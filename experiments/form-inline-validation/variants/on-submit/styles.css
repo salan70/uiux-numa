@@ -1,0 +1,100 @@
+/* variant `on-submit` のスタイル。レイアウトは全 variant で共通: 最大幅 24rem の 1 列、ラベルは上、項目間 1rem。 */
+
+.fiv-on-submit {
+  max-width: 24rem;
+  font: 16px system-ui, sans-serif;
+  line-height: 1.5;
+  color: #1c1b1f;
+}
+
+.fiv-on-submit-form {
+  display: grid;
+  gap: 1rem;
+}
+
+/* エラー要約 */
+.fiv-on-submit-summary {
+  padding: 1rem;
+  border: 2px solid #b3261e;
+  border-radius: 4px;
+}
+
+/* プログラムでフォーカスを移すため、操作手段に関わらずリングを出す。 */
+.fiv-on-submit-summary:focus {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
+
+.fiv-on-submit-summary-heading {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #b3261e;
+}
+
+.fiv-on-submit-summary-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.fiv-on-submit-summary-list a {
+  color: #b3261e;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* 各項目 */
+.fiv-on-submit-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.fiv-on-submit-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #79747e;
+  border-radius: 4px;
+}
+
+.fiv-on-submit-input[aria-invalid="true"] {
+  border-color: #b3261e;
+  border-width: 2px;
+}
+
+.fiv-on-submit-error {
+  margin: 0.25rem 0 0;
+  color: #b3261e;
+}
+
+/* 送信ボタン */
+.fiv-on-submit-submit {
+  justify-self: start;
+  padding: 0.5rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: #1a73e8;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 送信成功 */
+.fiv-on-submit-success {
+  margin: 0;
+  font-weight: 600;
+  color: #1b6b3a;
+}
+
+/* フォーカスリングは可視にする。 */
+.fiv-on-submit-input:focus-visible,
+.fiv-on-submit-submit:focus-visible,
+.fiv-on-submit-summary-list a:focus-visible {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
