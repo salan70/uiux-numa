@@ -1,0 +1,23 @@
+/* 実行基盤自身の最小スタイル。variant の見た目には干渉させない。 */
+.runner-nav {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ddd;
+  font: 14px system-ui, sans-serif;
+}
+
+.runner-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.runner-nav a[aria-current="page"] {
+  font-weight: bold;
+}
+
+.runner-main {
+  padding: 1rem;
+}

@@ -21,6 +21,8 @@
             pkgs.just
             pkgs.direnv
             pkgs.pre-commit
+            pkgs.nodejs_22
+            pkgs.pnpm
             pkgs.markdownlint-cli2
             unstable.oxfmt
           ];

@@ -3,6 +3,8 @@
 - 状態: Accepted
 - 日付: 2026-09-13
 - 参照: [Issue #1](https://github.com/salan70/uiux-numa/issues/1)
+- 補足: `platforms/` の作成時期は [Web 実行基盤の ADR](2026-09-13-web-runner.md) で「最初の Web Experiment」に改めた。
+- 補足: テンプレートは `docs/templates/<kind>/` に置く。[Experiment format の ADR](2026-09-13-experiment-format.md) で決めた。
 
 ## 背景
 

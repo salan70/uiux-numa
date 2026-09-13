@@ -2,18 +2,18 @@
 #
 # .claude/ と .agents/ 配下は正本（dotfiles）からコピーした vendor 資産のため
 # lint / format の対象外にする。整形すると正本との差分が生まれ、再同期のたびに衝突する。
-# flake.lock は nix が生成する JSON のため整形しない。
-exclude: '^(\.(claude|agents)/|flake\.lock$)'
+# flake.lock と pnpm-lock.yaml は生成物のため整形しない。
+exclude: '^(\.(claude|agents)/|flake\.lock$|pnpm-lock\.yaml$)'
 
 repos:
-  # oxfmt — JSON / YAML / Markdown の整形
+  # oxfmt — JSON / YAML / Markdown / TypeScript の整形
   - repo: local
     hooks:
       - id: oxfmt
         name: oxfmt
         entry: oxfmt --write
         language: system
-        files: \.(json|yaml|yml|md)$
+        files: \.(json|yaml|yml|md|ts|tsx|js|jsx)$
 
   # markdownlint — Markdown の lint
   - repo: local
