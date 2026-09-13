@@ -7,8 +7,8 @@
 
 uiux-numa は UI/UX とプロダクト体験を探索する R&D リポジトリです。
 AI エージェントで実験を反復し、成果を個人開発へ再利用できる形に育てます。
-思想、対象領域、Experiment lifecycle は Issue #1 で定義します。
-定義は README と `docs/` に明文化します。
+思想と責務は README に定義します。
+対象領域、3 層構成、Experiment lifecycle、評価方針は `docs/` に定義します。
 
 ## クイックリファレンス
 
@@ -41,7 +41,7 @@ just format     # Markdown / JSON / YAML の整形
 - Skill で定義済みの手順をこのファイルへ転記しない。Skill 名で参照する。
 - 依頼スコープ外の「ついでに改善」を禁止する。
 - 将来の仮想要件に備えたコードを禁止する。
-- 採用理由だけでなく却下理由も記録する。記録先は Issue #1 で決める。
+- 採用理由だけでなく却下理由も記録する。リポジトリの設計判断は `docs/decisions/` の ADR に残す。Experiment と Pattern の判断は各記録に残す。
 
 ## Git 運用
 
