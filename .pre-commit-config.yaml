@@ -1,0 +1,25 @@
+# 機械的強制は pre-commit が担う（AI hooks は使わない）。
+#
+# .claude/ と .agents/ 配下は正本（dotfiles）からコピーした vendor 資産のため
+# lint / format の対象外にする。整形すると正本との差分が生まれ、再同期のたびに衝突する。
+# flake.lock は nix が生成する JSON のため整形しない。
+exclude: '^(\.(claude|agents)/|flake\.lock$)'
+
+repos:
+  # oxfmt — JSON / YAML / Markdown の整形
+  - repo: local
+    hooks:
+      - id: oxfmt
+        name: oxfmt
+        entry: oxfmt --write
+        language: system
+        files: \.(json|yaml|yml|md)$
+
+  # markdownlint — Markdown の lint
+  - repo: local
+    hooks:
+      - id: markdownlint
+        name: markdownlint
+        entry: markdownlint-cli2
+        language: system
+        files: \.md$
