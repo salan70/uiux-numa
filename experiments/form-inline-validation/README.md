@@ -1,6 +1,6 @@
 ---
 title: 入力フォームの inline validation
-status: implementing
+status: evaluating
 created: 2026-09-13
 updated: 2026-09-13
 platforms:
@@ -65,9 +65,11 @@ variant で変える軸は次の 3 つ。
 
 ## Evaluation
 
-評価軸、重み、比較表は [evaluation.md](evaluation.md) に記録する。
+評価軸、重み、比較表、各観点の要点は [evaluation.md](evaluation.md) に記録する。
 観点は designer、UX writing、accessibility、interaction / motion、implementation の 5 つ。
 accessibility と writing clarity を必須の軸にする。
+必須の軸で課題ありの variant はない。
+realtime の interaction clarity は実操作の確認待ちで保留とした。
 
 ## Decision
 
