@@ -30,3 +30,7 @@ result-*
 .claude/settings.local.json
 .claude/stats-cache.json
 .claude/skills/**/__pycache__/
+
+# Node（Web 実行基盤）
+node_modules/
+platforms/web/dist/
