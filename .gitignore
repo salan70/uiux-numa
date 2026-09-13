@@ -1,0 +1,2 @@
+# .envrc は Git 管理対象（秘匿情報を入れない方針）。マシン固有の設定は .envrc.local へ。
+.envrc.local
