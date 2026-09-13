@@ -1,2 +1,32 @@
 # .envrc は Git 管理対象（秘匿情報を入れない方針）。マシン固有の設定は .envrc.local へ。
 .envrc.local
+
+# direnv / nix
+.direnv/
+result
+result-*
+
+# OS
+.DS_Store
+
+# Claude runtime artifacts
+.claude/cache/
+.claude/backups/
+.claude/debug/
+.claude/history.jsonl
+.claude/projects/
+.claude/file-history/
+.claude/ide/
+.claude/paste-cache/
+.claude/plans/
+.claude/plugins/
+.claude/session-env/
+.claude/sessions/
+.claude/shell-snapshots/
+.claude/tasks/
+.claude/telemetry/
+.claude/todos/
+.claude/usage-data/
+.claude/settings.local.json
+.claude/stats-cache.json
+.claude/skills/**/__pycache__/
