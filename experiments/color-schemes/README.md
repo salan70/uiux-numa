@@ -129,6 +129,7 @@ Decision では採用を 1 件に絞らず、実際の開発の土台として�
 ## Variants
 
 variant-id は、利用者の指示で和名のローマ字にする。
+[記録形式](../../docs/experiment-format.md)の、名前で選ぶ選択肢の variant-id に当たる。
 変えた軸は表に書く。
 
 | id          | 仮説                                                                       | 変えた軸                                                                                                        | 実装                  |

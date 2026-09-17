@@ -5,6 +5,7 @@ README は YAML frontmatter と本文で構成する。
 本文は [Experiment lifecycle](experiment-lifecycle.md) の 11 項目を同じ順で持つ。
 テンプレートは [docs/templates/experiment/README.md](templates/experiment/README.md) にある。
 採用理由と却下した案は [Experiment 記録形式の ADR](decisions/2026-09-13-experiment-format.md) に残す。
+名前で選ぶ variant と評価を経ない判断の扱いは、[補足の ADR](decisions/2026-09-17-named-variants-and-unevaluated-decisions.md) に残す。
 
 ## ディレクトリ構成
 
@@ -32,6 +33,7 @@ experiments/<slug>/
 - 日付 prefix を付けない。作成日は frontmatter の `created` に持つ。
 - slug はリポジトリ内で一意にし、内容が分かる名前にする。
 - variant-id も同じ規則にし、変えた軸が分かる名前にする（例: `on-blur`、`on-submit`、`realtime`）。
+- variant を名前で選ぶ選択肢として残す場合は、その名前を variant-id にしてよい（例: 配色の `wasabi`、`yuzu`）。変えた軸は Variants の表に書く。
 - `a`、`b` のような連番は使わない。
 
 ## frontmatter
@@ -85,19 +87,19 @@ status を変えたら `updated` も更新する。
 見出しは次の 11 個を英語のまま、この順で置く。
 未到達の節は見出しを残し、本文に `未定` と書く。
 
-| 節                        | 書くこと                                                                         |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| Problem                   | 解決したい課題と現状                                                             |
-| Target                    | 想定ユーザーと利用状況                                                           |
-| Scope / Domains           | 対象領域と、variant で変える軸（見た目、copy、情報構造、操作、motion、feedback） |
-| Constraints               | 技術、アクセシビリティ、プラットフォーム、時間などの制約                         |
-| Hypothesis                | variant 共通で検証したい仮説                                                     |
-| Variants                  | 下の表                                                                           |
-| Evaluation                | `evaluation.md` へのリンクと、選んだ評価軸と観点の要約                           |
-| Decision                  | 採用した variant、理由、判断者、判断日                                           |
-| Rejected reasons          | 却下した variant ごとの理由                                                      |
-| Learnings                 | 一般化できる知見と Pattern 候補                                                  |
-| Related patterns / assets | 抽出した Pattern と昇格した Asset へのリンク。なければ `なし`                    |
+| 節                        | 書くこと                                                                                                   |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Problem                   | 解決したい課題と現状                                                                                       |
+| Target                    | 想定ユーザーと利用状況                                                                                     |
+| Scope / Domains           | 対象領域と、variant で変える軸（見た目、copy、情報構造、操作、motion、feedback）                           |
+| Constraints               | 技術、アクセシビリティ、プラットフォーム、時間などの制約                                                   |
+| Hypothesis                | variant 共通で検証したい仮説                                                                               |
+| Variants                  | 下の表                                                                                                     |
+| Evaluation                | `evaluation.md` へのリンクと、選んだ評価軸と観点の要約。評価を行わずに判断した場合は、そのことと判断の根拠 |
+| Decision                  | 採用した variant、理由、判断者、判断日。複数を採用してよい。評価を行わずに判断した場合は、未評価の軸も書く |
+| Rejected reasons          | 却下した variant ごとの理由。評価の前に却下した場合は、判断者と判断日も書く                                |
+| Learnings                 | 一般化できる知見と Pattern 候補                                                                            |
+| Related patterns / assets | 抽出した Pattern と昇格した Asset へのリンク。なければ `なし`                                              |
 
 ### Variants の表
 
@@ -108,6 +110,7 @@ status を変えたら `updated` も更新する。
 - `id` は variant-id と同じにする。
 - `変えた軸` は Scope / Domains で挙げた軸から選ぶ。
 - 基準となる variant がある場合は、仮説の先頭に `基準:` と書く。
+- 評価の前に却下した variant も `variants/` と表に残し、仮説の先頭に `却下:` と書く。評価の対象には含めない。
 
 ## previews
 
