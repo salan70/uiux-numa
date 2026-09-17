@@ -2,7 +2,7 @@
 title: 入力フォームの inline validation
 status: evaluating
 created: 2026-09-13
-updated: 2026-09-13
+updated: 2026-09-17
 platforms:
   - web
 domains:
@@ -73,7 +73,8 @@ variant で変える軸は次の 3 つ。
 観点は designer、UX writing、accessibility、interaction / motion、implementation の 5 つ。
 accessibility と writing clarity を必須の軸にする。
 必須の軸で課題ありの variant はない。
-realtime の interaction clarity は実操作の確認待ちで保留とした。
+重要の interaction clarity で、on-blur、realtime、hybrid が課題ありになった。
+離脱で文言や要約の高さが変わり、修正直後の送信クリックが外れることを実操作で確認した。
 
 ## Decision
 
