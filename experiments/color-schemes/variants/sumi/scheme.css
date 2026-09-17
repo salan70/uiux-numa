@@ -1,0 +1,51 @@
+/*
+ * variant `sumi`（すみ）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-sumi) {
+  --color-bg: #fbfaf5; /* 生成り色 */
+  --color-bg-subtle: #f3f3f2; /* 白練 */
+  --color-surface: #fffffc; /* 胡粉色 */
+  --color-border: #dcdddd; /* 白鼠 */
+  --color-border-strong: #7b7c7d; /* 鉛色 */
+  --color-text: #2b2b2b; /* 蝋色 */
+  --color-text-muted: #595857; /* 墨 */
+  --color-accent: #2b2b2b; /* 蝋色 */
+  --color-accent-hover: #16160e; /* 暗黒色 */
+  --color-on-accent: #fbfaf5; /* 生成り色 */
+  --color-accent-strong: #2b2b2b; /* 蝋色 */
+  --color-accent-subtle: #dddcd6; /* 絹鼠 */
+  --color-focus: #eb6101; /* 朱色 */
+  --color-success: #316745; /* 千歳緑 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
+  --color-danger: #b7282e; /* 茜色 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-sumi) {
+    --color-bg: oklch(0.19 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
+    --color-bg-subtle: oklch(0.22 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
+    --color-surface: oklch(0.25 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
+    --color-border: #433d3c; /* 檳榔子染 */
+    --color-border-strong: #949495; /* 鼠色 */
+    --color-text: #fbfaf5; /* 生成り色 */
+    --color-text-muted: #a3a3a2; /* 薄墨色 */
+    --color-accent: #fffffc; /* 胡粉色 */
+    --color-accent-hover: #dcdddd; /* 白鼠 */
+    --color-on-accent: oklch(0.19 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
+    --color-accent-strong: #fbfaf5; /* 生成り色 */
+    --color-accent-subtle: #474a4d; /* 藍墨茶 */
+    --color-focus: #eb6101; /* 朱色 */
+    --color-success: #68be8d; /* 若竹色 */
+    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-warning: #f8b500; /* 山吹色 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #ee827c; /* 甚三紅 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}

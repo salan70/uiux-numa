@@ -1,0 +1,51 @@
+/*
+ * variant `kingyo`（きんぎょ）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-kingyo) {
+  --color-bg: #bce2e8; /* 水色 */
+  --color-bg-subtle: #a2d7dd; /* 瓶覗 */
+  --color-surface: #ffffff; /* 白 */
+  --color-border: #83ccd2; /* 白群 */
+  --color-border-strong: #43676b; /* 御召茶 */
+  --color-text: #0f2350; /* 濃藍 */
+  --color-text-muted: #455765; /* 鉄御納戸 */
+  --color-accent: #eb6101; /* 朱色 */
+  --color-accent-hover: #ee7948; /* 黄丹 */
+  --color-on-accent: #0f2350; /* 濃藍 */
+  --color-accent-strong: #8f2e14; /* 弁柄色 */
+  --color-accent-subtle: #f7bd8f; /* 洒落柿 */
+  --color-focus: #8f2e14; /* 弁柄色 */
+  --color-success: #316745; /* 千歳緑 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
+  --color-danger: #d7003a; /* 紅 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-kingyo) {
+    --color-bg: oklch(0.2 0.05 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
+    --color-bg-subtle: oklch(0.23 0.055 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
+    --color-surface: oklch(0.26 0.06 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
+    --color-border: #2a4073; /* 深縹 */
+    --color-border-strong: #698aab; /* 薄花色 */
+    --color-text: #ebf6f7; /* 藍白 */
+    --color-text-muted: #abced8; /* 秘色色 */
+    --color-accent: #eb6101; /* 朱色 */
+    --color-accent-hover: #ee7948; /* 黄丹 */
+    --color-on-accent: oklch(0.2 0.05 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
+    --color-accent-strong: #f19072; /* 東雲色 */
+    --color-accent-subtle: oklch(0.3 0.07 45); /* 朱色 #eb6101 の明度と彩度を変えた色 */
+    --color-focus: #f19072; /* 東雲色 */
+    --color-success: #68be8d; /* 若竹色 */
+    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-warning: #f8b500; /* 山吹色 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #f09199; /* 桃色 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}

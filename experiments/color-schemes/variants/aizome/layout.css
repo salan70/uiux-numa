@@ -1,0 +1,499 @@
+/*
+ * LP の構造、文字、余白。全 variant で同一の内容にする。
+ * 色は scheme.css が定義する役割（--color-*）だけを参照し、色の値をここに書かない。
+ */
+
+:root:has(.cs-lp) {
+  color-scheme: light dark;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.cs-lp {
+  font:
+    16px/1.7 system-ui,
+    sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* 詳細度を 0 にし、各要素の指定を優先させる */
+:where(.cs-lp) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.cs-lp) :where(p, h1, h2, h3) {
+  margin: 0;
+}
+
+/* 見出し、導入文、引用は文節で折り返し、行の長さを揃える */
+:where(.cs-lp) :where(h1, h2, h3, .cs-lead, blockquote p) {
+  word-break: auto-phrase;
+  text-wrap: balance;
+}
+
+.cs-lp :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.cs-container {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* header */
+
+.cs-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cs-header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1rem;
+}
+
+.cs-logo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.cs-logo-mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--color-accent);
+  border-radius: 0.375rem;
+}
+
+.cs-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-nav a {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.cs-nav a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+/* button */
+
+.cs-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.cs-button-primary {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.cs-button-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.cs-button-secondary {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+}
+
+.cs-button-secondary:hover {
+  background: var(--color-bg-subtle);
+}
+
+/* hero */
+
+.cs-hero {
+  padding-block: 4.5rem 4rem;
+}
+
+.cs-hero-inner {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 60rem) {
+  .cs-hero-inner {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.cs-eyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  color: var(--color-accent-strong);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--color-accent-subtle);
+  border-radius: 999px;
+}
+
+.cs-hero h1 {
+  font-size: clamp(2.25rem, 3vw + 1.25rem, 3.25rem);
+  line-height: 1.25;
+}
+
+.cs-lead {
+  max-width: 34rem;
+  margin-top: 1.25rem;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
+
+.cs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.cs-note {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+/* product mock */
+
+.cs-mock {
+  margin: 0;
+}
+
+.cs-mock-window {
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.cs-mock-head {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.cs-mock-title {
+  font-weight: 700;
+}
+
+.cs-mock-progress-label {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.cs-progress {
+  height: 0.5rem;
+  margin: 0.75rem 0 0.5rem;
+  overflow: hidden;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.cs-progress-bar {
+  width: 60%;
+  height: 100%;
+  background: var(--color-accent-strong);
+}
+
+.cs-tasks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-task {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.cs-task:first-child {
+  border-top: 0;
+}
+
+.cs-task-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cs-task-owner {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.cs-chip {
+  flex-shrink: 0;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.cs-chip-success {
+  color: var(--color-success);
+  background: var(--color-success-subtle);
+}
+
+.cs-chip-warning {
+  color: var(--color-warning);
+  background: var(--color-warning-subtle);
+}
+
+.cs-chip-danger {
+  color: var(--color-danger);
+  background: var(--color-danger-subtle);
+}
+
+.cs-chip-neutral {
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+}
+
+.cs-mock-caption {
+  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+/* section */
+
+.cs-section {
+  padding-block: 4.5rem;
+}
+
+.cs-section-subtle {
+  background: var(--color-bg-subtle);
+}
+
+.cs-kicker {
+  margin-bottom: 0.5rem;
+  color: var(--color-accent-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cs-section h2 {
+  font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
+  line-height: 1.35;
+}
+
+.cs-section-lead {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* features */
+
+.cs-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cs-feature {
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.cs-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-accent-strong);
+  background: var(--color-accent-subtle);
+  border-radius: 0.5rem;
+}
+
+.cs-feature h3 {
+  margin-block: 1rem 0.5rem;
+  font-size: 1.125rem;
+}
+
+.cs-feature p {
+  color: var(--color-text-muted);
+}
+
+/* quote */
+
+.cs-quote {
+  max-width: 44rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cs-quote blockquote {
+  margin: 0;
+}
+
+.cs-quote p {
+  font-size: clamp(1.25rem, 1vw + 1rem, 1.625rem);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.cs-quote figcaption {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+/* pricing */
+
+.cs-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.25rem;
+  max-width: 48rem;
+  margin-top: 2.5rem;
+}
+
+.cs-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.cs-plan-featured {
+  padding: calc(2rem - 1px);
+  border: 2px solid var(--color-accent-strong);
+}
+
+.cs-plan h3 {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 1.125rem;
+}
+
+.cs-badge {
+  padding: 0.125rem 0.5rem;
+  color: var(--color-on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--color-accent);
+  border-radius: 999px;
+}
+
+.cs-price {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cs-price small {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+  font-weight: 400;
+}
+
+.cs-plan ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.cs-plan .cs-button {
+  margin-top: auto;
+}
+
+/* signup */
+
+.cs-signup-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  max-width: 36rem;
+  margin-top: 2rem;
+}
+
+.cs-field {
+  display: flex;
+  flex: 1 1 16rem;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.cs-field label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cs-input {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+}
+
+.cs-help {
+  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.cs-status {
+  min-height: 1.7em;
+  margin-top: 0.5rem;
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+/* footer */
+
+.cs-footer {
+  padding-block: 2rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  border-top: 1px solid var(--color-border);
+}

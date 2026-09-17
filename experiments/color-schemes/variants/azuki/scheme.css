@@ -1,0 +1,51 @@
+/*
+ * variant `azuki`（あずき）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-azuki) {
+  --color-bg: #f8f4e6; /* 象牙色 */
+  --color-bg-subtle: #ede4cd; /* 練色 */
+  --color-surface: #fffffc; /* 胡粉色 */
+  --color-border: #e8d3c7; /* 灰梅 */
+  --color-border-strong: #887f7a; /* 煤色 */
+  --color-text: #3f312b; /* 赤墨 */
+  --color-text-muted: #595455; /* 丼鼠 */
+  --color-accent: #96514d; /* 小豆色 */
+  --color-accent-hover: #7b4741; /* 紅檜皮 */
+  --color-on-accent: #fffffc; /* 胡粉色 */
+  --color-accent-strong: #96514d; /* 小豆色 */
+  --color-accent-subtle: #fde8d0; /* 薄卵色 */
+  --color-focus: #96514d; /* 小豆色 */
+  --color-success: #316745; /* 千歳緑 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
+  --color-danger: #d7003a; /* 紅 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-azuki) {
+    --color-bg: #281a14; /* 鉄黒 */
+    --color-bg-subtle: oklch(0.255 0.025 44); /* 鉄黒 #281a14 の明度と彩度を変えた色 */
+    --color-surface: oklch(0.28 0.025 44); /* 鉄黒 #281a14 の明度と彩度を変えた色 */
+    --color-border: #3f312b; /* 赤墨 */
+    --color-border-strong: #887f7a; /* 煤色 */
+    --color-text: #f8f4e6; /* 象牙色 */
+    --color-text-muted: #d4acad; /* 薄柿 */
+    --color-accent: #b88884; /* 鴇浅葱 */
+    --color-accent-hover: #d69090; /* 退紅 */
+    --color-on-accent: #281a14; /* 鉄黒 */
+    --color-accent-strong: #b88884; /* 鴇浅葱 */
+    --color-accent-subtle: oklch(0.28 0.05 24); /* 小豆色 #96514d の明度と彩度を変えた色 */
+    --color-focus: #b88884; /* 鴇浅葱 */
+    --color-success: #68be8d; /* 若竹色 */
+    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-warning: #f8b500; /* 山吹色 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #ee836f; /* 珊瑚朱色 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}
