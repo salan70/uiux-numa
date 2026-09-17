@@ -1,0 +1,51 @@
+/*
+ * variant `aizome`（あいぞめ）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-aizome) {
+  --color-bg: #f7fcfe; /* 卯の花色 */
+  --color-bg-subtle: #ebf6f7; /* 藍白 */
+  --color-surface: #ffffff; /* 白 */
+  --color-border: #c0c6c9; /* 灰青 */
+  --color-border-strong: #6c848d; /* 藍鼠 */
+  --color-text: #203744; /* 褐返 */
+  --color-text-muted: #53727d; /* 錆御納戸 */
+  --color-accent: #165e83; /* 藍色 */
+  --color-accent-hover: #203744; /* 褐返 */
+  --color-on-accent: #ffffff; /* 白 */
+  --color-accent-strong: #165e83; /* 藍色 */
+  --color-accent-subtle: #c1e4e9; /* 白藍 */
+  --color-focus: #165e83; /* 藍色 */
+  --color-success: #316745; /* 千歳緑 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
+  --color-danger: #b7282e; /* 茜色 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-aizome) {
+    --color-bg: oklch(0.2 0.037 234); /* 褐返 #203744 の明度と彩度を変えた色 */
+    --color-bg-subtle: oklch(0.23 0.037 234); /* 褐返 #203744 の明度と彩度を変えた色 */
+    --color-surface: oklch(0.26 0.037 234); /* 褐返 #203744 の明度と彩度を変えた色 */
+    --color-border: #393f4c; /* 藍鉄 */
+    --color-border-strong: #6c848d; /* 藍鼠 */
+    --color-text: #ebf6f7; /* 藍白 */
+    --color-text-muted: #abced8; /* 秘色色 */
+    --color-accent: #a2d7dd; /* 瓶覗 */
+    --color-accent-hover: #c1e4e9; /* 白藍 */
+    --color-on-accent: oklch(0.2 0.037 234); /* 褐返 #203744 の明度と彩度を変えた色 */
+    --color-accent-strong: #a2d7dd; /* 瓶覗 */
+    --color-accent-subtle: oklch(0.32 0.06 237); /* 藍色 #165e83 の明度と彩度を変えた色 */
+    --color-focus: #a2d7dd; /* 瓶覗 */
+    --color-success: #68be8d; /* 若竹色 */
+    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-warning: #f8b500; /* 山吹色 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #ee827c; /* 甚三紅 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}

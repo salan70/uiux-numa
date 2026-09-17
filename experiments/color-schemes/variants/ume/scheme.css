@@ -1,0 +1,51 @@
+/*
+ * variant `ume`（うめ）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-ume) {
+  --color-bg: #fdeff2; /* 薄桜 */
+  --color-bg-subtle: #e9dfe5; /* 桜鼠 */
+  --color-surface: #ffffff; /* 白 */
+  --color-border: #dcd6d9; /* 薄梅鼠 */
+  --color-border-strong: #71686c; /* 紫鼠 */
+  --color-text: #5f414b; /* 紫鳶 */
+  --color-text-muted: #705b67; /* 葡萄鼠 */
+  --color-accent: #aa4c8f; /* 梅紫 */
+  --color-accent-hover: #7a4171; /* 蒲葡 */
+  --color-on-accent: #ffffff; /* 白 */
+  --color-accent-strong: #74325c; /* 暗紅色 */
+  --color-accent-subtle: #eebbcb; /* 撫子色 */
+  --color-focus: #aa4c8f; /* 梅紫 */
+  --color-success: #316745; /* 千歳緑 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
+  --color-danger: #b7282e; /* 茜色 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-ume) {
+    --color-bg: oklch(0.2 0.02 358); /* 紫鳶 #5f414b の明度と彩度を変えた色 */
+    --color-bg-subtle: oklch(0.23 0.022 358); /* 紫鳶 #5f414b の明度と彩度を変えた色 */
+    --color-surface: oklch(0.26 0.024 358); /* 紫鳶 #5f414b の明度と彩度を変えた色 */
+    --color-border: #513743; /* 似せ紫 */
+    --color-border-strong: #9e8b8e; /* 鳩羽鼠 */
+    --color-text: #fef4f4; /* 桜色 */
+    --color-text-muted: #c099a0; /* 梅鼠 */
+    --color-accent: #f2a0a1; /* 紅梅色 */
+    --color-accent-hover: #eebbcb; /* 撫子色 */
+    --color-on-accent: oklch(0.2 0.02 358); /* 紫鳶 #5f414b の明度と彩度を変えた色 */
+    --color-accent-strong: #f2a0a1; /* 紅梅色 */
+    --color-accent-subtle: oklch(0.3 0.07 340); /* 梅紫 #aa4c8f の明度と彩度を変えた色 */
+    --color-focus: #f2a0a1; /* 紅梅色 */
+    --color-success: #68be8d; /* 若竹色 */
+    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-warning: #f8b500; /* 山吹色 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #ee836f; /* 珊瑚朱色 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}

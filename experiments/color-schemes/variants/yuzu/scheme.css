@@ -1,0 +1,51 @@
+/*
+ * variant `yuzu`（ゆず）の配色。
+ * 伝統色をそのまま使う色は HEX、明度と彩度を変えた色は oklch() で書く。
+ * 色を選んだ意図は README の Variants に書く。
+ */
+
+:root:has(.cs-yuzu) {
+  --color-bg: #fbfaf5; /* 生成り色 */
+  --color-bg-subtle: #fff1cf; /* 鳥の子色 */
+  --color-surface: #fffffc; /* 胡粉色 */
+  --color-border: #dcd3b2; /* 砂色 */
+  --color-border-strong: #897858; /* 肥後煤竹 */
+  --color-text: #241a08; /* 憲法黒茶 */
+  --color-text-muted: #716246; /* 媚茶 */
+  --color-accent: #fabf14; /* 鬱金色 */
+  --color-accent-hover: #f8b500; /* 山吹色 */
+  --color-on-accent: #241a08; /* 憲法黒茶 */
+  --color-accent-strong: #316745; /* 千歳緑 */
+  --color-accent-subtle: #f8e58c; /* 淡黄 */
+  --color-focus: #316745; /* 千歳緑 */
+  --color-success: #006e54; /* 萌葱色 */
+  --color-success-subtle: #d6e9ca; /* 白緑 */
+  --color-warning: oklch(0.52 0.111 68); /* 金茶 #f39800 の明度と彩度を変えた色 */
+  --color-warning-subtle: #fde8d0; /* 薄卵色 */
+  --color-danger: #b7282e; /* 茜色 */
+  --color-danger-subtle: #fef4f4; /* 桜色 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-yuzu) {
+    --color-bg: oklch(0.2 0.018 80); /* 憲法黒茶 #241a08 の明度と彩度を変えた色 */
+    --color-bg-subtle: oklch(0.23 0.018 80); /* 憲法黒茶 #241a08 の明度と彩度を変えた色 */
+    --color-surface: oklch(0.26 0.018 80); /* 憲法黒茶 #241a08 の明度と彩度を変えた色 */
+    --color-border: #554738; /* 涅色 */
+    --color-border-strong: #94846a; /* 生壁色 */
+    --color-text: #fbfaf5; /* 生成り色 */
+    --color-text-muted: #cbb994; /* 白橡 */
+    --color-accent: #fabf14; /* 鬱金色 */
+    --color-accent-hover: #fbca4d; /* 支子色 */
+    --color-on-accent: oklch(0.2 0.018 80); /* 憲法黒茶 #241a08 の明度と彩度を変えた色 */
+    --color-accent-strong: #fabf14; /* 鬱金色 */
+    --color-accent-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
+    --color-focus: #fabf14; /* 鬱金色 */
+    --color-success: #7ebeab; /* 青竹色 */
+    --color-success-subtle: oklch(0.3 0.05 169); /* 萌葱色 #006e54 の明度と彩度を変えた色 */
+    --color-warning: #f39800; /* 金茶 */
+    --color-warning-subtle: #583822; /* 黒茶 */
+    --color-danger: #ee827c; /* 甚三紅 */
+    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+  }
+}
