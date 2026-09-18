@@ -91,6 +91,6 @@ if [ "$mono" = "1" ]; then
 fi
 
 # 参考情報。合否には使わない。
-echo "info: 要素数=$(xp 'count(//*)') バイト数=$(wc -c < "$file" | tr -d ' ') part-id=$(xp '//@id' | grep -o '"part-[^"]*"' | tr -d '"' | tr '\n' ' ')"
+echo "info: 要素数=$(xp 'count(//*)') バイト数=$(wc -c < "$file" | tr -d ' ') part-id=$({ xp '//@id' || true; } | { grep -o '"part-[^"]*"' || true; } | tr -d '"' | tr '\n' ' ')"
 
 [ "$errors" -eq 0 ] || { echo "error: $errors 件"; exit 1; }

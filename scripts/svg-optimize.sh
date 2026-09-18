@@ -20,7 +20,7 @@ echo "ok: 最適化 $(wc -c < "$src" | tr -d ' ') -> $(wc -c < "$dist" | tr -d '
 
 "$here/svg-check.sh" "$dist"
 
-ids() { xmllint --nonet --xpath '//@id' "$1" 2>/dev/null | grep -o '"part-[^"]*"' | tr -d '"' | sort; }
+ids() { { xmllint --nonet --xpath '//@id' "$1" 2>/dev/null || true; } | { grep -o '"part-[^"]*"' || true; } | tr -d '"' | sort; }
 src_ids="$(ids "$src")"; dist_ids="$(ids "$dist")"
 if [ "$src_ids" = "$dist_ids" ]; then
   echo "ok: part-* の ID を保持（$(echo "$src_ids" | grep -c . ) 個）"
