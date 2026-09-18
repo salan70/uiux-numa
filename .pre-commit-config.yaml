@@ -13,7 +13,7 @@ repos:
         name: oxfmt
         entry: oxfmt --write
         language: system
-        files: \.(json|yaml|yml|md|ts|tsx|js|jsx)$
+        files: \.(json|yaml|yml|md|ts|tsx|js|jsx|mjs)$
 
   # markdownlint — Markdown の lint
   - repo: local

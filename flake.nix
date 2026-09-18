@@ -25,6 +25,9 @@
             pkgs.pnpm
             pkgs.markdownlint-cli2
             unstable.oxfmt
+            unstable.resvg
+            unstable.svgo
+            pkgs.libxml2.bin
           ];
 
           shellHook = ''

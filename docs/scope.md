@@ -10,6 +10,7 @@ uiux-numa は UI の視覚表現だけを対象にしない。
 - layout
 - typography
 - iconography
+- logo / brand identity
 - illustration / SVG
 - color
 - responsive / adaptive design
