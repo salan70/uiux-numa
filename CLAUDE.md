@@ -30,6 +30,8 @@ just format     # Markdown / JSON / YAML の整形
 
 - 共通 Skill: `.claude/skills/`（`syncing-ai-assets` で配備する）
 - Skill の正本: dotfiles の `ai-assets/skills/`
+- UI/UX 固有 Skill の正本: `skills/`（成熟度と改善手順は `skills/README.md`）
+- UI/UX 固有 Skill の読み込み経路: `.claude/skills/<name> -> ../../skills/<name>` の symlink
 - Codex / Cursor 用 Skill: `.agents/skills -> ../.claude/skills`
 - Codex / Cursor 用指示: `AGENTS.md -> CLAUDE.md`
 - 個人設定、MCP、plugin、runtime 設定は配布しない
