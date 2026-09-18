@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>進み具合を見る</title>
+  <!-- 週ごとの完了率。台の線に立つ 3 本のうち、過去 2 週は中空、今週は solid にして「今」を示す。高さは等間隔にせず電波表示と区別する。 -->
+  <path id="part-progress-past" d="M3.75 20V13.75a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 1V20M10.25 20V8.75a1 1 0 0 1 1-1h1.5a1 1 0 0 1 1 1V20" fill="none" stroke="currentColor"/>
+  <path id="part-progress-current" d="M16 20V5.75A1.75 1.75 0 0 1 17.75 4h1.5A1.75 1.75 0 0 1 21 5.75V20Z" fill="currentColor" stroke="none"/>
+  <path id="part-progress-baseline" d="M3.75 20h16.5" fill="none" stroke="currentColor"/>
+</svg>

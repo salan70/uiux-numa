@@ -45,4 +45,5 @@ Issue は resvg と SVGO を第一候補にし、薄いスクリプトや just r
 - Web の Experiment の preview 撮影は `just web-shot` で再現できる。過去の Experiment の Learnings にある「置き場は未定」はここで解消するが、過去の記録は変更しない。
 - Chrome 152 の headless は `--screenshot` の後に終了しないことがある。`web-shot` はファイルの出現を待ってから Chrome を止める。
 - resvg の描画はブラウザと異なることがある。最終的な見え方は利用画面の撮影で確かめる。
+- Vite の開発サーバーは、起動後に追加した Experiment のディレクトリを glob に反映しないことがある。variant を追加したら `just web-dev` を再起動する。
 - SVG を扱う Experiment の記録は、[Experiment の記録形式](../experiment-format.md)の追記に従う。

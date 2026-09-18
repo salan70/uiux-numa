@@ -60,8 +60,11 @@ web-shot target out width="1280" height="800":
     scripts/web-shot.sh "http://localhost:{{web_port}}/?bare#{{target}}" "{{out}}" "{{width}}" "{{height}}"
 
 # SVG の機械検査（構文、対応範囲、明示された制約）。例: just svg-check icon.svg --mono --viewbox "0 0 24 24"
+[positional-arguments]
 svg-check file *args:
-    scripts/svg-check.sh {{args}} "{{file}}"
+    #!/usr/bin/env bash
+    file="$1"; shift
+    scripts/svg-check.sh "$@" "$file"
 
 # 複数の SVG を複数サイズ × 明暗背景で描画し、比較シート 1 枚にする。例: just svg-sheet out.png 16,24,48 a.svg b.svg
 svg-sheet out sizes +svgs:
