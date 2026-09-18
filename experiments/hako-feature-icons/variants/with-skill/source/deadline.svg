@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>期限を知らせる</title>
+  <!-- 組の規則: 線は器（文脈）、塗りは決まったもの。ここでは線が鐘、塗りが鳴らす舌（知らせ）。 -->
+  <!-- 鐘は半円、垂直線、45° の直線だけで組む。自由曲線を使わず、16px で縁と側面が 1px に乗る。 -->
+  <!-- 胴は 3〜16.5、舌は 18〜21 で、合わせて高さ 18。裾の張り出しは 2.25 に抑え、胴が平たく見えないようにする。 -->
+  <path id="part-deadline-body" d="M4.5 15.75L6.75 13.5V9A5.25 5.25 0 0 1 17.25 9V13.5L19.5 15.75Z" fill="none" stroke="currentColor"/>
+  <!-- 舌は縁の下に覗く半円。縁の線の下端（16.5）から 1.5 離す。半径 3 で、16px で幅 4px、高さ 2px として整数ピクセルに乗る。 -->
+  <path id="part-deadline-clapper" d="M9 18a3 3 0 0 0 6 0Z" fill="currentColor" stroke="none"/>
+</svg>

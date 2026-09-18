@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="currentColor" stroke="none">
+  <title>期限を知らせる</title>
+  <!--
+    鐘のシルエット。ドーム r=6、壁 y 10..12、裾は (1,2) の向きに広がり、底の角を Q で r≈2 に丸める。
+    舌は幅 6 の半円を、本体の底から隙間 2 を空けて置く。隙間が「鐘 + 舌」の読みを作る。
+    round 1: 壁を 1 短くし全体を 1 下げた（高さ 18 で人物と揃え、塗りの面積を 165 前後に揃える）。
+  -->
+  <path id="part-deadline-body" d="M6 10A6 6 0 0 1 18 10V12L19.5 15Q20.5 17 18.5 17H5.5Q3.5 17 4.5 15L6 12Z"/>
+  <path id="part-deadline-clapper" d="M9 19H15A3 3 0 0 1 9 19Z"/>
+</svg>

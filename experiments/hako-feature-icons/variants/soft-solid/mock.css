@@ -1,0 +1,206 @@
+/*
+ * 機能アイコンの利用画面モックのスタイル。全 variant で同一の内容にする。
+ * 色は color-schemes の variant wasabi（ライト）の役割から写す。役割名は同じにする。
+ */
+
+.fi-mock {
+  --color-bg: #f8fbf8; /* 白磁 */
+  --color-bg-subtle: #e6eae3; /* 灰黄緑 */
+  --color-surface: #fffffc; /* 胡粉色 */
+  --color-border: #d4dcd6; /* 蕎麦切色 */
+  --color-text: #333631; /* 黒緑 */
+  --color-text-muted: #5b6356; /* 柳煤竹 */
+  --color-accent: #006e54; /* 萌葱色 */
+  --color-accent-strong: #006e54; /* 萌葱色 */
+  --color-accent-subtle: #d6e9ca; /* 白緑 */
+
+  font:
+    16px/1.7 system-ui,
+    sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+:where(.fi-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.fi-mock) :where(p, h2, h3, dl, dd) {
+  margin: 0;
+}
+
+.fi-container {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* header */
+
+.fi-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fi-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1rem;
+}
+
+.fi-logo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.fi-logo-mark {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--color-accent);
+  border-radius: 0.375rem;
+}
+
+.fi-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+}
+
+/* section */
+
+.fi-section {
+  padding-block: 3rem;
+  background: var(--color-bg-subtle);
+}
+
+.fi-section-app {
+  background: var(--color-bg);
+}
+
+.fi-kicker {
+  margin-bottom: 0.5rem;
+  color: var(--color-accent-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.fi-section h2 {
+  font-size: 2rem;
+  line-height: 1.35;
+}
+
+.fi-lead {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* features */
+
+.fi-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fi-feature {
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.fi-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-accent-strong);
+  background: var(--color-accent-subtle);
+  border-radius: 0.5rem;
+}
+
+.fi-feature h3 {
+  margin-block: 1rem 0.5rem;
+  font-size: 1.125rem;
+}
+
+.fi-feature p {
+  color: var(--color-text-muted);
+}
+
+/* icon */
+
+.fi-icon {
+  display: inline-grid;
+  place-items: center;
+}
+
+.fi-icon svg {
+  display: block;
+}
+
+.fi-icon-24,
+.fi-icon-24 svg {
+  width: 24px;
+  height: 24px;
+}
+
+.fi-icon-16,
+.fi-icon-16 svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* app: task detail */
+
+.fi-task {
+  max-width: 24rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+}
+
+.fi-task-title {
+  font-weight: 700;
+}
+
+.fi-meta {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.fi-meta-row {
+  display: flex;
+  gap: 1rem;
+  padding-block: 0.375rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.fi-meta dt {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  width: 5rem;
+  color: var(--color-text-muted);
+}
+
+.fi-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

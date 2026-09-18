@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
+  <title>担当を決める</title>
+  <!-- 名札。縦長の札（外形 18×20、角丸なし）に担当者の頭と肩を置く。肩は札の下端から立ち上がる平らな台。頭だけ塗り、「決まった 1 人」を示す。 -->
+  <rect id="part-assign-badge" x="4" y="3" width="16" height="18" fill="none" stroke="currentColor"/>
+  <circle id="part-assign-head" cx="12" cy="10" r="3" fill="currentColor" stroke="none"/>
+  <path id="part-assign-shoulders" d="M8 20V16H16V20" fill="none" stroke="currentColor"/>
+</svg>
