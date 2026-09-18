@@ -4,6 +4,7 @@
 - 日付: 2026-09-13
 - 参照: [Issue #2](https://github.com/salan70/uiux-numa/issues/2)、[Experiment lifecycle](../experiment-lifecycle.md)
 - 補足: 名前で選ぶ variant、評価の前の却下、評価を経ない判断の記録は [補足の ADR](2026-09-17-named-variants-and-unevaluated-decisions.md) で追加した。
+- 補足: SVG の `source/` と `dist/`、variant 横断の `compare-<state>.png`、反復の記録は [SVG 制作の実行基盤の ADR](2026-09-18-svg-toolchain.md) で追加した。
 
 ## 背景
 

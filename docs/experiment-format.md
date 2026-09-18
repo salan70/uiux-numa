@@ -17,15 +17,19 @@ experiments/<slug>/
 ├── variants/
 │   └── <variant-id>/
 │       ├── index.tsx            # variant の入口。React コンポーネントを default export する
-│       └── *.css, *.ts, *.tsx   # この variant だけが使う補助ファイル
+│       ├── *.css, *.ts, *.tsx   # この variant だけが使う補助ファイル
+│       ├── source/*.svg         # SVG を扱う Experiment だけ。編集用の原本
+│       └── dist/*.svg           # SVG を扱う Experiment だけ。配布用（`just svg-optimize` の出力）
 └── previews/
-    └── <variant-id>-<state>.png
+    ├── <variant-id>-<state>.png
+    └── compare-<state>.png      # variant を横断する比較画像（任意）
 ```
 
 - `README.md` と `variants/` は必須にする。`evaluation.md` は評価の開始時に作る。`previews/` は preview の取得時に作る。
 - `evaluation.md` と `evaluation/` の内部形式は `docs/evaluation/` の文書で定める。README からはリンクするだけにする。
 - `variants/<variant-id>/` に Markdown を置かない。variant の説明と判断は README に集める。
 - Web の実行基盤は `experiments/*/variants/*/index.tsx` を glob で読む。`index.tsx` は props なしで描画できるコンポーネントを default export する。
+- SVG を扱う Experiment は、編集用の原本を `source/`、配布用を `dist/` に置く。`index.tsx` は `dist/` の SVG を利用画面のモックに埋め込む。手順とツールは [SVG 制作の実行基盤の ADR](decisions/2026-09-18-svg-toolchain.md) に従う。
 
 ## slug と variant-id
 
@@ -112,8 +116,15 @@ status を変えたら `updated` も更新する。
 - 基準となる variant がある場合は、仮説の先頭に `基準:` と書く。
 - 評価の前に却下した variant も `variants/` と表に残し、仮説の先頭に `却下:` と書く。評価の対象には含めない。
 
+### 反復の記録
+
+AI エージェントが variant を反復して改善した場合は、Variants の表の後に round ごとの記録を置く。
+round、観察、変更、参照した知識、終了理由を表にする。
+改善前後の preview は `<variant-id>-first-<state>.png` と `<variant-id>-final-<state>.png` で残す。
+
 ## previews
 
 - ファイル名は `<variant-id>-<state>.png` にする。
 - `state` は小文字の kebab-case にする。比較のため、すべての variant で同じ名前を揃える（例: `initial`、`error`、`success`）。
 - 静止画で判断できない motion は動画を置いてもよい。拡張子以外は同じ規則にする。
+- variant を横断する比較画像（比較シートなど）は `compare-<state>.png` にする。
