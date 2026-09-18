@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
+  <title>進み具合を見る</title>
+  <!-- 罫線の棒グラフ。定規で引いた L 字の軸（外形 20×19）に、週ごとの棒を 3 本立てる。高さは 4 刻みで伸び、今週の棒だけ塗る。 -->
+  <path id="part-progress-axis" d="M3 3V21H22" fill="none" stroke="currentColor"/>
+  <path id="part-progress-past" d="M7 13V21M11 9V21" fill="none" stroke="currentColor"/>
+  <rect id="part-progress-current" x="14" y="5" width="4" height="15" fill="currentColor" stroke="none"/>
+</svg>

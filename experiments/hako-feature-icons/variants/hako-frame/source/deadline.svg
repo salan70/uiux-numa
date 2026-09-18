@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>期限を知らせる</title>
+  <!-- 共通の箱: 上が開いた tray。外形 18×10（x 3〜21、y 11〜21）、底の角丸 2。3 個で同一。 -->
+  <path id="part-deadline-box" d="M4 12V18A2 2 0 0 0 6 20H18A2 2 0 0 0 20 18V12"/>
+  <!-- 合図の棒: 箱の口から上へ伸びる「!」の棒。外形 y 4〜11 で、箱の縁の高さで箱に入る。 -->
+  <path id="part-deadline-bar" d="M12 5V10"/>
+  <!-- 合図の点: 「!」の点を箱の中に置く（この icon で唯一の塗り）。棒と底との隙間 2。 -->
+  <circle id="part-deadline-dot" cx="12" cy="15" r="2" fill="currentColor" stroke="none"/>
+</svg>

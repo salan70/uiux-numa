@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>進み具合を見る</title>
+  <!-- 共通の箱: 上が開いた tray。外形 18×10（x 3〜21、y 11〜21）、底の角丸 2。3 個で同一。 -->
+  <path id="part-progress-box" d="M4 12V18A2 2 0 0 0 6 20H18A2 2 0 0 0 20 18V12"/>
+  <!-- 中身: 箱の中で完了したことを示すチェック。長い画が箱の縁を越えて上へ抜ける。壁と底との隙間 2。塗りなし。
+       箱の中に立てた棒（2 本、3 本）は 16px で漢字の「山」に見えたため、縦棒を避けた。 -->
+  <path id="part-progress-check" d="M8 13L11 16L16 6"/>
+</svg>

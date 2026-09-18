@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
+  <title>期限を知らせる</title>
+  <!-- 卓上の暦。横長の枠（外形 20×17）に綴じの 2 本と見出しの線。上端と見出しの隙間は 3 にして 16px でも帯に潰れないようにする。期限の日だけ塗りの正方形で示す。 -->
+  <rect id="part-deadline-frame" x="3" y="5" width="18" height="15" fill="none" stroke="currentColor"/>
+  <path id="part-deadline-rings" d="M7 2V6M17 2V6" fill="none" stroke="currentColor"/>
+  <path id="part-deadline-header" d="M3 10H21" fill="none" stroke="currentColor"/>
+  <rect id="part-deadline-day" x="14" y="13" width="4" height="4" fill="currentColor" stroke="none"/>
+</svg>

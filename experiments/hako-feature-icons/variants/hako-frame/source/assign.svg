@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>担当を決める</title>
+  <!-- 共通の箱: 上が開いた tray。外形 18×10（x 3〜21、y 11〜21）、底の角丸 2。3 個で同一。 -->
+  <path id="part-assign-box" d="M4 12V18A2 2 0 0 0 6 20H18A2 2 0 0 0 20 18V12"/>
+  <!-- 肩: 箱の口の中に浮く半円（r 4）。底と壁との隙間 2。底に付けると 16px で塊になったため離した。 -->
+  <path id="part-assign-shoulders" d="M8 16A4 4 0 0 1 16 16"/>
+  <!-- 頭: 箱の口から出る塗りの点（この icon で唯一の塗り）。肩との隙間 2。 -->
+  <circle id="part-assign-head" cx="12" cy="6" r="3" fill="currentColor" stroke="none"/>
+</svg>
