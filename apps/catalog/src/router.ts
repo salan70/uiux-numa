@@ -2,12 +2,29 @@ import { useEffect, useState } from "react";
 
 export type Route =
   | { name: "home" }
+  | { name: "getting-started" }
+  | { name: "principles" }
+  | { name: "principle"; slug: string }
   | { name: "colors" }
+  | { name: "color"; scheme: string }
   | { name: "typography" }
   | { name: "icons" }
+  | { name: "icon"; experiment: string }
   | { name: "graphics" }
+  | { name: "graphic"; experiment: string }
   | { name: "components" }
+  | { name: "component"; experiment: string }
+  | { name: "status" }
+  | { name: "resources" }
+  | { name: "redirect"; to: string }
   | { name: "notfound" };
+
+export const OLD_PATH_REDIRECTS: Record<string, string> = {
+  "/colors": "/foundations/colors",
+  "/typography": "/foundations/typography",
+  "/icons": "/foundations/icons",
+  "/graphics": "/foundations/graphics",
+};
 
 export function usePathname(): string {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -25,12 +42,35 @@ export function navigate(to: string): void {
   window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
+export function replaceLocation(to: string): void {
+  if (to === window.location.pathname) return;
+  window.history.replaceState({}, "", to);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
 export function matchRoute(path: string): Route {
-  if (path === "/") return { name: "home" };
-  if (path === "/colors") return { name: "colors" };
-  if (path === "/typography") return { name: "typography" };
-  if (path === "/icons") return { name: "icons" };
-  if (path === "/graphics") return { name: "graphics" };
-  if (path === "/components") return { name: "components" };
+  const normalized = path.replace(/\/+$/, "") || "/";
+  const redirected = OLD_PATH_REDIRECTS[normalized];
+  if (redirected) return { name: "redirect", to: redirected };
+  if (normalized === "/") return { name: "home" };
+  if (normalized === "/getting-started") return { name: "getting-started" };
+  if (normalized === "/principles") return { name: "principles" };
+  const principle = normalized.match(/^\/principles\/([a-z0-9-]+)$/);
+  if (principle) return { name: "principle", slug: principle[1] };
+  if (normalized === "/foundations/colors") return { name: "colors" };
+  const color = normalized.match(/^\/foundations\/colors\/([a-z0-9-]+)$/);
+  if (color) return { name: "color", scheme: color[1] };
+  if (normalized === "/foundations/typography") return { name: "typography" };
+  if (normalized === "/foundations/icons") return { name: "icons" };
+  const icon = normalized.match(/^\/foundations\/icons\/([a-z0-9-]+)$/);
+  if (icon) return { name: "icon", experiment: icon[1] };
+  if (normalized === "/foundations/graphics") return { name: "graphics" };
+  const graphic = normalized.match(/^\/foundations\/graphics\/([a-z0-9-]+)$/);
+  if (graphic) return { name: "graphic", experiment: graphic[1] };
+  if (normalized === "/components") return { name: "components" };
+  const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
+  if (component) return { name: "component", experiment: component[1] };
+  if (normalized === "/status") return { name: "status" };
+  if (normalized === "/resources") return { name: "resources" };
   return { name: "notfound" };
 }

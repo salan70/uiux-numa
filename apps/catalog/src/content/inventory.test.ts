@@ -12,6 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(7);
+    expect(catalog.principles).toHaveLength(2);
     expect(catalog.liveVariants).toHaveLength(41);
   });
 

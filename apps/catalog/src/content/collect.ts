@@ -1,14 +1,24 @@
 import { categoryForDomains, type CatalogCategory } from "./category";
+import { toRepoPath } from "./github";
 import {
   parseExperimentFrontmatter,
+  parseFrontmatter,
+  parsePrincipleFrontmatter,
   type ExperimentFrontmatter,
   type ExperimentStatus,
+  type PrincipleStatus,
 } from "./parseFrontmatter";
 import { collectSchemes, schemeFiles, type ColorScheme } from "./schemes";
 import { collectSvgs, svgFiles, type SvgVariant } from "./svgs";
 import { collectTokens, type CatalogToken } from "./tokens";
 
 const experimentReadmes = import.meta.glob<string>("../../../../experiments/*/README.md", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+
+const principleFiles = import.meta.glob<string>("../../../../docs/principles/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
@@ -46,12 +56,24 @@ export type ExperimentRecord = {
   variantIds: string[];
   variants: ExperimentVariant[];
   liveVariants: LiveVariant[];
+  body: string;
+};
+
+export type PrincipleRecord = {
+  slug: string;
+  title: string;
+  status: PrincipleStatus;
+  created: string;
+  updated: string;
+  body: string;
+  repoPath: string;
 };
 
 export type CatalogData = {
   tokens: CatalogToken[];
   schemes: ColorScheme[];
   experiments: ExperimentRecord[];
+  principles: PrincipleRecord[];
   svgs: SvgVariant[];
   liveVariants: LiveVariant[];
 };
@@ -62,10 +84,11 @@ function loadCatalog(): CatalogData {
     ([key, json]) => collectTokens(json, toRepoPath(key)).tokens,
   );
   const experiments = collectExperiments(liveVariants);
+  const principles = collectPrinciples();
   const schemes = collectSchemes(schemeFiles);
   const svgs = collectSvgs(svgFiles);
 
-  return { tokens, schemes, experiments, svgs, liveVariants };
+  return { tokens, schemes, experiments, principles, svgs, liveVariants };
 }
 
 function collectLiveVariants(): LiveVariant[] {
@@ -97,6 +120,7 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
     const slug = match[1];
     const repoPath = toRepoPath(key);
     const frontmatter = parseExperimentFrontmatter(source, repoPath);
+    const { body } = parseFrontmatter(source);
     const actual = (byExperiment.get(slug) ?? []).map((item) => item.variant).sort();
     const listed = parseVariantIds(source);
 
@@ -124,6 +148,7 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
         status: variantStatus(frontmatter, id),
       })),
       liveVariants: live,
+      body,
     });
   }
 
@@ -133,6 +158,29 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
     }
   }
 
+  return records.sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+function collectPrinciples(): PrincipleRecord[] {
+  const records: PrincipleRecord[] = [];
+  for (const [key, source] of Object.entries(principleFiles)) {
+    const match = key.match(/docs\/principles\/([^/]+)\.md$/);
+    if (!match) throw new Error(`原則パスが不正: ${key}`);
+    const slug = match[1];
+    if (slug === "README") continue;
+    const repoPath = toRepoPath(key);
+    const frontmatter = parsePrincipleFrontmatter(source, repoPath);
+    const { body } = parseFrontmatter(source);
+    records.push({
+      slug,
+      title: frontmatter.title,
+      status: frontmatter.status,
+      created: frontmatter.created,
+      updated: frontmatter.updated,
+      body,
+      repoPath,
+    });
+  }
   return records.sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
@@ -155,12 +203,6 @@ function parseVariantIds(source: string): string[] {
   const end = source.indexOf("\n## ", start + 1);
   const section = source.slice(start, end === -1 ? source.length : end);
   return [...section.matchAll(/^\|\s*`([a-z0-9-]+)`\s*\|/gm)].map((match) => match[1]);
-}
-
-function toRepoPath(globKey: string): string {
-  const match = globKey.match(/\/((?:experiments|tokens)\/.*)$/);
-  if (!match) throw new Error(`リポジトリパスに変換できない: ${globKey}`);
-  return match[1];
 }
 
 export const catalog = loadCatalog();

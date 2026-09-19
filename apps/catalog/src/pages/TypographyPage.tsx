@@ -15,7 +15,7 @@ export function TypographyPage() {
     <>
       <div className="page-intro">
         <p className="eyebrow">Typography</p>
-        <h1>文字</h1>
+        <h1>Typography</h1>
         <p className="lede">
           Semantic role と primitive token
           の実寸見本、表示確認用プレイグラウンド、実画面プレビュー。
