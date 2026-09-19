@@ -30,6 +30,7 @@ rm -f "$out"
 "$chrome" --headless --no-first-run --disable-gpu \
   --user-data-dir="$profile" \
   --hide-scrollbars --force-device-scale-factor=2 \
+  --virtual-time-budget=1000 \
   --window-size="$width,$height" \
   --screenshot="$out" "$url" >/dev/null 2>&1 &
 pid=$!

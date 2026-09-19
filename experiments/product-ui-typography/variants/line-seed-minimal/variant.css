@@ -1,0 +1,33 @@
+.pt-line-seed-minimal {
+  --pt-font-synthesis-weight: none;
+  --pt-title-family: var(--typography-title-font-family);
+  --pt-title-size: var(--typography-title-font-size);
+  --pt-title-weight: var(--typography-title-font-weight);
+  --pt-title-line-height: var(--typography-title-line-height);
+  --pt-title-letter-spacing: var(--typography-title-letter-spacing);
+  --pt-heading-family: var(--typography-heading-font-family);
+  --pt-heading-size: var(--typography-heading-font-size);
+  --pt-heading-weight: var(--typography-heading-font-weight);
+  --pt-heading-line-height: var(--typography-heading-line-height);
+  --pt-heading-letter-spacing: var(--typography-heading-letter-spacing);
+  --pt-body-family: var(--typography-body-font-family);
+  --pt-body-size: var(--typography-body-font-size);
+  --pt-body-weight: var(--typography-body-font-weight);
+  --pt-body-line-height: var(--typography-body-line-height);
+  --pt-body-letter-spacing: var(--typography-body-letter-spacing);
+  --pt-ui-family: var(--typography-ui-font-family);
+  --pt-ui-size: var(--typography-ui-font-size);
+  --pt-ui-weight: var(--typography-ui-font-weight);
+  --pt-ui-line-height: var(--typography-ui-line-height);
+  --pt-ui-letter-spacing: var(--typography-ui-letter-spacing);
+  --pt-control-family: var(--typography-control-font-family);
+  --pt-control-size: var(--typography-control-font-size);
+  --pt-control-weight: var(--typography-control-font-weight);
+  --pt-control-line-height: var(--typography-control-line-height);
+  --pt-control-letter-spacing: var(--typography-control-letter-spacing);
+  --pt-caption-family: var(--typography-caption-font-family);
+  --pt-caption-size: var(--typography-caption-font-size);
+  --pt-caption-weight: var(--typography-caption-font-weight);
+  --pt-caption-line-height: var(--typography-caption-line-height);
+  --pt-caption-letter-spacing: var(--typography-caption-letter-spacing);
+}
