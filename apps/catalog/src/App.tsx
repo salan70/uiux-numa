@@ -35,13 +35,14 @@ export function App() {
   }, [route]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    document.getElementById("main")?.scrollTo(0, 0);
   }, [path]);
 
   if (route.name === "redirect") {
+    const page = pageForRoute(matchRoute(route.to));
     return (
-      <Layout path={path} title="移動中">
-        <p>新しい URL へ移動します。</p>
+      <Layout path={route.to} title={page.title} updated={page.updated}>
+        {page.body}
       </Layout>
     );
   }

@@ -1,17 +1,24 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { searchIndex } from "../content/search";
 import { navigate } from "../router";
 import { Link } from "./Link";
 
 type Props = {
+  path?: string;
   onNavigate?: () => void;
 };
 
-export function SearchBox({ onNavigate }: Props) {
+export function SearchBox({ path, onNavigate }: Props) {
   const listId = useId();
   const inputId = useId();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    setQuery("");
+    setActive(0);
+  }, [path]);
+
   const results = useMemo(() => {
     const trimmed = query.trim();
     if (trimmed.length < 1) return [];

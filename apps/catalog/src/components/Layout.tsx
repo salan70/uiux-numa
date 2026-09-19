@@ -38,7 +38,12 @@ export function Layout({ path, title, updated, children }: Props) {
         <Link href="/" className="app-wordmark">
           {SITE_TITLE}
         </Link>
-        <button type="button" className="menu-button" aria-haspopup="dialog" onClick={openMenu}>
+        <button
+          type="button"
+          className="button menu-button"
+          aria-haspopup="dialog"
+          onClick={openMenu}
+        >
           メニュー
         </button>
       </header>
@@ -49,8 +54,8 @@ export function Layout({ path, title, updated, children }: Props) {
         <div className="app-content">
           <main id="main" className="app-main">
             {children}
-            <PageNav path={path} />
           </main>
+          <PageNav path={path} />
           <Footer updated={updated} />
         </div>
         <aside className="toc-column">
@@ -69,7 +74,7 @@ export function Layout({ path, title, updated, children }: Props) {
         <div className="sidebar-drawer-panel">
           <div className="sidebar-drawer-header">
             <p>メニュー</p>
-            <button type="button" onClick={closeMenu}>
+            <button type="button" className="button button-ghost" onClick={closeMenu}>
               閉じる
             </button>
           </div>

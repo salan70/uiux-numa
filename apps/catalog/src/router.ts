@@ -26,14 +26,28 @@ export const OLD_PATH_REDIRECTS: Record<string, string> = {
   "/graphics": "/foundations/graphics",
 };
 
+export function resolvePath(path: string): string {
+  const normalized = path.replace(/\/+$/, "") || "/";
+  return OLD_PATH_REDIRECTS[normalized] ?? normalized;
+}
+
 export function usePathname(): string {
-  const [path, setPath] = useState(() => window.location.pathname);
+  const [path, setPath] = useState(() => syncLocation());
   useEffect(() => {
-    const onChange = () => setPath(window.location.pathname);
+    const onChange = () => setPath(syncLocation());
     window.addEventListener("popstate", onChange);
     return () => window.removeEventListener("popstate", onChange);
   }, []);
   return path;
+}
+
+function syncLocation(): string {
+  const current = window.location.pathname;
+  const resolved = resolvePath(current);
+  if (current !== resolved) {
+    window.history.replaceState({}, "", resolved);
+  }
+  return resolved;
 }
 
 export function navigate(to: string): void {

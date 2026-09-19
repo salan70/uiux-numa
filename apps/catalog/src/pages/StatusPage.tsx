@@ -14,6 +14,13 @@ export function StatusPage() {
       <div className="token-table-wrap">
         <table className="token-table status-table">
           <caption>成果物のステータス</caption>
+          <colgroup>
+            <col className="status-col-name" />
+            <col className="status-col-kind" />
+            <col className="status-col-status" />
+            <col className="status-col-adopted" />
+            <col className="status-col-updated" />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">名前</th>

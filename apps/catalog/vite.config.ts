@@ -1,5 +1,5 @@
 import react from "@vitejs/plugin-react";
-import { readFileSync } from "node:fs";
+import { createReadStream, copyFileSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
@@ -69,8 +69,79 @@ function rawSchemeCss() {
   };
 }
 
+function catalogFonts() {
+  const source = resolve(repoRoot, "tokens/typography/fonts");
+  const publicPath = "/tokens/typography/fonts";
+  const allowed = new Set(["LINESeedJP-Regular.woff2", "LINESeedJP-Bold.woff2"]);
+
+  return {
+    name: "catalog-fonts",
+    configureServer(server: {
+      middlewares: {
+        use: (
+          fn: (
+            req: { url?: string },
+            res: { setHeader: (name: string, value: string) => void; statusCode: number },
+            next: () => void,
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] ?? "";
+        if (!url.startsWith(`${publicPath}/`)) {
+          next();
+          return;
+        }
+        const name = url.slice(publicPath.length + 1);
+        if (!allowed.has(name)) {
+          next();
+          return;
+        }
+        res.setHeader("Content-Type", "font/woff2");
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        createReadStream(resolve(source, name)).pipe(res as unknown as NodeJS.WritableStream);
+      });
+    },
+    configurePreviewServer(server: {
+      middlewares: {
+        use: (
+          fn: (
+            req: { url?: string },
+            res: { setHeader: (name: string, value: string) => void; statusCode: number },
+            next: () => void,
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] ?? "";
+        if (!url.startsWith(`${publicPath}/`)) {
+          next();
+          return;
+        }
+        const name = url.slice(publicPath.length + 1);
+        if (!allowed.has(name)) {
+          next();
+          return;
+        }
+        res.setHeader("Content-Type", "font/woff2");
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        createReadStream(resolve(source, name)).pipe(res as unknown as NodeJS.WritableStream);
+      });
+    },
+    writeBundle(options: { dir?: string }) {
+      const dest = resolve(options.dir ?? resolve(catalogRoot, "dist"), "tokens/typography/fonts");
+      mkdirSync(dest, { recursive: true });
+      for (const name of readdirSync(source)) {
+        if (allowed.has(name)) copyFileSync(resolve(source, name), resolve(dest, name));
+      }
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [rawSchemeCss(), react(), previewFallback()],
+  plugins: [catalogFonts(), rawSchemeCss(), react(), previewFallback()],
   resolve: {
     dedupe: ["react", "react-dom"],
   },

@@ -5,10 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UI/UX 沼</title>
     <meta name="description" content="UI/UX 沼。採用した配色、文字、SVG、コンポーネントを正として掲載する公開デザインシステム。" />
+    <link
+      rel="preload"
+      href="/tokens/typography/fonts/LINESeedJP-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/tokens/typography/fonts/LINESeedJP-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <script>
       (function () {
         var key = "uiux-numa-catalog-theme";
         var schemeKey = "uiux-numa-catalog-scheme";
+        var colorsKey = "uiux-numa-catalog-colors";
         var params = new URLSearchParams(location.search);
         var choice = params.get("theme") || localStorage.getItem(key) || "system";
         var scheme = params.get("scheme") || localStorage.getItem(schemeKey) || "sumi";
@@ -16,9 +31,23 @@
         var dark =
           choice === "dark" ||
           (choice === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.dataset.theme = dark ? "dark" : "light";
-        document.documentElement.dataset.themeChoice = choice;
-        document.documentElement.dataset.scheme = scheme;
+        var root = document.documentElement;
+        root.dataset.theme = dark ? "dark" : "light";
+        root.dataset.themeChoice = choice;
+        root.dataset.scheme = scheme;
+        try {
+          var cached = JSON.parse(localStorage.getItem(colorsKey) || "null");
+          if (
+            cached &&
+            cached.colors &&
+            cached.theme === root.dataset.theme &&
+            cached.scheme === scheme
+          ) {
+            Object.keys(cached.colors).forEach(function (name) {
+              root.style.setProperty(name, cached.colors[name]);
+            });
+          }
+        } catch (error) {}
       })();
     </script>
   </head>

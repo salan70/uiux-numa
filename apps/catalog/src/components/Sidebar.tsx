@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { NAV_SECTIONS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
 import { SearchBox } from "./SearchBox";
 import { ThemeSwitch } from "./ThemeSwitch";
+
+const NAV_OPEN_KEY = "uiux-numa-catalog-nav";
 
 type Props = {
   path: string;
@@ -9,17 +12,28 @@ type Props = {
 };
 
 export function Sidebar({ path, onNavigate }: Props) {
+  const [open, setOpen] = useState(() => readOpenSections(path));
+
+  function toggle(id: string, next: boolean) {
+    setOpen((current) => {
+      const updated = { ...current, [id]: next };
+      persistOpenSections(updated);
+      return updated;
+    });
+  }
+
   return (
     <div className="sidebar">
-      <SearchBox onNavigate={onNavigate} />
+      <SearchBox path={path} onNavigate={onNavigate} />
       <nav className="sidebar-nav" aria-label="サイト">
         {NAV_SECTIONS.map((section) => {
-          const open = section.items.some((item) => isCurrentPath(item.href, path));
+          const current = section.items.some((item) => isCurrentPath(item.href, path));
           return (
             <details
-              key={`${section.id}-${path}`}
+              key={section.id}
               className="sidebar-section"
-              open={open ? true : undefined}
+              open={current || open[section.id] !== false}
+              onToggle={(event) => toggle(section.id, event.currentTarget.open)}
             >
               <summary>{section.label}</summary>
               <ul>
@@ -44,4 +58,25 @@ export function Sidebar({ path, onNavigate }: Props) {
       </div>
     </div>
   );
+}
+
+function readOpenSections(path: string): Record<string, boolean> {
+  const defaults: Record<string, boolean> = {};
+  for (const section of NAV_SECTIONS) {
+    defaults[section.id] = true;
+    if (section.items.some((item) => isCurrentPath(item.href, path))) {
+      defaults[section.id] = true;
+    }
+  }
+  try {
+    const stored = sessionStorage.getItem(NAV_OPEN_KEY);
+    if (!stored) return defaults;
+    return { ...defaults, ...(JSON.parse(stored) as Record<string, boolean>) };
+  } catch {
+    return defaults;
+  }
+}
+
+function persistOpenSections(open: Record<string, boolean>): void {
+  sessionStorage.setItem(NAV_OPEN_KEY, JSON.stringify(open));
 }

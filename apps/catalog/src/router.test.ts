@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import redirects from "../public/_redirects?raw";
-import { matchRoute, OLD_PATH_REDIRECTS } from "./router";
+import { matchRoute, OLD_PATH_REDIRECTS, resolvePath } from "./router";
 
 describe("matchRoute", () => {
   it("静的ルートを返す", () => {
@@ -38,6 +38,9 @@ describe("matchRoute", () => {
 
   it("旧 URL を新 URL へ送る", () => {
     expect(OLD_PATH_REDIRECTS["/colors"]).toBe("/foundations/colors");
+    expect(resolvePath("/colors")).toBe("/foundations/colors");
+    expect(resolvePath("/colors/")).toBe("/foundations/colors");
+    expect(resolvePath("/status/")).toBe("/status");
     expect(matchRoute("/colors")).toEqual({ name: "redirect", to: "/foundations/colors" });
     expect(matchRoute("/typography")).toEqual({ name: "redirect", to: "/foundations/typography" });
     expect(matchRoute("/icons")).toEqual({ name: "redirect", to: "/foundations/icons" });

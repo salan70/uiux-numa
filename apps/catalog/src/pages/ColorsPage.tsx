@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CopyButton } from "../components/CopyButton";
 import { Link } from "../components/Link";
 import { SchemeSwatch } from "../components/SchemeSwatch";
+import { SegmentedControl } from "../components/SegmentedControl";
 import { catalog } from "../content/collect";
 import {
   formatRatio,
@@ -70,27 +71,16 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
           {scheme.id} <span className="meta">（{scheme.label}）</span>
         </h1>
       </div>
-      <fieldset className="mode-switch">
-        <legend>表示</legend>
-        <label>
-          <input
-            type="radio"
-            name="color-mode"
-            checked={mode === "light"}
-            onChange={() => setMode("light")}
-          />
-          Light
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="color-mode"
-            checked={mode === "dark"}
-            onChange={() => setMode("dark")}
-          />
-          Dark
-        </label>
-      </fieldset>
+      <SegmentedControl
+        name="color-mode"
+        legend="表示"
+        value={mode}
+        options={[
+          { value: "light", label: "Light" },
+          { value: "dark", label: "Dark" },
+        ]}
+        onChange={setMode}
+      />
       {ROLE_GROUPS.map((group) => (
         <section key={group.id} aria-labelledby={`${scheme.id}-${group.id}-heading`}>
           <h2 id={`${scheme.id}-${group.id}-heading`}>{group.label}</h2>
@@ -99,6 +89,13 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
               <caption>
                 {scheme.id} / {group.label} / {mode}
               </caption>
+              <colgroup>
+                <col className="color-col-role" />
+                <col className="color-col-ja" />
+                <col className="color-col-hex" />
+                <col className="color-col-contrast" />
+                <col className="color-col-copy" />
+              </colgroup>
               <thead>
                 <tr>
                   <th scope="col">role</th>
@@ -177,24 +174,50 @@ function SchemeList({ schemes }: { schemes: ColorScheme[] }) {
 
 function contrastCell(color: SchemeColor, byRole: Map<string, SchemeColor>) {
   const pair = ROLE_CONTRAST[color.role];
-  if (!pair) return "—";
+  if (!pair) {
+    return (
+      <div className="contrast-cell">
+        <span>—</span>
+        <span>—</span>
+        <span>—</span>
+      </div>
+    );
+  }
   const background = byRole.get(pair.against);
-  if (!background) return "—";
+  if (!background) {
+    return (
+      <div className="contrast-cell">
+        <span>—</span>
+        <span>—</span>
+        <span>—</span>
+      </div>
+    );
+  }
   try {
     const ratio = contrastRatioFromCss(color.value, background.value);
-    const pass = passesWcag(ratio, pair.minimum);
+    const normal = passesWcag(ratio, 4.5);
     const large = passesWcag(ratio, 3);
     return (
       <div className="contrast-cell">
-        <span>
+        <span className="tabular">
           {formatRatio(ratio)}（{color.role} / {pair.against}）
         </span>
-        <span>{pair.minimum === 4.5 ? (pass ? "4.5:1 合格" : "4.5:1 不合格") : null}</span>
-        <span>{large ? "3:1 合格" : "3:1 不合格"}</span>
+        <span className={normal ? "contrast-verdict-pass" : "contrast-verdict-fail"}>
+          {normal ? "4.5:1 合格" : "4.5:1 不合格"}
+        </span>
+        <span className={large ? "contrast-verdict-pass" : "contrast-verdict-fail"}>
+          {large ? "3:1 合格" : "3:1 不合格"}
+        </span>
       </div>
     );
   } catch {
-    return "—";
+    return (
+      <div className="contrast-cell">
+        <span>—</span>
+        <span>—</span>
+        <span>—</span>
+      </div>
+    );
   }
 }
 

@@ -101,6 +101,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 - preview PNG が Catalog の画面へ収集されていない
 - preview deployment の HTML に `noindex` がある
 - production の `uiux.oda79.me` には `noindex` がない
+- 遷移と状態変更で layout-shift が起きない（Copy、配色切替、表示幅、検索結果、サイドバー開閉、フォントと配色の初回描画）
 
 ## ローカル確認
 
