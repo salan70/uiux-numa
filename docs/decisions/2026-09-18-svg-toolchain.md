@@ -15,7 +15,7 @@ Issue は resvg と SVGO を第一候補にし、薄いスクリプトや just r
 
 - 描画は resvg、最適化は SVGO、構文と XPath の検査は xmllint（libxml2）を使う。`flake.nix` で固定し、resvg と svgo は nixpkgs-unstable、libxml2 は stable から取る。
 - トップレベルに `scripts/` を新設し、薄いスクリプトを置く。コマンドの定義は justfile に集約し、recipe からスクリプトを呼ぶ。
-- recipe は `svg-check`、`svg-sheet`、`svg-optimize`、`web-shot` の 4 つにする。
+- recipe は `svg-check`、`svg-sheet`、`svg-grid`、`svg-optimize`、`web-shot` の 5 つにする。`svg-grid` は variant を行、asset を列に並べた比較グリッドを作る。`svg-sheet` は 1 SVG を 1 行に置くため、variant 数 × asset 数が増えると縦に長くなりすぎるためである。
 - MVP の対応範囲は自己完結した静的 SVG にする。`script`、`foreignObject`、animate 系、`image`、`text`、外部参照、`on*` 属性、CSS の `var()`、`@import` は未対応として診断する。
 - `<text>` は未対応にする。resvg の文字描画はマシンのフォントに依存するためである。文字は path で描くか、利用画面の HTML テキストで組む。
 - 比較シートは二段で描画する。各 SVG をサイズと明暗の背景ごとに PNG へ描画し、その PNG を並べた SVG を再び描画する。`currentColor` は明背景で `#1b1b1b`、暗背景で `#e6e6e6` に固定する。

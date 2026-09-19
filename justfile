@@ -73,3 +73,7 @@ svg-sheet out sizes +svgs:
 # 編集用 SVG から配布用 SVG を作り、検査と part-* の ID 保持を確かめる
 svg-optimize src dist:
     scripts/svg-optimize.sh "{{src}}" "{{dist}}"
+
+# variant を行、asset を列に並べた比較グリッドを作る。例: just svg-grid out.png 32 a/dist b/dist
+svg-grid out size +dirs:
+    scripts/svg-grid.sh "{{out}}" "{{size}}" {{dirs}}
