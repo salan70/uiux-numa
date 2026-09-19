@@ -1,0 +1,206 @@
+/*
+ * 技術アイコンの利用画面モックのスタイル。全 variant で同一の内容にする。
+ * ページは VitePress の既定テーマの色、スライドは授業資料の刷新計画のトークン（primary、accent）を写す。
+ */
+
+.ti-mock {
+  --vp-text: #3c3c43;
+  --vp-text-2: #67676c;
+  --vp-brand: #3451b2;
+  --vp-bg: #ffffff;
+  --vp-bg-alt: #f6f6f7;
+  --vp-divider: #e2e2e3;
+  --slide-primary: #002d62;
+  --slide-accent: #ce1126;
+  --slide-ink: #1f2933;
+
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  font:
+    16px/1.7 system-ui,
+    sans-serif;
+  color: var(--vp-text);
+  background: #d9dbe0;
+}
+
+:where(.ti-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.ti-mock) :where(p, h1, h2, ul, pre) {
+  margin: 0;
+}
+
+/* doc page (VitePress 風) */
+
+.ti-doc {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--vp-bg);
+  border-radius: 0.5rem;
+}
+
+.ti-sidebar {
+  padding: 1.5rem 1.25rem;
+  background: var(--vp-bg-alt);
+  border-right: 1px solid var(--vp-divider);
+}
+
+.ti-sidebar-title {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.ti-sidebar-list {
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  color: var(--vp-text-2);
+}
+
+.ti-sidebar-list li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-block: 0.3rem;
+}
+
+.ti-sidebar-list .ti-current {
+  color: var(--vp-brand);
+  font-weight: 600;
+}
+
+.ti-content {
+  max-width: 44rem;
+  padding: 2rem 2.5rem 2.5rem;
+}
+
+.ti-content h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.ti-content h2 {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1.75rem 0 0.75rem;
+  padding-top: 1.25rem;
+  font-size: 1.25rem;
+  border-top: 1px solid var(--vp-divider);
+}
+
+.ti-content pre {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  background: var(--vp-bg-alt);
+  border-radius: 0.5rem;
+}
+
+/* slides (Marp 風、16:9 を 2 枚) */
+
+.ti-slides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.ti-slide {
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  padding: 2rem 2.5rem;
+  color: var(--slide-ink);
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 15%);
+}
+
+.ti-slide-chapter {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  color: var(--slide-primary);
+}
+
+.ti-slide-kicker {
+  margin-top: 1.25rem;
+  color: var(--slide-accent);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.ti-slide-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.ti-slide-heading {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  color: var(--slide-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 3px solid var(--slide-accent);
+}
+
+.ti-slide-list ul {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+  font-size: 1.125rem;
+}
+
+.ti-slide-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ti-slide-list .ti-icon {
+  color: var(--slide-primary);
+}
+
+/* icon */
+
+.ti-icon {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+}
+
+.ti-icon svg {
+  display: block;
+}
+
+.ti-icon-20,
+.ti-icon-20 svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ti-icon-24,
+.ti-icon-24 svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ti-icon-32,
+.ti-icon-32 svg {
+  width: 32px;
+  height: 32px;
+}
+
+.ti-icon-96,
+.ti-icon-96 svg {
+  width: 96px;
+  height: 96px;
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="currentColor" stroke="none">
+  <title>API と通信</title>
+  <!--
+    往復する 2 本の矢印で要求と応答を表す。軸は太さ 4、頭は底辺 9・長さ 8 の三角。
+    上下の矢印の間は 2 空ける。候補のうち波括弧は code の山括弧と、差込口は 20px で潰れるため採らない。
+  -->
+  <path id="part-api-request" d="M3.5 9 L14 9 A2 2 0 0 0 14 5 L3.5 5 A2 2 0 0 0 3.5 9 Z M13.5 2.5L21.5 7L13.5 11.5Z"/>
+  <path id="part-api-response" d="M20.5 15 L10 15 A2 2 0 0 0 10 19 L20.5 19 A2 2 0 0 0 20.5 15 Z M10.5 12.5L2.5 17L10.5 21.5Z"/>
+</svg>

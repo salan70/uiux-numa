@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>API と通信</title>
+  <!-- 行き（リクエスト） -->
+  <path id="part-api-request" d="M4 8h10"/>
+  <path id="part-api-requesthead" d="M19 8l-5-3v6z" fill="currentColor" stroke="none"/>
+  <!-- 戻り（レスポンス） -->
+  <path id="part-api-response" d="M20 16H10"/>
+  <!-- accent: 返ってくるレスポンスの矢じり -->
+  <path id="part-api-accent" d="M5 16l5-3v6z" fill="#ce1126" stroke="none"/>
+</svg>

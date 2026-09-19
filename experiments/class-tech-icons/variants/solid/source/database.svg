@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="currentColor" stroke="none">
+  <title>データベース</title>
+  <!--
+    円柱の塗り。側面の溝 2 本を幅 2 の負の空間で抜き、上面の楕円と同じ曲率で回す。
+    溝は端まで抜けるので、円盤 3 枚の重なりとして読める。溝どうしの間は 2。
+  -->
+  <path id="part-database-body" fill-rule="evenodd" d="M5 6.5A7 2.5 0 0 1 19 6.5V17.5A7 2.5 0 0 1 5 17.5Z M5 9.5A7 2.5 0 0 0 19 9.5L19 11.5A7 2.5 0 0 1 5 11.5Z M5 13.5A7 2.5 0 0 0 19 13.5L19 15.5A7 2.5 0 0 1 5 15.5Z"/>
+</svg>
