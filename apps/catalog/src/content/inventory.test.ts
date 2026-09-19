@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(9);
-    expect(catalog.liveVariants).toHaveLength(51);
+    expect(catalog.experiments).toHaveLength(10);
+    expect(catalog.liveVariants).toHaveLength(54);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/typography/typography.tokens.json",
@@ -70,11 +70,20 @@ describe("catalog inventory", () => {
       "product-ui-typography/line-seed-minimal",
       "soft-component-kit/hairline-float",
     ]);
-    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
+    expect(
+      ids("exploring").every(
+        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("catalog-redesign/"),
+      ),
+    ).toBe(true);
     expect(ids("exploring")).toHaveLength(
-      catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
-        0,
+      (catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
+        0) +
+        (catalog.experiments.find((item) => item.slug === "catalog-redesign")?.variantIds.length ??
+          0),
     );
+    expect(
+      catalog.experiments.find((item) => item.slug === "catalog-redesign")?.category,
+    ).toBeNull();
     expect(
       catalog.experiments
         .filter((item) => item.status === "decided" && item.adopted.length === 0)
