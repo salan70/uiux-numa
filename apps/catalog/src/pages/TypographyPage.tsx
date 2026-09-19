@@ -19,7 +19,6 @@ export function TypographyPage() {
     <>
       <div className="page-intro">
         <h1>文字</h1>
-        <p className="lede">見出し、本文、操作、補足の 6 役割を同じ書体で揃える。</p>
       </div>
       <section aria-labelledby="semantic-heading">
         <h2 id="semantic-heading">役割</h2>
@@ -61,19 +60,6 @@ export function TypographyPage() {
         title="product-ui-typography"
         defaultVariant={typography ? defaultVariantId(typography) : undefined}
       />
-      <section aria-labelledby="typography-usage-heading">
-        <h2 id="typography-usage-heading">使い方</h2>
-        <p>
-          正本は <code>tokens/typography/typography.tokens.json</code> である。
-        </p>
-        <p>
-          Web 用 CSS は <code>just tokens-build</code> で生成する。検査は{" "}
-          <code>just tokens-check</code> である。
-        </p>
-        <p>
-          利用側は <code>tokens/typography/index.css</code> を読み、semantic の CSS 変数を参照する。
-        </p>
-      </section>
     </>
   );
 }

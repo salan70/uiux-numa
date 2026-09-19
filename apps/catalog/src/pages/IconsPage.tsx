@@ -9,16 +9,11 @@ export function IconsPage() {
     <>
       <div className="page-intro">
         <h1>アイコン</h1>
-        <p className="lede">アイコンの案を、用途の大きさで見比べる。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (
           <li key={experiment.slug}>
             <Link href={`/foundations/icons/${experiment.slug}`}>{experiment.title}</Link>
-            <span className="meta">
-              {" "}
-              更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
-            </span>
           </li>
         ))}
       </ul>

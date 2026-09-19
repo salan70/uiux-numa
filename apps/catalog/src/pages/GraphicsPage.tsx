@@ -9,16 +9,11 @@ export function GraphicsPage() {
     <>
       <div className="page-intro">
         <h1>図</h1>
-        <p className="lede">ロゴと章扉の案を見比べる。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (
           <li key={experiment.slug}>
             <Link href={`/foundations/graphics/${experiment.slug}`}>{experiment.title}</Link>
-            <span className="meta">
-              {" "}
-              更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
-            </span>
           </li>
         ))}
       </ul>

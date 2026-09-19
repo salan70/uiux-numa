@@ -13,15 +13,11 @@ mkdir -p "$out_dir"
 
 pages=(
   home:/
-  getting-started:/getting-started
-  principles:/principles
   colors:/foundations/colors
   typography:/foundations/typography
   icons:/foundations/icons
   graphics:/foundations/graphics
   components:/components
-  status:/status
-  resources:/resources
 )
 
 for entry in "${pages[@]}"; do

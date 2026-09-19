@@ -1,9 +1,10 @@
 # UI/UX 沼の公開手順
 
 公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
-Catalog は採用した成果物を正として示す公開デザインシステムサイトである。
-Experiment の本文、原則、開発者向け手順を掲載する。
+Catalog は採用した成果物を視覚的にざっと確認する見本帳である。
+token、配色、文字、アイコン、図、部品のプレビューを掲載する。
 却下案は比較資料として残す。
+判断は [Catalog を視覚確認専用の見本帳へ絞る ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
 production URL は `https://uiux.oda79.me/` とする。
 Git 連携と custom domain には、利用者による Cloudflare 認証が 1 回必要である。
 この文書はその手動手順だけを残す。
@@ -92,7 +93,9 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 確認項目は次のとおり。
 
 - `https://uiux.oda79.me/` が HTTPS で開く
-- `/getting-started`、`/principles`、`/foundations/colors`、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components`、`/status`、`/resources` を直リンクで開ける
+- `/`、`/foundations/colors`、配色詳細、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components` と各 Experiment 詳細を直リンクで開ける
+- `/getting-started`、`/principles`、`/status`、`/resources` が NotFound になる
+- サイドバーに検索と削除ページへのリンクがない
 - `/colors` などの旧 URL が新 URL へ 301 される
 - ヘッダーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
 - ライト / ダークの切り替えで選択中の配色の値が変わる
@@ -101,7 +104,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 - preview PNG が Catalog の画面へ収集されていない
 - preview deployment の HTML に `noindex` がある
 - production の `uiux.oda79.me` には `noindex` がない
-- 遷移と状態変更で layout-shift が起きない（Copy、配色切替、表示幅、検索結果、サイドバー開閉、フォントと配色の初回描画）
+- 遷移と状態変更で layout-shift が起きない（Copy、配色切替、表示幅、サイドバー開閉、フォントと配色の初回描画）
 
 ## ローカル確認
 

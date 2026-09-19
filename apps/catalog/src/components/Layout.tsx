@@ -2,7 +2,6 @@ import { useEffect, useId, useRef, type ReactNode } from "react";
 import { SITE_TITLE } from "../site";
 import { Footer } from "./Footer";
 import { Link } from "./Link";
-import { PageNav } from "./PageNav";
 import { Sidebar } from "./Sidebar";
 import { ThemeSwitch } from "./ThemeSwitch";
 
@@ -57,7 +56,6 @@ export function Layout({ path, title, updated, children }: Props) {
         <div className="app-content">
           <main id="main" className="app-main">
             {children}
-            <PageNav path={path} />
             <Footer updated={updated} />
           </main>
         </div>

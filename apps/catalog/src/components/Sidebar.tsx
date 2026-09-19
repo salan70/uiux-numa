@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NAV_SECTIONS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
-import { SearchBox } from "./SearchBox";
 
 const NAV_OPEN_KEY = "uiux-numa-catalog-nav";
 
@@ -22,37 +21,34 @@ export function Sidebar({ path, onNavigate }: Props) {
   }
 
   return (
-    <div className="sidebar">
-      <SearchBox path={path} onNavigate={onNavigate} />
-      <nav className="sidebar-nav" aria-label="サイト">
-        {NAV_SECTIONS.map((section) => {
-          const current = section.items.some((item) => isCurrentPath(item.href, path));
-          return (
-            <details
-              key={section.id}
-              className="sidebar-section"
-              open={current || open[section.id] !== false}
-              onToggle={(event) => toggle(section.id, event.currentTarget.open)}
-            >
-              <summary>{section.label}</summary>
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      current={isCurrentPath(item.href, path)}
-                      onNavigate={onNavigate}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          );
-        })}
-      </nav>
-    </div>
+    <nav className="sidebar sidebar-nav" aria-label="サイト">
+      {NAV_SECTIONS.map((section) => {
+        const current = section.items.some((item) => isCurrentPath(item.href, path));
+        return (
+          <details
+            key={section.id}
+            className="sidebar-section"
+            open={current || open[section.id] !== false}
+            onToggle={(event) => toggle(section.id, event.currentTarget.open)}
+          >
+            <summary>{section.label}</summary>
+            <ul>
+              {section.items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    current={isCurrentPath(item.href, path)}
+                    onNavigate={onNavigate}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        );
+      })}
+    </nav>
   );
 }
 

@@ -50,14 +50,6 @@ export type NavSection = {
 
 export const NAV_SECTIONS: NavSection[] = [
   {
-    id: "guides",
-    label: "ガイド",
-    items: [
-      { href: "/getting-started", label: "はじめに" },
-      { href: "/principles", label: "原則" },
-    ],
-  },
-  {
     id: "foundations",
     label: "土台",
     items: [
@@ -71,14 +63,6 @@ export const NAV_SECTIONS: NavSection[] = [
     id: "components",
     label: "部品",
     items: [{ href: "/components", label: "部品" }],
-  },
-  {
-    id: "info",
-    label: "情報",
-    items: [
-      { href: "/status", label: "ステータス" },
-      { href: "/resources", label: "リソース" },
-    ],
   },
 ];
 
@@ -105,45 +89,4 @@ export function categoryHref(category: CatalogCategory): string {
 export function isCurrentPath(href: string, path: string): boolean {
   if (href === "/") return path === "/";
   return path === href || path.startsWith(`${href}/`);
-}
-
-export function sitePages(input: {
-  schemes: { id: string; label: string }[];
-  principles: { slug: string; title: string }[];
-  experiments: { slug: string; title: string; category: CatalogCategory }[];
-}): NavItem[] {
-  const byCategory = (category: CatalogCategory) =>
-    input.experiments.filter((item) => item.category === category);
-  return [
-    { href: "/", label: "トップ" },
-    { href: "/getting-started", label: "はじめに" },
-    { href: "/principles", label: "原則" },
-    ...input.principles.map((item) => ({
-      href: `/principles/${item.slug}`,
-      label: item.title,
-    })),
-    { href: "/foundations/colors", label: "配色" },
-    ...input.schemes.map((item) => ({
-      href: `/foundations/colors/${item.id}`,
-      label: item.label,
-    })),
-    { href: "/foundations/typography", label: "文字" },
-    { href: "/foundations/icons", label: "アイコン" },
-    ...byCategory("icons").map((item) => ({
-      href: `/foundations/icons/${item.slug}`,
-      label: item.title,
-    })),
-    { href: "/foundations/graphics", label: "図" },
-    ...byCategory("graphics").map((item) => ({
-      href: `/foundations/graphics/${item.slug}`,
-      label: item.title,
-    })),
-    { href: "/components", label: "部品" },
-    ...byCategory("components").map((item) => ({
-      href: `/components/${item.slug}`,
-      label: item.title,
-    })),
-    { href: "/status", label: "ステータス" },
-    { href: "/resources", label: "リソース" },
-  ];
 }

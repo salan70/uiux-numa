@@ -19,10 +19,10 @@
 
 - Catalog は `apps/catalog/` に閉じた Vite + React + TypeScript の静的サイトにする。
 - 人が見る表示名は「UI/UX 沼」とする。
-- 掲載対象は Tokens、Experiments、原則、Skills とする。
-- 一覧は手書きせず、canonical JSON と Markdown を `import.meta.glob` で読む。
+- 掲載対象は token、配色、文字、アイコン、図、部品の視覚サンプルとする。
+- 一覧は手書きせず、canonical JSON と Experiment README の frontmatter を `import.meta.glob` で読む。
 - frontmatter や参照先が不正なら build を失敗させる。
-- 詳細は概要だけを示し、全文は GitHub の原文へ送る。
+- Experiment 本文、原則、開発者向け手順は Catalog 内で描画しない。正本は Git 上の Markdown と JSON のままにする。
 - ADR と運用文書は Catalog 内で全文表示しない。
 - live variant は専用 route で描画し、同一 origin の iframe へ隔離する。
 - 公開は Cloudflare Pages の Git 連携にする。

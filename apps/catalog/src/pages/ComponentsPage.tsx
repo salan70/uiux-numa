@@ -9,16 +9,11 @@ export function ComponentsPage() {
     <>
       <div className="page-intro">
         <h1>部品</h1>
-        <p className="lede">画面に載せる部品の動きを、その場で試す。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (
           <li key={experiment.slug}>
             <Link href={`/components/${experiment.slug}`}>{experiment.title}</Link>
-            <span className="meta">
-              {" "}
-              更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
-            </span>
           </li>
         ))}
       </ul>
