@@ -337,12 +337,91 @@ button:hover {
   font-size: var(--typography-caption-font-size);
 }
 
-.markdown-source {
+.copy-field {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.copy-button {
+  font-size: var(--typography-caption-font-size);
+}
+
+.copy-status {
+  font-size: var(--typography-caption-font-size);
+  color: var(--color-text-muted);
+}
+
+.token-table-wrap {
   overflow: auto;
-  padding: 1rem;
+  margin: 1rem 0 2rem;
   border: 1px solid var(--color-border);
-  background: var(--color-bg);
-  white-space: pre-wrap;
+  background: var(--color-surface);
+}
+
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.token-table caption {
+  padding: 0.6rem 0.75rem;
+  color: var(--color-text-muted);
+  text-align: left;
+  font-size: var(--typography-caption-font-size);
+}
+
+.token-table th,
+.token-table td {
+  padding: 0.65rem 0.75rem;
+  border-top: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.token-table th {
+  font-weight: var(--typography-control-font-weight);
+}
+
+.token-value-cell {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.token-value-cell .token-sample {
+  margin: 0;
+}
+
+.mode-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 0 0 1.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+}
+
+.mode-switch legend {
+  padding: 0 0.3rem;
+}
+
+.hex-swatch,
+.contrast-cell {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.hex-swatch {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hex-swatch-chip {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--color-border);
 }
 
 .sidebar-drawer {
