@@ -1,0 +1,302 @@
+/* variant `no-skill-next` のスタイル。 */
+
+/* 配色は color-schemes の wasabi ライトの役割を写す。役割名は同じにする。 */
+.rcf-next {
+  --color-bg: #f8fbf8;
+  --color-bg-subtle: #e6eae3;
+  --color-surface: #fffffc;
+  --color-border: #d4dcd6;
+  --color-border-strong: #767c6b;
+  --color-text: #333631;
+  --color-text-muted: #5b6356;
+  --color-accent: #006e54;
+  --color-accent-hover: #005243;
+  --color-on-accent: #fffffc;
+  --color-accent-subtle: #d6e9ca;
+  --color-focus: #69821b;
+  --color-success: #316745;
+  --color-success-subtle: #d6e9ca;
+  --color-danger: #b7282e;
+  --color-danger-subtle: #fef4f4;
+
+  box-sizing: border-box;
+  min-block-size: 40rem;
+  padding: 2.5rem 1rem;
+  color: var(--color-text);
+  background: var(--color-bg);
+  font: var(--typography-ui-font-weight) var(--typography-ui-font-size) /
+    var(--typography-ui-line-height) var(--typography-ui-font-family);
+}
+
+.rcf-next-card {
+  box-sizing: border-box;
+  max-inline-size: 26rem;
+  margin-inline: auto;
+  padding: 1.5rem 1.5rem 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+/* 進み具合。現在地と済みの段を色と印の両方で示す。 */
+.rcf-next-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+  padding: 0 0 1rem;
+  list-style: none;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.rcf-next-step {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  font: var(--typography-caption-font-weight) var(--typography-caption-font-size) /
+    var(--typography-caption-line-height) var(--typography-caption-font-family);
+}
+
+.rcf-next-step-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  transition:
+    background-color 240ms ease-out,
+    border-color 240ms ease-out,
+    color 240ms ease-out;
+}
+
+.rcf-next-step[data-state="current"] {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+}
+
+.rcf-next-step[data-state="current"] .rcf-next-step-mark {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.rcf-next-step[data-state="past"] .rcf-next-step-mark {
+  color: var(--color-success);
+  background: var(--color-success-subtle);
+  border-color: var(--color-success);
+}
+
+/* 面の入り。進むときは右から、戻るときは左から入る。 */
+.rcf-next-face-forward {
+  animation: rcf-next-enter-forward 240ms ease-out both;
+}
+
+.rcf-next-face-back {
+  animation: rcf-next-enter-back 240ms ease-out both;
+}
+
+@keyframes rcf-next-enter-forward {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes rcf-next-enter-back {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+.rcf-next-title {
+  margin: 0 0 1.5rem;
+  border-radius: 4px;
+  font: var(--typography-title-font-weight) var(--typography-title-font-size) /
+    var(--typography-title-line-height) var(--typography-title-font-family);
+}
+
+.rcf-next-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* エラー要約 */
+.rcf-next-summary {
+  padding: 1rem;
+  background: var(--color-danger-subtle);
+  border: 2px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+.rcf-next-summary-heading {
+  margin: 0 0 0.5rem;
+  color: var(--color-danger);
+  font: var(--typography-heading-font-weight) var(--typography-heading-font-size) /
+    var(--typography-heading-line-height) var(--typography-heading-font-family);
+}
+
+.rcf-next-summary-list {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+
+.rcf-next-summary-list a {
+  color: var(--color-danger);
+  text-decoration: underline;
+}
+
+/* 各項目 */
+.rcf-next-label {
+  display: block;
+  margin-block-end: 0.25rem;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+}
+
+.rcf-next-hint {
+  margin: 0 0 0.375rem;
+  color: var(--color-text-muted);
+  font: var(--typography-caption-font-weight) var(--typography-caption-font-size) /
+    var(--typography-caption-line-height) var(--typography-caption-font-family);
+}
+
+.rcf-next-input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+}
+
+.rcf-next-input:read-only {
+  background: var(--color-bg-subtle);
+}
+
+.rcf-next-input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+.rcf-next-error {
+  margin: 0.25rem 0 0;
+  color: var(--color-danger);
+}
+
+/* 主ボタンと副ボタン */
+.rcf-next-submit,
+.rcf-next-secondary {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+  transition: background-color 120ms ease-out;
+}
+
+.rcf-next-submit {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  border: 1px solid transparent;
+}
+
+.rcf-next-submit:hover {
+  background: var(--color-accent-hover);
+}
+
+.rcf-next-submit[aria-disabled="true"] {
+  background: var(--color-accent-hover);
+  cursor: progress;
+}
+
+.rcf-next-secondary {
+  color: var(--color-accent);
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+}
+
+.rcf-next-secondary:hover {
+  background: var(--color-accent-subtle);
+}
+
+.rcf-next-sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* プログラムでフォーカスを移す面は、操作手段に関わらずリングを出す。 */
+.rcf-next-summary:focus,
+.rcf-next-title:focus,
+.rcf-next-input:focus-visible,
+.rcf-next-submit:focus-visible,
+.rcf-next-secondary:focus-visible,
+.rcf-next-summary-list a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 完了面 */
+.rcf-next-title:has(+ .rcf-next-lead) {
+  margin-block-end: 0.5rem;
+}
+
+.rcf-next-lead {
+  margin: 0 0 1.5rem;
+  font: var(--typography-body-font-weight) var(--typography-body-font-size) /
+    var(--typography-body-line-height) var(--typography-body-font-family);
+}
+
+.rcf-next-heading {
+  margin: 0 0 0.75rem;
+  font: var(--typography-heading-font-weight) var(--typography-heading-font-size) /
+    var(--typography-heading-line-height) var(--typography-heading-font-family);
+}
+
+.rcf-next-actions {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rcf-next-caption {
+  margin: 0.375rem 0 0;
+  color: var(--color-text-muted);
+  font: var(--typography-caption-font-weight) var(--typography-caption-font-size) /
+    var(--typography-caption-line-height) var(--typography-caption-font-family);
+}
+
+.rcf-next-email {
+  overflow-wrap: anywhere;
+  font-weight: var(--font-weight-bold);
+}
+
+/* 動きを減らす設定では横送りをやめる。進み具合の表示と見出しで、どこへ進んだかは伝わる。 */
+@media (prefers-reduced-motion: reduce) {
+  .rcf-next-face-forward,
+  .rcf-next-face-back {
+    animation: none;
+  }
+
+  .rcf-next-step-mark,
+  .rcf-next-submit,
+  .rcf-next-secondary {
+    transition: none;
+  }
+}

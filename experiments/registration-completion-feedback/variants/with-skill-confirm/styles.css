@@ -1,0 +1,332 @@
+/* variant `with-skill-confirm` のスタイル。 */
+
+/* 配色は experiments/color-schemes/variants/wasabi のライトの役割を写す。役割名は同じ。 */
+.rcf-confirm {
+  --color-bg: #f8fbf8;
+  --color-bg-subtle: #e6eae3;
+  --color-surface: #fffffc;
+  --color-border: #d4dcd6;
+  --color-border-strong: #767c6b;
+  --color-text: #333631;
+  --color-text-muted: #5b6356;
+  --color-accent: #006e54;
+  --color-accent-hover: #005243;
+  --color-on-accent: #fffffc;
+  --color-focus: #69821b;
+  --color-success: #316745;
+  --color-success-subtle: #d6e9ca;
+  --color-danger: #b7282e;
+  --color-danger-subtle: #fef4f4;
+
+  /* 曲線は crafting-motion の局所値。リポジトリ共通 token にはしない。 */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  min-height: calc(100vh - 6rem);
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background: var(--color-bg);
+  font: var(--typography-ui-font-weight) var(--typography-ui-font-size) /
+    var(--typography-ui-line-height) var(--typography-ui-font-family);
+}
+
+.rcf-confirm-card {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  justify-items: stretch;
+  box-sizing: border-box;
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+section.rcf-confirm-card {
+  justify-items: start;
+}
+
+.rcf-confirm-title {
+  margin: 0;
+  font: var(--typography-title-font-weight) var(--typography-title-font-size) /
+    var(--typography-title-line-height) var(--typography-title-font-family);
+}
+
+.rcf-confirm-title:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.rcf-confirm-body {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: var(--typography-body-font-weight) var(--typography-body-font-size) /
+    var(--typography-body-line-height) var(--typography-body-font-family);
+  overflow-wrap: anywhere;
+}
+
+.rcf-confirm-summary {
+  padding: 1rem;
+  background: var(--color-danger-subtle);
+  border: 2px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+.rcf-confirm-summary:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.rcf-confirm-summary-heading {
+  margin: 0 0 0.5rem;
+  color: var(--color-danger);
+  font: var(--typography-heading-font-weight) var(--typography-heading-font-size) /
+    var(--typography-heading-line-height) var(--typography-heading-font-family);
+}
+
+.rcf-confirm-summary-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.rcf-confirm-summary-list a {
+  color: var(--color-danger);
+  font-weight: var(--typography-control-font-weight);
+  text-decoration: underline;
+}
+
+.rcf-confirm-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+}
+
+.rcf-confirm-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  font: inherit;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.rcf-confirm-input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+/* 登録後も内容は残す。編集できないことを面の色で示す。 */
+.rcf-confirm-input:read-only {
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+}
+
+.rcf-confirm-error {
+  margin: 0.25rem 0 0;
+  color: var(--color-danger);
+  font: var(--typography-caption-font-weight) var(--typography-caption-font-size) /
+    var(--typography-caption-line-height) var(--typography-caption-font-family);
+}
+
+/* ボタン */
+.rcf-confirm-actions {
+  display: grid;
+  justify-items: start;
+}
+
+.rcf-confirm-button,
+.rcf-confirm-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.rcf-confirm-button {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.rcf-confirm-button-secondary {
+  color: var(--color-accent);
+  background: transparent;
+  border-color: var(--color-border-strong);
+}
+
+.rcf-confirm-button:active,
+.rcf-confirm-button-secondary:active {
+  transform: scale(0.97);
+}
+
+.rcf-confirm-submit[aria-disabled="true"]:active {
+  transform: none;
+}
+
+.rcf-confirm-submit[data-state="pending"] {
+  cursor: progress;
+  background: var(--color-accent-hover);
+}
+
+/* 押したボタン自身が結果へ変わる。主操作は下の「ログインへ進む」へ譲る。 */
+.rcf-confirm-submit[data-state="done"] {
+  cursor: default;
+  color: var(--color-success);
+  background: var(--color-success-subtle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rcf-confirm-button:not([aria-disabled="true"]):hover {
+    background: var(--color-accent-hover);
+  }
+
+  .rcf-confirm-button-secondary:hover {
+    background: var(--color-bg-subtle);
+  }
+}
+
+.rcf-confirm-input:focus-visible,
+.rcf-confirm-button:focus-visible,
+.rcf-confirm-button-secondary:focus-visible,
+.rcf-confirm-summary-list a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 送信中の進行。無限の進行なので linear。 */
+.rcf-confirm-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid color-mix(in srgb, var(--color-on-accent) 40%, transparent);
+  border-top-color: var(--color-on-accent);
+  border-radius: 50%;
+  animation: rcf-confirm-spin 800ms linear infinite;
+}
+
+@keyframes rcf-confirm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+ * ボタン内のチェック。stroke-dashoffset は transform / opacity の外だが、
+ * 24px の SVG 1 個に限り「押したボタンが成功へ変わった」因果を見せるために使う。性能は未計測。
+ */
+.rcf-confirm-check {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rcf-confirm-check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 300ms var(--ease-out) 100ms;
+
+  @starting-style {
+    stroke-dashoffset: 1;
+  }
+}
+
+/*
+ * 確認の入場。目的は「フィードバック」。原点は押したボタン側（上）に置き、ボタンから出たように見せる。
+ * 小さな面なので 200ms。カードの高さはこの面の分だけ即時に伸びる。下に要素がないので段飛びは起きない。
+ * 属性の切替による transition なので、途中で状態が変わっても現在値から続く。
+ */
+.rcf-confirm-result {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  opacity: 0;
+  transform: translateY(-8px);
+  transform-origin: top left;
+}
+
+.rcf-confirm-result[data-shown] {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--color-success-subtle);
+  border-radius: 8px;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+}
+
+.rcf-confirm-result-heading {
+  margin: 0;
+  color: var(--color-success);
+  font: var(--typography-heading-font-weight) var(--typography-heading-font-size) /
+    var(--typography-heading-line-height) var(--typography-heading-font-family);
+}
+
+.rcf-confirm-result .rcf-confirm-body {
+  color: var(--color-text);
+}
+
+.rcf-confirm-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 動きを減らす設定では移動と線の描画を止め、色と透明度の変化だけ残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .rcf-confirm-result {
+    transform: none;
+  }
+
+  .rcf-confirm-result[data-shown] {
+    transition: opacity 200ms ease;
+  }
+
+  .rcf-confirm-check path {
+    transition: none;
+  }
+
+  .rcf-confirm-button,
+  .rcf-confirm-button-secondary {
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  .rcf-confirm-button:active,
+  .rcf-confirm-button-secondary:active {
+    transform: none;
+  }
+
+  .rcf-confirm-spinner {
+    /* 回らない輪は止まって見えるため消す。進行は文言で伝える。 */
+    display: none;
+  }
+}
