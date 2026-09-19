@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>進み具合を見る</title>
+  <!-- 比喩は with-skill と同じ「到達線と棒」。語彙は線画 1 つ、線幅 2、端点と角は root で 1 回、live area は padding 2、座標は整数だけ。 -->
+  <!-- 100% の到達線。live area いっぱいの 3〜21 に置く。 -->
+  <path id="part-progress-goal" d="M3 3h18"/>
+  <!-- 週ごとの完了分。棒は線で描き、高さは 6 / 10 / 13 と等間隔を避けて電波表示と区別する。 -->
+  <path id="part-progress-week-1" d="M6 21v-6"/>
+  <path id="part-progress-week-2" d="M12 21v-10"/>
+  <path id="part-progress-week-3" d="M18 21v-13"/>
+</svg>
