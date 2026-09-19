@@ -20,10 +20,10 @@ export function TypographyPlayground({ roles }: Props) {
 
   return (
     <section className="playground" aria-labelledby="playground-heading">
-      <h2 id="playground-heading">Typography playground</h2>
+      <h2 id="playground-heading">Typography Playground</h2>
       <div className="playground-controls">
         <label>
-          role
+          Role
           <select value={selected.name} onChange={(event) => setRole(event.target.value)}>
             {roles.map((item) => (
               <option key={item.name} value={item.name}>
@@ -33,7 +33,7 @@ export function TypographyPlayground({ roles }: Props) {
           </select>
         </label>
         <label>
-          表示幅 {width}rem
+          表示幅: {width} rem
           <input
             type="range"
             min={16}
@@ -44,7 +44,7 @@ export function TypographyPlayground({ roles }: Props) {
         </label>
       </div>
       <label className="playground-text">
-        任意テキスト
+        サンプルテキスト
         <textarea value={text} onChange={(event) => setText(event.target.value)} rows={4} />
       </label>
       <div className="playground-stage" style={{ maxWidth: `${width}rem` }}>

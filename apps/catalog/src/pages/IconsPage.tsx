@@ -14,7 +14,7 @@ export function IconsPage() {
       <div className="page-intro">
         <p className="eyebrow">Icons</p>
         <h1>アイコン</h1>
-        <p className="lede">アイコン set ごとに、全 variant の SVG を並べる。</p>
+        <p className="lede">アイコンセットごとに、全バリアントの SVG を並べて比較する。</p>
       </div>
       <SvgGrid groups={groups} />
     </>

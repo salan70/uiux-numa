@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")!).render(
           <Variant />
         </Suspense>
       ) : (
-        <p>指定した live variant はない。</p>
+        <p>指定されたバリアントは見つかりません。</p>
       )}
     </main>
   </StrictMode>,

@@ -17,11 +17,12 @@ export function TypographyPage() {
         <p className="eyebrow">Typography</p>
         <h1>文字</h1>
         <p className="lede">
-          semantic role と primitive token の実寸見本、playground、live variant。
+          Semantic role と primitive token
+          の実寸見本、表示確認用プレイグラウンド、実画面プレビュー。
         </p>
       </div>
-      <TokenGroup title="semantic" tokens={semantics} />
-      <TokenGroup title="primitive" tokens={primitives} />
+      <TokenGroup title="Semantic tokens" tokens={semantics} />
+      <TokenGroup title="Primitive tokens" tokens={primitives} />
       <TypographyPlayground roles={semantics} />
       <LivePreview variants={live} title="product-ui-typography" />
     </>

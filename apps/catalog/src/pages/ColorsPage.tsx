@@ -21,19 +21,19 @@ export function ColorsPage() {
       <div className="page-intro">
         <p className="eyebrow">Colors</p>
         <h1>配色</h1>
-        <p className="lede">role ごとの色面と和名を、ライト / ダークで並べる。</p>
+        <p className="lede">Role ごとの色面と和名を、ライト / ダークの両モードで比較する。</p>
       </div>
       {current && (
         <section className="scheme-live" aria-labelledby="scheme-live-heading">
-          <p className="eyebrow">selected scheme</p>
+          <p className="eyebrow">Selected Scheme</p>
           <h2 id="scheme-live-heading">
             {current.id} <span className="meta">（{current.label}）</span>
           </h2>
           <div className="scheme-live-sample">
-            <p>現在の配色はサイト全体に反映されている。</p>
+            <p>選択中の配色はカタログ全体に反映される。</p>
             <div className="scheme-live-actions">
               <button type="button">主ボタン</button>
-              <span>本文と surface の組み合わせ</span>
+              <span>本文テキストとサーフェスの組み合わせ</span>
             </div>
           </div>
         </section>
@@ -48,7 +48,7 @@ export function ColorsPage() {
             </header>
             <div className="scheme-modes">
               <section aria-labelledby={`${scheme.id}-light-heading`}>
-                <h3 id={`${scheme.id}-light-heading`}>light</h3>
+                <h3 id={`${scheme.id}-light-heading`}>Light</h3>
                 <div className="scheme-swatches">
                   {scheme.light.map((color) => (
                     <SchemeSwatch color={color} key={color.cssName} />
@@ -56,7 +56,7 @@ export function ColorsPage() {
                 </div>
               </section>
               <section aria-labelledby={`${scheme.id}-dark-heading`}>
-                <h3 id={`${scheme.id}-dark-heading`}>dark</h3>
+                <h3 id={`${scheme.id}-dark-heading`}>Dark</h3>
                 <div className="scheme-swatches">
                   {scheme.dark.map((color) => (
                     <SchemeSwatch color={color} key={color.cssName} />

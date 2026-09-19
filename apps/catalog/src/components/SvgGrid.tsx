@@ -29,7 +29,7 @@ export function SvgGrid({ groups, showSizeControl = true, limit }: Props) {
                   checked={size === item}
                   onChange={() => setSize(item)}
                 />
-                {item}
+                {item}px
               </label>
             ))}
           </div>
