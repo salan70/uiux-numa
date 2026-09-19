@@ -10,6 +10,9 @@ type Props = {
 };
 
 export function ExperimentPage({ experiment, kind }: Props) {
+  if (!experiment.category) {
+    throw new Error(`${experiment.slug}: 土台 / 部品の種別がない`);
+  }
   const adopted = defaultVariantId(experiment);
   const groups = catalog.svgs.filter((group) => group.experiment === experiment.slug);
   const parentHref = categoryHref(experiment.category);

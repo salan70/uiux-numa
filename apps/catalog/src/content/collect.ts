@@ -1,6 +1,8 @@
 import { categoryForDomains, type CatalogCategory } from "./category";
 import {
   parseExperimentFrontmatter,
+  parseTokenAssetMeta,
+  type AssetMeta,
   type ExperimentFrontmatter,
   type ExperimentStatus,
 } from "./parseFrontmatter";
@@ -38,18 +40,27 @@ export type ExperimentRecord = {
   slug: string;
   title: string;
   status: ExperimentStatus;
+  role: AssetMeta["role"];
+  maturity: AssetMeta["maturity"];
   created: string;
   updated: string;
   adopted: string[];
   domains: string[];
-  category: CatalogCategory;
+  sources: string[];
+  platforms: string[];
+  category: CatalogCategory | null;
   variantIds: string[];
   variants: ExperimentVariant[];
   liveVariants: LiveVariant[];
 };
 
+export type TokenAsset = AssetMeta & {
+  sourcePath: string;
+};
+
 export type CatalogData = {
   tokens: CatalogToken[];
+  tokenAssets: TokenAsset[];
   schemes: ColorScheme[];
   experiments: ExperimentRecord[];
   svgs: SvgVariant[];
@@ -61,11 +72,23 @@ function loadCatalog(): CatalogData {
   const tokens = Object.entries(tokenFiles).flatMap(
     ([key, json]) => collectTokens(json, toTokenRepoPath(key)).tokens,
   );
+  const tokenAssets = Object.entries(tokenFiles).flatMap(([key, json]) => {
+    const sourcePath = toTokenRepoPath(key);
+    const meta = readTokenAssetMeta(json, sourcePath);
+    return meta ? [{ sourcePath, ...meta }] : [];
+  });
   const experiments = collectExperiments(liveVariants);
   const schemes = collectSchemes(schemeFiles);
   const svgs = collectSvgs(svgFiles);
 
-  return { tokens, schemes, experiments, svgs, liveVariants };
+  return { tokens, tokenAssets, schemes, experiments, svgs, liveVariants };
+}
+
+function readTokenAssetMeta(json: unknown, sourcePath: string): AssetMeta | null {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return null;
+  const extensions = (json as { $extensions?: { "uiux-numa"?: unknown } }).$extensions;
+  if (!extensions || extensions["uiux-numa"] == null) return null;
+  return parseTokenAssetMeta(json, sourcePath);
 }
 
 function toTokenRepoPath(globKey: string): string {
@@ -119,10 +142,14 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       slug,
       title: frontmatter.title,
       status: frontmatter.status,
+      role: frontmatter.role,
+      maturity: frontmatter.maturity,
       created: frontmatter.created,
       updated: frontmatter.updated,
       adopted: frontmatter.adopted,
       domains: frontmatter.domains,
+      sources: frontmatter.sources,
+      platforms: frontmatter.platforms,
       category: categoryForDomains(frontmatter.domains),
       variantIds: actual,
       variants: actual.map((id) => ({

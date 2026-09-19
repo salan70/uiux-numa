@@ -1,6 +1,8 @@
 ---
 title: 日本語プロダクト UI の Typography
 status: decided
+role: foundation
+maturity: candidate
 created: 2026-09-19
 updated: 2026-09-19
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - design-tokens
   - accessibility
+sources: []
 adopted:
   - line-seed-minimal
 ---

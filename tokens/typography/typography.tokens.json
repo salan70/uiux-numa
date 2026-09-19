@@ -1,4 +1,12 @@
 {
+  "$extensions": {
+    "uiux-numa": {
+      "role": "foundation",
+      "maturity": "candidate",
+      "platforms": ["web"],
+      "sources": ["product-ui-typography"]
+    }
+  },
   "font": {
     "family": {
       "sans": {

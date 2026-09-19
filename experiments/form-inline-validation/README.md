@@ -1,6 +1,8 @@
 ---
 title: 入力フォームの inline validation
 status: decided
+role: module
+maturity: candidate
 created: 2026-09-13
 updated: 2026-09-17
 platforms:
@@ -11,6 +13,7 @@ domains:
   - states-design
   - interaction-design
   - accessibility
+sources: []
 adopted:
   - on-submit
 ---

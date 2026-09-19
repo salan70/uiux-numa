@@ -7,8 +7,8 @@ describe("categoryForDomains", () => {
     expect(categoryForDomains(["illustration-svg", "visual-design"])).toBe("graphics");
   });
 
-  it("未対応の domains で失敗する", () => {
-    expect(() => categoryForDomains(["motion"])).toThrow("対応する Catalog の種別がない");
+  it("未対応の domains は種別なしにする", () => {
+    expect(categoryForDomains(["motion"])).toBeNull();
   });
 });
 

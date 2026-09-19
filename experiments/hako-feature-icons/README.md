@@ -1,6 +1,8 @@
 ---
 title: Hako の機能アイコン
 status: implementing
+role: reference
+maturity: experimental
 created: 2026-09-18
 updated: 2026-09-18
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - consistency
   - accessibility
+sources: []
 adopted: []
 ---
 

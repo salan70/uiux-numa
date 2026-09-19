@@ -1,6 +1,8 @@
 ---
 title: 柔らかい現代系の Catalog 部品キット
 status: decided
+role: module
+maturity: candidate
 created: 2026-09-19
 updated: 2026-09-20
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - interaction-design
   - accessibility
+sources: []
 adopted:
   - hairline-float
 ---

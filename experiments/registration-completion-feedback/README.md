@@ -1,6 +1,8 @@
 ---
 title: 登録完了の遷移とフィードバック
 status: decided
+role: reference
+maturity: experimental
 created: 2026-09-20
 updated: 2026-09-20
 platforms:
@@ -12,6 +14,7 @@ domains:
   - forms-input-ux
   - ux-writing
   - accessibility
+sources: []
 adopted: []
 ---
 

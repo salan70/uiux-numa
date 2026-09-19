@@ -1,6 +1,8 @@
 ---
 title: スライドの章扉イラスト
 status: decided
+role: reference
+maturity: experimental
 created: 2026-09-19
 updated: 2026-09-19
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - consistency
   - accessibility
+sources: []
 adopted: []
 ---
 

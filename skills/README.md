@@ -6,21 +6,25 @@ dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、ここと混
 
 ## 一覧
 
-| Skill                   | 成熟度         | 用途                                                                |
-| ----------------------- | -------------- | ------------------------------------------------------------------- |
-| `crafting-svg`          | `experimental` | SVG のアイコン、ロゴ、イラストを制作、比較、改善、最適化する        |
-| `exploring-ui-variants` | `experimental` | 方向の異なる UI 案を named variant として実装し、実サイズで比較する |
-| `crafting-motion`       | `experimental` | 動きの可否、目的、手段、中断、reduced motion を順に設計して実装する |
-| `reviewing-motion`      | `experimental` | 動きを点検する。作者所見は 1 観点であり、採用判断そのものではない   |
+| Skill                   | role     | maturity       | 用途                                                                |
+| ----------------------- | -------- | -------------- | ------------------------------------------------------------------- |
+| `crafting-svg`          | `module` | `experimental` | SVG のアイコン、ロゴ、イラストを制作、比較、改善、最適化する        |
+| `exploring-ui-variants` | `module` | `experimental` | 方向の異なる UI 案を named variant として実装し、実サイズで比較する |
+| `crafting-motion`       | `module` | `experimental` | 動きの可否、目的、手段、中断、reduced motion を順に設計して実装する |
+| `reviewing-motion`      | `module` | `experimental` | 動きを点検する。作者所見は 1 観点であり、採用判断そのものではない   |
 
 `exploring-ui-variants`、`crafting-motion`、`reviewing-motion` は Issue #9 の派生版である。
-役割は明示的に選ぶ `module` である。#8 の metadata キーは SKILL.md に持たない。
+役割は明示的に選ぶ `module` である。Issue #8 の metadata キーは `SKILL.md` に持たない。
 出典と衝突の扱いは [ADR](../docs/decisions/2026-09-20-emil-skill-derivation.md) に残す。
 
-成熟度の意味は次のとおり。
+Asset の `role` と `maturity` の意味は [docs/asset-model.md](../docs/asset-model.md) に従う。
+Skill の表で使う成熟度は次のとおり。
+Pattern lifecycle の `promoted` とは別の語である。
 
-- `experimental`: 制作手順の試作。Pattern から昇格した Asset ではない。Issue の Experiment で使いながら改善する。
-- `promoted`: Pattern lifecycle の昇格の条件を満たし、ADR で昇格を決めた。
+- `experimental`: R&D 中の制作手順。利用前提を置かない。
+- `candidate`: 実利用で検証中。
+- `stable`: 十分に検証され、再利用候補として扱える。
+- `deprecated`: 新規利用を推奨しない。
 
 ## 読み込み経路
 
@@ -33,7 +37,7 @@ Codex と Cursor は `.agents/skills -> ../.claude/skills` を経由して同じ
 
 1. `skills/<name>/SKILL.md` と `references/` を作る。frontmatter は `name` と `description` だけにする。
 2. `ln -s ../../skills/<name> .claude/skills/<name>` で symlink を作り、`git add` する。
-3. この一覧に成熟度と用途を書く。
+3. この一覧に `role`、`maturity`、用途を書く。
 
 ## 使い方
 

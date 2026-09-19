@@ -1,6 +1,8 @@
 ---
 title: 授業資料で使う技術アイコン
 status: decided
+role: module
+maturity: candidate
 created: 2026-09-18
 updated: 2026-09-18
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - consistency
   - accessibility
+sources: []
 adopted:
   - line-round
 ---
