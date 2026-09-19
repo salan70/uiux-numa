@@ -1,5 +1,6 @@
 import { NAV_SECTIONS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
+import { SearchBox } from "./SearchBox";
 import { ThemeSwitch } from "./ThemeSwitch";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 export function Sidebar({ path, onNavigate }: Props) {
   return (
     <div className="sidebar">
+      <SearchBox onNavigate={onNavigate} />
       <nav className="sidebar-nav" aria-label="サイト">
         {NAV_SECTIONS.map((section) => {
           const open = section.items.some((item) => isCurrentPath(item.href, path));
