@@ -6,9 +6,16 @@ dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、ここと混
 
 ## 一覧
 
-| Skill          | 成熟度         | 用途                                                         |
-| -------------- | -------------- | ------------------------------------------------------------ |
-| `crafting-svg` | `experimental` | SVG のアイコン、ロゴ、イラストを制作、比較、改善、最適化する |
+| Skill                   | 成熟度         | 用途                                                                |
+| ----------------------- | -------------- | ------------------------------------------------------------------- |
+| `crafting-svg`          | `experimental` | SVG のアイコン、ロゴ、イラストを制作、比較、改善、最適化する        |
+| `exploring-ui-variants` | `experimental` | 方向の異なる UI 案を named variant として実装し、実サイズで比較する |
+| `crafting-motion`       | `experimental` | 動きの可否、目的、手段、中断、reduced motion を順に設計して実装する |
+| `reviewing-motion`      | `experimental` | 動きを点検する。作者所見は 1 観点であり、採用判断そのものではない   |
+
+`exploring-ui-variants`、`crafting-motion`、`reviewing-motion` は Issue #9 の派生版である。
+役割は明示的に選ぶ `module` である。#8 の metadata キーは SKILL.md に持たない。
+出典と衝突の扱いは [ADR](../docs/decisions/2026-09-20-emil-skill-derivation.md) に残す。
 
 成熟度の意味は次のとおり。
 
@@ -31,6 +38,7 @@ Codex と Cursor は `.agents/skills -> ../.claude/skills` を経由して同じ
 ## 使い方
 
 Claude Code では `/crafting-svg` と入力するか、要求文に SVG の制作を書けば Skill が読み込まれる。
+動きの分岐は `/exploring-ui-variants`、実装は `/crafting-motion`、点検は `/reviewing-motion` を使う。
 新しいプロセスで確かめるには、リポジトリのルートで次を実行する。
 
 ```bash
@@ -71,6 +79,20 @@ nix develop -c claude -p "/crafting-svg 授業資料サイトのサイドバー�
 5. 同じ要求文とモデルで Skill なしの実行と比べ、効果と限界を `skills/README.md` に書き足す。
 
 Skill なし実行との比較は、Experiment `experiments/hako-feature-icons/` の Variants と Learnings に記録する。
+
+## 派生 3 Skill の読み込み確認（2026-09-20）
+
+symlink の解決は次を確認した。
+`.claude/skills/<name>` と `.agents/skills/<name>` は同じ `skills/<name>/SKILL.md` を指す。
+
+| エージェント | 確認   | 内容                                                                      |
+| ------------ | ------ | ------------------------------------------------------------------------- |
+| Cursor       | 済み   | `.agents/skills` 経由で 3 本の `SKILL.md` が実体へ解決した                |
+| Claude Code  | 済み   | `nix develop -c claude -p "/exploring-ui-variants …"` が Skill 名を返した |
+| Codex        | 未確認 | 同じ symlink 経路を使う想定。起動確認はしていない                         |
+
+読み込み確認はデザイン上の効果の確認ではない。
+効果の比較は `experiments/registration-completion-feedback/` で行う。
 
 ## 効果と限界（2026-09-19 時点）
 
