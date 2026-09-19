@@ -13,8 +13,12 @@ Experiment は「作る → 比較する → 評価する → 知識化する �
 6. 必要に応じて追加案や改善案を実装する。
 7. Decision と rejected reasons を記録する。
 8. 再利用可能な知見を抽出する。
-9. 十分に検証されたものを Pattern / Asset へ昇格する。
+9. 再利用できる形があれば Pattern を抽出し、必要なら Asset へ昇格する。
 10. 実プロジェクトで利用し、再度フィードバックする。
+
+手順 9 の `extracted` は記録上の抽出完了である。
+Asset の `maturity` を `stable` にしたことではない。
+分離の規則は [asset-model.md](asset-model.md) に定める。
 
 対象領域は [scope.md](scope.md)、評価の方針は [evaluation/policy.md](evaluation/policy.md) に従う。
 
@@ -40,5 +44,5 @@ Experiment は「作る → 比較する → 評価する → 知識化する �
 - learnings
 - related patterns / assets
 
-形式は Markdown と metadata の組み合わせを候補とする。後続 Issue「Experiment format / schema」で決める。
+形式は [experiment-format.md](experiment-format.md) に定める。
 判断の記録先は [判断履歴の ADR](decisions/2026-09-13-decision-records.md) に定める。

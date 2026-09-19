@@ -12,13 +12,16 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 ## 3 層構成
 
-| 層        | 役割                                                     | 置き場                                  |
-| --------- | -------------------------------------------------------- | --------------------------------------- |
-| Lab       | 同じ課題に複数案を実装し、比較・改善する                 | `experiments/`                          |
-| Knowledge | 実験から得た知見を整理する                               | `docs/`、`patterns/`                    |
-| Assets    | 検証済みの知見を他プロジェクトで再利用できる形に昇格する | `skills/`、`tokens/`、`design-systems/` |
+| 層        | 役割                                         | 置き場                                  |
+| --------- | -------------------------------------------- | --------------------------------------- |
+| Lab       | 同じ課題に複数案を実装し、比較・改善する     | `experiments/`                          |
+| Knowledge | 実験から得た知見を整理する                   | `docs/`、`patterns/`                    |
+| Assets    | 他プロジェクトで組み合わせて使う成果の置き場 | `skills/`、`tokens/`、`design-systems/` |
 
-各層の定義と昇格の方針は [docs/layers.md](docs/layers.md) に定める。
+置き場は探索、整理、再利用の作業場所である。
+完成した Design System への一方向の昇格先ではない。
+各成果は `role`（`foundation` / `module` / `reference`）と `maturity`（`experimental` / `candidate` / `stable` / `deprecated`）を独立に持つ。
+定義は [docs/layers.md](docs/layers.md) と [docs/asset-model.md](docs/asset-model.md) に定める。
 ディレクトリは中身ができた時点で作る。
 構成の決定は [初期ディレクトリ構成の ADR](docs/decisions/2026-09-13-initial-directory-layout.md) に残す。
 
@@ -41,13 +44,14 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 公開サイトの表示名は「UI/UX 沼」である。
 実装は `apps/catalog/` にある。
-Catalog は採用した成果物を正として示す公開デザインシステムサイトである。
-原則と開発者向け手順を掲載し、却下案は比較資料として残す。
-配色はサイドバーで選び、ライト / ダークのテーマと組み合わせて表示できる。
+Catalog は成果物の visual showcase である。
+仕様書や Asset の正本にはしない。
+説明文より先に見て触れ、`role` と `maturity` で再利用の前提を確かめる。
+配色はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
 production URL は `https://uiux.oda79.me/` とする。
 Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。
-構成の判断は [Catalog の ADR](docs/decisions/2026-09-19-catalog-design-system-site.md) に残す。
+構成の判断は [visual showcase の ADR](docs/decisions/2026-09-20-catalog-visual-showcase.md) に残す。
 
 ## 開発環境
 
@@ -65,7 +69,8 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 ## 文書一覧
 
 - [docs/scope.md](docs/scope.md): 対象領域
-- [docs/layers.md](docs/layers.md): Lab / Knowledge / Assets と昇格の方針
+- [docs/layers.md](docs/layers.md): Lab / Knowledge / Assets と置き場
+- [docs/asset-model.md](docs/asset-model.md): `role` と `maturity` の Asset モデル
 - [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md): Experiment の手順と記録項目
 - [docs/evaluation/policy.md](docs/evaluation/policy.md): 評価の方針
 - [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)

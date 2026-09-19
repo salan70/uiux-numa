@@ -1,7 +1,9 @@
 # Lab / Knowledge / Assets
 
 リポジトリは Lab、Knowledge、Assets の 3 層で構成する。
-知見は Lab から Knowledge へ整理し、検証を経て Assets へ昇格する。
+層は作業の置き場である。
+完成した Design System へ一方向に昇格する段階ではない。
+各成果の使い方は [Asset composition model](asset-model.md) の `role` と `maturity` で表す。
 
 ## Lab
 
@@ -31,7 +33,9 @@ Pattern と anti-pattern は `patterns/` に置く。
 
 ## Assets
 
-十分に検証された知見を、他プロジェクトで再利用できる形に昇格する層。
+他プロジェクトで組み合わせて使う成果を置く層。
+`stable` だけを置く場所ではない。
+`experimental` な Skill や `candidate` な token もここに置いてよい。
 対象例は次のとおり。
 
 - skills
@@ -77,9 +81,18 @@ Pattern の例:
 
 ## Asset への昇格
 
-複数の Experiment で再利用価値が確認できた Pattern を昇格する。
-昇格先は Design System、Skill、Template などとする。
-昇格の条件と手順は後続 Issue「Pattern lifecycle」で決める。
+Pattern を他プロジェクトで再利用できる形に変える手順は [pattern-lifecycle.md](pattern-lifecycle.md) に定める。
+昇格は置き場を Assets へ移すことであり、Asset の `maturity` を `stable` にすることではない。
+Experiment の `extracted` は抽出の完了であり、再利用前提ではない。
+
+## Asset モデル
+
+`role` と `maturity` は置き場と独立させる。
+Lab の Experiment が `reference` でもよい。
+Assets の Skill が `experimental` でもよい。
+必須 metadata、他プロジェクトでの利用、実例は [asset-model.md](asset-model.md) に定める。
+判断は [Asset composition model の ADR](decisions/2026-09-20-asset-composition-model.md) に残す。
+ディレクトリ再編は、分類の実例で必要になるまで行わない。
 
 ## Design Tokens
 
@@ -90,23 +103,20 @@ visual token だけでなく、必要性が確認できれば motion などの t
 
 ## Catalog
 
-Catalog は採用した成果物を視覚的にざっと確認する見本帳とする。
-却下した案は配色などの比較資料として残す。
+Catalog は成果物の visual showcase とする。
+仕様書や Asset の正本にはしない。
+説明文より先に見て触れ、`role` と `maturity` で再利用の前提を確かめる。
+採用成果に限らず、`reference` も探索してよい。
 
-- トップ: 紙の見本と 5 ページへのリンク
-- 土台: 配色、文字、アイコン、図
-- 部品: Experiment ごとの live iframe
-- Experiment 詳細: 採用案のプレビューだけ
-
-token 表は Name、値、説明、Copy を持つ。
-Experiment 本文、原則、開発者向け手順は Catalog 内で描画しない。
-ADR 全文は Catalog 内で描画しない。
-判断は [Catalog を視覚確認専用の見本帳へ絞る ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
+Experiment 本文、原則、開発者向け手順、ADR 全文は Catalog 内で描画しない。
+live variant は専用 route と iframe へ隔離する。
 preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
 実装は `apps/catalog/` に置く。
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
-判断は [Catalog のホストを見本帳にする ADR](decisions/2026-09-19-catalog-host.md) に残す。
+責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
+ホストの顔と token の取り込みは [ホスト ADR](decisions/2026-09-19-catalog-host.md) を維持する。
+見た目の方向は `experiments/catalog-redesign/` で比較し、公開面は人間判断のあとで改修する。
 
 ## AI Agent と Skill
 

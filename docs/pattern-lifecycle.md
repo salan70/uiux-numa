@@ -8,12 +8,12 @@ Pattern の判断の記録先と必須項目は [判断履歴の ADR](decisions/
 
 ## 用語
 
-| 用語            | 意味                                                                                             |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| Pattern         | 複数の場面で再利用できる体験上の解決の形。visual component に限定しない                          |
-| anti-pattern    | 避けるべき形。却下理由が一般化できたときに記録する                                               |
-| 由来 Experiment | Pattern の根拠となった Experiment。Pattern は 1 件以上の由来 Experiment を持つ                   |
-| Asset           | 他プロジェクトで再利用できる形に昇格したもの。Skill、Design Tokens、Design System、Template など |
+| 用語            | 意味                                                                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pattern         | 複数の場面で再利用できる体験上の解決の形。visual component に限定しない                                                                             |
+| anti-pattern    | 避けるべき形。却下理由が一般化できたときに記録する                                                                                                  |
+| 由来 Experiment | Pattern の根拠となった Experiment。Pattern は 1 件以上の由来 Experiment を持つ                                                                      |
+| Asset           | 他プロジェクトで組み合わせて使う成果。Skill、token、Design System、Template など。`role` と `maturity` は [asset-model.md](asset-model.md) に定める |
 
 ## 抽出の基準
 
@@ -37,7 +37,7 @@ Pattern の判断の記録先と必須項目は [判断履歴の ADR](decisions/
 4. 由来 Experiment の variant、previews、evaluation へリンクする。リンクは Good examples、Bad examples、Implementation examples に書く。
 5. When not to use と Bad examples を必ず書く。Rejected reasons が根拠になる。
 6. Accessibility considerations を必ず書く。evaluation の accessibility の観察が根拠になる。
-7. Experiment の Related patterns / assets から Pattern へリンクし、Experiment の status を `extracted` にする。
+7. Experiment の Related patterns / assets から Pattern へリンクし、Experiment の status を `extracted` にする。`extracted` は抽出完了であり、Asset の `maturity` は変えない。
 
 抽出は人間が判断する。
 AI agent が候補を挙げてもよいが、README を作る前に人間が候補を確認する。
@@ -96,10 +96,14 @@ sources:
 
 | 値          | 意味                           | 遷移の条件                                                                   |
 | ----------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `candidate` | 1 件の Experiment から抽出した | 抽出の手順を終えた                                                           |
+| `candidate` | 1 件の Experiment から抽出した | 抽出の手順を終えた。Asset の `maturity: candidate` ではない                  |
 | `validated` | 再利用価値を確認した           | 2 件目の Experiment または実プロジェクトで有効と確認し、`sources` に追加した |
 | `promoted`  | Asset へ昇格した               | 昇格の条件を満たし、ADR と Asset へのリンクを Sources に書いた               |
 | `retired`   | 使わないと判断した             | 理由と代替を When not to use に書いた                                        |
+
+Pattern の `promoted` は、再利用できる形の Asset を置いた印である。
+作った Asset の `maturity` は別途付ける。
+既定は `candidate` とし、`stable` は実利用の十分さを見て人間が付ける。
 
 status は `candidate`、`validated`、`promoted` の順に進める。
 `retired` はどの状態からでも遷移できる。
@@ -135,6 +139,8 @@ anti-pattern は同じ節を使い、次のように読み替える。
 
 昇格は Pattern を他プロジェクトで再利用できる形に変えることを指す。
 昇格しても Pattern は Knowledge の正本として残し、Asset は再利用の形として別に置く。
+置き場が Assets になっても、Asset の `maturity` は `stable` にしない。
+`role` は昇格先の使い方で付ける。
 
 共通の条件は次のとおり。
 

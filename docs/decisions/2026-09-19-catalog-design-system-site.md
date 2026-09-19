@@ -1,7 +1,8 @@
 # Catalog を公開デザインシステムサイトにする
 
-- 状態: Accepted
+- 状態: Superseded
 - 日付: 2026-09-19
+- 置き換え: 2026-09-20。[visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) が正本。
 - 参照: [UI/UX 沼の構成と公開先](2026-09-19-uiux-rd-catalog.md)、[Catalog を成果物の見本帳へ絞り込む](2026-09-19-catalog-artifacts-only.md)、[Lab / Knowledge / Assets](../layers.md)、[公開手順](../catalog-publishing.md)
 
 ## 背景

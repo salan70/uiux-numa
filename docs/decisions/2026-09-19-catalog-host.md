@@ -2,8 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-19
-- 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。
-- 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)
+- 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。「Catalog 全体の見た目を 3 案の Experiment にはしない」は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) が部分置換する。比較は `experiments/catalog-redesign/` に閉じ、公開 `apps/catalog/` は人間判断まで変えない。
+- 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)、[visual showcase](2026-09-20-catalog-visual-showcase.md)
 
 ## 背景
 
@@ -13,10 +13,10 @@
 
 ## 決定
 
-- Catalog の比喩は見本帳とする。
+- Catalog の比喩は見本帳とする。公開面のホストの顔の話である。成果物の掲載範囲は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) に従う。
 - サイト全体の配色切替は維持する。紙が変わる操作として扱う。
 - ホストの顔は構成、文字の役割、画面の言葉で作る。固有のブランド色は持たない。
-- Catalog 全体の見た目を 3 案の Experiment にはしない。
+- Catalog 全体の見た目を、公開 `apps/catalog/` の 3 スキンとしては作らない。方向の比較は `experiments/catalog-redesign/` で行う。
 - 画面語彙は日本語にする。`wasabi` などの id はコードとしてだけ出す。
 - `title` は画面に 1 つだけ使い、`h1` の大きさを token の外で増やさない。
 - 大文字アイブロウと字間強調は使わない。
@@ -61,7 +61,8 @@ Catalog で値が必要になったら、次の順で決める。
 見本帳にすると、採用成果が主役になり、クロムは構造だけになる。
 配色切替を残すと、役割色 `--color-*` がホストと見本で同じかをその場で確かめられる。
 
-全体を Experiment にすると variant がサイト単位になり、公開面の改修が止まる。
+全体を公開面の Experiment にすると variant がサイト単位になり、公開面の改修が止まる。
+比較は Lab の Experiment に閉じると、公開面を止めずに方向を試せる。
 日本語の画面語彙にすると、英語の Foundations 分類を先に置く生成物の型から外れる。
 
 Typography の `title` を破る `clamp` は、display token を足す理由にならない。
@@ -74,7 +75,7 @@ Typography の `title` を破る `clamp` は、display token を足す理由に�
 
 - VitePress 型三点セットのまま細部だけ整える: ドキュメント生成器の骨格が残り、AI 感の主因を消さない。
 - ホスト配色を 1 つに固定する: サイト全体の切替を残す方針と反する。
-- `experiments/catalog-chrome` で 3 スキンを先に作る: 比較軸がサイト全体になり、公開面が止まる。
+- `experiments/catalog-chrome` で公開面の 3 スキンを先に作る: 比較軸がサイト全体になり、公開面が止まる。Lab の `catalog-redesign` は公開面を変えない。
 - display / overline の typography token を足す: 共通用途が Catalog の見出しだけである。
 - color LP の角丸をすべて token 化する: `0.375` / `0.5` / `0.75` / `999px` は役割が分かれていない複製になる。
 - 影の elevation token を足す: 第二面がなく、color LP の制約とも反する。
