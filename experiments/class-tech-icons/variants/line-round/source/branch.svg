@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>バージョン管理</title>
+  <!-- 幹。両端はノードの中心で終え、丸い端点がノードの外縁と揃う -->
+  <path id="part-branch-trunk" d="M7 7v9"/>
+  <!-- 分岐。幹の接線から立ち上がり、水平でノードに入る -->
+  <path id="part-branch-fork" d="M7 15c0-3 5-5 9-5"/>
+  <circle id="part-branch-head" cx="7" cy="5" r="2"/>
+  <circle id="part-branch-base" cx="7" cy="18" r="2"/>
+  <circle id="part-branch-tip" cx="18" cy="10" r="2"/>
+</svg>

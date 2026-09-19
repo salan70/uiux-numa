@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>AI と LLM</title>
+  <!-- 大きい 4 点星 -->
+  <path id="part-ai-star" d="M11 5Q11 13 19 13 11 13 11 21 11 13 3 13 11 13 11 5Z"/>
+  <!-- accent: 生成の火花 -->
+  <path id="part-ai-accent" d="M18 2Q18 6 22 6 18 6 18 10 18 6 14 6 18 6 18 2Z" fill="#ce1126" stroke="none"/>
+</svg>
