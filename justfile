@@ -109,6 +109,6 @@ catalog-test:
 catalog-build:
     cd apps/catalog && pnpm build
 
-# 先に just catalog-dev を起動しておく。390 / 1280 とライト / ダークでホームを撮影する。
+# 先に just catalog-dev を起動しておく。ホームと 5 種別ページを 390 / 1280 とライト / ダークで撮影する。
 catalog-shot:
     scripts/catalog-shot.sh "http://localhost:{{catalog_port}}"

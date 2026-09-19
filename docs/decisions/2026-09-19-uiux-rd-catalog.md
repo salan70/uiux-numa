@@ -13,6 +13,8 @@
 公開後は `https://uiux.oda79.me/` で成果を共有する。
 詳細記録の正本は Git 上の Markdown と JSON のままにする。
 
+掲載内容の決定は [Catalog を成果物の見本帳へ絞り込む ADR](2026-09-19-catalog-artifacts-only.md) に置き換えた。
+
 ## 決定
 
 - Catalog は `apps/catalog/` に閉じた Vite + React + TypeScript の静的サイトにする。

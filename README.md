@@ -41,10 +41,14 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 公開サイトの表示名は「UI/UX 沼」である。
 実装は `apps/catalog/` にある。
+Catalog は実際の成果物を種別ごとに見る見本帳である。
+掲載する種別は Colors、Typography、Icons、Graphics、Components とする。
+Experiment の本文、原則、Skill、preview PNG は Catalog に掲載しない。
+配色はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
 production URL は `https://uiux.oda79.me/` とする。
 Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。
-構成の判断は [UI/UX 沼の ADR](docs/decisions/2026-09-19-uiux-rd-catalog.md) に残す。
+構成の判断は [Catalog の ADR](docs/decisions/2026-09-19-catalog-artifacts-only.md) に残す。
 
 ## 開発環境
 

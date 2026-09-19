@@ -1,15 +1,12 @@
 import { useEffect } from "react";
-import { catalog } from "./content/collect";
 import { Layout } from "./components/Layout";
-import { ExperimentDetailPage } from "./pages/ExperimentDetailPage";
-import { ExperimentsPage } from "./pages/ExperimentsPage";
+import { ColorsPage } from "./pages/ColorsPage";
+import { ComponentsPage } from "./pages/ComponentsPage";
+import { GraphicsPage } from "./pages/GraphicsPage";
 import { HomePage } from "./pages/HomePage";
+import { IconsPage } from "./pages/IconsPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { PrincipleDetailPage } from "./pages/PrincipleDetailPage";
-import { PrinciplesPage } from "./pages/PrinciplesPage";
-import { SkillDetailPage } from "./pages/SkillDetailPage";
-import { SkillsPage } from "./pages/SkillsPage";
-import { TokensPage } from "./pages/TokensPage";
+import { TypographyPage } from "./pages/TypographyPage";
 import { matchRoute, usePathname } from "./router";
 import { shouldNoindex } from "./theme";
 
@@ -34,81 +31,43 @@ export function App() {
 
   if (route.name === "home") {
     return (
-      <Layout path={path} title="ホーム">
+      <Layout path={path} title="成果物の見本帳">
         <HomePage />
       </Layout>
     );
   }
-  if (route.name === "tokens") {
+  if (route.name === "colors") {
     return (
-      <Layout path={path} title="Tokens">
-        <TokensPage />
+      <Layout path={path} title="Colors">
+        <ColorsPage />
       </Layout>
     );
   }
-  if (route.name === "experiments") {
+  if (route.name === "typography") {
     return (
-      <Layout path={path} title="Experiments">
-        <ExperimentsPage />
+      <Layout path={path} title="Typography">
+        <TypographyPage />
       </Layout>
     );
   }
-  if (route.name === "experiment") {
-    const experiment = catalog.experiments.find((item) => item.slug === route.slug);
-    if (!experiment) {
-      return (
-        <Layout path={path} title="ページがない">
-          <NotFoundPage />
-        </Layout>
-      );
-    }
+  if (route.name === "icons") {
     return (
-      <Layout path="/experiments" title={experiment.title}>
-        <ExperimentDetailPage experiment={experiment} />
+      <Layout path={path} title="Icons">
+        <IconsPage />
       </Layout>
     );
   }
-  if (route.name === "principles") {
+  if (route.name === "graphics") {
     return (
-      <Layout path={path} title="原則">
-        <PrinciplesPage />
+      <Layout path={path} title="Graphics">
+        <GraphicsPage />
       </Layout>
     );
   }
-  if (route.name === "principle") {
-    const principle = catalog.principles.find((item) => item.slug === route.slug);
-    if (!principle) {
-      return (
-        <Layout path={path} title="ページがない">
-          <NotFoundPage />
-        </Layout>
-      );
-    }
+  if (route.name === "components") {
     return (
-      <Layout path="/principles" title={principle.title}>
-        <PrincipleDetailPage principle={principle} />
-      </Layout>
-    );
-  }
-  if (route.name === "skills") {
-    return (
-      <Layout path={path} title="Skills">
-        <SkillsPage />
-      </Layout>
-    );
-  }
-  if (route.name === "skill") {
-    const skill = catalog.skills.find((item) => item.name === route.nameValue);
-    if (!skill) {
-      return (
-        <Layout path={path} title="ページがない">
-          <NotFoundPage />
-        </Layout>
-      );
-    }
-    return (
-      <Layout path="/skills" title={skill.name}>
-        <SkillDetailPage skill={skill} />
+      <Layout path={path} title="Components">
+        <ComponentsPage />
       </Layout>
     );
   }

@@ -4,18 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UI/UX 沼</title>
-    <meta name="description" content="UI/UX 沼。Tokens、Experiments、原則、Skills の成果一覧。" />
+    <meta name="description" content="UI/UX 沼。Colors、Typography、Icons、Graphics、Components の成果物見本帳。" />
     <script>
       (function () {
         var key = "uiux-numa-catalog-theme";
+        var schemeKey = "uiux-numa-catalog-scheme";
         var params = new URLSearchParams(location.search);
         var choice = params.get("theme") || localStorage.getItem(key) || "system";
+        var scheme = params.get("scheme") || localStorage.getItem(schemeKey) || "sumi";
         if (choice !== "light" && choice !== "dark" && choice !== "system") choice = "system";
         var dark =
           choice === "dark" ||
           (choice === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
         document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.scheme = scheme;
       })();
     </script>
   </head>

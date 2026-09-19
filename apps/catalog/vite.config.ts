@@ -1,4 +1,6 @@
 import react from "@vitejs/plugin-react";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
@@ -37,8 +39,38 @@ function previewFallback() {
   };
 }
 
+function rawSchemeCss() {
+  const virtualPrefix = "\0raw-scheme:";
+
+  return {
+    name: "raw-scheme-css",
+    enforce: "pre" as const,
+    resolveId(id: string, importer?: string) {
+      const [file, query = ""] = id.split("?");
+      if (!query.split("&").some((item) => item === "raw" || item.startsWith("raw="))) return;
+      const absoluteFile =
+        importer && file.startsWith(".") ? resolve(dirname(importer), file) : file;
+      if (!/\/experiments\/color-schemes\/variants\/[^/]+\/scheme\.css$/.test(absoluteFile)) return;
+      return `${virtualPrefix}${encodeURIComponent(absoluteFile)}.js`;
+    },
+    load(id: string) {
+      if (!id.startsWith(virtualPrefix)) return;
+      const file = decodeURIComponent(id.slice(virtualPrefix.length, -3));
+      return {
+        code: `export default ${JSON.stringify(readFileSync(file, "utf8"))}`,
+        map: { mappings: "" },
+        moduleType: "js",
+      };
+    },
+    transform(code: string, id: string) {
+      if (!id.startsWith(virtualPrefix)) return;
+      return { code, map: null, moduleType: "js" as const };
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), previewFallback()],
+  plugins: [rawSchemeCss(), react(), previewFallback()],
   resolve: {
     dedupe: ["react", "react-dom"],
   },
