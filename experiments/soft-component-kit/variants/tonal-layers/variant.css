@@ -1,0 +1,238 @@
+.sk-tonal-layers {
+  --sk-radius-control: 0.75rem;
+  --sk-radius-surface: 1.25rem;
+  --sk-duration: 180ms;
+  --sk-ease: ease-out;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.sk-tonal-layers .sk-header,
+.sk-tonal-layers .sk-sidebar-desktop {
+  background: var(--color-bg-subtle);
+}
+
+.sk-tonal-layers .sk-card,
+.sk-tonal-layers .sk-table-wrap,
+.sk-tonal-layers .sk-drawer-popup,
+.sk-tonal-layers .sk-select-popup,
+.sk-tonal-layers .sk-select-trigger,
+.sk-tonal-layers .sk-textarea,
+.sk-tonal-layers .sk-button,
+.sk-tonal-layers .sk-segmented-thumb {
+  background: var(--color-surface);
+}
+
+.sk-tonal-layers .sk-preview-frame,
+.sk-tonal-layers .sk-segmented {
+  background: var(--color-bg-subtle);
+}
+
+.sk-tonal-layers .sk-card,
+.sk-tonal-layers .sk-table-wrap,
+.sk-tonal-layers .sk-preview-frame {
+  border-radius: var(--sk-radius-surface);
+}
+
+.sk-tonal-layers .sk-card,
+.sk-tonal-layers .sk-preview-frame {
+  padding: 1.25rem;
+}
+
+.sk-tonal-layers .sk-footer,
+.sk-tonal-layers .sk-kicker,
+.sk-tonal-layers .sk-intro,
+.sk-tonal-layers .sk-help,
+.sk-tonal-layers .sk-section-panel a {
+  color: var(--color-text-muted);
+}
+
+.sk-tonal-layers .sk-wordmark,
+.sk-tonal-layers .sk-section-panel a[aria-current="page"] {
+  color: var(--color-text);
+}
+
+.sk-tonal-layers .sk-button,
+.sk-tonal-layers .sk-select-trigger,
+.sk-tonal-layers .sk-section-trigger,
+.sk-tonal-layers .sk-textarea,
+.sk-tonal-layers .sk-segmented,
+.sk-tonal-layers .sk-select-popup,
+.sk-tonal-layers .sk-select-item {
+  border: 0;
+  border-radius: var(--sk-radius-control);
+}
+
+.sk-tonal-layers .sk-button,
+.sk-tonal-layers .sk-select-trigger,
+.sk-tonal-layers .sk-textarea {
+  color: var(--color-text);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-border-strong) 70%, transparent);
+}
+
+.sk-tonal-layers .sk-textarea,
+.sk-tonal-layers .sk-select-trigger {
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.sk-tonal-layers .sk-button-primary {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+  box-shadow: none;
+}
+
+.sk-tonal-layers .sk-button-ghost,
+.sk-tonal-layers .sk-section-trigger {
+  background: transparent;
+  box-shadow: none;
+}
+
+.sk-tonal-layers .sk-section-trigger {
+  color: var(--color-text);
+}
+
+.sk-tonal-layers .sk-segmented {
+  padding: 0.25rem;
+}
+
+.sk-tonal-layers .sk-segmented-thumb {
+  border-radius: calc(var(--sk-radius-control) - 0.05rem);
+}
+
+.sk-tonal-layers .sk-segmented-option {
+  color: var(--color-text-muted);
+  border: 0;
+  background: transparent;
+}
+
+.sk-tonal-layers .sk-segmented-option[data-checked] {
+  color: var(--color-text);
+  font-weight: var(--typography-control-font-weight);
+  box-shadow: inset 0 0 0 2px var(--color-border-strong);
+}
+
+.sk-tonal-layers .sk-slider-track {
+  border-radius: 999px;
+  background: var(--color-bg-subtle);
+}
+
+.sk-tonal-layers .sk-slider-indicator {
+  border-radius: inherit;
+  background: var(--color-accent);
+}
+
+.sk-tonal-layers .sk-slider-thumb {
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-accent);
+  box-shadow: inset 0 0 0 2px var(--color-surface);
+}
+
+.sk-tonal-layers .sk-select-item {
+  color: var(--color-text);
+}
+
+.sk-tonal-layers .sk-select-item[data-highlighted] {
+  background: var(--color-bg-subtle);
+}
+
+.sk-tonal-layers .sk-select-item[data-selected] {
+  font-weight: var(--typography-control-font-weight);
+  box-shadow: inset 0 0 0 2px var(--color-border-strong);
+}
+
+.sk-tonal-layers .sk-swatch-chip {
+  border-radius: var(--sk-radius-control);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+
+.sk-tonal-layers .sk-swatch-accent {
+  background: var(--color-accent);
+}
+
+.sk-tonal-layers .sk-swatch-focus {
+  background: var(--color-focus);
+}
+
+.sk-tonal-layers .sk-swatch-danger {
+  background: var(--color-danger);
+}
+
+.sk-tonal-layers .sk-drawer-backdrop {
+  background: color-mix(in srgb, var(--color-bg-subtle) 80%, var(--color-text));
+}
+
+.sk-tonal-layers :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.sk-tonal-layers .sk-button:hover,
+.sk-tonal-layers .sk-select-trigger:hover,
+.sk-tonal-layers .sk-section-trigger:hover,
+.sk-tonal-layers .sk-button-ghost:hover,
+.sk-tonal-layers .sk-card:hover {
+  background: color-mix(in srgb, var(--color-surface) 70%, var(--color-bg-subtle));
+}
+
+.sk-tonal-layers .sk-button-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.sk-tonal-layers .sk-segmented-thumb,
+.sk-tonal-layers .sk-select-popup,
+.sk-tonal-layers .sk-drawer-backdrop,
+.sk-tonal-layers .sk-drawer-popup,
+.sk-tonal-layers .sk-section-panel,
+.sk-tonal-layers .sk-button,
+.sk-tonal-layers .sk-select-trigger,
+.sk-tonal-layers .sk-card,
+.sk-tonal-layers .sk-header,
+.sk-tonal-layers .sk-sidebar-desktop {
+  transition:
+    opacity var(--sk-duration) var(--sk-ease),
+    transform var(--sk-duration) var(--sk-ease),
+    background-color var(--sk-duration) var(--sk-ease),
+    box-shadow var(--sk-duration) var(--sk-ease),
+    height var(--sk-duration) var(--sk-ease);
+}
+
+.sk-tonal-layers .sk-section-panel {
+  height: var(--collapsible-panel-height);
+}
+
+.sk-tonal-layers .sk-section-panel[data-starting-style],
+.sk-tonal-layers .sk-section-panel[data-ending-style] {
+  height: 0;
+}
+
+.sk-tonal-layers .sk-select-popup[data-starting-style],
+.sk-tonal-layers .sk-select-popup[data-ending-style] {
+  opacity: 0;
+}
+
+.sk-tonal-layers .sk-drawer-backdrop[data-starting-style],
+.sk-tonal-layers .sk-drawer-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.sk-tonal-layers .sk-drawer-popup[data-starting-style],
+.sk-tonal-layers .sk-drawer-popup[data-ending-style] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-tonal-layers .sk-segmented-thumb,
+  .sk-tonal-layers .sk-select-popup,
+  .sk-tonal-layers .sk-drawer-backdrop,
+  .sk-tonal-layers .sk-drawer-popup,
+  .sk-tonal-layers .sk-section-panel,
+  .sk-tonal-layers .sk-button,
+  .sk-tonal-layers .sk-select-trigger,
+  .sk-tonal-layers .sk-card,
+  .sk-tonal-layers .sk-header,
+  .sk-tonal-layers .sk-sidebar-desktop {
+    transition: opacity 150ms ease;
+    transform: none;
+  }
+}

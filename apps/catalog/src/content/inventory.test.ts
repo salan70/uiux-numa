@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(7);
-    expect(catalog.liveVariants).toHaveLength(41);
+    expect(catalog.experiments).toHaveLength(8);
+    expect(catalog.liveVariants).toHaveLength(45);
   });
 
   it("Experiment を種別へ割り当てる", () => {
@@ -20,7 +20,7 @@ describe("catalog inventory", () => {
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("graphics")).toEqual(["class-chapter-illustration", "class-doc-logo"]);
-    expect(slugs("components")).toEqual(["form-inline-validation"]);
+    expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
   });
 
   it("live variant の id が重複しない", () => {
@@ -46,10 +46,16 @@ describe("catalog inventory", () => {
       "form-inline-validation/on-submit",
       "product-ui-typography/line-seed-minimal",
     ]);
-    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
+    expect(
+      ids("exploring").every(
+        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("soft-component-kit/"),
+      ),
+    ).toBe(true);
     expect(ids("exploring")).toHaveLength(
-      catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
-        0,
+      (catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
+        0) +
+        (catalog.experiments.find((item) => item.slug === "soft-component-kit")?.variantIds
+          .length ?? 0),
     );
     expect(
       catalog.experiments

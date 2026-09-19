@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-19
-- 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)
+- 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)
 
 ## 背景
 
@@ -90,3 +90,6 @@ color LP の `layout.css` は、同じ余白を変数参照に置き換える。
 
 角丸と検索の重ね方は Catalog の CSS に残る。
 配色切替の操作はヘッダーへ移す。
+
+部品一式の見本比較は [soft-component-kit](2026-09-19-soft-component-kit.md) に移す。
+角丸 `0.25rem` と影の禁止は、採用が決まるまでこの ADR が正本である。
