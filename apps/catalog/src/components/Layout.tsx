@@ -3,8 +3,8 @@ import { SITE_TITLE } from "../site";
 import { Footer } from "./Footer";
 import { Link } from "./Link";
 import { PageNav } from "./PageNav";
-import { PageToc } from "./PageToc";
 import { Sidebar } from "./Sidebar";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 type Props = {
   path: string;
@@ -38,14 +38,17 @@ export function Layout({ path, title, updated, children }: Props) {
         <Link href="/" className="app-wordmark">
           {SITE_TITLE}
         </Link>
-        <button
-          type="button"
-          className="button menu-button"
-          aria-haspopup="dialog"
-          onClick={openMenu}
-        >
-          メニュー
-        </button>
+        <div className="header-tools">
+          <ThemeSwitch />
+          <button
+            type="button"
+            className="button menu-button"
+            aria-haspopup="dialog"
+            onClick={openMenu}
+          >
+            メニュー
+          </button>
+        </div>
       </header>
       <div className="app-columns">
         <aside className="sidebar-desktop" aria-label="サイト">
@@ -54,13 +57,10 @@ export function Layout({ path, title, updated, children }: Props) {
         <div className="app-content">
           <main id="main" className="app-main">
             {children}
+            <PageNav path={path} />
+            <Footer updated={updated} />
           </main>
-          <PageNav path={path} />
-          <Footer updated={updated} />
         </div>
-        <aside className="toc-column">
-          <PageToc path={path} />
-        </aside>
       </div>
       <dialog
         ref={dialogRef}

@@ -4,9 +4,8 @@ export function GettingStartedPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">ガイド</p>
         <h1>はじめに</h1>
-        <p className="lede">UI/UX 沼は、実験から得た成果を公開するデザインシステムサイトである。</p>
+        <p className="lede">実験で残した見た目と操作を、ここから拾って使う。</p>
       </div>
       <section aria-labelledby="purpose-heading">
         <h2 id="purpose-heading">目的</h2>
@@ -35,13 +34,11 @@ export function GettingStartedPage() {
         <p>最終判断は人間が行い、採用理由と却下理由を記録する。</p>
       </section>
       <section aria-labelledby="catalog-heading">
-        <h2 id="catalog-heading">Catalog の読み方</h2>
-        <p>採用案を正として使う。却下案は比較資料である。</p>
-        <p>ステータスは採用、却下、検討中を表示する。</p>
+        <h2 id="catalog-heading">見本帳の読み方</h2>
+        <p>採用案を使う。使わない案は比較用である。</p>
         <p>
-          原則は <Link href="/principles">原則</Link>、導入手順は{" "}
-          <Link href="/resources">リソース</Link>、採否は <Link href="/status">ステータス</Link>{" "}
-          を見る。
+          原則は <Link href="/principles">原則</Link>、採否は <Link href="/status">ステータス</Link>
+          、導入は <Link href="/resources">リソース</Link> を見る。
         </p>
       </section>
     </>

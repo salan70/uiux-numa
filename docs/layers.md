@@ -96,8 +96,8 @@ Catalog は採用した成果物を正として示す公開デザインシステ
 
 - はじめに: 目的、構成、使い方
 - 原則: `docs/principles/*.md` を glob で読む
-- Foundations: Colors、Typography、Icons、Graphics
-- Components: Experiment ごとの live iframe
+- 土台: 配色、文字、アイコン、図
+- 部品: Experiment ごとの live iframe
 - ステータス: 成果物の採否一覧
 - リソース: 開発者向けの導入手順
 
@@ -108,7 +108,7 @@ preview PNG は Experiment の検証資産として `experiments/*/previews/` �
 実装は `apps/catalog/` に置く。
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
-判断は [Catalog を公開デザインシステムサイトにする ADR](decisions/2026-09-19-catalog-design-system-site.md) に残す。
+判断は [Catalog のホストを見本帳にする ADR](decisions/2026-09-19-catalog-host.md) に残す。
 
 ## AI Agent と Skill
 

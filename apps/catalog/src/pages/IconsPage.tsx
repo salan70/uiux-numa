@@ -8,9 +8,8 @@ export function IconsPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">Foundations</p>
-        <h1>Icons</h1>
-        <p className="lede">アイコンの Experiment ごとに SVG を比較する。</p>
+        <h1>アイコン</h1>
+        <p className="lede">アイコンの案を、用途の大きさで見比べる。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (

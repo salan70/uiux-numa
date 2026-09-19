@@ -45,13 +45,15 @@ lint-md:
 format:
     oxfmt --write . '!.claude/**' '!.agents/**' '!flake.lock'
 
-# canonical Typography token から Web 用 CSS を生成する
+# canonical token から Web 用 CSS を生成する
 tokens-build:
     node scripts/build-typography-tokens.mjs
+    node scripts/build-space-tokens.mjs
 
-# Typography token の構造、参照、生成差分を検査する
+# token の構造、参照、生成差分を検査する
 tokens-check:
     node scripts/build-typography-tokens.mjs --check
+    node scripts/build-space-tokens.mjs --check
 
 # Web 実行基盤（platforms/web）の依存を導入する
 web-install:

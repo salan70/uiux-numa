@@ -22,16 +22,14 @@ export function PageNav({ path }: Props) {
     <nav className="page-nav" aria-label="前後のページ">
       {prev ? (
         <Link href={prev.href} className="page-nav-prev">
-          <span className="page-nav-label">前へ</span>
-          <span>{prev.label}</span>
+          前へ {prev.label}
         </Link>
       ) : (
         <span />
       )}
       {next ? (
         <Link href={next.href} className="page-nav-next">
-          <span className="page-nav-label">次へ</span>
-          <span>{next.label}</span>
+          次へ {next.label}
         </Link>
       ) : (
         <span />

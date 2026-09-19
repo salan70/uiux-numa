@@ -2,7 +2,6 @@ import { useState } from "react";
 import { NAV_SECTIONS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
 import { SearchBox } from "./SearchBox";
-import { ThemeSwitch } from "./ThemeSwitch";
 
 const NAV_OPEN_KEY = "uiux-numa-catalog-nav";
 
@@ -53,9 +52,6 @@ export function Sidebar({ path, onNavigate }: Props) {
           );
         })}
       </nav>
-      <div className="sidebar-tools">
-        <ThemeSwitch />
-      </div>
     </div>
   );
 }

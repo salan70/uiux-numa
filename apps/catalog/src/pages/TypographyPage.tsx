@@ -6,23 +6,23 @@ import { catalog, defaultVariantId } from "../content/collect";
 import { formatTokenValue } from "../content/tokens";
 
 export function TypographyPage() {
-  const primitives = catalog.tokens.filter((token) => token.kind === "primitive");
-  const semantics = catalog.tokens.filter((token) => token.kind === "semantic");
+  const primitives = catalog.tokens.filter(
+    (token) => token.kind === "primitive" && token.name.startsWith("font."),
+  );
+  const semantics = catalog.tokens.filter(
+    (token) => token.kind === "semantic" && token.name.startsWith("typography."),
+  );
   const typography = catalog.experiments.find((item) => item.category === "typography");
   const live = typography?.liveVariants ?? [];
 
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">Typography</p>
-        <h1>Typography</h1>
-        <p className="lede">
-          Semantic 6 個と primitive 10 個の token を表で確認する。説明は canonical JSON の
-          $description である。
-        </p>
+        <h1>文字</h1>
+        <p className="lede">見出し、本文、操作、補足の 6 役割を同じ書体で揃える。</p>
       </div>
       <section aria-labelledby="semantic-heading">
-        <h2 id="semantic-heading">Semantic tokens</h2>
+        <h2 id="semantic-heading">役割</h2>
         <TokenTable
           caption="semantic token 6 個"
           rows={semantics.map((token) => ({
@@ -39,7 +39,7 @@ export function TypographyPage() {
         />
       </section>
       <section aria-labelledby="primitive-heading">
-        <h2 id="primitive-heading">Primitive tokens</h2>
+        <h2 id="primitive-heading">基本値</h2>
         <TokenTable
           caption="primitive token 10 個"
           rows={primitives.map((token) => ({

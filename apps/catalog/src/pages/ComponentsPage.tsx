@@ -8,9 +8,8 @@ export function ComponentsPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">Components</p>
-        <h1>コンポーネント</h1>
-        <p className="lede">コンポーネントの Experiment ごとに live デモを確認する。</p>
+        <h1>部品</h1>
+        <p className="lede">画面に載せる部品の動きを、その場で試す。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (

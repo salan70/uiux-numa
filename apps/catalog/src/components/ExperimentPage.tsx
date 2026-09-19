@@ -26,7 +26,6 @@ export function ExperimentPage({ experiment, kind }: Props) {
         <p className="crumb">
           <Link href={parentHref}>{parentLabel}</Link>
         </p>
-        <p className="eyebrow">{parentLabel}</p>
         <h1>{experiment.title}</h1>
         <p className="meta">
           <StatusBadge status={experimentStatus(experiment)} /> 更新日{" "}

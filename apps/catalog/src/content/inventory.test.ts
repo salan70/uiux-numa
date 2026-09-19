@@ -3,8 +3,8 @@ import { assertAdoptedIds, catalog } from "./collect";
 
 describe("catalog inventory", () => {
   it("token、配色、SVG、Experiment を欠落なく集める", () => {
-    expect(catalog.tokens).toHaveLength(16);
-    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(10);
+    expect(catalog.tokens).toHaveLength(18);
+    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(12);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(6);
     expect(catalog.schemes).toHaveLength(14);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(69);

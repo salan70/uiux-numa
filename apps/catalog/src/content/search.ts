@@ -19,30 +19,36 @@ export function collectSearchDocs(data: CatalogData): SearchDoc[] {
       keywords: "目的 構成 使い方",
     },
     { id: "page:principles", title: "原則", path: "/principles", keywords: "docs/principles" },
-    { id: "page:colors", title: "Colors", path: "/foundations/colors", keywords: "配色" },
+    { id: "page:colors", title: "配色", path: "/foundations/colors", keywords: "Colors 配色" },
     {
       id: "page:typography",
-      title: "Typography",
+      title: "文字",
       path: "/foundations/typography",
-      keywords: "文字 token",
+      keywords: "Typography token 文字",
     },
-    { id: "page:icons", title: "Icons", path: "/foundations/icons", keywords: "アイコン SVG" },
+    { id: "page:icons", title: "アイコン", path: "/foundations/icons", keywords: "Icons SVG" },
     {
       id: "page:graphics",
-      title: "Graphics",
+      title: "図",
       path: "/foundations/graphics",
-      keywords: "ロゴ イラスト",
+      keywords: "Graphics ロゴ イラスト",
     },
-    { id: "page:components", title: "コンポーネント", path: "/components", keywords: "Components" },
+    {
+      id: "page:components",
+      title: "部品",
+      path: "/components",
+      keywords: "Components コンポーネント",
+    },
     { id: "page:status", title: "ステータス", path: "/status", keywords: "採用 却下 検討中" },
     { id: "page:resources", title: "リソース", path: "/resources", keywords: "GitHub ライセンス" },
   ];
 
   for (const token of data.tokens) {
+    const path = token.name.startsWith("space.") ? "/resources" : "/foundations/typography";
     docs.push({
       id: `token:${token.name}`,
       title: token.name,
-      path: "/foundations/typography",
+      path,
       keywords: `${token.description} ${token.cssNames.join(" ")}`,
     });
   }
@@ -51,9 +57,9 @@ export function collectSearchDocs(data: CatalogData): SearchDoc[] {
     const names = [...scheme.light, ...scheme.dark].map((color) => color.name).join(" ");
     docs.push({
       id: `scheme:${scheme.id}`,
-      title: scheme.label === scheme.id ? scheme.id : `${scheme.id}（${scheme.label}）`,
+      title: scheme.label,
       path: `/foundations/colors/${scheme.id}`,
-      keywords: names,
+      keywords: `${scheme.id} ${names}`,
     });
   }
 

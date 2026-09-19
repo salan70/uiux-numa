@@ -43,7 +43,7 @@ export function SearchBox({ path, onNavigate }: Props) {
         aria-controls={listId}
         aria-autocomplete="list"
         value={query}
-        placeholder="token、配色、variant"
+        placeholder="配色、文字、部品"
         onChange={(event) => {
           setQuery(event.target.value);
           setActive(0);

@@ -94,7 +94,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 - `https://uiux.oda79.me/` が HTTPS で開く
 - `/getting-started`、`/principles`、`/foundations/colors`、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components`、`/status`、`/resources` を直リンクで開ける
 - `/colors` などの旧 URL が新 URL へ 301 される
-- サイドバーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
+- ヘッダーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
 - ライト / ダークの切り替えで選択中の配色の値が変わる
 - Typography の live variant と Components の iframe が表示される
 - Icons と Graphics の SVG が表示される
