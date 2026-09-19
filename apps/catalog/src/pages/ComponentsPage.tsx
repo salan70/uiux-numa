@@ -1,5 +1,5 @@
+import { ExperimentPage } from "../components/ExperimentPage";
 import { Link } from "../components/Link";
-import { LivePreview } from "../components/LivePreview";
 import { catalog } from "../content/collect";
 import { NotFoundPage } from "./NotFoundPage";
 
@@ -16,6 +16,10 @@ export function ComponentsPage() {
         {experiments.map((experiment) => (
           <li key={experiment.slug}>
             <Link href={`/components/${experiment.slug}`}>{experiment.title}</Link>
+            <span className="meta">
+              {" "}
+              更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
+            </span>
           </li>
         ))}
       </ul>
@@ -28,18 +32,5 @@ export function ComponentDetailPage({ experiment: slug }: { experiment: string }
     (item) => item.category === "components" && item.slug === slug,
   );
   if (!experiment) return <NotFoundPage />;
-  return (
-    <>
-      <div className="page-intro">
-        <p className="crumb">
-          <Link href="/components">コンポーネント</Link>
-        </p>
-        <h1>{experiment.title}</h1>
-        <p className="meta">
-          更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
-        </p>
-      </div>
-      <LivePreview variants={experiment.liveVariants} title={experiment.title} />
-    </>
-  );
+  return <ExperimentPage experiment={experiment} kind="live" />;
 }

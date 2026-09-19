@@ -10,11 +10,14 @@ const widths = [
 type Props = {
   variants: LiveVariant[];
   title?: string;
+  defaultVariant?: string;
 };
 
-export function LivePreview({ variants, title = "Live Preview" }: Props) {
+export function LivePreview({ variants, title = "Live Preview", defaultVariant }: Props) {
   const id = useId();
-  const [selected, setSelected] = useState(variants[0]?.variant ?? "");
+  const initial =
+    variants.find((item) => item.variant === defaultVariant)?.variant ?? variants[0]?.variant ?? "";
+  const [selected, setSelected] = useState(initial);
   const [width, setWidth] = useState<(typeof widths)[number]["id"]>("fit");
   const current = variants.find((item) => item.variant === selected) ?? variants[0];
   if (!current) return null;
