@@ -1,5 +1,9 @@
 import { categoryForDomains, type CatalogCategory } from "./category";
-import { parseExperimentFrontmatter } from "./parseFrontmatter";
+import {
+  parseExperimentFrontmatter,
+  type ExperimentFrontmatter,
+  type ExperimentStatus,
+} from "./parseFrontmatter";
 import { collectSchemes, schemeFiles, type ColorScheme } from "./schemes";
 import { collectSvgs, svgFiles, type SvgVariant } from "./svgs";
 import { collectTokens, type CatalogToken } from "./tokens";
@@ -23,11 +27,24 @@ export type LiveVariant = {
   previewPath: string;
 };
 
+export type VariantStatus = "adopted" | "rejected" | "exploring";
+
+export type ExperimentVariant = {
+  id: string;
+  status: VariantStatus;
+};
+
 export type ExperimentRecord = {
   slug: string;
+  title: string;
+  status: ExperimentStatus;
+  created: string;
+  updated: string;
+  adopted: string[];
   domains: string[];
   category: CatalogCategory;
   variantIds: string[];
+  variants: ExperimentVariant[];
   liveVariants: LiveVariant[];
 };
 
@@ -89,16 +106,24 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
         throw new Error(`${repoPath}: variant ${id} の index.tsx がない`);
       }
     }
+    assertAdoptedIds(frontmatter.adopted, listed, repoPath);
 
-    const variants = (byExperiment.get(slug) ?? []).sort((a, b) =>
-      a.variant.localeCompare(b.variant),
-    );
+    const live = (byExperiment.get(slug) ?? []).sort((a, b) => a.variant.localeCompare(b.variant));
     records.push({
       slug,
+      title: frontmatter.title,
+      status: frontmatter.status,
+      created: frontmatter.created,
+      updated: frontmatter.updated,
+      adopted: frontmatter.adopted,
       domains: frontmatter.domains,
       category: categoryForDomains(frontmatter.domains),
       variantIds: actual,
-      liveVariants: variants,
+      variants: actual.map((id) => ({
+        id,
+        status: variantStatus(frontmatter, id),
+      })),
+      liveVariants: live,
     });
   }
 
@@ -109,6 +134,19 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
   }
 
   return records.sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+export function assertAdoptedIds(adopted: string[], listed: string[], path: string): void {
+  for (const id of adopted) {
+    if (!listed.includes(id)) {
+      throw new Error(`${path}: adopted の ${id} が Variants 表にない`);
+    }
+  }
+}
+
+function variantStatus(frontmatter: ExperimentFrontmatter, id: string): VariantStatus {
+  if (frontmatter.status !== "decided") return "exploring";
+  return frontmatter.adopted.includes(id) ? "adopted" : "rejected";
 }
 
 function parseVariantIds(source: string): string[] {

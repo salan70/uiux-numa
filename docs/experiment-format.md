@@ -58,6 +58,7 @@ domains:
   - forms-input-ux
   - states-design
   - accessibility
+adopted: []
 ---
 ```
 
@@ -69,6 +70,13 @@ domains:
 | `updated`   | 必須 | 最終更新日（`YYYY-MM-DD`）                                                                     |
 | `platforms` | 必須 | 対象プラットフォーム。`platforms/` のディレクトリ名と同じ小文字にする（例: `web`）             |
 | `domains`   | 必須 | [対象領域](scope.md)の項目名を kebab-case にしたもの（例: `ux-writing`、`interaction-design`） |
+| `adopted`   | 必須 | 採用した variant-id の配列。Decision 節から転記する                                            |
+
+`adopted` は variant-id だけを持つ。
+本文の採用理由は Decision 節に残す。
+`status` が `decided` 以外なら空にする。
+`status` が `decided` で空なら、全案却下である。
+Variants 表にない ID を書くと Catalog の build が失敗する。
 
 ## status
 

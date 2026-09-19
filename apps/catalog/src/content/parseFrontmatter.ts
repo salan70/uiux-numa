@@ -21,6 +21,7 @@ export type ExperimentFrontmatter = {
   updated: string;
   platforms: string[];
   domains: string[];
+  adopted: string[];
 };
 
 export function splitFrontmatter(source: string): { raw: string; body: string } {
@@ -51,7 +52,7 @@ export function parseYamlBlock(raw: string): FrontmatterData {
 
     currentKey = pair[1];
     const rest = pair[2].trim();
-    if (rest === "") {
+    if (rest === "" || rest === "[]") {
       currentList = [];
       data[currentKey] = currentList;
       continue;
@@ -84,9 +85,24 @@ export function requireDate(data: FrontmatterData, key: string, path: string): s
 }
 
 export function requireStringList(data: FrontmatterData, key: string, path: string): string[] {
-  const value = data[key];
-  if (!Array.isArray(value) || value.length === 0 || value.some((item) => item.trim() === "")) {
+  const value = requireStringListAllowEmpty(data, key, path);
+  if (value.length === 0) {
     throw new Error(`${path}: ${key} は空でない文字列のリストにする`);
+  }
+  return value;
+}
+
+export function requireStringListAllowEmpty(
+  data: FrontmatterData,
+  key: string,
+  path: string,
+): string[] {
+  const value = data[key];
+  if (
+    !Array.isArray(value) ||
+    value.some((item) => typeof item !== "string" || item.trim() === "")
+  ) {
+    throw new Error(`${path}: ${key} は文字列のリストにする`);
   }
   return value;
 }
@@ -104,6 +120,7 @@ export function parseExperimentFrontmatter(source: string, path: string): Experi
     updated: requireDate(data, "updated", path),
     platforms: requireStringList(data, "platforms", path),
     domains: requireStringList(data, "domains", path),
+    adopted: requireStringListAllowEmpty(data, "adopted", path),
   };
 }
 

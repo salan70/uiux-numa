@@ -10,6 +10,7 @@ domains:
   - visual-design
   - iconography
   - accessibility
+adopted: []
 ---
 
 ## Problem

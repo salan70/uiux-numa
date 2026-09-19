@@ -10,6 +10,8 @@ domains:
   - visual-design
   - consistency
   - accessibility
+adopted:
+  - line-round
 ---
 
 ## Problem

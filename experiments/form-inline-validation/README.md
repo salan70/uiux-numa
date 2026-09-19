@@ -11,6 +11,8 @@ domains:
   - states-design
   - interaction-design
   - accessibility
+adopted:
+  - on-submit
 ---
 
 ## Problem

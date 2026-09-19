@@ -10,6 +10,17 @@ domains:
   - visual-design
   - design-tokens
   - accessibility
+adopted:
+  - wasabi
+  - yuzu
+  - azuki
+  - aizome
+  - sumi
+  - fuji
+  - ume
+  - shinbashi
+  - kingyo
+  - tsukiyo
 ---
 
 ## Problem
