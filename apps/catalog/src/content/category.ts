@@ -66,12 +66,12 @@ export const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
-export function categoryForDomains(domains: string[]): CatalogCategory {
+export function categoryForDomains(domains: string[]): CatalogCategory | null {
   for (const domain of domains) {
     const rule = CATEGORY_RULES.find((item) => item.domain === domain);
     if (rule) return rule.category;
   }
-  throw new Error(`対応する Catalog の種別がない: ${domains.join(", ")}`);
+  return null;
 }
 
 export function categoryLabel(category: CatalogCategory): string {

@@ -1,6 +1,8 @@
 ---
 title: 授業資料サイトのシンボルマーク
 status: decided
+role: reference
+maturity: experimental
 created: 2026-09-19
 updated: 2026-09-19
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - iconography
   - accessibility
+sources: []
 adopted: []
 ---
 

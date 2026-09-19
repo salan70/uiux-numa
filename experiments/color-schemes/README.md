@@ -1,6 +1,8 @@
 ---
 title: 実際の開発の土台にする配色
 status: decided
+role: module
+maturity: candidate
 created: 2026-09-17
 updated: 2026-09-17
 platforms:
@@ -10,6 +12,7 @@ domains:
   - visual-design
   - design-tokens
   - accessibility
+sources: []
 adopted:
   - wasabi
   - yuzu

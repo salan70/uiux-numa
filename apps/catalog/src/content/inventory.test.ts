@@ -11,8 +11,17 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(8);
-    expect(catalog.liveVariants).toHaveLength(45);
+    expect(catalog.experiments).toHaveLength(9);
+    expect(catalog.liveVariants).toHaveLength(51);
+    expect(catalog.tokenAssets).toEqual([
+      {
+        sourcePath: "tokens/typography/typography.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: ["product-ui-typography"],
+      },
+    ]);
   });
 
   it("Experiment を種別へ割り当てる", () => {
@@ -20,7 +29,21 @@ describe("catalog inventory", () => {
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("graphics")).toEqual(["class-chapter-illustration", "class-doc-logo"]);
-    expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
+    expect(slugs("components")).toEqual([
+      "form-inline-validation",
+      "registration-completion-feedback",
+      "soft-component-kit",
+    ]);
+  });
+
+  it("実例 3 件の role を読む", () => {
+    expect(catalog.experiments.find((item) => item.slug === "product-ui-typography")?.role).toBe(
+      "foundation",
+    );
+    expect(catalog.experiments.find((item) => item.slug === "class-doc-logo")?.role).toBe(
+      "reference",
+    );
+    expect(catalog.tokenAssets[0]?.role).toBe("foundation");
   });
 
   it("live variant の id が重複しない", () => {
@@ -57,7 +80,7 @@ describe("catalog inventory", () => {
         .filter((item) => item.status === "decided" && item.adopted.length === 0)
         .map((item) => item.slug)
         .sort(),
-    ).toEqual(["class-chapter-illustration", "class-doc-logo"]);
+    ).toEqual(["class-chapter-illustration", "class-doc-logo", "registration-completion-feedback"]);
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );

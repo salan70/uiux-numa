@@ -14,13 +14,29 @@ const EXPERIMENT_STATUSES = [
 
 export type ExperimentStatus = (typeof EXPERIMENT_STATUSES)[number];
 
+export const ASSET_ROLES = ["foundation", "module", "reference"] as const;
+export const ASSET_MATURITIES = ["experimental", "candidate", "stable", "deprecated"] as const;
+
+export type AssetRole = (typeof ASSET_ROLES)[number];
+export type AssetMaturity = (typeof ASSET_MATURITIES)[number];
+
+export type AssetMeta = {
+  role: AssetRole;
+  maturity: AssetMaturity;
+  platforms: string[];
+  sources: string[];
+};
+
 export type ExperimentFrontmatter = {
   title: string;
   status: ExperimentStatus;
+  role: AssetRole;
+  maturity: AssetMaturity;
   created: string;
   updated: string;
   platforms: string[];
   domains: string[];
+  sources: string[];
   adopted: string[];
 };
 
@@ -113,15 +129,61 @@ export function parseExperimentFrontmatter(source: string, path: string): Experi
   if (!isExperimentStatus(status)) {
     throw new Error(`${path}: status が不正: ${status}`);
   }
+  const meta = parseAssetMeta(data, path);
   return {
     title: requireString(data, "title", path),
     status,
+    role: meta.role,
+    maturity: meta.maturity,
     created: requireDate(data, "created", path),
     updated: requireDate(data, "updated", path),
-    platforms: requireStringList(data, "platforms", path),
+    platforms: meta.platforms,
     domains: requireStringList(data, "domains", path),
+    sources: meta.sources,
     adopted: requireStringListAllowEmpty(data, "adopted", path),
   };
+}
+
+export function parseAssetMeta(data: FrontmatterData, path: string): AssetMeta {
+  const role = requireString(data, "role", path);
+  if (!isAssetRole(role)) throw new Error(`${path}: role が不正: ${role}`);
+  const maturity = requireString(data, "maturity", path);
+  if (!isAssetMaturity(maturity)) throw new Error(`${path}: maturity が不正: ${maturity}`);
+  return {
+    role,
+    maturity,
+    platforms: requireStringList(data, "platforms", path),
+    sources: requireStringListAllowEmpty(data, "sources", path),
+  };
+}
+
+export function parseTokenAssetMeta(json: unknown, path: string): AssetMeta {
+  if (!json || typeof json !== "object" || Array.isArray(json)) {
+    throw new Error(`${path}: token JSON がオブジェクトではない`);
+  }
+  const extensions = (json as { $extensions?: unknown }).$extensions;
+  if (!extensions || typeof extensions !== "object" || Array.isArray(extensions)) {
+    throw new Error(`${path}: $extensions.uiux-numa がない`);
+  }
+  const raw = (extensions as { "uiux-numa"?: unknown })["uiux-numa"];
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error(`${path}: $extensions.uiux-numa がない`);
+  }
+  const record = raw as Record<string, unknown>;
+  const data: FrontmatterData = {};
+  for (const key of ["role", "maturity"] as const) {
+    const value = record[key];
+    if (typeof value !== "string") throw new Error(`${path}: ${key} は空でない文字列にする`);
+    data[key] = value;
+  }
+  for (const key of ["platforms", "sources"] as const) {
+    const value = record[key];
+    if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) {
+      throw new Error(`${path}: ${key} は文字列のリストにする`);
+    }
+    data[key] = value;
+  }
+  return parseAssetMeta(data, path);
 }
 
 function parseScalar(raw: string): string | number | boolean {
@@ -140,4 +202,12 @@ function unquote(raw: string): string {
 
 function isExperimentStatus(value: string): value is ExperimentStatus {
   return (EXPERIMENT_STATUSES as readonly string[]).includes(value);
+}
+
+function isAssetRole(value: string): value is AssetRole {
+  return (ASSET_ROLES as readonly string[]).includes(value);
+}
+
+function isAssetMaturity(value: string): value is AssetMaturity {
+  return (ASSET_MATURITIES as readonly string[]).includes(value);
 }
