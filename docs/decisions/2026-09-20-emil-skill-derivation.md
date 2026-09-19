@@ -59,5 +59,5 @@ Issue 8 は Asset の `role` / `maturity` と Catalog を扱う。
 ## 影響
 
 - Issue #9 の比較実験は、登録完了の遷移とフィードバックを扱う。Catalog 改修は #8 に残す。
-- 派生 Skill の更新は、上流差分を読んで取り込む。全 Skill の自動更新はしない。
-- 採否は人間が決める。判断前に自動読み込みを外したり、Phase 5 の知見整理へ進んだりしない。
+- 2026-09-20 の判断で、派生 3 Skill は `experimental` のまま継続利用する。1 件の比較では `stable` にしない。
+- 派生 Skill の更新は、上流差分を読んで取り込む。全 Skill の自動更新はしない。手順は `skills/README.md` に書く。
