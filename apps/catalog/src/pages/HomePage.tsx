@@ -4,7 +4,7 @@ import { SchemeSwatch } from "../components/SchemeSwatch";
 import { SvgGrid } from "../components/SvgGrid";
 import { TokenSample } from "../components/TokenSample";
 import { categoryHref, categoryLabel } from "../content/category";
-import { catalog } from "../content/collect";
+import { catalog, defaultVariantId } from "../content/collect";
 
 export function HomePage() {
   const typographyTokens = catalog.tokens.filter((token) => token.kind === "semantic").slice(0, 3);
@@ -93,7 +93,11 @@ export function HomePage() {
             <p>バリアントと表示幅を切り替えて動作を確認する。</p>
           </div>
           {components && (
-            <LivePreview variants={components.liveVariants} title={components.title} />
+            <LivePreview
+              variants={components.liveVariants}
+              title={components.title}
+              defaultVariant={defaultVariantId(components)}
+            />
           )}
         </section>
       </div>

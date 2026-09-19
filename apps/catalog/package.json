@@ -9,6 +9,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "marked": "18.0.13",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

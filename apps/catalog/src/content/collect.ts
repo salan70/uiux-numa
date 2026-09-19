@@ -11,6 +11,7 @@ import {
 import { collectSchemes, schemeFiles, type ColorScheme } from "./schemes";
 import { collectSvgs, svgFiles, type SvgVariant } from "./svgs";
 import { collectTokens, type CatalogToken } from "./tokens";
+import { extractOptionalSection, extractSection, renderMarkdown } from "./sections";
 
 const experimentReadmes = import.meta.glob<string>("../../../../experiments/*/README.md", {
   query: "?raw",
@@ -57,6 +58,10 @@ export type ExperimentRecord = {
   variants: ExperimentVariant[];
   liveVariants: LiveVariant[];
   body: string;
+  problemHtml: string;
+  decisionHtml: string;
+  rejectedHtml: string;
+  accessibilityHtml: string;
 };
 
 export type PrincipleRecord = {
@@ -149,6 +154,10 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       })),
       liveVariants: live,
       body,
+      problemHtml: renderMarkdown(extractSection(body, "Problem")),
+      decisionHtml: renderMarkdown(extractSection(body, "Decision")),
+      rejectedHtml: renderMarkdown(extractSection(body, "Rejected reasons")),
+      accessibilityHtml: renderMarkdown(extractOptionalSection(body, "アクセシビリティ")),
     });
   }
 
@@ -203,6 +212,10 @@ function parseVariantIds(source: string): string[] {
   const end = source.indexOf("\n## ", start + 1);
   const section = source.slice(start, end === -1 ? source.length : end);
   return [...section.matchAll(/^\|\s*`([a-z0-9-]+)`\s*\|/gm)].map((match) => match[1]);
+}
+
+export function defaultVariantId(experiment: ExperimentRecord): string | undefined {
+  return experiment.variants.find((item) => item.status === "adopted")?.id;
 }
 
 export const catalog = loadCatalog();

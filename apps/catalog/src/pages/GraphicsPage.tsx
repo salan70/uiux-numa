@@ -1,5 +1,5 @@
+import { ExperimentPage } from "../components/ExperimentPage";
 import { Link } from "../components/Link";
-import { SvgGrid } from "../components/SvgGrid";
 import { catalog } from "../content/collect";
 import { NotFoundPage } from "./NotFoundPage";
 
@@ -16,6 +16,10 @@ export function GraphicsPage() {
         {experiments.map((experiment) => (
           <li key={experiment.slug}>
             <Link href={`/foundations/graphics/${experiment.slug}`}>{experiment.title}</Link>
+            <span className="meta">
+              {" "}
+              更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
+            </span>
           </li>
         ))}
       </ul>
@@ -28,19 +32,5 @@ export function GraphicDetailPage({ experiment: slug }: { experiment: string }) 
     (item) => item.category === "graphics" && item.slug === slug,
   );
   if (!experiment) return <NotFoundPage />;
-  const groups = catalog.svgs.filter((group) => group.experiment === slug);
-  return (
-    <>
-      <div className="page-intro">
-        <p className="crumb">
-          <Link href="/foundations/graphics">Graphics</Link>
-        </p>
-        <h1>{experiment.title}</h1>
-        <p className="meta">
-          更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
-        </p>
-      </div>
-      <SvgGrid groups={groups} />
-    </>
-  );
+  return <ExperimentPage experiment={experiment} kind="svg" />;
 }

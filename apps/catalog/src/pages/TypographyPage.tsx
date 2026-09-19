@@ -2,15 +2,14 @@ import { LivePreview } from "../components/LivePreview";
 import { TokenSample } from "../components/TokenSample";
 import { TokenTable } from "../components/TokenTable";
 import { TypographyPlayground } from "../components/TypographyPlayground";
-import { catalog } from "../content/collect";
+import { catalog, defaultVariantId } from "../content/collect";
 import { formatTokenValue } from "../content/tokens";
 
 export function TypographyPage() {
   const primitives = catalog.tokens.filter((token) => token.kind === "primitive");
   const semantics = catalog.tokens.filter((token) => token.kind === "semantic");
-  const live = catalog.experiments
-    .filter((experiment) => experiment.category === "typography")
-    .flatMap((experiment) => experiment.liveVariants);
+  const typography = catalog.experiments.find((item) => item.category === "typography");
+  const live = typography?.liveVariants ?? [];
 
   return (
     <>
@@ -57,7 +56,11 @@ export function TypographyPage() {
         />
       </section>
       <TypographyPlayground roles={semantics} />
-      <LivePreview variants={live} title="product-ui-typography" />
+      <LivePreview
+        variants={live}
+        title="product-ui-typography"
+        defaultVariant={typography ? defaultVariantId(typography) : undefined}
+      />
       <section aria-labelledby="typography-usage-heading">
         <h2 id="typography-usage-heading">使い方</h2>
         <p>
