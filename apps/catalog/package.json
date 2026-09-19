@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "marked": "18.0.13",
+    "minisearch": "7.2.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
