@@ -1,0 +1,28 @@
+{
+  "name": "uiux-numa-catalog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "vitest": "3.2.4"
+  },
+  "engines": {
+    "node": "22.16.0",
+    "pnpm": "9.15.9"
+  },
+  "packageManager": "pnpm@9.15.9"
+}

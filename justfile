@@ -6,6 +6,9 @@
 # 5173 は他プロジェクトの Vite と衝突するため固定する。
 web_port := "5183"
 
+# Catalog のポート。catalog-dev と catalog-shot で同じ値を使う。
+catalog_port := "5184"
+
 # 引数なしで一覧を表示する
 default:
     @just --list
@@ -85,3 +88,27 @@ svg-optimize src dist:
 # variant を行、asset を列に並べた比較グリッドを作る。例: just svg-grid out.png 32 a/dist b/dist
 svg-grid out size +dirs:
     scripts/svg-grid.sh "{{out}}" "{{size}}" {{dirs}}
+
+# Catalog（apps/catalog）の依存を導入する
+catalog-install:
+    cd apps/catalog && pnpm install --frozen-lockfile
+
+# Catalog の開発サーバーを起動する
+catalog-dev:
+    cd apps/catalog && pnpm dev --port {{catalog_port}} --strictPort
+
+# Catalog の TypeScript を型検査する
+catalog-check:
+    cd apps/catalog && pnpm check
+
+# Catalog の単体テストを実行する
+catalog-test:
+    cd apps/catalog && pnpm test
+
+# Catalog の production build を作る
+catalog-build:
+    cd apps/catalog && pnpm build
+
+# 先に just catalog-dev を起動しておく。390 / 1280 とライト / ダークでホームを撮影する。
+catalog-shot:
+    scripts/catalog-shot.sh "http://localhost:{{catalog_port}}"

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI/UX 沼</title>
+    <meta name="description" content="UI/UX 沼。Tokens、Experiments、原則、Skills の成果一覧。" />
+    <script>
+      (function () {
+        var key = "uiux-numa-catalog-theme";
+        var params = new URLSearchParams(location.search);
+        var choice = params.get("theme") || localStorage.getItem(key) || "system";
+        if (choice !== "light" && choice !== "dark" && choice !== "system") choice = "system";
+        var dark =
+          choice === "dark" ||
+          (choice === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        document.documentElement.dataset.themeChoice = choice;
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -108,7 +108,10 @@ visual token だけでなく、必要性が確認できれば motion などの t
 
 interaction や animation は静止画だけでは判断できない。
 実動作または動画で確認できることを想定する。
-Cloudflare を利用する想定とし、実装は後続 Issue で扱う。
+実装は `apps/catalog/` に置く。
+公開時の表示名は「UI/UX 沼」とする。
+公開は Cloudflare Pages を使う。
+判断は [UI/UX 沼の ADR](decisions/2026-09-19-uiux-rd-catalog.md) に残す。
 
 ## AI Agent と Skill
 

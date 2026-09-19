@@ -31,6 +31,8 @@ result-*
 .claude/stats-cache.json
 .claude/skills/**/__pycache__/
 
-# Node（Web 実行基盤）
+# Node（Web 実行基盤と Catalog）
 node_modules/
 platforms/web/dist/
+apps/catalog/dist/
+apps/catalog/shots/
