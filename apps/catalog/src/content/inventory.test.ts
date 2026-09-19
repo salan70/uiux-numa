@@ -12,10 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(7);
-    expect(catalog.principles).toHaveLength(2);
-    expect(catalog.principles.every((item) => item.bodyHtml.length > 0)).toBe(true);
     expect(catalog.liveVariants).toHaveLength(41);
-    expect(catalog.experiments.every((item) => item.problemHtml.length > 0)).toBe(true);
   });
 
   it("Experiment を種別へ割り当てる", () => {

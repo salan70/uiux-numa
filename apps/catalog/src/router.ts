@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 
 export type Route =
   | { name: "home" }
-  | { name: "getting-started" }
-  | { name: "principles" }
-  | { name: "principle"; slug: string }
   | { name: "colors" }
   | { name: "color"; scheme: string }
   | { name: "typography" }
@@ -14,8 +11,6 @@ export type Route =
   | { name: "graphic"; experiment: string }
   | { name: "components" }
   | { name: "component"; experiment: string }
-  | { name: "status" }
-  | { name: "resources" }
   | { name: "redirect"; to: string }
   | { name: "notfound" };
 
@@ -67,10 +62,6 @@ export function matchRoute(path: string): Route {
   const redirected = OLD_PATH_REDIRECTS[normalized];
   if (redirected) return { name: "redirect", to: redirected };
   if (normalized === "/") return { name: "home" };
-  if (normalized === "/getting-started") return { name: "getting-started" };
-  if (normalized === "/principles") return { name: "principles" };
-  const principle = normalized.match(/^\/principles\/([a-z0-9-]+)$/);
-  if (principle) return { name: "principle", slug: principle[1] };
   if (normalized === "/foundations/colors") return { name: "colors" };
   const color = normalized.match(/^\/foundations\/colors\/([a-z0-9-]+)$/);
   if (color) return { name: "color", scheme: color[1] };
@@ -84,7 +75,5 @@ export function matchRoute(path: string): Route {
   if (normalized === "/components") return { name: "components" };
   const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
   if (component) return { name: "component", experiment: component[1] };
-  if (normalized === "/status") return { name: "status" };
-  if (normalized === "/resources") return { name: "resources" };
   return { name: "notfound" };
 }

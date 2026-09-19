@@ -3,14 +3,10 @@ import { Layout } from "./components/Layout";
 import { catalog } from "./content/collect";
 import { ColorDetailPage, ColorsPage } from "./pages/ColorsPage";
 import { ComponentDetailPage, ComponentsPage } from "./pages/ComponentsPage";
-import { GettingStartedPage } from "./pages/GettingStartedPage";
 import { GraphicDetailPage, GraphicsPage } from "./pages/GraphicsPage";
 import { HomePage } from "./pages/HomePage";
 import { IconDetailPage, IconsPage } from "./pages/IconsPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { PrincipleDetailPage, PrinciplesPage } from "./pages/PrinciplesPage";
-import { ResourcesPage } from "./pages/ResourcesPage";
-import { StatusPage } from "./pages/StatusPage";
 import { TypographyPage } from "./pages/TypographyPage";
 import { matchRoute, replaceLocation, usePathname } from "./router";
 import { shouldNoindex } from "./theme";
@@ -65,24 +61,6 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
       title: "トップ",
       updated: latestUpdated(catalog.experiments.map((item) => item.updated)),
       body: <HomePage />,
-    };
-  }
-  if (route.name === "getting-started") {
-    return { title: "はじめに", body: <GettingStartedPage /> };
-  }
-  if (route.name === "principles") {
-    return {
-      title: "原則",
-      updated: latestUpdated(catalog.principles.map((item) => item.updated)),
-      body: <PrinciplesPage />,
-    };
-  }
-  if (route.name === "principle") {
-    const principle = catalog.principles.find((item) => item.slug === route.slug);
-    return {
-      title: principle?.title ?? "ページが見つかりません",
-      updated: principle?.updated,
-      body: <PrincipleDetailPage slug={route.slug} />,
     };
   }
   if (route.name === "colors") {
@@ -157,16 +135,6 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
       updated: experiment?.updated,
       body: <ComponentDetailPage experiment={route.experiment} />,
     };
-  }
-  if (route.name === "status") {
-    return {
-      title: "ステータス",
-      updated: latestUpdated(catalog.experiments.map((item) => item.updated)),
-      body: <StatusPage />,
-    };
-  }
-  if (route.name === "resources") {
-    return { title: "リソース", body: <ResourcesPage /> };
   }
   return { title: "ページが見つかりません", body: <NotFoundPage /> };
 }

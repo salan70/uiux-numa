@@ -90,20 +90,18 @@ visual token だけでなく、必要性が確認できれば motion などの t
 
 ## Catalog
 
-Catalog は採用した成果物を正として示す公開デザインシステムサイトとする。
-却下した案は比較資料として残す。
-採用、却下、検討中のステータスを表示する。
+Catalog は採用した成果物を視覚的にざっと確認する見本帳とする。
+却下した案は配色などの比較資料として残す。
 
-- はじめに: 目的、構成、使い方
-- 原則: `docs/principles/*.md` を glob で読む
+- トップ: 紙の見本と 5 ページへのリンク
 - 土台: 配色、文字、アイコン、図
 - 部品: Experiment ごとの live iframe
-- ステータス: 成果物の採否一覧
-- リソース: 開発者向けの導入手順
+- Experiment 詳細: 採用案のプレビューだけ
 
 token 表は Name、値、説明、Copy を持つ。
-原則は正本の Markdown を直接読む。
+Experiment 本文、原則、開発者向け手順は Catalog 内で描画しない。
 ADR 全文は Catalog 内で描画しない。
+判断は [Catalog を視覚確認専用の見本帳へ絞る ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
 preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
 実装は `apps/catalog/` に置く。
 公開時の表示名は「UI/UX 沼」とする。

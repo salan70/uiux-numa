@@ -18,9 +18,15 @@ type Props = {
   variants: LiveVariant[];
   title?: string;
   defaultVariant?: string;
+  showHeading?: boolean;
 };
 
-export function LivePreview({ variants, title = "Live Preview", defaultVariant }: Props) {
+export function LivePreview({
+  variants,
+  title = "Live Preview",
+  defaultVariant,
+  showHeading = true,
+}: Props) {
   const id = useId();
   const initial =
     variants.find((item) => item.variant === defaultVariant)?.variant ?? variants[0]?.variant ?? "";
@@ -31,8 +37,14 @@ export function LivePreview({ variants, title = "Live Preview", defaultVariant }
   const headingId = `${id}-heading`;
 
   return (
-    <section className="live-preview" aria-labelledby={headingId}>
-      <h2 id={headingId}>{title}</h2>
+    <section
+      className="live-preview"
+      aria-labelledby={showHeading ? headingId : undefined}
+      aria-label={
+        showHeading ? undefined : `${current.experiment} / ${current.variant} のプレビュー`
+      }
+    >
+      {showHeading ? <h2 id={headingId}>{title}</h2> : null}
       <div className="live-controls">
         <SegmentedControl
           name={`${id}-variant`}

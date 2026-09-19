@@ -28,7 +28,6 @@ export function ColorsPage() {
     <>
       <div className="page-intro">
         <h1>配色</h1>
-        <p className="lede">採用した紙を先に置く。使わない案は後ろに残す。</p>
       </div>
       <section aria-labelledby="adopted-colors-heading">
         <h2 id="adopted-colors-heading">採用</h2>
@@ -36,18 +35,7 @@ export function ColorsPage() {
       </section>
       <section aria-labelledby="rejected-colors-heading">
         <h2 id="rejected-colors-heading">比較資料</h2>
-        <p className="lede">評価の前に却下した 4 案である。</p>
         <SchemeList schemes={rejected} />
-      </section>
-      <section aria-labelledby="colors-usage-heading">
-        <h2 id="colors-usage-heading">使い方</h2>
-        <p>
-          各 variant の <code>scheme.css</code> を読み、ルート要素へ <code>cs-{"{id}"}</code>{" "}
-          クラスを付ける。
-        </p>
-        <p>
-          例: <code>{`<div className="cs-sumi">`}</code>
-        </p>
       </section>
     </>
   );
@@ -137,13 +125,6 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
           </div>
         </section>
       ))}
-      <section aria-labelledby="color-usage-heading">
-        <h2 id="color-usage-heading">使い方</h2>
-        <p>
-          <code>{scheme.sourcePath}</code> を読み、
-          <code>{`<div className="cs-${scheme.id}">`}</code> で配色を有効にする。
-        </p>
-      </section>
     </>
   );
 }
