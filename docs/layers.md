@@ -90,28 +90,22 @@ visual token だけでなく、必要性が確認できれば motion などの t
 
 ## Catalog
 
-成果物を閲覧できるカタログサイトを持つ。
-単なるコンポーネント一覧ではなく、次を確認できる Product Experience archive を目指す。
+Catalog は実際の成果物を種別ごとに見る見本帳とする。
+Experiment の判断履歴や評価記録を表示する archive にはしない。
 
-- experiments
-- variants
-- screenshots / previews
-- interaction / motion previews
-- copy variants
-- comparisons
-- evaluations
-- decisions
-- source
-- related tokens
-- related patterns
-- platform implementations
+- Colors: 配色 role の色面と和名
+- Typography: semantic role と primitive token の実寸見本、playground、live variant
+- Icons: 全 variant の SVG グリッド
+- Graphics: ロゴと章扉イラストの SVG グリッド
+- Components: Experiment ごとの live iframe
 
-interaction や animation は静止画だけでは判断できない。
-実動作または動画で確認できることを想定する。
+Experiment の README、原則、Skill、preview PNG は Catalog の収集対象から外す。
+preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
+interaction や animation は Components の live iframe で確認する。
 実装は `apps/catalog/` に置く。
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
-判断は [UI/UX 沼の ADR](decisions/2026-09-19-uiux-rd-catalog.md) に残す。
+判断は [Catalog を成果物の見本帳へ絞り込む ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
 
 ## AI Agent と Skill
 

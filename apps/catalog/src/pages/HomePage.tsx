@@ -1,112 +1,100 @@
-import { catalog } from "../content/collect";
+import { LivePreview } from "../components/LivePreview";
 import { Link } from "../components/Link";
+import { SchemeSwatch } from "../components/SchemeSwatch";
+import { SvgGrid } from "../components/SvgGrid";
+import { TokenSample } from "../components/TokenSample";
+import { catalog } from "../content/collect";
 
 export function HomePage() {
-  const recent = [
-    ...catalog.experiments.map((item) => ({
-      href: `/experiments/${item.slug}`,
-      title: item.title,
-      kind: "Experiment",
-      updated: item.updated,
-    })),
-    ...catalog.principles.map((item) => ({
-      href: `/principles/${item.slug}`,
-      title: item.title,
-      kind: "原則",
-      updated: item.updated,
-    })),
-  ]
-    .sort((a, b) => b.updated.localeCompare(a.updated) || a.title.localeCompare(b.title))
-    .slice(0, 6);
-
-  const highlights = catalog.experiments
-    .filter((item) => item.status === "decided")
-    .sort((a, b) => b.updated.localeCompare(a.updated));
+  const typographyTokens = catalog.tokens.filter((token) => token.kind === "semantic").slice(0, 3);
+  const iconGroups = svgGroups("icons").slice(0, 2);
+  const graphicsGroups = svgGroups("graphics").slice(0, 2);
+  const components = catalog.experiments.find((item) => item.category === "components");
 
   return (
     <>
-      <h1>UI/UX 沼</h1>
-      <p className="lede">
-        Tokens、Experiments、原則、Skills の成果を閲覧する。詳細の正本は GitHub の記録にある。
-      </p>
-      <ul className="count-grid">
-        <li>
-          <Link href="/tokens">
-            <strong>{catalog.tokens.length}</strong>
-            <span>token</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/experiments">
-            <strong>{catalog.experiments.length}</strong>
-            <span>Experiment</span>
-          </Link>
-        </li>
-        <li>
-          <span>
-            <strong>{catalog.previews.length}</strong>
-            <span>preview</span>
-          </span>
-        </li>
-        <li>
-          <span>
-            <strong>{catalog.liveVariants.length}</strong>
-            <span>live variant</span>
-          </span>
-        </li>
-        <li>
-          <Link href="/principles">
-            <strong>{catalog.principles.length}</strong>
-            <span>原則</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="/skills">
-            <strong>{catalog.skills.length}</strong>
-            <span>Skill</span>
-          </Link>
-        </li>
-      </ul>
-      <section aria-labelledby="recent-heading">
-        <h2 id="recent-heading">最近の更新</h2>
-        <ul className="record-list">
-          {recent.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href}>{item.title}</Link>
-              <p>
-                {item.kind} · {item.updated}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section aria-labelledby="highlight-heading">
-        <h2 id="highlight-heading">主要成果</h2>
-        <ul className="record-list">
-          <li>
-            <Link href="/tokens">Typography tokens</Link>
-            <p>primitive 10 と semantic 6 の foundation</p>
-          </li>
-          {highlights.map((item) => (
-            <li key={item.slug}>
-              <Link href={`/experiments/${item.slug}`}>{item.title}</Link>
-              <p>{item.decisionExcerpt}</p>
-            </li>
-          ))}
-          {catalog.principles.map((item) => (
-            <li key={item.slug}>
-              <Link href={`/principles/${item.slug}`}>{item.title}</Link>
-              <p>status {item.status}</p>
-            </li>
-          ))}
-          {catalog.skills.map((item) => (
-            <li key={item.name}>
-              <Link href={`/skills/${item.name}`}>{item.name}</Link>
-              <p>{item.description}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="page-intro">
+        <p className="eyebrow">UI/UX 沼</p>
+        <h1>成果物の見本帳</h1>
+        <p className="lede">実際に作った配色、文字、SVG、コンポーネントを種別ごとに見る。</p>
+      </div>
+      <div className="artifact-bands">
+        <section className="artifact-band" aria-labelledby="colors-heading">
+          <div className="band-heading">
+            <p className="eyebrow">01</p>
+            <h2 id="colors-heading">
+              <Link href="/colors">Colors</Link>
+            </h2>
+            <p>和名を持つ配色の role と、ライト / ダークの色面。</p>
+          </div>
+          <div className="home-swatch-row">
+            {catalog.schemes.slice(0, 6).map((scheme) => (
+              <div className="home-swatch" key={scheme.id}>
+                <SchemeSwatch color={scheme.light[0]} />
+                <span>{scheme.id}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="artifact-band" aria-labelledby="typography-heading">
+          <div className="band-heading">
+            <p className="eyebrow">02</p>
+            <h2 id="typography-heading">
+              <Link href="/typography">Typography</Link>
+            </h2>
+            <p>semantic role と primitive token の実寸見本。</p>
+          </div>
+          <div className="home-type-row">
+            {typographyTokens.map((token) => (
+              <article className="artifact-card" key={token.name}>
+                <code>{token.name}</code>
+                <TokenSample token={token} />
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="artifact-band" aria-labelledby="icons-heading">
+          <div className="band-heading">
+            <p className="eyebrow">03</p>
+            <h2 id="icons-heading">
+              <Link href="/icons">Icons</Link>
+            </h2>
+            <p>アイコン set と variant の SVG。</p>
+          </div>
+          <SvgGrid groups={iconGroups} showSizeControl={false} />
+        </section>
+
+        <section className="artifact-band" aria-labelledby="graphics-heading">
+          <div className="band-heading">
+            <p className="eyebrow">04</p>
+            <h2 id="graphics-heading">
+              <Link href="/graphics">Graphics</Link>
+            </h2>
+            <p>ロゴと章扉イラストの SVG。</p>
+          </div>
+          <SvgGrid groups={graphicsGroups} showSizeControl={false} />
+        </section>
+
+        <section className="artifact-band" aria-labelledby="components-heading">
+          <div className="band-heading">
+            <p className="eyebrow">05</p>
+            <h2 id="components-heading">
+              <Link href="/components">Components</Link>
+            </h2>
+            <p>variant と表示幅を切り替えて動作を見る。</p>
+          </div>
+          {components && <LivePreview variants={components.liveVariants} title={components.slug} />}
+        </section>
+      </div>
     </>
   );
+}
+
+function svgGroups(category: "icons" | "graphics") {
+  const experiments = new Set(
+    catalog.experiments.filter((item) => item.category === category).map((item) => item.slug),
+  );
+  return catalog.svgs.filter((group) => experiments.has(group.experiment));
 }

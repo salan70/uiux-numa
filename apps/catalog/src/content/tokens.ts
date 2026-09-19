@@ -42,7 +42,7 @@ export function collectTokens(
       value: token.value,
       resolvedValue,
       references,
-      cssNames: cssNamesFor(name, token.type, resolvedValue),
+      cssNames: cssNames(name, token.type, resolvedValue),
       sourcePath,
     });
   }
@@ -129,7 +129,7 @@ function resolveValue(
   return value;
 }
 
-function cssNamesFor(name: string, type: string, resolved: unknown): string[] {
+export function cssNames(name: string, type: string, resolved: unknown): string[] {
   if (type !== "typography" || !resolved || typeof resolved !== "object") return [cssName(name)];
   return [
     cssName(`${name}.font-family`),

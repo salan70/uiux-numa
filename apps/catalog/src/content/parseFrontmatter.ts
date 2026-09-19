@@ -3,7 +3,6 @@ export type YamlValue = string | number | boolean | string[];
 export type FrontmatterData = Record<string, YamlValue>;
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
-
 const EXPERIMENT_STATUSES = [
   "draft",
   "implementing",
@@ -13,10 +12,7 @@ const EXPERIMENT_STATUSES = [
   "abandoned",
 ] as const;
 
-const PRINCIPLE_STATUSES = ["candidate", "adopted", "rejected"] as const;
-
 export type ExperimentStatus = (typeof EXPERIMENT_STATUSES)[number];
-export type PrincipleStatus = (typeof PRINCIPLE_STATUSES)[number];
 
 export type ExperimentFrontmatter = {
   title: string;
@@ -25,18 +21,6 @@ export type ExperimentFrontmatter = {
   updated: string;
   platforms: string[];
   domains: string[];
-};
-
-export type PrincipleFrontmatter = {
-  title: string;
-  status: PrincipleStatus;
-  created: string;
-  updated: string;
-};
-
-export type SkillFrontmatter = {
-  name: string;
-  description: string;
 };
 
 export function splitFrontmatter(source: string): { raw: string; body: string } {
@@ -123,28 +107,6 @@ export function parseExperimentFrontmatter(source: string, path: string): Experi
   };
 }
 
-export function parsePrincipleFrontmatter(source: string, path: string): PrincipleFrontmatter {
-  const { data } = parseFrontmatter(source);
-  const status = requireString(data, "status", path);
-  if (!isPrincipleStatus(status)) {
-    throw new Error(`${path}: status が不正: ${status}`);
-  }
-  return {
-    title: requireString(data, "title", path),
-    status,
-    created: requireDate(data, "created", path),
-    updated: requireDate(data, "updated", path),
-  };
-}
-
-export function parseSkillFrontmatter(source: string, path: string): SkillFrontmatter {
-  const { data } = parseFrontmatter(source);
-  return {
-    name: requireString(data, "name", path),
-    description: requireString(data, "description", path),
-  };
-}
-
 function parseScalar(raw: string): string | number | boolean {
   if (raw === "true") return true;
   if (raw === "false") return false;
@@ -161,8 +123,4 @@ function unquote(raw: string): string {
 
 function isExperimentStatus(value: string): value is ExperimentStatus {
   return (EXPERIMENT_STATUSES as readonly string[]).includes(value);
-}
-
-function isPrincipleStatus(value: string): value is PrincipleStatus {
-  return (PRINCIPLE_STATUSES as readonly string[]).includes(value);
 }
