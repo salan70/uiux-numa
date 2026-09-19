@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `shinbashi`: しんばし。明治の新橋で流行った鮮やかな新橋色と、平らな白い面。

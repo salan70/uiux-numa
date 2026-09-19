@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import mark from "./dist/mark.svg?raw";
 
 // variant `open-book`: 学ぶ行為の道具として、開いた本を正面から面で描く。

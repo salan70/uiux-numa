@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `vivid-violet`: accent の色相で色付けした面と高彩度の紫。印象の強さと、高彩度でのコントラスト確保を試す。

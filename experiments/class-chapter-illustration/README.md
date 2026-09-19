@@ -43,6 +43,7 @@ domains:
 - 装飾として `aria-hidden="true"` で置く。意味は章番号と題名の文字が担う。
 - 遠くから読めることを優先する。最小の線幅は 3、最小の隙間は 6 にする（320 幅での値）。
 - 利用画面のモックは全 variant で同一にし、`diff` で確認する。章扉のスライド 1 枚と、手元で見る資料ページの図 1 枚を並べる。
+- 書体とウェイトは `tokens/typography/` を使う。スライドと資料ページ固有の尺度は維持する。
 - 編集用の原本を `variants/<id>/source/chapter.svg`、配布用を `variants/<id>/dist/chapter.svg` に置く。
 - 部分編集の単位に `part-chapter-<role>` の id を付ける。色の部分編集の実証に使う。
 

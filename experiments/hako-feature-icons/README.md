@@ -47,6 +47,7 @@ variant で変える軸は次の 2 つ。
 - 編集用の原本を `variants/<id>/source/`、配布用を `variants/<id>/dist/` に置く。配布用は `just svg-optimize` で作る。
 - `index.tsx` は配布用を `?raw` で inline に展開する。
 - モックは React + TypeScript で、追加の npm 依存を入れない。
+- モックの文字は `tokens/typography/` の 6 role を使い、アイコン以外の比較条件を揃える。
 
 Skill の有無を比べる variant には、次の要求文をそのまま渡す。
 出力先の 1 行だけを variant ごとに置き換える。

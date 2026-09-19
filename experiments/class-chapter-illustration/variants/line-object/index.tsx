@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import art from "./dist/chapter.svg?raw";
 
 // variant `line-object`: 線画で対象物だけを描く。場面を作らず、要素を 4 つに絞る。

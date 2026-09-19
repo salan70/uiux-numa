@@ -48,13 +48,13 @@
 .ch-kicker {
   color: var(--slide-accent);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.06em;
 }
 
 .ch-title {
   font-size: 2.75rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   line-height: 1.25;
 }
 

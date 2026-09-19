@@ -53,7 +53,7 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 1.125rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }
 
 .fi-logo-mark {
@@ -88,7 +88,7 @@
   margin-bottom: 0.5rem;
   color: var(--color-accent-strong);
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.04em;
 }
 
@@ -173,7 +173,7 @@
 }
 
 .fi-task-title {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }
 
 .fi-meta {

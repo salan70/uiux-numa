@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import mark from "./dist/mark.svg?raw";
 
 // variant `glyph-c`: 文字を核にする案。class の頭文字 C を、字形をなぞらず角の取れた四角の骨格で組み直す。

@@ -58,6 +58,7 @@ variant で変える軸は見た目のうち配色だけにする。
 
 - React + TypeScript で実装し、追加の npm 依存を入れない。
 - `LandingPage.tsx` と `layout.css` は和名の 10 variant で同一の内容にする。同一性は `diff` で確認する。
+- 文字の共通 role は `tokens/typography/` を使う。hero、引用、価格の固有サイズは配色の比較条件として維持する。
 - variant ごとの差は `scheme.css` と、`index.tsx` の配色のクラス名だけにする。
 - LP は header、hero、機能、利用者の声、料金、更新情報の登録、footer で構成する。hero には製品画面の例を置き、意味色を使う。
 - 製品名は架空の「Hako」とし、UI 文言は日本語にする。

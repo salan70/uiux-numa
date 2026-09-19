@@ -57,6 +57,7 @@ domains:
 - 編集用の原本を `variants/<id>/source/<icon>.svg`、配布用を `variants/<id>/dist/<icon>.svg` に置く。`index.tsx` は配布用を `?raw` で inline に展開する。
 - 部分編集の単位に `part-<icon>-<role>` の id を付ける。2 色の variant は accent の要素に `part-<icon>-accent` を付ける。
 - モック（`Mock.tsx`、`mock.css`）は全 variant で同一にし、`diff` で確認する。追加の npm 依存を入れない。
+- 書体とウェイトは `tokens/typography/` を使う。VitePress と Marp 固有の尺度は維持する。
 
 利用者が渡したテーマは次のとおり（原文）。
 
