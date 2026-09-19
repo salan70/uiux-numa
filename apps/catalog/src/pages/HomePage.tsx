@@ -1,113 +1,83 @@
 import { Link } from "../components/Link";
-import { LivePreview } from "../components/LivePreview";
-import { SchemeSwatch } from "../components/SchemeSwatch";
-import { SvgGrid } from "../components/SvgGrid";
-import { TokenSample } from "../components/TokenSample";
 import { categoryHref, categoryLabel } from "../content/category";
-import { catalog, defaultVariantId } from "../content/collect";
+import { catalog } from "../content/collect";
 
 export function HomePage() {
-  const typographyTokens = catalog.tokens.filter((token) => token.kind === "semantic").slice(0, 3);
-  const iconGroups = svgGroups("icons").slice(0, 2);
-  const graphicsGroups = svgGroups("graphics").slice(0, 2);
-  const components = catalog.experiments.find((item) => item.category === "components");
+  const recent = [...catalog.experiments]
+    .sort((a, b) => b.updated.localeCompare(a.updated) || a.slug.localeCompare(b.slug))
+    .slice(0, 5);
 
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">UI/UX 沼</p>
         <h1>UI/UX 沼</h1>
         <p className="lede">
-          実験から採用した配色、文字、SVG、コンポーネントを正として掲載する。却下案は比較資料として残す。
+          AI エージェントで UI/UX
+          とプロダクト体験を反復的に探索する。成果を個人開発へ再利用できる形に育てる。
         </p>
+        <p>Catalog は採用した成果物を正として示す。却下案は比較資料として残す。</p>
       </div>
-      <div className="artifact-bands">
-        <section className="artifact-band" aria-labelledby="colors-heading">
-          <div className="band-heading">
-            <p className="eyebrow">Foundations</p>
-            <h2 id="colors-heading">
-              <Link href={categoryHref("colors")}>{categoryLabel("colors")}</Link>
-            </h2>
-            <p>採用した配色の Role と、ライト / ダークの色面一覧。</p>
-          </div>
-          <div className="home-swatch-row">
-            {catalog.schemes.slice(0, 6).map((scheme) => (
-              <Link
-                href={`/foundations/colors/${scheme.id}`}
-                className="home-swatch"
-                key={scheme.id}
-              >
-                <SchemeSwatch color={scheme.light[0]} />
-                <span>{scheme.id}</span>
+      <section aria-labelledby="principles-heading">
+        <h2 id="principles-heading">原則</h2>
+        <p>原則候補は Experiment から抽出し、採否は人間が決める。</p>
+        <ul className="record-list">
+          {catalog.principles.map((principle) => (
+            <li key={principle.slug}>
+              <Link href={`/principles/${principle.slug}`}>{principle.title}</Link>
+              <span className="meta"> {principle.status}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="foundations-heading">
+        <h2 id="foundations-heading">Foundations と Components</h2>
+        <ul className="home-cards">
+          <li>
+            <Link href={categoryHref("colors")}>{categoryLabel("colors")}</Link>
+            <p>採用した配色と Role。</p>
+          </li>
+          <li>
+            <Link href={categoryHref("typography")}>{categoryLabel("typography")}</Link>
+            <p>semantic と primitive の token 表。</p>
+          </li>
+          <li>
+            <Link href={categoryHref("icons")}>{categoryLabel("icons")}</Link>
+            <p>技術アイコンと機能アイコン。</p>
+          </li>
+          <li>
+            <Link href={categoryHref("graphics")}>{categoryLabel("graphics")}</Link>
+            <p>ロゴと章扉イラスト。</p>
+          </li>
+          <li>
+            <Link href={categoryHref("components")}>{categoryLabel("components")}</Link>
+            <p>フォームの inline validation。</p>
+          </li>
+        </ul>
+      </section>
+      <section aria-labelledby="recent-heading">
+        <h2 id="recent-heading">最近更新した成果物</h2>
+        <ul className="record-list">
+          {recent.map((experiment) => (
+            <li key={experiment.slug}>
+              <Link href={detailHref(experiment.category, experiment.slug)}>
+                {experiment.title}
               </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="artifact-band" aria-labelledby="typography-heading">
-          <div className="band-heading">
-            <p className="eyebrow">Foundations</p>
-            <h2 id="typography-heading">
-              <Link href={categoryHref("typography")}>{categoryLabel("typography")}</Link>
-            </h2>
-            <p>Semantic role と primitive token の実寸見本。</p>
-          </div>
-          <div className="home-type-row">
-            {typographyTokens.map((token) => (
-              <article className="artifact-card" key={token.name}>
-                <code>{token.name}</code>
-                <TokenSample token={token} />
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="artifact-band" aria-labelledby="icons-heading">
-          <div className="band-heading">
-            <p className="eyebrow">Foundations</p>
-            <h2 id="icons-heading">
-              <Link href={categoryHref("icons")}>{categoryLabel("icons")}</Link>
-            </h2>
-            <p>アイコンセットと各バリアントの SVG 一覧。</p>
-          </div>
-          <SvgGrid groups={iconGroups} showSizeControl={false} />
-        </section>
-
-        <section className="artifact-band" aria-labelledby="graphics-heading">
-          <div className="band-heading">
-            <p className="eyebrow">Foundations</p>
-            <h2 id="graphics-heading">
-              <Link href={categoryHref("graphics")}>{categoryLabel("graphics")}</Link>
-            </h2>
-            <p>ロゴと章扉イラストの各バリアント SVG 一覧。</p>
-          </div>
-          <SvgGrid groups={graphicsGroups} showSizeControl={false} />
-        </section>
-
-        <section className="artifact-band" aria-labelledby="components-heading">
-          <div className="band-heading">
-            <p className="eyebrow">Components</p>
-            <h2 id="components-heading">
-              <Link href={categoryHref("components")}>{categoryLabel("components")}</Link>
-            </h2>
-            <p>バリアントと表示幅を切り替えて動作を確認する。</p>
-          </div>
-          {components && (
-            <LivePreview
-              variants={components.liveVariants}
-              title={components.title}
-              defaultVariant={defaultVariantId(components)}
-            />
-          )}
-        </section>
-      </div>
+              <span className="meta">
+                {" "}
+                更新日 <time dateTime={experiment.updated}>{experiment.updated}</time>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </>
   );
 }
 
-function svgGroups(category: "icons" | "graphics") {
-  const experiments = new Set(
-    catalog.experiments.filter((item) => item.category === category).map((item) => item.slug),
-  );
-  return catalog.svgs.filter((group) => experiments.has(group.experiment));
+function detailHref(category: string, slug: string): string {
+  if (category === "colors") return categoryHref("colors");
+  if (category === "typography") return categoryHref("typography");
+  if (category === "icons") return `/foundations/icons/${slug}`;
+  if (category === "graphics") return `/foundations/graphics/${slug}`;
+  return `/components/${slug}`;
 }

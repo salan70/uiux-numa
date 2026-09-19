@@ -71,6 +71,7 @@ export type PrincipleRecord = {
   created: string;
   updated: string;
   body: string;
+  bodyHtml: string;
   repoPath: string;
 };
 
@@ -187,6 +188,7 @@ function collectPrinciples(): PrincipleRecord[] {
       created: frontmatter.created,
       updated: frontmatter.updated,
       body,
+      bodyHtml: renderMarkdown(body),
       repoPath,
     });
   }
