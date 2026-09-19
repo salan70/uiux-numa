@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <title>担当を決める</title>
+  <!-- 原則「組の一貫性は少数のパラメータで縛る」の手順に厳密に従う。語彙は線画 1 つ、線幅 2、端点と角は root で 1 回、live area は padding 2（ink を 2〜22 に収める）、線幅が偶数なので座標は整数だけ。 -->
+  <!-- 比喩は with-skill と同じ「カードと担当者」。カードは右下を開け、担当者がその開口に載る。 -->
+  <path id="part-assign-card" d="M9 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2"/>
+  <!-- タスクの題名 1 行。左辺と頭の ink から 2 離す。 -->
+  <path id="part-assign-title" d="M7 8h4"/>
+  <!-- 担当者 1 人。頭と肩で、塗りを使わず線だけで描く。半径 3 は 16px で中空が 2px 残る最小値。 -->
+  <circle id="part-assign-head" cx="17" cy="11" r="3"/>
+  <path id="part-assign-body" d="M13 21a4 3 0 0 1 8 0"/>
+</svg>
