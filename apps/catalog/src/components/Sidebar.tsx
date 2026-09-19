@@ -1,3 +1,4 @@
+import { Collapsible } from "@base-ui/react/collapsible";
 import { useState } from "react";
 import { NAV_SECTIONS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
@@ -24,28 +25,33 @@ export function Sidebar({ path, onNavigate }: Props) {
     <nav className="sidebar sidebar-nav" aria-label="サイト">
       {NAV_SECTIONS.map((section) => {
         const current = section.items.some((item) => isCurrentPath(item.href, path));
+        const isOpen = current || open[section.id] !== false;
         return (
-          <details
+          <Collapsible.Root
             key={section.id}
             className="sidebar-section"
-            open={current || open[section.id] !== false}
-            onToggle={(event) => toggle(section.id, event.currentTarget.open)}
+            open={isOpen}
+            onOpenChange={(next) => toggle(section.id, next)}
           >
-            <summary>{section.label}</summary>
-            <ul>
-              {section.items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    current={isCurrentPath(item.href, path)}
-                    onNavigate={onNavigate}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </details>
+            <Collapsible.Trigger className="sidebar-section-trigger">
+              {section.label}
+            </Collapsible.Trigger>
+            <Collapsible.Panel className="sidebar-section-panel" keepMounted>
+              <ul>
+                {section.items.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      current={isCurrentPath(item.href, path)}
+                      onNavigate={onNavigate}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Collapsible.Panel>
+          </Collapsible.Root>
         );
       })}
     </nav>

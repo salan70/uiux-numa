@@ -29,6 +29,7 @@ for entry in "${pages[@]}"; do
       [ "$width" = "390" ] && height=844
       out="$out_dir/${page}-${width}-${theme}.png"
       "$root/scripts/web-shot.sh" "${base}${path}?theme=${theme}&scheme=sumi" "$out" "$width" "$height"
+      sleep 1
     done
   done
 done

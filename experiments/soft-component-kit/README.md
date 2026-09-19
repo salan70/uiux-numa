@@ -1,8 +1,8 @@
 ---
 title: 柔らかい現代系の Catalog 部品キット
-status: implementing
+status: decided
 created: 2026-09-19
-updated: 2026-09-19
+updated: 2026-09-20
 platforms:
   - web
 domains:
@@ -10,7 +10,8 @@ domains:
   - visual-design
   - interaction-design
   - accessibility
-adopted: []
+adopted:
+  - hairline-float
 ---
 
 ## Problem
@@ -59,19 +60,38 @@ variant で変える軸は角丸、面の階層、影、動きの 4 つである
 
 ## Evaluation
 
-未定
+`docs/evaluation/review.md` の多観点の評価は行っていない。
+判断は、4 案の Kit 見本の確認による。
 
 ## Decision
 
-未定
+`hairline-float` を採用する。
+公開 Catalog の部品は、この案の造形と Base UI の配線へ置き換える。
+
+- 判断者: リポジトリの所有者
+- 判断日: 2026-09-20
+- 根拠: Kit 見本 4 案の確認
+
+採用の理由は次のとおり。
+
+- 1px の境界で部品の輪郭が読め、popup と drawer だけに影を置く。
+- 角丸は操作部品 `0.625rem`、面 `1rem` で、紙全体をカプセルにしない。
+- 動きは 140ms の ease-out と press 1px に収まり、CSS だけで足りる。
+
+未評価の軸は brand fit、支援技術での読み上げの横断確認、390px ヘッダーの既存のメニュー切れである。
 
 ## Rejected reasons
 
-未定
+- `tonal-layers`: 線も影もなく、色段差だけに頼る。Catalog の紙と部品の輪郭が弱い。popup の浮きも足りない。
+- `soft-pillow`: 面全体に拡散影を置く。全面の elevation になり、ホストが避けてきた影の使い方に戻る。ばねのイージングも CSS だけで揃える負荷が大きい。
+- `capsule-spring`: 角丸 999px と accent 塗り、強いばねが主役になる。表やカードと操作部品の形が分かれ、見本帳の紙をカプセルに寄せすぎる。
+
+却下した 3 案の `variants/` は比較記録として残す。
 
 ## Learnings
 
-未定
+- 公開面へ取り込むときは、採用案のローカル変数を `catalog.css` の部品セレクタへ写す。角丸と影は token にしない。
+- Experiment の Kit 見本は比較記録として残し、公開面の正本は Catalog の CSS と部品にする。
 
 ## Related patterns / assets
 

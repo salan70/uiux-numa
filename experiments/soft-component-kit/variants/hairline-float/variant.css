@@ -52,6 +52,7 @@
 .sk-hairline-float .sk-kicker,
 .sk-hairline-float .sk-intro,
 .sk-hairline-float .sk-help,
+.sk-hairline-float .sk-theme-switch,
 .sk-hairline-float .sk-section-panel a {
   color: var(--color-text-muted);
 }
@@ -65,6 +66,7 @@
 .sk-hairline-float .sk-select-trigger,
 .sk-hairline-float .sk-section-trigger,
 .sk-hairline-float .sk-textarea,
+.sk-hairline-float .sk-native-select,
 .sk-hairline-float .sk-segmented,
 .sk-hairline-float .sk-select-popup,
 .sk-hairline-float .sk-select-item {
@@ -73,7 +75,8 @@
 
 .sk-hairline-float .sk-button,
 .sk-hairline-float .sk-select-trigger,
-.sk-hairline-float .sk-textarea {
+.sk-hairline-float .sk-textarea,
+.sk-hairline-float .sk-native-select {
   color: var(--color-text);
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);

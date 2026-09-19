@@ -25,20 +25,20 @@ fi
 profile="$(mktemp -d)"
 mkdir -p "$(dirname "$out")"
 rm -f "$out"
-# Chrome 152 の headless は --screenshot の後に終了しないことがある。
-# ファイルの出現を待ち（最長 30 秒）、1 秒おいて Chrome を止める。
+log="$profile/chrome.log"
+# Chrome 152 以降の headless は --screenshot の後に終了しないことがある。
+# ファイルの出現を待ち（最長 90 秒）、止めてから次の撮影へ進む。
 "$chrome" --headless --no-first-run --disable-gpu \
   --user-data-dir="$profile" \
   --hide-scrollbars --force-device-scale-factor=2 \
   --virtual-time-budget=1000 \
   --window-size="$width,$height" \
-  --screenshot="$out" "$url" >/dev/null 2>&1 &
+  --screenshot="$out" "$url" >"$log" 2>&1 &
 pid=$!
 stop_chrome() {
-  # SIGTERM で 2 秒待ち、止まらなければ SIGKILL にする
   if kill -0 "$pid" 2>/dev/null; then
     kill "$pid" 2>/dev/null || true
-    for _ in 1 2 3 4; do kill -0 "$pid" 2>/dev/null || break; sleep 0.5; done
+    for _ in $(seq 1 10); do kill -0 "$pid" 2>/dev/null || break; sleep 0.5; done
     kill -9 "$pid" 2>/dev/null || true
     wait "$pid" 2>/dev/null || true
   fi
@@ -46,7 +46,17 @@ stop_chrome() {
 }
 trap stop_chrome EXIT
 waited=0
-while [ ! -s "$out" ] && [ "$waited" -lt 60 ]; do sleep 0.5; waited=$((waited + 1)); done
-sleep 1
-[ -s "$out" ] || { echo "error: 30 秒以内に撮影できなかった: $out" >&2; exit 1; }
+while [ ! -s "$out" ] && [ "$waited" -lt 180 ]; do
+  if ! kill -0 "$pid" 2>/dev/null; then
+    break
+  fi
+  sleep 0.5
+  waited=$((waited + 1))
+done
+sleep 0.5
+if [ ! -s "$out" ]; then
+  echo "error: 90 秒以内に撮影できなかった: $out" >&2
+  [ -s "$log" ] && tail -n 20 "$log" >&2
+  exit 1
+fi
 echo "ok: $out"

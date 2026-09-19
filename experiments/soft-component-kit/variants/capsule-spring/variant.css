@@ -36,6 +36,7 @@
 .sk-capsule-spring .sk-kicker,
 .sk-capsule-spring .sk-intro,
 .sk-capsule-spring .sk-help,
+.sk-capsule-spring .sk-theme-switch,
 .sk-capsule-spring .sk-section-panel a {
   color: var(--color-text-muted);
 }
@@ -49,6 +50,7 @@
 .sk-capsule-spring .sk-select-trigger,
 .sk-capsule-spring .sk-section-trigger,
 .sk-capsule-spring .sk-textarea,
+.sk-capsule-spring .sk-native-select,
 .sk-capsule-spring .sk-segmented,
 .sk-capsule-spring .sk-select-item,
 .sk-capsule-spring .sk-copy-button {
@@ -62,7 +64,8 @@
 }
 
 .sk-capsule-spring .sk-button,
-.sk-capsule-spring .sk-select-trigger {
+.sk-capsule-spring .sk-select-trigger,
+.sk-capsule-spring .sk-native-select {
   color: var(--color-accent-strong);
   background: var(--color-accent-subtle);
 }

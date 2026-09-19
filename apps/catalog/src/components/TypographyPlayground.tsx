@@ -1,5 +1,8 @@
+import { Field } from "@base-ui/react/field";
+import { Slider } from "@base-ui/react/slider";
 import { useMemo, useState, type CSSProperties } from "react";
 import type { CatalogToken } from "../content/tokens";
+import { SelectField } from "./SelectField";
 
 type Props = {
   roles: CatalogToken[];
@@ -22,31 +25,41 @@ export function TypographyPlayground({ roles }: Props) {
     <section className="playground" aria-labelledby="playground-heading">
       <h2 id="playground-heading">試し書き</h2>
       <div className="playground-controls">
-        <label>
-          役割
-          <select value={selected.name} onChange={(event) => setRole(event.target.value)}>
-            {roles.map((item) => (
-              <option key={item.name} value={item.name}>
-                {item.name.replace("typography.", "")}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          表示幅: {width} rem
-          <input
-            type="range"
-            min={16}
-            max={48}
-            value={width}
-            onChange={(event) => setWidth(Number(event.target.value))}
-          />
-        </label>
+        <SelectField
+          label="役割"
+          value={selected.name}
+          options={roles.map((item) => ({
+            value: item.name,
+            label: item.name.replace("typography.", ""),
+          }))}
+          onChange={setRole}
+        />
+        <Slider.Root
+          className="slider"
+          value={width}
+          min={16}
+          max={48}
+          onValueChange={(next) => setWidth(next)}
+        >
+          <div className="slider-head">
+            <Slider.Label className="select-label">表示幅: {width} rem</Slider.Label>
+          </div>
+          <Slider.Control className="slider-control">
+            <Slider.Track className="slider-track">
+              <Slider.Indicator className="slider-indicator" />
+              <Slider.Thumb aria-label="表示幅" className="slider-thumb" />
+            </Slider.Track>
+          </Slider.Control>
+        </Slider.Root>
       </div>
-      <label className="playground-text">
-        サンプルテキスト
-        <textarea value={text} onChange={(event) => setText(event.target.value)} rows={4} />
-      </label>
+      <Field.Root className="playground-text">
+        <Field.Label>サンプルテキスト</Field.Label>
+        <Field.Control
+          render={
+            <textarea value={text} onChange={(event) => setText(event.target.value)} rows={4} />
+          }
+        />
+      </Field.Root>
       <div className="playground-stage" style={{ maxWidth: `${width}rem` }}>
         <p style={style}>{text}</p>
       </div>

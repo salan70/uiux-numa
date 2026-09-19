@@ -41,6 +41,7 @@
 .sk-soft-pillow .sk-kicker,
 .sk-soft-pillow .sk-intro,
 .sk-soft-pillow .sk-help,
+.sk-soft-pillow .sk-theme-switch,
 .sk-soft-pillow .sk-section-panel a {
   color: var(--color-text-muted);
 }
@@ -54,6 +55,7 @@
 .sk-soft-pillow .sk-select-trigger,
 .sk-soft-pillow .sk-section-trigger,
 .sk-soft-pillow .sk-textarea,
+.sk-soft-pillow .sk-native-select,
 .sk-soft-pillow .sk-segmented,
 .sk-soft-pillow .sk-select-popup,
 .sk-soft-pillow .sk-select-item {
@@ -63,7 +65,8 @@
 
 .sk-soft-pillow .sk-button,
 .sk-soft-pillow .sk-select-trigger,
-.sk-soft-pillow .sk-textarea {
+.sk-soft-pillow .sk-textarea,
+.sk-soft-pillow .sk-native-select {
   color: var(--color-text);
   background: var(--color-surface);
   box-shadow:
