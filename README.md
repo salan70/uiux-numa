@@ -37,6 +37,15 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 他プロジェクトへの同期方法は別途検討する。
 
+## Catalog
+
+公開サイトの表示名は「UI/UX 沼」である。
+実装は `apps/catalog/` にある。
+ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
+production URL は `https://uiux.oda79.me/` とする。
+Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。
+構成の判断は [UI/UX 沼の ADR](docs/decisions/2026-09-19-uiux-rd-catalog.md) に残す。
+
 ## 開発環境
 
 Nix flake と direnv で固定する。
@@ -57,3 +66,4 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 - [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md): Experiment の手順と記録項目
 - [docs/evaluation/policy.md](docs/evaluation/policy.md): 評価の方針
 - [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)
+- [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX 沼の Cloudflare Pages 公開手順
