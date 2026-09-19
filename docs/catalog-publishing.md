@@ -1,8 +1,9 @@
 # UI/UX 沼の公開手順
 
 公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
-Catalog は Colors、Typography、Icons、Graphics、Components の成果物を掲載する。
-Experiment の本文、原則、Skill、preview PNG は公開画面に掲載しない。
+Catalog は採用した成果物を正として示す公開デザインシステムサイトである。
+Experiment の本文、原則、開発者向け手順を掲載する。
+却下案は比較資料として残す。
 production URL は `https://uiux.oda79.me/` とする。
 Git 連携と custom domain には、利用者による Cloudflare 認証が 1 回必要である。
 この文書はその手動手順だけを残す。
@@ -91,8 +92,9 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 確認項目は次のとおり。
 
 - `https://uiux.oda79.me/` が HTTPS で開く
-- `/colors`、`/typography`、`/icons`、`/graphics`、`/components` を直リンクで開ける
-- ヘッダーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
+- `/getting-started`、`/principles`、`/foundations/colors`、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components`、`/status`、`/resources` を直リンクで開ける
+- `/colors` などの旧 URL が新 URL へ 301 される
+- サイドバーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
 - ライト / ダークの切り替えで選択中の配色の値が変わる
 - Typography の live variant と Components の iframe が表示される
 - Icons と Graphics の SVG が表示される

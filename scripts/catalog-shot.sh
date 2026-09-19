@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Catalog のホームと 5 種別ページを 390 / 1280 とライト / ダークで撮影する。
+# Catalog の主要ルートを 390 / 1280 とライト / ダークで撮影する。
 #
 # 使い方: catalog-shot.sh <base-url>
 #   例: http://localhost:5184
@@ -11,9 +11,22 @@ root="$(cd "$(dirname "$0")/.." && pwd)"
 out_dir="$root/apps/catalog/shots"
 mkdir -p "$out_dir"
 
-for page in home colors typography icons graphics components; do
-  path="/"
-  [ "$page" = "home" ] || path="/$page"
+pages=(
+  home:/
+  getting-started:/getting-started
+  principles:/principles
+  colors:/foundations/colors
+  typography:/foundations/typography
+  icons:/foundations/icons
+  graphics:/foundations/graphics
+  components:/components
+  status:/status
+  resources:/resources
+)
+
+for entry in "${pages[@]}"; do
+  page="${entry%%:*}"
+  path="${entry#*:}"
   for theme in light dark; do
     for width in 390 1280; do
       height=800
