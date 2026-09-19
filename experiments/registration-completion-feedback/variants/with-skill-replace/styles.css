@@ -1,0 +1,324 @@
+/* variant `with-skill-replace` のスタイル。 */
+
+/* 配色は experiments/color-schemes/variants/wasabi のライトの役割を写す。役割名は同じ。 */
+.rcf-replace {
+  --color-bg: #f8fbf8;
+  --color-bg-subtle: #e6eae3;
+  --color-surface: #fffffc;
+  --color-border: #d4dcd6;
+  --color-border-strong: #767c6b;
+  --color-text: #333631;
+  --color-text-muted: #5b6356;
+  --color-accent: #006e54;
+  --color-accent-hover: #005243;
+  --color-on-accent: #fffffc;
+  --color-focus: #69821b;
+  --color-success: #316745;
+  --color-success-subtle: #d6e9ca;
+  --color-danger: #b7282e;
+  --color-danger-subtle: #fef4f4;
+
+  /* 曲線は crafting-motion の局所値。リポジトリ共通 token にはしない。 */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  min-height: calc(100vh - 6rem);
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background: var(--color-bg);
+  font: var(--typography-ui-font-weight) var(--typography-ui-font-size) /
+    var(--typography-ui-line-height) var(--typography-ui-font-family);
+}
+
+/* フォームと完了面を同じセルに重ね、差し替えの間も位置を変えない。 */
+.rcf-replace-card {
+  display: grid;
+  box-sizing: border-box;
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.rcf-replace-card > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.rcf-replace-title {
+  margin: 0;
+  font: var(--typography-title-font-weight) var(--typography-title-font-size) /
+    var(--typography-title-line-height) var(--typography-title-font-family);
+}
+
+.rcf-replace-title:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.rcf-replace-body {
+  margin: 0;
+  color: var(--color-text-muted);
+  font: var(--typography-body-font-weight) var(--typography-body-font-size) /
+    var(--typography-body-line-height) var(--typography-body-font-family);
+  overflow-wrap: anywhere;
+}
+
+/* フォーム */
+.rcf-replace-form {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  justify-items: stretch;
+  /* 退場。完了面の入場より先に消して、二重に見える時間を短くする。 */
+  transition: opacity 150ms ease;
+}
+
+.rcf-replace-form > .rcf-replace-button {
+  justify-self: start;
+}
+
+.rcf-replace-form[data-leaving] {
+  opacity: 0;
+}
+
+.rcf-replace-summary {
+  padding: 1rem;
+  background: var(--color-danger-subtle);
+  border: 2px solid var(--color-danger);
+  border-radius: 8px;
+}
+
+.rcf-replace-summary:focus {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.rcf-replace-summary-heading {
+  margin: 0 0 0.5rem;
+  color: var(--color-danger);
+  font: var(--typography-heading-font-weight) var(--typography-heading-font-size) /
+    var(--typography-heading-line-height) var(--typography-heading-font-family);
+}
+
+.rcf-replace-summary-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.rcf-replace-summary-list a {
+  color: var(--color-danger);
+  font-weight: var(--typography-control-font-weight);
+  text-decoration: underline;
+}
+
+.rcf-replace-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+}
+
+.rcf-replace-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.rcf-replace-input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+.rcf-replace-input:read-only {
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+}
+
+.rcf-replace-error {
+  margin: 0.25rem 0 0;
+  color: var(--color-danger);
+  font: var(--typography-caption-font-weight) var(--typography-caption-font-size) /
+    var(--typography-caption-line-height) var(--typography-caption-font-family);
+}
+
+/* ボタン */
+.rcf-replace-button,
+.rcf-replace-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font: var(--typography-control-font-weight) var(--typography-control-font-size) /
+    var(--typography-control-line-height) var(--typography-control-font-family);
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 150ms ease;
+}
+
+.rcf-replace-button {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.rcf-replace-button-secondary {
+  color: var(--color-accent);
+  background: transparent;
+  border-color: var(--color-border-strong);
+}
+
+.rcf-replace-button:active,
+.rcf-replace-button-secondary:active {
+  transform: scale(0.97);
+}
+
+.rcf-replace-button[aria-disabled="true"] {
+  cursor: progress;
+  background: var(--color-accent-hover);
+}
+
+.rcf-replace-button[aria-disabled="true"]:active {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rcf-replace-button:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .rcf-replace-button-secondary:hover {
+    background: var(--color-bg-subtle);
+  }
+}
+
+.rcf-replace-input:focus-visible,
+.rcf-replace-button:focus-visible,
+.rcf-replace-button-secondary:focus-visible,
+.rcf-replace-summary-list a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 送信中の進行。無限の進行なので linear。 */
+.rcf-replace-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid color-mix(in srgb, var(--color-on-accent) 40%, transparent);
+  border-top-color: var(--color-on-accent);
+  border-radius: 50%;
+  animation: rcf-replace-spin 800ms linear infinite;
+}
+
+@keyframes rcf-replace-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rcf-replace-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+ * 完了面の入場。目的は「状態の明示」。登録完了は稀な操作なので、
+ * recipes の「完了の入場」400ms を出発点にし、キーボード起点でも動かす。
+ * フォームの退場 150ms のあとに始め、交差で二重に見えないようにする。
+ * ボタンは入場中も押せる。
+ */
+.rcf-replace-done,
+.rcf-replace-login {
+  display: grid;
+  gap: 1rem;
+  align-content: center;
+  justify-items: start;
+}
+
+.rcf-replace-done {
+  transition:
+    opacity 400ms var(--ease-out) 120ms,
+    transform 400ms var(--ease-out) 120ms;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.rcf-replace-check {
+  width: 3rem;
+  height: 3rem;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rcf-replace-check circle {
+  fill: var(--color-success-subtle);
+}
+
+/*
+ * チェックの線を描く。stroke-dashoffset は transform / opacity の外だが、
+ * 48px の SVG 1 個に限り「送信が成功へ変わった」因果を見せるために使う。性能は未計測。
+ */
+.rcf-replace-check path {
+  stroke: var(--color-success);
+  stroke-width: 4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 450ms var(--ease-out) 300ms;
+
+  @starting-style {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* 動きを減らす設定では移動と線の描画を止め、短い透明度の変化だけ残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .rcf-replace-done {
+    /* フォームの退場と重ねない。遅延は通常時と同じにする。 */
+    transition: opacity 200ms ease 120ms;
+
+    @starting-style {
+      opacity: 0;
+      transform: none;
+    }
+  }
+
+  .rcf-replace-check path {
+    transition: none;
+  }
+
+  .rcf-replace-button,
+  .rcf-replace-button-secondary {
+    transition: background-color 150ms ease;
+  }
+
+  .rcf-replace-button:active,
+  .rcf-replace-button-secondary:active {
+    transform: none;
+  }
+
+  .rcf-replace-spinner {
+    /* 回らない輪は止まって見えるため消す。進行は文言で伝える。 */
+    display: none;
+  }
+}

@@ -1,6 +1,6 @@
 ---
 title: 登録完了の遷移とフィードバック
-status: draft
+status: evaluating
 created: 2026-09-20
 updated: 2026-09-20
 platforms:
@@ -119,26 +119,77 @@ Skill の有無以外の差（権限、読んだファイル、実際の読み�
 
 ## Variants
 
-| id           | 仮説                                                                                  | 変えた軸                     | 実装                   |
-| ------------ | ------------------------------------------------------------------------------------- | ---------------------------- | ---------------------- |
-| `no-skill`   | 基準: 現行構成でも完了画面は作れるが、動きと分岐の根拠は制作者の裁量に依存する        | 制作手法 = 派生 Skill なし   | `variants/no-skill/`   |
-| `with-skill` | 同じ要求文でも派生 Skill があれば、方向の軸、動きの目的、レビュー観点が記録として残る | 制作手法 = 派生 3 Skill あり | `variants/with-skill/` |
+| id                   | 仮説                                                                            | 変えた軸                                     | 実装                           |
+| -------------------- | ------------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------ |
+| `no-skill-replace`   | 基準: Skill なしでも、同じカード内の差し替えで完了は伝わる                      | 制作手法 = なし、完了の表現 = 差し替え       | `variants/no-skill-replace/`   |
+| `no-skill-confirm`   | Skill なしでも、フォームを残した確認で入力内容と完了を同時に見せられる          | 制作手法 = なし、完了の表現 = 同面の確認     | `variants/no-skill-confirm/`   |
+| `no-skill-next`      | Skill なしでも、段階表示で次操作（ログイン）へ誘導できる                        | 制作手法 = なし、完了の表現 = 次操作への遷移 | `variants/no-skill-next/`      |
+| `with-skill-replace` | 派生 Skill があると、差し替えの動きに目的と例外理由が残る                       | 制作手法 = あり、完了の表現 = 差し替え       | `variants/with-skill-replace/` |
+| `with-skill-confirm` | 派生 Skill があると、確認をボタン近傍のフィードバックとして設計する             | 制作手法 = あり、完了の表現 = 同面の確認     | `variants/with-skill-confirm/` |
+| `with-skill-next`    | 派生 Skill があると、面の前進を空間の連続として扱い、動かさない開閉を分けられる | 制作手法 = あり、完了の表現 = 次操作への遷移 | `variants/with-skill-next/`    |
 
-方向性の異なる追加 variant は、各条件の実行後に軸の名前で足す。
-連番の id は使わない。
+比較画面は `http://localhost:5183/#registration-completion-feedback/<id>` である。
+
+### Skill なし実行の条件
+
+`no-skill-*` は `--disable-slash-commands` 付きの新規 `claude -p` で作った。
+
+- 実行日: 2026-09-20
+- モデル: `claude-fable-5-1`
+- 権限: `--permission-mode acceptEdits`。Bash は `just`、`ls`、`cat`、`mkdir`、`diff`
+- 結果: 36 ターン、約 7 分、費用 4.31 USD
+- session_id: `74937b68-7401-454f-89e4-c3e0b7519141`
+- Skill の読み込み: なし（スラッシュコマンド無効。報告文に派生 Skill 名なし）
+
+生成セッション内のブラウザ確認はできなかった。
+既存の 5183 サーバーが新しい glob を持たず、別ポート起動が権限拒否されたためである。
+担当者がサーバーを再起動し、headless Chrome の CDP でエラー、成功、reduced motion を操作した。
+
+### Skill あり実行の条件
+
+`with-skill-*` は同じ要求文の先頭に `/exploring-ui-variants` `/crafting-motion` `/reviewing-motion` を付けた新規 `claude -p` で作った。
+
+- 実行日: 2026-09-20
+- モデル: `claude-fable-5-1`
+- 権限: `no-skill` と同じ
+- 結果: 66 ターン、約 11 分、費用 6.01 USD
+- session_id: `28c64f74-5fc0-4ac2-9225-1f1db0cd74cb`
+- Skill の読み込み: 3 本の SKILL.md と `recipes.md`、`standards.md` を読んだと報告した
+
+生成セッション内の実操作は未完了である。
+撮影用に 5199 を使ったが、完了面の操作確認は担当者の CDP 実行で補った。
+
+Skill の有無以外の差は次である。
+
+- なし条件だけ `--disable-slash-commands` を付けた
+- 疑似送信の待ちはなし 800ms、あり 900ms
+- あり条件は 300ms 超（350ms）と `stroke-dashoffset` を例外として記録した
+
+### 反復の記録
+
+生成セッションは、実操作が欠けたため観察と修正を 3 回まで使いきっていない。
+
+| variant              | round | 観察                                                        | 変更                                         | 参照                    | 終了理由         |
+| -------------------- | ----- | ----------------------------------------------------------- | -------------------------------------------- | ----------------------- | ---------------- |
+| `no-skill-*`         | 1     | 成功後もパスワードが state に残る                           | replace と next で成功後にパスワードを消した | on-submit の検証規則    | 確認手段が欠けた |
+| `with-skill-next`    | 1     | StrictMode で初期表示から見出しにフォーカスが入る           | 面の変化を比較してフォーカスする             | exploring-ui-variants   | 指摘あり         |
+| `with-skill-replace` | 1     | 送信ボタンだけ全幅。reduced motion で退場と入場が重なりうる | 左寄せ。遅延 120ms                           | crafting-motion recipes | 確認手段が欠けた |
 
 ## Evaluation
 
-未定
+評価軸、重み、比較表は [evaluation.md](evaluation.md) に記録する。
+観点は accessibility、interaction / motion、UX writing、implementation の 4 つ。
+必須の軸で課題ありがある variant は `with-skill-confirm`（accessibility、interaction clarity）である。
 
-評価軸と重みは Constraints の表で実装前に固定した。
-観点別ファイルは評価開始時に `evaluation.md` から参照する。
+担当者の操作記録は `/tmp/rcf-drive-notes.json` の内容を evaluation へ写した。
+Cursor の browser MCP はタブ生成後に view を見失ったため、Chrome CDP で代替した。
 
 ## Decision
 
 未定
 
 人間の採用判断の前に `decided` へ進めない。
+Skill ごとの継続、修正後再評価、見送りは Issue #9 の「判断待ち」に置く。
 
 ## Rejected reasons
 
@@ -146,7 +197,14 @@ Skill の有無以外の差（権限、読んだファイル、実際の読み�
 
 ## Learnings
 
-未定
+この 1 比較から一般化しない。
+観察できた範囲は次である。
+
+- 3 方向（差し替え、同面確認、次操作）は Skill なしでも出た。Skill ありは軸と目的の表を報告に残した。
+- 費用は Skill ありが約 40% 多い。ターン数も 36 から 66 へ増えた。
+- `reviewing-motion` は生成側が点検表を出さなかった。評価形式への接続は自動では起きなかった。
+- `with-skill-confirm` は完了後のフォーカスが `body` に落ちた。作者の「ボタンから動かさない」が、ボタン差し替えと衝突した。
+- reduced motion でも 6 案とも完了文言は残った。性能は未計測である。
 
 ## Related patterns / assets
 
