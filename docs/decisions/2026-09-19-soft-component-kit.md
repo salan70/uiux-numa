@@ -16,15 +16,19 @@
 ## 決定
 
 - 部品一式の見本比較の正本は、この ADR と Experiment `soft-component-kit` とする。
-- 公開 Catalog の見た目は、採用決定まで変えない。
+- 公開 Catalog の見た目は `hairline-float` とする。
 - 挙動の土台は `@base-ui/react` 1.8.0 とする。
 - 版は exact pin とし、`apps/catalog` と `platforms/web` の両方へ入れる。
 - 造形は 4 案を variant として並べ、利用者が採用を決める。
 - 角丸と影は token にしない。各 variant のローカル変数にする。
-- Catalog ホスト ADR の角丸 `0.25rem` と影の禁止は、採用決定まで有効とする。
-- 採用が決まった時点で、その 2 点をこの ADR の内容で置き換える。
+- 採用した `hairline-float` では、操作部品の角丸は `0.625rem`、面は `1rem` とする。
+- 影は popup と drawer だけに置く。色は `--color-text` の `color-mix` とする。
+- [Catalog ホスト](2026-09-19-catalog-host.md) の角丸 `0.25rem` と影の禁止は、この条項で置き換える。
 - preview の配色は variant 側で `localStorage` を読んで追従する。
 - `preview-main.tsx` で配色を一律適用しない。
+
+採用の記録は Experiment README の Decision と Rejected reasons にある。
+却下した 3 案の variant は比較記録として残す。
 
 ## 理由
 
@@ -37,6 +41,9 @@ Radix UI や React Aria は、Catalog に載せる土台として重い。
 
 角丸と影を token にすると、案ごとの差が共通定義に漏れ、比較軸が壊れる。
 `preview-main.tsx` で配色を当てると、opt-in していない Experiment まで変わる。
+
+公開面へ取り込むときは、採用案のローカル変数を Catalog の部品セレクタへ写す。
+`design-systems/` は作らない。
 
 ## 却下した案
 
@@ -52,5 +59,5 @@ Radix UI や React Aria は、Catalog に載せる土台として重い。
 
 Experiment は `experiments/soft-component-kit/` に置く。
 `forms-input-ux` を domains に含め、Catalog の部品ページへ載せる。
-採用後に `apps/catalog/src/components/` と `catalog.css` へ取り込む。
-その作業はこの ADR の範囲に含めない。
+公開 Catalog は `apps/catalog/src/components/` と `catalog.css` を `hairline-float` へ合わせる。
+Kit 見本の 4 案は比較記録として残す。

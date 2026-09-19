@@ -1,3 +1,7 @@
+import { type CSSProperties } from "react";
+import { Radio } from "@base-ui/react/radio";
+import { RadioGroup } from "@base-ui/react/radio-group";
+
 type Option<T extends string> = {
   value: T;
   label: string;
@@ -18,23 +22,35 @@ export function SegmentedControl<T extends string>({
   options,
   onChange,
 }: Props<T>) {
+  const index = Math.max(
+    options.findIndex((item) => item.value === value),
+    0,
+  );
+
   return (
     <fieldset className="segmented-control">
       <legend>{legend}</legend>
-      <div className="segmented-control-group" role="radiogroup" aria-label={legend}>
+      <RadioGroup
+        name={name}
+        value={value}
+        onValueChange={(next) => {
+          if (typeof next === "string") onChange(next as T);
+        }}
+        className="segmented-control-group"
+        style={
+          {
+            "--sk-index": String(index),
+            "--sk-count": String(options.length),
+          } as CSSProperties
+        }
+      >
+        <span className="segmented-control-thumb" aria-hidden="true" />
         {options.map((option) => (
-          <label key={option.value} className="segmented-control-option">
-            <input
-              type="radio"
-              name={name}
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onChange(option.value)}
-            />
-            <span>{option.label}</span>
-          </label>
+          <Radio.Root key={option.value} value={option.value} className="segmented-control-option">
+            {option.label}
+          </Radio.Root>
         ))}
-      </div>
+      </RadioGroup>
     </fieldset>
   );
 }

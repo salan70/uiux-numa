@@ -38,6 +38,7 @@ export function useCatalogColors(target: HTMLElement | null): void {
           applied.add(name);
         }
         if (parsed.theme === "light" || parsed.theme === "dark") {
+          target.dataset.theme = parsed.theme;
           target.style.colorScheme = parsed.theme;
         }
       } catch {
@@ -49,6 +50,7 @@ export function useCatalogColors(target: HTMLElement | null): void {
       if (!target) return;
       for (const name of applied) target.style.removeProperty(name);
       applied.clear();
+      delete target.dataset.theme;
       target.style.removeProperty("color-scheme");
     }
 

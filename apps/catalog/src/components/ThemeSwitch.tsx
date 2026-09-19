@@ -9,6 +9,7 @@ import {
   type ThemeChoice,
 } from "../theme";
 import { schemes } from "../content/schemes";
+import { SelectField } from "./SelectField";
 
 const themeChoices: { value: ThemeChoice; label: string }[] = [
   { value: "system", label: "システム" },
@@ -33,41 +34,27 @@ export function ThemeSwitch() {
 
   return (
     <div className="theme-switch">
-      <label>
-        <span>配色</span>
-        <select
-          value={scheme}
-          onChange={(event) => {
-            const next = event.target.value as SchemeChoice;
-            setScheme(next);
-            persistScheme(next);
-          }}
-        >
-          {schemes.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.id}
-              {item.label === item.id ? "" : `（${item.label}）`}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        <span>テーマ</span>
-        <select
-          value={theme}
-          onChange={(event) => {
-            const next = event.target.value as ThemeChoice;
-            setTheme(next);
-            persistTheme(next);
-          }}
-        >
-          {themeChoices.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <SelectField
+        label="配色"
+        value={scheme}
+        options={schemes.map((item) => ({
+          value: item.id,
+          label: item.label === item.id ? item.id : `${item.id}（${item.label}）`,
+        }))}
+        onChange={(next) => {
+          setScheme(next);
+          persistScheme(next);
+        }}
+      />
+      <SelectField
+        label="テーマ"
+        value={theme}
+        options={themeChoices}
+        onChange={(next) => {
+          setTheme(next);
+          persistTheme(next);
+        }}
+      />
     </div>
   );
 }

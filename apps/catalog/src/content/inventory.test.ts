@@ -45,17 +45,12 @@ describe("catalog inventory", () => {
       "color-schemes/yuzu",
       "form-inline-validation/on-submit",
       "product-ui-typography/line-seed-minimal",
+      "soft-component-kit/hairline-float",
     ]);
-    expect(
-      ids("exploring").every(
-        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("soft-component-kit/"),
-      ),
-    ).toBe(true);
+    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
     expect(ids("exploring")).toHaveLength(
-      (catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
-        0) +
-        (catalog.experiments.find((item) => item.slug === "soft-component-kit")?.variantIds
-          .length ?? 0),
+      catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
+        0,
     );
     expect(
       catalog.experiments

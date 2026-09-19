@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-19
+- 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。
 - 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)
 
 ## 背景
@@ -21,12 +22,14 @@
 - 大文字アイブロウと字間強調は使わない。
 - 右レールの機械目次はやめる。
 - 前後ナビとフッターは本文の末尾に置き、初画面を切らない。
-- 検索結果に影を使わない。枠だけで重ねる。
-- コントロールの角丸 `0.25rem` は Catalog に残す。token にはしない。
 - 余白は `space.page-inline` と `space.section` の 2 個だけ token にする。
 - コンポーネントは `apps/catalog/src/components/` に置く。
 - 配色の `tokens/color/` 昇格はこの判断に含めない。
 - 未評価の軸は、利用者の横断確認と公開面の改修速度である。
+
+角丸 `0.25rem` と影の禁止は、[soft-component-kit](2026-09-19-soft-component-kit.md) の採用で置き換える。
+公開 Catalog の操作部品は角丸 `0.625rem`、面は `1rem` とする。
+影は popup と drawer だけに置く。token にはしない。
 
 ### token の取り込み規則
 
@@ -49,9 +52,9 @@ Catalog で値が必要になったら、次の順で決める。
 
 ### Catalog に残す値
 
-- 入力とボタンの角丸は `0.25rem` とする。見本帳の紙を強く丸めないためである。
+- 操作部品の角丸は `0.625rem`、面は `1rem` とする。正本は [soft-component-kit](2026-09-19-soft-component-kit.md) の `hairline-float` である。
 - スライム状の `999px` と LP の `0.5rem` / `0.75rem` は、役割が分かれており共通化しない。
-- `--shadow-popover` は削除する。color LP は影を禁止しており、汎用 elevation の第二面がない。
+- `--shadow-popover` は token にしない。popup と drawer の影は Catalog の CSS に局所変数として置く。
 
 ## 理由
 
@@ -65,7 +68,7 @@ Typography の `title` を破る `clamp` は、display token を足す理由に�
 用途が Catalog の見出し 1 つだからである。
 
 余白 2 個は、両面で同じ値と同じ役割があった。
-角丸は値が面ごとに違い、コピーして token にすると役割が壊れる。
+角丸と影は面ごとに値が違い、コピーして token にすると役割が壊れる。
 
 ## 却下した案
 
@@ -92,4 +95,4 @@ color LP の `layout.css` は、同じ余白を変数参照に置き換える。
 配色切替の操作はヘッダーへ移す。
 
 部品一式の見本比較は [soft-component-kit](2026-09-19-soft-component-kit.md) に移す。
-角丸 `0.25rem` と影の禁止は、採用が決まるまでこの ADR が正本である。
+公開 Catalog の角丸と影は、その ADR の `hairline-float` が正本である。

@@ -1,5 +1,4 @@
-import { useId, useState, type CSSProperties } from "react";
-import { Collapsible } from "@base-ui/react/collapsible";
+import { useId, useRef, useState, type CSSProperties } from "react";
 import { Drawer } from "@base-ui/react/drawer";
 import { Field } from "@base-ui/react/field";
 import { Radio } from "@base-ui/react/radio";
@@ -10,6 +9,7 @@ import "../../color-schemes/variants/sumi/scheme.css";
 import "../../../tokens/space/index.css";
 import "../../../tokens/typography/index.css";
 import { CopyField } from "./parts/CopyField";
+import { SidebarNav } from "./parts/SidebarNav";
 import { useCatalogColors } from "./useCatalogColors";
 
 type Props = {
@@ -35,43 +35,46 @@ const ROWS = [
   { name: "danger", value: "#b7282e", contrast: "本文 5.9" },
 ] as const;
 
-const NAV = [
-  {
-    id: "foundations",
-    label: "土台",
-    items: [
-      { href: "#sk-colors", label: "配色", current: true },
-      { href: "#sk-type", label: "文字", current: false },
-    ],
-  },
-  {
-    id: "components",
-    label: "部品",
-    items: [
-      { href: "#sk-kit", label: "見本", current: false },
-      { href: "#sk-form", label: "入力", current: false },
-    ],
-  },
-] as const;
-
 export function Kit({ variantClass }: Props) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
   const [scheme, setScheme] = useState("sumi");
+  const [theme, setTheme] = useState("system");
   const [width, setWidth] = useState<(typeof WIDTHS)[number]["value"]>("fit");
   const widthIndex = WIDTHS.findIndex((item) => item.value === width);
   const formId = useId();
   useCatalogColors(root);
 
   return (
-    <div ref={setRoot} className={`cs-sumi sk-root ${variantClass}`}>
+    <div
+      ref={(node) => {
+        rootRef.current = node;
+        setRoot(node);
+      }}
+      className={`cs-sumi sk-root ${variantClass}`}
+    >
       <header className="sk-header">
         <a className="sk-wordmark" href="#sk-main">
           UI/UX 沼
         </a>
         <div className="sk-header-tools">
+          <div className="sk-theme-switch">
+            <label>
+              <span>テーマ</span>
+              <select
+                className="sk-native-select"
+                value={theme}
+                onChange={(event) => setTheme(event.target.value)}
+              >
+                <option value="system">システム</option>
+                <option value="light">ライト</option>
+                <option value="dark">ダーク</option>
+              </select>
+            </label>
+          </div>
           <Drawer.Root swipeDirection="right">
             <Drawer.Trigger className="sk-button sk-menu-button">メニュー</Drawer.Trigger>
-            <Drawer.Portal container={root}>
+            <Drawer.Portal container={rootRef}>
               <Drawer.Backdrop className="sk-drawer-backdrop" />
               <Drawer.Viewport className="sk-drawer-viewport">
                 <Drawer.Popup className="sk-drawer-popup">
@@ -125,7 +128,7 @@ export function Kit({ variantClass }: Props) {
                     </svg>
                   </Select.Icon>
                 </Select.Trigger>
-                <Select.Portal container={root}>
+                <Select.Portal container={rootRef}>
                   <Select.Positioner className="sk-select-positioner" sideOffset={6}>
                     <Select.Popup className="sk-select-popup">
                       <Select.List className="sk-select-list">
@@ -254,28 +257,5 @@ export function Kit({ variantClass }: Props) {
         </main>
       </div>
     </div>
-  );
-}
-
-function SidebarNav() {
-  return (
-    <nav className="sk-nav" aria-label="サイト">
-      {NAV.map((section) => (
-        <Collapsible.Root key={section.id} className="sk-section" defaultOpen>
-          <Collapsible.Trigger className="sk-section-trigger">{section.label}</Collapsible.Trigger>
-          <Collapsible.Panel className="sk-section-panel" keepMounted>
-            <ul>
-              {section.items.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} aria-current={item.current ? "page" : undefined}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </Collapsible.Panel>
-        </Collapsible.Root>
-      ))}
-    </nav>
   );
 }
