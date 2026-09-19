@@ -1,0 +1,119 @@
+/*
+ * スライドの章扉イラストの利用画面モックのスタイル。全 variant で同一の内容にする。
+ * 色は授業資料の刷新計画のトークン（primary、accent）と VitePress の既定テーマから写す。
+ */
+
+.ch-mock {
+  --vp-text: #3c3c43;
+  --vp-text-2: #67676c;
+  --vp-bg: #ffffff;
+  --vp-divider: #e2e2e3;
+  --slide-primary: #002d62;
+  --slide-accent: #ce1126;
+
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  font:
+    16px/1.7 system-ui,
+    sans-serif;
+  color: var(--vp-text);
+  background: #d9dbe0;
+}
+
+:where(.ch-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.ch-mock) :where(p, h2, figure) {
+  margin: 0;
+}
+
+/* 章扉のスライド（16:9） */
+
+.ch-slide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: center;
+  aspect-ratio: 16 / 9;
+  padding: 2.5rem 3rem;
+  overflow: hidden;
+  color: var(--slide-primary);
+  background: var(--vp-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 15%);
+}
+
+.ch-kicker {
+  color: var(--slide-accent);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.ch-title {
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.ch-lead {
+  margin-top: 0.75rem;
+  color: var(--vp-text-2);
+  font-size: 1.0625rem;
+}
+
+/* 手元で見る資料ページ */
+
+.ch-doc {
+  max-width: 44rem;
+  padding: 2rem 2.5rem 2.5rem;
+  background: var(--vp-bg);
+  border-radius: 0.5rem;
+}
+
+.ch-doc h2 {
+  margin-bottom: 0.75rem;
+  color: var(--slide-primary);
+  font-size: 1.375rem;
+}
+
+.ch-doc p {
+  margin-bottom: 1rem;
+}
+
+.ch-figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--slide-primary);
+  border: 1px solid var(--vp-divider);
+  border-radius: 0.5rem;
+}
+
+.ch-figure figcaption {
+  color: var(--vp-text-2);
+  font-size: 0.8125rem;
+}
+
+/* art */
+
+.ch-art,
+.ch-art svg {
+  display: block;
+}
+
+.ch-art-slide,
+.ch-art-slide svg {
+  width: 360px;
+  height: 270px;
+}
+
+.ch-art-doc,
+.ch-art-doc svg {
+  width: 200px;
+  height: 150px;
+}

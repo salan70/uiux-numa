@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>検査の途中で、1 つの項目に不具合が見つかった場面</title>
+
+  <!-- 下地: 検査の対象の面。3 色のうち最も明るく後退させる。項目がこの面の右端を越えて重なり、奥行きを作る。ILLUS-06 -->
+  <rect id="part-chapter-ground" x="44" y="26" width="164" height="176" rx="20" fill="#e7ebf1"/>
+
+  <!-- 済んだ項目: 面は currentColor、判定は下地色で抜く -->
+  <rect id="part-chapter-mark-done" x="70" y="51" width="34" height="34" rx="10" fill="currentColor"/>
+  <path id="part-chapter-check-done" d="M77 68l7 7 12-13" stroke="#e7ebf1" stroke-width="6"/>
+  <rect id="part-chapter-item-1" x="128" y="60" width="138" height="16" rx="8" fill="currentColor"/>
+
+  <!-- 焦点: 不具合。accent は 1 か所だけ、他より一回り大きく、光学的中心に置く。ILLUS-05 / FORM-01 -->
+  <rect id="part-chapter-accent" x="66" y="93" width="42" height="42" rx="13" fill="#ce1126"/>
+  <path id="part-chapter-accent-mark" d="M76 103l22 22M98 103l-22 22" stroke="#e7ebf1" stroke-width="7"/>
+  <rect id="part-chapter-item-2" x="128" y="106" width="112" height="16" rx="8" fill="currentColor"/>
+
+  <!-- これから検査する項目: 面を抜いて線だけにし、重さを 1 段下げる -->
+  <rect id="part-chapter-mark-todo" x="73" y="146" width="28" height="28" rx="8" stroke="currentColor" stroke-width="6"/>
+  <rect id="part-chapter-item-3" x="128" y="152" width="126" height="16" rx="8" fill="currentColor"/>
+</svg>

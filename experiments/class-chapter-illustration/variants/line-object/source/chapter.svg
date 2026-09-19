@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 320 240" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <title>期待と実際を突き合わせる</title>
+  <!--
+    線画で対象物だけを描く。場面と背景を持たない（ILLUS-02）。
+    対象は「期待と実際の突き合わせ」。同じ大きさの 2 つが釣り合う形で、一致の確認を示す。
+    線幅 5 は、採用済みの技術アイコン（viewBox 24、線幅 2）と表示時の実寸を揃えた値。
+    資料ページ 200px では 3.1px、章扉 360px では 5.6px になる。
+    要素は 4 つだけにする（ILLUS-05）。
+  -->
+  <!-- 実際（作ったもの）。強調 1 か所。左に置き、文字から入った視線が最初に当たる（ILLUS-07） -->
+  <rect id="part-chapter-accent" x="42" y="34" width="84" height="84" rx="14" stroke="#ce1126"/>
+  <!-- 期待（仕様）。実際と同じ大きさ、同じ形にして、一致を形で示す -->
+  <rect id="part-chapter-expected" x="194" y="34" width="84" height="84" rx="14"/>
+  <!-- 竿。水平＝一致。2 つの下辺は竿と重ねて「載っている」ことを示す -->
+  <path id="part-chapter-beam" d="M26 118h268"/>
+  <!-- 支点。2 つの対象より細く小さくして、主役を保つ（ILLUS-05） -->
+  <path id="part-chapter-pivot" d="M160 118l30 70h-60z"/>
+</svg>
