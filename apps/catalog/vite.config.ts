@@ -143,7 +143,7 @@ function catalogFonts() {
 export default defineConfig({
   plugins: [catalogFonts(), rawSchemeCss(), react(), previewFallback()],
   resolve: {
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "@base-ui/react"],
   },
   server: {
     fs: {

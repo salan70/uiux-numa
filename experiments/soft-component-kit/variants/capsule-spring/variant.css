@@ -1,0 +1,224 @@
+.sk-capsule-spring {
+  --sk-radius-control: 999px;
+  --sk-radius-surface: 1.75rem;
+  --sk-duration: 360ms;
+  --sk-ease: linear(0, 0.28 12%, 1.12 52%, 1);
+  --sk-shadow-accent: 0 0.7rem 1.6rem color-mix(in srgb, var(--color-accent) 38%, transparent);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.sk-capsule-spring .sk-header,
+.sk-capsule-spring .sk-sidebar-desktop,
+.sk-capsule-spring .sk-card,
+.sk-capsule-spring .sk-table-wrap,
+.sk-capsule-spring .sk-drawer-popup,
+.sk-capsule-spring .sk-select-popup {
+  background: var(--color-surface);
+}
+
+.sk-capsule-spring .sk-card,
+.sk-capsule-spring .sk-table-wrap,
+.sk-capsule-spring .sk-preview-frame {
+  border-radius: var(--sk-radius-surface);
+}
+
+.sk-capsule-spring .sk-card,
+.sk-capsule-spring .sk-preview-frame {
+  padding: 1.25rem;
+}
+
+.sk-capsule-spring .sk-preview-frame {
+  background: var(--color-accent-subtle);
+}
+
+.sk-capsule-spring .sk-footer,
+.sk-capsule-spring .sk-kicker,
+.sk-capsule-spring .sk-intro,
+.sk-capsule-spring .sk-help,
+.sk-capsule-spring .sk-section-panel a {
+  color: var(--color-text-muted);
+}
+
+.sk-capsule-spring .sk-wordmark,
+.sk-capsule-spring .sk-section-panel a[aria-current="page"] {
+  color: var(--color-text);
+}
+
+.sk-capsule-spring .sk-button,
+.sk-capsule-spring .sk-select-trigger,
+.sk-capsule-spring .sk-section-trigger,
+.sk-capsule-spring .sk-textarea,
+.sk-capsule-spring .sk-segmented,
+.sk-capsule-spring .sk-select-item,
+.sk-capsule-spring .sk-copy-button {
+  border: 0;
+  border-radius: var(--sk-radius-control);
+}
+
+.sk-capsule-spring .sk-select-popup {
+  border: 0;
+  border-radius: var(--sk-radius-surface);
+}
+
+.sk-capsule-spring .sk-button,
+.sk-capsule-spring .sk-select-trigger {
+  color: var(--color-accent-strong);
+  background: var(--color-accent-subtle);
+}
+
+.sk-capsule-spring .sk-textarea {
+  color: var(--color-text);
+  background: var(--color-accent-subtle);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.sk-capsule-spring .sk-button-primary {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.sk-capsule-spring .sk-button-ghost,
+.sk-capsule-spring .sk-section-trigger {
+  color: var(--color-text);
+  background: transparent;
+}
+
+.sk-capsule-spring .sk-segmented {
+  padding: 0.25rem;
+  background: var(--color-accent-subtle);
+}
+
+.sk-capsule-spring .sk-segmented-thumb {
+  border-radius: var(--sk-radius-control);
+  background: var(--color-accent);
+}
+
+.sk-capsule-spring .sk-segmented-option {
+  color: var(--color-text);
+  border: 0;
+  background: transparent;
+}
+
+.sk-capsule-spring .sk-segmented-option[data-checked] {
+  color: var(--color-on-accent);
+  font-weight: var(--typography-control-font-weight);
+}
+
+.sk-capsule-spring .sk-slider-track {
+  border-radius: var(--sk-radius-control);
+  background: var(--color-accent-subtle);
+}
+
+.sk-capsule-spring .sk-slider-indicator {
+  border-radius: inherit;
+  background: var(--color-accent);
+}
+
+.sk-capsule-spring .sk-slider-thumb {
+  border: 0;
+  border-radius: var(--sk-radius-control);
+  background: var(--color-accent);
+}
+
+.sk-capsule-spring .sk-select-item {
+  color: var(--color-text);
+}
+
+.sk-capsule-spring .sk-select-item[data-highlighted] {
+  background: var(--color-accent-subtle);
+}
+
+.sk-capsule-spring .sk-swatch-chip {
+  border-radius: var(--sk-radius-control);
+}
+
+.sk-capsule-spring .sk-swatch-accent {
+  background: var(--color-accent);
+}
+
+.sk-capsule-spring .sk-swatch-focus {
+  background: var(--color-focus);
+}
+
+.sk-capsule-spring .sk-swatch-danger {
+  background: var(--color-danger);
+}
+
+.sk-capsule-spring .sk-drawer-backdrop {
+  background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.sk-capsule-spring :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.sk-capsule-spring .sk-button:hover,
+.sk-capsule-spring .sk-select-trigger:hover,
+.sk-capsule-spring .sk-slider-thumb:hover {
+  box-shadow: var(--sk-shadow-accent);
+}
+
+.sk-capsule-spring .sk-button-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.sk-capsule-spring .sk-button:active,
+.sk-capsule-spring .sk-select-trigger:active,
+.sk-capsule-spring .sk-segmented-option:active {
+  transform: scale(0.96);
+}
+
+.sk-capsule-spring .sk-segmented-thumb,
+.sk-capsule-spring .sk-select-popup,
+.sk-capsule-spring .sk-drawer-backdrop,
+.sk-capsule-spring .sk-drawer-popup,
+.sk-capsule-spring .sk-section-panel,
+.sk-capsule-spring .sk-button,
+.sk-capsule-spring .sk-select-trigger {
+  transition:
+    opacity var(--sk-duration) var(--sk-ease),
+    transform var(--sk-duration) var(--sk-ease),
+    background-color var(--sk-duration) var(--sk-ease),
+    box-shadow var(--sk-duration) var(--sk-ease),
+    height var(--sk-duration) var(--sk-ease);
+}
+
+.sk-capsule-spring .sk-section-panel {
+  height: var(--collapsible-panel-height);
+}
+
+.sk-capsule-spring .sk-section-panel[data-starting-style],
+.sk-capsule-spring .sk-section-panel[data-ending-style] {
+  height: 0;
+}
+
+.sk-capsule-spring .sk-select-popup[data-starting-style],
+.sk-capsule-spring .sk-select-popup[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.sk-capsule-spring .sk-drawer-backdrop[data-starting-style],
+.sk-capsule-spring .sk-drawer-backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.sk-capsule-spring .sk-drawer-popup[data-starting-style],
+.sk-capsule-spring .sk-drawer-popup[data-ending-style] {
+  transform: translateX(112%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-capsule-spring .sk-segmented-thumb,
+  .sk-capsule-spring .sk-select-popup,
+  .sk-capsule-spring .sk-drawer-backdrop,
+  .sk-capsule-spring .sk-drawer-popup,
+  .sk-capsule-spring .sk-section-panel,
+  .sk-capsule-spring .sk-button,
+  .sk-capsule-spring .sk-select-trigger {
+    transition: opacity 150ms ease;
+    transform: none;
+  }
+}

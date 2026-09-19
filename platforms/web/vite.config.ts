@@ -10,7 +10,7 @@ export default defineConfig({
     // experiments/ は platforms/web/ の外にあり node_modules を持たないため、
     // react と react-dom はこのプロジェクトの 1 つのコピーに解決する。
     // tsconfig.json の paths も同じ理由で置いている。
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "@base-ui/react"],
   },
   server: {
     fs: {
