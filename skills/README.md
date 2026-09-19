@@ -40,6 +40,28 @@ nix develop -c claude -p "/crafting-svg <要求文>" --permission-mode acceptEdi
 Skill から他の文書へは、リポジトリのルートからのパスを文字列で書く。
 symlink 経由では相対リンクの解決先がずれるためである。
 
+## 新規プロセスでの動作確認（2026-09-19）
+
+`skills/` を正本、`.claude/skills/` の symlink を読み込み経路とする構成が、新しいプロセスで働くことを確かめた。
+
+```bash
+nix develop -c claude -p "/crafting-svg 授業資料サイトのサイドバーに 9 個目のアイコンを足します。意味は「設定」です。…" \
+  --model claude-opus-5 --permission-mode acceptEdits --allowedTools "Bash(just *)" …
+```
+
+結果は次のとおり。
+
+- `/crafting-svg` が展開され、SKILL.md の手順に従って実行された。参照資料からは知識 ID を 14 件引用した（`ICON-02`、`ICON-06`、`SVG-01`、`FORM-11`、`UIFIT-07` など）。
+- `docs/principles/` の原則候補 2 件を読み、どちらも `candidate` なので未検証の仮説として扱った。Skill の指示どおりである。
+- `just svg-check`、`just svg-sheet`、`just svg-optimize` を実行し、編集用と配布用の両方が検査を通った。`part-*` の id 2 個が保持された。
+- 比喩の候補（歯車 3 種とスライダー）を先に描いて比べ、外した理由を残した。手順 2 の追記が働いた。
+- 反復を 3 回行い、観察、変更、参照 ID を記録した。既存 8 個と root の属性が 1 文字も違わないことを確かめた。
+- 組の規則から外れた点（斜めの歯が 0.5 刻み）を自分で申告し、理由を書いた。
+- 利用画面の撮影は行えなかった。`just web-shot` は `experiments/` に variant を足す必要があり、今回は変更を禁じていたためである。未検証として報告された。
+- 費用は 2.84 USD、41 ターンだった。
+
+この実行は Experiment には記録しない。Skill の動作確認が目的である。
+
 ## 改善手順
 
 1. Experiment で Skill を使い、README に反復の記録と未解決の点を残す。
