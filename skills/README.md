@@ -94,6 +94,44 @@ symlink の解決は次を確認した。
 読み込み確認はデザイン上の効果の確認ではない。
 効果の比較は `experiments/registration-completion-feedback/` で行う。
 
+## 派生 3 Skill の効果と限界（2026-09-20）
+
+同じ要求文とモデル（`claude-fable-5-1`）で、Skill の有無を比べた。
+記録は `experiments/registration-completion-feedback/README.md` にある。
+人間判断は 3 本とも継続利用である。成熟度は `experimental` のままである。
+
+| 項目       | Skill なし                          | Skill あり                                       |
+| ---------- | ----------------------------------- | ------------------------------------------------ |
+| 費用       | 4.31 USD                            | 6.01 USD                                         |
+| ターン数   | 36                                  | 66                                               |
+| 方向の数   | 差し替え、同面確認、次操作の 3 方向 | 同じ 3 方向。軸と代償の表を報告に残した          |
+| 動きの根拠 | 実装のみ                            | 目的と例外（350ms、`stroke-dashoffset`）を文章化 |
+| 点検       | 担当者が後から評価                  | 生成中は点検表なし。評価は `review.md` で実施    |
+
+使い分けは次のとおり。
+
+- 案の分岐と比較画面: `/exploring-ui-variants`
+- 動きの目的、手段、中断、reduced motion: `/crafting-motion`
+- 動きの点検メモ: `/reviewing-motion`。採否は人間と複数観点レビューが決める
+
+限界は次のとおり。
+
+- 方向の数は Skill なしでも足りた。増えたのは根拠文と費用である。
+- 生成中の点検は自動では起きない。
+- ボタン近傍だけに完了を置くと、成功後のフォーカスが落ちうる。
+- 性能は未計測である。1 比較を一般化しない。
+
+### 上流の更新
+
+出典は [emilkowalski/skills](https://github.com/emilkowalski/skills) の commit `85e8e2363b713506e1d5b6e07a0eb2da66be1bc3` である。
+更新するときは次の順にする。
+
+1. 上流の対象ディレクトリだけを、記録済みコミットとの差分で読む。
+2. 衝突表（[ADR](../docs/decisions/2026-09-20-emil-skill-derivation.md)）に反する手順は取り込まない。
+3. 取り込んだ箇所は SOURCE.md のコミットを更新し、変更理由を残す。
+4. 読み込み確認と、影響する Experiment の操作確認を再実行する。
+5. 全 Skill の自動更新はしない。
+
 ## 効果と限界（2026-09-19 時点）
 
 同じ要求文とモデル（`claude-fable-5-1`）で、Skill の有無を比べた。

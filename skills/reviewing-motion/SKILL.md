@@ -64,6 +64,10 @@ Experiment の Decision ではない。
 
 ## 出力
 
+生成セッションで点検表が出なくても、実装を止めない。
+評価は別 agent が `docs/evaluation/review.md` の interaction / motion 観点で行う。
+この Skill の出力は、その観点の入力であり、代替ではない。
+
 観点別ファイルへ書くときは `docs/evaluation/review.md` の形式を使う。
 動きだけの点検メモが必要なときは、次の 2 部にする。
 
@@ -95,3 +99,4 @@ Experiment の Decision ではない。
 - 作者の好みを必須の accessibility 判定に使う。
 - 1 Skill の Approve を Experiment の採用にする。
 - 未計測のまま「GPU だから速い」と書く。
+- 生成中に点検表が無いことを、Skill 未読込や見送り理由にする。

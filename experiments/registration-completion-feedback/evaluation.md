@@ -63,8 +63,11 @@ preview は `previews/<id>-{initial,error,success,success-reduced}.png` であ�
 - Skill ありは費用とターンが増え、根拠の文章が増えた。
 - 記録: [evaluation/implementation.md](evaluation/implementation.md)
 
-## 人間の判断待ちの論点
+## 人間の判断
 
-1. 派生 3 Skill を継続利用するか、修正して再評価するか、見送りか。
-2. `reviewing-motion` を評価手順へどう接続するか。今回の生成は点検表を出していない。
-3. `with-skill-confirm` のフォーカス落ちを、Skill の欠陥として直すか、1 variant の実装ミスとして切り分けるか。
+判断日は 2026-09-20 である。
+結果は README の Decision に記録する。
+
+1. 派生 3 Skill は継続利用する。成熟度は `experimental` のままにする。
+2. `reviewing-motion` の生成時点検は必須にしない。評価は `docs/evaluation/review.md` の interaction / motion 観点で行う。
+3. `with-skill-confirm` のフォーカス落ちは variant の実装ミスとする。Skill 本文の再評価条件にはしない。

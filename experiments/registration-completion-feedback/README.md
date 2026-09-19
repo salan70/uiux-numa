@@ -1,6 +1,6 @@
 ---
 title: 登録完了の遷移とフィードバック
-status: evaluating
+status: decided
 created: 2026-09-20
 updated: 2026-09-20
 platforms:
@@ -186,14 +186,33 @@ Cursor の browser MCP はタブ生成後に view を見失ったため、Chrome
 
 ## Decision
 
-未定
+派生 3 Skill を継続利用する。成熟度は `experimental` のままにする。
 
-人間の採用判断の前に `decided` へ進めない。
-Skill ごとの継続、修正後再評価、見送りは Issue #9 の「判断待ち」に置く。
+- 判断者: リポジトリの所有者
+- 判断日: 2026-09-20
+- 根拠: [evaluation.md](evaluation.md) と Issue #9 での選択
+
+Skill ごとの理由は次のとおり。
+
+- `exploring-ui-variants`: なしでも 3 方向は出る。ありは軸と代償の表が残る。比較記録に使う。
+- `crafting-motion`: 目的と例外（350ms、`stroke-dashoffset`）が文章に残る。数値は出発点として扱う。
+- `reviewing-motion`: 生成中の点検表は出なかった。評価は `docs/evaluation/review.md` で後から行う前提で残す。
+
+登録完了 UI は Pattern にしない。
+Catalog の方向性もこの Experiment では選ばない。
+
+適用条件は次のとおり。
+
+- 明示的に `/exploring-ui-variants`、`/crafting-motion`、`/reviewing-motion` を選ぶ。
+- 1 件の比較を一般的な優位性にしない。性能は未計測のまま断定しない。
+- Codex の読み込みは未確認である。
 
 ## Rejected reasons
 
-未定
+- 3 Skill の見送り: 比較記録と例外理由が残るため、自動読み込みは外さない。
+- 3 Skill の修正後再評価: 今回の欠陥は `with-skill-confirm` の実装に限り、Skill 本文の再評価条件ではない。
+- `with-skill-confirm`: 成功後のフォーカスが `body` に落ち、必須軸が課題ありである。完了 UI の候補にしない。
+- `stable` 化: 比較は 1 件であり、実績が足りない。
 
 ## Learnings
 
@@ -202,10 +221,17 @@ Skill ごとの継続、修正後再評価、見送りは Issue #9 の「判断�
 
 - 3 方向（差し替え、同面確認、次操作）は Skill なしでも出た。Skill ありは軸と目的の表を報告に残した。
 - 費用は Skill ありが約 40% 多い。ターン数も 36 から 66 へ増えた。
-- `reviewing-motion` は生成側が点検表を出さなかった。評価形式への接続は自動では起きなかった。
-- `with-skill-confirm` は完了後のフォーカスが `body` に落ちた。作者の「ボタンから動かさない」が、ボタン差し替えと衝突した。
+- `reviewing-motion` は生成側が点検表を出さなかった。評価形式への接続は自動では起きない。
+- `with-skill-confirm` は完了後のフォーカスが `body` に落ちた。作者の「ボタンから動かさない」が、ボタン差し替えと衝突した。Skill 欠陥ではなく variant の実装ミスとして切り分ける。
 - reduced motion でも 6 案とも完了文言は残った。性能は未計測である。
+
+作者由来の仮説と、実験で確認した事実を分ける。
+
+- 仮説のまま: 300ms 上限、ease の好み、GPU なら速い、キーボードなら動きを消す。
+- 確認した事実: なしでも分岐は出る。ありは根拠文と費用が増える。点検は別観点レビューが要る。
 
 ## Related patterns / assets
 
-なし
+- `skills/exploring-ui-variants/`
+- `skills/crafting-motion/`
+- `skills/reviewing-motion/`
