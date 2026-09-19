@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import mark from "./dist/mark.svg?raw";
 
 // variant `chalk-mark`: 印と進み。理解に付く印（チェック）を 1 本の筆致として面で描き、

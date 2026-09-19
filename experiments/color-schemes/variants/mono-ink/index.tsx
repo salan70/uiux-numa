@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `mono-ink`: 無彩色だけの面と墨色の accent。色相なしで主操作が目立つかと、意味色の際立ちを試す。

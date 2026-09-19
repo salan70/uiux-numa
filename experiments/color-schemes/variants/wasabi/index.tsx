@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `wasabi`: わさび。すりおろした身の淡い黄緑と、根茎の皮の深い青緑。

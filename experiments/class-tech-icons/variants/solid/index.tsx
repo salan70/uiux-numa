@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import terminal from "./dist/terminal.svg?raw";
 import code from "./dist/code.svg?raw";
 import branch from "./dist/branch.svg?raw";

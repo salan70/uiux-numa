@@ -42,6 +42,7 @@ wordmark（「授業資料」や「class_doc」の文字）は利用画面の HT
 - 単色（`currentColor`）で成立させる。色はマークの外から与える。
 - 16px（favicon）、24px（header）、32px（スライドの隅）、64px（アプリのタイル、反転）で成立する。細部は 16px で判別できる要素だけにする。
 - 利用画面のモックは全 variant で同一にし、`diff` で確認する。ブラウザのタブ、サイトの header（wordmark と並ぶ）、スライドの隅、明暗の単色、反転のタイルを並べる。
+- 書体とウェイトは `tokens/typography/` を使う。教材固有のサイズと行間は token 化しない。
 - 色は VitePress の既定テーマと資料の刷新計画のトークン（primary #002d62、accent #ce1126）から取る。
 - 編集用の原本を `variants/<id>/source/mark.svg`、配布用を `variants/<id>/dist/mark.svg` に置く。`index.tsx` は配布用を `?raw` で inline に展開する。
 - 部分編集の単位に `part-mark-<role>` の id を付ける。

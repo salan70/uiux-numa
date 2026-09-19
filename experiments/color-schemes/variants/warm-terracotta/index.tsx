@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `warm-terracotta`: 黄みの生成り色とテラコッタ。落ち着きと親しみを狙い、accent がエラー色に近い条件を試す。

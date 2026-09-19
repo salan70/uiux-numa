@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `aizome`: あいぞめ。藍白から褐返までの藍の濃淡。

@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import art from "./dist/chapter.svg?raw";
 
 // variant `flat-scene`: 面で場面を描く。検査の途中（済・不具合・未）を 3 行で示し、

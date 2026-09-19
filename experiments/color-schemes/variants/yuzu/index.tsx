@@ -1,5 +1,7 @@
 import { LandingPage } from "./LandingPage";
 import "./layout.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import "./scheme.css";
 
 // variant `yuzu`: ゆず。熟した果皮の黄、白いわた、葉の緑。

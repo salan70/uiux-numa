@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import assign from "./dist/assign.svg?raw";
 import deadline from "./dist/deadline.svg?raw";
 import progress from "./dist/progress.svg?raw";

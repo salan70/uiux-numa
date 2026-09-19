@@ -1,5 +1,7 @@
 import { Mock } from "./Mock";
 import "./mock.css";
+import "../../../../tokens/typography/index.css";
+import "../../typography.css";
 import mark from "./dist/mark.svg?raw";
 
 // variant `stacked-sheets`: 回を重ねて積み上がる資料を、重なった 2 枚の紙で表す。
