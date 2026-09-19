@@ -10,6 +10,7 @@ domains:
   - visual-design
   - consistency
   - accessibility
+adopted: []
 ---
 
 ## Problem

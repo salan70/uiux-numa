@@ -11,6 +11,8 @@ platforms:
 domains:
   - ux-writing
   - forms-input-ux
+adopted:
+  - on-submit
 ---
 
 ## Problem
@@ -40,6 +42,20 @@ describe("parseExperimentFrontmatter", () => {
     const data = parseExperimentFrontmatter(experimentSource, "experiments/form/README.md");
     expect(data.status).toBe("decided");
     expect(data.domains).toEqual(["ux-writing", "forms-input-ux"]);
+    expect(data.adopted).toEqual(["on-submit"]);
+  });
+
+  it("adopted が空配列でも読む", () => {
+    const source = experimentSource.replace("adopted:\n  - on-submit", "adopted: []");
+    const data = parseExperimentFrontmatter(source, "experiments/form/README.md");
+    expect(data.adopted).toEqual([]);
+  });
+
+  it("adopted がないと失敗する", () => {
+    const source = experimentSource.replace("adopted:\n  - on-submit\n", "");
+    expect(() => parseExperimentFrontmatter(source, "x.md")).toThrow(
+      "adopted は文字列のリストにする",
+    );
   });
 
   it("不正な status で失敗する", () => {

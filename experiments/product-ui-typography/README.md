@@ -10,6 +10,8 @@ domains:
   - visual-design
   - design-tokens
   - accessibility
+adopted:
+  - line-seed-minimal
 ---
 
 ## Problem

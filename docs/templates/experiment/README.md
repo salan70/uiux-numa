@@ -7,6 +7,7 @@ platforms:
   - <web など>
 domains:
   - <対象領域の項目名。例: ux-writing>
+adopted: []
 ---
 
 ## Problem
