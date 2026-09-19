@@ -10,6 +10,8 @@
 配色 14 案と SVG 69 点は専用ページがなく、preview PNG と iframe の中でしか確認できなかった。
 Catalog の役割を、実際に作った成果物を比較する見本帳へ絞り込む。
 
+掲載方針の決定は [Catalog を公開デザインシステムサイトにする ADR](2026-09-19-catalog-design-system-site.md) に置き換えた。
+
 ## 決定
 
 - ナビゲーションは Colors、Typography、Icons、Graphics、Components の 5 種別で切る。

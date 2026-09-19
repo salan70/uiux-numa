@@ -90,22 +90,25 @@ visual token だけでなく、必要性が確認できれば motion などの t
 
 ## Catalog
 
-Catalog は実際の成果物を種別ごとに見る見本帳とする。
-Experiment の判断履歴や評価記録を表示する archive にはしない。
+Catalog は採用した成果物を正として示す公開デザインシステムサイトとする。
+却下した案は比較資料として残す。
+採用、却下、検討中のステータスを表示する。
 
-- Colors: 配色 role の色面と和名
-- Typography: semantic role と primitive token の実寸見本、playground、live variant
-- Icons: 全 variant の SVG グリッド
-- Graphics: ロゴと章扉イラストの SVG グリッド
+- はじめに: 目的、構成、使い方
+- 原則: `docs/principles/*.md` を glob で読む
+- Foundations: Colors、Typography、Icons、Graphics
 - Components: Experiment ごとの live iframe
+- ステータス: 成果物の採否一覧
+- リソース: 開発者向けの導入手順
 
-Experiment の README、原則、Skill、preview PNG は Catalog の収集対象から外す。
+token 表は Name、値、説明、Copy を持つ。
+原則は正本の Markdown を直接読む。
+ADR 全文は Catalog 内で描画しない。
 preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
-interaction や animation は Components の live iframe で確認する。
 実装は `apps/catalog/` に置く。
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
-判断は [Catalog を成果物の見本帳へ絞り込む ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
+判断は [Catalog を公開デザインシステムサイトにする ADR](decisions/2026-09-19-catalog-design-system-site.md) に残す。
 
 ## AI Agent と Skill
 
