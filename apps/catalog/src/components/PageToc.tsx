@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 type Heading = {
   id: string;
@@ -14,7 +14,7 @@ export function PageToc({ path }: Props) {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [active, setActive] = useState("");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const main = document.getElementById("main");
     if (!main) return;
     const nodes = [...main.querySelectorAll("h2, h3")];

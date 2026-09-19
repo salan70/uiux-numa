@@ -2,9 +2,14 @@ import { useId, useState, type CSSProperties } from "react";
 import type { VariantStatus } from "../content/collect";
 import type { SvgVariant } from "../content/svgs";
 import { CopyButton } from "./CopyButton";
+import { SegmentedControl } from "./SegmentedControl";
 import { StatusBadge } from "./StatusBadge";
 
-const sizes = [24, 48, 96] as const;
+const sizes = [
+  { value: "24", label: "24px" },
+  { value: "48", label: "48px" },
+  { value: "96", label: "96px" },
+] as const;
 
 type Props = {
   groups: SvgVariant[];
@@ -15,7 +20,7 @@ type Props = {
 
 export function SvgGrid({ groups, showSizeControl = true, limit, statuses }: Props) {
   const id = useId();
-  const [size, setSize] = useState<(typeof sizes)[number]>(48);
+  const [size, setSize] = useState<(typeof sizes)[number]["value"]>("48");
   const ordered = [...groups].sort((a, b) => {
     const rank = (variant: string) => (statuses?.[variant] === "adopted" ? 0 : 1);
     return rank(a.variant) - rank(b.variant) || a.variant.localeCompare(b.variant);
@@ -25,23 +30,13 @@ export function SvgGrid({ groups, showSizeControl = true, limit, statuses }: Pro
   return (
     <div className="svg-catalog">
       {showSizeControl && (
-        <fieldset className="svg-size-control">
-          <legend>表示サイズ</legend>
-          <div>
-            {sizes.map((item) => (
-              <label key={item}>
-                <input
-                  type="radio"
-                  name={`${id}-size`}
-                  value={item}
-                  checked={size === item}
-                  onChange={() => setSize(item)}
-                />
-                {item}px
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        <SegmentedControl
+          name={`${id}-size`}
+          legend="表示サイズ"
+          value={size}
+          options={sizes}
+          onChange={setSize}
+        />
       )}
       <div className="svg-groups">
         {visibleGroups.map((group) => (
@@ -60,7 +55,7 @@ export function SvgGrid({ groups, showSizeControl = true, limit, statuses }: Pro
                       dangerouslySetInnerHTML={{ __html: asset.source }}
                     />
                     <figcaption>
-                      {asset.name}
+                      <span>{asset.name}</span>
                       <CopyButton
                         value={asset.source}
                         label={`${asset.name} の SVG`}

@@ -5,6 +5,7 @@ export type SchemeChoice = string;
 
 export const THEME_KEY = "uiux-numa-catalog-theme";
 export const SCHEME_KEY = "uiux-numa-catalog-scheme";
+export const COLORS_KEY = "uiux-numa-catalog-colors";
 export const DEFAULT_SCHEME = "sumi";
 export const PREFERENCE_EVENT = "catalog-preferences-change";
 
@@ -58,12 +59,32 @@ export function applyPreferences(themeChoice: ThemeChoice, schemeChoice: SchemeC
   knownRoles.add("--color-accent-strong");
   knownRoles.add("--color-accent-text");
   for (const role of knownRoles) root.style.removeProperty(role);
-  for (const color of colors) root.style.setProperty(color.cssName, color.value);
+  const applied: Record<string, string> = {};
+  for (const color of colors) {
+    root.style.setProperty(color.cssName, color.value);
+    applied[color.cssName] = color.value;
+  }
 
   const strong = colors.find((color) => color.role === "accent-strong");
   const text = colors.find((color) => color.role === "accent-text");
-  if (!strong && text) root.style.setProperty("--color-accent-strong", text.value);
-  if (!text && strong) root.style.setProperty("--color-accent-text", strong.value);
+  if (!strong && text) {
+    root.style.setProperty("--color-accent-strong", text.value);
+    applied["--color-accent-strong"] = text.value;
+  }
+  if (!text && strong) {
+    root.style.setProperty("--color-accent-text", strong.value);
+    applied["--color-accent-text"] = strong.value;
+  }
+
+  localStorage.setItem(
+    COLORS_KEY,
+    JSON.stringify({
+      theme: resolvedTheme,
+      themeChoice,
+      scheme: scheme.id,
+      colors: applied,
+    }),
+  );
 
   window.dispatchEvent(
     new CustomEvent(PREFERENCE_EVENT, { detail: { themeChoice, scheme: scheme.id } }),

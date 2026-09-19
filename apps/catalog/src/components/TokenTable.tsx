@@ -18,6 +18,12 @@ export function TokenTable({ caption, rows }: Props) {
     <div className="token-table-wrap">
       <table className="token-table">
         <caption>{caption}</caption>
+        <colgroup>
+          <col className="token-col-name" />
+          <col className="token-col-value" />
+          <col className="token-col-desc" />
+          <col className="token-col-copy" />
+        </colgroup>
         <thead>
           <tr>
             <th scope="col">Name</th>

@@ -1,11 +1,18 @@
 import { useId, useState } from "react";
 import type { LiveVariant } from "../content/collect";
+import { SegmentedControl } from "./SegmentedControl";
 
 const widths = [
-  { id: "mobile", label: "390px", width: "390px" },
-  { id: "desktop", label: "1280px", width: "1280px" },
-  { id: "fit", label: "全幅", width: "100%" },
+  { value: "mobile", label: "390px" },
+  { value: "desktop", label: "1280px" },
+  { value: "fit", label: "全幅" },
 ] as const;
+
+const widthPx: Record<(typeof widths)[number]["value"], string> = {
+  mobile: "390px",
+  desktop: "1280px",
+  fit: "100%",
+};
 
 type Props = {
   variants: LiveVariant[];
@@ -18,57 +25,36 @@ export function LivePreview({ variants, title = "Live Preview", defaultVariant }
   const initial =
     variants.find((item) => item.variant === defaultVariant)?.variant ?? variants[0]?.variant ?? "";
   const [selected, setSelected] = useState(initial);
-  const [width, setWidth] = useState<(typeof widths)[number]["id"]>("fit");
+  const [width, setWidth] = useState<(typeof widths)[number]["value"]>("fit");
   const current = variants.find((item) => item.variant === selected) ?? variants[0];
   if (!current) return null;
-  const frame = widths.find((item) => item.id === width) ?? widths[2];
   const headingId = `${id}-heading`;
 
   return (
     <section className="live-preview" aria-labelledby={headingId}>
       <h2 id={headingId}>{title}</h2>
       <div className="live-controls">
-        <fieldset>
-          <legend>バリアント</legend>
-          <div className="live-variants">
-            {variants.map((item) => (
-              <label key={item.variant}>
-                <input
-                  type="radio"
-                  name={`${id}-variant`}
-                  value={item.variant}
-                  checked={current.variant === item.variant}
-                  onChange={() => setSelected(item.variant)}
-                />
-                {item.variant}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>表示幅</legend>
-          <div className="live-widths">
-            {widths.map((item) => (
-              <label key={item.id}>
-                <input
-                  type="radio"
-                  name={`${id}-width`}
-                  value={item.id}
-                  checked={width === item.id}
-                  onChange={() => setWidth(item.id)}
-                />
-                {item.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
+        <SegmentedControl
+          name={`${id}-variant`}
+          legend="バリアント"
+          value={current.variant}
+          options={variants.map((item) => ({ value: item.variant, label: item.variant }))}
+          onChange={setSelected}
+        />
+        <SegmentedControl
+          name={`${id}-width`}
+          legend="表示幅"
+          value={width}
+          options={widths}
+          onChange={setWidth}
+        />
       </div>
       <div className="live-frame-wrap">
         <iframe
           className="live-frame"
           title={`${current.experiment} / ${current.variant} のプレビュー`}
           src={current.previewPath}
-          style={{ width: frame.width }}
+          style={{ width: widthPx[width] }}
         />
       </div>
     </section>

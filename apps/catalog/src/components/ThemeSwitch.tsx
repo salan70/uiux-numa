@@ -17,15 +17,11 @@ const themeChoices: { value: ThemeChoice; label: string }[] = [
 ];
 
 export function ThemeSwitch() {
-  const [theme, setTheme] = useState<ThemeChoice>("system");
-  const [scheme, setScheme] = useState<SchemeChoice>("sumi");
+  const [theme, setTheme] = useState<ThemeChoice>(() => readThemeChoice());
+  const [scheme, setScheme] = useState<SchemeChoice>(() => readSchemeChoice());
 
   useEffect(() => {
-    const nextTheme = readThemeChoice();
-    const nextScheme = readSchemeChoice();
-    setTheme(nextTheme);
-    setScheme(nextScheme);
-    applyPreferences(nextTheme, nextScheme);
+    applyPreferences(theme, scheme);
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
@@ -33,7 +29,7 @@ export function ThemeSwitch() {
     };
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
-  }, []);
+  }, [scheme, theme]);
 
   return (
     <div className="theme-switch">
