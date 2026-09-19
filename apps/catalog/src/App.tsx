@@ -72,7 +72,7 @@ export function App() {
     );
   }
   return (
-    <Layout path={path} title="ページがない">
+    <Layout path={path} title="ページが見つかりません">
       <NotFoundPage />
     </Layout>
   );

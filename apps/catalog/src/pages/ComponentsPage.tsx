@@ -11,7 +11,9 @@ export function ComponentsPage() {
       <div className="page-intro">
         <p className="eyebrow">Components</p>
         <h1>コンポーネント</h1>
-        <p className="lede">Experiment ごとに live iframe を置き、variant と表示幅を切り替える。</p>
+        <p className="lede">
+          コンポーネントの各バリアントを、表示幅を切り替えながら実画面で確認する。
+        </p>
       </div>
       {experiments.map((experiment) => (
         <LivePreview

@@ -4,7 +4,7 @@ import type { LiveVariant } from "../content/collect";
 const widths = [
   { id: "mobile", label: "390px", width: "390px" },
   { id: "desktop", label: "1280px", width: "1280px" },
-  { id: "fit", label: "幅いっぱい", width: "100%" },
+  { id: "fit", label: "全幅", width: "100%" },
 ] as const;
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
   title?: string;
 };
 
-export function LivePreview({ variants, title = "live preview" }: Props) {
+export function LivePreview({ variants, title = "Live Preview" }: Props) {
   const id = useId();
   const [selected, setSelected] = useState(variants[0]?.variant ?? "");
   const [width, setWidth] = useState<(typeof widths)[number]["id"]>("fit");
@@ -26,7 +26,7 @@ export function LivePreview({ variants, title = "live preview" }: Props) {
       <h2 id={headingId}>{title}</h2>
       <div className="live-controls">
         <fieldset>
-          <legend>variant</legend>
+          <legend>バリアント</legend>
           <div className="live-variants">
             {variants.map((item) => (
               <label key={item.variant}>
@@ -63,7 +63,7 @@ export function LivePreview({ variants, title = "live preview" }: Props) {
       <div className="live-frame-wrap">
         <iframe
           className="live-frame"
-          title={`${current.experiment} / ${current.variant} の live preview`}
+          title={`${current.experiment} / ${current.variant} のプレビュー`}
           src={current.previewPath}
           style={{ width: frame.width }}
         />

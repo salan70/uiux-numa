@@ -11,9 +11,9 @@ import {
 import { schemes } from "../content/schemes";
 
 const themeChoices: { value: ThemeChoice; label: string }[] = [
-  { value: "light", label: "light" },
-  { value: "dark", label: "dark" },
-  { value: "system", label: "system" },
+  { value: "system", label: "システム" },
+  { value: "light", label: "ライト" },
+  { value: "dark", label: "ダーク" },
 ];
 
 export function ThemeSwitch() {

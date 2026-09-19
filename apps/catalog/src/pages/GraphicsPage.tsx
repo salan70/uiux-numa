@@ -14,7 +14,7 @@ export function GraphicsPage() {
       <div className="page-intro">
         <p className="eyebrow">Graphics</p>
         <h1>グラフィック</h1>
-        <p className="lede">ロゴと章扉イラストの SVG を variant ごとに見る。</p>
+        <p className="lede">ロゴや章扉イラストの SVG をバリアントごとに並べて比較する。</p>
       </div>
       <SvgGrid groups={groups} />
     </>

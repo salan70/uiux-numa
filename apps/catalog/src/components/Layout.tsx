@@ -18,7 +18,7 @@ export function Layout({ path, title, children }: Props) {
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
-        本文へ
+        本文へスキップ
       </a>
       <header className="app-header">
         <Link href="/" className="app-wordmark">

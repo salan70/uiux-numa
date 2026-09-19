@@ -16,7 +16,7 @@ export function HomePage() {
       <div className="page-intro">
         <p className="eyebrow">UI/UX 沼</p>
         <h1>成果物の見本帳</h1>
-        <p className="lede">実際に作った配色、文字、SVG、コンポーネントを種別ごとに見る。</p>
+        <p className="lede">制作した配色、文字、SVG、コンポーネントを種別ごとに一覧・比較する。</p>
       </div>
       <div className="artifact-bands">
         <section className="artifact-band" aria-labelledby="colors-heading">
@@ -25,7 +25,7 @@ export function HomePage() {
             <h2 id="colors-heading">
               <Link href="/colors">Colors</Link>
             </h2>
-            <p>和名を持つ配色の role と、ライト / ダークの色面。</p>
+            <p>和名を持つ各配色の Role と、ライト / ダークの色面一覧。</p>
           </div>
           <div className="home-swatch-row">
             {catalog.schemes.slice(0, 6).map((scheme) => (
@@ -43,7 +43,7 @@ export function HomePage() {
             <h2 id="typography-heading">
               <Link href="/typography">Typography</Link>
             </h2>
-            <p>semantic role と primitive token の実寸見本。</p>
+            <p>Semantic role と primitive token の実寸見本。</p>
           </div>
           <div className="home-type-row">
             {typographyTokens.map((token) => (
@@ -61,7 +61,7 @@ export function HomePage() {
             <h2 id="icons-heading">
               <Link href="/icons">Icons</Link>
             </h2>
-            <p>アイコン set と variant の SVG。</p>
+            <p>アイコンセットと各バリアントの SVG 一覧。</p>
           </div>
           <SvgGrid groups={iconGroups} showSizeControl={false} />
         </section>
@@ -72,7 +72,7 @@ export function HomePage() {
             <h2 id="graphics-heading">
               <Link href="/graphics">Graphics</Link>
             </h2>
-            <p>ロゴと章扉イラストの SVG。</p>
+            <p>ロゴと章扉イラストの各バリアント SVG 一覧。</p>
           </div>
           <SvgGrid groups={graphicsGroups} showSizeControl={false} />
         </section>
@@ -83,7 +83,7 @@ export function HomePage() {
             <h2 id="components-heading">
               <Link href="/components">Components</Link>
             </h2>
-            <p>variant と表示幅を切り替えて動作を見る。</p>
+            <p>バリアントと表示幅を切り替えて動作を確認する。</p>
           </div>
           {components && <LivePreview variants={components.liveVariants} title={components.slug} />}
         </section>
