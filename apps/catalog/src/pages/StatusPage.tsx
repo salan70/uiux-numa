@@ -7,9 +7,8 @@ export function StatusPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">情報</p>
         <h1>ステータス</h1>
-        <p className="lede">成果物の種別、採否、採用案、更新日を一覧する。</p>
+        <p className="lede">成果物の採否と更新日である。</p>
       </div>
       <div className="token-table-wrap">
         <table className="token-table status-table">

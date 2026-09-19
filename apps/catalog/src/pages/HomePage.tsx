@@ -1,4 +1,5 @@
 import { Link } from "../components/Link";
+import { SchemeSpecimen } from "../components/SchemeSpecimen";
 import { categoryHref, categoryLabel } from "../content/category";
 import { catalog } from "../content/collect";
 
@@ -11,15 +12,15 @@ export function HomePage() {
     <>
       <div className="page-intro">
         <h1>UI/UX 沼</h1>
-        <p className="lede">
-          AI エージェントで UI/UX
-          とプロダクト体験を反復的に探索する。成果を個人開発へ再利用できる形に育てる。
-        </p>
-        <p>Catalog は採用した成果物を正として示す。却下案は比較資料として残す。</p>
+        <p className="lede">採用した見た目と操作を、紙の上で確かめる見本帳である。</p>
       </div>
+      <section aria-labelledby="paper-heading">
+        <h2 id="paper-heading">いまの紙</h2>
+        <p className="lede">配色とテーマはヘッダーで切り替える。サイト全体が同じ紙になる。</p>
+        <SchemeSpecimen />
+      </section>
       <section aria-labelledby="principles-heading">
         <h2 id="principles-heading">原則</h2>
-        <p>原則候補は Experiment から抽出し、採否は人間が決める。</p>
         <ul className="record-list">
           {catalog.principles.map((principle) => (
             <li key={principle.slug}>
@@ -30,32 +31,32 @@ export function HomePage() {
         </ul>
       </section>
       <section aria-labelledby="foundations-heading">
-        <h2 id="foundations-heading">Foundations と Components</h2>
-        <ul className="home-cards">
+        <h2 id="foundations-heading">土台と部品</h2>
+        <ul className="record-list">
           <li>
             <Link href={categoryHref("colors")}>{categoryLabel("colors")}</Link>
-            <p>採用した配色と Role。</p>
+            <span className="meta"> 採用した配色</span>
           </li>
           <li>
             <Link href={categoryHref("typography")}>{categoryLabel("typography")}</Link>
-            <p>semantic と primitive の token 表。</p>
+            <span className="meta"> 文字の役割</span>
           </li>
           <li>
             <Link href={categoryHref("icons")}>{categoryLabel("icons")}</Link>
-            <p>技術アイコンと機能アイコン。</p>
+            <span className="meta"> 技術アイコンと機能アイコン</span>
           </li>
           <li>
             <Link href={categoryHref("graphics")}>{categoryLabel("graphics")}</Link>
-            <p>ロゴと章扉イラスト。</p>
+            <span className="meta"> ロゴと章扉</span>
           </li>
           <li>
             <Link href={categoryHref("components")}>{categoryLabel("components")}</Link>
-            <p>フォームの inline validation。</p>
+            <span className="meta"> フォームの検証</span>
           </li>
         </ul>
       </section>
       <section aria-labelledby="recent-heading">
-        <h2 id="recent-heading">最近更新した成果物</h2>
+        <h2 id="recent-heading">最近の更新</h2>
         <ul className="record-list">
           {recent.map((experiment) => (
             <li key={experiment.slug}>

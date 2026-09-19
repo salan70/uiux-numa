@@ -13,7 +13,7 @@ describe("categoryForDomains", () => {
 });
 
 describe("categoryHref", () => {
-  it("Foundations の URL を返す", () => {
+  it("土台の URL を返す", () => {
     expect(categoryHref("colors")).toBe("/foundations/colors");
     expect(categoryHref("components")).toBe("/components");
   });

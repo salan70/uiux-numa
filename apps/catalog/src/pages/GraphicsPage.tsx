@@ -8,9 +8,8 @@ export function GraphicsPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">Foundations</p>
-        <h1>Graphics</h1>
-        <p className="lede">ロゴと章扉イラストの Experiment ごとに SVG を比較する。</p>
+        <h1>図</h1>
+        <p className="lede">ロゴと章扉の案を見比べる。</p>
       </div>
       <ul className="record-list">
         {experiments.map((experiment) => (

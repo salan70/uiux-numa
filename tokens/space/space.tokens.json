@@ -1,0 +1,19 @@
+{
+  "space": {
+    "$type": "dimension",
+    "page-inline": {
+      "$value": {
+        "value": 1.5,
+        "unit": "rem"
+      },
+      "$description": "ページ左右の余白。本文と画面端の距離。"
+    },
+    "section": {
+      "$value": {
+        "value": 2.5,
+        "unit": "rem"
+      },
+      "$description": "主要セクションの開始までの縦の間隔。"
+    }
+  }
+}

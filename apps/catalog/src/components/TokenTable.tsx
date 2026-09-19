@@ -26,10 +26,10 @@ export function TokenTable({ caption, rows }: Props) {
         </colgroup>
         <thead>
           <tr>
-            <th scope="col">Name</th>
+            <th scope="col">名前</th>
             <th scope="col">値</th>
             <th scope="col">説明</th>
-            <th scope="col">Copy</th>
+            <th scope="col">コピー</th>
           </tr>
         </thead>
         <tbody>

@@ -35,7 +35,7 @@ export function App() {
   }, [route]);
 
   useEffect(() => {
-    document.getElementById("main")?.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }, [path]);
 
   if (route.name === "redirect") {
@@ -87,28 +87,29 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "colors") {
     return {
-      title: "Colors",
+      title: "配色",
       updated: experimentUpdated("colors"),
       body: <ColorsPage />,
     };
   }
   if (route.name === "color") {
+    const scheme = catalog.schemes.find((item) => item.id === route.scheme);
     return {
-      title: route.scheme,
+      title: scheme?.label ?? route.scheme,
       updated: experimentUpdated("colors"),
       body: <ColorDetailPage scheme={route.scheme} />,
     };
   }
   if (route.name === "typography") {
     return {
-      title: "Typography",
+      title: "文字",
       updated: experimentUpdated("typography"),
       body: <TypographyPage />,
     };
   }
   if (route.name === "icons") {
     return {
-      title: "Icons",
+      title: "アイコン",
       updated: latestUpdated(
         catalog.experiments.filter((item) => item.category === "icons").map((item) => item.updated),
       ),
@@ -125,7 +126,7 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "graphics") {
     return {
-      title: "Graphics",
+      title: "図",
       updated: latestUpdated(
         catalog.experiments
           .filter((item) => item.category === "graphics")
@@ -144,7 +145,7 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "components") {
     return {
-      title: "コンポーネント",
+      title: "部品",
       updated: experimentUpdated("components"),
       body: <ComponentsPage />,
     };

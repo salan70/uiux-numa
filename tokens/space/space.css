@@ -1,0 +1,5 @@
+/* space.tokens.json から生成する。直接編集しない。 */
+:root {
+  --space-page-inline: 1.5rem;
+  --space-section: 2.5rem;
+}

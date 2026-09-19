@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CopyButton } from "../components/CopyButton";
 import { Link } from "../components/Link";
+import { SchemeSpecimen } from "../components/SchemeSpecimen";
 import { SchemeSwatch } from "../components/SchemeSwatch";
 import { SegmentedControl } from "../components/SegmentedControl";
 import { catalog } from "../content/collect";
@@ -26,9 +27,8 @@ export function ColorsPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">Foundations</p>
-        <h1>Colors</h1>
-        <p className="lede">採用した配色を正として掲載する。却下案は比較資料として残す。</p>
+        <h1>配色</h1>
+        <p className="lede">採用した紙を先に置く。使わない案は後ろに残す。</p>
       </div>
       <section aria-labelledby="adopted-colors-heading">
         <h2 id="adopted-colors-heading">採用</h2>
@@ -64,23 +64,24 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
     <>
       <div className="page-intro">
         <p className="crumb">
-          <Link href="/foundations/colors">Colors</Link>
+          <Link href="/foundations/colors">配色</Link>
         </p>
-        <p className="eyebrow">配色</p>
-        <h1>
-          {scheme.id} <span className="meta">（{scheme.label}）</span>
-        </h1>
+        <h1>{scheme.label}</h1>
+        <p className="meta">
+          <code>{scheme.id}</code>
+        </p>
       </div>
       <SegmentedControl
         name="color-mode"
         legend="表示"
         value={mode}
         options={[
-          { value: "light", label: "Light" },
-          { value: "dark", label: "Dark" },
+          { value: "light", label: "ライト" },
+          { value: "dark", label: "ダーク" },
         ]}
         onChange={setMode}
       />
+      <SchemeSpecimen scheme={scheme} mode={mode} />
       {ROLE_GROUPS.map((group) => (
         <section key={group.id} aria-labelledby={`${scheme.id}-${group.id}-heading`}>
           <h2 id={`${scheme.id}-${group.id}-heading`}>{group.label}</h2>
@@ -102,7 +103,7 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
                   <th scope="col">和名</th>
                   <th scope="col">HEX</th>
                   <th scope="col">コントラスト比</th>
-                  <th scope="col">Copy</th>
+                  <th scope="col">コピー</th>
                 </tr>
               </thead>
               <tbody>
@@ -155,11 +156,13 @@ function SchemeList({ schemes }: { schemes: ColorScheme[] }) {
           <article className="scheme-card">
             <header>
               <h3>
-                <Link href={`/foundations/colors/${scheme.id}`}>
-                  {scheme.id} <span className="meta">（{scheme.label}）</span>
-                </Link>
+                <Link href={`/foundations/colors/${scheme.id}`}>{scheme.label}</Link>
               </h3>
+              <p className="meta">
+                <code>{scheme.id}</code>
+              </p>
             </header>
+            <SchemeSpecimen scheme={scheme} />
             <div className="home-swatch-row">
               {scheme.light.slice(0, 6).map((color) => (
                 <SchemeSwatch color={color} key={color.cssName} />

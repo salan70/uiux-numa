@@ -4,9 +4,8 @@ export function ResourcesPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">情報</p>
         <h1>リソース</h1>
-        <p className="lede">開発者向けのリポジトリ、Skill、token の導入手順。</p>
+        <p className="lede">リポジトリと、token の読み方である。</p>
       </div>
       <section aria-labelledby="repo-heading">
         <h2 id="repo-heading">リポジトリ</h2>
@@ -38,6 +37,18 @@ export function ResourcesPage() {
         </p>
         <p>
           利用側は <code>tokens/typography/index.css</code> を読み、semantic の CSS 変数を参照する。
+        </p>
+      </section>
+      <section aria-labelledby="space-heading">
+        <h2 id="space-heading">余白 token の導入</h2>
+        <p>
+          正本は <code>tokens/space/space.tokens.json</code> である。
+        </p>
+        <p>
+          Web 用 CSS は <code>just tokens-build</code> で生成する。
+        </p>
+        <p>
+          利用側は <code>tokens/space/index.css</code> を読む。
         </p>
       </section>
       <section aria-labelledby="colors-heading">

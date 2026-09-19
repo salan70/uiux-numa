@@ -20,10 +20,10 @@ export function TypographyPlayground({ roles }: Props) {
 
   return (
     <section className="playground" aria-labelledby="playground-heading">
-      <h2 id="playground-heading">Typography Playground</h2>
+      <h2 id="playground-heading">試し書き</h2>
       <div className="playground-controls">
         <label>
-          Role
+          役割
           <select value={selected.name} onChange={(event) => setRole(event.target.value)}>
             {roles.map((item) => (
               <option key={item.name} value={item.name}>

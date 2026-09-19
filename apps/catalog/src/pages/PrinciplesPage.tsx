@@ -8,11 +8,8 @@ export function PrinciplesPage() {
   return (
     <>
       <div className="page-intro">
-        <p className="eyebrow">ガイド</p>
         <h1>原則</h1>
-        <p className="lede">
-          原則は <code>docs/principles/*.md</code> を glob で読む。正本は Catalog に分かれない。
-        </p>
+        <p className="lede">画面を決めるときに先に読む約束である。</p>
       </div>
       <ul className="record-list">
         {catalog.principles.map((principle) => (
@@ -35,7 +32,7 @@ export function PrincipleDetailPage({ slug }: { slug: string }) {
         <p className="crumb">
           <Link href="/principles">原則</Link>
         </p>
-        <p className="eyebrow">{principle.status}</p>
+        <p className="meta">{principle.status}</p>
         <h1>{principle.title}</h1>
         <p className="meta">
           更新日 <time dateTime={principle.updated}>{principle.updated}</time>
