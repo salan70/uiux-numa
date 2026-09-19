@@ -1,12 +1,15 @@
 ---
 title: <Experiment の題名>
 status: draft
+role: module
+maturity: experimental
 created: <YYYY-MM-DD>
 updated: <YYYY-MM-DD>
 platforms:
   - <web など>
 domains:
   - <対象領域の項目名。例: ux-writing>
+sources: []
 adopted: []
 ---
 

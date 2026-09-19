@@ -6,6 +6,8 @@ README は YAML frontmatter と本文で構成する。
 テンプレートは [docs/templates/experiment/README.md](templates/experiment/README.md) にある。
 採用理由と却下した案は [Experiment 記録形式の ADR](decisions/2026-09-13-experiment-format.md) に残す。
 名前で選ぶ variant と評価を経ない判断の扱いは、[補足の ADR](decisions/2026-09-17-named-variants-and-unevaluated-decisions.md) に残す。
+`role` と `maturity` は [Asset composition model](asset-model.md) に従う。
+Experiment の `status` や `adopted` と混ぜない。
 
 ## ディレクトリ構成
 
@@ -49,6 +51,8 @@ experiments/<slug>/
 ---
 title: フォームの inline validation
 status: draft
+role: module
+maturity: experimental
 created: 2026-09-13
 updated: 2026-09-13
 platforms:
@@ -58,6 +62,7 @@ domains:
   - forms-input-ux
   - states-design
   - accessibility
+sources: []
 adopted: []
 ---
 ```
@@ -65,18 +70,23 @@ adopted: []
 | 項目        | 必須 | 内容                                                                                           |
 | ----------- | ---- | ---------------------------------------------------------------------------------------------- |
 | `title`     | 必須 | 日本語の題名                                                                                   |
-| `status`    | 必須 | 下の status の値                                                                               |
+| `status`    | 必須 | 下の status の値。Asset の `maturity` ではない                                                 |
+| `role`      | 必須 | [Asset の role](asset-model.md)。`foundation` / `module` / `reference`                         |
+| `maturity`  | 必須 | [Asset の maturity](asset-model.md)。`experimental` / `candidate` / `stable` / `deprecated`    |
 | `created`   | 必須 | 作成日（`YYYY-MM-DD`）                                                                         |
 | `updated`   | 必須 | 最終更新日（`YYYY-MM-DD`）                                                                     |
 | `platforms` | 必須 | 対象プラットフォーム。`platforms/` のディレクトリ名と同じ小文字にする（例: `web`）             |
 | `domains`   | 必須 | [対象領域](scope.md)の項目名を kebab-case にしたもの（例: `ux-writing`、`interaction-design`） |
-| `adopted`   | 必須 | 採用した variant-id の配列。Decision 節から転記する                                            |
+| `sources`   | 必須 | 由来。slug やパス。自身が起点なら空配列                                                        |
+| `adopted`   | 必須 | 採用した variant-id の配列。Decision 節から転記する。再利用の可否ではない                      |
 
 `adopted` は variant-id だけを持つ。
 本文の採用理由は Decision 節に残す。
 `status` が `decided` 以外なら空にする。
 `status` が `decided` で空なら、全案却下である。
 Variants 表にない ID を書くと Catalog の build が失敗する。
+`extracted` は知見の抽出完了である。
+`maturity: stable` へは自動で進めない。
 
 ## status
 
@@ -86,7 +96,7 @@ Variants 表にない ID を書くと Catalog の build が失敗する。
 | `implementing` | variant を実装している                                | 3                |
 | `evaluating`   | 評価している                                          | 4                |
 | `decided`      | 人間が判断し、decision と rejected reasons を記録した | 5〜7             |
-| `extracted`    | 知見を抽出し、Pattern / Asset への昇格を終えた        | 8〜9             |
+| `extracted`    | 知見を抽出し、Pattern / Asset へリンクした            | 8〜9             |
 | `abandoned`    | 判断前に中止した。理由を Decision に書く              | 任意             |
 
 status は上から順に進める。

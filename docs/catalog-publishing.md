@@ -1,10 +1,10 @@
 # UI/UX 沼の公開手順
 
 公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
-Catalog は採用した成果物を視覚的にざっと確認する見本帳である。
+Catalog は成果物の visual showcase である。
 token、配色、文字、アイコン、図、部品のプレビューを掲載する。
-却下案は比較資料として残す。
-判断は [Catalog を視覚確認専用の見本帳へ絞る ADR](decisions/2026-09-19-catalog-artifacts-only.md) に残す。
+`role` と `maturity` で再利用の前提を示す。
+判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
 production URL は `https://uiux.oda79.me/` とする。
 Git 連携と custom domain には、利用者による Cloudflare 認証が 1 回必要である。
 この文書はその手動手順だけを残す。

@@ -13,13 +13,13 @@
 公開後は `https://uiux.oda79.me/` で成果を共有する。
 詳細記録の正本は Git 上の Markdown と JSON のままにする。
 
-掲載内容の決定は [Catalog を成果物の見本帳へ絞り込む ADR](2026-09-19-catalog-artifacts-only.md) に置き換えた。
+掲載内容の決定は [Catalog を成果物の visual showcase にする ADR](2026-09-20-catalog-visual-showcase.md) に置き換える。
 
 ## 決定
 
 - Catalog は `apps/catalog/` に閉じた Vite + React + TypeScript の静的サイトにする。
 - 人が見る表示名は「UI/UX 沼」とする。
-- 掲載対象は token、配色、文字、アイコン、図、部品の視覚サンプルとする。
+- 掲載対象は token、配色、文字、アイコン、図、部品の視覚サンプルとする。採用に限るかは [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) に従う。
 - 一覧は手書きせず、canonical JSON と Experiment README の frontmatter を `import.meta.glob` で読む。
 - frontmatter や参照先が不正なら build を失敗させる。
 - Experiment 本文、原則、開発者向け手順は Catalog 内で描画しない。正本は Git 上の Markdown と JSON のままにする。
