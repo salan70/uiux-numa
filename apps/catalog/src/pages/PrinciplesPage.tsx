@@ -1,5 +1,7 @@
 import { Link } from "../components/Link";
+import { MarkdownBody } from "../components/MarkdownBody";
 import { catalog } from "../content/collect";
+import { githubBlobUrl } from "../content/github";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function PrinciplesPage() {
@@ -9,7 +11,7 @@ export function PrinciplesPage() {
         <p className="eyebrow">ガイド</p>
         <h1>原則</h1>
         <p className="lede">
-          原則候補は docs/principles/ の Markdown を直接読む。正本は Catalog に分かれない。
+          原則は <code>docs/principles/*.md</code> を glob で読む。正本は Catalog に分かれない。
         </p>
       </div>
       <ul className="record-list">
@@ -39,7 +41,15 @@ export function PrincipleDetailPage({ slug }: { slug: string }) {
           更新日 <time dateTime={principle.updated}>{principle.updated}</time>
         </p>
       </div>
-      <pre className="markdown-source">{principle.body}</pre>
+      <MarkdownBody html={principle.bodyHtml} />
+      <section aria-labelledby="principle-source-heading">
+        <h2 id="principle-source-heading">正本</h2>
+        <p>
+          <a href={githubBlobUrl(principle.repoPath)} rel="noreferrer">
+            {principle.repoPath}
+          </a>
+        </p>
+      </section>
     </>
   );
 }

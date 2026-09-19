@@ -457,9 +457,25 @@ button:hover {
   border: 1px solid var(--color-border);
 }
 
-.svg-card figcaption {
+.home-cards {
   display: grid;
-  gap: 0.35rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-cards li {
+  max-width: none;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.home-cards p {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-muted);
 }
 
 .sidebar-drawer {

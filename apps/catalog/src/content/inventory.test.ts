@@ -13,6 +13,7 @@ describe("catalog inventory", () => {
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(7);
     expect(catalog.principles).toHaveLength(2);
+    expect(catalog.principles.every((item) => item.bodyHtml.length > 0)).toBe(true);
     expect(catalog.liveVariants).toHaveLength(41);
     expect(catalog.experiments.every((item) => item.problemHtml.length > 0)).toBe(true);
   });
