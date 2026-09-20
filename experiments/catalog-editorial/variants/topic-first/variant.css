@@ -2440,6 +2440,75 @@
   }
 }
 
+/* コアは番号付きの一覧。番号が優先順位を表すので、装飾にせず数字で見せる。 */
+.ed-root--topic .guide-cores {
+  margin: var(--ed-section) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: guide-core;
+}
+
+.ed-root--topic .guide-core {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--ed-gap-lg);
+  padding-block: var(--ed-gap-lg);
+  border-block-start: 1px solid var(--ed-line);
+  counter-increment: guide-core;
+}
+
+.ed-root--topic .guide-core::before {
+  content: counter(guide-core);
+  grid-row: 1 / span 2;
+  color: var(--ed-muted);
+  font-size: var(--ed-item);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--font-line-height-tight);
+}
+
+.ed-root--topic .guide-core__title {
+  margin: 0;
+  font-size: var(--ed-item);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+}
+
+.ed-root--topic .guide-core__body {
+  margin: var(--ed-gap) 0 0;
+  max-inline-size: 40rem;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+/* タグは無彩色にする。色は良い例と悪い例のために取っておく。 */
+.ed-root--topic .guide-rule__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ed-gap);
+  margin: 0 0 var(--ed-gap-lg);
+}
+
+.ed-root--topic .guide-tag {
+  padding: 0.125rem var(--ed-gap);
+  color: var(--ed-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  text-decoration: none;
+  border: 1px solid var(--ed-line);
+  border-radius: var(--ed-radius);
+}
+
+.ed-root--topic .guide-tag--core {
+  color: var(--ed-text);
+  transition: border-color var(--ed-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ed-root--topic .guide-tag--core:hover {
+    border-color: var(--ed-text);
+  }
+}
+
 .ed-root--topic .guide-rules {
   margin-block-start: var(--ed-section);
 }

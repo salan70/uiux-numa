@@ -11,8 +11,19 @@ export type LinkItem = {
   url: string;
 };
 
+export type Applies = "foundation" | "module";
+
+// コアは思想。見出しと短い本文だけを持ち、並び順が優先順位を表す。
+export type Principle = {
+  title: string;
+  body: string;
+};
+
 export type Rule = {
   title: string;
+  // 未移行の文書では null と空配列になる。
+  applies: Applies | null;
+  cores: string[];
   rationale: string;
   good: string;
   bad: string;
@@ -28,12 +39,6 @@ export type SourceItem = {
   description: string;
 };
 
-export type Judgment = {
-  decider: string;
-  date: string;
-  reason: string;
-};
-
 export type Guideline = {
   slug: string;
   title: string;
@@ -41,13 +46,13 @@ export type Guideline = {
   status: Status;
   axes: string[];
   purpose: string;
-  scope: string;
-  // 規則は 2 層に分ける。コアは主題の土台、Tips は個別の場面への適用。
-  core: Rule[];
+  // コアは思想、Tips は具体的な場面の規則。
+  core: Principle[];
   tips: Rule[];
+  // 以下は未移行の文書だけが持つ。新書式では null と空配列になる。
+  scope: string | null;
   checklist: string[];
   sources: SourceItem[];
-  judgment: Judgment;
 };
 
 // 図版キーの正本。図版そのものは見本帳（variants/*/figures.tsx）が持つ。
@@ -83,7 +88,19 @@ const VALID_AXES = [
   "brand fit",
 ] as const;
 
-const KNOWN_SECTIONS = ["目的", "適用範囲", "コア", "Tips", "確認項目", "出典", "判断"] as const;
+const KNOWN_SECTIONS = ["目的", "コア", "Tips"] as const;
+const LEGACY_SECTIONS = ["目的", "適用範囲", "コア", "Tips", "確認項目", "出典", "判断"] as const;
+
+// 旧書式のまま残っている文書。移行するたびに外し、空になったら旧書式の分岐ごと消す。
+const LEGACY_SLUGS: readonly string[] = [
+  "ux-writing",
+  "information-architecture",
+  "design-four-principles",
+  "accessibility",
+  "color",
+];
+
+const VALID_APPLIES: readonly Applies[] = ["foundation", "module"];
 
 const guidelineFiles = import.meta.glob<string>("../../../docs/guidelines/*.md", {
   query: "?raw",
@@ -157,15 +174,18 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   // H2 節ごとの分割
   const sections = splitSections(body);
 
+  const legacy = LEGACY_SLUGS.includes(slug);
+  const knownSections: readonly string[] = legacy ? LEGACY_SECTIONS : KNOWN_SECTIONS;
+
   // 未知の節の検査
   for (const name of Object.keys(sections)) {
-    if (!(KNOWN_SECTIONS as readonly string[]).includes(name)) {
+    if (!knownSections.includes(name)) {
       throw new Error(`[guidelines/${slug}] unknown section: '## ${name}'`);
     }
   }
 
   // 必須節の検査
-  for (const required of KNOWN_SECTIONS) {
+  for (const required of knownSections) {
     if (!(required in sections)) {
       throw new Error(`[guidelines/${slug}] missing required section: '## ${required}'`);
     }
@@ -174,50 +194,46 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   const purpose = joinParagraphs(sections["目的"]);
   if (!purpose) throw new Error(`[guidelines/${slug}] '## 目的' must not be empty`);
 
-  const scope = joinParagraphs(sections["適用範囲"]);
-  if (!scope) throw new Error(`[guidelines/${slug}] '## 適用範囲' must not be empty`);
+  const base = { slug, title, summary, status, axes, purpose };
 
-  const core = parseRules(slug, sections["コア"]);
-  if (core.length === 0) {
-    throw new Error(`[guidelines/${slug}] '## コア' must contain at least one rule`);
+  if (legacy) {
+    const scope = joinParagraphs(sections["適用範囲"]);
+    if (!scope) throw new Error(`[guidelines/${slug}] '## 適用範囲' must not be empty`);
+
+    // 旧書式のコアは規則の形をしている。見出しと意図だけを思想として写す。
+    const core = parseRules(slug, sections["コア"], null).map((rule) => ({
+      title: rule.title,
+      body: rule.rationale,
+    }));
+    if (core.length === 0) {
+      throw new Error(`[guidelines/${slug}] '## コア' must contain at least one rule`);
+    }
+
+    const tips = parseRules(slug, sections["Tips"], null);
+    if (tips.length === 0) {
+      throw new Error(`[guidelines/${slug}] '## Tips' must contain at least one rule`);
+    }
+
+    const checklist = parseChecklist(slug, sections["確認項目"]);
+    const sources = parseSources(slug, sections["出典"]);
+    return { ...base, core, tips, scope, checklist, sources };
   }
 
-  const tips = parseRules(slug, sections["Tips"]);
+  const core = parsePrinciples(slug, sections["コア"]);
+  if (core.length === 0) {
+    throw new Error(`[guidelines/${slug}] '## コア' must contain at least one item`);
+  }
+
+  const tips = parseRules(
+    slug,
+    sections["Tips"],
+    core.map((item) => item.title),
+  );
   if (tips.length === 0) {
     throw new Error(`[guidelines/${slug}] '## Tips' must contain at least one rule`);
   }
 
-  const checklist = parseChecklist(slug, sections["確認項目"]);
-  if (checklist.length === 0) {
-    throw new Error(`[guidelines/${slug}] '## 確認項目' must contain at least one item`);
-  }
-
-  const sources = parseSources(slug, sections["出典"]);
-
-  const judgment = parseJudgment(slug, sections["判断"]);
-  // adopted は人間が採否を決めた印。判断欄が埋まっていなければ矛盾している。
-  if (status === "adopted") {
-    for (const [key, value] of Object.entries(judgment)) {
-      if (value === "未定") {
-        throw new Error(`[guidelines/${slug}] status is 'adopted' but 判断 '${key}' is 未定`);
-      }
-    }
-  }
-
-  return {
-    slug,
-    title,
-    summary,
-    status,
-    axes,
-    purpose,
-    scope,
-    core,
-    tips,
-    checklist,
-    sources,
-    judgment,
-  };
+  return { ...base, core, tips, scope: null, checklist: [], sources: [] };
 }
 
 function splitSections(body: string): Record<string, string> {
@@ -261,38 +277,50 @@ function joinParagraphs(text: string): string {
   return paragraphs.join("\n\n");
 }
 
-function parseRules(slug: string, sectionBody: string): Rule[] {
-  const rules: Rule[] = [];
-  const lines = sectionBody.split(/\r?\n/);
-
-  let currentTitle: string | null = null;
-  let currentLines: string[] = [];
-
-  const flush = () => {
-    if (!currentTitle) return;
-    rules.push(parseSingleRule(slug, currentTitle, currentLines));
-    currentTitle = null;
-    currentLines = [];
-  };
-
-  for (const line of lines) {
+function splitItems(sectionBody: string): { title: string; lines: string[] }[] {
+  const items: { title: string; lines: string[] }[] = [];
+  for (const line of sectionBody.split(/\r?\n/)) {
     const h3Match = line.match(/^###\s+(.+)$/);
     if (h3Match) {
-      flush();
-      currentTitle = h3Match[1].trim();
-    } else if (currentTitle) {
-      currentLines.push(line);
+      items.push({ title: h3Match[1].trim(), lines: [] });
+    } else if (items.length > 0) {
+      items[items.length - 1].lines.push(line);
     }
   }
-  flush();
-
-  return rules;
+  return items;
 }
 
-function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
+function parsePrinciples(slug: string, sectionBody: string): Principle[] {
+  return splitItems(sectionBody).map(({ title, lines }) => {
+    // コアに箇条書きが混ざるのは、具体例を持ち込んだ印。Tips へ送らせる。
+    const listLine = lines.find((line) => line.trim().startsWith("- "));
+    if (listLine) {
+      throw new Error(`[guidelines/${slug}] core '${title}' must not have list items`);
+    }
+    const body = joinParagraphs(lines.join("\n"));
+    if (!body) throw new Error(`[guidelines/${slug}] core '${title}' must have a body`);
+    return { title, body };
+  });
+}
+
+/** coreTitles が null のときは旧書式として読み、適用とコアを求めない。 */
+function parseRules(slug: string, sectionBody: string, coreTitles: string[] | null): Rule[] {
+  return splitItems(sectionBody).map(({ title, lines }) =>
+    parseSingleRule(slug, title, lines, coreTitles),
+  );
+}
+
+function parseSingleRule(
+  slug: string,
+  title: string,
+  lines: string[],
+  coreTitles: string[] | null,
+): Rule {
   let rationaleLines: string[] = [];
   let readingRationale = false;
 
+  let applies: Applies | null = null;
+  const cores: string[] = [];
   let good: string | null = null;
   let bad: string | null = null;
   let exception: string | null = null;
@@ -314,6 +342,28 @@ function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
     if (line.startsWith("- ")) {
       readingRationale = false;
       const itemText = line.slice(2).trim();
+
+      const appliesMatch = coreTitles && itemText.match(/^適用:\s*(.*)$/);
+      if (appliesMatch) {
+        const value = appliesMatch[1].trim();
+        if (!(VALID_APPLIES as readonly string[]).includes(value)) {
+          throw new Error(`[guidelines/${slug}] rule '${title}' has unknown 適用: '${value}'`);
+        }
+        applies = value as Applies;
+        continue;
+      }
+
+      const coreMatch = coreTitles && itemText.match(/^コア:\s*(.*)$/);
+      if (coreMatch) {
+        const value = coreMatch[1].trim();
+        if (!coreTitles.includes(value)) {
+          throw new Error(
+            `[guidelines/${slug}] rule '${title}' refers to unknown core: '${value}'`,
+          );
+        }
+        cores.push(value);
+        continue;
+      }
 
       const goodMatch = itemText.match(/^良い例:\s*(.*)$/);
       if (goodMatch) {
@@ -376,9 +426,17 @@ function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
   if (!bad) {
     throw new Error(`[guidelines/${slug}] rule '${title}' missing '- 悪い例'`);
   }
+  if (coreTitles && !applies) {
+    throw new Error(`[guidelines/${slug}] rule '${title}' missing '- 適用'`);
+  }
+  if (coreTitles && cores.length === 0) {
+    throw new Error(`[guidelines/${slug}] rule '${title}' missing '- コア'`);
+  }
 
   return {
     title,
+    applies,
+    cores,
     rationale,
     good,
     bad,
@@ -445,27 +503,6 @@ function parseSources(slug: string, sectionBody: string): SourceItem[] {
     list.push({ text: content, url: null, description: "" });
   }
   return list;
-}
-
-function parseJudgment(slug: string, sectionBody: string): Judgment {
-  let decider = "未定";
-  let date = "未定";
-  let reason = "未定";
-
-  for (const line of sectionBody.split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    const match = trimmed.match(/^-\s+(判断者|判断日|理由):\s*(.*)$/);
-    if (match) {
-      const key = match[1];
-      const val = match[2].trim();
-      if (key === "判断者") decider = val;
-      if (key === "判断日") date = val;
-      if (key === "理由") reason = val;
-    }
-  }
-
-  return { decider, date, reason };
 }
 
 /**
