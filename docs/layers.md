@@ -116,6 +116,7 @@ preview PNG は Experiment の検証資産として `experiments/*/previews/` �
 公開は Cloudflare Pages を使う。
 責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
 ホストの顔は [ホスト ADR](decisions/2026-09-19-catalog-host.md) と `hairline-float` を維持する。
+色面は `playful-chroma` から借り、scheme token へ混ぜる。
 情報設計の原則は `experiments/catalog-redesign/` の Decision を正本にする。
 
 ## AI Agent と Skill

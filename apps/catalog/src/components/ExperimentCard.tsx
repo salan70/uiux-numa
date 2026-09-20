@@ -21,7 +21,7 @@ export function ExperimentCard({ experiment, category, kind }: Props) {
     : experiment.liveVariants;
 
   return (
-    <article className="experiment-card">
+    <article className="experiment-card" data-chroma={category}>
       <h2>
         <Link href={href}>{experiment.title}</Link>
       </h2>
