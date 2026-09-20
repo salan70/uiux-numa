@@ -918,25 +918,49 @@
   color: var(--ed-muted);
 }
 
+/* 山形を重ねるための囲い。select 自身の擬似要素は描けない。 */
+.ed-root--topic .theme__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 既定の矢印は OS の造形なので、画面の他の部品と揃わない。
+   線 2 本を回した山形に置き換える。色を継ぐので配色を切り替えても追従する。 */
+.ed-root--topic .theme__control::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  inline-size: 0.375rem;
+  block-size: 0.375rem;
+  border-inline-end: 1.5px solid var(--ed-muted);
+  border-block-end: 1.5px solid var(--ed-muted);
+  transform: translateY(-2px) rotate(45deg);
+  pointer-events: none;
+}
+
 /* 幅は内容によらず固定する。選び直したときに題字の並びが動かないようにする。
-   和名は最長でも 4 文字なので 7rem に収まり、明暗の「端末に従う」も同じ幅に入る。 */
+   和名は最長でも 4 文字なので 7.5rem に収まり、テーマの「端末に従う」も同じ幅に入る。
+   線はヘアラインにし、面を surface に落として、押せる場所であることを面で示す。 */
 .ed-root--topic .theme__select {
-  inline-size: 7rem;
+  appearance: none;
+  inline-size: 7.5rem;
   min-block-size: var(--ed-tap);
-  padding: 0 0.5rem;
-  border: 1px solid var(--ed-line-strong);
+  padding-inline: 0.75rem 2rem;
+  border: 1px solid var(--ed-line);
   border-radius: var(--ed-radius);
-  background: var(--ed-bg);
+  background: var(--ed-surface);
   color: var(--ed-text);
   font: inherit;
   font-size: 0.875rem;
+  font-weight: 700;
   cursor: pointer;
   transition: border-color var(--ed-duration) ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .ed-root--topic .theme__select:hover {
-    border-color: var(--ed-accent);
+    border-color: var(--ed-line-strong);
   }
 }
 
@@ -968,6 +992,10 @@
 
   .ed-root--topic .theme__select {
     inline-size: 7.25rem;
+  }
+
+  .ed-root--topic .theme__control::after {
+    inset-inline-end: 0.625rem;
   }
 }
 
