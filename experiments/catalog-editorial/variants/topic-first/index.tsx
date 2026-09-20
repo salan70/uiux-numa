@@ -641,8 +641,9 @@ function Feature({
             <span aria-hidden="true">←</span>
             <span className="feature__step-name">{prev.label}</span>
           </button>
+          {/* 桁数を揃える。1 / 10 と 10 / 10 で幅が変わると、両隣のボタンが動く。 */}
           <span className="feature__count">
-            {index + 1} / {shown.length}
+            {String(index + 1).padStart(String(shown.length).length, "0")} / {shown.length}
           </span>
           <button
             type="button"
