@@ -36,3 +36,12 @@ node_modules/
 platforms/web/dist/
 apps/catalog/dist/
 apps/catalog/shots/
+
+# vite plugin が tokens/typography/fonts から配信するため、public 配下の複製は追跡しない
+apps/catalog/public/tokens/
+
+# エディタのローカル設定
+.vscode/
+
+# 作業メモ（リポジトリの記録は docs/ と experiments/ に残す）
+/untitled.md
