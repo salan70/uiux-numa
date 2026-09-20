@@ -18,6 +18,7 @@ description: 方向の異なる UI 案を named variant として実装し、pla
 - `platforms/web`（hash `#<slug>/<id>`、`just web-dev`）
 - 動きが課題なら `skills/crafting-motion/SKILL.md`
 - 動きの点検が必要なら `skills/reviewing-motion/SKILL.md`
+- `docs/principles/`: 独自の原則候補。status が `candidate` のものは未検証の仮説として扱い、`adopted` だけを採用済みとして参照する
 
 パスはリポジトリのルートからのものである。
 未導入の上流 Skill（`emil-design-eng`、`pick-ui-library`、`apple-design` など）は呼び出さない。
@@ -80,6 +81,10 @@ Brief の言語と制約を守る。
 すべての案を切り替えて操作する。
 キーボード、focus、連続操作、中断を少なくとも 1 回ずつ試す。
 動きがある案は `prefers-reduced-motion` も見る。
+状態を切り替えて、周りの要素が動かないことを見る。
+現在地、選択、件数の表示で寸法が変わると、押すたびに次の押し先がずれる。
+候補（未検証）の原則が `docs/principles/state-changes-must-not-move-layout.md` にある。
+hover でしか出ない情報を作らない。focus と、hover のないポインタでも届く道を用意する。
 
 README の Variants 表に、軸、仮説、実装パスを書く。
 却下した案も残す。削除しない。

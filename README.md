@@ -76,5 +76,6 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 - [docs/asset-model.md](docs/asset-model.md): `role` と `maturity` の Asset モデル
 - [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md): Experiment の手順と記録項目
 - [docs/evaluation/policy.md](docs/evaluation/policy.md): 評価の方針
+- [docs/principles/](docs/principles/): 原則候補と、採否の判断手順
 - [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)
 - [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX 沼の Cloudflare Pages 公開手順
