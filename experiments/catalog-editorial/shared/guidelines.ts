@@ -67,6 +67,15 @@ const guidelineFiles = import.meta.glob<string>("../../../docs/guidelines/*.md",
   eager: true,
 });
 
+export const GUIDELINE_ORDER: readonly string[] = [
+  "ux-writing",
+  "information-architecture",
+  "design-four-principles",
+  "accessibility",
+  "states-and-feedback",
+  "color",
+];
+
 export function loadGuidelines(): Guideline[] {
   const list: Guideline[] = [];
 
@@ -77,7 +86,14 @@ export function loadGuidelines(): Guideline[] {
     list.push(parseGuideline(slug, content));
   }
 
-  return list;
+  return list.sort((a, b) => {
+    const ia = GUIDELINE_ORDER.indexOf(a.slug);
+    const ib = GUIDELINE_ORDER.indexOf(b.slug);
+    if (ia !== -1 && ib !== -1) return ia - ib;
+    if (ia !== -1) return -1;
+    if (ib !== -1) return 1;
+    return a.slug.localeCompare(b.slug);
+  });
 }
 
 // 起動・ビルド時に検証を走らせる。不整合があれば即座に throw して build を落とす。
