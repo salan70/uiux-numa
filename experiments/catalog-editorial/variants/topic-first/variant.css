@@ -1390,6 +1390,32 @@
   font-size: 0.875rem;
 }
 
+/* ---- タイポグラフィ ---- */
+
+/* 書体そのものを先に出す。役割の見本だけでは、何で組んであるのかが読めない。
+   出すのは名前と字形だけにする。素性の全文は token の README にある。 */
+.ed-root--topic .typeface {
+  padding-block-end: var(--ed-gap-lg);
+  border-block-end: 1px solid var(--ed-line-strong);
+}
+
+.ed-root--topic .typeface__name {
+  margin: 0;
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+/* 字形は大きく出す。仮名、片仮名、漢字、欧字、数字の字面を 1 度に比べるためである。 */
+.ed-root--topic .typeface__glyphs {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
 /* ---- タイポグラフィの役割 ---- */
 
 .ed-root--topic .roles {
@@ -1398,25 +1424,70 @@
   list-style: none;
 }
 
+/* 見本と仕様を左右に分ける。
+   値を見本の上に 1 行で並べていたときは、どの数が何を指すのかが読めなかった。
+   見本の側を広く取るのは、役割の画面で最も見るものが実寸の文だからである。 */
+/* 見本の測り（30em）に合わせて左の列を止め、仕様をその隣に置く。
+   左を 1fr にすると、見本と仕様のあいだに読む物のない帯ができる。 */
 .ed-root--topic .role {
-  padding-block: var(--ed-gap-lg);
+  display: grid;
+  grid-template-columns: minmax(0, 34em) 15rem;
+  justify-content: start;
+  gap: var(--ed-gap-lg) var(--ed-section);
+  padding-block: 1.5rem;
   border-block-end: 1px solid var(--ed-line);
 }
 
-.ed-root--topic .role__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+.ed-root--topic .role__main {
+  min-inline-size: 0;
+}
+
+.ed-root--topic .role__name {
   margin: 0 0 0.5rem;
   font-size: var(--ed-label);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--ed-muted);
+  color: var(--ed-accent);
+}
+
+/* 仕様は定義の組で出す。項目名を先に置き、値の桁を揃える。 */
+.ed-root--topic .role__spec {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
 }
 
-.ed-root--topic .role__name {
-  color: var(--ed-accent);
+.ed-root--topic .role__spec-row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.25rem;
+  border-block-end: 1px solid var(--ed-line);
+}
+
+.ed-root--topic .role__spec-row:last-child {
+  border-block-end: none;
+}
+
+.ed-root--topic .role__spec dt {
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+  line-height: var(--font-line-height-ui);
+}
+
+.ed-root--topic .role__spec dd {
+  margin: 0;
+  line-height: var(--font-line-height-ui);
+}
+
+@media (width <= 60rem) {
+  .ed-root--topic .role {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* 行の長さを本文の測りに揃える。
