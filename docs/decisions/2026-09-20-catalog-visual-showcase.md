@@ -30,7 +30,11 @@ Catalog は公開 Design System サイト、または採用成果だけの見本
 - 公開名「UI/UX 沼」、ホスト `apps/catalog/`、Cloudflare Pages、production URL は維持する。
 - ホストが固有のブランド色を持たない判断は [ホスト ADR](2026-09-19-catalog-host.md) を維持する。
 - token の取り込み規則と余白 token もホスト ADR を維持する。
-- Catalog 全体の見た目は、公開面を止めて 3 案にしない。比較は `experiments/catalog-redesign/` で行う。公開 `apps/catalog/` の改修は人間が方向を決めてから行う。
+- Catalog 全体の見た目は、公開面を止めて 3 案にしない。比較は `experiments/catalog-redesign/` で行った。
+- 公開殻は [soft-component-kit](2026-09-19-soft-component-kit.md) の `hairline-float` とする。既存 Catalog chrome を続ける。
+- 情報設計は `quiet-hierarchy` の役割だけを借りる。静かな殻、1 度に 1 つの主役、説明より specimen を先にする。
+- `playful-chroma` の人格と遊び copy は公開面に入れない。
+- 3 つの catalog-redesign 案を公開サイトの正にも同居にもしない。判断の正本は Experiment README の Decision である。
 
 ## 理由
 
@@ -44,12 +48,15 @@ metadata を出すと、コピーしてよいものと観察だけのものが�
 - 公開 Design System サイトへ戻す: ドキュメントが主役になり、R&D の成果物探索とずれる。
 - 採用成果だけを載せる見本帳のままにする: `reference` と `experimental` が見えない。
 - Catalog を Asset の正本にする: Git 上の記録と表示が分岐する。
-- 公開 `apps/catalog/` を 3 スキンで同時運用する: 比較軸がサイト単位になり、公開面が止まる。
+- 公開 `apps/catalog/` を 3 スキンで同時運用する: 比較軸がサイト単位になり、公開面が止まる。人間判断でも却下した。
+- `precision-keyboard` を公開殻にする: 暗い精密さが成果物より先に来る。
+- `quiet-hierarchy` の表層を写す: 造形は `hairline-float` が正であり、借りるのは階層の役割だけである。
+- `playful-chroma` の色と人間味 copy を入れる: 標本と人格が並走する。
 - Astro へ移行する: 現行の live variant と収集処理を捨てる理由がない。
 
 ## 影響
 
 README と `docs/layers.md` と公開手順の Catalog 定義を本 ADR へ向ける。
-本番 Catalog の情報設計は、`catalog-redesign` の人間判断のあとで更新する。
-それまでは現行の土台 / 部品ナビを維持する。
-ドメインが土台 / 部品へ落ちない Experiment は、ナビに出さず metadata だけ収集してよい。
+本番 Catalog の情報設計は、本 ADR と `experiments/catalog-redesign/` の Decision に従う。
+ナビは配色、文字、アイコン、図、UI、動きなど、見て辿る種別にする。
+`catalog-redesign` 自体は公開ナビに出さない。比較記録として metadata だけ集める。
