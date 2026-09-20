@@ -42,7 +42,7 @@ const TOPICS: Topic[] = [
   {
     id: "typography",
     label: "タイポグラフィ",
-    lead: "日本語 UI の書体と文字の役割。",
+    lead: "書体と文字の役割。",
     domains: ["typography"],
   },
   { id: "tokens", label: "トークン", lead: "正本の値そのもの。", domains: [] },
@@ -845,10 +845,18 @@ function TypographyTopic({ nav }: { nav: ScreenApi }) {
         ))}
       </ol>
       {work && (
-        <div className="work">
-          <WorkHead work={work} nav={nav} />
-          <LiveBlock work={work} />
-        </div>
+        <p className="topic-source">
+          <span className="topic-source__label">正本</span>
+          <a
+            href={nav.hrefFor({ screen: "detail", item: work.slug })}
+            onClick={(event) => {
+              event.preventDefault();
+              nav.go({ screen: "detail", item: work.slug, variant: null });
+            }}
+          >
+            {work.title}
+          </a>
+        </p>
       )}
     </div>
   );
@@ -947,6 +955,30 @@ function tokenText(value: Token["value"]): string {
  * token を実際に当てた見本を描く。値だけでは字面と大きさが判断できないため。
  * 文字に関係しない token（余白）は、文字ではなく長さの帯で見せる。
  */
+/**
+ * 役割の token に入れる文。
+ * その役割で実際に書く文を入れる。字形の羅列（あAaＡ 日本語 UI）では、
+ * 役割ごとの文の長さと行数が出ないため、組んだときの見え方が判断できない。
+ * body だけ複数行にしてあるのは、行間の値が 1 行では確かめられないからである。
+ * 文面は正本の $description に書いた用途から取り、説明と食い違わないようにした。
+ */
+const ROLE_SAMPLES: Record<string, string> = {
+  "typography.title": "文字の役割を決める",
+  "typography.heading": "本文と見出しの組み方",
+  "typography.body":
+    "読む人が迷わないように、行の長さと行間を先に決める。日本語は字面が詰まるので、欧文より行間を広く取る。",
+  "typography.ui": "更新日 2026.09.19 ／ 全 6 役割",
+  "typography.control": "この成果物を開く",
+  "typography.caption": "最終更新 2026.09.19",
+};
+
+/**
+ * 素の値に入れる文字。
+ * font.size や font.weight は役割を持たないので、意味のある文は当てられない。
+ * 仮名・片仮名・漢字・欧字・数字を 1 つずつ並べ、字形と太さの差だけを見る並びにする。
+ */
+const GLYPHS = "あア亜 Aa 0123";
+
 function TokenSample({ token }: { token: Token }) {
   const value = token.value;
 
@@ -962,7 +994,7 @@ function TokenSample({ token }: { token: Token }) {
           lineHeight: value["lineHeight"],
         }}
       >
-        あAaＡ 日本語 UI
+        {ROLE_SAMPLES[token.path] ?? GLYPHS}
       </span>
     );
   }
@@ -975,21 +1007,21 @@ function TokenSample({ token }: { token: Token }) {
   if (token.path.startsWith("font.size.")) {
     return (
       <span className="token-table__sample" style={{ fontSize: text }}>
-        あAaＡ 日本語
+        {GLYPHS}
       </span>
     );
   }
   if (token.path.startsWith("font.weight.")) {
     return (
       <span className="token-table__sample" style={{ fontWeight: Number(text) }}>
-        あAaＡ 日本語 UI
+        {GLYPHS}
       </span>
     );
   }
   if (token.path.startsWith("font.family.")) {
     return (
       <span className="token-table__sample" style={{ fontFamily: text }}>
-        あAaＡ 日本語 UI
+        {GLYPHS}
       </span>
     );
   }

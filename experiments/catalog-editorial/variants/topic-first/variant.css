@@ -1375,8 +1375,33 @@
   color: var(--ed-accent);
 }
 
+/* 行の長さを本文の測りに揃える。
+   全幅で組むと body の見本が 1 行に収まり、行間の値が確かめられない。 */
 .ed-root--topic .role__sample {
   margin: 0;
+  max-inline-size: 30em;
+}
+
+/* 正本へ辿る 1 行。トピックの中身のあとに置く。
+   成果物の live 標本は、役割の見本と同じものを 2 度見せることになるので出さない。 */
+.ed-root--topic .topic-source {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: var(--ed-gap-lg) 0 0;
+  font-size: 0.875rem;
+}
+
+.ed-root--topic .topic-source__label {
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .topic-source a {
+  color: var(--ed-accent);
+  border-block-end: 1px solid currentcolor;
 }
 
 .ed-root--topic .role__desc {
