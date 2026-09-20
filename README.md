@@ -47,6 +47,7 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 Catalog は成果物の visual showcase である。
 仕様書や Asset の正本にはしない。
 公開殻は `hairline-float` である。中身は静かな階層で、標本を先に置く。
+色面は `playful-chroma` から借り、配色切替の token に混ぜる。
 配色、文字、アイコン、図、UI、動きを見て辿る。
 `role` と `maturity` は正本 metadata を二次情報として出す。
 配色はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。

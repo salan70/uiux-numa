@@ -324,6 +324,51 @@ select {
   --catalog-duration: 140ms;
   --catalog-ease: ease-out;
   --catalog-shadow-float: 0 0.75rem 1.75rem color-mix(in srgb, var(--color-text) 16%, transparent);
+  --chroma-warm: #ffd6c8;
+  --chroma-cool: #cde7ff;
+  --chroma-green: #3d7a5a;
+  --chroma-blue: #3b5bdb;
+  --chroma-coral: #c44b32;
+  --chroma-paper: #fff6ea;
+  --chroma-wash: 32%;
+  --chroma-field: 14%;
+  --chroma-card: 22%;
+  --chroma-paper-mix: 20%;
+  --chroma-ink: var(--chroma-blue);
+  --chroma-wash-color: var(--chroma-cool);
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      color-mix(in srgb, var(--chroma-warm) var(--chroma-wash), transparent) 0%,
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      color-mix(in srgb, var(--chroma-cool) var(--chroma-wash), transparent) 0%,
+      transparent 40%
+    ),
+    color-mix(in srgb, var(--chroma-paper) var(--chroma-paper-mix), var(--color-bg));
+}
+
+:root[data-theme="dark"] .app-shell {
+  --chroma-wash: 16%;
+  --chroma-field: 10%;
+  --chroma-card: 12%;
+  --chroma-paper-mix: 0%;
+}
+
+:root[data-scheme="aizome"] .app-shell,
+:root[data-scheme="cool-blue"] .app-shell {
+  --chroma-wash: 22%;
+  --chroma-field: 8%;
+  --chroma-paper-mix: 10%;
+}
+
+:root[data-theme="dark"][data-scheme="aizome"] .app-shell,
+:root[data-theme="dark"][data-scheme="cool-blue"] .app-shell {
+  --chroma-wash: 14%;
+  --chroma-field: 8%;
+  --chroma-paper-mix: 0%;
 }
 
 .app-header {
@@ -337,7 +382,7 @@ select {
   min-height: 3.5rem;
   padding: 0.65rem var(--space-page-inline);
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--chroma-cool) var(--chroma-field), var(--color-surface));
 }
 
 .app-wordmark {
@@ -371,7 +416,7 @@ select {
   overflow: auto;
   scrollbar-gutter: stable;
   border-right: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--chroma-cool) var(--chroma-field), var(--color-surface));
 }
 
 .sidebar {
@@ -412,6 +457,7 @@ select {
 .sidebar-nav a[aria-current="page"] {
   color: var(--color-text);
   font-weight: var(--typography-control-font-weight);
+  background: color-mix(in srgb, var(--chroma-warm) 18%, var(--color-bg-subtle));
 }
 
 .select-field,
@@ -713,7 +759,7 @@ select {
   height: 100%;
   overflow: auto;
   border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--chroma-cool) var(--chroma-field), var(--color-surface));
   color: var(--color-text);
   box-shadow: var(--catalog-shadow-float);
 }
@@ -1166,6 +1212,10 @@ figcaption {
 
 .showcase-hero {
   margin-bottom: var(--space-section);
+  padding: clamp(1rem, 2.4vw, 1.75rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--catalog-radius-surface);
+  background: var(--color-surface);
 }
 
 .showcase-hero .live-preview {
@@ -1188,6 +1238,50 @@ figcaption {
 .category-card,
 .experiment-card {
   min-width: 0;
+  padding: clamp(1rem, 2.4vw, 1.75rem);
+  border: 1px solid color-mix(in srgb, var(--chroma-ink) 24%, var(--color-border));
+  border-radius: var(--catalog-radius-surface);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--chroma-wash-color) var(--chroma-card), var(--color-surface)) 0%,
+      var(--color-surface) 58%
+    );
+}
+
+.category-card[data-chroma="colors"],
+.experiment-card[data-chroma="colors"] {
+  --chroma-ink: var(--chroma-coral);
+  --chroma-wash-color: var(--chroma-warm);
+}
+
+.category-card[data-chroma="typography"],
+.experiment-card[data-chroma="typography"] {
+  --chroma-ink: var(--chroma-blue);
+  --chroma-wash-color: var(--chroma-cool);
+}
+
+.category-card[data-chroma="icons"],
+.experiment-card[data-chroma="icons"],
+.category-card[data-chroma="motion"],
+.experiment-card[data-chroma="motion"] {
+  --chroma-ink: var(--chroma-green);
+  --chroma-wash-color: var(--chroma-green);
+  --chroma-card: 12%;
+}
+
+.category-card[data-chroma="graphics"],
+.experiment-card[data-chroma="graphics"] {
+  --chroma-ink: var(--chroma-coral);
+  --chroma-wash-color: var(--chroma-coral);
+  --chroma-card: 12%;
+}
+
+.category-card[data-chroma="components"],
+.experiment-card[data-chroma="components"] {
+  --chroma-ink: var(--chroma-blue);
+  --chroma-wash-color: var(--chroma-blue);
+  --chroma-card: 12%;
 }
 
 .category-card h2,

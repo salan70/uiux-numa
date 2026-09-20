@@ -51,7 +51,7 @@ function CategoryCard({ category }: { category: CatalogCategory }) {
   const href = categoryHref(category);
   const label = categoryLabel(category);
   return (
-    <article className="category-card">
+    <article className="category-card" data-chroma={category}>
       <h2>
         <Link href={href}>{label}</Link>
       </h2>

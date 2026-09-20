@@ -73,5 +73,6 @@
 
 2026-09-20。利用者の決定である。
 公開殻は `hairline-float`。役割は `quiet-hierarchy` の静かな階層と標本優先。
-3 variant は公開サイトの正にしない。`playful-chroma` の人格と遊び copy は使わない。
+色面は `playful-chroma` から借り、scheme に混ぜる。人格と遊び copy は使わない。
+3 variant は公開サイトの正にしない。
 詳細は [README の Decision](README.md) にある。
