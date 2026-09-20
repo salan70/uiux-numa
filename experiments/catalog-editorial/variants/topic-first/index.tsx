@@ -206,7 +206,8 @@ export default function TopicFirst() {
 
 /**
  * 配色と明暗を選ぶ。題字に置くのは、どの画面からでも切り替えられるようにするためである。
- * 選択の形を select にしたのは、14 配色 × 3 状態をボタンで並べると題字が本文より高くなるため。
+ * 選択の形を select にしたのは、10 配色 × 3 状態をボタンで並べると題字が本文より高くなるため。
+ * 既定の矢印は造形が揃わないので消し、線で引いた山形を重ねる。
  * 幅は内容によらず固定し、選び直しても周りが動かないようにする。
  */
 function ThemeControl({ theme }: { theme: Theme }) {
@@ -214,31 +215,35 @@ function ThemeControl({ theme }: { theme: Theme }) {
     <div className="theme">
       <label className="theme__field">
         <span className="theme__label">配色</span>
-        <select
-          className="theme__select"
-          value={theme.scheme.id}
-          onChange={(event) => theme.setScheme(event.target.value)}
-        >
-          {theme.schemeOptions.map((scheme) => (
-            <option key={scheme.id} value={scheme.id}>
-              {scheme.label}
-            </option>
-          ))}
-        </select>
+        <span className="theme__control">
+          <select
+            className="theme__select"
+            value={theme.scheme.id}
+            onChange={(event) => theme.setScheme(event.target.value)}
+          >
+            {theme.schemeOptions.map((scheme) => (
+              <option key={scheme.id} value={scheme.id}>
+                {scheme.label}
+              </option>
+            ))}
+          </select>
+        </span>
       </label>
       <label className="theme__field">
-        <span className="theme__label">明暗</span>
-        <select
-          className="theme__select"
-          value={theme.appearance}
-          onChange={(event) => theme.setAppearance(event.target.value as Appearance)}
-        >
-          {APPEARANCES.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.label}
-            </option>
-          ))}
-        </select>
+        <span className="theme__label">テーマ</span>
+        <span className="theme__control">
+          <select
+            className="theme__select"
+            value={theme.appearance}
+            onChange={(event) => theme.setAppearance(event.target.value as Appearance)}
+          >
+            {APPEARANCES.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </span>
       </label>
     </div>
   );
