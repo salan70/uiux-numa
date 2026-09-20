@@ -1474,10 +1474,10 @@
   gap: 0.75rem;
 }
 
+/* 本数は配色ごとに変わるので、列数を固定しない。
+   固定すると、帯が少ない配色で右端に空きが出る。 */
 .ed-root--topic .feature__bands {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1488,6 +1488,7 @@
 }
 
 .ed-root--topic .feature__band {
+  flex: 1 1 0;
   min-inline-size: 0;
 }
 
@@ -1891,7 +1892,7 @@
   /* 狭い幅では hero の帯を縦積みにする。
      7 列のままだと 1 列が 50px を切り、hex が途中で折り返して読めない。 */
   .ed-root--topic .feature__bands {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     block-size: auto;
   }
 
