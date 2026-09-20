@@ -14,6 +14,11 @@ export function parseCssColor(value: string): Rgb {
   throw new Error(`未対応の色表記: ${value}`);
 }
 
+/** 表示用の hex。oklch も 8bit に丸めた sRGB へ寄せる。 */
+export function hexFromCssColor(value: string): string {
+  return rgbToHex(parseCssColor(value));
+}
+
 export function relativeLuminance(rgb: Rgb): number {
   const channel = (value: number) => {
     const c = value / 255;
@@ -34,6 +39,14 @@ export function formatRatio(ratio: number): string {
 
 export function passes(ratio: number, minimum: 4.5 | 3): boolean {
   return ratio + Number.EPSILON >= minimum;
+}
+
+function rgbToHex(rgb: Rgb): string {
+  const channel = (value: number) =>
+    Math.round(Math.min(255, Math.max(0, value)))
+      .toString(16)
+      .padStart(2, "0");
+  return `#${channel(rgb.r)}${channel(rgb.g)}${channel(rgb.b)}`;
 }
 
 function parseHex(raw: string): Rgb {

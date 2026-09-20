@@ -20,6 +20,7 @@ import {
 import {
   contrastRatio,
   formatRatio,
+  hexFromCssColor,
   parseCssColor,
   passes,
   relativeLuminance,
@@ -591,25 +592,22 @@ function defaultVariant(work: Work): string {
 /* ---- 配色。coolors のパレットカードを参考にする ---- */
 
 /**
- * カードの帯に出す役割と、その並び。最大 7 本にする（利用者の判断、2026-09-20）。
- * 左の 4 本は accent 系で、主役の色とその変化を並べる。
- * 残る 3 本は文字、線、地から 1 つずつ取り、明度の幅を最大にする。
- * text-muted と bg-subtle を外したのは、text と bg に近い明度の帯が隣に並ぶためである。
- * 意味色（success / warning / danger）は配色をまたいでほぼ共通なので、出しても差にならない。
+ * カードの帯に出す役割と、その並び。配色ごとに値が変わる役割だけを出す（利用者の判断、2026-09-20）。
+ * 文字、線、地、意味色は 14 案すべてで同じ値なので、並べてもカードの差にならない。
+ * 差になるのは accent 系と focus、on-accent の 6 役割だけで、配色の性格もここに出る。
  * 同じ値の役割は 1 本にまとめ、役割名をスラッシュで並べる。
- * aizome のように accent と accent-strong が同じ値の配色があり、分けると同じ帯が 2 本並ぶ。
- * まとめれば色の面は重複せず、その配色が 1 色を 2 役に当てていることも読める。
- * まとめた結果、本数は 7 本以下で配色ごとに変わる。
- * 外した役割はポップアップで見せる。
+ * aizome のように accent と accent-strong と focus が同じ値の配色があり、分けると同じ帯が 3 本並ぶ。
+ * まとめれば色の面は重複せず、その配色が 1 色を 3 役に当てていることも読める。
+ * まとめた結果、本数は 6 本以下で配色ごとに変わる。
+ * 共通の役割も含めた全 19 役割はポップアップで見せる。
  */
 const CARD_ROLES = [
   "accent",
   "accent-hover",
   "accent-strong",
   "accent-subtle",
-  "text",
-  "border-strong",
-  "bg",
+  "focus",
+  "on-accent",
 ];
 
 /** 展開したときに見せる全役割の並び。役割の意味で束ねる。 */
@@ -635,6 +633,125 @@ const CONTRAST_PAIRS: Array<{ fg: string; bg: string; minimum: 4.5 | 3 }> = [
   { fg: "border-strong", bg: "bg", minimum: 3 },
   { fg: "focus", bg: "bg", minimum: 3 },
 ];
+
+/** 表示するカラーコードは # に統一する。oklch のまま出すと、配色ごとに記法が混ざって読み比べられない。 */
+function hexOf(value: string): string {
+  try {
+    return hexFromCssColor(value);
+  } catch {
+    return value;
+  }
+}
+
+/**
+ * 和名コメントが無い色に当てる名。
+ * 役割名をそのまま出すと、帯が指しているものが色ではなく役割になる。
+ * 語彙は増やさず、無彩は白から黒までの 8 段、有彩は色相の基本名に濃淡を 1 つ付けるだけにする。
+ */
+const NEUTRAL_NAMES: Array<{ min: number; name: string }> = [
+  { min: 0.97, name: "白" },
+  { min: 0.925, name: "白練" },
+  { min: 0.8, name: "白鼠" },
+  { min: 0.63, name: "銀鼠" },
+  { min: 0.46, name: "鼠" },
+  { min: 0.29, name: "灰" },
+  { min: 0.13, name: "墨" },
+  { min: 0, name: "黒" },
+];
+
+const HUE_NAMES: Array<{ max: number; name: string }> = [
+  { max: 14, name: "赤" },
+  { max: 45, name: "橙" },
+  { max: 70, name: "黄" },
+  { max: 95, name: "黄緑" },
+  { max: 155, name: "緑" },
+  { max: 195, name: "青緑" },
+  { max: 235, name: "青" },
+  { max: 258, name: "藍" },
+  { max: 310, name: "紫" },
+  { max: 345, name: "桃" },
+  { max: 360, name: "赤" },
+];
+
+function derivedName(value: string): string {
+  let hue = 0;
+  let saturation = 0;
+  let lightness = 0;
+  try {
+    [hue, saturation, lightness] = toHsl(parseCssColor(value));
+  } catch {
+    return value;
+  }
+  if (saturation < 0.08) {
+    return NEUTRAL_NAMES.find((step) => lightness >= step.min)?.name ?? "黒";
+  }
+  const name = HUE_NAMES.find((step) => hue < step.max)?.name ?? "赤";
+  if (lightness >= 0.8) return `淡${name}`;
+  if (lightness <= 0.22) return `深${name}`;
+  return name;
+}
+
+/** 色相、彩度、明度。色名を決めるためだけに使う。 */
+function toHsl({ r, g, b }: { r: number; g: number; b: number }): [number, number, number] {
+  const red = r / 255;
+  const green = g / 255;
+  const blue = b / 255;
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const lightness = (max + min) / 2;
+  const span = max - min;
+  if (span === 0) return [0, 0, lightness];
+  const saturation = span / (1 - Math.abs(2 * lightness - 1));
+  const hue =
+    max === red
+      ? 60 * (((green - blue) / span) % 6)
+      : max === green
+        ? 60 * ((blue - red) / span + 2)
+        : 60 * ((red - green) / span + 4);
+  return [(hue + 360) % 360, saturation, lightness];
+}
+
+/** 帯に出す色の名。正本の行末コメントがあればそれを使い、無ければ値から決める。 */
+function colorLabel(color: SchemeColor): string {
+  return color.name === color.role ? derivedName(color.value) : color.name;
+}
+
+/**
+ * 配色の名に当てる文字色。
+ * その配色の色を使い、地（bg）に対して読めない値だけ順に次の候補へ落とす。
+ * 新しい色は作らない。候補がどれも足りなければ、比が最大の候補を使う。
+ */
+function schemeInk(scheme: Scheme, mode: "light" | "dark", roles: string[], minimum: 4.5 | 3) {
+  const paper = colorOf(scheme, mode, "bg")?.value ?? (mode === "dark" ? "#000000" : "#ffffff");
+  let best = "";
+  let bestRatio = -1;
+  for (const role of roles) {
+    const value = colorOf(scheme, mode, role)?.value;
+    if (!value) continue;
+    let ratio = 0;
+    try {
+      ratio = contrastRatio(value, paper);
+    } catch {
+      continue;
+    }
+    if (passes(ratio, minimum)) return value;
+    if (ratio > bestRatio) {
+      best = value;
+      bestRatio = ratio;
+    }
+  }
+  return best || undefined;
+}
+
+/** 名は主色。20px の太字なので 3:1 を満たせばよい。 */
+function labelInk(scheme: Scheme, mode: "light" | "dark"): string | undefined {
+  return schemeInk(scheme, mode, ["accent", "accent-strong", "accent-hover", "text"], 3);
+}
+
+/** id は副となる色。12px なので 4.5:1 を求める。 */
+function codeInk(scheme: Scheme, mode: "light" | "dark"): string | undefined {
+  return schemeInk(scheme, mode, ["accent-hover", "accent-strong", "accent", "text-muted"], 4.5);
+}
 
 /** 帯の上に置く文字の色。新しい色を作らず、その帯の明るさで黒か白を選ぶ。 */
 function inkOn(value: string): string {
@@ -663,7 +780,7 @@ function mergeRoles(scheme: Scheme, mode: "light" | "dark", roles: string[]): Ba
       found.roles.push(role);
       continue;
     }
-    const band: Band = { value: color.value, name: color.name, roles: [role] };
+    const band: Band = { value: color.value, name: colorLabel(color), roles: [role] };
     byValue.set(color.value, band);
     out.push(band);
   }
@@ -751,10 +868,10 @@ function ColorsTopic({ mode }: { mode: "light" | "dark" }) {
                       type="button"
                       className="band__hit"
                       style={{ color: inkOn(band.value) }}
-                      onClick={() => copy(band.value)}
+                      onClick={() => copy(hexOf(band.value))}
                     >
                       <span className="band__info">
-                        <span className="band__hex">{band.value}</span>
+                        <span className="band__hex">{hexOf(band.value)}</span>
                         <span className="band__role">{band.roles.join(" / ")}</span>
                       </span>
                     </button>
@@ -763,8 +880,10 @@ function ColorsTopic({ mode }: { mode: "light" | "dark" }) {
               </ul>
               <div className="palette__head">
                 <p className="palette__name">
-                  <span className="palette__label">{scheme.label}</span>
-                  <code>{scheme.id}</code>
+                  <span className="palette__label" style={{ color: labelInk(scheme, mode) }}>
+                    {scheme.label}
+                  </span>
+                  <code style={{ color: codeInk(scheme, mode) }}>{scheme.id}</code>
                 </p>
                 <button
                   type="button"
@@ -830,9 +949,9 @@ function Feature({
                   type="button"
                   className="feature__hit"
                   style={{ color: inkOn(band.value) }}
-                  onClick={() => copy(band.value)}
+                  onClick={() => copy(hexOf(band.value))}
                 >
-                  <span className="feature__hex">{band.value}</span>
+                  <span className="feature__hex">{hexOf(band.value)}</span>
                   <span className="feature__role">{band.roles.join(" / ")}</span>
                   <span className="feature__jp">{band.name}</span>
                 </button>
@@ -843,8 +962,10 @@ function Feature({
       </div>
       <div className="feature__head">
         <p className="feature__name" id="feature-name">
-          <span className="feature__label">{scheme.label}</span>
-          <code>{scheme.id}</code>
+          <span className="feature__label" style={{ color: labelInk(scheme, mode) }}>
+            {scheme.label}
+          </span>
+          <code style={{ color: codeInk(scheme, mode) }}>{scheme.id}</code>
         </p>
         {/* 送り先が何かを、方向ではなく配色の名前で示す。 */}
         <p className="feature__nav">
@@ -916,8 +1037,10 @@ function SchemeDialog({
         <div className="sheet-dialog__body">
           <div className="sheet-dialog__head">
             <p className="sheet-dialog__name" id="dialog-name">
-              <span className="sheet-dialog__label">{scheme.label}</span>
-              <code>{scheme.id}</code>
+              <span className="sheet-dialog__label" style={{ color: labelInk(scheme, mode) }}>
+                {scheme.label}
+              </span>
+              <code style={{ color: codeInk(scheme, mode) }}>{scheme.id}</code>
             </p>
             <button
               type="button"
@@ -958,12 +1081,12 @@ function SchemeDetail({
                   <button
                     type="button"
                     className="role-item__hit"
-                    onClick={() => copy(color.value)}
+                    onClick={() => copy(hexOf(color.value))}
                   >
                     <span className="role-item__chip" style={{ background: color.value }} />
                     <span className="role-item__role">{role}</span>
-                    <span className="role-item__jp">{color.name}</span>
-                    <span className="role-item__hex">{color.value}</span>
+                    <span className="role-item__jp">{colorLabel(color)}</span>
+                    <span className="role-item__hex">{hexOf(color.value)}</span>
                   </button>
                 </li>,
               ];
