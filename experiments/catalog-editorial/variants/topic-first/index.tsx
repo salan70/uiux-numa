@@ -7,7 +7,13 @@ import "./variant.css";
 import { Sheet, longestTitle, shortestTitle, type SheetSpec } from "../../shared/Sheet";
 import { useEffect, useRef, useState } from "react";
 import { runnerPath, svgsFor, works, worksByUpdated, type Work } from "../../shared/data";
-import { schemes, type Scheme, type SchemeColor } from "../../shared/schemes";
+import {
+  schemeById,
+  schemeVars,
+  schemes,
+  type Scheme,
+  type SchemeColor,
+} from "../../shared/schemes";
 import {
   contrastRatio,
   formatRatio,
@@ -97,17 +103,97 @@ function countOf(topic: Topic): string {
   return `${worksIn(topic.id).length} 件`;
 }
 
+/* ---- 画面そのものの配色。カタログは正本の配色を着る ---- */
+
+/**
+ * 既定の配色。
+ * 意図: カタログが固有の色を持たず、正本の配色の 1 つをそのまま着ている状態から始める。
+ * 根拠: これまでの --ed-* の値（白練・白鼠・鉛色）は sumi から取ったものなので、
+ *       sumi を既定にすると造形を変えずに「配色を着ている」状態へ移せる。
+ * 却下: 固有の紅を既定に残す。カタログだけが正本にない色を持つことになり、
+ *       配色を切り替えても強調の色だけが変わらない画面になる。
+ */
+const DEFAULT_SCHEME = "sumi";
+
+type Appearance = "auto" | "light" | "dark";
+
+type Theme = {
+  scheme: Scheme;
+  /** 利用者が選んだ値。auto は端末の設定に従う。 */
+  appearance: Appearance;
+  /** 実際に描く明暗。auto を解決したあとの値。 */
+  mode: "light" | "dark";
+  schemeOptions: Scheme[];
+  setScheme: (id: string) => void;
+  setAppearance: (value: Appearance) => void;
+};
+
+const APPEARANCES: Array<{ id: Appearance; label: string }> = [
+  { id: "auto", label: "端末に従う" },
+  { id: "light", label: "ライト" },
+  { id: "dark", label: "ダーク" },
+];
+
+/** 端末の明暗設定。auto のときだけ使う。 */
+function useSystemDark(): boolean {
+  const [dark, setDark] = useState(
+    () => typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+  useEffect(() => {
+    if (typeof matchMedia !== "function") return;
+    const query = matchMedia("(prefers-color-scheme: dark)");
+    const update = () => setDark(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return dark;
+}
+
+/**
+ * 画面の配色を 1 か所で持つ。
+ * 配色トピックの標本だけでなく、カタログ自身の面にも同じ値を当てる。
+ * 選べる配色は採用したものに限る。却下した配色でカタログを組んでも判断の材料にならない。
+ */
+function useTheme(): Theme {
+  const [id, setScheme] = useState(DEFAULT_SCHEME);
+  const [appearance, setAppearance] = useState<Appearance>("auto");
+  const systemDark = useSystemDark();
+  const schemeOptions = adoptedSchemes();
+  const scheme = schemeById(id) ?? schemeOptions[0] ?? schemes[0];
+  const mode = appearance === "auto" ? (systemDark ? "dark" : "light") : appearance;
+  return { scheme, appearance, mode, schemeOptions, setScheme, setAppearance };
+}
+
+/**
+ * 却下した配色は出さない（利用者の判断、2026-09-20）。
+ * 使える配色だけを並べたほうが、選ぶ面として迷いがない。
+ * 却下した 4 案は experiments/color-schemes の記録に残っている。
+ */
+function adoptedSchemes(): Scheme[] {
+  const adopted = works.find((item) => item.slug === "color-schemes")?.adopted ?? [];
+  return adopted.length > 0 ? schemes.filter((item) => adopted.includes(item.id)) : schemes;
+}
+
 export default function TopicFirst() {
   const nav = useScreen("top");
+  const theme = useTheme();
   return (
-    <div className="ed-root ed-root--topic">
+    <div
+      className="ed-root ed-root--topic"
+      style={
+        {
+          ...schemeVars(theme.scheme, theme.mode),
+          colorScheme: theme.mode,
+        } as React.CSSProperties
+      }
+    >
       <a className="skip" href="#ed-main">
         本文へスキップ
       </a>
-      <Masthead nav={nav} />
+      <Masthead nav={nav} theme={theme} />
       <main className="ed-main" id="ed-main">
         {nav.screen === "top" && <Top nav={nav} />}
-        {nav.screen === "list" && <TopicScreen nav={nav} />}
+        {nav.screen === "list" && <TopicScreen nav={nav} theme={theme} />}
         {nav.screen === "detail" && <Detail nav={nav} />}
         {nav.screen === "sheet" && <Sheet spec={SPEC} />}
       </main>
@@ -115,7 +201,47 @@ export default function TopicFirst() {
   );
 }
 
-function Masthead({ nav }: { nav: ScreenApi }) {
+/**
+ * 配色と明暗を選ぶ。題字に置くのは、どの画面からでも切り替えられるようにするためである。
+ * 選択の形を select にしたのは、14 配色 × 3 状態をボタンで並べると題字が本文より高くなるため。
+ * 幅は内容によらず固定し、選び直しても周りが動かないようにする。
+ */
+function ThemeControl({ theme }: { theme: Theme }) {
+  return (
+    <div className="theme">
+      <label className="theme__field">
+        <span className="theme__label">配色</span>
+        <select
+          className="theme__select"
+          value={theme.scheme.id}
+          onChange={(event) => theme.setScheme(event.target.value)}
+        >
+          {theme.schemeOptions.map((scheme) => (
+            <option key={scheme.id} value={scheme.id}>
+              {scheme.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="theme__field">
+        <span className="theme__label">明暗</span>
+        <select
+          className="theme__select"
+          value={theme.appearance}
+          onChange={(event) => theme.setAppearance(event.target.value as Appearance)}
+        >
+          {APPEARANCES.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
+}
+
+function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
   const current = nav.screen === "list" ? nav.filter : null;
   return (
     <header className="masthead">
@@ -155,6 +281,7 @@ function Masthead({ nav }: { nav: ScreenApi }) {
       >
         見本
       </a>
+      <ThemeControl theme={theme} />
     </header>
   );
 }
@@ -264,7 +391,7 @@ function Top({ nav }: { nav: ScreenApi }) {
   );
 }
 
-function TopicScreen({ nav }: { nav: ScreenApi }) {
+function TopicScreen({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
   const topic = topicById(nav.filter) ?? TOPICS[0];
   return (
     <section className="index" aria-labelledby="index-head">
@@ -272,7 +399,7 @@ function TopicScreen({ nav }: { nav: ScreenApi }) {
         {topic.label}
       </h1>
       <p className="index__lead">{topic.lead}</p>
-      <TopicBody topic={topic} nav={nav} />
+      <TopicBody topic={topic} nav={nav} theme={theme} />
     </section>
   );
 }
@@ -282,9 +409,9 @@ function TopicScreen({ nav }: { nav: ScreenApi }) {
  * 一覧を挟んで詳細へ送ると、成果物を見るまでに 2 回押すことになる。
  * 中身の形は topic ごとに違うので、描き分けはここで持つ。
  */
-function TopicBody({ topic, nav }: { topic: Topic; nav: ScreenApi }) {
+function TopicBody({ topic, nav, theme }: { topic: Topic; nav: ScreenApi; theme: Theme }) {
   if (topic.id === "tokens") return <TokenTables />;
-  if (topic.id === "colors") return <ColorsTopic />;
+  if (topic.id === "colors") return <ColorsTopic mode={theme.mode} />;
   if (topic.id === "typography") return <TypographyTopic nav={nav} />;
   if (topic.id === "icons" || topic.id === "illustrations") {
     return <SvgTopic topic={topic} nav={nav} />;
@@ -489,42 +616,19 @@ function DetailIcon() {
   );
 }
 
-function ColorsTopic() {
-  const [mode, setMode] = useState<"light" | "dark">("light");
+// 明暗の切替は題字の選択に一本化した。
+// 配色トピックだけに切替を置くと、同じ操作が画面の 2 か所にあり、
+// どちらがカタログ自身の見え方を変えるのか読めない。
+function ColorsTopic({ mode }: { mode: "light" | "dark" }) {
   const [open, setOpen] = useState<string | null>(null);
   const { copied, copy } = useCopy();
-  // 却下した配色は出さない（利用者の判断、2026-09-20）。
-  // 使える配色だけを並べたほうが、選ぶ面として迷いがない。
-  // 却下した 4 案は experiments/color-schemes の記録に残っている。
-  const adopted = works.find((item) => item.slug === "color-schemes")?.adopted ?? [];
-  const shown = adopted.length > 0 ? schemes.filter((item) => adopted.includes(item.id)) : schemes;
+  const shown = adoptedSchemes();
 
   return (
     <div className="topic-body">
       <Feature mode={mode} shown={shown} copy={copy} />
 
       <div className="palette-browse">
-        <div className="palette-bar">
-          <div className="mode" role="group" aria-label="明暗">
-            <button
-              type="button"
-              className="mode__item"
-              aria-pressed={mode === "light"}
-              onClick={() => setMode("light")}
-            >
-              ライト
-            </button>
-            <button
-              type="button"
-              className="mode__item"
-              aria-pressed={mode === "dark"}
-              onClick={() => setMode("dark")}
-            >
-              ダーク
-            </button>
-          </div>
-        </div>
-
         <ul className="palettes">
           {shown.map((scheme) => (
             <li className="palette" key={scheme.id}>
