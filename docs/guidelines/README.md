@@ -36,20 +36,30 @@ updated: YYYY-MM-DD
 
 本文の節は次の順で置く。
 
-| 節       | 書くこと                                                         |
-| -------- | ---------------------------------------------------------------- |
-| 目的     | その主題で何を目指すか                                           |
-| 適用範囲 | どこに適用し、どこを対象外にするか                               |
-| 規則     | 規則ごとの見出し、意図と根拠、良い例、悪い例、例外、図、出どころ |
-| 確認項目 | チェックリスト形式の点検項目                                     |
-| 出典     | 外部の文献や達成基準                                             |
-| 判断     | status を変えた判断者、判断日、理由                              |
+| 節       | 書くこと                                               |
+| -------- | ------------------------------------------------------ |
+| 目的     | その主題で何を目指すか                                 |
+| 適用範囲 | どこに適用し、どこを対象外にするか                     |
+| コア     | 主題の土台となる規則。判断の前提であり、例外が少ない   |
+| Tips     | 個別の場面へコアを当てた規則。場面が変われば入れ替わる |
+| 確認項目 | チェックリスト形式の点検項目                           |
+| 出典     | 外部の文献や達成基準                                   |
+| 判断     | status を変えた判断者、判断日、理由                    |
+
+コアと Tips は同じ書式で書く。違いは層だけである。
+
+コアに置くのは、その主題で何を守るかを決める規則である。
+長さや個数の目安のような客観的な値、文と語の作り方、意味の伝え方など、場面によらず効くものを書く。
+1 主題あたり 4〜6 件に収める。多いものはコアではない。
+
+Tips に置くのは、コアを具体的な場面へ当てた規則である。
+部品、画面、操作の名前が出てくるものはここに入る。
 
 ## 規則の項目
 
 各規則は第 3 レベル見出し（`###`）で始め、次の項目を書く。
 
-- 見出し: 規則の内容を行動で示す。
+- 見出し: 規則の内容を行動で示す。コアと Tips で書き方は変えない。
 - 意図と根拠: なぜその規則が必要かを説明する。
 - 良い例: 推奨する表現や実装。必須とする。
 - 悪い例: 避けるべき表現や実装。必須とする。
@@ -67,11 +77,13 @@ updated: YYYY-MM-DD
 
 ## 文書一覧
 
-| 文書                                                       | 主題                 | status  |
-| ---------------------------------------------------------- | -------------------- | ------- |
-| [ux-writing.md](ux-writing.md)                             | UX ライティング      | `draft` |
-| [information-architecture.md](information-architecture.md) | 情報設計             | `draft` |
-| [design-four-principles.md](design-four-principles.md)     | デザイン 4 原則      | `draft` |
-| [accessibility.md](accessibility.md)                       | アクセシビリティ     | `draft` |
-| [states-and-feedback.md](states-and-feedback.md)           | 状態とフィードバック | `draft` |
-| [color.md](color.md)                                       | 色の使い方           | `draft` |
+文書名は Catalog の表示と揃えて英語にする。本文は日本語で書く。
+
+| 文書                                                       | title                    | 主題                 | status  |
+| ---------------------------------------------------------- | ------------------------ | -------------------- | ------- |
+| [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `draft` |
+| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft` |
+| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft` |
+| [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft` |
+| [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft` |
+| [color.md](color.md)                                       | Color                    | 色の使い方           | `draft` |
