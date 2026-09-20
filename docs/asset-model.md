@@ -91,3 +91,19 @@ Catalog 固有の copy や metadata を正本にしない。
 | Typography token         | `foundation` | `candidate`    | `tokens/typography/`            |
 | `exploring-ui-variants`  | `module`     | `experimental` | `skills/exploring-ui-variants/` |
 | 授業資料のシンボルマーク | `reference`  | `experimental` | `experiments/class-doc-logo/`   |
+
+## 他プロジェクトでの具体例
+
+個人の Web アプリへ取り込むときは、次のように分ける。
+
+Typography token は `foundation` かつ `candidate` である。
+本文と操作文の共通土台として入れてよい。
+他リポジトリでの長期利用は未確認なので、`stable` としては扱わない。
+上書きしたら理由を残す。
+
+`exploring-ui-variants` は `module` かつ `experimental` である。
+複数案を分岐する依頼のときだけ選ぶ。
+常時の開発手順には入れない。
+
+`class-doc-logo` は `reference` かつ `experimental` である。
+構図や比較の着想に使い、SVG を依存にコピーしない。
