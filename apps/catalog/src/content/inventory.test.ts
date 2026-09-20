@@ -24,19 +24,30 @@ describe("catalog inventory", () => {
     ]);
   });
 
-  it("Experiment を種別へ割り当てる", () => {
+  it("Experiment を topic へ割り当てる", () => {
     expect(slugs("colors")).toEqual(["color-schemes"]);
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
-    expect(slugs("graphics")).toEqual(["class-doc-logo"]);
     expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
-    expect(
-      catalog.experiments.find((item) => item.slug === "class-chapter-illustration")?.category,
-    ).toBeNull();
-    expect(
-      catalog.experiments.find((item) => item.slug === "registration-completion-feedback")
-        ?.category,
-    ).toBeNull();
+    // 公開面から外した domain は topic を持たない。
+    for (const slug of [
+      "class-doc-logo",
+      "class-chapter-illustration",
+      "registration-completion-feedback",
+    ]) {
+      expect(catalog.experiments.find((item) => item.slug === slug)?.topic).toBeNull();
+    }
+  });
+
+  it("token を正本のファイル単位で束ねる", () => {
+    expect(catalog.tokenFamilies.map((family) => family.id)).toEqual(["space", "typography"]);
+    for (const family of catalog.tokenFamilies) {
+      expect(family.tokens.length).toBeGreaterThan(0);
+      expect(family.sourcePath).toMatch(/^tokens\/.+\.tokens\.json$/);
+    }
+    expect(catalog.tokenFamilies.flatMap((family) => family.tokens)).toHaveLength(
+      catalog.tokens.length,
+    );
   });
 
   it("実例 3 件の role を読む", () => {
@@ -58,6 +69,7 @@ describe("catalog inventory", () => {
 
   it("adopted 件数と variant のステータスを検査する", () => {
     expect(ids("adopted")).toEqual([
+      "catalog-editorial/topic-first",
       "class-tech-icons/line-round",
       "color-schemes/aizome",
       "color-schemes/azuki",
@@ -74,11 +86,7 @@ describe("catalog inventory", () => {
       "soft-component-kit/hairline-float",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
-    expect(
-      ids("exploring").every(
-        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("catalog-editorial/"),
-      ),
-    ).toBe(true);
+    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
     expect(ids("exploring")).toHaveLength(
       exploringSlugs().reduce(
         (total, slug) =>
@@ -92,9 +100,7 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.adopted).toEqual(
       [],
     );
-    expect(
-      catalog.experiments.find((item) => item.slug === "catalog-redesign")?.category,
-    ).toBeNull();
+    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.topic).toBeNull();
     expect(
       catalog.experiments
         .filter((item) => item.status === "decided" && item.adopted.length === 0)
@@ -109,9 +115,7 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );
-    expect(
-      catalog.experiments.find((item) => item.slug === "catalog-editorial")?.category,
-    ).toBeNull();
+    expect(catalog.experiments.find((item) => item.slug === "catalog-editorial")?.topic).toBeNull();
   });
 
   it("adopted に Variants 表にない ID があると失敗する", () => {
@@ -121,9 +125,9 @@ describe("catalog inventory", () => {
   });
 });
 
-function slugs(category: string): string[] {
+function slugs(topic: string): string[] {
   return catalog.experiments
-    .filter((experiment) => experiment.category === category)
+    .filter((experiment) => experiment.topic === topic)
     .map((experiment) => experiment.slug);
 }
 

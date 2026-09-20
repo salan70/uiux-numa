@@ -1,10 +1,9 @@
 // docs/guidelines/*.md の読み込みと検証。
 // 依存を足さず、決めた書式だけを読む小さな解析器。
 // 知らない節や欠けた項目、未知の図版キーは throw して build を落とす。
-// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
-// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 import React from "react";
-import { parseFrontmatter } from "./data";
+import { repoBlobUrl } from "./github";
+import { parseFrontmatter } from "./parseFrontmatter";
 
 export type Status = "draft" | "adopted";
 
@@ -104,7 +103,7 @@ const LEGACY_SLUGS: readonly string[] = [
 
 const VALID_APPLIES: readonly Applies[] = ["foundation", "module"];
 
-const guidelineFiles = import.meta.glob<string>("../../../docs/guidelines/*.md", {
+const guidelineFiles = import.meta.glob<string>("../../../../docs/guidelines/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
@@ -143,7 +142,7 @@ export function loadGuidelines(): Guideline[] {
 export const ALL_GUIDELINES: Guideline[] = loadGuidelines();
 
 export function parseGuideline(slug: string, raw: string): Guideline {
-  const front = parseFrontmatter(raw);
+  const { data: front } = parseFrontmatter(raw);
 
   const title = typeof front["title"] === "string" ? front["title"].trim() : "";
   if (!title) throw new Error(`[guidelines/${slug}] title is required in frontmatter`);
@@ -158,7 +157,7 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   const status: Status = statusRaw;
 
   const axes = Array.isArray(front["axes"])
-    ? front["axes"].map((a) => String(a).trim()).filter(Boolean)
+    ? front["axes"].map((axis) => String(axis).trim()).filter(Boolean)
     : [];
   if (axes.length === 0) {
     throw new Error(`[guidelines/${slug}] axes must contain at least one evaluation axis`);
@@ -533,14 +532,15 @@ export function renderInline(text: string): React.ReactNode {
 
     const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (linkMatch) {
+      const href = resolveHref(linkMatch[2]);
       return React.createElement(
         "a",
         {
           key: index,
-          href: linkMatch[2],
+          href,
           className: "guide-link",
-          target: linkMatch[2].startsWith("http") ? "_blank" : undefined,
-          rel: linkMatch[2].startsWith("http") ? "noreferrer" : undefined,
+          target: "_blank",
+          rel: "noreferrer",
         },
         linkMatch[1],
       );
@@ -556,4 +556,28 @@ export function renderInline(text: string): React.ReactNode {
 
     return React.createElement(React.Fragment, { key: index }, part);
   });
+}
+
+/**
+ * 文書の中の相対リンクを解決する。
+ * 正本は docs/guidelines/ にあり、リンクは同じリポジトリ内の相対パスで書かれている。
+ * 公開サイトの URL 構造とは合わないので、リポジトリの該当ファイルへ送る。
+ */
+export function resolveHref(href: string): string {
+  if (/^https?:\/\//.test(href)) return href;
+  return repoBlobUrl(normalizeDocsPath(href));
+}
+
+/** docs/guidelines/ からの相対パスをリポジトリルートからのパスにする。 */
+function normalizeDocsPath(href: string): string {
+  const segments = "docs/guidelines".split("/");
+  for (const part of href.split("/")) {
+    if (part === "." || part === "") continue;
+    if (part === "..") {
+      segments.pop();
+      continue;
+    }
+    segments.push(part);
+  }
+  return segments.join("/");
 }

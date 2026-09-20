@@ -1,14 +1,17 @@
 import { useEffect, type ReactNode } from "react";
 import { Layout } from "./components/Layout";
 import { catalog } from "./content/collect";
-import { ColorDetailPage, ColorsPage } from "./pages/ColorsPage";
-import { ComponentDetailPage, ComponentsPage } from "./pages/ComponentsPage";
-import { GraphicDetailPage, GraphicsPage } from "./pages/GraphicsPage";
+import { ALL_GUIDELINES } from "./content/guidelines";
+import { ColorsPage } from "./pages/ColorsPage";
+import { ComponentsPage } from "./pages/ComponentsPage";
+import { DetailPage } from "./pages/DetailPage";
+import { GuidelinesPage } from "./pages/GuidelinesPage";
 import { HomePage } from "./pages/HomePage";
-import { IconDetailPage, IconsPage } from "./pages/IconsPage";
+import { IconsPage } from "./pages/IconsPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { TokensPage } from "./pages/TokensPage";
 import { TypographyPage } from "./pages/TypographyPage";
-import { matchRoute, replaceLocation, usePathname } from "./router";
+import { matchRoute, replaceLocation, usePathname, type Route } from "./router";
 import { shouldNoindex } from "./theme";
 
 export function App() {
@@ -28,11 +31,17 @@ export function App() {
 
   useEffect(() => {
     if (route.name === "redirect") replaceLocation(route.to);
+    // 文書を指していない /guidelines は先頭の文書へ送る。同じ中身の URL を 2 つ作らない。
+    if (route.name === "guideline" && route.slug === null && ALL_GUIDELINES[0]) {
+      replaceLocation(`/guidelines/${ALL_GUIDELINES[0].slug}`);
+    }
   }, [route]);
 
+  // 先頭へ戻すのは画面が変わったときだけにする。
+  // path をそのまま見ると、配色のダイアログを開閉するたびにページが飛ぶ。
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [path]);
+  }, [screenKey(route, path)]);
 
   if (route.name === "redirect") {
     const page = pageForRoute(matchRoute(route.to));
@@ -51,7 +60,7 @@ export function App() {
   );
 }
 
-function pageForRoute(route: ReturnType<typeof matchRoute>): {
+function pageForRoute(route: Route): {
   title: string;
   updated?: string;
   body: ReactNode;
@@ -63,85 +72,75 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
       body: <HomePage />,
     };
   }
-  if (route.name === "colors") {
+  if (route.name === "colors" || route.name === "color") {
+    const scheme = route.name === "color" ? route.scheme : null;
+    const label = scheme
+      ? (catalog.schemes.find((item) => item.id === scheme)?.label ?? scheme)
+      : "Colors";
     return {
-      title: "Colors",
-      updated: experimentUpdated("colors"),
-      body: <ColorsPage />,
-    };
-  }
-  if (route.name === "color") {
-    const scheme = catalog.schemes.find((item) => item.id === route.scheme);
-    return {
-      title: scheme?.label ?? route.scheme,
-      updated: experimentUpdated("colors"),
-      body: <ColorDetailPage scheme={route.scheme} />,
+      title: label,
+      updated: topicUpdated("colors"),
+      body: <ColorsPage openScheme={scheme} />,
     };
   }
   if (route.name === "typography") {
     return {
       title: "Typography",
-      updated: experimentUpdated("typography"),
+      updated: topicUpdated("typography"),
       body: <TypographyPage />,
+    };
+  }
+  if (route.name === "tokens") {
+    return {
+      title: "Tokens",
+      body: <TokensPage />,
     };
   }
   if (route.name === "icons") {
     return {
       title: "Icons",
-      updated: latestUpdated(
-        catalog.experiments.filter((item) => item.category === "icons").map((item) => item.updated),
-      ),
+      updated: topicUpdated("icons"),
       body: <IconsPage />,
-    };
-  }
-  if (route.name === "icon") {
-    const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
-    return {
-      title: experiment?.title ?? "ページが見つかりません",
-      updated: experiment?.updated,
-      body: <IconDetailPage experiment={route.experiment} />,
-    };
-  }
-  if (route.name === "graphics") {
-    return {
-      title: "Graphics",
-      updated: latestUpdated(
-        catalog.experiments
-          .filter((item) => item.category === "graphics")
-          .map((item) => item.updated),
-      ),
-      body: <GraphicsPage />,
-    };
-  }
-  if (route.name === "graphic") {
-    const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
-    return {
-      title: experiment?.title ?? "ページが見つかりません",
-      updated: experiment?.updated,
-      body: <GraphicDetailPage experiment={route.experiment} />,
     };
   }
   if (route.name === "components") {
     return {
       title: "Components",
-      updated: experimentUpdated("components"),
+      updated: topicUpdated("components"),
       body: <ComponentsPage />,
     };
   }
-  if (route.name === "component") {
+  if (route.name === "icon" || route.name === "component" || route.name === "typographyDetail") {
     const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
     return {
       title: experiment?.title ?? "ページが見つかりません",
       updated: experiment?.updated,
-      body: <ComponentDetailPage experiment={route.experiment} />,
+      body: <DetailPage slug={route.experiment} />,
+    };
+  }
+  if (route.name === "guideline") {
+    const slug = route.slug ?? ALL_GUIDELINES[0]?.slug;
+    const guideline = ALL_GUIDELINES.find((item) => item.slug === slug);
+    return {
+      title: guideline?.title ?? "ページが見つかりません",
+      body: slug ? <GuidelinesPage slug={slug} /> : <NotFoundPage />,
     };
   }
   return { title: "ページが見つかりません", body: <NotFoundPage /> };
 }
 
-function experimentUpdated(category: string): string | undefined {
+/**
+ * 先頭へ戻す単位。
+ * 配色の詳細は一覧の上にダイアログを重ねるだけなので、一覧と同じ画面として扱う。
+ */
+function screenKey(route: Route, path: string): string {
+  if (route.name === "color") return "/foundations/colors";
+  return path;
+}
+
+function topicUpdated(topic: string): string | undefined {
   return latestUpdated(
-    catalog.experiments.filter((item) => item.category === category).map((item) => item.updated),
+    catalog.experiments.filter((item) => item.topic === topic).map((item) => item.updated),
   );
 }
 

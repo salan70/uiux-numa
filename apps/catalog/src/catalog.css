@@ -38,8 +38,6 @@
   --color-warning-subtle: oklch(0.955 0.035 75);
   --color-danger: oklch(0.538 0.154 27);
   --color-danger-subtle: oklch(0.955 0.021 27);
-  --control-height: 2.25rem;
-  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='black' d='M3.2 5.7 8 10.5l4.8-4.8-1.1-1.1L8 8.3 4.3 4.6z'/%3E%3C/svg%3E");
 }
 
 * {
@@ -67,1337 +65,2761 @@ body {
   line-height: var(--typography-ui-line-height);
 }
 
-h1,
-h2,
-h3 {
-  margin-top: 0;
-  color: var(--color-text);
-  font-family: var(--typography-heading-font-family);
-  font-weight: var(--typography-heading-font-weight);
-  letter-spacing: var(--typography-heading-letter-spacing);
-  line-height: var(--typography-heading-line-height);
+/* 公開 Catalog の造形。
+   正本は experiments/catalog-editorial/variants/topic-first で作った案である。
+   面は無彩、線はヘアライン、強調は 1 色、部品は角丸と 120ms の色変化。
+   判断は docs/decisions/2026-09-20-catalog-topic-first.md に残す。 */
+
+/* 明暗は theme.ts が :root[data-theme] を立てて決める。
+   media query で上書きすると、利用者の選択と端末の設定が衝突する。 */
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
-h1 {
-  margin-bottom: 0.75rem;
-  font-family: var(--typography-title-font-family);
-  font-size: var(--typography-title-font-size);
-  font-weight: var(--typography-title-font-weight);
-  letter-spacing: var(--typography-title-letter-spacing);
-  line-height: var(--typography-title-line-height);
-}
-
-h2 {
-  margin: var(--space-section) 0 0.75rem;
-  font-size: var(--typography-heading-font-size);
-}
-
-.app-main > .page-intro + section h2,
-.app-main > section:first-child h2 {
-  margin-top: 0;
-}
-
-h3 {
-  margin-bottom: 0.5rem;
-  font-size: var(--typography-ui-font-size);
-}
-
-p,
-li {
-  max-width: 48rem;
-}
-
-a {
-  color: var(--color-accent-strong);
-}
-
-a:hover {
-  text-decoration-thickness: 0.12em;
-}
-
-button,
-select,
-textarea,
-input[type="text"] {
-  color: var(--color-text);
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-surface);
-  font: inherit;
-  border-radius: var(--catalog-radius-control);
-}
-
-button,
-select {
-  min-height: var(--control-height);
-  height: var(--control-height);
-  padding: 0 0.7rem;
-}
-
-button {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  white-space: nowrap;
-}
-
-button:hover,
-.select-trigger:hover {
-  background: var(--color-bg-subtle);
-}
-
-button:active,
-.button:active,
-.select-trigger:active,
-.select-trigger[data-popup-open],
-.segmented-control-option:active {
-  transform: translateY(1px);
-}
-
-.button,
-.button-primary,
-.button-ghost,
-.select-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  min-height: var(--control-height);
-  height: var(--control-height);
-  padding: 0 0.7rem;
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font: inherit;
-  border-radius: var(--catalog-radius-control);
-  white-space: nowrap;
-}
-
-.select-trigger {
-  justify-content: space-between;
-  cursor: pointer;
-  min-width: 12rem;
-}
-
-.select-icon {
-  width: 0.75rem;
-  height: 0.75rem;
-  flex: none;
-}
-
-.select-positioner {
-  z-index: 4;
-  min-width: var(--anchor-width);
-}
-
-.select-popup {
-  min-width: var(--anchor-width);
-  padding: 0.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-control);
-  background: var(--color-surface);
-  box-shadow: var(--catalog-shadow-float);
-}
-
-.select-list {
-  max-height: min(16rem, var(--available-height));
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-}
-
-.select-item {
-  display: flex;
-  align-items: center;
-  min-height: 2.25rem;
-  padding: 0 0.7rem;
-  cursor: pointer;
-  color: var(--color-text);
-  border-radius: var(--catalog-radius-control);
-}
-
-.select-item[data-highlighted] {
-  background: var(--color-bg-subtle);
-}
-
-.button-primary {
-  color: var(--color-on-accent);
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-}
-
-.button-primary:hover {
-  background: var(--color-accent-hover);
-}
-
-.button-ghost {
-  border-color: var(--color-border);
-  background: transparent;
-}
-
-.button-ghost:hover {
-  background: var(--color-bg-subtle);
-}
-
-select {
-  appearance: none;
-  padding-right: 1.8rem;
-  background-image: var(--icon-chevron);
-  background-repeat: no-repeat;
-  background-position: right 0.55rem center;
-  background-size: 0.75rem;
-}
-
-.slider-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.slider-control {
-  display: flex;
-  align-items: center;
-  min-height: 2.25rem;
-  touch-action: none;
-}
-
-.slider-track {
-  position: relative;
-  width: 100%;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: var(--color-border);
-}
-
-.slider-indicator {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--color-accent);
-}
-
-.slider-thumb {
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
-  background: var(--color-surface);
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-.skip-link {
-  position: absolute;
-  top: -3rem;
-  left: 0.75rem;
-  z-index: 4;
-  padding: 0.4rem 0.7rem;
-  color: var(--color-text);
-  background: var(--color-surface);
-}
-
-.skip-link:focus {
-  top: 0.75rem;
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 .app-shell {
-  isolation: isolate;
-  position: relative;
-  min-height: 100%;
-  --catalog-radius-control: 0.625rem;
-  --catalog-radius-surface: 1rem;
-  --catalog-duration: 140ms;
-  --catalog-ease: ease-out;
-  --catalog-shadow-float: 0 0.75rem 1.75rem color-mix(in srgb, var(--color-text) 16%, transparent);
-  background: var(--color-bg);
-}
-
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.5rem;
-  padding: 0.65rem var(--space-page-inline);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.app-wordmark {
-  color: var(--color-text);
-  font-family: var(--typography-control-font-family);
-  font-weight: var(--typography-control-font-weight);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.header-tools {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.menu-button {
-  display: none;
-}
-
-.app-columns {
-  display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
-  align-items: start;
-}
-
-.sidebar-desktop {
-  position: sticky;
-  top: 3.5rem;
-  height: calc(100vh - 3.5rem);
-  overflow: auto;
-  scrollbar-gutter: stable;
-  border-right: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  padding: 1rem 0.75rem var(--space-page-inline);
-}
-
-.sidebar-nav {
-  display: grid;
-  gap: 0.25rem;
-  align-content: start;
-}
-
-.sidebar-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.sidebar-nav li {
-  max-width: none;
-}
-
-.sidebar-nav a {
-  display: block;
-  padding: 0.45rem 0.6rem;
-  color: var(--color-text-muted);
-  text-decoration: none;
-  border-radius: var(--catalog-radius-control);
-}
-
-.sidebar-nav a:hover {
-  background: var(--color-bg-subtle);
-}
-
-.sidebar-nav a[aria-current="page"] {
-  color: var(--color-text);
-  font-weight: var(--typography-control-font-weight);
-  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-bg-subtle));
-}
-
-.select-field,
-.theme-switch {
-  display: flex;
-  align-items: center;
-}
-
-.theme-switch {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.5rem;
-}
-
-.select-field {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.35rem;
-}
-
-.select-label {
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-}
-
-.header-tools .theme-switch {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.header-tools .select-field {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.header-tools .select-trigger {
-  min-width: 5.2rem;
-  min-height: 2rem;
-  height: 2rem;
-  padding: 0.2rem 0.35rem;
-  font-size: var(--typography-caption-font-size);
-}
-
-.app-content {
-  min-width: 0;
-}
-
-.app-main {
-  width: min(100% - (2 * var(--space-page-inline)), 56rem);
-  margin: 0 auto;
-  padding: var(--space-section) var(--space-page-inline) 4rem;
-}
-
-.app-footer {
-  margin-top: var(--space-section);
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-}
-
-.app-footer p {
-  margin: 0.3rem 0;
-}
-
-.copy-field {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.copy-button {
-  min-width: 6.25rem;
-  font-size: var(--typography-caption-font-size);
-}
-
-.copy-button-label {
-  display: inline-block;
-  min-width: 3.5em;
-  text-align: left;
-}
-
-.copy-button svg {
-  width: 0.9rem;
-  height: 0.9rem;
-  flex: none;
-}
-
-.token-table-wrap {
-  overflow: auto;
-  margin: 1rem 0 2rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.token-table {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
-}
-
-.token-col-name {
-  width: 22%;
-}
-
-.token-col-value {
-  width: 38%;
-}
-
-.token-col-desc {
-  width: 28%;
-}
-
-.token-col-copy,
-.color-col-copy {
-  width: 7.5rem;
-}
-
-.color-col-role {
-  width: 22%;
-}
-
-.color-col-ja {
-  width: 16%;
-}
-
-.color-col-hex {
-  width: 18%;
-}
-
-.color-col-contrast {
-  width: 28%;
-}
-
-.status-col-name {
-  width: 28%;
-}
-
-.status-col-kind {
-  width: 16%;
-}
-
-.status-col-status {
-  width: 14%;
-}
-
-.status-col-adopted {
-  width: 26%;
-}
-
-.status-col-updated {
-  width: 16%;
-}
-
-.token-table caption {
-  padding: 0.6rem 0.75rem;
-  color: var(--color-text-muted);
-  text-align: left;
-  font-size: var(--typography-caption-font-size);
-}
-
-.token-table th,
-.token-table td {
-  padding: 0.65rem 0.75rem;
-  border-top: 1px solid var(--color-border);
-  text-align: left;
-  vertical-align: top;
-  overflow-wrap: anywhere;
-}
-
-.token-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--color-surface);
-  font-weight: var(--typography-control-font-weight);
-}
-
-.token-table .tabular {
-  font-variant-numeric: tabular-nums;
-}
-
-.token-value-cell {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.token-value-cell .token-sample {
-  margin: 0;
-}
-
-.segmented-control {
-  min-width: 0;
-  margin: 0 0 1.5rem;
-  padding: 0;
-  border: 0;
-}
-
-.segmented-control legend {
-  padding: 0;
-  margin-bottom: 0.4rem;
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-}
-
-.segmented-control-group {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(var(--sk-count), minmax(0, 1fr));
-  padding: 0.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-control);
-  background: var(--color-bg-subtle);
-}
-
-.segmented-control-thumb {
-  position: absolute;
-  inset-block: 0.25rem;
-  inset-inline-start: 0.25rem;
-  width: calc((100% - 0.5rem) / var(--sk-count));
-  pointer-events: none;
-  border-radius: calc(var(--catalog-radius-control) - 0.05rem);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  transform: translateX(calc(var(--sk-index) * 100%));
-}
-
-.segmented-control-option {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 4.5rem;
-  min-height: var(--control-height);
-  padding: 0 0.75rem;
-  border: 0;
-  background: transparent;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  cursor: pointer;
-  font: inherit;
-}
-
-.segmented-control-option[data-checked] {
-  color: var(--color-text);
-  font-weight: var(--typography-control-font-weight);
-}
-
-.hex-swatch,
-.contrast-cell {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.hex-swatch-chip {
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-control);
-}
-
-.contrast-cell {
-  min-height: 3.6rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.contrast-verdict-pass {
-  color: var(--color-success);
-}
-
-.contrast-verdict-fail {
-  color: var(--color-danger);
-}
-
-.hex-swatch {
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.sidebar-drawer-backdrop,
-.sidebar-drawer-viewport {
-  position: fixed;
-  inset: 0;
-  z-index: 5;
-}
-
-.sidebar-drawer-viewport {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.sidebar-drawer {
-  width: min(20rem, 100%);
-  height: 100%;
-  overflow: auto;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
-  box-shadow: var(--catalog-shadow-float);
-}
-
-.sidebar-drawer-backdrop {
-  background: color-mix(in srgb, var(--color-text) 45%, transparent);
-}
-
-.sidebar-drawer-panel {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.sidebar-drawer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.sidebar-drawer-title {
-  margin: 0;
-  font-family: var(--typography-control-font-family);
-  font-size: var(--typography-ui-font-size);
-  font-weight: var(--typography-control-font-weight);
-}
-
-.page-intro {
-  max-width: 52rem;
-  margin-bottom: var(--space-section);
-}
-
-.meta,
-.crumb {
-  color: var(--color-text-muted);
-}
-
-.artifact-bands {
-  display: grid;
-  gap: 1rem;
-}
-
-.artifact-band {
-  display: grid;
-  grid-template-columns: minmax(11rem, 0.35fr) minmax(0, 1fr);
-  gap: 2rem;
-  min-width: 0;
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.artifact-band > *,
-.page-intro,
-.token-list,
-.token-card,
-.scheme-list,
-.scheme-card,
-.scheme-modes,
-.svg-catalog,
-.live-preview {
-  min-width: 0;
-}
-
-.band-heading h2 {
-  margin-bottom: 0.6rem;
-  font-size: clamp(1.3rem, 2vw, 2rem);
-}
-
-.band-heading h2 a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.band-heading p:last-child {
-  margin-bottom: 0;
-  color: var(--color-text-muted);
-}
-
-.home-swatch-row,
-.home-type-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-  gap: 0.75rem;
-  align-content: start;
-}
-
-.home-swatch {
-  min-width: 0;
-}
-
-.home-swatch > span {
-  display: block;
-  margin-top: 0.35rem;
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-}
-
-.home-type-row {
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-}
-
-.artifact-card,
-.token-sample,
-.token-fallback,
-.playground-stage,
-.scheme-live-sample {
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-bg);
-}
-
-.artifact-card .token-sample {
-  margin: 0.75rem 0 0;
-}
-
-.record-list,
-.token-list,
-.svg-grid {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.token-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 1rem;
-}
-
-.token-card {
-  max-width: none;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.token-sample {
-  min-height: 4rem;
-  margin: 0.75rem 0;
-}
-
-.token-value {
-  margin-bottom: 0;
-  color: var(--color-text-muted);
-  overflow-wrap: anywhere;
-}
-
-.token-value code,
-.token-card h3 code {
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-
-.token-fallback {
-  overflow: auto;
-}
-
-.playground,
-.live-preview,
-.scheme-live,
-.scheme-list,
-.svg-catalog {
-  margin-top: var(--space-section);
-}
-
-.playground-controls,
-.playground-text,
-.live-controls,
-.svg-size-control {
-  display: grid;
-  gap: 1rem;
-}
-
-.playground-controls,
-.live-controls {
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  align-items: start;
-  margin-bottom: 1rem;
-}
-
-.playground-controls .select-field,
-.playground-text {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.playground-text textarea {
-  width: min(100%, 48rem);
-  min-height: 7rem;
-  padding: 0.65rem;
-  border-radius: var(--catalog-radius-control);
-}
-
-.playground-stage {
-  margin-top: 1rem;
-}
-
-.live-controls fieldset,
-.svg-size-control {
-  min-width: 0;
-  margin: 0;
-}
-
-.live-variants,
-.live-widths,
-.svg-size-control > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.9rem;
-}
-
-.live-variants label,
-.live-widths label,
-.svg-size-control label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.live-frame-wrap {
-  display: flex;
-  justify-content: center;
-  height: 36rem;
-  overflow: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-bg-subtle);
-}
-
-.live-frame {
-  display: block;
-  height: 100%;
-  min-height: 0;
-  border: 0;
-  background: #fff;
-}
-
-.scheme-live {
-  padding: 1.5rem;
-  border: 1px solid var(--color-accent-strong);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-accent-subtle);
-}
-
-.scheme-live h2 {
-  margin-bottom: 1rem;
-}
-
-.scheme-live-sample {
-  color: var(--color-text);
-  background: var(--color-surface);
-}
-
-.scheme-live-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.scheme-live-actions button {
-  color: var(--color-on-accent);
-  border-color: var(--color-accent);
-  background: var(--color-accent);
-}
-
-.scheme-live-actions button:hover {
-  background: var(--color-accent-hover);
-}
-
-.scheme-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: var(--space-section);
-}
-
-.scheme-card {
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.scheme-card header h3 {
-  margin-bottom: 0.25rem;
-}
-
-.scheme-card header .meta {
-  margin: 0 0 0.75rem;
-}
-
-.scheme-specimen {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0 0 1rem;
-  padding: var(--space-page-inline);
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--catalog-radius-surface);
-}
-
-.scheme-specimen-lede {
-  margin: 0;
-  max-width: none;
-  font-family: var(--typography-body-font-family);
+  min-block-size: 100vh;
+
+  /* 配色。カタログ自身も正本の配色を着る。
+     --color-* は theme.ts が選ばれた配色の 19 役割を :root へ当てる。
+     ここでは役割の対応だけを決め、色の値は持たない。
+     fallback は sumi のライトの値で、正本が読めない場合でも画面が壊れないようにする。 */
+  --cat-bg: var(--color-bg, #fbfaf5);
+  --cat-surface: var(--color-bg-subtle, #f3f3f2);
+  --cat-text: var(--color-text, #2b2b2b);
+  --cat-muted: var(--color-text-muted, #595857);
+  --cat-line: var(--color-border, #dcdddd);
+  --cat-line-strong: var(--color-border-strong, #7b7c7d);
+  --cat-accent: var(--color-accent, #2b2b2b);
+  --cat-on-accent: var(--color-on-accent, #fbfaf5);
+
+  /* 文字。役割の token をそのまま使い、画面ごとの寸法を持たない。
+     number と display だけは token にない大きさなので、
+     最大値を token の倍数で置き、画面幅で縮める。 */
+  --cat-number: clamp(3.5rem, 10vw, 8rem);
+  --cat-display: clamp(2.625rem, 7vw, 6rem);
+  --cat-h2: var(--typography-title-font-size);
+  --cat-item: var(--font-size-lg);
+  --cat-label: var(--font-size-sm);
+
+  /* 余白。page-inline と section は token の値をそのまま使う。 */
+  --cat-gap: 0.5rem;
+  --cat-gap-lg: 1rem;
+  --cat-inline: var(--space-page-inline, 1.5rem);
+  --cat-section: var(--space-section, 2.5rem);
+  --cat-block: 5rem;
+
+  /* 画面の部品。角丸は小さく取り、印刷ではなく操作面であることを示す。 */
+  --cat-radius: 0.375rem;
+  --cat-tap: 2.5rem;
+  --cat-duration: 120ms;
+
+  background: var(--cat-bg);
+  color: var(--cat-text);
+  font-family: var(--font-family-sans);
   font-size: var(--typography-body-font-size);
-  font-weight: var(--typography-body-font-weight);
-  letter-spacing: var(--typography-body-letter-spacing);
   line-height: var(--typography-body-line-height);
+  font-feature-settings: "palt";
 }
 
-.scheme-specimen-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
+/* 明暗の上書きはここに書かない。
+   配色の正本がライトとダークの両方を持っており、theme.ts が選ばれた方を当てる。
+   端末の設定に従うか固定するかも題字の選択で決めるので、
+   media query で上書きすると選択と端末の設定が衝突する。 */
+
+.app-shell *,
+.app-shell *::before,
+.app-shell *::after {
+  box-sizing: border-box;
 }
 
-.scheme-specimen-accent {
-  padding-inline-start: 0.75rem;
-  border-inline-start: 2px solid var(--color-accent-strong);
-  color: var(--color-accent-strong);
+.app-shell :focus-visible {
+  outline: 2px solid var(--cat-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-.scheme-specimen-actions .button,
-.scheme-specimen-actions input {
-  margin: 0;
-}
-
-.scheme-modes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.scheme-modes section {
-  min-width: 0;
-}
-
-.scheme-modes h3 {
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-  text-transform: uppercase;
-}
-
-.scheme-swatches {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-  gap: 0.6rem;
-}
-
-.scheme-swatch {
-  min-width: 0;
-  margin: 0;
-}
-
-.scheme-swatch-color {
-  aspect-ratio: 1.6;
-  min-height: 3.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-control);
-}
-
-.scheme-swatch figcaption {
-  display: grid;
-  gap: 0.1rem;
-  margin-top: 0.3rem;
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-  overflow-wrap: anywhere;
-}
-
-.scheme-swatch code {
-  color: var(--color-text);
-}
-
-.svg-groups {
-  display: grid;
-  gap: 2rem;
-}
-
-.svg-group h3 {
-  margin-bottom: 0.75rem;
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-}
-
-.svg-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-  gap: 0.75rem;
-}
-
-.svg-grid > li {
-  max-width: none;
-}
-
-.svg-card {
-  margin: 0;
-  padding: 0.75rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.svg-art {
-  display: grid;
-  place-items: center;
-  height: 8rem;
-  min-height: 8rem;
-  color: var(--color-text);
-  background: var(--color-bg-subtle);
-  border-radius: var(--catalog-radius-control);
-}
-
-.svg-card figcaption {
-  display: grid;
-  gap: 0.35rem;
-  margin-top: 0.45rem;
-}
-
-.svg-art svg {
-  display: block;
-  width: var(--svg-size);
-  height: var(--svg-size);
-}
-
-figcaption {
-  margin-top: 0.45rem;
-  color: var(--color-text-muted);
-  font-size: var(--typography-caption-font-size);
-  overflow-wrap: anywhere;
-}
-
-.home-swatch {
+.app-shell a {
   color: inherit;
   text-decoration: none;
-}
-
-.record-list {
-  display: grid;
-  gap: 0.85rem;
-}
-
-.record-list li {
-  max-width: none;
-}
-
-.showcase-hero {
-  margin-bottom: var(--space-section);
-  padding: clamp(1rem, 2.4vw, 1.75rem);
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.showcase-hero .live-preview {
-  margin-top: 0.75rem;
-}
-
-.showcase-hero h1 {
-  margin-bottom: 0.35rem;
-}
-
-.category-index,
-.experiment-index {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: var(--space-section);
-}
-
-.category-card,
-.experiment-card {
-  min-width: 0;
-  padding: clamp(1rem, 2.4vw, 1.75rem);
-  border: 1px solid var(--color-border);
-  border-radius: var(--catalog-radius-surface);
-  background: var(--color-surface);
-}
-
-.category-card h2,
-.experiment-card h2 {
-  margin: 0 0 0.75rem;
-}
-
-.category-card h2 a,
-.experiment-card h2 a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.category-card .svg-catalog,
-.experiment-card .svg-catalog,
-.experiment-card .live-preview,
-.category-card .token-sample {
-  margin-top: 0;
-}
-
-.live-preview.is-compact .live-frame-wrap {
-  height: 16rem;
-}
-
-.asset-meta {
-  margin-top: 1rem;
-}
-
-.asset-meta.is-compact {
-  margin-top: 0.5rem;
-}
-
-.asset-sources {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-}
-
-.asset-sources a,
-.asset-sources code {
-  overflow-wrap: anywhere;
-}
-
-.category-titles {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--color-text-muted);
-}
-
-.category-titles li {
-  max-width: none;
-}
-
-.button,
-.button-primary,
-.button-ghost,
-.select-trigger,
-.segmented-control-thumb,
-.select-popup,
-.sidebar-drawer-backdrop,
-.sidebar-drawer {
-  transition:
-    opacity var(--catalog-duration) var(--catalog-ease),
-    transform var(--catalog-duration) var(--catalog-ease),
-    background-color var(--catalog-duration) var(--catalog-ease),
-    box-shadow var(--catalog-duration) var(--catalog-ease),
-    height var(--catalog-duration) var(--catalog-ease);
-}
-
-.select-popup[data-starting-style],
-.select-popup[data-ending-style] {
-  opacity: 0;
-  transform: translateY(-0.25rem);
-}
-
-.sidebar-drawer-backdrop[data-starting-style],
-.sidebar-drawer-backdrop[data-ending-style] {
-  opacity: 0;
-}
-
-.sidebar-drawer[data-starting-style],
-.sidebar-drawer[data-ending-style] {
-  transform: translateX(100%);
-}
-
-@media (max-width: 52rem) {
-  .menu-button {
-    display: inline-flex;
-  }
-
-  .app-columns {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .sidebar-desktop {
-    display: none;
-  }
-
-  .header-tools .theme-switch {
-    flex-wrap: wrap;
-  }
-
-  .artifact-band {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 36rem) {
-  .app-header {
-    display: block;
-    width: 100vw;
-    max-width: 100vw;
-  }
-
-  .app-main {
-    width: min(100% - var(--space-page-inline), 96rem);
-    min-width: 0;
-    overflow-x: hidden;
-    padding-top: var(--space-section);
-  }
-
-  .header-tools {
-    display: block;
-  }
-
-  .header-tools .theme-switch {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    width: calc(100vw - (2 * var(--space-page-inline)));
-    max-width: calc(100vw - (2 * var(--space-page-inline)));
-    margin-top: 0.5rem;
-    min-width: 0;
-    gap: 0.5rem;
-  }
-
-  .header-tools .select-field {
-    min-width: 0;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .header-tools .select-trigger {
-    width: auto;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .header-tools .select-trigger > span:first-child {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .menu-button {
-    position: absolute;
-    top: 0.65rem;
-    right: var(--space-page-inline);
-  }
-
-  .scheme-modes {
-    grid-template-columns: 1fr;
-  }
-
-  .live-controls,
-  .playground-controls {
-    grid-template-columns: 1fr;
-  }
-
-  .home-swatch-row,
-  .home-type-row,
-  .scheme-swatches,
-  .svg-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .live-variants,
-  .live-widths {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .segmented-control-thumb,
-  .select-popup,
-  .sidebar-drawer-backdrop,
-  .sidebar-drawer,
-  .button,
-  .button-primary,
-  .button-ghost,
-  .select-trigger {
-    transition: opacity 150ms ease;
-    transform: none;
+  .app-shell * {
+    transition: none !important;
+  }
+}
+
+.app-shell .skip {
+  position: absolute;
+  inset-inline-start: var(--cat-inline);
+  inset-block-start: -4rem;
+  z-index: 2;
+  padding: 0.5rem 1rem;
+  background: var(--cat-text);
+  color: var(--cat-bg);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .skip:focus {
+  inset-block-start: 0.5rem;
+}
+
+/* ---- サイドバー ---- */
+
+/* 根を横 2 桁にし、左をナビ、右を版面にする。
+   横帯では 13 面が折り返して帯が画面の半分を占めたが、縦なら全件を一度に出せる。 */
+.app-shell {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  align-items: start;
+}
+
+.app-shell .sidebar {
+  position: sticky;
+  inset-block-start: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cat-section);
+  block-size: 100vh;
+  overflow: auto;
+  padding: var(--cat-gap-lg) var(--cat-gap-lg) var(--cat-section);
+  background: var(--cat-bg);
+  border-inline-end: 1px solid var(--cat-line);
+}
+
+.app-shell .sidebar__name {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.app-shell .sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cat-gap-lg);
+}
+
+/* 群の見出しは遷移しない。子と同じ大きさにすると押せると読まれる。
+   語の造形（小さい、字間、大文字、muted）だけでは項目との差が弱いので、
+   群の幅いっぱいに罫を 1 本引き、下に続く項目がこの見出しの内側だと示す。
+   罫は本文の見出し（.section-title）と同じ役で、太さだけを 1px に落とす。 */
+.app-shell .sidebar__heading {
+  margin: 0 0 var(--cat-gap);
+  padding-inline: var(--cat-gap);
+  padding-block-end: var(--cat-gap);
+  border-block-end: 1px solid var(--cat-line);
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cat-muted);
+}
+
+.app-shell .sidebar__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .sidebar__link {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--cat-tap);
+  padding-inline: var(--cat-gap);
+  border-inline-start: 2px solid transparent;
+  color: var(--cat-muted);
+  font-size: 1rem;
+  transition: color var(--cat-duration) ease;
+}
+
+/* 現在地は色と縦の線で示す。太さや余白を変えると、移るたびにナビ全体が動く。 */
+.app-shell .sidebar__link[aria-current="page"] {
+  color: var(--cat-text);
+  border-inline-start-color: var(--cat-accent);
+  font-weight: 700;
+}
+
+/* 群を持たない単独の項目は、群の見出しの分だけ上に余白を取る。 */
+.app-shell .sidebar__link--lone {
+  font-weight: 700;
+  color: var(--cat-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .sidebar__link:hover {
+    color: var(--cat-accent);
+  }
+}
+
+.app-shell .sidebar .theme {
+  margin-block-start: auto;
+  flex-wrap: wrap;
+}
+
+/* 狭い幅ではサイドバーを畳まず、上の帯に戻して横へ流す。
+   1 段に収めれば、折り返しで帯が伸びることはない。 */
+@media (width < 60rem) {
+  .app-shell {
+    display: block;
+  }
+
+  /* 題字と配色の選択を 1 行に収め、ナビをその下に 1 群 1 行で流す。
+     縦に積むと帯が画面の半分を占める。 */
+  .app-shell .sidebar {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "name theme"
+      "nav nav";
+    align-items: center;
+    block-size: auto;
+    z-index: 1;
+    gap: var(--cat-gap);
+    padding-block: var(--cat-gap);
+    padding-inline: var(--cat-inline);
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--cat-line);
+    background: color-mix(in srgb, var(--cat-bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .app-shell .sidebar__name {
+    grid-area: name;
+  }
+
+  .app-shell .sidebar__nav {
+    grid-area: nav;
+    gap: 0;
+  }
+
+  .app-shell .sidebar .theme {
+    grid-area: theme;
+    justify-self: end;
+  }
+
+  .app-shell .sidebar__group {
+    display: flex;
+    align-items: center;
+    gap: var(--cat-gap-lg);
+    min-inline-size: 0;
+  }
+
+  /* 群の名は折り返さない。幅を固定すると、長い名が隣の項目に重なる。
+     横に並ぶ帯では罫が項目の上に乗らないので、縦の帯でだけ引く。 */
+  .app-shell .sidebar__heading {
+    margin: 0;
+    flex: none;
+    padding-inline: 0;
+    padding-block-end: 0;
+    border-block-end: 0;
+    white-space: nowrap;
+  }
+
+  .app-shell .sidebar__list {
+    flex-direction: row;
+    gap: var(--cat-gap-lg);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .app-shell .sidebar__link {
+    border-inline-start: 0;
+    border-block-end: 2px solid transparent;
+    white-space: nowrap;
+  }
+
+  .app-shell .sidebar__link[aria-current="page"] {
+    border-inline-start-color: transparent;
+    border-block-end-color: var(--cat-accent);
+  }
+
+  .app-shell .sidebar .theme {
+    margin-block-start: 0;
+    flex-wrap: nowrap;
+  }
+}
+
+/* ---- 版面 ---- */
+
+/* 版面は桁の幅いっぱいに置き、上限を超えたときだけ中央へ寄せる。
+   inline-size を書かないと、auto margin を持つ grid の項目は伸びず内容の幅に縮む。
+   縮むと Icons のように内容の幅が狭い画面だけ、見出しの開始位置が右へずれる。 */
+.app-shell .app-main {
+  inline-size: 100%;
+  max-inline-size: 84rem;
+  margin: 0 auto;
+  padding: var(--cat-block) var(--cat-inline);
+}
+
+.app-shell .app-main > * + * {
+  margin-block-start: var(--cat-block);
+}
+
+.app-shell .section-head,
+.app-shell .section-title {
+  margin: 0;
+  font-size: var(--cat-h2);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.app-shell .section-title {
+  padding-block-end: var(--cat-gap-lg);
+  border-block-end: 2px solid var(--cat-text);
+}
+
+/* ---- 積み上げの一覧 ---- */
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .card__hit:hover .card__title {
+    color: var(--cat-accent);
+  }
+}
+
+/* ---- 標本 ---- */
+
+.app-shell .live {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.app-shell .live__frame {
+  inline-size: 100%;
+  block-size: 16rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--cat-surface);
+  display: block;
+}
+
+.app-shell .live--tall .live__frame {
+  block-size: 30rem;
+}
+
+.app-shell .live__caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .live__id {
+  color: var(--cat-text);
+  letter-spacing: 0.04em;
+}
+
+/* ---- metadata ---- */
+
+.app-shell .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .meta span + span::before {
+  content: "／";
+  margin-inline-end: 0.75rem;
+  color: var(--cat-line-strong);
+}
+
+/* ---- 索引 ---- */
+
+.app-shell .cards {
+  margin: var(--cat-section) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  /* 均一な格子にしない。1 件目だけ 2 列取って、索引でも主役を作る。 */
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--cat-section) 1.5rem;
+}
+
+.app-shell .card {
+  grid-column: span 2;
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.app-shell .card:first-child {
+  grid-column: span 4;
+}
+
+.app-shell .card:first-child .live__frame {
+  block-size: 24rem;
+}
+
+.app-shell .card__title {
+  font-size: var(--cat-item);
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color var(--cat-duration) ease;
+}
+
+.app-shell .card:first-child .card__title {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+/* ---- 詳細 ---- */
+
+.app-shell .detail {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 1.5rem;
+  row-gap: var(--cat-gap-lg);
+}
+
+.app-shell .detail > * {
+  min-inline-size: 0;
+}
+
+.app-shell .detail__crumb {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .detail__crumb a {
+  color: var(--cat-accent);
+}
+
+.app-shell .detail__title {
+  grid-column: 1 / span 7;
+  margin: 0;
+  font-size: var(--cat-display);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.app-shell .detail__lead {
+  grid-column: 1 / span 7;
+  margin: 0;
+  max-inline-size: 36em;
+  color: var(--cat-muted);
+}
+
+.app-shell .detail__live {
+  grid-column: 1 / span 7;
+  margin-block-start: var(--cat-gap-lg);
+}
+
+.app-shell .detail__side {
+  grid-column: 9 / -1;
+  grid-row: 2 / span 3;
+  align-self: start;
+  display: grid;
+  gap: var(--cat-gap);
+  align-content: start;
+  padding-inline-start: 1.5rem;
+  border-inline-start: 1px solid var(--cat-line);
+}
+
+.app-shell .detail__source {
+  margin: var(--cat-gap) 0 0;
+  font-size: var(--cat-label);
+  color: var(--cat-muted);
+}
+
+.app-shell .detail__source code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+.app-shell .variants {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.app-shell .variants--row {
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 0.5rem;
+}
+
+.app-shell .variants__item {
+  appearance: none;
+  inline-size: 100%;
+  min-block-size: var(--cat-tap);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--cat-radius);
+  background: none;
+  color: var(--cat-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    color var(--cat-duration) ease,
+    background-color var(--cat-duration) ease;
+}
+
+/* 選択は色と面で示す。太さを変えると chip の幅が変わり、切り替えるたびに並びが動く。 */
+.app-shell .variants__item[aria-pressed="true"] {
+  color: var(--cat-text);
+  background: var(--cat-surface);
+  border-color: var(--cat-line);
+}
+
+.app-shell .variants__id {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.8125rem;
+}
+
+.app-shell .variants__mark {
+  flex: none;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-accent);
+}
+
+/* ---- 操作部品 ---- */
+
+.app-shell .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--cat-tap);
+  padding: 0 1.25rem;
+  border: 1px solid var(--cat-text);
+  border-radius: var(--cat-radius);
+  background: var(--cat-text);
+  color: var(--cat-bg);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color var(--cat-duration) ease,
+    border-color var(--cat-duration) ease;
+}
+
+.app-shell .btn--quiet {
+  background: none;
+  color: var(--cat-text);
+  border-color: var(--cat-line-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .btn:hover {
+    background: var(--cat-accent);
+    border-color: var(--cat-accent);
+    color: var(--cat-on-accent);
+  }
+
+  .app-shell .variants__item:hover {
+    color: var(--cat-text);
+    border-color: var(--cat-line-strong);
+  }
+}
+
+/* ---- 狭い幅 ---- */
+
+@media (width <= 60rem) {
+  .app-shell .app-main {
+    padding-block: var(--cat-section);
+  }
+
+  .app-shell .app-main > * + * {
+    margin-block-start: var(--cat-section);
+  }
+
+  .app-shell .hero__title,
+  .app-shell .hero__lead,
+  .app-shell .hero__live,
+  .app-shell .detail__title,
+  .app-shell .detail__lead,
+  .app-shell .detail__live {
+    grid-column: 1 / -1;
+  }
+
+  .app-shell .hero__side,
+  .app-shell .detail__side {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    padding-inline-start: 0;
+    padding-block-start: var(--cat-gap-lg);
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--cat-line);
+  }
+
+  .app-shell .cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .app-shell .card,
+  .app-shell .card:first-child {
+    grid-column: span 2;
+  }
+
+  .app-shell .card:first-child .live__frame {
+    block-size: 16rem;
+  }
+
+  .app-shell .card:first-child .card__title {
+    font-size: var(--cat-item);
+    letter-spacing: 0;
+  }
+}
+
+@media (width <= 40rem) {
+  .app-shell .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .card,
+  .app-shell .card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .app-shell .live--tall .live__frame {
+    block-size: 20rem;
+  }
+}
+
+/* ---- 色と文字の見本 ---- */
+
+.app-shell .ed-sheet > * + * {
+  margin-block-start: var(--cat-block);
+}
+
+.app-shell .ed-sheet__head {
+  padding-block-end: var(--cat-section);
+  border-block-end: 2px solid var(--cat-text);
+}
+
+.app-shell .ed-sheet__kicker {
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-accent);
+}
+
+.app-shell .ed-sheet__title {
+  margin: var(--cat-gap) 0 0;
+  font-size: var(--cat-display);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.app-shell .ed-sheet__hypothesis {
+  margin: var(--cat-gap-lg) 0 0;
+  max-inline-size: 36em;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__facts {
+  display: grid;
+  gap: 0;
+  margin: var(--cat-section) 0 0;
+  max-inline-size: 36rem;
+}
+
+.app-shell .ed-sheet__facts > div {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: var(--cat-gap-lg);
+  padding-block: 0.5rem;
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .ed-sheet__facts dt {
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__facts dd {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.app-shell .ed-sheet__h2 {
+  margin: 0;
+  font-size: var(--cat-h2);
+  font-weight: 700;
+  line-height: 1.3;
+  padding-block-end: var(--cat-gap);
+  border-block-end: 2px solid var(--cat-text);
+}
+
+.app-shell .ed-sheet__note {
+  margin: var(--cat-gap-lg) 0 0;
+  max-inline-size: 38em;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__section > :not(.ed-sheet__h2):not(.ed-sheet__note) {
+  margin-block-start: var(--cat-section);
+}
+
+.app-shell .ed-sheet__table-wrap {
+  overflow-x: auto;
+}
+
+.app-shell .ed-sheet__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.app-shell .ed-sheet__table th,
+.app-shell .ed-sheet__table td {
+  padding: 0.875rem 1rem 0.875rem 0;
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--cat-line);
+}
+
+.app-shell .ed-sheet__table thead th {
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  border-block-end-color: var(--cat-line-strong);
+  white-space: nowrap;
+}
+
+.app-shell .ed-sheet__table tbody th {
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.app-shell .ed-sheet__table tbody th code {
+  display: block;
+  margin-block-start: 0.25rem;
+  font-weight: 400;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__intent-cell {
+  min-inline-size: 20rem;
+  max-inline-size: 30rem;
+}
+
+.app-shell .ed-sheet__ref-cell {
+  min-inline-size: 9rem;
+}
+
+.app-shell .ed-sheet__swatch {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.app-shell .ed-sheet__chip {
+  display: block;
+  inline-size: 3.5rem;
+  block-size: 2.25rem;
+  border: 1px solid var(--cat-line);
+  border-radius: 2px;
+}
+
+.app-shell code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+}
+
+.app-shell .ed-sheet__contrast {
+  display: grid;
+  gap: 0.25rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .ed-sheet__contrast-target {
+  font-size: var(--cat-label);
+  letter-spacing: 0.06em;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__contrast-mark {
+  margin-inline-start: 0.5rem;
+  font-weight: 700;
+}
+
+.app-shell .ed-sheet__contrast-row[data-pass="false"] {
+  color: var(--cat-accent);
+}
+
+.app-shell .ed-sheet__dash {
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__scale {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .ed-sheet__step + .ed-sheet__step {
+  margin-block-start: var(--cat-section);
+  padding-block-start: var(--cat-section);
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .ed-sheet__step-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0 0 var(--cat-gap-lg);
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .ed-sheet__step-name {
+  color: var(--cat-accent);
+}
+
+.app-shell .ed-sheet__step-sample {
+  margin: 0;
+  max-inline-size: 58%;
+  overflow-wrap: anywhere;
+}
+
+.app-shell .ed-sheet__step-intent {
+  margin: var(--cat-gap-lg) 0 0;
+  max-inline-size: 38em;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--cat-muted);
+}
+
+.app-shell .ed-sheet__step-use {
+  display: inline-block;
+  margin-inline-end: 0.75rem;
+  padding-inline-end: 0.75rem;
+  border-inline-end: 1px solid var(--cat-line);
+  font-weight: 700;
+  color: var(--cat-text);
+}
+
+.app-shell .ed-sheet__measure {
+  margin-block-start: var(--cat-section);
+  padding-block-start: var(--cat-section);
+  border-block-start: 2px solid var(--cat-text);
+}
+
+.app-shell .ed-sheet__measure-body {
+  margin: var(--cat-gap-lg) 0 0;
+  max-inline-size: 36em;
+}
+
+.app-shell .ed-sheet__space {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .ed-sheet__space li {
+  display: grid;
+  grid-template-columns: 8rem 7rem 5rem 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-block-end: 1px solid var(--cat-line);
+  font-size: 0.8125rem;
+}
+
+.app-shell .ed-sheet__space-bar {
+  display: block;
+  block-size: 0.5rem;
+  border-radius: 1px;
+  background: var(--cat-accent);
+}
+
+.app-shell .ed-sheet__space-name {
+  font-weight: 700;
+}
+
+.app-shell .ed-sheet__space-value,
+.app-shell .ed-sheet__space-use {
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .ed-sheet__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cat-sheet-cols), 1fr);
+  gap: 1.5rem;
+  block-size: 5rem;
+}
+
+.app-shell .ed-sheet__grid span {
+  background: var(--cat-surface);
+  border-radius: 2px;
+}
+
+.app-shell .ed-sheet__grid span:nth-child(-n + 7) {
+  background: color-mix(in srgb, var(--cat-accent) 20%, transparent);
+}
+
+.app-shell .ed-sheet__open {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+  max-inline-size: 42em;
+}
+
+.app-shell .ed-sheet__open li {
+  padding-inline-start: 1.25rem;
+  border-inline-start: 3px solid var(--cat-accent);
+}
+
+.app-shell .parts {
+  display: grid;
+  gap: var(--cat-section);
+  max-inline-size: 48rem;
+}
+
+.app-shell .parts__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+@media (width <= 60rem) {
+  .app-shell .ed-sheet > * + * {
+    margin-block-start: var(--cat-section);
+  }
+
+  .app-shell .ed-sheet__step-sample {
+    max-inline-size: 100%;
+  }
+
+  .app-shell .ed-sheet__space li {
+    grid-template-columns: 6rem 1fr;
+    row-gap: 0.25rem;
+  }
+
+  .app-shell .ed-sheet__space-use {
+    grid-column: 1 / -1;
+  }
+
+  .app-shell .ed-sheet__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .app-shell .ed-sheet__grid span:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+/* ---- ここから topic-first の差分。入口をトピックにしたことで要る規則だけ ---- */
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .topic__hit:hover .topic__label {
+    color: var(--cat-accent);
+  }
+}
+
+/* ---- 配色と明暗の選択 ---- */
+
+/* サイドバーの最下段に置く。どの画面からでも切り替えられ、本文の桁を狭めない。 */
+.app-shell .theme {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* 語を出さず、アイコンのボタン 2 つにする。
+   選択そのものは native の select に任せ、面へ透明のまま重ねる。
+   ボタンを自前で開くと、選択肢の並びと鍵盤の操作をこの画面が持つことになる。 */
+.app-shell .theme__pick {
+  position: relative;
+  display: inline-flex;
+  inline-size: var(--cat-tap);
+  block-size: var(--cat-tap);
+}
+
+/* 語は読み上げのために残し、見た目からだけ外す。 */
+.app-shell .theme__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 面はナビの項目と同じ寸法にし、線はヘアライン、面は surface に落とす。 */
+.app-shell .theme__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--cat-surface);
+  color: var(--cat-text);
+  transition: border-color var(--cat-duration) ease;
+}
+
+.app-shell .theme__icon svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+/* select は面いっぱいに重ねる。見た目は持たないが、focus の輪郭はこの矩形に出る。 */
+.app-shell .theme__native {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .theme__pick:hover .theme__icon {
+    border-color: var(--cat-line-strong);
+  }
+}
+
+/* ---- トップの 1 件 ---- */
+
+.app-shell .hero {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 1.5rem;
+  row-gap: var(--cat-gap-lg);
+}
+
+.app-shell .hero > * {
+  min-inline-size: 0;
+}
+
+.app-shell .hero__kicker {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .hero__topic {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: var(--cat-radius);
+  background: var(--cat-accent);
+  color: var(--cat-on-accent);
+  letter-spacing: 0.06em;
+}
+
+.app-shell .hero__title {
+  grid-column: 1 / span 7;
+  margin: var(--cat-gap) 0 0;
+  font-size: var(--cat-display);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.app-shell .hero__lead {
+  grid-column: 1 / span 7;
+  margin: 0;
+  max-inline-size: 36em;
+  color: var(--cat-muted);
+}
+
+.app-shell .hero__live {
+  grid-column: 1 / span 7;
+  margin-block-start: var(--cat-gap-lg);
+}
+
+.app-shell .hero__side {
+  grid-column: 9 / -1;
+  grid-row: 2 / span 3;
+  align-self: start;
+  display: grid;
+  gap: var(--cat-gap-lg);
+  align-content: start;
+  padding-inline-start: 1.5rem;
+  border-inline-start: 1px solid var(--cat-line);
+}
+
+.app-shell .hero__action {
+  margin: 0;
+}
+
+/* ---- トピック一覧。入口は 7 つとも同じ重さにする ---- */
+
+.app-shell .topic-list {
+  margin: var(--cat-section) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--cat-section) 1.5rem;
+}
+
+.app-shell .topic {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+.app-shell .topic__hit {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  min-block-size: var(--cat-tap);
+  padding-block-end: 0.5rem;
+  border-block-end: 2px solid var(--cat-text);
+}
+
+.app-shell .topic__label {
+  font-size: var(--cat-h2);
+  font-weight: 700;
+  line-height: 1.3;
+  transition: color var(--cat-duration) ease;
+}
+
+.app-shell .topic__count {
+  flex: none;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .topic__lead {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--cat-muted);
+}
+
+/* token のトピックには標本がないので、族と件数の帯を置く。 */
+.app-shell .token-strip {
+  display: grid;
+  gap: 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--cat-surface);
+  block-size: 16rem;
+  align-content: start;
+}
+
+.app-shell .token-strip__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding-block: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.app-shell .token-strip__row + .token-strip__row {
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .token-strip__name {
+  font-weight: 700;
+}
+
+.app-shell .token-strip__count {
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- トピックの画面 ---- */
+
+.app-shell .index .section-title {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.app-shell .index__lead {
+  margin: var(--cat-gap-lg) 0 0;
+  max-inline-size: 36em;
+  color: var(--cat-muted);
+}
+
+.app-shell .empty {
+  margin: var(--cat-section) 0 0;
+  color: var(--cat-muted);
+}
+
+/* ---- token の表 ---- */
+
+.app-shell .token-families {
+  display: grid;
+  gap: var(--cat-block);
+  margin-block-start: var(--cat-section);
+}
+
+.app-shell .token-family__head {
+  margin: 0 0 0.5rem;
+  font-size: var(--cat-h2);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.app-shell .token-family__source {
+  margin: 0.5rem 0 0;
+  font-size: var(--cat-label);
+  color: var(--cat-muted);
+}
+
+.app-shell .token-table-wrap {
+  overflow-x: auto;
+  margin-block-start: var(--cat-gap-lg);
+}
+
+.app-shell .token-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.app-shell .token-table th,
+.app-shell .token-table td {
+  padding: 0.875rem 1rem 0.875rem 0;
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--cat-line);
+}
+
+.app-shell .token-table thead th {
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  border-block-end-color: var(--cat-line-strong);
+  white-space: nowrap;
+}
+
+.app-shell .token-table tbody th {
+  white-space: nowrap;
+  font-weight: 400;
+}
+
+.app-shell .token-table__kind {
+  display: block;
+  margin-block-start: 0.25rem;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .token-table__value {
+  min-inline-size: 14rem;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--cat-muted);
+}
+
+/* composite な token は値だけでは字面が判断できないので、実スタイルで見本を描く。 */
+.app-shell .token-table__sample {
+  display: block;
+  min-inline-size: 12rem;
+  overflow-wrap: anywhere;
+}
+
+.app-shell .token-table__desc {
+  min-inline-size: 16rem;
+  color: var(--cat-muted);
+}
+
+@media (width <= 60rem) {
+  .app-shell .hero__title,
+  .app-shell .hero__lead,
+  .app-shell .hero__live {
+    grid-column: 1 / -1;
+  }
+
+  .app-shell .hero__side {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    padding-inline-start: 0;
+    padding-block-start: var(--cat-gap-lg);
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--cat-line);
+  }
+
+  .app-shell .topic-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width <= 40rem) {
+  .app-shell .topic-list {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .token-strip {
+    block-size: auto;
+  }
+}
+
+/* 余白の token は文字ではなく長さの帯で見せる。字面では大きさが分からない。 */
+.app-shell .token-table__bar {
+  display: block;
+  block-size: 0.75rem;
+  border-radius: 1px;
+  background: var(--cat-accent);
+}
+
+/* ---- トピックの中身。一覧を挟まず、成果物そのものを出す ---- */
+
+.app-shell .topic-body {
+  display: grid;
+  gap: var(--cat-block);
+  margin-block-start: var(--cat-section);
+}
+
+.app-shell .work {
+  display: grid;
+  gap: var(--cat-gap-lg);
+}
+
+.app-shell .work-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-block-end: 0.5rem;
+  border-block-end: 2px solid var(--cat-text);
+}
+
+.app-shell .work-head__title {
+  margin: 0;
+  font-size: var(--cat-h2);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.app-shell .work-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .work-head__meta a {
+  color: var(--cat-accent);
+}
+
+.app-shell .work-head__meta span + span::before {
+  content: "／";
+  margin-inline-end: 0.75rem;
+  color: var(--cat-line-strong);
+}
+
+/* ---- 配色 ---- */
+
+/* 配色を当てた標本。色の一覧だけでは、組んだときの見え方が分からない。 */
+.app-shell .specimen {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--cs-border);
+  border-radius: var(--cat-radius);
+  background: var(--cs-bg);
+  color: var(--cs-text);
+}
+
+.app-shell .specimen__title {
+  margin: 0;
+  font-size: var(--typography-title-font-size);
+  font-weight: 700;
+  line-height: var(--typography-title-line-height);
+}
+
+.app-shell .specimen__body {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--cs-text-muted);
+}
+
+.app-shell .specimen__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+}
+
+.app-shell .specimen__btn {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.25rem;
+  padding: 0 1rem;
+  border-radius: var(--cat-radius);
+  background: var(--cs-accent);
+  color: var(--cs-on-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.app-shell .specimen__btn--quiet {
+  background: none;
+  color: var(--cs-text);
+  border: 1px solid var(--cs-border-strong);
+}
+
+.app-shell .specimen__field {
+  display: flex;
+  align-items: center;
+  min-block-size: 2.25rem;
+  margin: 0;
+  padding: 0 0.75rem;
+  border: 1px solid var(--cs-border-strong);
+  border-radius: var(--cat-radius);
+  background: var(--cs-surface);
+  color: var(--cs-text-muted);
+  font-size: 0.875rem;
+}
+
+/* ---- タイポグラフィ ---- */
+
+/* 書体そのものを先に出す。役割の見本だけでは、何で組んであるのかが読めない。
+   出すのは名前と字形だけにする。素性の全文は token の README にある。 */
+.app-shell .typeface {
+  padding-block-end: var(--cat-gap-lg);
+  border-block-end: 1px solid var(--cat-line-strong);
+}
+
+.app-shell .typeface__name {
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+/* 字形は大きく出す。仮名、片仮名、漢字、欧字、数字の字面を 1 度に比べるためである。 */
+.app-shell .typeface__glyphs {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+/* ---- タイポグラフィの役割 ---- */
+
+.app-shell .roles {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 見本と仕様を左右に分ける。
+   値を見本の上に 1 行で並べていたときは、どの数が何を指すのかが読めなかった。
+   見本の側を広く取るのは、役割の画面で最も見るものが実寸の文だからである。 */
+/* 見本の測り（30em）に合わせて左の列を止め、仕様は右端に寄せる（利用者の判断、2026-09-20）。
+   右端に置くと、6 役割の仕様が同じ縦線の上に揃い、役割どうしを縦に読み比べられる。 */
+.app-shell .role {
+  display: grid;
+  grid-template-columns: minmax(0, 34em) minmax(0, 1fr);
+  gap: var(--cat-gap-lg) var(--cat-section);
+  padding-block: 1.5rem;
+  border-block-end: 1px solid var(--cat-line);
+}
+
+.app-shell .role__main {
+  min-inline-size: 0;
+}
+
+.app-shell .role__name {
+  margin: 0 0 0.5rem;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-accent);
+}
+
+/* 仕様は定義の組で出す。項目名を先に置き、値の桁を揃える。 */
+.app-shell .role__spec {
+  display: grid;
+  justify-self: end;
+  inline-size: 15rem;
+  gap: 0.25rem;
+  margin: 0;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .role__spec-row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.25rem;
+  border-block-end: 1px solid var(--cat-line);
+}
+
+.app-shell .role__spec-row:last-child {
+  border-block-end: none;
+}
+
+.app-shell .role__spec dt {
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  line-height: var(--font-line-height-ui);
+}
+
+.app-shell .role__spec dd {
+  margin: 0;
+  line-height: var(--font-line-height-ui);
+}
+
+@media (width <= 60rem) {
+  .app-shell .role {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-shell .role__spec {
+    justify-self: start;
+    inline-size: 100%;
+  }
+}
+
+/* 見本は素のまま置く。token を当てた面なので、罫や余白を足すと見本自体が装飾を持つ。
+   行の長さは本文の測りに揃える。全幅で組むと body の見本が 1 行に収まり、
+   行間の値が確かめられない。 */
+.app-shell .role__sample {
+  margin: 0;
+  max-inline-size: 30em;
+}
+
+/* 正本へ辿る 1 行。トピックの中身のあとに置く。
+   成果物の live 標本は、役割の見本と同じものを 2 度見せることになるので出さない。
+   「正本」の標識は付けない。リンクが 1 本だけなら、押す先は題名から読める。 */
+.app-shell .topic-source {
+  margin: var(--cat-gap-lg) 0 0;
+  font-size: 0.875rem;
+}
+
+.app-shell .topic-source a {
+  color: var(--cat-accent);
+  border-block-end: 1px solid currentcolor;
+}
+
+/* 説明には縦の罫を引く。
+   caption の見本は 0.875rem の並文字なので、印がないと説明と見分けが付かなかった。
+   印は注釈の側に付ける。見本の側に付けると、見本が素のまま見られなくなる。 */
+.app-shell .role__desc {
+  margin: 0.75rem 0 0;
+  max-inline-size: 38em;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--cat-line);
+  font-size: 0.875rem;
+  color: var(--cat-muted);
+}
+
+/* ---- SVG の格子 ---- */
+
+/* 罫は格子ではなく各セルに持たせる。
+   格子の側に罫を引くと、件数が列数に満たないときに空いたところまで線が伸びる。 */
+.app-shell .svg-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.75rem;
+}
+
+.app-shell .svg-grid--large {
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.app-shell .svg-cell {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  align-content: center;
+  padding: 1.25rem 0.75rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--cat-bg);
+  /* SVG は currentColor を使う。土台の文字色を渡す。 */
+  color: var(--cat-text);
+}
+
+.app-shell .svg-cell__art {
+  display: grid;
+  place-items: center;
+}
+
+.app-shell .svg-cell__art svg {
+  inline-size: 3rem;
+  block-size: 3rem;
+}
+
+.app-shell .svg-grid--large .svg-cell__art svg {
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: 10rem;
+}
+
+.app-shell .svg-cell__name {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.6875rem;
+  color: var(--cat-muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* 採用と却下を 1 語で示す。掲載対象は採用成果に限らないので、前提が読めるようにする。 */
+.app-shell .scheme__mark {
+  margin-inline-start: auto;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .scheme__mark[data-adopted="true"] {
+  color: var(--cat-accent);
+}
+
+/* ---- 配色。coolors のパレットカードを参考にする ----
+   色そのものを面にし、格子で一望できるようにする。
+   造形の語彙は issue-feature から引き継いだものを使い、新しい角丸や影を増やさない。 */
+
+/* 1 配色を全幅で見せる帯。ページの顔として置く。 */
+.app-shell .feature {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* 大きな帯は 2 段にして、カードより多くの役割を出す。
+   本数は配色ごとに変わるので、列数を固定しない。固定すると右端に空きが出る。 */
+.app-shell .feature__bands {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  block-size: 15rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  overflow: hidden;
+}
+
+.app-shell .feature__row {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-inline-size: 0;
+}
+
+/* 幅は flex-grow で割る。accent、text、bg だけ 2 倍にして、配色の性格を決める 3 色を大きく見せる。 */
+.app-shell .feature__band {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  /* 帯の高さを揃える。warning のように注記が長い役割があり、
+     折り返すとその帯だけ背が高くなって段が崩れる。全文はポップアップで読める。 */
+  overflow: hidden;
+}
+
+.app-shell .feature__hit {
+  appearance: none;
+  inline-size: 100%;
+  block-size: 100%;
+  display: grid;
+  gap: 0.125rem;
+  align-content: end;
+  justify-items: start;
+  padding: 0.75rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.app-shell .feature__hex,
+.app-shell .feature__role,
+.app-shell .feature__jp {
+  max-inline-size: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-shell .feature__hex {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.app-shell .feature__role,
+.app-shell .feature__jp {
+  font-size: var(--cat-label);
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+
+.app-shell .feature__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.app-shell .feature__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.app-shell .feature__label {
+  font-size: var(--cat-h2);
+  font-weight: 700;
+}
+
+.app-shell .feature__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+/* 幅は内容によらず固定にする。配色名の字数で送りのボタンが伸び縮みすると、
+   次を押すたびにボタンの位置が動く。 */
+.app-shell .feature__step {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  inline-size: 8rem;
+  min-block-size: var(--cat-tap);
+  padding: 0 0.75rem;
+  border: 1px solid var(--cat-line-strong);
+  border-radius: var(--cat-radius);
+  background: none;
+  color: var(--cat-text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color var(--cat-duration) ease,
+    border-color var(--cat-duration) ease;
+}
+
+.app-shell .feature__step-name {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 幅を固定する。LINE Seed JP は等幅数字を持たないので、
+   font-variant-numeric: tabular-nums では桁ごとに幅が変わり、両隣のボタンが動く。 */
+.app-shell .feature__count {
+  inline-size: 4.5rem;
+  text-align: center;
+  white-space: nowrap;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* hero と格子の間だけを大きく開け、切替と格子は近づける。 */
+.app-shell .palette-browse {
+  display: grid;
+  gap: var(--cat-section);
+}
+
+/* パレットカードの格子。 */
+.app-shell .palettes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--cat-section) 1.5rem;
+}
+
+.app-shell .palette {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+/* 帯は隙間なく並べ、角丸はカード全体にだけ付ける。
+   hover と focus で、その帯だけを広げて情報を出す。
+   7 本すべてに文字を載せると色の面が文字で埋まり、色を見る面ではなくなる。 */
+.app-shell .bands {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  block-size: 9rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  overflow: hidden;
+}
+
+.app-shell .band {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  transition: flex-grow var(--cat-duration) ease;
+}
+
+.app-shell .band__hit {
+  appearance: none;
+  inline-size: 100%;
+  block-size: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.app-shell .band__info {
+  display: grid;
+  gap: 0.125rem;
+  justify-items: center;
+  /* 情報は hover だけに頼らない。focus でも出し、粗いポインタでは常時出す。 */
+  opacity: 0;
+  transition: opacity var(--cat-duration) ease;
+}
+
+.app-shell .band:has(.band__hit:focus-visible) {
+  flex-grow: 3;
+}
+
+.app-shell .band__hit:focus-visible .band__info {
+  opacity: 1;
+}
+
+.app-shell .band__hit:focus-visible {
+  outline-offset: -3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .band:hover {
+    flex-grow: 3;
+  }
+
+  .app-shell .band:hover .band__info {
+    opacity: 1;
+  }
+
+  .app-shell .feature__step:hover,
+  .app-shell .palette__more:hover {
+    color: var(--cat-accent);
+    border-color: var(--cat-accent);
+  }
+}
+
+/* 粗いポインタでは hover が無いので、狭いまま全部に出す。 */
+@media (hover: none) {
+  .app-shell .band__info {
+    opacity: 1;
+  }
+
+  .app-shell .band__hex {
+    font-size: 0.625rem;
+  }
+
+  .app-shell .band__role {
+    display: none;
+  }
+}
+
+.app-shell .band__hex {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.app-shell .band__role {
+  font-size: var(--cat-label);
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.app-shell .palette__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.app-shell .palette__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.app-shell .palette__label {
+  font-size: var(--cat-item);
+  font-weight: 700;
+}
+
+/* 詳細は語ではなく印にする。カードの下の 1 行を色と名前だけに保つ。 */
+.app-shell .palette__more {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--cat-tap);
+  block-size: var(--cat-tap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--cat-radius);
+  background: none;
+  color: var(--cat-muted);
+  cursor: pointer;
+  transition: color var(--cat-duration) ease;
+}
+
+.app-shell .icon {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.app-shell .icon__dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* ポップアップの中身。 */
+.app-shell .detail-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  align-items: start;
+  gap: var(--cat-gap-lg) var(--cat-section);
+}
+
+/* grid の項目は既定で min-content より縮まない。
+   0 にしないと、hex と和名が隣の列へはみ出して重なる。 */
+.app-shell .role-group {
+  min-inline-size: 0;
+}
+
+.app-shell .role-group__label {
+  margin: 0 0 0.5rem;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .role-list,
+.app-shell .ratios {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+
+.app-shell .role-item + .role-item,
+.app-shell .ratio + .ratio {
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .role-item__hit {
+  appearance: none;
+  inline-size: 100%;
+  min-block-size: var(--cat-tap);
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 7rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8125rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.app-shell .role-item__chip {
+  block-size: 1.25rem;
+  border: 1px solid var(--cat-line);
+  border-radius: 2px;
+}
+
+.app-shell .role-item__role,
+.app-shell .role-item__jp {
+  min-inline-size: 0;
+  /* anywhere にすると hex が途中で割れる。語の区切りを優先する。 */
+  overflow-wrap: break-word;
+}
+
+.app-shell .role-item__role {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--cat-muted);
+}
+
+.app-shell .role-item__hex {
+  justify-self: end;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.6875rem;
+  color: var(--cat-muted);
+  overflow-wrap: anywhere;
+}
+
+.app-shell .ratio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block: 0.375rem;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .ratio__pair {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--cat-muted);
+}
+
+.app-shell .ratio__min {
+  color: var(--cat-muted);
+}
+
+.app-shell .ratio__mark {
+  font-weight: 700;
+}
+
+.app-shell .ratio[data-pass="false"] .ratio__mark,
+.app-shell .ratio[data-pass="false"] .ratio__value {
+  color: var(--cat-accent);
+}
+
+/* コピーの結果は読み上げにも届くようにする。 */
+.app-shell .copied {
+  margin: 0;
+  min-block-size: 1.5rem;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (width <= 60rem) {
+  .app-shell .palettes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .app-shell .feature__bands {
+    block-size: 10rem;
+  }
+}
+
+@media (width <= 40rem) {
+  .app-shell .palettes {
+    grid-template-columns: 1fr;
+  }
+
+  /* 狭い幅では hero の帯を縦積みにする。
+     7 列のままだと 1 列が 50px を切り、hex が途中で折り返して読めない。 */
+  .app-shell .feature__bands {
+    grid-template-rows: none;
+    block-size: auto;
+  }
+
+  .app-shell .feature__row {
+    flex-direction: column;
+  }
+
+  /* 縦積みでは高さを内容に決めさせる。
+     flex-basis 0 のままだと、高さが決まらない入れ物の中で帯が 0 になる。 */
+  .app-shell .feature__band {
+    flex: 0 0 auto;
+  }
+
+  .app-shell .feature__hit {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: start;
+    align-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    min-block-size: 2.5rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .app-shell .feature__hex {
+    font-size: 0.75rem;
+  }
+
+  /* 狭い幅は 2 行にする。位置を明示しないと hex が細い列へ流れ、1 文字ずつ折り返す。 */
+  .app-shell .role-item__hit {
+    grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+    row-gap: 0.125rem;
+  }
+
+  .app-shell .role-item__chip {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .app-shell .role-item__role {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .app-shell .role-item__hex {
+    grid-column: 3;
+    grid-row: 1;
+    white-space: nowrap;
+  }
+
+  .app-shell .role-item__jp {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+
+  .app-shell .ratio {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.125rem;
+  }
+
+  .app-shell .ratio__pair {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---- 詳細のポップアップ ----
+   <dialog> の showModal に任せる。Esc、背景の不活性化、focus の閉じ込めが既定で付く。
+   ポップアップは実行基盤の iframe の中で開くので、position: fixed の根の上に重なる。 */
+
+.app-shell .sheet-dialog {
+  inline-size: min(72rem, calc(100% - 2 * var(--cat-inline)));
+  max-block-size: min(46rem, calc(100% - 2 * var(--cat-inline)));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--cat-line-strong);
+  border-radius: var(--cat-radius);
+  background: var(--cat-bg);
+  color: var(--cat-text);
+  font-family: var(--font-family-sans);
+  overflow: hidden;
+}
+
+.app-shell .sheet-dialog::backdrop {
+  /* 影は使わない方針なので、背景は面の暗さだけで沈める。 */
+  background: rgb(12 12 12 / 45%);
+}
+
+.app-shell .sheet-dialog__body {
+  max-block-size: min(46rem, calc(100vh - 2 * var(--cat-inline)));
+  overflow-y: auto;
+  padding: var(--cat-section);
+}
+
+.app-shell .sheet-dialog__head {
+  position: sticky;
+  inset-block-start: calc(var(--cat-section) * -1);
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin: calc(var(--cat-section) * -1) calc(var(--cat-section) * -1) var(--cat-gap-lg);
+  padding: var(--cat-gap-lg) var(--cat-section);
+  background: var(--cat-bg);
+  border-block-end: 2px solid var(--cat-text);
+}
+
+.app-shell .sheet-dialog__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.app-shell .sheet-dialog__label {
+  font-size: var(--cat-h2);
+  font-weight: 700;
+}
+
+.app-shell .sheet-dialog__close {
+  appearance: none;
+  min-block-size: var(--cat-tap);
+  padding: 0 0.875rem;
+  border: 1px solid var(--cat-line-strong);
+  border-radius: var(--cat-radius);
+  background: none;
+  color: var(--cat-text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color var(--cat-duration) ease,
+    border-color var(--cat-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .sheet-dialog__close:hover {
+    color: var(--cat-accent);
+    border-color: var(--cat-accent);
+  }
+}
+
+@media (width <= 40rem) {
+  .app-shell .sheet-dialog {
+    inline-size: calc(100% - 1rem);
+    max-block-size: calc(100% - 1rem);
+  }
+
+  .app-shell .sheet-dialog__body {
+    padding: var(--cat-gap-lg);
+    max-block-size: calc(100vh - 1rem);
+  }
+
+  .app-shell .sheet-dialog__head {
+    inset-block-start: calc(var(--cat-gap-lg) * -1);
+    margin: calc(var(--cat-gap-lg) * -1) calc(var(--cat-gap-lg) * -1) var(--cat-gap-lg);
+    padding: 0.75rem var(--cat-gap-lg);
+  }
+}
+
+/* ---- ここから方針（guidelines）の規則 ---- */
+
+/* 寸法はすべて token と --cat-* から引く。この画面だけが正本にない値を持っていた
+   （0.9375rem、0.8125rem、1.125rem、行 1.6〜1.7）ので、
+   「画面が正本にない寸法を持たない」という A6 の決定に揃え直した。
+   版面と見出しはトピックの画面と共有する（.index / .section-title / .index__lead / .work-head）。 */
+
+/* 節の間隔。罫は .work-head の 2px が持つので、ここでは引かない。 */
+.app-shell .guide-block {
+  margin-block-start: var(--cat-block);
+}
+
+.app-shell .guide-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--cat-gap) var(--cat-gap-lg);
+  margin: var(--cat-gap-lg) 0 0;
+}
+
+.app-shell .guide-facts dt {
+  font-size: var(--cat-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-facts dd {
+  margin: 0;
+  /* 複数行の本文は 40rem を fallback にし、対応環境では 40ic を上限にする（token の README）。 */
+  max-inline-size: 40rem;
+  font-size: var(--typography-body-font-size);
+  line-height: var(--typography-body-line-height);
+}
+
+@supports (max-inline-size: 40ic) {
+  .app-shell .guide-facts dd,
+  .app-shell .guide-rule__rationale {
+    max-inline-size: 40ic;
+  }
+}
+
+.app-shell .guide-rule:focus {
+  outline: none;
+}
+
+.app-shell .guide-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  gap: var(--cat-section);
+  align-items: start;
+}
+
+.app-shell .guide-layout__main > * + * {
+  margin-block-start: var(--cat-block);
+}
+
+/* 索引は読んでいる間も見えるよう、右の桁に留める。 */
+.app-shell .guide-aside {
+  position: sticky;
+  inset-block-start: var(--cat-gap-lg);
+  max-block-size: calc(100vh - var(--cat-section));
+  overflow: auto;
+}
+
+.app-shell .guide-aside__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cat-gap-lg);
+  padding-inline-start: var(--cat-gap-lg);
+  border-inline-start: 1px solid var(--cat-line);
+}
+
+.app-shell .guide-aside__title {
+  margin: 0;
+  font-size: var(--cat-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-aside__layer-name {
+  margin: 0 0 var(--cat-gap);
+  font-size: var(--cat-label);
+  font-weight: 700;
+  color: var(--cat-text);
+}
+
+.app-shell .guide-aside__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 索引は本文と同じ文字の並びにする。ボタンの造形にすると、
+   規則そのものより索引の方が強く見える。 */
+.app-shell .guide-aside__link {
+  display: block;
+  padding: 0.25rem 0 0.25rem var(--cat-gap);
+  border-inline-start: 2px solid transparent;
+  color: var(--cat-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: color var(--cat-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .guide-aside__link:hover {
+    color: var(--cat-accent);
+    border-inline-start-color: var(--cat-accent);
+  }
+}
+
+.app-shell .guide-layer__lead {
+  margin: 0 0 var(--cat-gap-lg);
+  color: var(--cat-muted);
+}
+
+/* 狭い幅では索引を本文の前へ戻す。右に置くと本文が 2 桁に割れて読めない。 */
+@media (width < 72rem) {
+  .app-shell .guide-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-shell .guide-aside {
+    position: static;
+    order: -1;
+    max-block-size: none;
+    margin-block-start: var(--cat-section);
+  }
+
+  .app-shell .guide-aside__inner {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+}
+
+/* コアは番号付きの一覧。番号が優先順位を表すので、装飾にせず数字で見せる。 */
+.app-shell .guide-cores {
+  margin: var(--cat-section) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: guide-core;
+}
+
+.app-shell .guide-core {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--cat-gap-lg);
+  padding-block: var(--cat-gap-lg);
+  border-block-start: 1px solid var(--cat-line);
+  counter-increment: guide-core;
+}
+
+.app-shell .guide-core::before {
+  content: counter(guide-core);
+  grid-row: 1 / span 2;
+  color: var(--cat-muted);
+  font-size: var(--cat-item);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--font-line-height-tight);
+}
+
+.app-shell .guide-core__title {
+  margin: 0;
+  font-size: var(--cat-item);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+}
+
+.app-shell .guide-core__body {
+  margin: var(--cat-gap) 0 0;
+  max-inline-size: 40rem;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+/* タグは無彩色にする。色は良い例と悪い例のために取っておく。 */
+.app-shell .guide-rule__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cat-gap);
+  margin: 0 0 var(--cat-gap-lg);
+}
+
+.app-shell .guide-tag {
+  padding: 0.125rem var(--cat-gap);
+  color: var(--cat-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  text-decoration: none;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-tag--core {
+  color: var(--cat-text);
+  transition: border-color var(--cat-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .guide-tag--core:hover {
+    border-color: var(--cat-text);
+  }
+}
+
+.app-shell .guide-rules {
+  margin-block-start: var(--cat-section);
+}
+
+.app-shell .guide-rule {
+  margin-block-start: var(--cat-section);
+  padding-block-start: var(--cat-section);
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .guide-rule:first-child {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-block-start: none;
+}
+
+.app-shell .guide-rule__title {
+  margin: 0 0 var(--cat-gap-lg);
+  font-size: var(--cat-item);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+}
+
+.app-shell .guide-rule__figure {
+  margin-block-end: var(--cat-gap-lg);
+}
+
+.app-shell .guide-rule__rationale {
+  margin-block-end: var(--cat-gap-lg);
+  max-inline-size: 40rem;
+  font-size: var(--typography-body-font-size);
+  line-height: var(--typography-body-line-height);
+  color: var(--cat-text);
+}
+
+.app-shell .guide-examples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cat-gap-lg);
+  margin-block-end: var(--cat-gap-lg);
+}
+
+.app-shell .guide-example {
+  padding: var(--cat-gap-lg);
+  border-radius: var(--cat-radius);
+  background: var(--cat-surface);
+}
+
+/* 良い例と悪い例は線の種類で分ける。色だけで分けると、配色によっては差が読めない。 */
+.app-shell .guide-example--bad {
+  border: 1px dashed var(--cat-line-strong);
+}
+
+.app-shell .guide-example--good {
+  border: 1px solid var(--cat-line-strong);
+}
+
+.app-shell .guide-example__header {
+  margin-block-end: var(--cat-gap);
+}
+
+.app-shell .guide-example__tag {
+  display: inline-block;
+  font-size: var(--cat-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.app-shell .guide-example__tag--bad {
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-example__tag--good {
+  color: var(--cat-accent);
+}
+
+.app-shell .guide-example__body {
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-text);
+}
+
+.app-shell .guide-rule__exception {
+  margin-block-start: var(--cat-gap-lg);
+  padding: var(--cat-gap) var(--cat-gap-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-muted);
+  background: var(--cat-bg);
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-rule__exception-label {
+  margin-inline-end: var(--cat-gap);
+  font-weight: var(--font-weight-bold);
+  color: var(--cat-text);
+}
+
+.app-shell .guide-rule__origins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cat-gap-lg);
+  margin-block-start: var(--cat-gap-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-rule__origin-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cat-gap);
+}
+
+.app-shell .guide-rule__origin-label {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.app-shell .guide-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cat-gap);
+  margin: var(--cat-gap-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .guide-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cat-gap);
+  font-size: var(--typography-ui-font-size);
+  line-height: var(--font-line-height-ui);
+}
+
+/* 箱は文字を入れない印なので、行の中心に合わせて置く。 */
+.app-shell .guide-checklist__icon {
+  flex: none;
+  margin-block-start: calc((1em * var(--font-line-height-ui) - 1rem) / 2);
+  inline-size: 1rem;
+  block-size: 1rem;
+  border: 1px solid var(--cat-line-strong);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-sources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cat-gap);
+  margin: var(--cat-gap-lg) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .guide-sources__item {
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-code {
+  padding-inline: var(--cat-gap);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  background: var(--cat-surface);
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-link {
+  color: var(--cat-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.app-shell .guide-strong {
+  font-weight: var(--font-weight-bold);
+}
+
+/* ---- 方針の図版 ---- */
+
+.app-shell .guide-figure__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cat-gap-lg);
+}
+
+.app-shell .guide-figure__card {
+  padding: var(--cat-gap-lg);
+  background: var(--cat-surface);
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-figure__card--bad {
+  border-style: dashed;
+}
+
+.app-shell .guide-figure__tag {
+  margin-block-end: var(--cat-gap-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.app-shell .guide-figure__tag--bad {
+  color: var(--cat-muted);
+}
+
+.app-shell .guide-figure__tag--good {
+  color: var(--cat-accent);
+}
+
+/* 図版の器なので、高さは文字の寸法ではなく中身に合わせて決める。 */
+.app-shell .guide-figure__specimen {
+  min-block-size: 5rem;
+  padding: var(--cat-gap-lg);
+  background: var(--cat-bg);
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+}
+
+.app-shell .guide-figure__caption {
+  margin: var(--cat-gap) 0 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-muted);
+}
+
+@media (width <= 40rem) {
+  .app-shell .guide-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .guide-examples {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell .guide-figure__grid {
+    grid-template-columns: 1fr;
   }
 }

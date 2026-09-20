@@ -4,6 +4,7 @@
 - 日付: 2026-09-20
 - 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)、[見本帳へ絞る ADR](2026-09-19-catalog-artifacts-only.md)
 - 更新: 規則の書式は [方針の書式 ADR](2026-09-20-guideline-format.md) が置き換えた。
+- 更新: 公開実装は [topic-first ADR](2026-09-20-catalog-topic-first.md) で `/guidelines` と `/guidelines/:slug` として入れた。
 
 ## 背景
 

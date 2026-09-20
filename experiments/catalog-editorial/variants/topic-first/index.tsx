@@ -72,7 +72,7 @@ const TOPICS: Topic[] = [
 // topic を消すと、その domain の成果物は topicOf が null を返して一覧に出ない。
 
 // 1 つの成果物が複数の domain を持つので、どの topic に入れるかを 1 つに決める。
-// 正本（apps/catalog/src/content/category.ts の categoryForExperiment）と同じく、
+// 正本（apps/catalog/src/content/topics.ts の topicForExperiment）と同じく、
 // 成果物が frontmatter に書いた domain の順で、最初に topic へ当たるものを採る。
 // topic の表示順は利用者が挙げた順にしたいので、割り当てとは分ける。
 // どの topic にも当たらない domain の成果物は、掲載しない（null を返す）。

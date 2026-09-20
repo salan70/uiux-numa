@@ -6,14 +6,20 @@ type Props = {
   children: ReactNode;
   className?: string;
   current?: boolean;
+  /** 閉じたあとに focus を戻す先を探すために使う。 */
+  id?: string;
+  "aria-haspopup"?: "dialog";
+  "aria-label"?: string;
   onNavigate?: () => void;
 };
 
-export function Link({ href, children, className, current, onNavigate }: Props) {
+export function Link({ href, children, className, current, id, onNavigate, ...rest }: Props) {
   return (
     <a
       href={href}
       className={className}
+      id={id}
+      {...rest}
       aria-current={current ? "page" : undefined}
       onClick={(event) => {
         if (

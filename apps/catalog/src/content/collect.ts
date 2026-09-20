@@ -1,4 +1,4 @@
-import { categoryForExperiment, type CatalogCategory } from "./category";
+import { topicForExperiment, type TopicId } from "./topics";
 import {
   parseExperimentFrontmatter,
   parseTokenAssetMeta,
@@ -48,7 +48,10 @@ export type ExperimentRecord = {
   domains: string[];
   sources: string[];
   platforms: string[];
-  category: CatalogCategory | null;
+  topic: TopicId | null;
+  /** README の Problem 節の先頭文。見出し下のリードに使う。 */
+  lead: string;
+  repoPath: string;
   variantIds: string[];
   variants: ExperimentVariant[];
   liveVariants: LiveVariant[];
@@ -58,13 +61,30 @@ export type TokenAsset = AssetMeta & {
   sourcePath: string;
 };
 
+/** token の正本ファイル 1 つ分。画面はこの単位で表にする。 */
+export type TokenFamily = {
+  id: string;
+  label: string;
+  sourcePath: string;
+  /** $extensions を持たない正本もあるので null を許す。 */
+  role: AssetMeta["role"] | null;
+  maturity: AssetMeta["maturity"] | null;
+  tokens: CatalogToken[];
+};
+
 export type CatalogData = {
   tokens: CatalogToken[];
   tokenAssets: TokenAsset[];
+  tokenFamilies: TokenFamily[];
   schemes: ColorScheme[];
   experiments: ExperimentRecord[];
   svgs: SvgVariant[];
   liveVariants: LiveVariant[];
+};
+
+const FAMILY_LABELS: Record<string, string> = {
+  typography: "文字",
+  space: "余白",
 };
 
 function loadCatalog(): CatalogData {
@@ -81,7 +101,33 @@ function loadCatalog(): CatalogData {
   const schemes = collectSchemes(schemeFiles);
   const svgs = collectSvgs(svgFiles);
 
-  return { tokens, tokenAssets, schemes, experiments, svgs, liveVariants };
+  const tokenFamilies = collectTokenFamilies(tokens, tokenAssets);
+
+  return { tokens, tokenAssets, tokenFamilies, schemes, experiments, svgs, liveVariants };
+}
+
+function collectTokenFamilies(tokens: CatalogToken[], assets: TokenAsset[]): TokenFamily[] {
+  const families = new Map<string, TokenFamily>();
+  for (const token of tokens) {
+    const match = token.sourcePath.match(/^tokens\/([^/]+)\//);
+    if (!match) throw new Error(`token の正本パスが不正: ${token.sourcePath}`);
+    const id = match[1];
+    const found = families.get(id);
+    if (found) {
+      found.tokens.push(token);
+      continue;
+    }
+    const asset = assets.find((item) => item.sourcePath === token.sourcePath);
+    families.set(id, {
+      id,
+      label: FAMILY_LABELS[id] ?? id,
+      sourcePath: token.sourcePath,
+      role: asset?.role ?? null,
+      maturity: asset?.maturity ?? null,
+      tokens: [token],
+    });
+  }
+  return [...families.values()].sort((a, b) => a.id.localeCompare(b.id));
 }
 
 function readTokenAssetMeta(json: unknown, sourcePath: string): AssetMeta | null {
@@ -150,7 +196,9 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       domains: frontmatter.domains,
       sources: frontmatter.sources,
       platforms: frontmatter.platforms,
-      category: categoryForExperiment(slug, frontmatter.domains),
+      topic: topicForExperiment(slug, frontmatter.domains),
+      lead: leadSentence(source),
+      repoPath,
       variantIds: actual,
       variants: actual.map((id) => ({
         id,
@@ -196,8 +244,54 @@ function parseVariantIds(source: string): string[] {
   return [...section.matchAll(/^\|\s*`([a-z0-9-]+)`\s*\|/gm)].map((match) => match[1]);
 }
 
+/**
+ * README の Problem 節の先頭文。
+ * 1 文 1 行で書く規範（CLAUDE.md）があるため、最初の非空行をそのまま使う。
+ */
+function leadSentence(source: string): string {
+  const start = source.indexOf("## Problem");
+  if (start === -1) return "";
+  const end = source.indexOf("\n## ", start + 1);
+  const section = source.slice(start + "## Problem".length, end === -1 ? source.length : end);
+  const line = section.split(/\r?\n/).find((item) => item.trim() !== "");
+  return line?.trim() ?? "";
+}
+
 export function defaultVariantId(experiment: ExperimentRecord): string | undefined {
   return experiment.variants.find((item) => item.status === "adopted")?.id;
 }
 
 export const catalog = loadCatalog();
+
+/**
+ * 却下した配色は公開面に出さない。
+ * 使える配色だけを並べたほうが、選ぶ面として迷いがない。
+ * 却下した案は experiments/color-schemes の記録に残っている。
+ */
+export function adoptedSchemes(): ColorScheme[] {
+  const adopted = catalog.experiments.find((item) => item.slug === "color-schemes")?.adopted ?? [];
+  if (adopted.length === 0) return catalog.schemes;
+  return catalog.schemes.filter((item) => adopted.includes(item.id));
+}
+
+/** トピックに入る成果物。更新の新しい順に並べる。 */
+export function worksInTopic(topic: TopicId): ExperimentRecord[] {
+  return catalog.experiments
+    .filter((item) => item.topic === topic)
+    .sort((a, b) => b.updated.localeCompare(a.updated) || a.slug.localeCompare(b.slug));
+}
+
+/** 更新の新しい順。トップの hero に使う。 */
+export function worksByUpdated(): ExperimentRecord[] {
+  return catalog.experiments
+    .filter((item) => item.topic !== null)
+    .sort((a, b) => b.updated.localeCompare(a.updated) || a.slug.localeCompare(b.slug));
+}
+
+/** variant が持つ配布用の SVG。 */
+export function svgsFor(experiment: string, variant: string) {
+  return (
+    catalog.svgs.find((item) => item.experiment === experiment && item.variant === variant)
+      ?.assets ?? []
+  );
+}

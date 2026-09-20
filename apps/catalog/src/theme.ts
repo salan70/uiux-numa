@@ -1,3 +1,4 @@
+import { adoptedSchemes } from "./content/collect";
 import { schemes } from "./content/schemes";
 
 export type ThemeChoice = "light" | "dark" | "system";
@@ -13,8 +14,9 @@ export function isThemeChoice(value: string | null): value is ThemeChoice {
   return value === "light" || value === "dark" || value === "system";
 }
 
+// 選べるのは採用した配色だけ。保存済みや query の未採用 id は既定へ落とす。
 export function isSchemeChoice(value: string | null): value is SchemeChoice {
-  return value !== null && schemes.some((scheme) => scheme.id === value);
+  return value !== null && adoptedSchemes().some((scheme) => scheme.id === value);
 }
 
 export function readThemeChoice(): ThemeChoice {

@@ -1,109 +1,78 @@
-import { AssetMeta, experimentMeta } from "../components/AssetMeta";
+import { LiveFrame } from "../components/LiveFrame";
 import { Link } from "../components/Link";
-import { LivePreview } from "../components/LivePreview";
-import { SchemeSwatch } from "../components/SchemeSwatch";
-import { SvgGrid } from "../components/SvgGrid";
-import { TokenSample } from "../components/TokenSample";
-import {
-  CATEGORY_ORDER,
-  categoryHref,
-  categoryLabel,
-  type CatalogCategory,
-} from "../content/category";
-import { catalog, defaultVariantId } from "../content/collect";
-import type { ColorScheme } from "../content/schemes";
+import { Meta } from "../components/Meta";
+import { dot } from "../components/work";
+import { catalog, worksByUpdated, worksInTopic } from "../content/collect";
+import { topicById, topicHref, workHref, TOPICS, type Topic } from "../content/topics";
 
+/** 最後に更新した成果物を主役にし、その下にトピックの入口を並べる。 */
 export function HomePage() {
-  const hero = catalog.experiments.find((item) => item.slug === "product-ui-typography");
-  const adopted = hero ? defaultVariantId(hero) : undefined;
-  const heroLive = hero
-    ? adopted
-      ? hero.liveVariants.filter((item) => item.variant === adopted)
-      : hero.liveVariants
-    : [];
+  const hero = worksByUpdated()[0];
+  if (!hero) return <p className="empty">まだ成果物がない。</p>;
+  const heroTopic = hero.topic ? topicById(hero.topic) : undefined;
 
   return (
     <>
-      {hero ? (
-        <section className="showcase-hero" aria-labelledby="hero-heading">
-          <p className="crumb">
-            <Link href={categoryHref("typography")}>{categoryLabel("typography")}</Link>
-          </p>
-          <h1 id="hero-heading">{hero.title}</h1>
-          <LivePreview variants={heroLive} defaultVariant={adopted} showHeading={false} />
-          <AssetMeta {...experimentMeta(hero)} compact />
-        </section>
-      ) : (
-        <div className="page-intro">
-          <h1>UI/UX 沼</h1>
+      <section className="hero" aria-labelledby="hero-title">
+        <p className="hero__kicker">
+          <span className="hero__topic">{heroTopic?.label ?? "成果物"}</span>
+          <span>最終更新 {dot(hero.updated)}</span>
+        </p>
+        <h1 className="hero__title" id="hero-title" tabIndex={-1} data-screen-heading>
+          {hero.title}
+        </h1>
+        <p className="hero__lead">{hero.lead}</p>
+        <div className="hero__live">
+          <LiveFrame work={hero} tall />
         </div>
-      )}
-      <nav className="category-index" aria-label="種別">
-        {CATEGORY_ORDER.map((category) => (
-          <CategoryCard category={category} key={category} />
-        ))}
-      </nav>
+        <div className="hero__side">
+          <Meta work={hero} />
+          {hero.topic && (
+            <p className="hero__action">
+              <Link href={workHref(hero.topic, hero.slug)} className="btn">
+                この成果物を開く
+              </Link>
+            </p>
+          )}
+        </div>
+      </section>
+
+      <section className="topics" aria-labelledby="topics-head">
+        <h2 className="section-title" id="topics-head">
+          トピック
+        </h2>
+        <ul className="topic-list">
+          {TOPICS.map((topic) => {
+            const sample = topic.id === "tokens" ? null : worksInTopic(topic.id)[0];
+            return (
+              <li className="topic" key={topic.id}>
+                <Link href={topicHref(topic.id)} className="topic__hit">
+                  <span className="topic__label">{topic.label}</span>
+                  <span className="topic__count">{countOf(topic)}</span>
+                </Link>
+                <p className="topic__lead">{topic.lead}</p>
+                {sample ? (
+                  <LiveFrame work={sample} />
+                ) : (
+                  <div className="token-strip">
+                    {catalog.tokenFamilies.map((family) => (
+                      <p className="token-strip__row" key={family.id}>
+                        <span className="token-strip__name">{family.label}</span>
+                        <span className="token-strip__count">{family.tokens.length}</span>
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
     </>
   );
 }
 
-function CategoryCard({ category }: { category: CatalogCategory }) {
-  const href = categoryHref(category);
-  const label = categoryLabel(category);
-  return (
-    <article className="category-card" data-chroma={category}>
-      <h2>
-        <Link href={href}>{label}</Link>
-      </h2>
-      <CategoryPreview category={category} />
-    </article>
-  );
-}
-
-function CategoryPreview({ category }: { category: CatalogCategory }) {
-  if (category === "colors") {
-    const scheme = firstAdoptedScheme();
-    if (!scheme) return null;
-    return (
-      <div className="home-swatch-row">
-        {scheme.light.slice(0, 6).map((color) => (
-          <SchemeSwatch color={color} key={color.cssName} />
-        ))}
-      </div>
-    );
-  }
-  if (category === "typography") {
-    const body = catalog.tokens.find(
-      (token) => token.kind === "semantic" && token.name === "typography.body",
-    );
-    return body ? <TokenSample token={body} /> : null;
-  }
-  if (category === "icons" || category === "graphics") {
-    const experiment = catalog.experiments.find((item) => item.category === category);
-    if (!experiment) return null;
-    const adopted = defaultVariantId(experiment);
-    const groups = catalog.svgs.filter((group) => group.experiment === experiment.slug);
-    return (
-      <SvgGrid
-        groups={adopted ? groups.filter((group) => group.variant === adopted) : groups}
-        showSizeControl={false}
-        limit={1}
-      />
-    );
-  }
-  return (
-    <ul className="category-titles">
-      {catalog.experiments
-        .filter((item) => item.category === category)
-        .map((item) => (
-          <li key={item.slug}>{item.title}</li>
-        ))}
-    </ul>
-  );
-}
-
-function firstAdoptedScheme(): ColorScheme | undefined {
-  const experiment = catalog.experiments.find((item) => item.slug === "color-schemes");
-  const id = experiment?.adopted[0];
-  return id ? catalog.schemes.find((scheme) => scheme.id === id) : catalog.schemes[0];
+function countOf(topic: Topic): string {
+  if (topic.id === "tokens") return `${catalog.tokens.length} token`;
+  return `${worksInTopic(topic.id).length} 件`;
 }

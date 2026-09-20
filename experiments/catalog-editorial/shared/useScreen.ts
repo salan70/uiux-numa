@@ -1,6 +1,8 @@
 // 案の中の画面切替。
 // 実行基盤（platforms/web/src/App.tsx）が hash `#<slug>/<id>` を variant の選択に使うため、
 // 画面の状態は query に持つ。再読込で画面が消えず、1 画面ずつ撮影できる。
+// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
+// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 import { useCallback, useEffect, useState } from "react";
 
 export const SCREENS = ["top", "list", "detail", "sheet", "guide"] as const;
