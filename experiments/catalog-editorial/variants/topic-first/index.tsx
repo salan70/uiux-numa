@@ -917,19 +917,32 @@ function SchemeSpecimen({ scheme, mode }: { scheme: Scheme; mode: "light" | "dar
 }
 
 /**
- * composite な token を項目名つきの組にする。値は元のまま 4 つである。
+ * composite な token を項目名つきの組にする。
  * 値だけを並べていたときは「1.5rem 700 行 1.3 字間 0px」となり、
  * どの数が何を指すのかが、行 と 字間 の 2 つ以外は読めなかった。
- * 書体は全役割で同じなので、役割ごとには出さず画面の先頭に 1 度だけ出す。
+ * 書体は画面の先頭にも出すが、役割ごとにも出す（利用者の判断、2026-09-20）。
+ * この画面の役割は 6 つしかないので、役割ごとの組が 4 行だと token の表より薄くなる。
  */
 function compositeSpec(value: Token["value"]): Array<{ label: string; value: string }> {
   if (typeof value === "string") return [{ label: "値", value }];
   const out: Array<{ label: string; value: string }> = [];
+  const family = value["fontFamily"];
+  if (family) out.push({ label: "書体", value: primaryFamily(family) });
   if (value["fontSize"]) out.push({ label: "大きさ", value: value["fontSize"] });
   if (value["fontWeight"]) out.push({ label: "太さ", value: value["fontWeight"] });
   if (value["lineHeight"]) out.push({ label: "行間", value: value["lineHeight"] });
   if (value["letterSpacing"]) out.push({ label: "字間", value: value["letterSpacing"] });
   return out;
+}
+
+/** 指定の先頭だけを出す。以降は書体が無いときの代替なので、見本を組んだ書体ではない。 */
+function primaryFamily(stack: string): string {
+  return (
+    stack
+      .split(",")[0]
+      ?.replace(/^["']|["']$/g, "")
+      .trim() ?? stack
+  );
 }
 
 /* ---- タイポグラフィ。役割を実寸で組む ---- */
@@ -995,7 +1008,6 @@ function TypographyTopic({ nav }: { nav: ScreenApi }) {
       </ol>
       {work && (
         <p className="topic-source">
-          <span className="topic-source__label">正本</span>
           <a
             href={nav.hrefFor({ screen: "detail", item: work.slug })}
             onClick={(event) => {
