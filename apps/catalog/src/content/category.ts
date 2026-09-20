@@ -44,7 +44,8 @@ export const CATEGORY_ORDER: CatalogCategory[] = [
   "motion",
 ];
 
-export const UNCATEGORIZED_SLUGS = new Set(["catalog-redesign"]);
+// Catalog 自身の設計を比べる Experiment は公開ナビに出さない。比較記録として metadata だけ集める。
+export const UNCATEGORIZED_SLUGS = new Set(["catalog-redesign", "catalog-editorial"]);
 
 export type NavItem = {
   href: string;
