@@ -1524,11 +1524,16 @@
   }
 }
 
-/* 行の長さを本文の測りに揃える。
-   全幅で組むと body の見本が 1 行に収まり、行間の値が確かめられない。 */
+/* 見本には縦の罫を引く。
+   caption は 0.875rem の並文字なので、罫がないと下の説明と見分けが付かなかった。
+   語で「見本」と断らずに済むよう、位置と罫だけで役割を示す。
+   行の長さは本文の測りに揃える。全幅で組むと body の見本が 1 行に収まり、
+   行間の値が確かめられない。 */
 .ed-root--topic .role__sample {
   margin: 0;
   max-inline-size: 30em;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--ed-line-strong);
 }
 
 /* 正本へ辿る 1 行。トピックの中身のあとに置く。
