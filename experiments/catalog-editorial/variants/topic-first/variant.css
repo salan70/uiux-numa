@@ -1294,37 +1294,6 @@
 
 /* ---- 配色 ---- */
 
-.ed-root--topic .schemes {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--ed-section) 1.5rem;
-}
-
-.ed-root--topic .scheme {
-  display: grid;
-  gap: 0.75rem;
-  align-content: start;
-  min-inline-size: 0;
-}
-
-.ed-root--topic .scheme__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0;
-  padding-block-end: 0.5rem;
-  border-block-end: 1px solid var(--ed-line);
-}
-
-.ed-root--topic .scheme__label {
-  font-size: var(--ed-item);
-  font-weight: 700;
-}
-
 /* 配色を当てた標本。色の一覧だけでは、組んだときの見え方が分からない。 */
 .ed-root--topic .specimen {
   display: grid;
@@ -1385,38 +1354,6 @@
   background: var(--cs-surface);
   color: var(--cs-text-muted);
   font-size: 0.875rem;
-}
-
-.ed-root--topic .swatches {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  gap: 0.5rem;
-}
-
-.ed-root--topic .swatch {
-  display: grid;
-  gap: 0.125rem;
-}
-
-.ed-root--topic .swatch__chip {
-  display: block;
-  block-size: 1.75rem;
-  border: 1px solid var(--ed-line);
-  border-radius: 2px;
-}
-
-.ed-root--topic .swatch__role {
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 0.6875rem;
-  color: var(--ed-muted);
-}
-
-.ed-root--topic .swatch__name {
-  font-size: 0.6875rem;
-  color: var(--ed-text);
 }
 
 /* ---- タイポグラフィの役割 ---- */
@@ -1513,11 +1450,6 @@
   overflow-wrap: anywhere;
 }
 
-@media (width <= 60rem) {
-  .ed-root--topic .schemes {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* 採用と却下を 1 語で示す。掲載対象は採用成果に限らないので、前提が読めるようにする。 */
 .ed-root--topic .scheme__mark {
@@ -1530,4 +1462,449 @@
 
 .ed-root--topic .scheme__mark[data-adopted="true"] {
   color: var(--ed-accent);
+}
+
+/* ---- 配色。coolors のパレットカードを参考にする ----
+   色そのものを面にし、格子で一望できるようにする。
+   造形の語彙は issue-feature から引き継いだものを使い、新しい角丸や影を増やさない。 */
+
+/* 1 配色を全幅で見せる帯。ページの顔として置く。 */
+.ed-root--topic .feature {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ed-root--topic .feature__bands {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  block-size: 12rem;
+  border: 1px solid var(--ed-line);
+  border-radius: var(--ed-radius);
+  overflow: hidden;
+}
+
+.ed-root--topic .feature__band {
+  min-inline-size: 0;
+}
+
+.ed-root--topic .feature__hit {
+  appearance: none;
+  inline-size: 100%;
+  block-size: 100%;
+  display: grid;
+  gap: 0.125rem;
+  align-content: end;
+  justify-items: start;
+  padding: 0.75rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.ed-root--topic .feature__hex {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.ed-root--topic .feature__role,
+.ed-root--topic .feature__jp {
+  font-size: var(--ed-label);
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+
+.ed-root--topic .feature__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.ed-root--topic .feature__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.ed-root--topic .feature__label {
+  font-size: var(--ed-h2);
+  font-weight: 700;
+}
+
+.ed-root--topic .feature__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.ed-root--topic .feature__step {
+  appearance: none;
+  min-block-size: var(--ed-tap);
+  padding: 0 0.875rem;
+  border: 1px solid var(--ed-line-strong);
+  border-radius: var(--ed-radius);
+  background: none;
+  color: var(--ed-text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color var(--ed-duration) ease,
+    border-color var(--ed-duration) ease;
+}
+
+.ed-root--topic .feature__count {
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* hero と格子の間だけを大きく開け、切替と格子は近づける。 */
+.ed-root--topic .palette-browse {
+  display: grid;
+  gap: var(--ed-section);
+}
+
+/* 明暗の切替と操作の説明。 */
+.ed-root--topic .palette-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+}
+
+.ed-root--topic .palette-bar__note {
+  margin: 0;
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+/* パレットカードの格子。 */
+.ed-root--topic .palettes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ed-section) 1.5rem;
+}
+
+.ed-root--topic .palette {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-inline-size: 0;
+}
+
+/* 帯は隙間なく並べ、角丸はカード全体にだけ付ける。 */
+.ed-root--topic .bands {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  block-size: 9rem;
+  border: 1px solid var(--ed-line);
+  border-radius: var(--ed-radius);
+  overflow: hidden;
+}
+
+.ed-root--topic .band {
+  min-inline-size: 0;
+}
+
+.ed-root--topic .band__hit {
+  appearance: none;
+  inline-size: 100%;
+  block-size: 100%;
+  display: grid;
+  gap: 0.125rem;
+  align-content: end;
+  justify-items: center;
+  padding: 0.5rem 0.25rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  /* hex は hover だけに頼らない。focus でも出し、狭い幅では常時出す。 */
+  opacity: 0;
+  transition: opacity var(--ed-duration) ease;
+}
+
+.ed-root--topic .band__hit:focus-visible {
+  opacity: 1;
+  outline-offset: -3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ed-root--topic .bands:hover .band__hit {
+    opacity: 1;
+  }
+
+  .ed-root--topic .feature__step:hover,
+  .ed-root--topic .palette__more:hover {
+    color: var(--ed-accent);
+    border-color: var(--ed-accent);
+  }
+}
+
+@media (hover: none) {
+  .ed-root--topic .band__hit {
+    opacity: 1;
+  }
+}
+
+.ed-root--topic .band__hex {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.ed-root--topic .band__role {
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+  overflow-wrap: anywhere;
+}
+
+.ed-root--topic .palette__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.ed-root--topic .palette__name {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.ed-root--topic .palette__label {
+  font-size: var(--ed-item);
+  font-weight: 700;
+}
+
+.ed-root--topic .palette__mark {
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .palette__mark[data-adopted="true"] {
+  color: var(--ed-accent);
+}
+
+.ed-root--topic .palette__more {
+  appearance: none;
+  min-block-size: var(--ed-tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ed-muted);
+  font: inherit;
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+  transition: color var(--ed-duration) ease;
+}
+
+/* 展開したカードは行を占有する。
+   3 列のまま開くと、19 役割とコントラストが細い 1 列に縦積みになって読めない。 */
+.ed-root--topic .palette:has(.detail-panel) {
+  grid-column: 1 / -1;
+}
+
+/* 展開したときの中身。カードの直下に開く。 */
+.ed-root--topic .detail-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  align-items: start;
+  gap: var(--ed-gap-lg) var(--ed-section);
+  margin-block-start: 0.5rem;
+  padding: var(--ed-gap-lg);
+  border: 1px solid var(--ed-line);
+  border-radius: var(--ed-radius);
+  background: var(--ed-surface);
+}
+
+.ed-root--topic .role-group__label {
+  margin: 0 0 0.5rem;
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .role-list,
+.ed-root--topic .ratios {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+
+.ed-root--topic .role-item + .role-item,
+.ed-root--topic .ratio + .ratio {
+  border-block-start: 1px solid var(--ed-line);
+}
+
+.ed-root--topic .role-item__hit {
+  appearance: none;
+  inline-size: 100%;
+  min-block-size: var(--ed-tap);
+  display: grid;
+  grid-template-columns: 1.25rem 8rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8125rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.ed-root--topic .role-item__chip {
+  block-size: 1.25rem;
+  border: 1px solid var(--ed-line);
+  border-radius: 2px;
+}
+
+.ed-root--topic .role-item__role {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .role-item__hex {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.6875rem;
+  color: var(--ed-muted);
+  white-space: nowrap;
+}
+
+.ed-root--topic .ratio {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-block: 0.375rem;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-root--topic .ratio__pair {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .ratio__min {
+  color: var(--ed-muted);
+}
+
+.ed-root--topic .ratio__mark {
+  font-weight: 700;
+}
+
+.ed-root--topic .ratio[data-pass="false"] .ratio__mark,
+.ed-root--topic .ratio[data-pass="false"] .ratio__value {
+  color: var(--ed-accent);
+}
+
+/* コピーの結果は読み上げにも届くようにする。 */
+.ed-root--topic .copied {
+  margin: 0;
+  min-block-size: 1.5rem;
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (width <= 60rem) {
+  .ed-root--topic .palettes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ed-root--topic .feature__bands {
+    block-size: 10rem;
+  }
+}
+
+@media (width <= 40rem) {
+  .ed-root--topic .palettes {
+    grid-template-columns: 1fr;
+  }
+
+  /* 狭い幅では hero の帯を縦積みにする。
+     7 列のままだと 1 列が 50px を切り、hex が途中で折り返して読めない。 */
+  .ed-root--topic .feature__bands {
+    grid-template-columns: 1fr;
+    block-size: auto;
+  }
+
+  .ed-root--topic .feature__hit {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: start;
+    align-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    min-block-size: 2.5rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .ed-root--topic .feature__hex {
+    font-size: 0.75rem;
+  }
+
+  .ed-root--topic .role-item__hit {
+    grid-template-columns: 1.25rem 1fr auto;
+    row-gap: 0.125rem;
+  }
+
+  .ed-root--topic .role-item__jp {
+    grid-column: 2 / -1;
+  }
+
+  .ed-root--topic .ratio {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.125rem;
+  }
+
+  .ed-root--topic .ratio__pair {
+    grid-column: 1 / -1;
+  }
 }
