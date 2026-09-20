@@ -1524,16 +1524,12 @@
   }
 }
 
-/* 見本には縦の罫を引く。
-   caption は 0.875rem の並文字なので、罫がないと下の説明と見分けが付かなかった。
-   語で「見本」と断らずに済むよう、位置と罫だけで役割を示す。
+/* 見本は素のまま置く。token を当てた面なので、罫や余白を足すと見本自体が装飾を持つ。
    行の長さは本文の測りに揃える。全幅で組むと body の見本が 1 行に収まり、
    行間の値が確かめられない。 */
 .ed-root--topic .role__sample {
   margin: 0;
   max-inline-size: 30em;
-  padding-inline-start: 1rem;
-  border-inline-start: 2px solid var(--ed-line-strong);
 }
 
 /* 正本へ辿る 1 行。トピックの中身のあとに置く。
@@ -1549,9 +1545,14 @@
   border-block-end: 1px solid currentcolor;
 }
 
+/* 説明には縦の罫を引く。
+   caption の見本は 0.875rem の並文字なので、印がないと説明と見分けが付かなかった。
+   印は注釈の側に付ける。見本の側に付けると、見本が素のまま見られなくなる。 */
 .ed-root--topic .role__desc {
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
   max-inline-size: 38em;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--ed-line);
   font-size: 0.875rem;
   color: var(--ed-muted);
 }
