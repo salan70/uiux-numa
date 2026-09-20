@@ -7,9 +7,10 @@ describe("matchRoute", () => {
     expect(matchRoute("/")).toEqual({ name: "home" });
     expect(matchRoute("/foundations/colors")).toEqual({ name: "colors" });
     expect(matchRoute("/foundations/typography")).toEqual({ name: "typography" });
+    expect(matchRoute("/foundations/tokens")).toEqual({ name: "tokens" });
     expect(matchRoute("/foundations/icons")).toEqual({ name: "icons" });
-    expect(matchRoute("/foundations/graphics")).toEqual({ name: "graphics" });
     expect(matchRoute("/components")).toEqual({ name: "components" });
+    expect(matchRoute("/guidelines")).toEqual({ name: "guideline", slug: null });
   });
 
   it("動的セグメントを返す", () => {
@@ -18,13 +19,17 @@ describe("matchRoute", () => {
       name: "icon",
       experiment: "class-tech-icons",
     });
-    expect(matchRoute("/foundations/graphics/class-doc-logo")).toEqual({
-      name: "graphic",
-      experiment: "class-doc-logo",
+    expect(matchRoute("/foundations/typography/product-ui-typography")).toEqual({
+      name: "typographyDetail",
+      experiment: "product-ui-typography",
     });
     expect(matchRoute("/components/form-inline-validation")).toEqual({
       name: "component",
       experiment: "form-inline-validation",
+    });
+    expect(matchRoute("/guidelines/states-and-feedback")).toEqual({
+      name: "guideline",
+      slug: "states-and-feedback",
     });
   });
 
@@ -38,6 +43,9 @@ describe("matchRoute", () => {
     expect(matchRoute("/resources")).toEqual({ name: "notfound" });
     expect(matchRoute("/motion")).toEqual({ name: "notfound" });
     expect(matchRoute("/motion/registration-completion-feedback")).toEqual({ name: "notfound" });
+    expect(matchRoute("/graphics")).toEqual({ name: "notfound" });
+    expect(matchRoute("/foundations/graphics")).toEqual({ name: "notfound" });
+    expect(matchRoute("/foundations/graphics/class-doc-logo")).toEqual({ name: "notfound" });
     expect(matchRoute("/foundations/graphics/class-chapter-illustration")).toEqual({
       name: "notfound",
     });
@@ -50,7 +58,7 @@ describe("matchRoute", () => {
     expect(matchRoute("/colors")).toEqual({ name: "redirect", to: "/foundations/colors" });
     expect(matchRoute("/typography")).toEqual({ name: "redirect", to: "/foundations/typography" });
     expect(matchRoute("/icons")).toEqual({ name: "redirect", to: "/foundations/icons" });
-    expect(matchRoute("/graphics")).toEqual({ name: "redirect", to: "/foundations/graphics" });
+    expect(OLD_PATH_REDIRECTS["/graphics"]).toBeUndefined();
   });
 
   it("末尾スラッシュを正規化する", () => {
@@ -62,6 +70,7 @@ describe("matchRoute", () => {
     expect(source).toMatch(/\/colors\s+\/foundations\/colors\s+301/);
     expect(source).toMatch(/\/typography\s+\/foundations\/typography\s+301/);
     expect(source).toMatch(/\/icons\s+\/foundations\/icons\s+301/);
-    expect(source).toMatch(/\/graphics\s+\/foundations\/graphics\s+301/);
+    // graphics は公開面から外した。404 へ 301 で送らない。
+    expect(source).not.toMatch(/^\/graphics\s/m);
   });
 });

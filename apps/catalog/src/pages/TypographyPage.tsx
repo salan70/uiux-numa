@@ -1,68 +1,61 @@
-import { AssetMeta, experimentMeta } from "../components/AssetMeta";
-import { LivePreview } from "../components/LivePreview";
-import { TokenSample } from "../components/TokenSample";
-import { TokenTable } from "../components/TokenTable";
-import { TypographyPlayground } from "../components/TypographyPlayground";
-import { catalog, defaultVariantId } from "../content/collect";
-import { formatTokenValue } from "../content/tokens";
+import { compositeSpec, TokenSample } from "../components/TokenSample";
+import { Link } from "../components/Link";
+import { catalog } from "../content/collect";
+import { TopicScreen } from "../components/TopicScreen";
+import { workHref } from "../content/topics";
+import { typefaceName } from "../content/typeface";
 
+/** 素の値に入れる字形。仮名・片仮名・漢字・欧字・数字を 1 つずつ並べる。 */
+const GLYPHS = "あア亜 Aa 0123";
+
+/** 書体と文字の役割。役割を実寸で組んで見せる。 */
 export function TypographyPage() {
-  const primitives = catalog.tokens.filter(
-    (token) => token.kind === "primitive" && token.name.startsWith("font."),
-  );
-  const semantics = catalog.tokens.filter(
-    (token) => token.kind === "semantic" && token.name.startsWith("typography."),
-  );
-  const typography = catalog.experiments.find((item) => item.category === "typography");
-  const live = typography?.liveVariants ?? [];
+  const work = catalog.experiments.find((item) => item.slug === "product-ui-typography");
+  const roles =
+    catalog.tokenFamilies
+      .find((family) => family.id === "typography")
+      ?.tokens.filter((token) => token.kind === "semantic") ?? [];
+  const name = typefaceName();
 
   return (
-    <>
-      <div className="page-intro">
-        <h1>Typography</h1>
-      </div>
-      <LivePreview
-        variants={live}
-        title="product-ui-typography"
-        defaultVariant={typography ? defaultVariantId(typography) : undefined}
-        showHeading={false}
-      />
-      {typography ? <AssetMeta {...experimentMeta(typography)} /> : null}
-      <TypographyPlayground roles={semantics} />
-      <section aria-labelledby="semantic-heading">
-        <h2 id="semantic-heading">役割</h2>
-        <TokenTable
-          caption="semantic token 6 個"
-          rows={semantics.map((token) => ({
-            name: token.name,
-            value: (
-              <div className="token-value-cell">
+    <TopicScreen id="typography">
+      {name && (
+        <section className="typeface" aria-labelledby="typeface-head">
+          <h2 className="typeface__name" id="typeface-head">
+            {name}
+          </h2>
+          <p className="typeface__glyphs" aria-hidden="true">
+            {GLYPHS}
+          </p>
+        </section>
+      )}
+
+      <ol className="roles">
+        {roles.map((token) => (
+          <li className="role" key={token.name}>
+            <div className="role__main">
+              <p className="role__name">{token.name.replace("typography.", "")}</p>
+              <p className="role__sample">
                 <TokenSample token={token} />
-                <code>{formatTokenValue(token.type, token.resolvedValue)}</code>
-              </div>
-            ),
-            description: token.description,
-            copy: token.cssNames.join(", "),
-          }))}
-        />
-      </section>
-      <section aria-labelledby="primitive-heading">
-        <h2 id="primitive-heading">基本値</h2>
-        <TokenTable
-          caption="primitive token 10 個"
-          rows={primitives.map((token) => ({
-            name: token.name,
-            value: (
-              <div className="token-value-cell">
-                <TokenSample token={token} />
-                <code>{formatTokenValue(token.type, token.resolvedValue)}</code>
-              </div>
-            ),
-            description: token.description,
-            copy: token.cssNames.join(", "),
-          }))}
-        />
-      </section>
-    </>
+              </p>
+              <p className="role__desc">{token.description}</p>
+            </div>
+            <dl className="role__spec">
+              {compositeSpec(token.resolvedValue).map((item) => (
+                <div className="role__spec-row" key={item.label}>
+                  <dt>{item.label}</dt>
+                  <dd>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+        ))}
+      </ol>
+      {work?.topic && (
+        <p className="topic-source">
+          <Link href={workHref(work.topic, work.slug)}>{work.title}</Link>
+        </p>
+      )}
+    </TopicScreen>
   );
 }

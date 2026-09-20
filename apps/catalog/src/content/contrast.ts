@@ -6,34 +6,20 @@ export type ContrastPair = {
   minimum: 4.5 | 3;
 };
 
+/** 役割の意味で束ねる。全 19 役割がいずれかの群に入る。 */
 export const ROLE_GROUPS = [
-  {
-    id: "text",
-    label: "Text",
-    roles: ["text", "text-muted", "on-accent", "accent-strong", "success", "warning", "danger"],
-  },
-  {
-    id: "background",
-    label: "Background",
-    roles: [
-      "bg",
-      "bg-subtle",
-      "surface",
-      "accent-subtle",
-      "success-subtle",
-      "warning-subtle",
-      "danger-subtle",
-    ],
-  },
-  {
-    id: "border",
-    label: "Border",
-    roles: ["border", "border-strong", "focus"],
-  },
+  { id: "surface", label: "面", roles: ["bg", "bg-subtle", "surface"] },
+  { id: "line", label: "線", roles: ["border", "border-strong", "focus"] },
+  { id: "text", label: "文字", roles: ["text", "text-muted"] },
   {
     id: "accent",
-    label: "Accent",
-    roles: ["accent", "accent-hover"],
+    label: "強調",
+    roles: ["accent", "accent-hover", "accent-strong", "accent-subtle", "on-accent"],
+  },
+  {
+    id: "semantic",
+    label: "意味",
+    roles: ["success", "success-subtle", "warning", "warning-subtle", "danger", "danger-subtle"],
   },
 ] as const;
 

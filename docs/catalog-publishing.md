@@ -2,9 +2,9 @@
 
 公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
 Catalog は成果物の visual showcase である。
-token、配色、文字、アイコン、図、UI、動きのプレビューを掲載する。
+配色、文字、token、部品、アイコンの 5 トピックと、方針を掲載する。
 `role` と `maturity` で再利用の前提を示す。
-判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
+判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) と [topic-first ADR](decisions/2026-09-20-catalog-topic-first.md) に残す。
 production URL は `https://uiux.oda79.me/` とする。
 Git 連携と custom domain には、利用者による Cloudflare 認証が 1 回必要である。
 この文書はその手動手順だけを残す。
@@ -93,18 +93,31 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 確認項目は次のとおり。
 
 - `https://uiux.oda79.me/` が HTTPS で開く
-- `/`、`/foundations/colors`、配色詳細、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components`、`/motion` と各 Experiment 詳細を直リンクで開ける
-- `/getting-started`、`/principles`、`/status`、`/resources` が NotFound になる
-- サイドバーに検索と削除ページへのリンクがない
-- `/colors` などの旧 URL が新 URL へ 301 される
-- ヘッダーの配色選択がサイト全体へ反映され、再読み込み後も保たれる
+- 次の URL を直リンクで開ける
+  - `/`、`/foundations/colors`、`/foundations/colors/<採用した配色>`（ダイアログが開いた状態で出る）
+  - `/foundations/typography`、`/foundations/typography/product-ui-typography`
+  - `/foundations/tokens`
+  - `/foundations/icons`、`/foundations/icons/<Experiment>`
+  - `/components`、`/components/<Experiment>`
+  - `/guidelines`（先頭の文書へ置き換わる）、`/guidelines/<slug>`
+- 次の URL が NotFound になる
+  - `/foundations/graphics`、`/foundations/graphics/class-doc-logo`、`/graphics`
+  - `/getting-started`、`/principles`、`/status`、`/resources`、`/motion`
+  - `/foundations/colors/<却下した配色>`
+- `/colors`、`/typography`、`/icons` の旧 URL が新 URL へ 301 される
+- サイドバーが Works 5 件と Guidelines 6 件の 2 群である
+- サイドバー最下段の配色と明暗の選択がサイト全体へ反映され、再読み込み後も保たれる
+- 選べる配色が採用したものだけである
 - ライト / ダークの切り替えで選択中の配色の値が変わる
-- Typography の live variant と Components の iframe が表示される
-- Icons と Graphics の SVG が表示される
+- 配色の詳細を開くと URL が変わり、Esc、背景、閉じるボタンのどれでも一覧へ戻る
+- 配色の詳細を開閉しても、ページのスクロール位置が動かない
+- Components と Home の live が表示される。iframe の src が `/preview/<exp>/<variant>` である
+- Icons の SVG が表示される
+- 方針の索引から規則へ飛べる。本文中の相対リンクがリポジトリの該当ファイルへ解決される
 - preview PNG が Catalog の画面へ収集されていない
 - preview deployment の HTML に `noindex` がある
 - production の `uiux.oda79.me` には `noindex` がない
-- 遷移と状態変更で layout-shift が起きない（Copy、配色切替、表示幅、サイドバー開閉、フォントと配色の初回描画）
+- 遷移と状態変更で layout-shift が起きない（帯の hover 展開、配色切替、ダイアログの開閉、表示幅）
 
 ## ローカル確認
 

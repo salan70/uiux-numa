@@ -1,6 +1,8 @@
 // 配色の実データ。正本は experiments/color-schemes/variants/<id>/scheme.css。
 // 解析の正本は apps/catalog/src/content/schemes.ts にあり、ここはその要点だけを写す。
 // apps/ へ import しない慣習は shared/data.ts の冒頭に書いた理由と同じ。
+// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
+// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 
 export type SchemeColor = {
   role: string;

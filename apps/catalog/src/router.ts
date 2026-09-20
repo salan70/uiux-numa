@@ -5,23 +5,24 @@ export type Route =
   | { name: "colors" }
   | { name: "color"; scheme: string }
   | { name: "typography" }
+  | { name: "typographyDetail"; experiment: string }
+  | { name: "tokens" }
   | { name: "icons" }
   | { name: "icon"; experiment: string }
-  | { name: "graphics" }
-  | { name: "graphic"; experiment: string }
   | { name: "components" }
   | { name: "component"; experiment: string }
+  // slug が null のときは先頭の文書へ送る。
+  | { name: "guideline"; slug: string | null }
   | { name: "redirect"; to: string }
   | { name: "notfound" };
 
+// Graphics と Illustrations は公開面から外した。
+// 404 へ 301 で送っても往復が増えるだけなので、/graphics の転送も置かない。
 export const OLD_PATH_REDIRECTS: Record<string, string> = {
   "/colors": "/foundations/colors",
   "/typography": "/foundations/typography",
   "/icons": "/foundations/icons",
-  "/graphics": "/foundations/graphics",
 };
-
-const RETIRED_PATHS = new Set(["/foundations/graphics/class-chapter-illustration"]);
 
 export function resolvePath(path: string): string {
   const normalized = path.replace(/\/+$/, "") || "/";
@@ -61,7 +62,6 @@ export function replaceLocation(to: string): void {
 
 export function matchRoute(path: string): Route {
   const normalized = path.replace(/\/+$/, "") || "/";
-  if (RETIRED_PATHS.has(normalized)) return { name: "notfound" };
   const redirected = OLD_PATH_REDIRECTS[normalized];
   if (redirected) return { name: "redirect", to: redirected };
   if (normalized === "/") return { name: "home" };
@@ -69,14 +69,17 @@ export function matchRoute(path: string): Route {
   const color = normalized.match(/^\/foundations\/colors\/([a-z0-9-]+)$/);
   if (color) return { name: "color", scheme: color[1] };
   if (normalized === "/foundations/typography") return { name: "typography" };
+  const typography = normalized.match(/^\/foundations\/typography\/([a-z0-9-]+)$/);
+  if (typography) return { name: "typographyDetail", experiment: typography[1] };
+  if (normalized === "/foundations/tokens") return { name: "tokens" };
   if (normalized === "/foundations/icons") return { name: "icons" };
   const icon = normalized.match(/^\/foundations\/icons\/([a-z0-9-]+)$/);
   if (icon) return { name: "icon", experiment: icon[1] };
-  if (normalized === "/foundations/graphics") return { name: "graphics" };
-  const graphic = normalized.match(/^\/foundations\/graphics\/([a-z0-9-]+)$/);
-  if (graphic) return { name: "graphic", experiment: graphic[1] };
   if (normalized === "/components") return { name: "components" };
   const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
   if (component) return { name: "component", experiment: component[1] };
+  if (normalized === "/guidelines") return { name: "guideline", slug: null };
+  const guideline = normalized.match(/^\/guidelines\/([a-z0-9-]+)$/);
+  if (guideline) return { name: "guideline", slug: guideline[1] };
   return { name: "notfound" };
 }

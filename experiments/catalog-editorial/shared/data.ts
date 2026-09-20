@@ -2,6 +2,8 @@
 // 正本は experiments/ 配下のファイルで、ここは写しを持たない。
 // experiments から apps/ へ import しない（experiments/soft-component-kit/shared/useCatalogColors.ts と同じ慣習）。
 // frontmatter と参照先の不整合検査は apps/catalog/src/content/collect.ts の責務であり、ここでは行わない。
+// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
+// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 
 export type Role = "foundation" | "module" | "reference";
 export type Maturity = "experimental" | "candidate" | "stable" | "deprecated";
@@ -28,7 +30,7 @@ export type Work = {
 
 export type Kind = "色" | "文字" | "記号" | "図" | "部品" | "動き";
 
-// 正本は apps/catalog/src/content/category.ts の CATEGORY_RULES。
+// 正本は apps/catalog/src/content/topics.ts の TOPICS。
 // Catalog の IA を作り直す Experiment なので、種別の呼び名は案ごとに変えてよい。
 // ここでは domain から 1 つの種別を決める規則だけを写す。
 const KIND_RULES: ReadonlyArray<{ domain: string; kind: Kind }> = [

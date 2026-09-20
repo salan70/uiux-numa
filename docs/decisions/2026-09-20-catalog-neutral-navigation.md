@@ -4,6 +4,7 @@
 - 日付: 2026-09-20
 - 参照: [Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
 - 置き換え: 上記 ADR の色面とナビゲーション
+- 更新: 公開カテゴリの決定は [topic-first ADR](2026-09-20-catalog-topic-first.md) が置き換えた。Graphics も公開面から外した。
 
 ## 背景
 

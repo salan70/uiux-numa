@@ -1,16 +1,36 @@
-import { ExperimentPage } from "../components/ExperimentPage";
-import { catalog } from "../content/collect";
-import { ExperimentListPage } from "./ExperimentListPage";
-import { NotFoundPage } from "./NotFoundPage";
+import { useState } from "react";
+import { LiveFrame } from "../components/LiveFrame";
+import { VariantChips } from "../components/VariantChips";
+import { WorkHead } from "../components/WorkHead";
+import { defaultVariant } from "../components/work";
+import { worksInTopic, type ExperimentRecord } from "../content/collect";
+import { TopicScreen } from "../components/TopicScreen";
 
+/** 入力と操作の部品。live 標本を大きく出す。 */
 export function ComponentsPage() {
-  return <ExperimentListPage category="components" />;
+  const list = worksInTopic("components");
+  return (
+    <TopicScreen id="components">
+      {list.length === 0 ? (
+        <p className="empty">まだ成果物がない。</p>
+      ) : (
+        <div className="topic-body">
+          {list.map((work) => (
+            <LiveWork key={work.slug} work={work} />
+          ))}
+        </div>
+      )}
+    </TopicScreen>
+  );
 }
 
-export function ComponentDetailPage({ experiment: slug }: { experiment: string }) {
-  const experiment = catalog.experiments.find(
-    (item) => item.category === "components" && item.slug === slug,
+function LiveWork({ work }: { work: ExperimentRecord }) {
+  const [current, setCurrent] = useState(defaultVariant(work));
+  return (
+    <div className="work">
+      <WorkHead work={work} />
+      <VariantChips work={work} current={current} onSelect={setCurrent} />
+      <LiveFrame work={work} variant={current} tall caption="platforms" />
+    </div>
   );
-  if (!experiment) return <NotFoundPage />;
-  return <ExperimentPage experiment={experiment} kind="live" />;
 }

@@ -1,6 +1,8 @@
 // docs/guidelines/*.md の読み込みと検証。
 // 依存を足さず、決めた書式だけを読む小さな解析器。
 // 知らない節や欠けた項目、未知の図版キーは throw して build を落とす。
+// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
+// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 import React from "react";
 import { parseFrontmatter } from "./data";
 

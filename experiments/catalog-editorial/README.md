@@ -1,6 +1,6 @@
 ---
 title: Catalog のエディトリアル再設計
-status: evaluating
+status: decided
 role: reference
 maturity: experimental
 created: 2026-09-20
@@ -17,7 +17,8 @@ domains:
 sources:
   - experiments/catalog-redesign
   - docs/decisions/2026-09-20-catalog-visual-showcase.md
-adopted: []
+adopted:
+  - topic-first
 ---
 
 ## Problem
@@ -125,7 +126,7 @@ variant で変える軸は IA、文字、グリッド、色の 4 つである。
 
 A5 では、hover した帯だけを広げてその色の情報を出す挙動と、却下した配色を出さない判断を足した（2026-09-20）。
 
-現在地は A10 の実装完了である。
+現在地は段階 D の実施中である。
 A2 で造形が決まり（`issue-feature`）、A3 で情報設計を `topic-first` に作り直し、A4 でトピックの画面が中身そのものを出すようにした。
 A5 では配色トピックを coolors のパレットカードに寄せ、A6 でカタログ自身が正本の配色を着るようにした。
 A7 では成果物の背景となる方針ページを新設し、`docs/guidelines/` 配下の 6 本の方針と連動させた。
@@ -133,16 +134,28 @@ A8 では題字のナビを「成果物」「方針」の 2 親に畳み、方�
 あわせて画面内の文書切替タブを廃し、方針画面の版面と寸法をトピックの画面に揃えた。
 A9 では版面の開始位置を全画面で揃え、Illustrations と Motion の掲載を止め、群の見出しに罫を引き、配色と明暗の選択をアイコンのボタンにした。
 A10 では方針の書式を作り直し、コアを思想の短文に、Tips を適用と関連コアを持つ具体の規則にした。States & Feedback だけを新書式へ移し、残り 5 文書は旧書式のまま読んでいる。
+段階 C では `topic-first` を採用し、`apps/catalog` の表示層をこの案の構造へ置き換えた。URL は path ベースを維持し、`/foundations/tokens` と `/guidelines` を足し、Graphics を公開面から外した。
 トップ、トピック 5 面、詳細、見本、方針 6 面を実データで実装した。
 
 ## Evaluation
 
-未定。
-A1 の見本は評価の対象にしない。
-色と文字だけでは、discoverability と interaction clarity を判定できないためである。
-A2 で 3 画面が揃った時点で `evaluation.md` を作る。
+評価は実施しない。
+却下した 4 案は 2026-09-20 に評価を経ずに却下済みであり、比較する対象が残っていない（[named variants ADR](../../docs/decisions/2026-09-17-named-variants-and-unevaluated-decisions.md)）。
+選ぶ予定だった 9 軸のうち、visual hierarchy、brand fit、information architecture、discoverability、consistency は A1 から A10 の各段階で利用者が画面を見て判断した。
 
-選ぶ予定の軸と重みは次である。
+評価していない軸は次である。採否の根拠にしていない。
+
+| 軸                      | 未評価の理由                                       |
+| ----------------------- | -------------------------------------------------- |
+| accessibility           | 自動検査と実機の読み上げを実施していない           |
+| localization robustness | 390 幅の折返しは見たが、和欧混植と長い題名は未検証 |
+| motion appropriateness  | 動きを軸にした案がなく、比較対象がない             |
+| perceived performance   | 実測していない                                     |
+| implementation cost     | 1 から書く前提で、決め手にしない                   |
+
+再評価するのは、公開後に「探せない」という報告が出たとき、または `docs/evaluation/` の枠組みで Catalog 自身を測る必要が生じたときである。
+
+選ぶ予定だった軸と重みは次である。
 
 | 軸                       | 重み | 選定理由                                               |
 | ------------------------ | ---- | ------------------------------------------------------ |
@@ -157,11 +170,17 @@ A2 で 3 画面が揃った時点で `evaluation.md` を作る。
 | implementation cost      | 参考 | 1 から書く前提なので決め手にしない                     |
 
 総合点、順位、おすすめは書かない。
-利用者は評価を待たずに判断してよい。
 
 ## Decision
 
-未定。
+`topic-first` を採用する。
+判断者は利用者である。
+判断日は 2026-09-20 である。
+評価は実施していない。未評価の軸は Evaluation に書いた。
+
+公開 Catalog の表示層をこの案の構造へ置き換えた。
+URL は path ベースを維持し、この案の query 設計は採らなかった。
+判断は [topic-first ADR](../../docs/decisions/2026-09-20-catalog-topic-first.md) に残す。
 
 ## Rejected reasons
 
@@ -211,6 +230,11 @@ A1 の時点で分かったことだけ記す。
   層の役割が違うなら、書式も変える。コアから例を取り上げると、具体を持つ規則は自動的に Tips へ寄る。
 - 規則に「どのプロジェクトで守るか」を書くと、他のプロジェクトへ持ち出すときの判断がいらなくなる。
   語は asset-model の role から借り、新しい段階を作らなかった。
+- 同じ正本を 2 か所で読むと、値の形まで同じにはならない。Experiment 側は DTCG の dimension を `1.5rem` の文字列に潰し、公開側は `{value, unit}` のまま持っていた。移植では表示の分岐を書き直すことになった。写しを作るときは、何を写して何を写さないかを型で示しておく。
+- 文書の中の相対リンクは、文書を置いた場所でしか正しくない。`docs/guidelines/` から `../../experiments/...` と書いたリンクは、Experiment の中では偶然 iframe の外へ出ないので気づけなかった。公開面ではリポジトリの該当ファイルへ解決する分岐が要った。
+- 一覧とその上に重ねるダイアログを URL で表すと、画面が変わったかどうかの判定と衝突する。`path` の変化で先頭へスクロールを戻していたため、ダイアログの開閉のたびにページが飛んだ。「画面が変わった」の単位は path とは別に決める。
+- topic から外した domain は、TOPICS から消すだけでは足りない。`class-doc-logo` は `logo-brand-identity` の次に `iconography` を持っており、Graphics を外したら Icons に現れた。退役させる domain は明示的に止める。
+- この案で作った値は、公開面へ移したあとも token にしなかった。利用面が 2 つになると見込んでいたが、Experiment 側は記録として凍結するので 1 面のままである。段階 C で検討すると書いた分の結論は「据え置き」だった。
 
 ## Related patterns / assets
 

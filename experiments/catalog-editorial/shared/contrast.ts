@@ -1,5 +1,7 @@
 // コントラスト比の計算。正本は apps/catalog/src/content/contrast.ts で、ここは必要な関数だけを写す。
 // 8bit に丸めた sRGB から WCAG 2 の式で計算する（experiments/color-schemes/README.md の方針と同じ）。
+// 公開実装は 2026-09-20 に apps/catalog へ移した（docs/decisions/2026-09-20-catalog-topic-first.md）。
+// ここは Experiment を再実行するための写しであり、公開面は参照しない。
 
 export type Rgb = { r: number; g: number; b: number };
 
