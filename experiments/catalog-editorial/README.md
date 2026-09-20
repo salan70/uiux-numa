@@ -56,7 +56,7 @@ variant で変える軸は IA、文字、グリッド、色の 4 つである。
 
 - 比較は `just web-dev` の実サイズで行う。URL は `http://localhost:5183/?bare#catalog-editorial/<id>`。
 - variant の根は `position: fixed; inset: 0; overflow: auto` にして、実行基盤の `.runner-main` の余白から切り離す。`platforms/web/src/runner.css` は変えない。他の Experiment に影響するためである。
-- 画面は top / list / detail / sheet の 4 つにし、query `?screen=` で切り替える。hash は実行基盤が variant の選択に使っている。query にすると再読込で画面が消えず、`scripts/web-shot.sh` で 1 画面ずつ撮影できる。
+- 画面は top / list / detail / sheet / guide の 5 つにし、query `?screen=` で切り替える。hash は実行基盤が variant の選択に使っている。query にすると再読込で画面が消えず、`scripts/web-shot.sh` で 1 画面ずつ撮影できる。
 - データは `shared/data.ts` が読む実データだけを使う。ダミーの文字列と、押しても何も起きない部品を置かない。
 - `experiments` から `apps/` へ import しない。`shared/` は同じ glob を自前で書く。不整合の検査は `apps/catalog/src/content/collect.ts` の責務のままにする。
 - `apps/catalog/src/catalog.css`、`apps/catalog/src/components/*`、`experiments/soft-component-kit/shared/*` を import せず、class 名も流用しない。
