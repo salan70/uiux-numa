@@ -5,7 +5,7 @@
 import "../../../../tokens/typography/index.css";
 import "./variant.css";
 import { Sheet, longestTitle, shortestTitle, type SheetSpec } from "../../shared/Sheet";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { runnerPath, svgsFor, works, worksByUpdated, type Work } from "../../shared/data";
 import { schemes, type Scheme, type SchemeColor } from "../../shared/schemes";
 import {
@@ -353,24 +353,26 @@ function defaultVariant(work: Work): string {
 /* ---- 配色。coolors のパレットカードを参考にする ---- */
 
 /**
- * カードの帯に出す代表 7 色の候補。明るい順に並べ、最後に有彩の色を置く。
+ * カードの帯に出す代表 7 色の候補。
+ * 左に主役の色、右に地の色を置く。accent から bg まで濃い順に下るので、
+ * 左端を見れば配色の個性が、右端を見れば紙の色が分かる。
  * 19 役割すべてを帯にすると淡色が過半を占め、カードがほぼ白一色になって配色間の差が読めない。
- * surface と accent-hover を先頭に入れないのは、bg と accent に近い色が並んで帯が埋まるためである。
- * 値が重複する役割は飛ばし、異なる色が 7 本並ぶまで後ろの候補から補う。
- * aizome のように accent と focus が同じ値の配色があり、そのままだと同じ帯が 2 本並ぶ。
+ * 値が重複する役割は飛ばし、後ろの候補から補って常に 7 本にする。
+ * aizome のように accent と text-hover が同じ値の配色があり、そのままだと同じ帯が 2 本並ぶ。
+ * 補う候補は淡い色だけにする。右端は地の色で終わらせたいので、focus のような有彩は補わない。
+ * 7 本に届かない配色は、その本数のまま並べる。同じ帯を 2 本置くより本数が減るほうがよい。
  * 残りの役割はカードを開いたときに見せる。
  */
 const CARD_ROLE_CANDIDATES = [
-  "bg",
-  "bg-subtle",
-  "border-strong",
-  "text-muted",
-  "text",
   "accent",
-  "focus",
+  "accent-hover",
+  "text",
+  "text-muted",
+  "border-strong",
+  "bg-subtle",
+  "bg",
   "accent-subtle",
   "surface",
-  "accent-hover",
 ];
 
 const CARD_BAND_COUNT = 7;
@@ -502,13 +504,12 @@ function ColorsTopic() {
                 <button
                   type="button"
                   className="palette__more"
-                  aria-expanded={open === scheme.id}
-                  onClick={() => setOpen(open === scheme.id ? null : scheme.id)}
+                  aria-haspopup="dialog"
+                  onClick={() => setOpen(scheme.id)}
                 >
-                  {open === scheme.id ? "閉じる" : "役割をすべて見る"}
+                  役割をすべて見る
                 </button>
               </div>
-              {open === scheme.id && <SchemeDetail scheme={scheme} mode={mode} copy={copy} />}
             </li>
           ))}
         </ul>
@@ -517,6 +518,13 @@ function ColorsTopic() {
           {copied ? `${copied} をコピーした。` : ""}
         </p>
       </div>
+
+      <SchemeDialog
+        scheme={shown.find((item) => item.id === open)}
+        mode={mode}
+        copy={copy}
+        onClose={() => setOpen(null)}
+      />
     </div>
   );
 }
@@ -578,7 +586,65 @@ function Feature({
   );
 }
 
-/** 展開したときの中身。19 役割すべてと、主要な組み合わせのコントラスト。 */
+/**
+ * 詳細のポップアップ。
+ * <dialog> の showModal に任せると、Esc、背景の不活性化、focus の閉じ込めが既定で付く。
+ * 自前で作ると、この 3 つを再実装することになる。
+ */
+function SchemeDialog({
+  scheme,
+  mode,
+  copy,
+  onClose,
+}: {
+  scheme: Scheme | undefined;
+  mode: "light" | "dark";
+  copy: (value: string) => void;
+  onClose: () => void;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (scheme && !dialog.open) dialog.showModal();
+    if (!scheme && dialog.open) dialog.close();
+  }, [scheme]);
+
+  return (
+    <dialog
+      className="sheet-dialog"
+      ref={ref}
+      aria-labelledby="dialog-name"
+      onClose={onClose}
+      // 背景を押しても閉じる。dialog 自身が背景の当たり判定になる。
+      onClick={(event) => {
+        if (event.target === ref.current) ref.current?.close();
+      }}
+    >
+      {scheme && (
+        <div className="sheet-dialog__body">
+          <div className="sheet-dialog__head">
+            <p className="sheet-dialog__name" id="dialog-name">
+              <span className="sheet-dialog__label">{scheme.label}</span>
+              <code>{scheme.id}</code>
+            </p>
+            <button
+              type="button"
+              className="sheet-dialog__close"
+              onClick={() => ref.current?.close()}
+            >
+              閉じる
+            </button>
+          </div>
+          <SchemeDetail scheme={scheme} mode={mode} copy={copy} />
+        </div>
+      )}
+    </dialog>
+  );
+}
+
+/** ポップアップの中身。19 役割すべてと、主要な組み合わせのコントラスト。 */
 function SchemeDetail({
   scheme,
   mode,
