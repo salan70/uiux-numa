@@ -1,0 +1,152 @@
+---
+title: 情報設計
+summary: 情報の分類、階層、順序を利用者の探し方に合わせ、最短で目的へ届く構造にする。
+status: draft
+axes:
+  - information architecture
+  - discoverability
+  - visual hierarchy
+created: 2026-09-20
+updated: 2026-09-20
+---
+
+## 目的
+
+情報の分類、順序、階層を利用者のメンタルモデルに合わせる。
+中間ページや不要な操作を省き、求めている対象へ最短で届くようにする。
+
+## 適用範囲
+
+画面構造、ナビゲーション、カテゴリ分類、情報の階層化に適用する。
+個々の部品のレイアウトや文言の表現は対象外とする。
+
+## 規則
+
+### 入口の語彙は利用者の探し方に合わせる
+
+意図と根拠: 作り手の分類や内部体系ではなく、利用者が探す目的の語に合わせる。
+語彙が一致することで、迷わずに正しい入口を選べる。
+
+- 良い例:「配色」「タイポグラフィ」「トークン」「コンポーネント」
+- 悪い例:「第 1 号」「第 2 号」などの号数や、「色」「文字」「記号」という抽象的な種別。
+- 例外: 雑誌など号数そのものを探す編集媒体。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
+
+### 入口は中身が始まる場所にする
+
+意図と根拠: 一覧ページを挟むと操作が 1 回増えてしまう。
+トピックを選んだら、その中身そのものが始まる構成にする。
+
+- 良い例: トピックを選ぶと、代表成果物や標本が直接始まる。
+- 悪い例: トピックを選ぶと、一覧リンクだけが並ぶ中間画面を挟む。
+- 例外: 件数が数百件におよび、先頭の選定が難しい場合。
+- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+### 形の違う中身を同じ枠に入れない
+
+意図と根拠: データの形が異なるものを均一な枠に押し込めると視認性が落ちる。
+標本、表、格子など、中身の形に合わせて適切な見せ方を選ぶ。
+
+- 良い例: 配色は色面、トークンは仕様表、アイコンは等幅格子で組む。
+- 悪い例: すべての要素を同一寸法のカードの中に無理に押し込める。
+- 例外: 多様な形式を均一なサムネイルで並べる統合検索結果。
+- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+### 1 件の置き場は 1 つに決め、決め方を固定する
+
+意図と根拠: 複数カテゴリにまたがる要素の置き場が曖昧だと迷いが生じる。
+優先順位を明確に定め、所属する場所を 1 つに固定する。
+
+- 良い例: 領域の優先度順で最初に一致したトピックに割り当てる。
+- 悪い例: 同じ成果物が複数のトピックに重複して現れる。
+- 例外: 検索やタグなど、多軸での探索を目的とする機能。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
+
+### ナビゲーションの並びは覚えられる順にする
+
+意図と根拠: 更新順や件数順で並べると、配置が変わり場所を記憶できない。
+利用者の関心順や固定順で並べ、位置の記憶を助ける。
+
+- 良い例: 利用者が重視する順序でナビゲーションの並びを固定する。
+- 悪い例: 更新のたびにナビの並び順が入れ替わる。
+- 例外: 更新順の閲覧そのものが主目的であるタイムライン。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+### 「その他」の分類を作らない
+
+意図と根拠:「その他」は何が入っているか予測できず、押されない場所になる。
+すべての要素に明確な行き先を用意する。
+
+- 良い例: アイコンやイラストなど、具体的な行き先トピックを足す。
+- 悪い例: 主たる 4 項目に入らない要素を「その他」にまとめる。
+- 例外: ユーザー自身が任意に作成する分類不能なフォルダ。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
+
+### 同じ内容を 2 度見せず、同じ操作を 2 か所に置かない
+
+意図と根拠: 1 つの画面内に重複する要素や操作があると、役割の判断が鈍る。
+重複を排除し、各要素に唯一の役割を持たせる。
+
+- 良い例: 実寸見本があるなら小標本は省き、テーマ切替は 1 つにする。
+- 悪い例: 実寸見本の下に同じ内容の小さなプレビュー枠を重ねる。
+- 例外: 画面上部と下部の両方に配置すべき長いフォームの送信ボタン。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+### 詳細画面からの戻り先を 1 つにする
+
+意図と根拠: 閲覧履歴によって戻り先が変わると、現在地を見失いやすい。
+パンくず等で上位の階層を明示し、戻り先を 1 つに固定する。
+
+- 良い例: トピック、成果物、案の階層に沿って 1 つ上の戻り先を示す。
+- 悪い例: 直前の履歴によってトップに戻ったり一覧に戻ったりする。
+- 例外: モーダルダイアログの閉じる操作。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
+
+### 件数に見合った構造にする
+
+意図と根拠: 少数の一覧に複雑な絞り込みを設けると操作の手間だけが増える。
+要素数に応じた適切な情報密度と機能を選択する。
+
+- 良い例: 14 件程度の要素は 1 画面で一望できるようにする。
+- 悪い例: 14 件の一覧に並び替えや複数条件フィルターを設ける。
+- 例外: 数千件を超える大規模なデータ一覧。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+### 見本にはそれが何かを添える
+
+意図と根拠: 見本だけが並んでいても、何の標本かが分からなければ活用できない。
+使われているフォント名やトークン名を明記する。
+
+- 良い例: 見本の先頭に書体名を添えて何の標本かを示す。
+- 悪い例: 見本だけが並び、書体名がどこにも書かれていない。
+- 例外: 装飾的な幾何学パターンなど、固有の仕様名を持たないもの。
+- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
+
+## 確認項目
+
+- [ ] 入口のラベルは利用者の探し方の語彙に合わせているか。
+- [ ] 押した先の画面で、不要な中間一覧を挟まずに中身が始まっているか。
+- [ ] 形状や属性の異なる情報に別々の表現枠を用意しているか。
+- [ ] その他という曖昧な分類が存在しないか。
+- [ ] 画面内に同一の操作や情報が重複して存在していないか。
+
+## 出典
+
+- [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/): 組織化、ラベリング、ナビゲーション
+- [Dan Brown: Eight Principles of Information Architecture](https://eightprinciples.com/): 物体、選択、開示、見本、正面玄関、集中ナビゲーションの原則
+
+## 判断
+
+- 判断者: 未定
+- 判断日: 未定
+- 理由: draft のため未定
