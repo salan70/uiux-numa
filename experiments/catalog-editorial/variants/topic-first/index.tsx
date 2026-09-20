@@ -441,13 +441,15 @@ function ColorsTopic() {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [open, setOpen] = useState<string | null>(null);
   const { copied, copy } = useCopy();
-  // 採用された配色と、評価の前に却下された配色の両方を載せる。
-  // 掲載対象を採用成果に限らないのは visual showcase の ADR の判断である。
+  // 却下した配色は出さない（利用者の判断、2026-09-20）。
+  // 使える配色だけを並べたほうが、選ぶ面として迷いがない。
+  // 却下した 4 案は experiments/color-schemes の記録に残っている。
   const adopted = works.find((item) => item.slug === "color-schemes")?.adopted ?? [];
+  const shown = adopted.length > 0 ? schemes.filter((item) => adopted.includes(item.id)) : schemes;
 
   return (
     <div className="topic-body">
-      <Feature mode={mode} adopted={adopted} copy={copy} />
+      <Feature mode={mode} shown={shown} copy={copy} />
 
       <div className="palette-browse">
         <div className="palette-bar">
@@ -473,7 +475,7 @@ function ColorsTopic() {
         </div>
 
         <ul className="palettes">
-          {schemes.map((scheme) => (
+          {shown.map((scheme) => (
             <li className="palette" key={scheme.id}>
               <ul className="bands">
                 {cardColors(scheme, mode).map((color) => (
@@ -484,8 +486,10 @@ function ColorsTopic() {
                       style={{ color: inkOn(color.value) }}
                       onClick={() => copy(color.value)}
                     >
-                      <span className="band__hex">{color.value}</span>
-                      <span className="band__role">{color.role}</span>
+                      <span className="band__info">
+                        <span className="band__hex">{color.value}</span>
+                        <span className="band__role">{color.role}</span>
+                      </span>
                     </button>
                   </li>
                 ))}
@@ -494,9 +498,6 @@ function ColorsTopic() {
                 <p className="palette__name">
                   <span className="palette__label">{scheme.label}</span>
                   <code>{scheme.id}</code>
-                  <span className="palette__mark" data-adopted={adopted.includes(scheme.id)}>
-                    {adopted.includes(scheme.id) ? "採用" : "却下"}
-                  </span>
                 </p>
                 <button
                   type="button"
@@ -526,21 +527,17 @@ function ColorsTopic() {
  */
 function Feature({
   mode,
-  adopted,
+  shown,
   copy,
 }: {
   mode: "light" | "dark";
-  adopted: string[];
+  shown: Scheme[];
   copy: (value: string) => void;
 }) {
-  const startAt = Math.max(
-    0,
-    schemes.findIndex((item) => adopted.includes(item.id)),
-  );
-  const [index, setIndex] = useState(startAt);
-  const scheme = schemes[index];
+  const [index, setIndex] = useState(0);
+  const scheme = shown[index] ?? shown[0];
   const move = (step: number) =>
-    setIndex((current) => (current + step + schemes.length) % schemes.length);
+    setIndex((current) => (current + step + shown.length) % shown.length);
 
   return (
     <section className="feature" aria-labelledby="feature-name">
@@ -570,7 +567,7 @@ function Feature({
             前の配色
           </button>
           <span className="feature__count">
-            {index + 1} / {schemes.length}
+            {index + 1} / {shown.length}
           </span>
           <button type="button" className="feature__step" onClick={() => move(1)}>
             次の配色
