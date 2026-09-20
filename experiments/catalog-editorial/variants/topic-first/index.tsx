@@ -25,7 +25,7 @@ import {
   relativeLuminance,
 } from "../../shared/contrast";
 import { tokenFamilies, type Token } from "../../shared/tokens";
-import { useScreen, type ScreenApi } from "../../shared/useScreen";
+import { useScreen, type ScreenApi, type ScreenState } from "../../shared/useScreen";
 import { ALL_GUIDELINES, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
 import { FIGURE_COMPONENTS } from "./figures";
 
@@ -49,30 +49,30 @@ type Topic = {
 // ナビの正本。種別ではなく「何を探しているか」で分ける。
 // 正本の domain は docs/scope.md にある。ここは topic への割り当てだけを持つ。
 const TOPICS: Topic[] = [
-  { id: "colors", label: "配色", lead: "役割ごとに決めた色の組。", domains: ["color"] },
+  { id: "colors", label: "Colors", lead: "役割ごとに決めた色の組。", domains: ["color"] },
   {
     id: "typography",
-    label: "タイポグラフィ",
+    label: "Typography",
     lead: "書体と文字の役割。",
     domains: ["typography"],
   },
-  { id: "tokens", label: "トークン", lead: "正本の値そのもの。", domains: [] },
+  { id: "tokens", label: "Tokens", lead: "正本の値そのもの。", domains: [] },
   {
     id: "components",
-    label: "コンポーネント",
+    label: "Components",
     lead: "入力と操作の部品。",
     domains: ["forms-input-ux"],
   },
-  { id: "icons", label: "アイコン", lead: "画面で使う記号の組。", domains: ["iconography"] },
+  { id: "icons", label: "Icons", lead: "画面で使う記号の組。", domains: ["iconography"] },
   {
     id: "illustrations",
-    label: "イラスト",
+    label: "Illustrations",
     lead: "マークと挿絵。",
     domains: ["logo-brand-identity", "illustration-svg"],
   },
   {
     id: "motion",
-    label: "モーション",
+    label: "Motion",
     lead: "遷移と完了のフィードバック。",
     domains: ["animation-motion"],
   },
@@ -195,7 +195,7 @@ export default function TopicFirst() {
       <a className="skip" href="#ed-main">
         本文へスキップ
       </a>
-      <Masthead nav={nav} theme={theme} />
+      <Sidebar nav={nav} theme={theme} />
       <main className="ed-main" id="ed-main">
         {nav.screen === "top" && <Top nav={nav} />}
         {nav.screen === "list" && <TopicScreen nav={nav} theme={theme} />}
@@ -252,14 +252,52 @@ function ThemeControl({ theme }: { theme: Theme }) {
   );
 }
 
-function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
-  const current = nav.screen === "list" ? nav.filter : null;
-  const firstGuideSlug = ALL_GUIDELINES[0]?.slug ?? "design-four-principles";
+/**
+ * サイドバーのナビの正本。成果物と方針の 2 群にし、子をその下に常に開いて並べる。
+ * 横帯では 13 面が 390 幅で 3 段に折り返すため畳む必要があったが、
+ * 縦に置けば全件を一度に出せる。現在地を探す操作が要らなくなる。
+ * 群の見出しは遷移しない。遷移するのは子のリンクである。
+ */
+type NavGroupId = "works" | "guide";
 
+type NavChild = { key: string; label: string; to: Partial<ScreenState> };
+
+const NAV_GROUPS: { id: NavGroupId; label: string; children: NavChild[] }[] = [
+  {
+    id: "works",
+    label: "Works",
+    children: TOPICS.map((topic) => ({
+      key: topic.id,
+      label: topic.label,
+      to: { screen: "list", filter: topic.id, item: null },
+    })),
+  },
+  {
+    id: "guide",
+    label: "Guidelines",
+    children: ALL_GUIDELINES.map((guideline) => ({
+      key: guideline.slug,
+      label: guideline.title,
+      to: { screen: "guide", item: guideline.slug, filter: null },
+    })),
+  },
+];
+
+/**
+ * 現在地の子を返す。親の下線と子の aria-current の両方がこの 1 か所を見る。
+ * 方針は item なしでも先頭の文書を描くので、判定もその fallback に合わせる。
+ */
+function currentChildKey(nav: ScreenApi, id: NavGroupId): string | null {
+  if (id === "works") return nav.screen === "list" ? nav.filter : null;
+  if (nav.screen !== "guide") return null;
+  return nav.item ?? ALL_GUIDELINES[0]?.slug ?? null;
+}
+
+function Sidebar({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
   return (
-    <header className="masthead">
+    <div className="sidebar">
       <a
-        className="masthead__name"
+        className="sidebar__name"
         href={nav.hrefFor({ screen: "top", item: null, filter: null })}
         onClick={(event) => {
           event.preventDefault();
@@ -268,45 +306,54 @@ function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
       >
         UI／UX 沼
       </a>
-      <nav className="masthead__nav" aria-label="トピック">
-        {TOPICS.map((topic) => (
-          <a
-            key={topic.id}
-            href={nav.hrefFor({ screen: "list", filter: topic.id, item: null })}
-            aria-current={current === topic.id ? "page" : undefined}
-            onClick={(event) => {
-              event.preventDefault();
-              nav.go({ screen: "list", filter: topic.id, item: null });
-            }}
-          >
-            {topic.label}
-          </a>
-        ))}
+      <nav className="sidebar__nav" aria-label="主ナビゲーション">
+        {NAV_GROUPS.map((group) => {
+          const currentKey = currentChildKey(nav, group.id);
+          return (
+            <section className="sidebar__group" key={group.id}>
+              <h2 className="sidebar__heading" id={`nav-${group.id}`}>
+                {group.label}
+              </h2>
+              <ul className="sidebar__list" aria-labelledby={`nav-${group.id}`}>
+                {group.children.map((child) => (
+                  <li key={child.key}>
+                    <a
+                      className="sidebar__link"
+                      href={nav.hrefFor(child.to)}
+                      aria-current={child.key === currentKey ? "page" : undefined}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        nav.go(child.to);
+                      }}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })}
+        <section className="sidebar__group">
+          <ul className="sidebar__list">
+            <li>
+              <a
+                className="sidebar__link sidebar__link--lone"
+                href={nav.hrefFor({ screen: "sheet", item: null, filter: null })}
+                aria-current={nav.screen === "sheet" ? "page" : undefined}
+                onClick={(event) => {
+                  event.preventDefault();
+                  nav.go({ screen: "sheet", item: null, filter: null });
+                }}
+              >
+                Specimens
+              </a>
+            </li>
+          </ul>
+        </section>
       </nav>
-      <a
-        className="masthead__guide"
-        href={nav.hrefFor({ screen: "guide", item: firstGuideSlug, filter: null })}
-        aria-current={nav.screen === "guide" ? "page" : undefined}
-        onClick={(event) => {
-          event.preventDefault();
-          nav.go({ screen: "guide", item: firstGuideSlug, filter: null });
-        }}
-      >
-        方針
-      </a>
-      <a
-        className="masthead__sheet"
-        href={nav.hrefFor({ screen: "sheet", item: null, filter: null })}
-        aria-current={nav.screen === "sheet" ? "page" : undefined}
-        onClick={(event) => {
-          event.preventDefault();
-          nav.go({ screen: "sheet", item: null, filter: null });
-        }}
-      >
-        見本
-      </a>
       <ThemeControl theme={theme} />
-    </header>
+    </div>
   );
 }
 
@@ -1518,88 +1565,46 @@ function Parts() {
 }
 
 // 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。
-function goToRule(index: number) {
-  const target = document.getElementById(`rule-${index}`);
+function goToRule(domId: string) {
+  const target = document.getElementById(domId);
   if (!target) return;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   target.focus();
 }
 
-function GuideScreen({ nav }: { nav: ScreenApi }) {
-  const guidelines = ALL_GUIDELINES;
-  const activeSlug = nav.item ?? guidelines[0]?.slug;
-  const currentGuideline = guidelines.find((g) => g.slug === activeSlug) ?? guidelines[0];
-
-  if (!currentGuideline) {
-    return (
-      <div className="guide-screen">
-        <p>ガイドラインが見つかりません。</p>
-      </div>
-    );
-  }
-
+/**
+ * 規則の 1 層。コアと Tips は同じ形で描く。違うのは層の名と並び順だけである。
+ * 形を変えると、同じ書式の規則が別物に見える。
+ */
+function RuleLayer({
+  id,
+  title,
+  lead,
+  rules,
+  nav,
+}: {
+  id: string;
+  title: string;
+  lead: string;
+  rules: Rule[];
+  nav: ScreenApi;
+}) {
   return (
-    <div className="guide-screen">
-      <div className="guide-hero">
-        <h1 className="guide-title" tabIndex={-1} data-screen-heading>
-          {currentGuideline.title}
-        </h1>
-        <p className="guide-summary">{currentGuideline.summary}</p>
-        <nav className="guide-nav" aria-label="文書の切替">
-          {guidelines.map((g) => (
-            <a
-              key={g.slug}
-              className="guide-nav__link"
-              href={nav.hrefFor({ screen: "guide", item: g.slug, filter: null })}
-              aria-current={g.slug === currentGuideline.slug ? "page" : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                nav.go({ screen: "guide", item: g.slug, filter: null });
-              }}
-            >
-              {g.title}
-            </a>
-          ))}
-        </nav>
-        <div className="guide-meta">
-          <div className="guide-meta__col">
-            <h2>目的</h2>
-            <p>{currentGuideline.purpose}</p>
-          </div>
-          <div className="guide-meta__col">
-            <h2>適用範囲</h2>
-            <p>{currentGuideline.scope}</p>
-          </div>
-        </div>
+    <section className="guide-block" aria-labelledby={`guide-${id}-head`}>
+      <div className="work-head">
+        <h2 className="work-head__title" id={`guide-${id}-head`}>
+          {title}
+        </h2>
+        <p className="work-head__meta">{rules.length} 件</p>
       </div>
-
-      <nav className="guide-toc" aria-label="規則の索引">
-        <h2 className="guide-toc__label">規則の索引</h2>
-        <ul className="guide-toc__list">
-          {currentGuideline.rules.map((rule, idx) => (
-            <li key={idx}>
-              <a
-                className="guide-toc__link"
-                href={`#rule-${idx}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToRule(idx);
-                }}
-              >
-                {rule.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
+      <p className="guide-layer__lead">{lead}</p>
       <div className="guide-rules">
-        {currentGuideline.rules.map((rule, idx) => {
+        {rules.map((rule, idx) => {
           const Figure = rule.figureKey ? FIGURE_COMPONENTS[rule.figureKey] : null;
           return (
-            <article key={idx} id={`rule-${idx}`} className="guide-rule" tabIndex={-1}>
-              <h2 className="guide-rule__title">{rule.title}</h2>
+            <article key={idx} id={`rule-${id}-${idx}`} className="guide-rule" tabIndex={-1}>
+              <h3 className="guide-rule__title">{rule.title}</h3>
               {Figure && (
                 <div className="guide-rule__figure">
                   <Figure />
@@ -1653,37 +1658,135 @@ function GuideScreen({ nav }: { nav: ScreenApi }) {
           );
         })}
       </div>
+    </section>
+  );
+}
 
-      <section className="guide-checklist-section">
-        <h2 className="guide-section-title">確認項目</h2>
-        <ul className="guide-checklist">
-          {currentGuideline.checklist.map((item, idx) => (
-            <li key={idx} className="guide-checklist__item">
-              <span className="guide-checklist__icon" aria-hidden="true" />
-              <span>{renderInline(item)}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+const LAYERS = [
+  { id: "core", title: "コア", lead: "この主題で守る土台。場面によらず効く。" },
+  { id: "tips", title: "Tips", lead: "コアを個別の場面へ当てたもの。場面が変われば入れ替わる。" },
+] as const;
 
-      <section className="guide-sources-section">
-        <h2 className="guide-section-title">出典</h2>
-        <ul className="guide-sources">
-          {currentGuideline.sources.map((src, idx) => (
-            <li key={idx} className="guide-sources__item">
-              {src.url ? (
-                <a href={src.url} className="guide-link" target="_blank" rel="noreferrer">
-                  {src.text}
-                </a>
-              ) : (
-                <span className="guide-strong">{src.text}</span>
-              )}
-              {src.description && <span>: {src.description}</span>}
-            </li>
-          ))}
-        </ul>
+function GuideScreen({ nav }: { nav: ScreenApi }) {
+  const guidelines = ALL_GUIDELINES;
+  // item なしの URL でも画面が空にならないよう、先頭の文書へ落とす。
+  // URL は書き換えない。描画後に URL が変わると、戻る操作と撮影の再現性が落ちる。
+  const guideline = guidelines.find((item) => item.slug === nav.item) ?? guidelines[0];
+
+  if (!guideline) {
+    return (
+      <section className="index">
+        <p className="empty">方針の文書が読み込めなかった。</p>
       </section>
-    </div>
+    );
+  }
+
+  const layers = LAYERS.map((layer) => ({
+    ...layer,
+    rules: layer.id === "core" ? guideline.core : guideline.tips,
+  }));
+
+  return (
+    <section className="index" aria-labelledby="index-head">
+      <h1 className="section-title" id="index-head" tabIndex={-1} data-screen-heading>
+        {guideline.title}
+      </h1>
+      <p className="index__lead">{guideline.summary}</p>
+
+      <div className="guide-layout">
+        <div className="guide-layout__main">
+          <section className="guide-block" aria-labelledby="guide-about">
+            <div className="work-head">
+              <h2 className="work-head__title" id="guide-about">
+                この方針について
+              </h2>
+            </div>
+            <dl className="guide-facts">
+              <dt>目的</dt>
+              <dd>{guideline.purpose}</dd>
+              <dt>適用範囲</dt>
+              <dd>{guideline.scope}</dd>
+            </dl>
+          </section>
+
+          {layers.map((layer) => (
+            <RuleLayer key={layer.id} {...layer} nav={nav} />
+          ))}
+
+          <section className="guide-block" aria-labelledby="guide-checklist-head">
+            <div className="work-head">
+              <h2 className="work-head__title" id="guide-checklist-head">
+                確認項目
+              </h2>
+            </div>
+            <ul className="guide-checklist">
+              {guideline.checklist.map((item, idx) => (
+                <li key={idx} className="guide-checklist__item">
+                  <span className="guide-checklist__icon" aria-hidden="true" />
+                  <span>{renderInline(item)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="guide-block" aria-labelledby="guide-sources-head">
+            <div className="work-head">
+              <h2 className="work-head__title" id="guide-sources-head">
+                出典
+              </h2>
+            </div>
+            <ul className="guide-sources">
+              {guideline.sources.map((src, idx) => (
+                <li key={idx} className="guide-sources__item">
+                  {src.url ? (
+                    <a href={src.url} className="guide-link" target="_blank" rel="noreferrer">
+                      {src.text}
+                    </a>
+                  ) : (
+                    <span className="guide-strong">{src.text}</span>
+                  )}
+                  {src.description && <span>: {src.description}</span>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        {/* 索引は本文の右へ置く。読んでいる途中でも規則の全体が見える。 */}
+        <aside className="guide-aside" aria-labelledby="guide-toc-head">
+          <div className="guide-aside__inner">
+            <h2 className="guide-aside__title" id="guide-toc-head">
+              規則の索引
+            </h2>
+            {layers.map((layer) => (
+              <nav
+                className="guide-aside__layer"
+                key={layer.id}
+                aria-label={`${layer.title}の索引`}
+              >
+                <p className="guide-aside__layer-name">{layer.title}</p>
+                <ul className="guide-aside__list">
+                  {layer.rules.map((rule, idx) => (
+                    <li key={idx}>
+                      <a
+                        className="guide-aside__link"
+                        href={`#rule-${layer.id}-${idx}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          goToRule(`rule-${layer.id}-${idx}`);
+                        }}
+                      >
+                        {rule.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
+        </aside>
+      </div>
+    </section>
   );
 }
 
