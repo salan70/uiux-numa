@@ -1122,15 +1122,17 @@ function tokenText(value: Token["value"]): string {
  * 役割ごとの文の長さと行数が出ないため、組んだときの見え方が判断できない。
  * body だけ複数行にしてあるのは、行間の値が 1 行では確かめられないからである。
  * 文面は正本の $description に書いた用途から取り、説明と食い違わないようにした。
+ * どの役割も 1 つの文にする。値を並べた断片（「更新日 2026.09.19 ／ 全 6 役割」）は、
+ * 何を言っているのか読めず、見本としても字面の長さが役割と結び付かない。
  */
 const ROLE_SAMPLES: Record<string, string> = {
   "typography.title": "文字の役割を決める",
   "typography.heading": "本文と見出しの組み方",
   "typography.body":
     "読む人が迷わないように、行の長さと行間を先に決める。日本語は字面が詰まるので、欧文より行間を広く取る。",
-  "typography.ui": "更新日 2026.09.19 ／ 全 6 役割",
+  "typography.ui": "この書体は 2 つのウェイトを持つ",
   "typography.control": "この成果物を開く",
-  "typography.caption": "最終更新 2026.09.19",
+  "typography.caption": "文字の値は tokens/typography が正本",
 };
 
 /**
