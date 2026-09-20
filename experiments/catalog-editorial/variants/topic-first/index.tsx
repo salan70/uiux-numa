@@ -353,29 +353,30 @@ function defaultVariant(work: Work): string {
 /* ---- 配色。coolors のパレットカードを参考にする ---- */
 
 /**
- * カードの帯に出す代表 7 色の候補。
- * 左に主役の色、右に地の色を置く。accent から bg まで濃い順に下るので、
- * 左端を見れば配色の個性が、右端を見れば紙の色が分かる。
- * 19 役割すべてを帯にすると淡色が過半を占め、カードがほぼ白一色になって配色間の差が読めない。
- * 値が重複する役割は飛ばし、後ろの候補から補って常に 7 本にする。
- * aizome のように accent と text-hover が同じ値の配色があり、そのままだと同じ帯が 2 本並ぶ。
- * 補う候補は淡い色だけにする。右端は地の色で終わらせたいので、focus のような有彩は補わない。
- * 7 本に届かない配色は、その本数のまま並べる。同じ帯を 2 本置くより本数が減るほうがよい。
- * 残りの役割はカードを開いたときに見せる。
+ * カードの帯に出す役割と、その並び。
+ * 左に主役の色、右に地の色を置く。左端を見れば配色の個性が、右端を見れば紙の色が分かる。
+ * accent 系は 4 つとも出す（利用者の判断、2026-09-20）。
+ * ただし accent-subtle は淡いので、同じく淡い bg 系の手前へ回す。
+ * 濃い色と淡い色が交互に並ぶと、カードが縞に見えて配色の性格が読めない。
+ * 意味色（success / warning / danger）は配色をまたいでほぼ共通なので帯に出しても差にならない。
+ * 同じ値の役割は 1 本にまとめ、役割名を並べて出す。
+ * aizome のように accent と accent-strong が同じ値の配色があり、分けると同じ帯が 2 本並ぶ。
+ * まとめれば色の面は重複せず、その配色が 1 色を 2 つの役割へ当てていることも読める。
+ * まとめた結果、本数は配色ごとに変わる。
+ * 本数の違いは、その配色がこれらの役割で何色を使い分けているかをそのまま表す。
+ * 残りの役割はポップアップで見せる。
  */
-const CARD_ROLE_CANDIDATES = [
+const CARD_ROLES = [
   "accent",
+  "accent-strong",
   "accent-hover",
   "text",
   "text-muted",
   "border-strong",
+  "accent-subtle",
   "bg-subtle",
   "bg",
-  "accent-subtle",
-  "surface",
 ];
-
-const CARD_BAND_COUNT = 7;
 
 /** 展開したときに見せる全役割の並び。役割の意味で束ねる。 */
 const ROLE_GROUPS: Array<{ label: string; roles: string[] }> = [
@@ -414,15 +415,23 @@ function colorOf(scheme: Scheme, mode: "light" | "dark", role: string): SchemeCo
   return scheme[mode].find((item) => item.role === role);
 }
 
-function cardColors(scheme: Scheme, mode: "light" | "dark"): SchemeColor[] {
-  const out: SchemeColor[] = [];
-  const seen = new Set<string>();
-  for (const role of CARD_ROLE_CANDIDATES) {
-    if (out.length === CARD_BAND_COUNT) break;
+/** 帯 1 本。同じ値の役割はここでまとまる。 */
+type Band = { value: string; name: string; roles: string[] };
+
+function cardColors(scheme: Scheme, mode: "light" | "dark"): Band[] {
+  const out: Band[] = [];
+  const byValue = new Map<string, Band>();
+  for (const role of CARD_ROLES) {
     const color = colorOf(scheme, mode, role);
-    if (!color || seen.has(color.value)) continue;
-    seen.add(color.value);
-    out.push(color);
+    if (!color) continue;
+    const found = byValue.get(color.value);
+    if (found) {
+      found.roles.push(role);
+      continue;
+    }
+    const band: Band = { value: color.value, name: color.name, roles: [role] };
+    byValue.set(color.value, band);
+    out.push(band);
   }
   return out;
 }
@@ -480,17 +489,17 @@ function ColorsTopic() {
           {shown.map((scheme) => (
             <li className="palette" key={scheme.id}>
               <ul className="bands">
-                {cardColors(scheme, mode).map((color) => (
-                  <li className="band" key={color.role} style={{ background: color.value }}>
+                {cardColors(scheme, mode).map((band) => (
+                  <li className="band" key={band.value} style={{ background: band.value }}>
                     <button
                       type="button"
                       className="band__hit"
-                      style={{ color: inkOn(color.value) }}
-                      onClick={() => copy(color.value)}
+                      style={{ color: inkOn(band.value) }}
+                      onClick={() => copy(band.value)}
                     >
                       <span className="band__info">
-                        <span className="band__hex">{color.value}</span>
-                        <span className="band__role">{color.role}</span>
+                        <span className="band__hex">{band.value}</span>
+                        <span className="band__role">{band.roles.join(" · ")}</span>
                       </span>
                     </button>
                   </li>
@@ -550,17 +559,17 @@ function Feature({
   return (
     <section className="feature" aria-labelledby="feature-name">
       <ul className="feature__bands">
-        {cardColors(scheme, mode).map((color) => (
-          <li className="feature__band" key={color.role} style={{ background: color.value }}>
+        {cardColors(scheme, mode).map((band) => (
+          <li className="feature__band" key={band.value} style={{ background: band.value }}>
             <button
               type="button"
               className="feature__hit"
-              style={{ color: inkOn(color.value) }}
-              onClick={() => copy(color.value)}
+              style={{ color: inkOn(band.value) }}
+              onClick={() => copy(band.value)}
             >
-              <span className="feature__hex">{color.value}</span>
-              <span className="feature__role">{color.role}</span>
-              <span className="feature__jp">{color.name}</span>
+              <span className="feature__hex">{band.value}</span>
+              <span className="feature__role">{band.roles.join(" · ")}</span>
+              <span className="feature__jp">{band.name}</span>
             </button>
           </li>
         ))}
