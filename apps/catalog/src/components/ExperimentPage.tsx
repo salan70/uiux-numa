@@ -1,5 +1,7 @@
 import { categoryHref, categoryLabel, type CatalogCategory } from "../content/category";
-import { catalog, defaultVariantId, type ExperimentRecord } from "../content/collect";
+import { defaultVariantId, type ExperimentRecord } from "../content/collect";
+import { catalog } from "../content/collect";
+import { AssetMeta, experimentMeta } from "./AssetMeta";
 import { LivePreview } from "./LivePreview";
 import { SvgGrid } from "./SvgGrid";
 import { Link } from "./Link";
@@ -11,7 +13,7 @@ type Props = {
 
 export function ExperimentPage({ experiment, kind }: Props) {
   if (!experiment.category) {
-    throw new Error(`${experiment.slug}: 土台 / 部品の種別がない`);
+    throw new Error(`${experiment.slug}: 公開種別がない`);
   }
   const adopted = defaultVariantId(experiment);
   const groups = catalog.svgs.filter((group) => group.experiment === experiment.slug);
@@ -39,6 +41,7 @@ export function ExperimentPage({ experiment, kind }: Props) {
       ) : (
         <SvgGrid groups={adopted ? groups.filter((group) => group.variant === adopted) : groups} />
       )}
+      <AssetMeta {...experimentMeta(experiment)} />
     </>
   );
 }

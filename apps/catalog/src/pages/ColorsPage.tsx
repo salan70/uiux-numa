@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AssetMeta, experimentMeta } from "../components/AssetMeta";
 import { CopyButton } from "../components/CopyButton";
 import { Link } from "../components/Link";
 import { SchemeSpecimen } from "../components/SchemeSpecimen";
@@ -28,6 +29,7 @@ export function ColorsPage() {
     <>
       <div className="page-intro">
         <h1>配色</h1>
+        {experiment ? <AssetMeta {...experimentMeta(experiment)} compact /> : null}
       </div>
       <section aria-labelledby="adopted-colors-heading">
         <h2 id="adopted-colors-heading">採用</h2>
@@ -59,6 +61,7 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
           <code>{scheme.id}</code>
         </p>
       </div>
+      <SchemeSpecimen scheme={scheme} mode={mode} />
       <SegmentedControl
         name="color-mode"
         legend="表示"
@@ -69,7 +72,6 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
         ]}
         onChange={setMode}
       />
-      <SchemeSpecimen scheme={scheme} mode={mode} />
       {ROLE_GROUPS.map((group) => (
         <section key={group.id} aria-labelledby={`${scheme.id}-${group.id}-heading`}>
           <h2 id={`${scheme.id}-${group.id}-heading`}>{group.label}</h2>

@@ -1,3 +1,4 @@
+import { AssetMeta, experimentMeta } from "../components/AssetMeta";
 import { LivePreview } from "../components/LivePreview";
 import { TokenSample } from "../components/TokenSample";
 import { TokenTable } from "../components/TokenTable";
@@ -20,6 +21,14 @@ export function TypographyPage() {
       <div className="page-intro">
         <h1>文字</h1>
       </div>
+      <LivePreview
+        variants={live}
+        title="product-ui-typography"
+        defaultVariant={typography ? defaultVariantId(typography) : undefined}
+        showHeading={false}
+      />
+      {typography ? <AssetMeta {...experimentMeta(typography)} /> : null}
+      <TypographyPlayground roles={semantics} />
       <section aria-labelledby="semantic-heading">
         <h2 id="semantic-heading">役割</h2>
         <TokenTable
@@ -54,12 +63,6 @@ export function TypographyPage() {
           }))}
         />
       </section>
-      <TypographyPlayground roles={semantics} />
-      <LivePreview
-        variants={live}
-        title="product-ui-typography"
-        defaultVariant={typography ? defaultVariantId(typography) : undefined}
-      />
     </>
   );
 }

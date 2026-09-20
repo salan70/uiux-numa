@@ -1,4 +1,4 @@
-import { categoryForDomains, type CatalogCategory } from "./category";
+import { categoryForExperiment, type CatalogCategory } from "./category";
 import {
   parseExperimentFrontmatter,
   parseTokenAssetMeta,
@@ -150,7 +150,7 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       domains: frontmatter.domains,
       sources: frontmatter.sources,
       platforms: frontmatter.platforms,
-      category: categoryForDomains(frontmatter.domains),
+      category: categoryForExperiment(slug, frontmatter.domains),
       variantIds: actual,
       variants: actual.map((id) => ({
         id,

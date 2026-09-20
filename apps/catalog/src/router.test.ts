@@ -10,6 +10,7 @@ describe("matchRoute", () => {
     expect(matchRoute("/foundations/icons")).toEqual({ name: "icons" });
     expect(matchRoute("/foundations/graphics")).toEqual({ name: "graphics" });
     expect(matchRoute("/components")).toEqual({ name: "components" });
+    expect(matchRoute("/motion")).toEqual({ name: "motion" });
   });
 
   it("動的セグメントを返す", () => {
@@ -25,6 +26,10 @@ describe("matchRoute", () => {
     expect(matchRoute("/components/form-inline-validation")).toEqual({
       name: "component",
       experiment: "form-inline-validation",
+    });
+    expect(matchRoute("/motion/registration-completion-feedback")).toEqual({
+      name: "motionDetail",
+      experiment: "registration-completion-feedback",
     });
   });
 

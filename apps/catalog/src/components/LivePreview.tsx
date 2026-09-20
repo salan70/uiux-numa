@@ -19,6 +19,7 @@ type Props = {
   title?: string;
   defaultVariant?: string;
   showHeading?: boolean;
+  compact?: boolean;
 };
 
 export function LivePreview({
@@ -26,6 +27,7 @@ export function LivePreview({
   title = "Live Preview",
   defaultVariant,
   showHeading = true,
+  compact = false,
 }: Props) {
   const id = useId();
   const initial =
@@ -38,29 +40,35 @@ export function LivePreview({
 
   return (
     <section
-      className="live-preview"
+      className={compact ? "live-preview is-compact" : "live-preview"}
       aria-labelledby={showHeading ? headingId : undefined}
       aria-label={
         showHeading ? undefined : `${current.experiment} / ${current.variant} のプレビュー`
       }
     >
       {showHeading ? <h2 id={headingId}>{title}</h2> : null}
-      <div className="live-controls">
-        <SegmentedControl
-          name={`${id}-variant`}
-          legend="バリアント"
-          value={current.variant}
-          options={variants.map((item) => ({ value: item.variant, label: item.variant }))}
-          onChange={setSelected}
-        />
-        <SegmentedControl
-          name={`${id}-width`}
-          legend="表示幅"
-          value={width}
-          options={widths}
-          onChange={setWidth}
-        />
-      </div>
+      {variants.length > 1 || !compact ? (
+        <div className="live-controls">
+          {variants.length > 1 ? (
+            <SegmentedControl
+              name={`${id}-variant`}
+              legend="バリアント"
+              value={current.variant}
+              options={variants.map((item) => ({ value: item.variant, label: item.variant }))}
+              onChange={setSelected}
+            />
+          ) : null}
+          {compact ? null : (
+            <SegmentedControl
+              name={`${id}-width`}
+              legend="表示幅"
+              value={width}
+              options={widths}
+              onChange={setWidth}
+            />
+          )}
+        </div>
+      ) : null}
       <div className="live-frame-wrap">
         <iframe
           className="live-frame"

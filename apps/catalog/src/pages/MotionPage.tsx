@@ -3,14 +3,14 @@ import { catalog } from "../content/collect";
 import { ExperimentListPage } from "./ExperimentListPage";
 import { NotFoundPage } from "./NotFoundPage";
 
-export function GraphicsPage() {
-  return <ExperimentListPage category="graphics" />;
+export function MotionPage() {
+  return <ExperimentListPage category="motion" />;
 }
 
-export function GraphicDetailPage({ experiment: slug }: { experiment: string }) {
+export function MotionDetailPage({ experiment: slug }: { experiment: string }) {
   const experiment = catalog.experiments.find(
-    (item) => item.category === "graphics" && item.slug === slug,
+    (item) => item.category === "motion" && item.slug === slug,
   );
   if (!experiment) return <NotFoundPage />;
-  return <ExperimentPage experiment={experiment} kind="svg" />;
+  return <ExperimentPage experiment={experiment} kind="live" />;
 }
