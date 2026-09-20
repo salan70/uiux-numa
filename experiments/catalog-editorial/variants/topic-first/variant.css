@@ -1455,12 +1455,11 @@
 /* 見本と仕様を左右に分ける。
    値を見本の上に 1 行で並べていたときは、どの数が何を指すのかが読めなかった。
    見本の側を広く取るのは、役割の画面で最も見るものが実寸の文だからである。 */
-/* 見本の測り（30em）に合わせて左の列を止め、仕様をその隣に置く。
-   左を 1fr にすると、見本と仕様のあいだに読む物のない帯ができる。 */
+/* 見本の測り（30em）に合わせて左の列を止め、仕様は右端に寄せる（利用者の判断、2026-09-20）。
+   右端に置くと、6 役割の仕様が同じ縦線の上に揃い、役割どうしを縦に読み比べられる。 */
 .ed-root--topic .role {
   display: grid;
-  grid-template-columns: minmax(0, 34em) 15rem;
-  justify-content: start;
+  grid-template-columns: minmax(0, 34em) minmax(0, 1fr);
   gap: var(--ed-gap-lg) var(--ed-section);
   padding-block: 1.5rem;
   border-block-end: 1px solid var(--ed-line);
@@ -1481,6 +1480,8 @@
 /* 仕様は定義の組で出す。項目名を先に置き、値の桁を揃える。 */
 .ed-root--topic .role__spec {
   display: grid;
+  justify-self: end;
+  inline-size: 15rem;
   gap: 0.25rem;
   margin: 0;
   font-size: 0.875rem;
@@ -1516,6 +1517,11 @@
   .ed-root--topic .role {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .ed-root--topic .role__spec {
+    justify-self: start;
+    inline-size: 100%;
+  }
 }
 
 /* 行の長さを本文の測りに揃える。
@@ -1526,20 +1532,11 @@
 }
 
 /* 正本へ辿る 1 行。トピックの中身のあとに置く。
-   成果物の live 標本は、役割の見本と同じものを 2 度見せることになるので出さない。 */
+   成果物の live 標本は、役割の見本と同じものを 2 度見せることになるので出さない。
+   「正本」の標識は付けない。リンクが 1 本だけなら、押す先は題名から読める。 */
 .ed-root--topic .topic-source {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   margin: var(--ed-gap-lg) 0 0;
   font-size: 0.875rem;
-}
-
-.ed-root--topic .topic-source__label {
-  font-size: var(--ed-label);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--ed-muted);
 }
 
 .ed-root--topic .topic-source a {
