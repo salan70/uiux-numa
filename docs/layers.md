@@ -115,8 +115,8 @@ preview PNG は Experiment の検証資産として `experiments/*/previews/` �
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
 責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
-ホストの顔と token の取り込みは [ホスト ADR](decisions/2026-09-19-catalog-host.md) を維持する。
-見た目の方向は `experiments/catalog-redesign/` で比較し、公開面は人間判断のあとで改修する。
+ホストの顔は [ホスト ADR](decisions/2026-09-19-catalog-host.md) と `hairline-float` を維持する。
+情報設計の原則は `experiments/catalog-redesign/` の Decision を正本にする。
 
 ## AI Agent と Skill
 

@@ -69,9 +69,9 @@
 - 公開面へ移すならホスト色の衝突を先に決める必要がある。
 - 記録: [evaluation/implementation.md](evaluation/implementation.md)
 
-## 人間の判断待ちの論点
+## 人間の判断
 
-- 公開 Catalog の殻を、暗い精密さ、静かな余白、色の人格のどれに寄せるか。
-- トップを検索起点にするか、大きな 1 specimen にするか、色カード群にするか。
-- 要素の組み合わせ（例: 静かな殻 + 精密なコマンド）を許すか、1 案の純度を保つか。
-- 最終 visual direction は人間が決める。Phase 5 には進まない。
+2026-09-20。利用者の決定である。
+公開殻は `hairline-float`。役割は `quiet-hierarchy` の静かな階層と標本優先。
+3 variant は公開サイトの正にしない。`playful-chroma` の人格と遊び copy は使わない。
+詳細は [README の Decision](README.md) にある。

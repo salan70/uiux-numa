@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-19
-- 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。「Catalog 全体の見た目を 3 案の Experiment にはしない」は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) が部分置換する。比較は `experiments/catalog-redesign/` に閉じ、公開 `apps/catalog/` は人間判断まで変えない。
+- 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。「Catalog 全体の見た目を 3 案の Experiment にはしない」は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) が部分置換する。比較は `experiments/catalog-redesign/` に閉じた。公開殻は人間判断のあとでも `hairline-float` を続ける。
 - 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../../experiments/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)、[visual showcase](2026-09-20-catalog-visual-showcase.md)
 
 ## 背景
@@ -85,8 +85,8 @@ Typography の `title` を破る `clamp` は、display token を足す理由に�
 ## 影響
 
 Catalog は `apps/catalog/` の CSS とページを見本帳の骨格へ直す。
-画面名は配色、文字、アイコン、図、部品とする。
-URL は `/foundations/colors` などの既存パスを維持する。
+画面名は配色、文字、アイコン、図、UI、動きとする。
+URL は `/foundations/colors` などの既存パスを維持し、動きは `/motion` を足す。
 
 余白 token の正本は `tokens/space/space.tokens.json` である。
 生成 CSS は `just tokens-build` が作る。
