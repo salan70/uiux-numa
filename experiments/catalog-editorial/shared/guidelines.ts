@@ -17,7 +17,7 @@ export type Rule = {
   good: string;
   bad: string;
   exception: string | null;
-  figureKey: string | null;
+  figureKey: FigureKey | null;
   experiment: LinkItem | null;
   source: LinkItem | null;
 };
@@ -48,6 +48,7 @@ export type Guideline = {
   judgment: Judgment;
 };
 
+// 図版キーの正本。図版そのものは見本帳（variants/*/figures.tsx）が持つ。
 export const VALID_FIGURE_KEYS = [
   "proximity",
   "alignment",
@@ -57,7 +58,28 @@ export const VALID_FIGURE_KEYS = [
   "state-stable",
 ] as const;
 
-export type ValidFigureKey = (typeof VALID_FIGURE_KEYS)[number];
+export type FigureKey = (typeof VALID_FIGURE_KEYS)[number];
+
+// docs/evaluation/axes.md の 17 軸。
+const VALID_AXES = [
+  "visual hierarchy",
+  "information density",
+  "discoverability",
+  "information architecture",
+  "interaction clarity",
+  "writing clarity",
+  "motion appropriateness",
+  "feedback quality",
+  "consistency",
+  "accessibility",
+  "platform fit",
+  "delight",
+  "perceived performance",
+  "localization robustness",
+  "implementation cost",
+  "maintainability",
+  "brand fit",
+] as const;
 
 const KNOWN_SECTIONS = ["目的", "適用範囲", "規則", "確認項目", "出典", "判断"] as const;
 
@@ -120,6 +142,11 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   if (axes.length === 0) {
     throw new Error(`[guidelines/${slug}] axes must contain at least one evaluation axis`);
   }
+  for (const axis of axes) {
+    if (!(VALID_AXES as readonly string[]).includes(axis)) {
+      throw new Error(`[guidelines/${slug}] unknown evaluation axis: '${axis}'`);
+    }
+  }
 
   // 本文の抽出（frontmatter 除去）
   const bodyMatch = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n([\s\S]*)$/);
@@ -161,6 +188,14 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   const sources = parseSources(slug, sections["出典"]);
 
   const judgment = parseJudgment(slug, sections["判断"]);
+  // adopted は人間が採否を決めた印。判断欄が埋まっていなければ矛盾している。
+  if (status === "adopted") {
+    for (const [key, value] of Object.entries(judgment)) {
+      if (value === "未定") {
+        throw new Error(`[guidelines/${slug}] status is 'adopted' but 判断 '${key}' is 未定`);
+      }
+    }
+  }
 
   return {
     slug,
@@ -253,7 +288,7 @@ function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
   let good: string | null = null;
   let bad: string | null = null;
   let exception: string | null = null;
-  let figureKey: string | null = null;
+  let figureKey: FigureKey | null = null;
   let experiment: LinkItem | null = null;
   let source: LinkItem | null = null;
 
@@ -296,19 +331,19 @@ function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
         if (!(VALID_FIGURE_KEYS as readonly string[]).includes(key)) {
           throw new Error(`[guidelines/${slug}] rule '${title}' has unknown figure key: '${key}'`);
         }
-        figureKey = key;
+        figureKey = key as FigureKey;
         continue;
       }
 
       const experimentMatch = itemText.match(/^実験:\s*(.*)$/);
       if (experimentMatch) {
-        experiment = parseLinkItem(experimentMatch[1].trim());
+        experiment = parseLinkItem(slug, title, "実験", experimentMatch[1].trim());
         continue;
       }
 
       const sourceMatch = itemText.match(/^出典:\s*(.*)$/);
       if (sourceMatch) {
-        source = parseLinkItem(sourceMatch[1].trim());
+        source = parseLinkItem(slug, title, "出典", sourceMatch[1].trim());
         continue;
       }
 
@@ -346,12 +381,15 @@ function parseSingleRule(slug: string, title: string, lines: string[]): Rule {
   };
 }
 
-function parseLinkItem(raw: string): LinkItem {
+// 出どころは必ずリンクにする。href が空の <a> を画面に出さないため。
+function parseLinkItem(slug: string, title: string, label: string, raw: string): LinkItem {
   const match = raw.match(/\[(.*?)\]\((.*?)\)/);
-  if (match) {
-    return { text: match[1].trim(), url: match[2].trim() };
+  if (!match || !match[2].trim()) {
+    throw new Error(
+      `[guidelines/${slug}] rule '${title}' の '${label}' must be a markdown link: '${raw}'`,
+    );
   }
-  return { text: raw, url: "" };
+  return { text: match[1].trim(), url: match[2].trim() };
 }
 
 function parseChecklist(slug: string, sectionBody: string): string[] {
