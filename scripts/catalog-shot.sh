@@ -18,6 +18,7 @@ pages=(
   icons:/foundations/icons
   graphics:/foundations/graphics
   components:/components
+  motion:/motion
 )
 
 for entry in "${pages[@]}"; do

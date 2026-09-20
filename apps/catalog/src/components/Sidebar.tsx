@@ -1,9 +1,5 @@
-import { Collapsible } from "@base-ui/react/collapsible";
-import { useState } from "react";
-import { NAV_SECTIONS, isCurrentPath } from "../content/category";
+import { NAV_ITEMS, isCurrentPath } from "../content/category";
 import { Link } from "./Link";
-
-const NAV_OPEN_KEY = "uiux-numa-catalog-nav";
 
 type Props = {
   path: string;
@@ -11,70 +7,17 @@ type Props = {
 };
 
 export function Sidebar({ path, onNavigate }: Props) {
-  const [open, setOpen] = useState(() => readOpenSections(path));
-
-  function toggle(id: string, next: boolean) {
-    setOpen((current) => {
-      const updated = { ...current, [id]: next };
-      persistOpenSections(updated);
-      return updated;
-    });
-  }
-
   return (
     <nav className="sidebar sidebar-nav" aria-label="サイト">
-      {NAV_SECTIONS.map((section) => {
-        const current = section.items.some((item) => isCurrentPath(item.href, path));
-        const isOpen = current || open[section.id] !== false;
-        return (
-          <Collapsible.Root
-            key={section.id}
-            className="sidebar-section"
-            open={isOpen}
-            onOpenChange={(next) => toggle(section.id, next)}
-          >
-            <Collapsible.Trigger className="sidebar-section-trigger">
-              {section.label}
-            </Collapsible.Trigger>
-            <Collapsible.Panel className="sidebar-section-panel" keepMounted>
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      current={isCurrentPath(item.href, path)}
-                      onNavigate={onNavigate}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Collapsible.Panel>
-          </Collapsible.Root>
-        );
-      })}
+      <ul>
+        {NAV_ITEMS.map((item) => (
+          <li key={item.href}>
+            <Link href={item.href} current={isCurrentPath(item.href, path)} onNavigate={onNavigate}>
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
-}
-
-function readOpenSections(path: string): Record<string, boolean> {
-  const defaults: Record<string, boolean> = {};
-  for (const section of NAV_SECTIONS) {
-    defaults[section.id] = true;
-    if (section.items.some((item) => isCurrentPath(item.href, path))) {
-      defaults[section.id] = true;
-    }
-  }
-  try {
-    const stored = sessionStorage.getItem(NAV_OPEN_KEY);
-    if (!stored) return defaults;
-    return { ...defaults, ...(JSON.parse(stored) as Record<string, boolean>) };
-  } catch {
-    return defaults;
-  }
-}
-
-function persistOpenSections(open: Record<string, boolean>): void {
-  sessionStorage.setItem(NAV_OPEN_KEY, JSON.stringify(open));
 }

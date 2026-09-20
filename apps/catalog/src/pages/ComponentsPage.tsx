@@ -1,24 +1,10 @@
 import { ExperimentPage } from "../components/ExperimentPage";
-import { Link } from "../components/Link";
 import { catalog } from "../content/collect";
+import { ExperimentListPage } from "./ExperimentListPage";
 import { NotFoundPage } from "./NotFoundPage";
 
 export function ComponentsPage() {
-  const experiments = catalog.experiments.filter((item) => item.category === "components");
-  return (
-    <>
-      <div className="page-intro">
-        <h1>部品</h1>
-      </div>
-      <ul className="record-list">
-        {experiments.map((experiment) => (
-          <li key={experiment.slug}>
-            <Link href={`/components/${experiment.slug}`}>{experiment.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+  return <ExperimentListPage category="components" />;
 }
 
 export function ComponentDetailPage({ experiment: slug }: { experiment: string }) {

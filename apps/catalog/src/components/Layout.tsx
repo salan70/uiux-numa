@@ -49,7 +49,7 @@ export function Layout({ path, title, updated, children }: Props) {
                         <Drawer.Close className="button button-ghost">閉じる</Drawer.Close>
                       </div>
                       <Drawer.Description className="visually-hidden">
-                        サイト内の節を開いて移動できます。
+                        種別へ移動できます。
                       </Drawer.Description>
                       <Sidebar path={path} onNavigate={() => setMenuOpen(false)} />
                     </Drawer.Content>

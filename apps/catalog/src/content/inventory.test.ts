@@ -29,11 +29,8 @@ describe("catalog inventory", () => {
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("graphics")).toEqual(["class-chapter-illustration", "class-doc-logo"]);
-    expect(slugs("components")).toEqual([
-      "form-inline-validation",
-      "registration-completion-feedback",
-      "soft-component-kit",
-    ]);
+    expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
+    expect(slugs("motion")).toEqual(["registration-completion-feedback"]);
   });
 
   it("実例 3 件の role を読む", () => {
@@ -70,16 +67,16 @@ describe("catalog inventory", () => {
       "product-ui-typography/line-seed-minimal",
       "soft-component-kit/hairline-float",
     ]);
-    expect(
-      ids("exploring").every(
-        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("catalog-redesign/"),
-      ),
-    ).toBe(true);
+    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
     expect(ids("exploring")).toHaveLength(
-      (catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
-        0) +
-        (catalog.experiments.find((item) => item.slug === "catalog-redesign")?.variantIds.length ??
-          0),
+      catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
+        0,
+    );
+    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.status).toBe(
+      "decided",
+    );
+    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.adopted).toEqual(
+      [],
     );
     expect(
       catalog.experiments.find((item) => item.slug === "catalog-redesign")?.category,
@@ -89,7 +86,12 @@ describe("catalog inventory", () => {
         .filter((item) => item.status === "decided" && item.adopted.length === 0)
         .map((item) => item.slug)
         .sort(),
-    ).toEqual(["class-chapter-illustration", "class-doc-logo", "registration-completion-feedback"]);
+    ).toEqual([
+      "catalog-redesign",
+      "class-chapter-illustration",
+      "class-doc-logo",
+      "registration-completion-feedback",
+    ]);
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );

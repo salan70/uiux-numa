@@ -6,6 +6,7 @@ import { ComponentDetailPage, ComponentsPage } from "./pages/ComponentsPage";
 import { GraphicDetailPage, GraphicsPage } from "./pages/GraphicsPage";
 import { HomePage } from "./pages/HomePage";
 import { IconDetailPage, IconsPage } from "./pages/IconsPage";
+import { MotionDetailPage, MotionPage } from "./pages/MotionPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { TypographyPage } from "./pages/TypographyPage";
 import { matchRoute, replaceLocation, usePathname } from "./router";
@@ -123,7 +124,7 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "components") {
     return {
-      title: "部品",
+      title: "UI",
       updated: experimentUpdated("components"),
       body: <ComponentsPage />,
     };
@@ -134,6 +135,21 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
       title: experiment?.title ?? "ページが見つかりません",
       updated: experiment?.updated,
       body: <ComponentDetailPage experiment={route.experiment} />,
+    };
+  }
+  if (route.name === "motion") {
+    return {
+      title: "動き",
+      updated: experimentUpdated("motion"),
+      body: <MotionPage />,
+    };
+  }
+  if (route.name === "motionDetail") {
+    const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
+    return {
+      title: experiment?.title ?? "ページが見つかりません",
+      updated: experiment?.updated,
+      body: <MotionDetailPage experiment={route.experiment} />,
     };
   }
   return { title: "ページが見つかりません", body: <NotFoundPage /> };

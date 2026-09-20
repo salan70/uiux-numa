@@ -11,6 +11,8 @@ export type Route =
   | { name: "graphic"; experiment: string }
   | { name: "components" }
   | { name: "component"; experiment: string }
+  | { name: "motion" }
+  | { name: "motionDetail"; experiment: string }
   | { name: "redirect"; to: string }
   | { name: "notfound" };
 
@@ -75,5 +77,8 @@ export function matchRoute(path: string): Route {
   if (normalized === "/components") return { name: "components" };
   const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
   if (component) return { name: "component", experiment: component[1] };
+  if (normalized === "/motion") return { name: "motion" };
+  const motion = normalized.match(/^\/motion\/([a-z0-9-]+)$/);
+  if (motion) return { name: "motionDetail", experiment: motion[1] };
   return { name: "notfound" };
 }

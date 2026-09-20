@@ -20,9 +20,15 @@ export const CATEGORY_RULES = [
     href: "/foundations/graphics",
   },
   {
+    domain: "animation-motion",
+    category: "motion",
+    label: "動き",
+    href: "/motion",
+  },
+  {
     domain: "forms-input-ux",
     category: "components",
-    label: "部品",
+    label: "UI",
     href: "/components",
   },
 ] as const;
@@ -35,35 +41,22 @@ export const CATEGORY_ORDER: CatalogCategory[] = [
   "icons",
   "graphics",
   "components",
+  "motion",
 ];
+
+export const UNCATEGORIZED_SLUGS = new Set(["catalog-redesign"]);
 
 export type NavItem = {
   href: string;
   label: string;
 };
 
-export type NavSection = {
-  id: string;
-  label: string;
-  items: NavItem[];
-};
-
-export const NAV_SECTIONS: NavSection[] = [
-  {
-    id: "foundations",
-    label: "土台",
-    items: [
-      { href: "/foundations/colors", label: "配色" },
-      { href: "/foundations/typography", label: "文字" },
-      { href: "/foundations/icons", label: "アイコン" },
-      { href: "/foundations/graphics", label: "図" },
-    ],
-  },
-  {
-    id: "components",
-    label: "部品",
-    items: [{ href: "/components", label: "部品" }],
-  },
+export const NAV_ITEMS: NavItem[] = [
+  { href: "/", label: "トップ" },
+  ...CATEGORY_ORDER.map((category) => ({
+    href: categoryHref(category),
+    label: categoryLabel(category),
+  })),
 ];
 
 export function categoryForDomains(domains: string[]): CatalogCategory | null {
@@ -72,6 +65,11 @@ export function categoryForDomains(domains: string[]): CatalogCategory | null {
     if (rule) return rule.category;
   }
   return null;
+}
+
+export function categoryForExperiment(slug: string, domains: string[]): CatalogCategory | null {
+  if (UNCATEGORIZED_SLUGS.has(slug)) return null;
+  return categoryForDomains(domains);
 }
 
 export function categoryLabel(category: CatalogCategory): string {
