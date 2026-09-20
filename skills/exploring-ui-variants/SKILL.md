@@ -19,6 +19,7 @@ description: 方向の異なる UI 案を named variant として実装し、pla
 - 動きが課題なら `skills/crafting-motion/SKILL.md`
 - 動きの点検が必要なら `skills/reviewing-motion/SKILL.md`
 - `docs/principles/`: 独自の原則候補。status が `candidate` のものは未検証の仮説として扱い、`adopted` だけを採用済みとして参照する
+- `docs/guidelines/`: 主題ごとの方針。status が `draft` のものは未採用として扱い、`adopted` だけを採用済みとして参照する
 
 パスはリポジトリのルートからのものである。
 未導入の上流 Skill（`emil-design-eng`、`pick-ui-library`、`apple-design` など）は呼び出さない。
