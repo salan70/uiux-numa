@@ -29,14 +29,7 @@ import { useScreen, type ScreenApi, type ScreenState } from "../../shared/useScr
 import { ALL_GUIDELINES, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
 import { FIGURE_COMPONENTS } from "./figures";
 
-type TopicId =
-  | "colors"
-  | "typography"
-  | "tokens"
-  | "components"
-  | "icons"
-  | "illustrations"
-  | "motion";
+type TopicId = "colors" | "typography" | "tokens" | "components" | "icons";
 
 type Topic = {
   id: TopicId;
@@ -64,25 +57,18 @@ const TOPICS: Topic[] = [
     domains: ["forms-input-ux"],
   },
   { id: "icons", label: "Icons", lead: "画面で使う記号の組。", domains: ["iconography"] },
-  {
-    id: "illustrations",
-    label: "Illustrations",
-    lead: "マークと挿絵。",
-    domains: ["logo-brand-identity", "illustration-svg"],
-  },
-  {
-    id: "motion",
-    label: "Motion",
-    lead: "遷移と完了のフィードバック。",
-    domains: ["animation-motion"],
-  },
 ];
+
+// Illustrations と Motion は掲載を止める（利用者の判断、2026-09-20）。
+// Catalog 本体も同じ日に illustration-svg と animation-motion を退役させている
+// （docs/decisions/2026-09-20-catalog-neutral-navigation.md）。
+// topic を消すと、その domain の成果物は topicOf が null を返して一覧に出ない。
 
 // 1 つの成果物が複数の domain を持つので、どの topic に入れるかを 1 つに決める。
 // 正本（apps/catalog/src/content/category.ts の categoryForExperiment）と同じく、
 // 成果物が frontmatter に書いた domain の順で、最初に topic へ当たるものを採る。
 // topic の表示順は利用者が挙げた順にしたいので、割り当てとは分ける。
-// 例: class-doc-logo は logo-brand-identity を先に書いているのでイラストに入る。
+// どの topic にも当たらない domain の成果物は、掲載しない（null を返す）。
 function topicOf(work: Work): TopicId | null {
   for (const domain of work.domains) {
     const topic = TOPICS.find((item) => item.domains.includes(domain));
@@ -208,45 +194,102 @@ export default function TopicFirst() {
 }
 
 /**
- * 配色と明暗を選ぶ。題字に置くのは、どの画面からでも切り替えられるようにするためである。
- * 選択の形を select にしたのは、10 配色 × 3 状態をボタンで並べると題字が本文より高くなるため。
- * 既定の矢印は造形が揃わないので消し、線で引いた山形を重ねる。
- * 幅は内容によらず固定し、選び直しても周りが動かないようにする。
+ * 勾玉。配色を選ぶボタンの面に置く。
+ * 形は太玉（頭）から尾へ細る曲がり玉で、頭に穴を 1 つ開ける。
+ * 面は選択中の配色の accent を当てる。何色を着ているかを、名前ではなく色そのもので示す。
+ */
+function MagatamaIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        fill="var(--ed-accent)"
+        d="M12 2.5a9.5 9.5 0 0 1 0 19 4.75 4.75 0 0 1 0-9.5 4.75 4.75 0 0 0 0-9.5Z"
+      />
+      <circle cx="11.2" cy="16.6" r="1.7" fill="var(--ed-surface)" />
+    </svg>
+  );
+}
+
+/** 明暗の 3 状態。端末に従うは半分だけ塗った円、ライトは日、ダークは月。 */
+function AppearanceIcon({ value }: { value: Appearance }) {
+  const common = {
+    viewBox: "0 0 24 24",
+    "aria-hidden": true,
+    focusable: "false" as const,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.5,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  if (value === "light") {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="4.25" />
+        <path d="M12 3v2.25M12 18.75V21M3 12h2.25M18.75 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6" />
+      </svg>
+    );
+  }
+  if (value === "dark") {
+    return (
+      <svg {...common}>
+        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 3.75a8.25 8.25 0 0 1 0 16.5Z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+/**
+ * 配色と明暗を選ぶ。サイドバーの最下段に置くのは、どの画面からでも切り替えられるようにするためである。
+ * 形はアイコンのボタン 2 つにする（利用者の判断、2026-09-20）。
+ * 語を出していた頃は 2 行で 7.5rem の枠を 2 つ取り、ナビの列の下半分を選択が占めていた。
+ * 押したあとの選択は native の select に任せる。
+ * 10 配色と 3 状態をボタンの並びで出すと、また同じ面積を取り戻すことになる。
+ * select は面へ透明のまま重ね、見た目はアイコンだけにする。
+ * 語は読み上げのために残し、見た目からだけ外す。
  */
 function ThemeControl({ theme }: { theme: Theme }) {
   return (
     <div className="theme">
-      <label className="theme__field">
+      <label className="theme__pick">
         <span className="theme__label">配色</span>
-        <span className="theme__control">
-          <select
-            className="theme__select"
-            value={theme.scheme.id}
-            onChange={(event) => theme.setScheme(event.target.value)}
-          >
-            {theme.schemeOptions.map((scheme) => (
-              <option key={scheme.id} value={scheme.id}>
-                {scheme.label}
-              </option>
-            ))}
-          </select>
+        <span className="theme__icon">
+          <MagatamaIcon />
         </span>
+        <select
+          className="theme__native"
+          value={theme.scheme.id}
+          onChange={(event) => theme.setScheme(event.target.value)}
+        >
+          {theme.schemeOptions.map((scheme) => (
+            <option key={scheme.id} value={scheme.id}>
+              {scheme.label}
+            </option>
+          ))}
+        </select>
       </label>
-      <label className="theme__field">
+      <label className="theme__pick">
         <span className="theme__label">テーマ</span>
-        <span className="theme__control">
-          <select
-            className="theme__select"
-            value={theme.appearance}
-            onChange={(event) => theme.setAppearance(event.target.value as Appearance)}
-          >
-            {APPEARANCES.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+        <span className="theme__icon">
+          <AppearanceIcon value={theme.appearance} />
         </span>
+        <select
+          className="theme__native"
+          value={theme.appearance}
+          onChange={(event) => theme.setAppearance(event.target.value as Appearance)}
+        >
+          {APPEARANCES.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.label}
+            </option>
+          ))}
+        </select>
       </label>
     </div>
   );
@@ -484,9 +527,7 @@ function TopicBody({ topic, nav, theme }: { topic: Topic; nav: ScreenApi; theme:
   if (topic.id === "tokens") return <TokenTables />;
   if (topic.id === "colors") return <ColorsTopic mode={theme.mode} />;
   if (topic.id === "typography") return <TypographyTopic nav={nav} />;
-  if (topic.id === "icons" || topic.id === "illustrations") {
-    return <SvgTopic topic={topic} nav={nav} />;
-  }
+  if (topic.id === "icons") return <SvgTopic topic={topic} nav={nav} />;
   return <LiveTopic topic={topic} nav={nav} />;
 }
 
@@ -1086,7 +1127,7 @@ function TypographyTopic({ nav }: { nav: ScreenApi }) {
   );
 }
 
-/* ---- アイコンと図。SVG そのものを並べる ---- */
+/* ---- アイコン。SVG そのものを並べる ---- */
 
 function SvgTopic({ topic, nav }: { topic: Topic; nav: ScreenApi }) {
   const list = worksIn(topic.id);
@@ -1094,13 +1135,13 @@ function SvgTopic({ topic, nav }: { topic: Topic; nav: ScreenApi }) {
   return (
     <div className="topic-body">
       {list.map((work) => (
-        <SvgWork key={work.slug} work={work} nav={nav} large={topic.id === "illustrations"} />
+        <SvgWork key={work.slug} work={work} nav={nav} />
       ))}
     </div>
   );
 }
 
-function SvgWork({ work, nav, large }: { work: Work; nav: ScreenApi; large: boolean }) {
+function SvgWork({ work, nav }: { work: Work; nav: ScreenApi }) {
   const [current, setCurrent] = useState(defaultVariant(work));
   const assets = svgsFor(work.slug, current);
   return (
@@ -1110,7 +1151,7 @@ function SvgWork({ work, nav, large }: { work: Work; nav: ScreenApi; large: bool
       {assets.length === 0 ? (
         <p className="empty">この variant に配布用の SVG がない。</p>
       ) : (
-        <ul className={large ? "svg-grid svg-grid--large" : "svg-grid"}>
+        <ul className="svg-grid">
           {assets.map((asset) => (
             <li className="svg-cell" key={asset.name}>
               <span className="svg-cell__art" dangerouslySetInnerHTML={{ __html: asset.source }} />

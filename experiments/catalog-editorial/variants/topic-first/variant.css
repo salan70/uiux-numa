@@ -133,10 +133,15 @@
   gap: var(--ed-gap-lg);
 }
 
-/* 群の見出しは遷移しない。子と同じ大きさにすると押せると読まれる。 */
+/* 群の見出しは遷移しない。子と同じ大きさにすると押せると読まれる。
+   語の造形（小さい、字間、大文字、muted）だけでは項目との差が弱いので、
+   群の幅いっぱいに罫を 1 本引き、下に続く項目がこの見出しの内側だと示す。
+   罫は本文の見出し（.section-title）と同じ役で、太さだけを 1px に落とす。 */
 .ed-root--topic .sidebar__heading {
   margin: 0 0 var(--ed-gap);
   padding-inline: var(--ed-gap);
+  padding-block-end: var(--ed-gap);
+  border-block-end: 1px solid var(--ed-line);
   font-size: var(--ed-label);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -235,11 +240,14 @@
     min-inline-size: 0;
   }
 
-  /* 群の名は折り返さない。幅を固定すると、長い名が隣の項目に重なる。 */
+  /* 群の名は折り返さない。幅を固定すると、長い名が隣の項目に重なる。
+     横に並ぶ帯では罫が項目の上に乗らないので、縦の帯でだけ引く。 */
   .ed-root--topic .sidebar__heading {
     margin: 0;
     flex: none;
     padding-inline: 0;
+    padding-block-end: 0;
+    border-block-end: 0;
     white-space: nowrap;
   }
 
@@ -269,7 +277,11 @@
 
 /* ---- 版面 ---- */
 
+/* 版面は桁の幅いっぱいに置き、上限を超えたときだけ中央へ寄せる。
+   inline-size を書かないと、auto margin を持つ grid の項目は伸びず内容の幅に縮む。
+   縮むと Icons のように内容の幅が狭い画面だけ、見出しの開始位置が右へずれる。 */
 .ed-root--topic .ed-main {
+  inline-size: 100%;
   max-inline-size: 84rem;
   margin: 0 auto;
   padding: var(--ed-block) var(--ed-inline);
@@ -984,101 +996,63 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  /* ナビと同じ行の右端へ寄せる。以前は「方針」のリンクがこの役を持っていた。 */
-  margin-inline-start: auto;
 }
 
-.ed-root--topic .theme__field {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.ed-root--topic .theme__label {
-  font-size: var(--ed-label);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--ed-muted);
-}
-
-/* 山形を重ねるための囲い。select 自身の擬似要素は描けない。 */
-.ed-root--topic .theme__control {
+/* 語を出さず、アイコンのボタン 2 つにする。
+   選択そのものは native の select に任せ、面へ透明のまま重ねる。
+   ボタンを自前で開くと、選択肢の並びと鍵盤の操作をこの画面が持つことになる。 */
+.ed-root--topic .theme__pick {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  inline-size: var(--ed-tap);
+  block-size: var(--ed-tap);
 }
 
-/* 既定の矢印は OS の造形なので、画面の他の部品と揃わない。
-   線 2 本を回した山形に置き換える。色を継ぐので配色を切り替えても追従する。 */
-.ed-root--topic .theme__control::after {
-  content: "";
+/* 語は読み上げのために残し、見た目からだけ外す。 */
+.ed-root--topic .theme__label {
   position: absolute;
-  inset-inline-end: 0.75rem;
-  inline-size: 0.375rem;
-  block-size: 0.375rem;
-  border-inline-end: 1.5px solid var(--ed-muted);
-  border-block-end: 1.5px solid var(--ed-muted);
-  transform: translateY(-2px) rotate(45deg);
-  pointer-events: none;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
-/* 幅は内容によらず固定する。選び直したときに題字の並びが動かないようにする。
-   和名は最長でも 4 文字なので 7.5rem に収まり、テーマの「端末に従う」も同じ幅に入る。
-   線はヘアラインにし、面を surface に落として、押せる場所であることを面で示す。 */
-.ed-root--topic .theme__select {
-  appearance: none;
-  inline-size: 7.5rem;
-  min-block-size: var(--ed-tap);
-  padding-inline: 0.75rem 2rem;
+/* 面はナビの項目と同じ寸法にし、線はヘアライン、面は surface に落とす。 */
+.ed-root--topic .theme__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
   border: 1px solid var(--ed-line);
   border-radius: var(--ed-radius);
   background: var(--ed-surface);
   color: var(--ed-text);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
   transition: border-color var(--ed-duration) ease;
 }
 
+.ed-root--topic .theme__icon svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+/* select は面いっぱいに重ねる。見た目は持たないが、focus の輪郭はこの矩形に出る。 */
+.ed-root--topic .theme__native {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  opacity: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .ed-root--topic .theme__select:hover {
+  .ed-root--topic .theme__pick:hover .theme__icon {
     border-color: var(--ed-line-strong);
-  }
-}
-
-/* 狭い画面では選択を行の先頭へ送る。ナビが折り返して題字が 3 段になるため。 */
-@media (width <= 60rem) {
-  .ed-root--topic .theme {
-    inline-size: 100%;
-    justify-content: flex-start;
-  }
-}
-
-/* 390 では題字が 5 段になり、sticky な帯が画面の 3 割を占める。
-   ラベルの語を隠して選択を「見本」と同じ行に収め、1 段減らす。
-   読み上げには残すので、clip で見た目だけを外す。 */
-@media (width <= 40rem) {
-  .ed-root--topic .theme {
-    inline-size: auto;
-    margin-inline-start: auto;
-  }
-
-  .ed-root--topic .theme__label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .ed-root--topic .theme__select {
-    inline-size: 7.25rem;
-  }
-
-  .ed-root--topic .theme__control::after {
-    inset-inline-end: 0.625rem;
   }
 }
 
