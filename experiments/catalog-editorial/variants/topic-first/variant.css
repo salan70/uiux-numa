@@ -135,6 +135,8 @@
   transition: color var(--ed-duration) ease;
 }
 
+/* 現在地は色と下線で示す。太さを変えると項目の幅が変わり、
+   トピックを移るたびにナビ全体が動く。 */
 .ed-root--topic .masthead__nav a[aria-current="page"] {
   color: var(--ed-text);
   border-block-end-color: var(--ed-accent);
@@ -390,11 +392,11 @@
     background-color var(--ed-duration) ease;
 }
 
+/* 選択は色と面で示す。太さを変えると chip の幅が変わり、切り替えるたびに並びが動く。 */
 .ed-root--topic .variants__item[aria-pressed="true"] {
   color: var(--ed-text);
   background: var(--ed-surface);
   border-color: var(--ed-line);
-  font-weight: 700;
 }
 
 .ed-root--topic .variants__id {
@@ -871,10 +873,6 @@
   gap: 0.25rem 1.25rem;
   font-size: 1rem;
   font-weight: 400;
-}
-
-.ed-root--topic .masthead__nav a[aria-current="page"] {
-  font-weight: 700;
 }
 
 .ed-root--topic .masthead__sheet {
@@ -1590,7 +1588,12 @@
   white-space: nowrap;
 }
 
+/* 幅を固定する。LINE Seed JP は等幅数字を持たないので、
+   font-variant-numeric: tabular-nums では桁ごとに幅が変わり、両隣のボタンが動く。 */
 .ed-root--topic .feature__count {
+  inline-size: 4.5rem;
+  text-align: center;
+  white-space: nowrap;
   font-size: var(--ed-label);
   font-weight: 700;
   letter-spacing: 0.12em;
