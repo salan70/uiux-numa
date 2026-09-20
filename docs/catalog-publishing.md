@@ -2,7 +2,7 @@
 
 公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
 Catalog は成果物の visual showcase である。
-token、配色、文字、アイコン、図、部品のプレビューを掲載する。
+token、配色、文字、アイコン、図、UI、動きのプレビューを掲載する。
 `role` と `maturity` で再利用の前提を示す。
 判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
 production URL は `https://uiux.oda79.me/` とする。
@@ -93,7 +93,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 確認項目は次のとおり。
 
 - `https://uiux.oda79.me/` が HTTPS で開く
-- `/`、`/foundations/colors`、配色詳細、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components` と各 Experiment 詳細を直リンクで開ける
+- `/`、`/foundations/colors`、配色詳細、`/foundations/typography`、`/foundations/icons`、`/foundations/graphics`、`/components`、`/motion` と各 Experiment 詳細を直リンクで開ける
 - `/getting-started`、`/principles`、`/status`、`/resources` が NotFound になる
 - サイドバーに検索と削除ページへのリンクがない
 - `/colors` などの旧 URL が新 URL へ 301 される
