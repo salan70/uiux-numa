@@ -3,6 +3,9 @@
 // 変えるのは情報設計だけで、号や特集といった雑誌の枠組みは使わない。
 // 入口は「何を探しているか」の種類にし、token も正本の tokens/ から同じ並びに載せる。
 import "../../../../tokens/typography/index.css";
+// 書体の素性（名前、版、ウェイト、配布元、ライセンス）の正本は token の README である。
+// 画面へ書き写すと、書体を入れ替えたときに 2 か所を直すことになる。
+import typographyReadme from "../../../../tokens/typography/README.md?raw";
 import "./variant.css";
 import { Sheet, longestTitle, shortestTitle, type SheetSpec } from "../../shared/Sheet";
 import { useEffect, useRef, useState } from "react";
@@ -909,20 +912,50 @@ function SchemeSpecimen({ scheme, mode }: { scheme: Scheme; mode: "light" | "dar
 }
 
 /**
- * composite な token の要点だけを並べる。
- * 書体名は全役割で同じなので出さない。出すと 1 行が長くなり、役割ごとの差が読めない。
+ * composite な token を項目名つきの組にする。値は元のまま 4 つである。
+ * 値だけを並べていたときは「1.5rem 700 行 1.3 字間 0px」となり、
+ * どの数が何を指すのかが、行 と 字間 の 2 つ以外は読めなかった。
+ * 書体は全役割で同じなので、役割ごとには出さず画面の先頭に 1 度だけ出す。
  */
-function compositeMeta(value: Token["value"]): string[] {
-  if (typeof value === "string") return [value];
-  const out: string[] = [];
-  if (value["fontSize"]) out.push(value["fontSize"]);
-  if (value["fontWeight"]) out.push(value["fontWeight"]);
-  if (value["lineHeight"]) out.push(`行 ${value["lineHeight"]}`);
-  if (value["letterSpacing"]) out.push(`字間 ${value["letterSpacing"]}`);
+function compositeSpec(value: Token["value"]): Array<{ label: string; value: string }> {
+  if (typeof value === "string") return [{ label: "値", value }];
+  const out: Array<{ label: string; value: string }> = [];
+  if (value["fontSize"]) out.push({ label: "大きさ", value: value["fontSize"] });
+  if (value["fontWeight"]) out.push({ label: "太さ", value: value["fontWeight"] });
+  if (value["lineHeight"]) out.push({ label: "行間", value: value["lineHeight"] });
+  if (value["letterSpacing"]) out.push({ label: "字間", value: value["letterSpacing"] });
   return out;
 }
 
 /* ---- タイポグラフィ。役割を実寸で組む ---- */
+
+/**
+ * 書体の名前。正本は tokens/typography/README.md の採用範囲である。
+ * 画面へ書き写すと、書体を入れ替えたときに 2 か所を直すことになる。
+ * 読めなかったときは出さない。README の書き方が変わっても画面は壊れない。
+ */
+function typefaceName(): string | undefined {
+  return typographyReadme.match(/書体は\s*(.+?)\s*の\s*.+?\s*を使う。/)?.[1];
+}
+
+/**
+ * 書体そのものを先に出す。
+ * 役割の見本だけでは、どの書体で組んであるのかが画面から分からなかった。
+ * 出すのは名前と字形だけにする。ライセンスや配布元は token の README で読む。
+ */
+function TypefaceHead({ name }: { name?: string }) {
+  if (!name) return null;
+  return (
+    <section className="typeface" aria-labelledby="typeface-head">
+      <h2 className="typeface__name" id="typeface-head">
+        {name}
+      </h2>
+      <p className="typeface__glyphs" aria-hidden="true">
+        {GLYPHS}
+      </p>
+    </section>
+  );
+}
 
 function TypographyTopic({ nav }: { nav: ScreenApi }) {
   const work = works.find((item) => item.slug === "product-ui-typography");
@@ -932,19 +965,26 @@ function TypographyTopic({ nav }: { nav: ScreenApi }) {
       ?.tokens.filter((token) => token.kind === "semantic") ?? [];
   return (
     <div className="topic-body">
+      <TypefaceHead name={typefaceName()} />
+
       <ol className="roles">
         {roles.map((token) => (
           <li className="role" key={token.path}>
-            <p className="role__meta">
-              <span className="role__name">{token.path.replace("typography.", "")}</span>
-              {compositeMeta(token.value).map((item) => (
-                <span key={item}>{item}</span>
+            <div className="role__main">
+              <p className="role__name">{token.path.replace("typography.", "")}</p>
+              <p className="role__sample">
+                <TokenSample token={token} />
+              </p>
+              <p className="role__desc">{token.description}</p>
+            </div>
+            <dl className="role__spec">
+              {compositeSpec(token.value).map((item) => (
+                <div className="role__spec-row" key={item.label}>
+                  <dt>{item.label}</dt>
+                  <dd>{item.value}</dd>
+                </div>
               ))}
-            </p>
-            <p className="role__sample">
-              <TokenSample token={token} />
-            </p>
-            <p className="role__desc">{token.description}</p>
+            </dl>
           </li>
         ))}
       </ol>
