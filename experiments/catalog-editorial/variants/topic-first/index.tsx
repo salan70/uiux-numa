@@ -27,7 +27,13 @@ import {
 } from "../../shared/contrast";
 import { tokenFamilies, type Token } from "../../shared/tokens";
 import { useScreen, type ScreenApi, type ScreenState } from "../../shared/useScreen";
-import { ALL_GUIDELINES, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
+import {
+  ALL_GUIDELINES,
+  renderInline,
+  type Guideline,
+  type Principle,
+  type Rule,
+} from "../../shared/guidelines";
 import { FIGURE_COMPONENTS } from "./figures";
 
 type TopicId = "colors" | "typography" | "tokens" | "components" | "icons";
@@ -1737,38 +1743,80 @@ function goToRule(domId: string) {
   target.focus();
 }
 
-/**
- * 規則の 1 層。コアと Tips は同じ形で描く。違うのは層の名と並び順だけである。
- * 形を変えると、同じ書式の規則が別物に見える。
- */
-function RuleLayer({
-  id,
-  title,
-  lead,
+type Layer = { id: string; title: string; lead: string };
+
+/** コアは思想の短い一覧。番号が衝突したときの優先順位を表す。 */
+function CoreLayer({ layer, cores }: { layer: Layer; cores: Principle[] }) {
+  return (
+    <section className="guide-block" aria-labelledby={`guide-${layer.id}-head`}>
+      <div className="work-head">
+        <h2 className="work-head__title" id={`guide-${layer.id}-head`}>
+          {layer.title}
+        </h2>
+        <p className="work-head__meta">{cores.length} 件</p>
+      </div>
+      <p className="guide-layer__lead">{layer.lead}</p>
+      <ol className="guide-cores">
+        {cores.map((core, idx) => (
+          <li key={idx} id={`rule-${layer.id}-${idx}`} className="guide-core" tabIndex={-1}>
+            <h3 className="guide-core__title">{core.title}</h3>
+            <p className="guide-core__body">{renderInline(core.body)}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/** Tips は具体的な場面の規則。適用と、結び付くコアをタグで示す。 */
+function TipsLayer({
+  layer,
   rules,
+  cores,
   nav,
 }: {
-  id: string;
-  title: string;
-  lead: string;
+  layer: Layer;
   rules: Rule[];
+  cores: Principle[];
   nav: ScreenApi;
 }) {
+  const id = layer.id;
   return (
     <section className="guide-block" aria-labelledby={`guide-${id}-head`}>
       <div className="work-head">
         <h2 className="work-head__title" id={`guide-${id}-head`}>
-          {title}
+          {layer.title}
         </h2>
         <p className="work-head__meta">{rules.length} 件</p>
       </div>
-      <p className="guide-layer__lead">{lead}</p>
+      <p className="guide-layer__lead">{layer.lead}</p>
       <div className="guide-rules">
         {rules.map((rule, idx) => {
           const Figure = rule.figureKey ? FIGURE_COMPONENTS[rule.figureKey] : null;
           return (
             <article key={idx} id={`rule-${id}-${idx}`} className="guide-rule" tabIndex={-1}>
               <h3 className="guide-rule__title">{rule.title}</h3>
+              {rule.applies && (
+                <p className="guide-rule__tags">
+                  <span className="guide-tag">{rule.applies}</span>
+                  {rule.cores.map((coreTitle) => {
+                    const coreId = `rule-${CORE_LAYER.id}-${cores.findIndex((core) => core.title === coreTitle)}`;
+                    return (
+                      <a
+                        key={coreTitle}
+                        className="guide-tag guide-tag--core"
+                        href={`#${coreId}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          goToRule(coreId);
+                        }}
+                      >
+                        {coreTitle}
+                      </a>
+                    );
+                  })}
+                </p>
+              )}
               {Figure && (
                 <div className="guide-rule__figure">
                   <Figure />
@@ -1826,10 +1874,23 @@ function RuleLayer({
   );
 }
 
-const LAYERS = [
-  { id: "core", title: "コア", lead: "この主題で守る土台。場面によらず効く。" },
-  { id: "tips", title: "Tips", lead: "コアを個別の場面へ当てたもの。場面が変われば入れ替わる。" },
-] as const;
+const CORE_LAYER: Layer = {
+  id: "core",
+  title: "コア",
+  lead: "この主題の考え方。ぶつかったときは上にあるものを優先する。",
+};
+const TIPS_LAYER: Layer = {
+  id: "tips",
+  title: "Tips",
+  lead: "具体的な場面の規則。foundation はどのプロジェクトでも守り、module はこの主題を重視するときに選ぶ。",
+};
+
+// 未移行の文書は優先順位も適用も持たない。書いていない意味を lead で語らせない。
+const LEGACY_CORE_LAYER: Layer = { ...CORE_LAYER, lead: "この主題で守る土台。場面によらず効く。" };
+const LEGACY_TIPS_LAYER: Layer = {
+  ...TIPS_LAYER,
+  lead: "コアを個別の場面へ当てたもの。場面が変われば入れ替わる。",
+};
 
 function GuideScreen({ nav }: { nav: ScreenApi }) {
   const guidelines = ALL_GUIDELINES;
@@ -1845,10 +1906,14 @@ function GuideScreen({ nav }: { nav: ScreenApi }) {
     );
   }
 
-  const layers = LAYERS.map((layer) => ({
-    ...layer,
-    rules: layer.id === "core" ? guideline.core : guideline.tips,
-  }));
+  // scope を持つのは未移行の文書だけ。
+  const legacy = guideline.scope !== null;
+  const coreLayer = legacy ? LEGACY_CORE_LAYER : CORE_LAYER;
+  const tipsLayer = legacy ? LEGACY_TIPS_LAYER : TIPS_LAYER;
+  const layers = [
+    { ...coreLayer, rules: guideline.core },
+    { ...tipsLayer, rules: guideline.tips },
+  ];
 
   return (
     <section className="index" aria-labelledby="index-head">
@@ -1868,52 +1933,60 @@ function GuideScreen({ nav }: { nav: ScreenApi }) {
             <dl className="guide-facts">
               <dt>目的</dt>
               <dd>{guideline.purpose}</dd>
-              <dt>適用範囲</dt>
-              <dd>{guideline.scope}</dd>
+              {guideline.scope && (
+                <>
+                  <dt>適用範囲</dt>
+                  <dd>{guideline.scope}</dd>
+                </>
+              )}
             </dl>
           </section>
 
-          {layers.map((layer) => (
-            <RuleLayer key={layer.id} {...layer} nav={nav} />
-          ))}
+          <CoreLayer layer={coreLayer} cores={guideline.core} />
+          <TipsLayer layer={tipsLayer} rules={guideline.tips} cores={guideline.core} nav={nav} />
 
-          <section className="guide-block" aria-labelledby="guide-checklist-head">
-            <div className="work-head">
-              <h2 className="work-head__title" id="guide-checklist-head">
-                確認項目
-              </h2>
-            </div>
-            <ul className="guide-checklist">
-              {guideline.checklist.map((item, idx) => (
-                <li key={idx} className="guide-checklist__item">
-                  <span className="guide-checklist__icon" aria-hidden="true" />
-                  <span>{renderInline(item)}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {/* 確認項目と出典は未移行の文書だけが持つ。 */}
+          {guideline.checklist.length > 0 && (
+            <section className="guide-block" aria-labelledby="guide-checklist-head">
+              <div className="work-head">
+                <h2 className="work-head__title" id="guide-checklist-head">
+                  確認項目
+                </h2>
+              </div>
+              <ul className="guide-checklist">
+                {guideline.checklist.map((item, idx) => (
+                  <li key={idx} className="guide-checklist__item">
+                    <span className="guide-checklist__icon" aria-hidden="true" />
+                    <span>{renderInline(item)}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-          <section className="guide-block" aria-labelledby="guide-sources-head">
-            <div className="work-head">
-              <h2 className="work-head__title" id="guide-sources-head">
-                出典
-              </h2>
-            </div>
-            <ul className="guide-sources">
-              {guideline.sources.map((src, idx) => (
-                <li key={idx} className="guide-sources__item">
-                  {src.url ? (
-                    <a href={src.url} className="guide-link" target="_blank" rel="noreferrer">
-                      {src.text}
-                    </a>
-                  ) : (
-                    <span className="guide-strong">{src.text}</span>
-                  )}
-                  {src.description && <span>: {src.description}</span>}
-                </li>
-              ))}
-            </ul>
-          </section>
+          {guideline.sources.length > 0 && (
+            <section className="guide-block" aria-labelledby="guide-sources-head">
+              <div className="work-head">
+                <h2 className="work-head__title" id="guide-sources-head">
+                  出典
+                </h2>
+              </div>
+              <ul className="guide-sources">
+                {guideline.sources.map((src, idx) => (
+                  <li key={idx} className="guide-sources__item">
+                    {src.url ? (
+                      <a href={src.url} className="guide-link" target="_blank" rel="noreferrer">
+                        {src.text}
+                      </a>
+                    ) : (
+                      <span className="guide-strong">{src.text}</span>
+                    )}
+                    {src.description && <span>: {src.description}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
 
         {/* 索引は本文の右へ置く。読んでいる途中でも規則の全体が見える。 */}
