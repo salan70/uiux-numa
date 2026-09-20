@@ -11,21 +11,27 @@
   inset: 0;
   overflow: auto;
 
-  /* 配色。参照は index.tsx の palette に書いた。 */
-  --ed-bg: #ffffff; /* 白 */
-  --ed-surface: #f3f3f2; /* 白練 */
-  --ed-text: #0c0c0c; /* 漆黒 */
-  --ed-muted: #656765; /* 鈍色 */
-  --ed-line: #dad9d8; /* 白鼠 */
-  --ed-line-strong: #7b7c7d; /* 鉛色 */
-  --ed-accent: #c9171e; /* 紅 */
+  /* 配色。カタログ自身も正本の配色を着る。
+     --color-* は index.tsx が選ばれた配色の 19 役割をそのまま当てる。
+     ここでは役割の対応だけを決め、色の値は持たない。
+     fallback は sumi のライトの値で、正本が読めない場合でも画面が壊れないようにする。 */
+  --ed-bg: var(--color-bg, #fbfaf5);
+  --ed-surface: var(--color-bg-subtle, #f3f3f2);
+  --ed-text: var(--color-text, #2b2b2b);
+  --ed-muted: var(--color-text-muted, #595857);
+  --ed-line: var(--color-border, #dcdddd);
+  --ed-line-strong: var(--color-border-strong, #7b7c7d);
+  --ed-accent: var(--color-accent, #2b2b2b);
+  --ed-on-accent: var(--color-on-accent, #fbfaf5);
 
-  /* 文字。階梯は index.tsx の type に書いた。 */
+  /* 文字。役割の token をそのまま使い、画面ごとの寸法を持たない。
+     number と display だけは token にない大きさなので、
+     最大値を token の倍数で置き、画面幅で縮める。 */
   --ed-number: clamp(3.5rem, 10vw, 8rem);
   --ed-display: clamp(2.625rem, 7vw, 6rem);
-  --ed-h2: 1.5rem;
-  --ed-item: 1.125rem;
-  --ed-label: 0.75rem;
+  --ed-h2: var(--typography-title-font-size);
+  --ed-item: var(--font-size-lg);
+  --ed-label: var(--font-size-sm);
 
   /* 余白。page-inline と section は token の値をそのまま使う。 */
   --ed-gap: 0.5rem;
@@ -48,18 +54,10 @@
   font-feature-settings: "palt";
 }
 
-@media (prefers-color-scheme: dark) {
-  .ed-root--topic {
-    --ed-bg: #0d0d0f;
-    --ed-surface: #1a1a1d;
-    --ed-text: #fffffb;
-    --ed-muted: #91989f;
-    --ed-line: #2a2a2e;
-    --ed-accent: #e87a90;
-
-    color-scheme: dark;
-  }
-}
+/* 明暗の上書きはここに書かない。
+   配色の正本がライトとダークの両方を持っており、index.tsx が選ばれた方を当てる。
+   端末の設定に従うか固定するかも題字の選択で決めるので、
+   media query で上書きすると選択と端末の設定が衝突する。 */
 
 .ed-root--topic *,
 .ed-root--topic *::before,
@@ -442,7 +440,7 @@
   .ed-root--topic .btn:hover {
     background: var(--ed-accent);
     border-color: var(--ed-accent);
-    color: #ffffff;
+    color: var(--ed-on-accent);
   }
 
   .ed-root--topic .variants__item:hover {
@@ -897,6 +895,82 @@
   }
 }
 
+/* ---- 配色と明暗の選択 ---- */
+
+/* 題字の右端に置く。ナビと同じ行に収め、本文の上に帯をもう 1 本増やさない。 */
+.ed-root--topic .theme {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.ed-root--topic .theme__field {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.ed-root--topic .theme__label {
+  font-size: var(--ed-label);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ed-muted);
+}
+
+/* 幅は内容によらず固定する。選び直したときに題字の並びが動かないようにする。
+   和名は最長でも 4 文字なので 7rem に収まり、明暗の「端末に従う」も同じ幅に入る。 */
+.ed-root--topic .theme__select {
+  inline-size: 7rem;
+  min-block-size: var(--ed-tap);
+  padding: 0 0.5rem;
+  border: 1px solid var(--ed-line-strong);
+  border-radius: var(--ed-radius);
+  background: var(--ed-bg);
+  color: var(--ed-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--ed-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ed-root--topic .theme__select:hover {
+    border-color: var(--ed-accent);
+  }
+}
+
+/* 狭い画面では選択を行の先頭へ送る。ナビが折り返して題字が 3 段になるため。 */
+@media (width <= 60rem) {
+  .ed-root--topic .theme {
+    inline-size: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* 390 では題字が 5 段になり、sticky な帯が画面の 3 割を占める。
+   ラベルの語を隠して選択を「見本」と同じ行に収め、1 段減らす。
+   読み上げには残すので、clip で見た目だけを外す。 */
+@media (width <= 40rem) {
+  .ed-root--topic .theme {
+    inline-size: auto;
+    margin-inline-start: auto;
+  }
+
+  .ed-root--topic .theme__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ed-root--topic .theme__select {
+    inline-size: 7.25rem;
+  }
+}
+
 /* ---- トップの 1 件 ---- */
 
 .ed-root--topic .hero {
@@ -931,7 +1005,7 @@
   padding: 0 0.5rem;
   border-radius: var(--ed-radius);
   background: var(--ed-accent);
-  color: #ffffff;
+  color: var(--ed-on-accent);
   letter-spacing: 0.06em;
 }
 
@@ -1250,36 +1324,6 @@
   content: "／";
   margin-inline-end: 0.75rem;
   color: var(--ed-line-strong);
-}
-
-/* ---- 明暗の切替 ---- */
-
-.ed-root--topic .mode {
-  display: inline-flex;
-  gap: 0.5rem;
-}
-
-.ed-root--topic .mode__item {
-  appearance: none;
-  min-block-size: var(--ed-tap);
-  padding: 0 0.875rem;
-  border: 1px solid var(--ed-line-strong);
-  border-radius: var(--ed-radius);
-  background: none;
-  color: var(--ed-muted);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    color var(--ed-duration) ease,
-    background-color var(--ed-duration) ease;
-}
-
-.ed-root--topic .mode__item[aria-pressed="true"] {
-  color: var(--ed-bg);
-  background: var(--ed-text);
-  border-color: var(--ed-text);
 }
 
 /* ---- 配色 ---- */
@@ -1630,15 +1674,6 @@
 .ed-root--topic .palette-browse {
   display: grid;
   gap: var(--ed-section);
-}
-
-/* 明暗の切替と操作の説明。 */
-.ed-root--topic .palette-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
 }
 
 /* パレットカードの格子。 */
