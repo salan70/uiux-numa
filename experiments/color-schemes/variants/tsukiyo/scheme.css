@@ -5,47 +5,47 @@
  */
 
 :root:has(.cs-tsukiyo) {
-  --color-bg: #eaf4fc; /* 月白 */
-  --color-bg-subtle: #bbc8e6; /* 淡藤色 */
-  --color-surface: #ffffff; /* 白 */
-  --color-border: #d3cfd9; /* 暁鼠 */
-  --color-border-strong: #44617b; /* 紺鼠 */
-  --color-text: #0f2350; /* 濃藍 */
-  --color-text-muted: #393f4c; /* 藍鉄 */
+  --color-bg: oklch(0.985 0 0);
+  --color-bg-subtle: oklch(0.955 0 0);
+  --color-surface: oklch(1 0 0);
+  --color-border: oklch(0.9 0 0);
+  --color-border-strong: oklch(0.611 0 0);
+  --color-text: oklch(0.2 0 0);
+  --color-text-muted: oklch(0.501 0 0);
   --color-accent: #192f60; /* 紺青 */
   --color-accent-hover: #0f2350; /* 濃藍 */
   --color-on-accent: #eaf4fc; /* 月白 */
   --color-accent-strong: #192f60; /* 紺青 */
   --color-accent-subtle: #e6b422; /* 黄金 */
   --color-focus: #192f60; /* 紺青 */
-  --color-success: #316745; /* 千歳緑 */
-  --color-success-subtle: #d6e9ca; /* 白緑 */
-  --color-warning: oklch(0.52 0.111 68); /* 金茶 #f39800 の明度と彩度を変えた色 */
-  --color-warning-subtle: #fde8d0; /* 薄卵色 */
-  --color-danger: #b7282e; /* 茜色 */
-  --color-danger-subtle: #fef4f4; /* 桜色 */
+  --color-success: oklch(0.51 0.11 150);
+  --color-success-subtle: oklch(0.955 0.035 150);
+  --color-warning: oklch(0.523 0.107 75);
+  --color-warning-subtle: oklch(0.955 0.035 75);
+  --color-danger: oklch(0.538 0.154 27);
+  --color-danger-subtle: oklch(0.955 0.021 27);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:has(.cs-tsukiyo) {
-    --color-bg: oklch(0.2 0.06 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
-    --color-bg-subtle: oklch(0.23 0.065 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
-    --color-surface: oklch(0.26 0.065 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
-    --color-border: #2a4073; /* 深縹 */
-    --color-border-strong: #698aab; /* 薄花色 */
-    --color-text: #eaf4fc; /* 月白 */
-    --color-text-muted: #bbc8e6; /* 淡藤色 */
+    --color-bg: oklch(0.16 0 0);
+    --color-bg-subtle: oklch(0.19 0 0);
+    --color-surface: oklch(0.215 0 0);
+    --color-border: oklch(0.32 0 0);
+    --color-border-strong: oklch(0.53 0 0);
+    --color-text: oklch(0.95 0 0);
+    --color-text-muted: oklch(0.639 0 0);
     --color-accent: #e6b422; /* 黄金 */
     --color-accent-hover: #fcd575; /* 卵色 */
     --color-on-accent: oklch(0.2 0.06 264); /* 濃藍 #0f2350 の明度と彩度を変えた色 */
     --color-accent-strong: #e6b422; /* 黄金 */
     --color-accent-subtle: oklch(0.32 0.08 264); /* 紺青 #192f60 の明度と彩度を変えた色 */
     --color-focus: #e6b422; /* 黄金 */
-    --color-success: #68be8d; /* 若竹色 */
-    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
-    --color-warning: #f39800; /* 金茶 */
-    --color-warning-subtle: #583822; /* 黒茶 */
-    --color-danger: #ee827c; /* 甚三紅 */
-    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+    --color-success: oklch(0.678 0.11 150);
+    --color-success-subtle: oklch(0.3 0.05 150);
+    --color-warning: oklch(0.686 0.11 75);
+    --color-warning-subtle: oklch(0.3 0.06 75);
+    --color-danger: oklch(0.697 0.154 27);
+    --color-danger-subtle: oklch(0.3 0.05 27);
   }
 }

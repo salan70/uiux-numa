@@ -47,10 +47,10 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 Catalog は成果物の visual showcase である。
 仕様書や Asset の正本にはしない。
 公開殻は `hairline-float` である。中身は静かな階層で、標本を先に置く。
-色面は `playful-chroma` から借り、配色切替の token に混ぜる。
-配色、文字、アイコン、図、UI、動きを見て辿る。
+背景と主要な面は白黒を基準にし、選択した Colors の accent を限定して使う。
+ナビは 6 カテゴリで構成する。
 `role` と `maturity` は正本 metadata を二次情報として出す。
-配色はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。
+Colors はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
 production URL は `https://uiux.oda79.me/` とする。
 Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。

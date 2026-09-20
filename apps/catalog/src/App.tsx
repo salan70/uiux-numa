@@ -6,7 +6,6 @@ import { ComponentDetailPage, ComponentsPage } from "./pages/ComponentsPage";
 import { GraphicDetailPage, GraphicsPage } from "./pages/GraphicsPage";
 import { HomePage } from "./pages/HomePage";
 import { IconDetailPage, IconsPage } from "./pages/IconsPage";
-import { MotionDetailPage, MotionPage } from "./pages/MotionPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { TypographyPage } from "./pages/TypographyPage";
 import { matchRoute, replaceLocation, usePathname } from "./router";
@@ -59,14 +58,14 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
 } {
   if (route.name === "home") {
     return {
-      title: "トップ",
+      title: "Home",
       updated: latestUpdated(catalog.experiments.map((item) => item.updated)),
       body: <HomePage />,
     };
   }
   if (route.name === "colors") {
     return {
-      title: "配色",
+      title: "Colors",
       updated: experimentUpdated("colors"),
       body: <ColorsPage />,
     };
@@ -81,14 +80,14 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "typography") {
     return {
-      title: "文字",
+      title: "Typography",
       updated: experimentUpdated("typography"),
       body: <TypographyPage />,
     };
   }
   if (route.name === "icons") {
     return {
-      title: "アイコン",
+      title: "Icons",
       updated: latestUpdated(
         catalog.experiments.filter((item) => item.category === "icons").map((item) => item.updated),
       ),
@@ -105,7 +104,7 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "graphics") {
     return {
-      title: "図",
+      title: "Graphics",
       updated: latestUpdated(
         catalog.experiments
           .filter((item) => item.category === "graphics")
@@ -124,7 +123,7 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
   }
   if (route.name === "components") {
     return {
-      title: "UI",
+      title: "Components",
       updated: experimentUpdated("components"),
       body: <ComponentsPage />,
     };
@@ -135,21 +134,6 @@ function pageForRoute(route: ReturnType<typeof matchRoute>): {
       title: experiment?.title ?? "ページが見つかりません",
       updated: experiment?.updated,
       body: <ComponentDetailPage experiment={route.experiment} />,
-    };
-  }
-  if (route.name === "motion") {
-    return {
-      title: "動き",
-      updated: experimentUpdated("motion"),
-      body: <MotionPage />,
-    };
-  }
-  if (route.name === "motionDetail") {
-    const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
-    return {
-      title: experiment?.title ?? "ページが見つかりません",
-      updated: experiment?.updated,
-      body: <MotionDetailPage experiment={route.experiment} />,
     };
   }
   return { title: "ページが見つかりません", body: <NotFoundPage /> };

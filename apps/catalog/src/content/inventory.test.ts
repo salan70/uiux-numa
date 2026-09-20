@@ -28,9 +28,15 @@ describe("catalog inventory", () => {
     expect(slugs("colors")).toEqual(["color-schemes"]);
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
-    expect(slugs("graphics")).toEqual(["class-chapter-illustration", "class-doc-logo"]);
+    expect(slugs("graphics")).toEqual(["class-doc-logo"]);
     expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
-    expect(slugs("motion")).toEqual(["registration-completion-feedback"]);
+    expect(
+      catalog.experiments.find((item) => item.slug === "class-chapter-illustration")?.category,
+    ).toBeNull();
+    expect(
+      catalog.experiments.find((item) => item.slug === "registration-completion-feedback")
+        ?.category,
+    ).toBeNull();
   });
 
   it("実例 3 件の role を読む", () => {

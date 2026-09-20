@@ -35,7 +35,7 @@ export function ThemeSwitch() {
   return (
     <div className="theme-switch">
       <SelectField
-        label="配色"
+        label="Colors"
         value={scheme}
         options={schemes.map((item) => ({
           value: item.id,

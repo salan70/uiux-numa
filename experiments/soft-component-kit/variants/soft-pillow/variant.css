@@ -6,7 +6,8 @@
   --sk-shadow-float:
     0 0.35rem 0.7rem color-mix(in srgb, var(--color-text) 8%, transparent),
     0 1.1rem 2.4rem color-mix(in srgb, var(--color-text) 12%, transparent);
-  --sk-highlight: inset 0 1px 0 light-dark(transparent, color-mix(in srgb, var(--color-text) 22%, transparent));
+  --sk-highlight: inset 0 1px 0
+    light-dark(transparent, color-mix(in srgb, var(--color-text) 22%, transparent));
   color: var(--color-text);
   background: var(--color-bg);
 }

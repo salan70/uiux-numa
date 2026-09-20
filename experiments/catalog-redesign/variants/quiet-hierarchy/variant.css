@@ -7,7 +7,11 @@
   min-height: 36rem;
   color: var(--qh-fg);
   background: var(--qh-bg);
-  font: 16px/1.5 "LINE Seed JP", ui-sans-serif, system-ui, sans-serif;
+  font:
+    16px/1.5 "LINE Seed JP",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 }
 
 .qh-bar {

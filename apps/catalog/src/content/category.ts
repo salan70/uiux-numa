@@ -1,34 +1,22 @@
 export const CATEGORY_RULES = [
-  { domain: "color", category: "colors", label: "配色", href: "/foundations/colors" },
+  { domain: "color", category: "colors", label: "Colors", href: "/foundations/colors" },
   {
     domain: "typography",
     category: "typography",
-    label: "文字",
+    label: "Typography",
     href: "/foundations/typography",
   },
-  { domain: "iconography", category: "icons", label: "アイコン", href: "/foundations/icons" },
+  { domain: "iconography", category: "icons", label: "Icons", href: "/foundations/icons" },
   {
     domain: "logo-brand-identity",
     category: "graphics",
-    label: "図",
+    label: "Graphics",
     href: "/foundations/graphics",
-  },
-  {
-    domain: "illustration-svg",
-    category: "graphics",
-    label: "図",
-    href: "/foundations/graphics",
-  },
-  {
-    domain: "animation-motion",
-    category: "motion",
-    label: "動き",
-    href: "/motion",
   },
   {
     domain: "forms-input-ux",
     category: "components",
-    label: "UI",
+    label: "Components",
     href: "/components",
   },
 ] as const;
@@ -41,11 +29,11 @@ export const CATEGORY_ORDER: CatalogCategory[] = [
   "icons",
   "graphics",
   "components",
-  "motion",
 ];
 
 // Catalog 自身の設計を比べる Experiment は公開ナビに出さない。比較記録として metadata だけ集める。
 export const UNCATEGORIZED_SLUGS = new Set(["catalog-redesign", "catalog-editorial"]);
+const RETIRED_DOMAINS = new Set(["illustration-svg", "animation-motion"]);
 
 export type NavItem = {
   href: string;
@@ -53,7 +41,7 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "トップ" },
+  { href: "/", label: "Home" },
   ...CATEGORY_ORDER.map((category) => ({
     href: categoryHref(category),
     label: categoryLabel(category),
@@ -70,6 +58,7 @@ export function categoryForDomains(domains: string[]): CatalogCategory | null {
 
 export function categoryForExperiment(slug: string, domains: string[]): CatalogCategory | null {
   if (UNCATEGORIZED_SLUGS.has(slug)) return null;
+  if (domains.some((domain) => RETIRED_DOMAINS.has(domain))) return null;
   return categoryForDomains(domains);
 }
 

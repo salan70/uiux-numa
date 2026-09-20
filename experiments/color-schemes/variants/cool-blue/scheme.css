@@ -1,13 +1,13 @@
 /* variant `cool-blue` の配色。青みの無彩色に、中彩度の青を 1 色だけ accent に使う。値は OKLCH で sRGB 色域内に収める。 */
 
 :root:has(.cs-cool-blue) {
-  --color-bg: oklch(0.985 0.006 255);
-  --color-bg-subtle: oklch(0.965 0.007 255);
+  --color-bg: oklch(0.985 0 0);
+  --color-bg-subtle: oklch(0.955 0 0);
   --color-surface: oklch(1 0 0);
-  --color-border: oklch(0.915 0.009 255);
-  --color-border-strong: oklch(0.619 0.012 255);
-  --color-text: oklch(0.22 0.009 255);
-  --color-text-muted: oklch(0.509 0.012 255);
+  --color-border: oklch(0.9 0 0);
+  --color-border-strong: oklch(0.611 0 0);
+  --color-text: oklch(0.2 0 0);
+  --color-text-muted: oklch(0.501 0 0);
   --color-accent: oklch(0.557 0.16 259);
   --color-accent-hover: oklch(0.497 0.16 259);
   --color-on-accent: oklch(1 0 0);
@@ -24,13 +24,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root:has(.cs-cool-blue) {
-    --color-bg: oklch(0.18 0.012 255);
-    --color-bg-subtle: oklch(0.205 0.015 255);
-    --color-surface: oklch(0.235 0.014 255);
-    --color-border: oklch(0.32 0.018 255);
-    --color-border-strong: oklch(0.54 0.024 255);
-    --color-text: oklch(0.95 0.018 255);
-    --color-text-muted: oklch(0.651 0.024 255);
+    --color-bg: oklch(0.16 0 0);
+    --color-bg-subtle: oklch(0.19 0 0);
+    --color-surface: oklch(0.215 0 0);
+    --color-border: oklch(0.32 0 0);
+    --color-border-strong: oklch(0.53 0 0);
+    --color-text: oklch(0.95 0 0);
+    --color-text-muted: oklch(0.639 0 0);
     --color-accent: oklch(0.7 0.12 259);
     --color-accent-hover: oklch(0.76 0.119 259);
     --color-on-accent: oklch(0.18 0.02 259);

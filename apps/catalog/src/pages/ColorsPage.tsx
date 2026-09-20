@@ -28,7 +28,7 @@ export function ColorsPage() {
   return (
     <>
       <div className="page-intro">
-        <h1>配色</h1>
+        <h1>Colors</h1>
         {experiment ? <AssetMeta {...experimentMeta(experiment)} compact /> : null}
       </div>
       <section aria-labelledby="adopted-colors-heading">
@@ -54,7 +54,7 @@ export function ColorDetailPage({ scheme: schemeId }: { scheme: string }) {
     <>
       <div className="page-intro">
         <p className="crumb">
-          <Link href="/foundations/colors">配色</Link>
+          <Link href="/foundations/colors">Colors</Link>
         </p>
         <h1>{scheme.label}</h1>
         <p className="meta">
