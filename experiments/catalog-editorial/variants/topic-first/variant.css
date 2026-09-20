@@ -1614,11 +1614,11 @@
   min-inline-size: 0;
 }
 
-/* 帯は隙間なく並べ、角丸はカード全体にだけ付ける。 */
+/* 帯は隙間なく並べ、角丸はカード全体にだけ付ける。
+   hover と focus で、その帯だけを広げて情報を出す。
+   7 本すべてに文字を載せると色の面が文字で埋まり、色を見る面ではなくなる。 */
 .ed-root--topic .bands {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1629,7 +1629,9 @@
 }
 
 .ed-root--topic .band {
+  flex: 1 1 0;
   min-inline-size: 0;
+  transition: flex-grow var(--ed-duration) ease;
 }
 
 .ed-root--topic .band__hit {
@@ -1637,26 +1639,41 @@
   inline-size: 100%;
   block-size: 100%;
   display: grid;
-  gap: 0.125rem;
-  align-content: end;
-  justify-items: center;
+  place-items: center;
   padding: 0.5rem 0.25rem;
   border: 0;
   background: none;
   font: inherit;
   cursor: pointer;
-  /* hex は hover だけに頼らない。focus でも出し、狭い幅では常時出す。 */
+}
+
+.ed-root--topic .band__info {
+  display: grid;
+  gap: 0.125rem;
+  justify-items: center;
+  /* 情報は hover だけに頼らない。focus でも出し、粗いポインタでは常時出す。 */
   opacity: 0;
   transition: opacity var(--ed-duration) ease;
 }
 
-.ed-root--topic .band__hit:focus-visible {
+.ed-root--topic .band:has(.band__hit:focus-visible) {
+  flex-grow: 3;
+}
+
+.ed-root--topic .band__hit:focus-visible .band__info {
   opacity: 1;
+}
+
+.ed-root--topic .band__hit:focus-visible {
   outline-offset: -3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .ed-root--topic .bands:hover .band__hit {
+  .ed-root--topic .band:hover {
+    flex-grow: 3;
+  }
+
+  .ed-root--topic .band:hover .band__info {
     opacity: 1;
   }
 
@@ -1667,24 +1684,33 @@
   }
 }
 
+/* 粗いポインタでは hover が無いので、狭いまま全部に出す。 */
 @media (hover: none) {
-  .ed-root--topic .band__hit {
+  .ed-root--topic .band__info {
     opacity: 1;
+  }
+
+  .ed-root--topic .band__hex {
+    font-size: 0.625rem;
+  }
+
+  .ed-root--topic .band__role {
+    display: none;
   }
 }
 
 .ed-root--topic .band__hex {
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: 1rem;
   font-weight: 700;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .ed-root--topic .band__role {
-  font-size: 0.625rem;
-  letter-spacing: 0.04em;
+  font-size: var(--ed-label);
+  letter-spacing: 0.06em;
   opacity: 0.75;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .ed-root--topic .palette__head {
@@ -1705,17 +1731,6 @@
 .ed-root--topic .palette__label {
   font-size: var(--ed-item);
   font-weight: 700;
-}
-
-.ed-root--topic .palette__mark {
-  font-size: var(--ed-label);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--ed-muted);
-}
-
-.ed-root--topic .palette__mark[data-adopted="true"] {
-  color: var(--ed-accent);
 }
 
 .ed-root--topic .palette__more {
