@@ -26,8 +26,8 @@ import {
 } from "../../shared/contrast";
 import { tokenFamilies, type Token } from "../../shared/tokens";
 import { useScreen, type ScreenApi } from "../../shared/useScreen";
-import { loadGuidelines, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
-import { FIGURE_COMPONENTS, type FigureKey, isFigureKey } from "./figures";
+import { ALL_GUIDELINES, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
+import { FIGURE_COMPONENTS } from "./figures";
 
 type TopicId =
   | "colors"
@@ -254,8 +254,7 @@ function ThemeControl({ theme }: { theme: Theme }) {
 
 function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
   const current = nav.screen === "list" ? nav.filter : null;
-  const guidelines = loadGuidelines();
-  const firstGuideSlug = guidelines[0]?.slug ?? "design-four-principles";
+  const firstGuideSlug = ALL_GUIDELINES[0]?.slug ?? "design-four-principles";
 
   return (
     <header className="masthead">
@@ -1518,8 +1517,17 @@ function Parts() {
   );
 }
 
+// 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。
+function goToRule(index: number) {
+  const target = document.getElementById(`rule-${index}`);
+  if (!target) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+  target.focus();
+}
+
 function GuideScreen({ nav }: { nav: ScreenApi }) {
-  const guidelines = loadGuidelines();
+  const guidelines = ALL_GUIDELINES;
   const activeSlug = nav.item ?? guidelines[0]?.slug;
   const currentGuideline = guidelines.find((g) => g.slug === activeSlug) ?? guidelines[0];
 
@@ -1576,7 +1584,7 @@ function GuideScreen({ nav }: { nav: ScreenApi }) {
                 href={`#rule-${idx}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById(`rule-${idx}`)?.scrollIntoView({ behavior: "smooth" });
+                  goToRule(idx);
                 }}
               >
                 {rule.title}
@@ -1588,12 +1596,9 @@ function GuideScreen({ nav }: { nav: ScreenApi }) {
 
       <div className="guide-rules">
         {currentGuideline.rules.map((rule, idx) => {
-          const Figure =
-            rule.figureKey && isFigureKey(rule.figureKey)
-              ? FIGURE_COMPONENTS[rule.figureKey as FigureKey]
-              : null;
+          const Figure = rule.figureKey ? FIGURE_COMPONENTS[rule.figureKey] : null;
           return (
-            <article key={idx} id={`rule-${idx}`} className="guide-rule">
+            <article key={idx} id={`rule-${idx}`} className="guide-rule" tabIndex={-1}>
               <h2 className="guide-rule__title">{rule.title}</h2>
               {Figure && (
                 <div className="guide-rule__figure">

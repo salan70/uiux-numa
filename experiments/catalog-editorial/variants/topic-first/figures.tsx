@@ -2,27 +2,7 @@
 // 正本は Markdown に置かず、見本帳の側で管理する。
 // 図版は --ed-* と typography だけで組み、選択中の配色とテーマに追従させる。
 import React from "react";
-
-export type FigureKey =
-  | "proximity"
-  | "alignment"
-  | "repetition"
-  | "contrast"
-  | "state-layout-shift"
-  | "state-stable";
-
-export const VALID_FIGURE_KEYS: readonly string[] = [
-  "proximity",
-  "alignment",
-  "repetition",
-  "contrast",
-  "state-layout-shift",
-  "state-stable",
-];
-
-export function isFigureKey(key: string): key is FigureKey {
-  return VALID_FIGURE_KEYS.includes(key);
-}
+import type { FigureKey } from "../../shared/guidelines";
 
 /** 4 原則: 近接の図版 */
 function FigureProximity() {
@@ -418,6 +398,7 @@ function FigureStateStable() {
   );
 }
 
+// キーの正本は shared/guidelines.ts。図版を足し忘れると型検査が落ちる。
 export const FIGURE_COMPONENTS: Record<FigureKey, React.ComponentType> = {
   proximity: FigureProximity,
   alignment: FigureAlignment,

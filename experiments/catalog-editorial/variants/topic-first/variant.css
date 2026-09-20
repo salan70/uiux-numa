@@ -517,7 +517,7 @@
     grid-column: 1 / -1;
   }
 
-      .ed-root--topic .live--tall .live__frame {
+  .ed-root--topic .live--tall .live__frame {
     block-size: 20rem;
   }
 }
@@ -1618,7 +1618,6 @@
   overflow-wrap: anywhere;
 }
 
-
 /* 採用と却下を 1 語で示す。掲載対象は採用成果に限らないので、前提が読めるようにする。 */
 .ed-root--topic .scheme__mark {
   margin-inline-start: auto;
@@ -2270,13 +2269,14 @@
 
 .ed-root--topic .guide-title {
   margin: 0;
-  font-size: var(--ed-h1);
+  font-size: var(--ed-display);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
 }
 
-.ed-root--topic .guide-title:focus {
+.ed-root--topic .guide-title:focus,
+.ed-root--topic .guide-rule:focus {
   outline: none;
 }
 
