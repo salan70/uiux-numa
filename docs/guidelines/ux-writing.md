@@ -22,16 +22,16 @@ updated: 2026-09-20
 
 ## 規則
 
-### ボタンは押した後の状態を行動で示す
+### ボタンのラベルは押した後に起きる行動で書く
 
 意図と根拠: 利用者はボタンを押した結果を予測して操作する。
-押した後の状態を行動の動詞で書くと、操作の結果が明確になる。
+押した後に何が起きるかを、対象を含む動詞句で書く。
 
 - 良い例:「変更を保存」「アカウントを作成」
-- 悪い例:「はい」「送信」「OK」
+- 悪い例:「はい」「OK」「決定」
 - 例外: 検索アイコン単体など、慣習が確立した単一目的のボタン。
 - 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
-- 出典: [WCAG 2.2 3.3.2 達成基準](https://www.w3.org/WAI/WCAG22/quickref/#labels-or-instructions)
+- 出典: [WCAG 2.2 達成基準 2.4.6（AA）](https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html)
 
 ### 前後の送りボタンは送り先を名前で示す
 
@@ -81,7 +81,7 @@ updated: 2026-09-20
 利用者が日常で使う語彙に合わせて操作の目的を伝える。
 
 - 良い例:「テーマ」
-- 悪い例:「明暗」「appearance モード」
+- 悪い例:「appearance モード」「color-scheme 属性」
 - 例外: 開発者向けのコンソールログやデバッグ表示。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
@@ -125,7 +125,6 @@ updated: 2026-09-20
 - 良い例: 全項目を動詞の基本形「〜する」で揃える。
 - 悪い例:「〜の確認」「設定します」「削除すること」と語尾が混在する。
 - 例外: 定型フォーマットや引用を含むリスト。
-- 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
 ### 言い切れない不確実な事実を断定しない
 
@@ -135,7 +134,6 @@ updated: 2026-09-20
 - 良い例:「通常数分で完了します」「処理を受け付けました」
 - 悪い例:「即座に反映されます」
 - 例外: ローカルで完全に完結し、遅延のない処理。
-- 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
 ## 確認項目
 
@@ -147,8 +145,8 @@ updated: 2026-09-20
 
 ## 出典
 
-- [Nielsen Norman Group: 10 Usability Heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/): システム状態の可視性、システムと実世界の調和、一貫性と標準、エラーからの回復
-- [WCAG 2.2: 達成基準 3.3.1 / 3.3.2 / 3.3.3](https://www.w3.org/WAI/WCAG22/quickref/#input-assistance): エラーの特定、ラベル又は説明、エラー修正の提案
+- [Nielsen Norman Group: 10 Usability Heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/): システムと実世界の調和（2）、一貫性と標準（4）、美的で最小限の設計（8）
+- [WCAG 2.2: 達成基準 2.4.6 / 3.3.1 / 3.3.2 / 3.3.3](https://www.w3.org/WAI/WCAG22/quickref/#input-assistance): 見出し及びラベル、エラーの特定、ラベル又は説明、エラー修正の提案
 
 ## 判断
 

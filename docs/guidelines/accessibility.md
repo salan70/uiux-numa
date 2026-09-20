@@ -17,8 +17,9 @@ updated: 2026-09-20
 
 ## 適用範囲
 
-画面の配色、文字の階梯、入力部品、ダイアログ、キーボード導線に適用する。
-外部ライブラリ内部のレンダリング挙動は対象外とする。
+Web の画面を前提とし、配色、文字の階梯、入力部品、ダイアログ、キーボード導線に適用する。
+他の platform では同等の達成基準へ読み替える。
+外部ライブラリは、採用した時点で本稿の責任範囲に入る。内部の実装を直せない場合も、選定時に本稿の確認項目で確かめ、満たさないものは採用しない。
 
 ## 規則
 
@@ -29,7 +30,7 @@ updated: 2026-09-20
 
 - 良い例: 背景に対して 4.5:1 を超える文字色をコントラスト計算して設定する。
 - 悪い例: コントラスト比が 3.8:1 の淡いグレー文字を本文に使う。
-- 例外: 操作不能な無効化テキストや、純粋な装飾要素。
+- 例外: 24px 以上、または 19px 以上の太字は 3:1 でよい。操作不能な無効化テキストと純粋な装飾も対象外。
 - 実験: [catalog-editorial/shared/contrast.ts](../../experiments/catalog-editorial/shared/contrast.ts)
 - 出典: [WCAG 2.2 達成基準 1.4.3](https://www.w3.org/WAI/WCAG22/quickref/#contrast-minimum)
 
@@ -55,6 +56,38 @@ updated: 2026-09-20
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 1.4.1](https://www.w3.org/WAI/WCAG22/quickref/#use-of-color)
 
+### 意味を持つ画像に代替テキストを付け、装飾は読み上げから外す
+
+意図と根拠: 画像が読めない利用者には、画像が担う情報が文字で届く必要がある。
+情報を担う画像には内容を説明する代替テキストを付け、装飾だけの画像は読み上げの対象から外す。
+
+- 良い例: 図版に内容を説明する代替テキストを付け、飾り罫は `aria-hidden` にする。
+- 悪い例: すべての画像に `alt=""` を付ける、または `alt` 属性自体を省く。
+- 例外: 隣接するテキストが同じ内容を完全に説明している画像。
+- 出典: [WCAG 2.2 達成基準 1.1.1](https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html)
+
+### 見出しとランドマークで画面の構造を示す
+
+意図と根拠: 支援技術の利用者は、見出しとランドマークを飛ばし読みの目印に使う。
+見た目の大きさではなく文書構造で見出しの階層を決め、主要な領域をランドマーク要素で囲む。
+
+- 良い例: `header`、`nav`、`main` で領域を分け、見出しを h1 から順に置く。
+- 悪い例: 文字を大きくした `div` を見出しの代わりに使い、階層を飛ばす。
+- 例外: 視覚的に見出しを出さない領域。`aria-label` でランドマークに名前を付ける。
+- 実験: [catalog-editorial/variants/topic-first/index.tsx](../../experiments/catalog-editorial/variants/topic-first/index.tsx)
+- 出典: [WCAG 2.2 達成基準 1.3.1](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
+
+### ラベル、エラー文、補足を入力欄と結び付ける
+
+意図と根拠: 見た目が近いだけでは、支援技術はどの文言がどの入力欄のものか判別できない。
+`label` の `for` で名前を結び、補足とエラー文は `aria-describedby` で結ぶ。
+
+- 良い例: `label` の `for` と `aria-describedby` で、名前と説明を入力欄に結ぶ。
+- 悪い例: 入力欄の上に文字を置くだけで、要素として関連付けない。
+- 例外: 入力欄自身の `aria-label` で名前が完結する検索窓など。
+- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 出典: [WCAG 2.2 達成基準 1.3.1](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
+
 ### ポインタのターゲット領域は 24px 以上にする
 
 意図と根拠: 小さすぎる操作対象は、タッチ操作や震えのある手で誤操作を起こす。
@@ -65,6 +98,16 @@ updated: 2026-09-20
 - 例外: インラインテキスト中に配置された文脈上のリンク。
 - 実験: [skills/crafting-svg/references/ui-fit.md](../../skills/crafting-svg/references/ui-fit.md)
 - 出典: [WCAG 2.2 達成基準 2.5.8](https://www.w3.org/WAI/WCAG22/quickref/#target-size-minimum)
+
+### 文字の拡大と狭い幅で内容を失わせない
+
+意図と根拠: 文字を拡大したり狭い幅で開いたりしても、読めて操作できる必要がある。
+文字サイズを 200% にしても内容が欠けず、320px 相当の幅で 2 方向のスクロールを起こさない。
+
+- 良い例: 相対単位で寸法を組み、折り返しと縦 1 方向のスクロールで収める。
+- 悪い例: 高さを px で固定し、拡大した文字を枠の外で切り落とす。
+- 例外: 表、地図、図版など、2 次元の配置が内容の本質である要素。
+- 出典: [WCAG 2.2 達成基準 1.4.4 / 1.4.10](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html)
 
 ### すべての操作をキーボードだけで完結させる
 
@@ -84,7 +127,7 @@ updated: 2026-09-20
 
 - 良い例: 2px の鮮明な輪郭線を出し、scroll-margin で固定帯との重なりを防ぐ。
 - 悪い例: outline: none で枠を消し、固定ヘッダーの背後に要素が潜り込む。
-- 例外: マウス操作時のみフォーカス枠を隠す :focus-visible の活用。
+- 例外: ポインタで押した直後。`:focus-visible` を使い、キーボード操作のときだけ枠を出す。
 - 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.7 / 2.4.11](https://www.w3.org/WAI/WCAG22/quickref/#focus-visible)
 
@@ -119,7 +162,7 @@ prefers-reduced-motion を検出し、アニメーションを抑制する。
 - 悪い例: 端末設定を無視して常に画面全体がスライドや拡大縮小する。
 - 例外: 動画再生など、動きそのものがコンテンツの本質である場合。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [WCAG 2.2 達成基準 2.3.3](https://www.w3.org/WAI/WCAG22/quickref/#animation-from-interactions)
+- 出典: [WCAG 2.2 達成基準 2.3.3（AAA）](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html)
 
 ### 操作の名前は「何が起きるか」で付ける
 
@@ -141,19 +184,23 @@ prefers-reduced-motion を検出し、アニメーションを抑制する。
 - 悪い例: div 要素でモーダルを自作し、背後の要素にフォーカスが漏れる。
 - 例外: 簡易なポップオーバーなど、非モーダルな浮動表示。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [MDN dialog 要素](https://developer.mozilla.org/ja/docs/Web/HTML/Element/dialog)
+- 出典: [MDN dialog 要素](https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/dialog)
 
 ## 確認項目
 
-- [ ] すべてのテキストと背景色のコントラスト比が 4.5:1 以上か。
-- [ ] アイコンや枠線のコントラスト比が 3:1 以上か。
+- [ ] 本文のコントラスト比が 4.5:1 以上か。大きな文字は 3:1 以上か。
+- [ ] 意味を担うアイコンや枠線のコントラスト比が 3:1 以上か。
+- [ ] 情報を担う画像に代替テキストがあり、装飾が読み上げから外れているか。
+- [ ] 見出しの階層とランドマークが文書構造として組まれているか。
+- [ ] ラベルとエラー文が入力欄に要素として関連付けられているか。
+- [ ] 文字を 200% に拡大し、320px 相当の幅にしても内容が失われないか。
 - [ ] すべてのボタンやリンクにキーボードだけで到達し操作できるか。
 - [ ] フォーカス位置が明瞭な輪郭線で視覚化されているか。
 - [ ] 動きを減らす設定を有効にした際に過剰な動きが停止するか。
 
 ## 出典
 
-- [WCAG 2.2 ガイドライン](https://www.w3.org/WAI/WCAG22/quickref/): 知覚可能、操作可能、理解可能、堅牢の達成基準
+- [WCAG 2.2 ガイドライン](https://www.w3.org/WAI/WCAG22/quickref/): 知覚可能、操作可能、理解可能、堅牢の達成基準。本稿が引くのは 2.3.3 を除きレベル A と AA
 - [MDN Web Docs: アクセシビリティ](https://developer.mozilla.org/ja/docs/Web/Accessibility): HTML と WAI-ARIA の実装標準
 
 ## 判断
