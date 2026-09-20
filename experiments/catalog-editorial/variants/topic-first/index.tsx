@@ -7,7 +7,14 @@ import "./variant.css";
 import { Sheet, longestTitle, shortestTitle, type SheetSpec } from "../../shared/Sheet";
 import { useState } from "react";
 import { runnerPath, svgsFor, works, worksByUpdated, type Work } from "../../shared/data";
-import { schemes, type Scheme } from "../../shared/schemes";
+import { schemes, type Scheme, type SchemeColor } from "../../shared/schemes";
+import {
+  contrastRatio,
+  formatRatio,
+  parseCssColor,
+  passes,
+  relativeLuminance,
+} from "../../shared/contrast";
 import { tokenFamilies, type Token } from "../../shared/tokens";
 import { useScreen, type ScreenApi } from "../../shared/useScreen";
 
@@ -343,77 +350,302 @@ function defaultVariant(work: Work): string {
   return work.adopted[0] ?? work.variantIds[0];
 }
 
-/* ---- 配色。14 配色そのものを並べる ---- */
+/* ---- 配色。coolors のパレットカードを参考にする ---- */
 
-const COLOR_ROLES = [
+/**
+ * カードの帯に出す代表 7 色の候補。明るい順に並べ、最後に有彩の色を置く。
+ * 19 役割すべてを帯にすると淡色が過半を占め、カードがほぼ白一色になって配色間の差が読めない。
+ * surface と accent-hover を先頭に入れないのは、bg と accent に近い色が並んで帯が埋まるためである。
+ * 値が重複する役割は飛ばし、異なる色が 7 本並ぶまで後ろの候補から補う。
+ * aizome のように accent と focus が同じ値の配色があり、そのままだと同じ帯が 2 本並ぶ。
+ * 残りの役割はカードを開いたときに見せる。
+ */
+const CARD_ROLE_CANDIDATES = [
   "bg",
   "bg-subtle",
-  "surface",
-  "border",
   "border-strong",
-  "text",
   "text-muted",
+  "text",
   "accent",
-  "accent-hover",
-  "on-accent",
   "focus",
-  "success",
-  "warning",
-  "danger",
+  "accent-subtle",
+  "surface",
+  "accent-hover",
 ];
+
+const CARD_BAND_COUNT = 7;
+
+/** 展開したときに見せる全役割の並び。役割の意味で束ねる。 */
+const ROLE_GROUPS: Array<{ label: string; roles: string[] }> = [
+  { label: "面", roles: ["bg", "bg-subtle", "surface"] },
+  { label: "線", roles: ["border", "border-strong", "focus"] },
+  { label: "文字", roles: ["text", "text-muted"] },
+  {
+    label: "強調",
+    roles: ["accent", "accent-hover", "accent-strong", "accent-subtle", "on-accent"],
+  },
+  {
+    label: "意味",
+    roles: ["success", "success-subtle", "warning", "warning-subtle", "danger", "danger-subtle"],
+  },
+];
+
+/** コントラストを確かめる主要な組み合わせ。正本は apps/catalog/src/content/contrast.ts。 */
+const CONTRAST_PAIRS: Array<{ fg: string; bg: string; minimum: 4.5 | 3 }> = [
+  { fg: "text", bg: "bg", minimum: 4.5 },
+  { fg: "text-muted", bg: "bg", minimum: 4.5 },
+  { fg: "on-accent", bg: "accent", minimum: 4.5 },
+  { fg: "border-strong", bg: "bg", minimum: 3 },
+  { fg: "focus", bg: "bg", minimum: 3 },
+];
+
+/** 帯の上に置く文字の色。新しい色を作らず、その帯の明るさで黒か白を選ぶ。 */
+function inkOn(value: string): string {
+  try {
+    return relativeLuminance(parseCssColor(value)) > 0.45 ? "#0c0c0c" : "#ffffff";
+  } catch {
+    return "#0c0c0c";
+  }
+}
+
+function colorOf(scheme: Scheme, mode: "light" | "dark", role: string): SchemeColor | undefined {
+  return scheme[mode].find((item) => item.role === role);
+}
+
+function cardColors(scheme: Scheme, mode: "light" | "dark"): SchemeColor[] {
+  const out: SchemeColor[] = [];
+  const seen = new Set<string>();
+  for (const role of CARD_ROLE_CANDIDATES) {
+    if (out.length === CARD_BAND_COUNT) break;
+    const color = colorOf(scheme, mode, role);
+    if (!color || seen.has(color.value)) continue;
+    seen.add(color.value);
+    out.push(color);
+  }
+  return out;
+}
+
+/** hex をコピーする。clipboard が無い環境でも落とさない。 */
+function useCopy(): { copied: string | null; copy: (value: string) => void } {
+  const [copied, setCopied] = useState<string | null>(null);
+  const copy = (value: string) => {
+    void navigator.clipboard
+      ?.writeText(value)
+      .then(() => setCopied(value))
+      .catch(() => setCopied(null));
+  };
+  return { copied, copy };
+}
 
 function ColorsTopic() {
   const [mode, setMode] = useState<"light" | "dark">("light");
+  const [open, setOpen] = useState<string | null>(null);
+  const { copied, copy } = useCopy();
   // 採用された配色と、評価の前に却下された配色の両方を載せる。
   // 掲載対象を採用成果に限らないのは visual showcase の ADR の判断である。
   const adopted = works.find((item) => item.slug === "color-schemes")?.adopted ?? [];
+
   return (
     <div className="topic-body">
-      <div className="mode" role="group" aria-label="明暗">
-        <button
-          type="button"
-          className="mode__item"
-          aria-pressed={mode === "light"}
-          onClick={() => setMode("light")}
-        >
-          ライト
-        </button>
-        <button
-          type="button"
-          className="mode__item"
-          aria-pressed={mode === "dark"}
-          onClick={() => setMode("dark")}
-        >
-          ダーク
-        </button>
-      </div>
-      <ul className="schemes">
-        {schemes.map((scheme) => (
-          <li className="scheme" key={scheme.id}>
-            <p className="scheme__head">
-              <span className="scheme__label">{scheme.label}</span>
-              <code>{scheme.id}</code>
-              <span className="scheme__mark" data-adopted={adopted.includes(scheme.id)}>
-                {adopted.includes(scheme.id) ? "採用" : "却下"}
-              </span>
-            </p>
-            <SchemeSpecimen scheme={scheme} mode={mode} />
-            <ul className="swatches">
-              {COLOR_ROLES.map((role) => {
-                const color = scheme[mode].find((item) => item.role === role);
-                if (!color) return null;
-                return (
-                  <li className="swatch" key={role}>
-                    <span className="swatch__chip" style={{ background: color.value }} />
-                    <span className="swatch__role">{role}</span>
-                    <span className="swatch__name">{color.name}</span>
+      <Feature mode={mode} adopted={adopted} copy={copy} />
+
+      <div className="palette-browse">
+        <div className="palette-bar">
+          <div className="mode" role="group" aria-label="明暗">
+            <button
+              type="button"
+              className="mode__item"
+              aria-pressed={mode === "light"}
+              onClick={() => setMode("light")}
+            >
+              ライト
+            </button>
+            <button
+              type="button"
+              className="mode__item"
+              aria-pressed={mode === "dark"}
+              onClick={() => setMode("dark")}
+            >
+              ダーク
+            </button>
+          </div>
+          <p className="palette-bar__note">帯を押すと hex をコピーする。</p>
+        </div>
+
+        <ul className="palettes">
+          {schemes.map((scheme) => (
+            <li className="palette" key={scheme.id}>
+              <ul className="bands">
+                {cardColors(scheme, mode).map((color) => (
+                  <li className="band" key={color.role} style={{ background: color.value }}>
+                    <button
+                      type="button"
+                      className="band__hit"
+                      style={{ color: inkOn(color.value) }}
+                      onClick={() => copy(color.value)}
+                    >
+                      <span className="band__hex">{color.value}</span>
+                      <span className="band__role">{color.role}</span>
+                    </button>
                   </li>
-                );
-              })}
-            </ul>
+                ))}
+              </ul>
+              <div className="palette__head">
+                <p className="palette__name">
+                  <span className="palette__label">{scheme.label}</span>
+                  <code>{scheme.id}</code>
+                  <span className="palette__mark" data-adopted={adopted.includes(scheme.id)}>
+                    {adopted.includes(scheme.id) ? "採用" : "却下"}
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  className="palette__more"
+                  aria-expanded={open === scheme.id}
+                  onClick={() => setOpen(open === scheme.id ? null : scheme.id)}
+                >
+                  {open === scheme.id ? "閉じる" : "役割をすべて見る"}
+                </button>
+              </div>
+              {open === scheme.id && <SchemeDetail scheme={scheme} mode={mode} copy={copy} />}
+            </li>
+          ))}
+        </ul>
+
+        <p className="copied" role="status">
+          {copied ? `${copied} をコピーした。` : ""}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 1 配色を全幅で見せる帯。前後のボタンで送る。
+ * カードの展開とは連動させない。連動させると、画面外の帯が変わって変化が見えない。
+ */
+function Feature({
+  mode,
+  adopted,
+  copy,
+}: {
+  mode: "light" | "dark";
+  adopted: string[];
+  copy: (value: string) => void;
+}) {
+  const startAt = Math.max(
+    0,
+    schemes.findIndex((item) => adopted.includes(item.id)),
+  );
+  const [index, setIndex] = useState(startAt);
+  const scheme = schemes[index];
+  const move = (step: number) =>
+    setIndex((current) => (current + step + schemes.length) % schemes.length);
+
+  return (
+    <section className="feature" aria-labelledby="feature-name">
+      <ul className="feature__bands">
+        {cardColors(scheme, mode).map((color) => (
+          <li className="feature__band" key={color.role} style={{ background: color.value }}>
+            <button
+              type="button"
+              className="feature__hit"
+              style={{ color: inkOn(color.value) }}
+              onClick={() => copy(color.value)}
+            >
+              <span className="feature__hex">{color.value}</span>
+              <span className="feature__role">{color.role}</span>
+              <span className="feature__jp">{color.name}</span>
+            </button>
           </li>
         ))}
       </ul>
+      <div className="feature__head">
+        <p className="feature__name" id="feature-name">
+          <span className="feature__label">{scheme.label}</span>
+          <code>{scheme.id}</code>
+        </p>
+        <p className="feature__nav">
+          <button type="button" className="feature__step" onClick={() => move(-1)}>
+            前の配色
+          </button>
+          <span className="feature__count">
+            {index + 1} / {schemes.length}
+          </span>
+          <button type="button" className="feature__step" onClick={() => move(1)}>
+            次の配色
+          </button>
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/** 展開したときの中身。19 役割すべてと、主要な組み合わせのコントラスト。 */
+function SchemeDetail({
+  scheme,
+  mode,
+  copy,
+}: {
+  scheme: Scheme;
+  mode: "light" | "dark";
+  copy: (value: string) => void;
+}) {
+  return (
+    <div className="detail-panel">
+      {ROLE_GROUPS.map((group) => (
+        <div className="role-group" key={group.label}>
+          <p className="role-group__label">{group.label}</p>
+          <ul className="role-list">
+            {group.roles.flatMap((role) => {
+              const color = colorOf(scheme, mode, role);
+              if (!color) return [];
+              return [
+                <li className="role-item" key={role}>
+                  <button
+                    type="button"
+                    className="role-item__hit"
+                    onClick={() => copy(color.value)}
+                  >
+                    <span className="role-item__chip" style={{ background: color.value }} />
+                    <span className="role-item__role">{role}</span>
+                    <span className="role-item__jp">{color.name}</span>
+                    <span className="role-item__hex">{color.value}</span>
+                  </button>
+                </li>,
+              ];
+            })}
+          </ul>
+        </div>
+      ))}
+
+      <div className="role-group">
+        <p className="role-group__label">コントラスト</p>
+        <ul className="ratios">
+          {CONTRAST_PAIRS.flatMap((pair) => {
+            const fg = colorOf(scheme, mode, pair.fg);
+            const bg = colorOf(scheme, mode, pair.bg);
+            if (!fg || !bg) return [];
+            const ratio = contrastRatio(fg.value, bg.value);
+            const ok = passes(ratio, pair.minimum);
+            return [
+              <li className="ratio" key={`${pair.fg}-${pair.bg}`} data-pass={ok}>
+                <span className="ratio__pair">
+                  {pair.fg} 対 {pair.bg}
+                </span>
+                <span className="ratio__value">{formatRatio(ratio)}</span>
+                <span className="ratio__min">{pair.minimum}:1</span>
+                <span className="ratio__mark">{ok ? "合格" : "不足"}</span>
+              </li>,
+            ];
+          })}
+        </ul>
+      </div>
+
+      <div className="role-group">
+        <p className="role-group__label">組んだところ</p>
+        <SchemeSpecimen scheme={scheme} mode={mode} />
+      </div>
     </div>
   );
 }
