@@ -109,6 +109,8 @@ Catalog は成果物の visual showcase とする。
 採用成果に限らず、`reference` も探索してよい。
 
 Experiment 本文、原則、開発者向け手順、ADR 全文は Catalog 内で描画しない。
+成果物の背景となる方針は二次情報として掲載する。
+正本（`docs/guidelines/`）から glob で読み、成果物探索の邪魔をしない。
 live variant は専用 route と iframe へ隔離する。
 preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
 実装は `apps/catalog/` に置く。
