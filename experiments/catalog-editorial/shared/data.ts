@@ -170,9 +170,9 @@ function leadSentence(source: string): string {
   return line?.trim() ?? "";
 }
 
-type FrontmatterValue = string | string[];
+export type FrontmatterValue = string | string[];
 
-function parseFrontmatter(source: string): Record<string, FrontmatterValue> {
+export function parseFrontmatter(source: string): Record<string, FrontmatterValue> {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return {};
   const data: Record<string, FrontmatterValue> = {};

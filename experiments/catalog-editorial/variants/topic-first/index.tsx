@@ -26,6 +26,8 @@ import {
 } from "../../shared/contrast";
 import { tokenFamilies, type Token } from "../../shared/tokens";
 import { useScreen, type ScreenApi } from "../../shared/useScreen";
+import { loadGuidelines, renderInline, type Guideline, type Rule } from "../../shared/guidelines";
+import { FIGURE_COMPONENTS, type FigureKey, isFigureKey } from "./figures";
 
 type TopicId =
   | "colors"
@@ -199,6 +201,7 @@ export default function TopicFirst() {
         {nav.screen === "list" && <TopicScreen nav={nav} theme={theme} />}
         {nav.screen === "detail" && <Detail nav={nav} />}
         {nav.screen === "sheet" && <Sheet spec={SPEC} />}
+        {nav.screen === "guide" && <GuideScreen nav={nav} />}
       </main>
     </div>
   );
@@ -251,6 +254,9 @@ function ThemeControl({ theme }: { theme: Theme }) {
 
 function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
   const current = nav.screen === "list" ? nav.filter : null;
+  const guidelines = loadGuidelines();
+  const firstGuideSlug = guidelines[0]?.slug ?? "design-four-principles";
+
   return (
     <header className="masthead">
       <a
@@ -278,6 +284,17 @@ function Masthead({ nav, theme }: { nav: ScreenApi; theme: Theme }) {
           </a>
         ))}
       </nav>
+      <a
+        className="masthead__guide"
+        href={nav.hrefFor({ screen: "guide", item: firstGuideSlug, filter: null })}
+        aria-current={nav.screen === "guide" ? "page" : undefined}
+        onClick={(event) => {
+          event.preventDefault();
+          nav.go({ screen: "guide", item: firstGuideSlug, filter: null });
+        }}
+      >
+        方針
+      </a>
       <a
         className="masthead__sheet"
         href={nav.hrefFor({ screen: "sheet", item: null, filter: null })}
@@ -1498,5 +1515,198 @@ function Parts() {
         </li>
       </ul>
     </div>
+  );
+}
+
+function GuideScreen({ nav }: { nav: ScreenApi }) {
+  const guidelines = loadGuidelines();
+  const activeSlug = nav.item ?? guidelines[0]?.slug;
+  const currentGuideline = guidelines.find((g) => g.slug === activeSlug) ?? guidelines[0];
+
+  if (!currentGuideline) {
+    return (
+      <div className="guide-screen">
+        <p>ガイドラインが見つかりません。</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="guide-screen">
+      <div className="guide-hero">
+        <h1 className="guide-title" tabIndex={-1} data-screen-heading>
+          {currentGuideline.title}
+        </h1>
+        <p className="guide-summary">{currentGuideline.summary}</p>
+        <nav className="guide-nav" aria-label="文書の切替">
+          {guidelines.map((g) => (
+            <a
+              key={g.slug}
+              className="guide-nav__link"
+              href={nav.hrefFor({ screen: "guide", item: g.slug, filter: null })}
+              aria-current={g.slug === currentGuideline.slug ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                nav.go({ screen: "guide", item: g.slug, filter: null });
+              }}
+            >
+              {g.title}
+            </a>
+          ))}
+        </nav>
+        <div className="guide-meta">
+          <div className="guide-meta__col">
+            <h2>目的</h2>
+            <p>{currentGuideline.purpose}</p>
+          </div>
+          <div className="guide-meta__col">
+            <h2>適用範囲</h2>
+            <p>{currentGuideline.scope}</p>
+          </div>
+        </div>
+      </div>
+
+      <nav className="guide-toc" aria-label="規則の索引">
+        <h2 className="guide-toc__label">規則の索引</h2>
+        <ul className="guide-toc__list">
+          {currentGuideline.rules.map((rule, idx) => (
+            <li key={idx}>
+              <a
+                className="guide-toc__link"
+                href={`#rule-${idx}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(`rule-${idx}`)?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                {rule.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="guide-rules">
+        {currentGuideline.rules.map((rule, idx) => {
+          const Figure =
+            rule.figureKey && isFigureKey(rule.figureKey)
+              ? FIGURE_COMPONENTS[rule.figureKey as FigureKey]
+              : null;
+          return (
+            <article key={idx} id={`rule-${idx}`} className="guide-rule">
+              <h2 className="guide-rule__title">{rule.title}</h2>
+              {Figure && (
+                <div className="guide-rule__figure">
+                  <Figure />
+                </div>
+              )}
+              <div className="guide-rule__rationale">{renderInline(rule.rationale)}</div>
+              <div className="guide-examples">
+                <div className="guide-example guide-example--bad">
+                  <div className="guide-example__header">
+                    <span className="guide-example__tag guide-example__tag--bad">悪い例</span>
+                  </div>
+                  <div className="guide-example__body">{renderInline(rule.bad)}</div>
+                </div>
+                <div className="guide-example guide-example--good">
+                  <div className="guide-example__header">
+                    <span className="guide-example__tag guide-example__tag--good">良い例</span>
+                  </div>
+                  <div className="guide-example__body">{renderInline(rule.good)}</div>
+                </div>
+              </div>
+              {rule.exception && (
+                <div className="guide-rule__exception">
+                  <span className="guide-rule__exception-label">例外:</span>
+                  {renderInline(rule.exception)}
+                </div>
+              )}
+              {(rule.experiment || rule.source) && (
+                <div className="guide-rule__origins">
+                  {rule.experiment && (
+                    <span className="guide-rule__origin-item">
+                      <span className="guide-rule__origin-label">実験:</span>
+                      {renderExperimentLink(rule.experiment, nav)}
+                    </span>
+                  )}
+                  {rule.source && (
+                    <span className="guide-rule__origin-item">
+                      <span className="guide-rule__origin-label">出典:</span>
+                      <a
+                        href={rule.source.url}
+                        className="guide-link"
+                        target={rule.source.url.startsWith("http") ? "_blank" : undefined}
+                        rel={rule.source.url.startsWith("http") ? "noreferrer" : undefined}
+                      >
+                        {rule.source.text}
+                      </a>
+                    </span>
+                  )}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+
+      <section className="guide-checklist-section">
+        <h2 className="guide-section-title">確認項目</h2>
+        <ul className="guide-checklist">
+          {currentGuideline.checklist.map((item, idx) => (
+            <li key={idx} className="guide-checklist__item">
+              <span className="guide-checklist__icon" aria-hidden="true" />
+              <span>{renderInline(item)}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="guide-sources-section">
+        <h2 className="guide-section-title">出典</h2>
+        <ul className="guide-sources">
+          {currentGuideline.sources.map((src, idx) => (
+            <li key={idx} className="guide-sources__item">
+              {src.url ? (
+                <a href={src.url} className="guide-link" target="_blank" rel="noreferrer">
+                  {src.text}
+                </a>
+              ) : (
+                <span className="guide-strong">{src.text}</span>
+              )}
+              {src.description && <span>: {src.description}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  );
+}
+
+function renderExperimentLink(exp: { text: string; url: string }, nav: ScreenApi) {
+  const match = exp.url.match(/experiments\/([a-z0-9-]+)/);
+  const expSlug = match ? match[1] : null;
+  const targetWork = expSlug ? works.find((w) => w.slug === expSlug) : null;
+  if (targetWork && targetWork.variantIds.length > 0) {
+    const variantId = targetWork.adopted[0] ?? targetWork.variantIds[0];
+    return (
+      <a
+        href={nav.hrefFor({ screen: "detail", item: targetWork.slug, variant: variantId })}
+        className="guide-link"
+        onClick={(e) => {
+          e.preventDefault();
+          nav.go({ screen: "detail", item: targetWork.slug, variant: variantId });
+        }}
+      >
+        {exp.text}
+      </a>
+    );
+  }
+  const githubUrl = exp.url.startsWith("http")
+    ? exp.url
+    : `https://github.com/salan70/uiux-numa/blob/main/${exp.url.replace(/^(\.\.\/)+/, "")}`;
+  return (
+    <a href={githubUrl} className="guide-link" target="_blank" rel="noreferrer">
+      {exp.text}
+    </a>
   );
 }
