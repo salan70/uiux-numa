@@ -42,7 +42,9 @@ export type Guideline = {
   axes: string[];
   purpose: string;
   scope: string;
-  rules: Rule[];
+  // 規則は 2 層に分ける。コアは主題の土台、Tips は個別の場面への適用。
+  core: Rule[];
+  tips: Rule[];
   checklist: string[];
   sources: SourceItem[];
   judgment: Judgment;
@@ -81,7 +83,7 @@ const VALID_AXES = [
   "brand fit",
 ] as const;
 
-const KNOWN_SECTIONS = ["目的", "適用範囲", "規則", "確認項目", "出典", "判断"] as const;
+const KNOWN_SECTIONS = ["目的", "適用範囲", "コア", "Tips", "確認項目", "出典", "判断"] as const;
 
 const guidelineFiles = import.meta.glob<string>("../../../docs/guidelines/*.md", {
   query: "?raw",
@@ -175,9 +177,14 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   const scope = joinParagraphs(sections["適用範囲"]);
   if (!scope) throw new Error(`[guidelines/${slug}] '## 適用範囲' must not be empty`);
 
-  const rules = parseRules(slug, sections["規則"]);
-  if (rules.length === 0) {
-    throw new Error(`[guidelines/${slug}] '## 規則' must contain at least one rule`);
+  const core = parseRules(slug, sections["コア"]);
+  if (core.length === 0) {
+    throw new Error(`[guidelines/${slug}] '## コア' must contain at least one rule`);
+  }
+
+  const tips = parseRules(slug, sections["Tips"]);
+  if (tips.length === 0) {
+    throw new Error(`[guidelines/${slug}] '## Tips' must contain at least one rule`);
   }
 
   const checklist = parseChecklist(slug, sections["確認項目"]);
@@ -205,7 +212,8 @@ export function parseGuideline(slug: string, raw: string): Guideline {
     axes,
     purpose,
     scope,
-    rules,
+    core,
+    tips,
     checklist,
     sources,
     judgment,

@@ -14,24 +14,26 @@ function FigureProximity() {
           className="guide-figure__specimen"
           style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
         >
-          <div style={{ fontSize: "0.8125rem", color: "var(--ed-muted)" }}>氏名</div>
+          <div style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-muted)" }}>氏名</div>
           <div
             style={{
               padding: "0.375rem 0.5rem",
               border: "1px solid var(--ed-border)",
               borderRadius: "0.375rem",
-              fontSize: "0.875rem",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             山田 太郎
           </div>
-          <div style={{ fontSize: "0.8125rem", color: "var(--ed-muted)" }}>メールアドレス</div>
+          <div style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-muted)" }}>
+            メールアドレス
+          </div>
           <div
             style={{
               padding: "0.375rem 0.5rem",
               border: "1px solid var(--ed-border)",
               borderRadius: "0.375rem",
-              fontSize: "0.875rem",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             taro@example.com
@@ -50,7 +52,13 @@ function FigureProximity() {
           style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-            <div style={{ fontSize: "0.8125rem", color: "var(--ed-text)", fontWeight: 500 }}>
+            <div
+              style={{
+                fontSize: "var(--font-size-sm)",
+                color: "var(--ed-text)",
+                fontWeight: "var(--font-weight-bold)",
+              }}
+            >
               氏名
             </div>
             <div
@@ -58,14 +66,20 @@ function FigureProximity() {
                 padding: "0.375rem 0.5rem",
                 border: "1px solid var(--ed-border-strong)",
                 borderRadius: "0.375rem",
-                fontSize: "0.875rem",
+                fontSize: "var(--font-size-sm)",
               }}
             >
               山田 太郎
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-            <div style={{ fontSize: "0.8125rem", color: "var(--ed-text)", fontWeight: 500 }}>
+            <div
+              style={{
+                fontSize: "var(--font-size-sm)",
+                color: "var(--ed-text)",
+                fontWeight: "var(--font-weight-bold)",
+              }}
+            >
               メールアドレス
             </div>
             <div
@@ -73,7 +87,7 @@ function FigureProximity() {
                 padding: "0.375rem 0.5rem",
                 border: "1px solid var(--ed-border-strong)",
                 borderRadius: "0.375rem",
-                fontSize: "0.875rem",
+                fontSize: "var(--font-size-sm)",
               }}
             >
               taro@example.com
@@ -100,15 +114,17 @@ function FigureAlignment() {
         >
           <div
             style={{
-              fontSize: "1rem",
-              fontWeight: 700,
+              fontSize: "var(--font-size-md)",
+              fontWeight: "var(--font-weight-bold)",
               marginLeft: "0.5rem",
               color: "var(--ed-text)",
             }}
           >
             設定の確認
           </div>
-          <div style={{ fontSize: "0.875rem", color: "var(--ed-muted)", marginLeft: "0" }}>
+          <div
+            style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-muted)", marginLeft: "0" }}
+          >
             通知の設定を変更します。
           </div>
           <div
@@ -119,7 +135,7 @@ function FigureAlignment() {
               background: "var(--ed-surface)",
               border: "1px solid var(--ed-border)",
               borderRadius: "0.375rem",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             保存する
@@ -139,10 +155,16 @@ function FigureAlignment() {
             paddingLeft: "0.5rem",
           }}
         >
-          <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--ed-text)" }}>
+          <div
+            style={{
+              fontSize: "var(--font-size-md)",
+              fontWeight: "var(--font-weight-bold)",
+              color: "var(--ed-text)",
+            }}
+          >
             設定の確認
           </div>
-          <div style={{ fontSize: "0.875rem", color: "var(--ed-muted)" }}>
+          <div style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-muted)" }}>
             通知の設定を変更します。
           </div>
           <div
@@ -152,8 +174,8 @@ function FigureAlignment() {
               background: "var(--ed-accent)",
               color: "var(--ed-bg)",
               borderRadius: "0.375rem",
-              fontSize: "0.8125rem",
-              fontWeight: 500,
+              fontSize: "var(--font-size-sm)",
+              fontWeight: "var(--font-weight-bold)",
             }}
           >
             保存する
@@ -182,7 +204,7 @@ function FigureRepetition() {
               padding: "0.375rem 0.625rem",
               border: "1px solid var(--ed-border-strong)",
               borderRadius: "0.375rem",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             配色: sumi
@@ -192,7 +214,7 @@ function FigureRepetition() {
               padding: "0.375rem 0.5rem",
               border: "2px solid #999",
               borderRadius: "0px",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
               background: "#fff",
               color: "#000",
             }}
@@ -215,7 +237,7 @@ function FigureRepetition() {
               padding: "0.375rem 0.625rem",
               border: "1px solid var(--ed-border-strong)",
               borderRadius: "0.375rem",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
               color: "var(--ed-text)",
               display: "flex",
               alignItems: "center",
@@ -239,7 +261,7 @@ function FigureRepetition() {
               padding: "0.375rem 0.625rem",
               border: "1px solid var(--ed-border-strong)",
               borderRadius: "0.375rem",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
               color: "var(--ed-text)",
               display: "flex",
               alignItems: "center",
@@ -277,8 +299,10 @@ function FigureContrast() {
           className="guide-figure__specimen"
           style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}
         >
-          <div style={{ fontSize: "0.875rem", color: "var(--ed-text)" }}>見出しの文字階梯</div>
-          <div style={{ fontSize: "0.875rem", color: "var(--ed-text)" }}>
+          <div style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-text)" }}>
+            見出しの文字階梯
+          </div>
+          <div style={{ fontSize: "var(--font-size-sm)", color: "var(--ed-text)" }}>
             見出しには font-size-lg を使用します
           </div>
         </div>
@@ -294,14 +318,20 @@ function FigureContrast() {
           className="guide-figure__specimen"
           style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
         >
-          <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--ed-text)" }}>
+          <div
+            style={{
+              fontSize: "var(--font-size-lg)",
+              fontWeight: "var(--font-weight-bold)",
+              color: "var(--ed-text)",
+            }}
+          >
             見出しの文字階梯
           </div>
           <div
             style={{
               borderLeft: "2px solid var(--ed-border-strong)",
               paddingLeft: "0.5rem",
-              fontSize: "0.8125rem",
+              fontSize: "var(--font-size-sm)",
               color: "var(--ed-muted)",
             }}
           >
@@ -330,8 +360,8 @@ function FigureStateLayoutShift() {
             style={{
               padding: "0.25rem 0.5rem",
               borderBottom: "2px solid var(--ed-accent)",
-              fontWeight: 700,
-              fontSize: "0.875rem",
+              fontWeight: "var(--font-weight-bold)",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             概要 (74px)
@@ -339,8 +369,8 @@ function FigureStateLayoutShift() {
           <div
             style={{
               padding: "0.25rem 0.5rem",
-              fontWeight: 400,
-              fontSize: "0.875rem",
+              fontWeight: "var(--font-weight-regular)",
+              fontSize: "var(--font-size-sm)",
               color: "var(--ed-muted)",
             }}
           >
@@ -372,8 +402,8 @@ function FigureStateStable() {
               padding: "0.25rem 0.5rem",
               borderBottom: "2px solid var(--ed-accent)",
               color: "var(--ed-accent)",
-              fontWeight: 500,
-              fontSize: "0.875rem",
+              fontWeight: "var(--font-weight-bold)",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             概要 (68px)
@@ -383,8 +413,8 @@ function FigureStateStable() {
               padding: "0.25rem 0.5rem",
               borderBottom: "2px solid transparent",
               color: "var(--ed-muted)",
-              fontWeight: 500,
-              fontSize: "0.875rem",
+              fontWeight: "var(--font-weight-bold)",
+              fontSize: "var(--font-size-sm)",
             }}
           >
             設定 (68px)
