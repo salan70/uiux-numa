@@ -1559,14 +1559,17 @@
   margin: 0;
 }
 
+/* 幅は内容によらず固定にする。配色名の字数で送りのボタンが伸び縮みすると、
+   次を押すたびにボタンの位置が動く。 */
 .ed-root--topic .feature__step {
   appearance: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.375rem;
-  max-inline-size: 12rem;
+  inline-size: 8rem;
   min-block-size: var(--ed-tap);
-  padding: 0 0.875rem;
+  padding: 0 0.75rem;
   border: 1px solid var(--ed-line-strong);
   border-radius: var(--ed-radius);
   background: none;
@@ -1578,6 +1581,13 @@
   transition:
     color var(--ed-duration) ease,
     border-color var(--ed-duration) ease;
+}
+
+.ed-root--topic .feature__step-name {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ed-root--topic .feature__count {
