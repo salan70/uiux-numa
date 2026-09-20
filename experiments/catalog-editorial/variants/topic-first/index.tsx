@@ -358,7 +358,7 @@ function defaultVariant(work: Work): string {
  * 残る 3 本は文字、線、地から 1 つずつ取り、明度の幅を最大にする。
  * text-muted と bg-subtle を外したのは、text と bg に近い明度の帯が隣に並ぶためである。
  * 意味色（success / warning / danger）は配色をまたいでほぼ共通なので、出しても差にならない。
- * 同じ値の役割は 1 本にまとめ、役割名を中黒で並べる。
+ * 同じ値の役割は 1 本にまとめ、役割名をスラッシュで並べる。
  * aizome のように accent と accent-strong が同じ値の配色があり、分けると同じ帯が 2 本並ぶ。
  * まとめれば色の面は重複せず、その配色が 1 色を 2 役に当てていることも読める。
  * まとめた結果、本数は 7 本以下で配色ごとに変わる。
@@ -495,7 +495,7 @@ function ColorsTopic() {
                     >
                       <span className="band__info">
                         <span className="band__hex">{band.value}</span>
-                        <span className="band__role">{band.roles.join(" · ")}</span>
+                        <span className="band__role">{band.roles.join(" / ")}</span>
                       </span>
                     </button>
                   </li>
@@ -564,7 +564,7 @@ function Feature({
               onClick={() => copy(band.value)}
             >
               <span className="feature__hex">{band.value}</span>
-              <span className="feature__role">{band.roles.join(" · ")}</span>
+              <span className="feature__role">{band.roles.join(" / ")}</span>
               <span className="feature__jp">{band.name}</span>
             </button>
           </li>
