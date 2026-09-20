@@ -11,5 +11,7 @@ body,
 
 .preview-root > p {
   margin: 1rem;
-  font: 1rem/1.5 system-ui, sans-serif;
+  font:
+    1rem/1.5 system-ui,
+    sans-serif;
 }

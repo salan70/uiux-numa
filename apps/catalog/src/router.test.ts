@@ -10,7 +10,6 @@ describe("matchRoute", () => {
     expect(matchRoute("/foundations/icons")).toEqual({ name: "icons" });
     expect(matchRoute("/foundations/graphics")).toEqual({ name: "graphics" });
     expect(matchRoute("/components")).toEqual({ name: "components" });
-    expect(matchRoute("/motion")).toEqual({ name: "motion" });
   });
 
   it("動的セグメントを返す", () => {
@@ -27,10 +26,6 @@ describe("matchRoute", () => {
       name: "component",
       experiment: "form-inline-validation",
     });
-    expect(matchRoute("/motion/registration-completion-feedback")).toEqual({
-      name: "motionDetail",
-      experiment: "registration-completion-feedback",
-    });
   });
 
   it("削除した URL は notfound を返す", () => {
@@ -41,6 +36,11 @@ describe("matchRoute", () => {
     });
     expect(matchRoute("/status")).toEqual({ name: "notfound" });
     expect(matchRoute("/resources")).toEqual({ name: "notfound" });
+    expect(matchRoute("/motion")).toEqual({ name: "notfound" });
+    expect(matchRoute("/motion/registration-completion-feedback")).toEqual({ name: "notfound" });
+    expect(matchRoute("/foundations/graphics/class-chapter-illustration")).toEqual({
+      name: "notfound",
+    });
   });
 
   it("旧 URL を新 URL へ送る", () => {

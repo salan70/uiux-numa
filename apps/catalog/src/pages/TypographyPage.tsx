@@ -19,7 +19,7 @@ export function TypographyPage() {
   return (
     <>
       <div className="page-intro">
-        <h1>文字</h1>
+        <h1>Typography</h1>
       </div>
       <LivePreview
         variants={live}

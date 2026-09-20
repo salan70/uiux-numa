@@ -1,47 +1,47 @@
 /* variant `vivid-violet` の配色。accent と同じ色相で面を色付けし、sRGB 色域の上限に近い高彩度の紫を accent に使う。 */
 
 :root:has(.cs-vivid-violet) {
-  --color-bg: oklch(0.98 0.01 295);
-  --color-bg-subtle: oklch(0.955 0.023 295);
-  --color-surface: oklch(0.995 0.002 295);
-  --color-border: oklch(0.9 0.026 295);
-  --color-border-strong: oklch(0.614 0.036 295);
-  --color-text: oklch(0.22 0.026 295);
-  --color-text-muted: oklch(0.503 0.036 295);
+  --color-bg: oklch(0.985 0 0);
+  --color-bg-subtle: oklch(0.955 0 0);
+  --color-surface: oklch(1 0 0);
+  --color-border: oklch(0.9 0 0);
+  --color-border-strong: oklch(0.611 0 0);
+  --color-text: oklch(0.2 0 0);
+  --color-text-muted: oklch(0.501 0 0);
   --color-accent: oklch(0.579 0.24 295);
   --color-accent-hover: oklch(0.519 0.24 295);
   --color-on-accent: oklch(1 0 0);
   --color-accent-text: oklch(0.535 0.24 295);
   --color-accent-subtle: oklch(0.935 0.033 295);
   --color-focus: oklch(0.579 0.24 295);
-  --color-success: oklch(0.506 0.12 150);
-  --color-success-subtle: oklch(0.95 0.04 150);
-  --color-warning: oklch(0.519 0.106 75);
-  --color-warning-subtle: oklch(0.95 0.039 75);
-  --color-danger: oklch(0.536 0.167 27);
-  --color-danger-subtle: oklch(0.95 0.024 27);
+  --color-success: oklch(0.51 0.11 150);
+  --color-success-subtle: oklch(0.955 0.035 150);
+  --color-warning: oklch(0.523 0.107 75);
+  --color-warning-subtle: oklch(0.955 0.035 75);
+  --color-danger: oklch(0.538 0.154 27);
+  --color-danger-subtle: oklch(0.955 0.021 27);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:has(.cs-vivid-violet) {
-    --color-bg: oklch(0.16 0.03 295);
-    --color-bg-subtle: oklch(0.19 0.039 295);
-    --color-surface: oklch(0.22 0.036 295);
-    --color-border: oklch(0.32 0.045 295);
-    --color-border-strong: oklch(0.536 0.06 295);
-    --color-text: oklch(0.95 0.025 295);
-    --color-text-muted: oklch(0.645 0.06 295);
+    --color-bg: oklch(0.16 0 0);
+    --color-bg-subtle: oklch(0.19 0 0);
+    --color-surface: oklch(0.215 0 0);
+    --color-border: oklch(0.32 0 0);
+    --color-border-strong: oklch(0.53 0 0);
+    --color-text: oklch(0.95 0 0);
+    --color-text-muted: oklch(0.639 0 0);
     --color-accent: oklch(0.7 0.16 295);
     --color-accent-hover: oklch(0.76 0.133 295);
     --color-on-accent: oklch(0.16 0.03 295);
     --color-accent-text: oklch(0.741 0.145 295);
     --color-accent-subtle: oklch(0.3 0.09 295);
     --color-focus: oklch(0.7 0.16 295);
-    --color-success: oklch(0.676 0.12 150);
+    --color-success: oklch(0.678 0.11 150);
     --color-success-subtle: oklch(0.3 0.05 150);
-    --color-warning: oklch(0.687 0.12 75);
+    --color-warning: oklch(0.686 0.11 75);
     --color-warning-subtle: oklch(0.3 0.06 75);
-    --color-danger: oklch(0.697 0.167 27);
+    --color-danger: oklch(0.697 0.154 27);
     --color-danger-subtle: oklch(0.3 0.05 27);
   }
 }

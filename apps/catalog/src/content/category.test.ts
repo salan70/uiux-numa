@@ -4,11 +4,14 @@ import { categoryForDomains, categoryForExperiment, categoryHref } from "./categ
 describe("categoryForDomains", () => {
   it("domains の先頭から最初に一致する種別を返す", () => {
     expect(categoryForDomains(["ux-writing", "forms-input-ux"])).toBe("components");
-    expect(categoryForDomains(["illustration-svg", "visual-design"])).toBe("graphics");
+    expect(categoryForDomains(["logo-brand-identity", "visual-design"])).toBe("graphics");
   });
 
-  it("動きの domain を種別に割り当てる", () => {
-    expect(categoryForDomains(["animation-motion", "forms-input-ux"])).toBe("motion");
+  it("Illustration と Motion は公開種別に割り当てない", () => {
+    expect(categoryForDomains(["illustration-svg", "visual-design"])).toBeNull();
+    expect(categoryForDomains(["animation-motion", "visual-design"])).toBeNull();
+    expect(categoryForExperiment("illustration", ["illustration-svg", "iconography"])).toBeNull();
+    expect(categoryForExperiment("motion", ["animation-motion", "forms-input-ux"])).toBeNull();
   });
 
   it("未対応の domains は種別なしにする", () => {
@@ -24,6 +27,5 @@ describe("categoryHref", () => {
   it("公開種別の URL を返す", () => {
     expect(categoryHref("colors")).toBe("/foundations/colors");
     expect(categoryHref("components")).toBe("/components");
-    expect(categoryHref("motion")).toBe("/motion");
   });
 });

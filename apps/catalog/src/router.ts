@@ -11,8 +11,6 @@ export type Route =
   | { name: "graphic"; experiment: string }
   | { name: "components" }
   | { name: "component"; experiment: string }
-  | { name: "motion" }
-  | { name: "motionDetail"; experiment: string }
   | { name: "redirect"; to: string }
   | { name: "notfound" };
 
@@ -22,6 +20,8 @@ export const OLD_PATH_REDIRECTS: Record<string, string> = {
   "/icons": "/foundations/icons",
   "/graphics": "/foundations/graphics",
 };
+
+const RETIRED_PATHS = new Set(["/foundations/graphics/class-chapter-illustration"]);
 
 export function resolvePath(path: string): string {
   const normalized = path.replace(/\/+$/, "") || "/";
@@ -61,6 +61,7 @@ export function replaceLocation(to: string): void {
 
 export function matchRoute(path: string): Route {
   const normalized = path.replace(/\/+$/, "") || "/";
+  if (RETIRED_PATHS.has(normalized)) return { name: "notfound" };
   const redirected = OLD_PATH_REDIRECTS[normalized];
   if (redirected) return { name: "redirect", to: redirected };
   if (normalized === "/") return { name: "home" };
@@ -77,8 +78,5 @@ export function matchRoute(path: string): Route {
   if (normalized === "/components") return { name: "components" };
   const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
   if (component) return { name: "component", experiment: component[1] };
-  if (normalized === "/motion") return { name: "motion" };
-  const motion = normalized.match(/^\/motion\/([a-z0-9-]+)$/);
-  if (motion) return { name: "motionDetail", experiment: motion[1] };
   return { name: "notfound" };
 }

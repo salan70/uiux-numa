@@ -2,7 +2,9 @@
 
 .fiv-hybrid-root {
   max-width: 24rem;
-  font: 16px/1.5 system-ui, sans-serif;
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
   color: #1c1b1f;
 }
 

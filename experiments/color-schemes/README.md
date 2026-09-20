@@ -454,6 +454,18 @@ preview の state は `light` と `dark` の 2 つにする。
 - 380 色のうち 301 色は伝統色をそのまま使い、残りは色相を保って明度と彩度を変えた。
 - 多観点の評価を経ていない。brand fit、visual hierarchy、色覚の多様性での見え方は未評価である。
 
+2026-09-20 に、14 variant の面と本文を共通の無彩色へ変更した。
+ライトは白地と黒文字、ダークは黒地と白文字を基準にする。
+通常の罫線と意味色も variant 間で共通にした。
+
+variant 固有色は accent と focus に残す。
+accent は塗り、文字、罫線に使う。
+色付き文字と罫線には `accent-strong` または `accent-text` を使う。
+フォーム境界の `border-strong` は無彩色のまま使う。
+
+背景全体を variant 固有色で染める案は、成果より配色が先に見えるため却下した。
+すべてを無彩色にする案は、variant の用途と比較可能性が失われるため却下した。
+
 ## Rejected reasons
 
 最初の 4 variant（`cool-blue`、`warm-terracotta`、`vivid-violet`、`mono-ink`）は評価の前に却下した。

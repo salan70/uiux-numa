@@ -5,47 +5,47 @@
  */
 
 :root:has(.cs-sumi) {
-  --color-bg: #fbfaf5; /* 生成り色 */
-  --color-bg-subtle: #f3f3f2; /* 白練 */
-  --color-surface: #fffffc; /* 胡粉色 */
-  --color-border: #dcdddd; /* 白鼠 */
-  --color-border-strong: #7b7c7d; /* 鉛色 */
-  --color-text: #2b2b2b; /* 蝋色 */
-  --color-text-muted: #595857; /* 墨 */
+  --color-bg: oklch(0.985 0 0);
+  --color-bg-subtle: oklch(0.955 0 0);
+  --color-surface: oklch(1 0 0);
+  --color-border: oklch(0.9 0 0);
+  --color-border-strong: oklch(0.611 0 0);
+  --color-text: oklch(0.2 0 0);
+  --color-text-muted: oklch(0.501 0 0);
   --color-accent: #2b2b2b; /* 蝋色 */
   --color-accent-hover: #16160e; /* 暗黒色 */
   --color-on-accent: #fbfaf5; /* 生成り色 */
   --color-accent-strong: #2b2b2b; /* 蝋色 */
   --color-accent-subtle: #dddcd6; /* 絹鼠 */
-  --color-focus: #eb6101; /* 朱色 */
-  --color-success: #316745; /* 千歳緑 */
-  --color-success-subtle: #d6e9ca; /* 白緑 */
-  --color-warning: oklch(0.52 0.104 82); /* 山吹色 #f8b500 の明度と彩度を変えた色 */
-  --color-warning-subtle: #fff1cf; /* 鳥の子色 */
-  --color-danger: #b7282e; /* 茜色 */
-  --color-danger-subtle: #fef4f4; /* 桜色 */
+  --color-focus: #c94f00; /* 朱色を無彩色の面に合わせて暗くした色 */
+  --color-success: oklch(0.51 0.11 150);
+  --color-success-subtle: oklch(0.955 0.035 150);
+  --color-warning: oklch(0.523 0.107 75);
+  --color-warning-subtle: oklch(0.955 0.035 75);
+  --color-danger: oklch(0.538 0.154 27);
+  --color-danger-subtle: oklch(0.955 0.021 27);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:has(.cs-sumi) {
-    --color-bg: oklch(0.19 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
-    --color-bg-subtle: oklch(0.22 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
-    --color-surface: oklch(0.25 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
-    --color-border: #433d3c; /* 檳榔子染 */
-    --color-border-strong: #949495; /* 鼠色 */
-    --color-text: #fbfaf5; /* 生成り色 */
-    --color-text-muted: #a3a3a2; /* 薄墨色 */
+    --color-bg: oklch(0.16 0 0);
+    --color-bg-subtle: oklch(0.19 0 0);
+    --color-surface: oklch(0.215 0 0);
+    --color-border: oklch(0.32 0 0);
+    --color-border-strong: oklch(0.53 0 0);
+    --color-text: oklch(0.95 0 0);
+    --color-text-muted: oklch(0.639 0 0);
     --color-accent: #fffffc; /* 胡粉色 */
     --color-accent-hover: #dcdddd; /* 白鼠 */
     --color-on-accent: oklch(0.19 0 0); /* 蝋色 #2b2b2b の明度と彩度を変えた色 */
     --color-accent-strong: #fbfaf5; /* 生成り色 */
     --color-accent-subtle: #474a4d; /* 藍墨茶 */
     --color-focus: #eb6101; /* 朱色 */
-    --color-success: #68be8d; /* 若竹色 */
-    --color-success-subtle: oklch(0.3 0.05 154); /* 千歳緑 #316745 の明度と彩度を変えた色 */
-    --color-warning: #f8b500; /* 山吹色 */
-    --color-warning-subtle: #583822; /* 黒茶 */
-    --color-danger: #ee827c; /* 甚三紅 */
-    --color-danger-subtle: oklch(0.28 0.06 24); /* 茜色 #b7282e の明度と彩度を変えた色 */
+    --color-success: oklch(0.678 0.11 150);
+    --color-success-subtle: oklch(0.3 0.05 150);
+    --color-warning: oklch(0.686 0.11 75);
+    --color-warning-subtle: oklch(0.3 0.06 75);
+    --color-danger: oklch(0.697 0.154 27);
+    --color-danger-subtle: oklch(0.3 0.05 27);
   }
 }
