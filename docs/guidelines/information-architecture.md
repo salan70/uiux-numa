@@ -42,7 +42,6 @@ updated: 2026-09-20
 - 悪い例: トピックを選ぶと、一覧リンクだけが並ぶ中間画面を挟む。
 - 例外: 件数が数百件におよび、先頭の選定が難しい場合。
 - 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ### 形の違う中身を同じ枠に入れない
 
@@ -53,12 +52,12 @@ updated: 2026-09-20
 - 悪い例: すべての要素を同一寸法のカードの中に無理に押し込める。
 - 例外: 多様な形式を均一なサムネイルで並べる統合検索結果。
 - 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ### 1 件の置き場は 1 つに決め、決め方を固定する
 
 意図と根拠: 複数カテゴリにまたがる要素の置き場が曖昧だと迷いが生じる。
 優先順位を明確に定め、所属する場所を 1 つに固定する。
+多軸の分類を勧める Dan Brown の multiple classification とは意図して反対を採る。件数が少なく、分類を一望できるうちは単一の置き場の方が迷いが少ない。
 
 - 良い例: 領域の優先度順で最初に一致したトピックに割り当てる。
 - 悪い例: 同じ成果物が複数のトピックに重複して現れる。
@@ -75,7 +74,6 @@ updated: 2026-09-20
 - 悪い例: 更新のたびにナビの並び順が入れ替わる。
 - 例外: 更新順の閲覧そのものが主目的であるタイムライン。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ### 「その他」の分類を作らない
 
@@ -97,18 +95,17 @@ updated: 2026-09-20
 - 悪い例: 実寸見本の下に同じ内容の小さなプレビュー枠を重ねる。
 - 例外: 画面上部と下部の両方に配置すべき長いフォームの送信ボタン。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ### 詳細画面からの戻り先を 1 つにする
 
-意図と根拠: 閲覧履歴によって戻り先が変わると、現在地を見失いやすい。
-パンくず等で上位の階層を明示し、戻り先を 1 つに固定する。
+意図と根拠: 利用者の半数は上位の階層を通らずに詳細へ直接たどり着く。
+閲覧履歴に依存せず、パンくず等で上位の階層と戻り先を 1 つに固定して示す。
 
 - 良い例: トピック、成果物、案の階層に沿って 1 つ上の戻り先を示す。
 - 悪い例: 直前の履歴によってトップに戻ったり一覧に戻ったりする。
 - 例外: モーダルダイアログの閉じる操作。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
+- 出典: [Dan Brown: Eight Principles of Information Architecture](https://doi.org/10.1002/bult.2010.1720360605)
 
 ### 件数に見合った構造にする
 
@@ -119,7 +116,6 @@ updated: 2026-09-20
 - 悪い例: 14 件の一覧に並び替えや複数条件フィルターを設ける。
 - 例外: 数千件を超える大規模なデータ一覧。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ### 見本にはそれが何かを添える
 
@@ -130,7 +126,6 @@ updated: 2026-09-20
 - 悪い例: 見本だけが並び、書体名がどこにも書かれていない。
 - 例外: 装飾的な幾何学パターンなど、固有の仕様名を持たないもの。
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
-- 出典: [Eight Principles of Information Architecture](https://eightprinciples.com/)
 
 ## 確認項目
 
@@ -143,7 +138,7 @@ updated: 2026-09-20
 ## 出典
 
 - [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/): 組織化、ラベリング、ナビゲーション
-- [Dan Brown: Eight Principles of Information Architecture](https://eightprinciples.com/): 物体、選択、開示、見本、正面玄関、集中ナビゲーションの原則
+- [Dan Brown: Eight Principles of Information Architecture](https://doi.org/10.1002/bult.2010.1720360605): Bulletin of ASIS&T 36(6), 2010。本稿が引くのは front doors のみ。multiple classification は「1 件の置き場は 1 つに決め、決め方を固定する」と反対の立場を採る
 
 ## 判断
 
