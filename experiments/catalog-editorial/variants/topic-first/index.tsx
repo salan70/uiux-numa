@@ -639,7 +639,7 @@ function Feature({
             onClick={() => move(-1)}
           >
             <span aria-hidden="true">←</span>
-            {prev.label}
+            <span className="feature__step-name">{prev.label}</span>
           </button>
           <span className="feature__count">
             {index + 1} / {shown.length}
@@ -650,7 +650,7 @@ function Feature({
             aria-label={`次の配色 ${next.label}`}
             onClick={() => move(1)}
           >
-            {next.label}
+            <span className="feature__step-name">{next.label}</span>
             <span aria-hidden="true">→</span>
           </button>
         </p>
