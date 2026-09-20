@@ -1,0 +1,589 @@
+/* 案 index-ledger の造形。巻末索引と目次。
+   色は experiments/color-schemes の role をそのまま使い、この案では 1 色も作らない。
+   --color-* の実値は index.tsx が生成する <style> が入れる。
+   値の根拠は index.tsx の SPEC と rationale/index-ledger.md にある。 */
+
+.ed-root--ledger {
+  /* 実行基盤（platforms/web）の .runner-main の余白から切り離し、全画面で比較する。 */
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+
+  /* 文字。最大は token の title と同じ 1.5rem に留める。 */
+  --ed-title: var(--typography-title-font-size);
+  --ed-row: var(--typography-ui-font-size);
+  --ed-note: 0.8125rem;
+  --ed-micro: 0.6875rem;
+
+  /* 余白。すべて 0.5rem（8px）の倍数にする。 */
+  --ed-unit: 0.5rem;
+  --ed-row-pad: 0.75rem;
+  --ed-gutter: var(--space-page-inline, 1.5rem);
+  --ed-section: var(--space-section, 2.5rem);
+
+  /* 欄の幅。本文と欄外注を別の欄にする。 */
+  --ed-body: 44rem;
+  --ed-margin: 14rem;
+
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family-sans);
+  font-size: var(--ed-row);
+  line-height: var(--typography-ui-line-height);
+}
+
+.ed-root--ledger *,
+.ed-root--ledger *::before,
+.ed-root--ledger *::after {
+  box-sizing: border-box;
+}
+
+.ed-root--ledger :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ---- 版面 ---- */
+
+.ed-root--ledger .ed-sheet {
+  max-inline-size: calc(var(--ed-body) + var(--ed-gutter) + var(--ed-margin));
+  margin: 0 auto;
+  padding: var(--ed-section) var(--ed-gutter);
+}
+
+.ed-root--ledger .ed-sheet > * + * {
+  margin-block-start: var(--ed-section);
+}
+
+/* ---- 頭 ---- */
+
+.ed-root--ledger .ed-sheet__head {
+  padding-block-end: var(--ed-section);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__kicker {
+  margin: 0;
+  font-size: var(--ed-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__title {
+  margin: var(--ed-unit) 0 0;
+  font-size: var(--ed-title);
+  font-weight: 700;
+  line-height: var(--typography-title-line-height);
+}
+
+.ed-root--ledger .ed-sheet__hypothesis {
+  margin: var(--ed-unit) 0 0;
+  max-inline-size: 38em;
+  font-size: var(--ed-row);
+  line-height: var(--typography-body-line-height);
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__facts {
+  display: grid;
+  gap: 0;
+  margin: calc(var(--ed-unit) * 3) 0 0;
+}
+
+.ed-root--ledger .ed-sheet__facts > div {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: var(--ed-gutter);
+  padding-block: var(--ed-unit);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__facts dt {
+  font-size: var(--ed-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__facts dd {
+  margin: 0;
+  font-size: var(--ed-note);
+}
+
+/* ---- 節 ---- */
+
+.ed-root--ledger .ed-sheet__h2 {
+  margin: 0;
+  font-size: var(--ed-row);
+  font-weight: 700;
+  line-height: var(--typography-ui-line-height);
+  padding-block-end: var(--ed-unit);
+  border-block-end: 2px solid var(--color-text);
+}
+
+/* 節の題に通し番号を振る。索引の面なので、節にも番号がある。 */
+.ed-root--ledger .ed-sheet__section {
+  counter-increment: ed-section;
+}
+
+.ed-root--ledger .ed-sheet {
+  counter-reset: ed-section;
+}
+
+.ed-root--ledger .ed-sheet__h2::before {
+  content: counter(ed-section, decimal-leading-zero) "　";
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__note {
+  /* 節の説明は欄外注と同じ扱いにする。本文より前に説明を置かない方針の表れ。 */
+  margin: var(--ed-unit) 0 0;
+  max-inline-size: 38em;
+  font-size: var(--ed-note);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__section > :not(.ed-sheet__h2):not(.ed-sheet__note) {
+  margin-block-start: calc(var(--ed-unit) * 3);
+}
+
+/* ---- 配色の表 ---- */
+
+.ed-root--ledger .ed-sheet__table-wrap {
+  overflow-x: auto;
+}
+
+.ed-root--ledger .ed-sheet__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ed-note);
+  line-height: 1.6;
+}
+
+.ed-root--ledger .ed-sheet__table th,
+.ed-root--ledger .ed-sheet__table td {
+  padding: var(--ed-row-pad) var(--ed-gutter) var(--ed-row-pad) 0;
+  text-align: start;
+  vertical-align: top;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__table thead th {
+  font-size: var(--ed-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  border-block-end: 1px solid var(--color-text);
+  white-space: nowrap;
+}
+
+.ed-root--ledger .ed-sheet__table tbody th {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ed-root--ledger .ed-sheet__table tbody th code {
+  display: block;
+  margin-block-start: 0.25rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__intent-cell {
+  min-inline-size: 20rem;
+  max-inline-size: 28rem;
+}
+
+.ed-root--ledger .ed-sheet__swatch {
+  display: flex;
+  align-items: center;
+  gap: var(--ed-unit);
+}
+
+.ed-root--ledger .ed-sheet__chip {
+  display: block;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.ed-root--ledger code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--ed-micro);
+}
+
+.ed-root--ledger .ed-sheet__contrast {
+  display: grid;
+  gap: 0.125rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-root--ledger .ed-sheet__contrast-target {
+  font-size: var(--ed-micro);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__contrast-mark {
+  margin-inline-start: var(--ed-unit);
+}
+
+.ed-root--ledger .ed-sheet__contrast-row[data-pass="false"] {
+  font-weight: 700;
+  color: var(--color-danger);
+}
+
+.ed-root--ledger .ed-sheet__dash {
+  color: var(--color-text-muted);
+}
+
+/* ---- 文字の階梯 ---- */
+
+.ed-root--ledger .ed-sheet__scale {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__step {
+  display: grid;
+  grid-template-columns: 1fr var(--ed-margin);
+  column-gap: var(--ed-gutter);
+  padding-block: calc(var(--ed-unit) * 2);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__step-meta {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: grid;
+  gap: 0.125rem;
+  align-content: start;
+  margin: 0;
+  font-size: var(--ed-micro);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ed-root--ledger .ed-sheet__step-name {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ed-root--ledger .ed-sheet__step-sample {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.ed-root--ledger .ed-sheet__step-intent {
+  grid-column: 1;
+  grid-row: 2;
+  margin: var(--ed-unit) 0 0;
+  font-size: var(--ed-note);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ed-sheet__step-use {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ed-root--ledger .ed-sheet__step-use::after {
+  content: "　";
+}
+
+.ed-root--ledger .ed-sheet__measure {
+  margin-block-start: calc(var(--ed-unit) * 3);
+}
+
+.ed-root--ledger .ed-sheet__measure-body {
+  margin: var(--ed-unit) 0 0;
+  max-inline-size: 38em;
+  line-height: var(--typography-body-line-height);
+}
+
+/* ---- 余白 ---- */
+
+.ed-root--ledger .ed-sheet__space {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__space li {
+  display: grid;
+  grid-template-columns: 6rem 7rem 4rem 1fr;
+  align-items: center;
+  gap: var(--ed-gutter);
+  padding-block: var(--ed-row-pad);
+  border-block-end: 1px solid var(--color-border);
+  font-size: var(--ed-note);
+}
+
+.ed-root--ledger .ed-sheet__space-bar {
+  display: block;
+  block-size: 0.5rem;
+  background: var(--color-text);
+}
+
+.ed-root--ledger .ed-sheet__space-name {
+  font-weight: 700;
+}
+
+.ed-root--ledger .ed-sheet__space-value,
+.ed-root--ledger .ed-sheet__space-use {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- グリッド ---- */
+
+.ed-root--ledger .ed-sheet__grid {
+  display: grid;
+  grid-template-columns: var(--ed-body) var(--ed-gutter) var(--ed-margin);
+  block-size: 4rem;
+}
+
+.ed-root--ledger .ed-sheet__grid span:nth-child(1) {
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.ed-root--ledger .ed-sheet__grid span:nth-child(3) {
+  background: color-mix(in srgb, var(--color-text) 4%, transparent);
+  border-inline-start: 1px solid var(--color-border);
+}
+
+/* ---- 決めてほしいこと ---- */
+
+.ed-root--ledger .ed-sheet__open {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ed-open;
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .ed-sheet__open li {
+  counter-increment: ed-open;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--ed-unit);
+  padding-block: var(--ed-row-pad);
+  border-block-end: 1px solid var(--color-border);
+  font-size: var(--ed-note);
+  line-height: 1.7;
+}
+
+.ed-root--ledger .ed-sheet__open li::before {
+  content: counter(ed-open, decimal-leading-zero);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+/* ---- 部品 ---- */
+
+.ed-root--ledger .parts {
+  display: grid;
+  gap: calc(var(--ed-unit) * 4);
+}
+
+.ed-root--ledger .parts__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ed-gutter);
+  margin: 0;
+}
+
+/* 索引そのものが主要部品。行が 1 作品で、行全体がリンクになる。 */
+.ed-root--ledger .ledger {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ed-row);
+}
+
+.ed-root--ledger .ledger th,
+.ed-root--ledger .ledger td {
+  padding: var(--ed-row-pad) var(--ed-unit) var(--ed-row-pad) 0;
+  text-align: start;
+  border-block-end: 1px solid var(--color-border);
+  vertical-align: baseline;
+}
+
+.ed-root--ledger .ledger thead th {
+  font-size: var(--ed-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  border-block-end: 1px solid var(--color-text);
+}
+
+.ed-root--ledger .ledger__no,
+.ed-root--ledger .ledger__date {
+  inline-size: 1%;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.ed-root--ledger .ledger tbody th {
+  inline-size: 99%;
+  font-weight: 400;
+}
+
+/* 目次のリーダー罫。題名と右の列を点線でつなぐ。 */
+.ed-root--ledger .ledger__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ed-unit);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ed-root--ledger .ledger__leader {
+  flex: 1;
+  border-block-end: 1px dotted var(--color-border-strong);
+  transform: translateY(-0.25em);
+}
+
+.ed-root--ledger .ledger__note {
+  color: var(--color-text-muted);
+  font-size: var(--ed-note);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ed-root--ledger .ledger tbody tr:hover .ledger__title {
+    font-weight: 700;
+  }
+
+  .ed-root--ledger .ledger tbody tr:hover .ledger__title::before {
+    content: "→";
+    position: absolute;
+    margin-inline-start: -1.25rem;
+    font-weight: 400;
+  }
+
+  .ed-root--ledger .btn:hover,
+  .ed-root--ledger .filter__item:hover {
+    border-color: var(--color-text);
+  }
+}
+
+.ed-root--ledger .ledger__title {
+  position: relative;
+}
+
+/* 操作部品は罫でだけ示す。索引の面に塗りを足さない。 */
+.ed-root--ledger .btn {
+  appearance: none;
+  min-block-size: 2.25rem;
+  padding: 0 var(--ed-gutter);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ed-root--ledger .filter {
+  display: inline-flex;
+}
+
+.ed-root--ledger .filter__item {
+  appearance: none;
+  min-block-size: 2.25rem;
+  padding: 0 var(--ed-row-pad);
+  border: 1px solid var(--color-border);
+  background: none;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: var(--ed-note);
+  cursor: pointer;
+}
+
+.ed-root--ledger .filter__item + .filter__item {
+  border-inline-start: 0;
+}
+
+/* 現在の絞り込みは、下辺の罫を消してタブの形にする。 */
+.ed-root--ledger .filter__item[aria-pressed="true"] {
+  color: var(--color-text);
+  font-weight: 700;
+  border-block-end-color: transparent;
+}
+
+.ed-root--ledger .marginalia {
+  display: grid;
+  grid-template-columns: 1fr var(--ed-margin);
+  column-gap: var(--ed-gutter);
+  margin: 0;
+  padding-block-start: var(--ed-row-pad);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.ed-root--ledger .marginalia__note {
+  font-size: var(--ed-note);
+  color: var(--color-text-muted);
+}
+
+/* ---- 狭い幅 ---- */
+
+@media (width <= 52rem) {
+  .ed-root--ledger .ed-sheet__step {
+    grid-template-columns: 1fr;
+  }
+
+  .ed-root--ledger .ed-sheet__step-meta {
+    grid-column: 1;
+    grid-row: 3;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: var(--ed-gutter);
+    margin-block-start: var(--ed-unit);
+    overflow-x: auto;
+  }
+
+  .ed-root--ledger .ed-sheet__space li {
+    grid-template-columns: 6rem 1fr;
+    row-gap: 0.25rem;
+  }
+
+  .ed-root--ledger .ed-sheet__space-use {
+    grid-column: 1 / -1;
+  }
+
+  .ed-root--ledger .ed-sheet__grid,
+  .ed-root--ledger .marginalia {
+    grid-template-columns: 1fr;
+  }
+
+  .ed-root--ledger .ed-sheet__grid span:nth-child(2),
+  .ed-root--ledger .ed-sheet__grid span:nth-child(3) {
+    display: none;
+  }
+
+  /* 狭い幅では種別と役割の列を落とす。行の題名と日付だけ残す。 */
+  .ed-root--ledger .ledger thead th:nth-child(3),
+  .ed-root--ledger .ledger thead th:nth-child(4),
+  .ed-root--ledger .ledger tbody td:nth-child(3),
+  .ed-root--ledger .ledger tbody td:nth-child(4) {
+    display: none;
+  }
+}
+
+.ed-root--ledger .ed-sheet__ref-cell {
+  min-inline-size: 9rem;
+}

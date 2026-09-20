@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(10);
-    expect(catalog.liveVariants).toHaveLength(54);
+    expect(catalog.experiments).toHaveLength(11);
+    expect(catalog.liveVariants).toHaveLength(59);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/typography/typography.tokens.json",
@@ -67,10 +67,18 @@ describe("catalog inventory", () => {
       "product-ui-typography/line-seed-minimal",
       "soft-component-kit/hairline-float",
     ]);
-    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
+    // status が decided 以外の Experiment の variant はすべて exploring になる。
+    expect(
+      ids("exploring").every(
+        (id) => id.startsWith("hako-feature-icons/") || id.startsWith("catalog-editorial/"),
+      ),
+    ).toBe(true);
     expect(ids("exploring")).toHaveLength(
-      catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.variantIds.length ??
+      exploringSlugs().reduce(
+        (total, slug) =>
+          total + (catalog.experiments.find((item) => item.slug === slug)?.variantIds.length ?? 0),
         0,
+      ),
     );
     expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.status).toBe(
       "decided",
@@ -95,6 +103,9 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );
+    expect(
+      catalog.experiments.find((item) => item.slug === "catalog-editorial")?.category,
+    ).toBeNull();
   });
 
   it("adopted に Variants 表にない ID があると失敗する", () => {
@@ -107,6 +118,12 @@ describe("catalog inventory", () => {
 function slugs(category: string): string[] {
   return catalog.experiments
     .filter((experiment) => experiment.category === category)
+    .map((experiment) => experiment.slug);
+}
+
+function exploringSlugs(): string[] {
+  return catalog.experiments
+    .filter((experiment) => experiment.status !== "decided")
     .map((experiment) => experiment.slug);
 }
 
