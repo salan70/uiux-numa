@@ -268,7 +268,6 @@ function TopicScreen({ nav }: { nav: ScreenApi }) {
   const topic = topicById(nav.filter) ?? TOPICS[0];
   return (
     <section className="index" aria-labelledby="index-head">
-      <p className="index__kicker">トピック</p>
       <h1 className="section-title" id="index-head" tabIndex={-1} data-screen-heading>
         {topic.label}
       </h1>
@@ -414,10 +413,10 @@ function colorOf(scheme: Scheme, mode: "light" | "dark", role: string): SchemeCo
 /** 帯 1 本。同じ値の役割はここでまとまる。 */
 type Band = { value: string; name: string; roles: string[] };
 
-function cardColors(scheme: Scheme, mode: "light" | "dark"): Band[] {
+function mergeRoles(scheme: Scheme, mode: "light" | "dark", roles: string[]): Band[] {
   const out: Band[] = [];
   const byValue = new Map<string, Band>();
-  for (const role of CARD_ROLES) {
+  for (const role of roles) {
     const color = colorOf(scheme, mode, role);
     if (!color) continue;
     const found = byValue.get(color.value);
@@ -432,6 +431,37 @@ function cardColors(scheme: Scheme, mode: "light" | "dark"): Band[] {
   return out;
 }
 
+function cardColors(scheme: Scheme, mode: "light" | "dark"): Band[] {
+  return mergeRoles(scheme, mode, CARD_ROLES);
+}
+
+/**
+ * 大きな帯は 2 段にして、カードより多くの役割を出す。
+ * 上段は主役と文字、下段は面と線と意味色。カードで外した役割もここで見られる。
+ * accent、text、bg だけ幅を 2 倍にする。配色の性格を決める 3 色なので、
+ * 大きさでも他と区別する。
+ */
+const HERO_ROWS: string[][] = [
+  ["accent", "accent-hover", "accent-strong", "accent-subtle", "on-accent", "text", "text-muted"],
+  [
+    "bg",
+    "bg-subtle",
+    "surface",
+    "border",
+    "border-strong",
+    "focus",
+    "success",
+    "warning",
+    "danger",
+  ],
+];
+
+const HERO_WEIGHT: Record<string, number> = { accent: 2, text: 2, bg: 2 };
+
+function heroWeight(band: Band): number {
+  return Math.max(...band.roles.map((role) => HERO_WEIGHT[role] ?? 1));
+}
+
 /** hex をコピーする。clipboard が無い環境でも落とさない。 */
 function useCopy(): { copied: string | null; copy: (value: string) => void } {
   const [copied, setCopied] = useState<string | null>(null);
@@ -442,6 +472,21 @@ function useCopy(): { copied: string | null; copy: (value: string) => void } {
       .catch(() => setCopied(null));
   };
   return { copied, copy };
+}
+
+/**
+ * 詳細を開く印。
+ * 線幅、端点、live area を 1 値に固定する規則は docs/principles/icon-set-consistency-by-few-parameters.md に従う。
+ * 24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2。
+ */
+function DetailIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5.25" />
+      <circle cx="12" cy="7.75" r="0.75" className="icon__dot" />
+    </svg>
+  );
 }
 
 function ColorsTopic() {
@@ -478,7 +523,6 @@ function ColorsTopic() {
               ダーク
             </button>
           </div>
-          <p className="palette-bar__note">帯を押すと hex をコピーする。</p>
         </div>
 
         <ul className="palettes">
@@ -510,9 +554,10 @@ function ColorsTopic() {
                   type="button"
                   className="palette__more"
                   aria-haspopup="dialog"
+                  aria-label={`${scheme.label} の役割をすべて見る`}
                   onClick={() => setOpen(scheme.id)}
                 >
-                  役割をすべて見る
+                  <DetailIcon />
                 </button>
               </div>
             </li>
@@ -549,41 +594,64 @@ function Feature({
 }) {
   const [index, setIndex] = useState(0);
   const scheme = shown[index] ?? shown[0];
-  const move = (step: number) =>
-    setIndex((current) => (current + step + shown.length) % shown.length);
+  const at = (step: number) => (index + step + shown.length) % shown.length;
+  const move = (step: number) => setIndex(at(step));
+  const prev = shown[at(-1)];
+  const next = shown[at(1)];
 
   return (
     <section className="feature" aria-labelledby="feature-name">
-      <ul className="feature__bands">
-        {cardColors(scheme, mode).map((band) => (
-          <li className="feature__band" key={band.value} style={{ background: band.value }}>
-            <button
-              type="button"
-              className="feature__hit"
-              style={{ color: inkOn(band.value) }}
-              onClick={() => copy(band.value)}
-            >
-              <span className="feature__hex">{band.value}</span>
-              <span className="feature__role">{band.roles.join(" / ")}</span>
-              <span className="feature__jp">{band.name}</span>
-            </button>
-          </li>
+      <div className="feature__bands">
+        {HERO_ROWS.map((roles, row) => (
+          <ul className="feature__row" key={row}>
+            {mergeRoles(scheme, mode, roles).map((band) => (
+              <li
+                className="feature__band"
+                key={band.value}
+                style={{ background: band.value, flexGrow: heroWeight(band) }}
+              >
+                <button
+                  type="button"
+                  className="feature__hit"
+                  style={{ color: inkOn(band.value) }}
+                  onClick={() => copy(band.value)}
+                >
+                  <span className="feature__hex">{band.value}</span>
+                  <span className="feature__role">{band.roles.join(" / ")}</span>
+                  <span className="feature__jp">{band.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         ))}
-      </ul>
+      </div>
       <div className="feature__head">
         <p className="feature__name" id="feature-name">
           <span className="feature__label">{scheme.label}</span>
           <code>{scheme.id}</code>
         </p>
+        {/* 送り先が何かを、方向ではなく配色の名前で示す。 */}
         <p className="feature__nav">
-          <button type="button" className="feature__step" onClick={() => move(-1)}>
-            前の配色
+          <button
+            type="button"
+            className="feature__step"
+            aria-label={`前の配色 ${prev.label}`}
+            onClick={() => move(-1)}
+          >
+            <span aria-hidden="true">←</span>
+            {prev.label}
           </button>
           <span className="feature__count">
             {index + 1} / {shown.length}
           </span>
-          <button type="button" className="feature__step" onClick={() => move(1)}>
-            次の配色
+          <button
+            type="button"
+            className="feature__step"
+            aria-label={`次の配色 ${next.label}`}
+            onClick={() => move(1)}
+          >
+            {next.label}
+            <span aria-hidden="true">→</span>
           </button>
         </p>
       </div>
