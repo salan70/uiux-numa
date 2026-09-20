@@ -3,7 +3,7 @@
 // 画面の状態は query に持つ。再読込で画面が消えず、1 画面ずつ撮影できる。
 import { useCallback, useEffect, useState } from "react";
 
-export const SCREENS = ["top", "list", "detail", "sheet"] as const;
+export const SCREENS = ["top", "list", "detail", "sheet", "guide"] as const;
 export type Screen = (typeof SCREENS)[number];
 
 export type ScreenState = {
