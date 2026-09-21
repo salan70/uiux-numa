@@ -1,4 +1,5 @@
 import { ALL_GUIDELINES, renderInline, type Principle, type Rule } from "../content/guidelines";
+import { renderSentences } from "../components/Sentences";
 
 /** 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。 */
 function goToRule(domId: string) {
@@ -7,18 +8,6 @@ function goToRule(domId: string) {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   target.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
   target.focus();
-}
-
-/** 文ごとに分けて包む。1 行に収まる間は続けて読ませ、折り返す時だけ文の切れ目で改行する。 */
-function renderSentences(text: string) {
-  return text
-    .split(/(?<=。)/)
-    .filter((part) => part.length > 0)
-    .map((sentence, i) => (
-      <span key={i} className="guide-sentence">
-        {renderInline(sentence)}
-      </span>
-    ));
 }
 
 // 節の名は英語にする。文書名とナビが英語なので、節だけ日本語だと語が混じる。

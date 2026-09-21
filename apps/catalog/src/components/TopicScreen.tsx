@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { topicById, type TopicId } from "../content/topics";
+import { renderSentences } from "./Sentences";
 
 /**
  * トピックの画面の枠。題名とリードだけを持ち、中身は topic ごとに描き分ける。
@@ -13,7 +14,7 @@ export function TopicScreen({ id, children }: { id: TopicId; children: ReactNode
       <h1 className="section-title" id="index-head" tabIndex={-1} data-screen-heading>
         {topic.label}
       </h1>
-      <p className="index__lead">{topic.lead}</p>
+      <p className="index__lead">{renderSentences(topic.lead)}</p>
       {children}
     </section>
   );

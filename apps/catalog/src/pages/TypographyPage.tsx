@@ -4,6 +4,7 @@ import { catalog } from "../content/collect";
 import { TopicScreen } from "../components/TopicScreen";
 import { workHref } from "../content/topics";
 import { typefaceName } from "../content/typeface";
+import { renderSentences } from "../components/Sentences";
 
 /** 素の値に入れる字形。仮名・片仮名・漢字・欧字・数字を 1 つずつ並べる。 */
 const GLYPHS = "あア亜 Aa 0123";
@@ -38,7 +39,7 @@ export function TypographyPage() {
               <p className="role__sample">
                 <TokenSample token={token} />
               </p>
-              <p className="role__desc">{token.description}</p>
+              <p className="role__desc">{renderSentences(token.description)}</p>
             </div>
             <dl className="role__spec">
               {compositeSpec(token.resolvedValue).map((item) => (
