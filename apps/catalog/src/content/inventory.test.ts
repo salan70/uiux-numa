@@ -12,7 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(6);
-    expect(catalog.liveVariants).toHaveLength(24);
+    expect(catalog.liveVariants).toHaveLength(22);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -106,6 +106,7 @@ describe("catalog inventory", () => {
   it("adopted 件数と variant のステータスを検査する", () => {
     expect(ids("adopted")).toEqual([
       "button/pill-action",
+      "card/zoom-cover",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",

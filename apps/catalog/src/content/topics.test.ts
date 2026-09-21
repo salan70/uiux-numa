@@ -42,6 +42,7 @@ describe("ナビのリンク先", () => {
 
   it("Components の成果物は部品ごとの詳細へつなぐ", () => {
     expect(workHref("components", "button")).toBe("/components/button");
+    expect(workHref("components", "card")).toBe("/components/card");
   });
 
   it("tokens のトピックは成果物を持たない", () => {

@@ -3,6 +3,11 @@ import "../../../../experiments/button/shared/button.css";
 import "../../../../experiments/button/variants/pill-action/variant.css";
 import { Button } from "../../../../experiments/button/shared/Button";
 import { Showcase } from "../../../../experiments/button/shared/Showcase";
+import "../../../../experiments/card/shared/card.css";
+import "../../../../experiments/card/variants/zoom-cover/variant.css";
+import { Card } from "../../../../experiments/card/shared/Card";
+import { IconsCover, TypographyCover } from "../../../../experiments/card/shared/covers";
+import { Showcase as CardShowcase } from "../../../../experiments/card/shared/Showcase";
 
 /**
  * Components に載せる部品の正本。1 件ごとに一覧の見本と詳細の本文を持つ。
@@ -26,6 +31,12 @@ export const CATALOG_COMPONENTS: CatalogComponent[] = [
     Preview: ButtonPreview,
     Detail: () => <Showcase variantClass="button-pill-action" embedded />,
   },
+  {
+    slug: "card",
+    title: "Card",
+    Preview: CardPreview,
+    Detail: () => <CardShowcase variantClass="card-zoom-cover" embedded />,
+  },
 ];
 
 function ButtonPreview() {
@@ -35,6 +46,15 @@ function ButtonPreview() {
       <Button appearance="secondary">続ける</Button>
       <Button appearance="quiet">続ける</Button>
       <Button appearance="danger">削除</Button>
+    </div>
+  );
+}
+
+function CardPreview() {
+  return (
+    <div className="card-zoom-cover card-catalog-preview">
+      <Card href="/foundations/typography" title="Typography" cover={<TypographyCover />} />
+      <Card href="/foundations/icons" title="Icons" cover={<IconsCover />} />
     </div>
   );
 }
