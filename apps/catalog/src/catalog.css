@@ -1047,7 +1047,7 @@ body {
 .app-shell .token-table__kind {
   display: block;
   margin-block-start: var(--space-100);
-  font-size: var(--cat-label);
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--cat-muted);
