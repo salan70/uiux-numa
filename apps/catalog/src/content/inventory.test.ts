@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(6);
-    expect(catalog.liveVariants).toHaveLength(22);
+    expect(catalog.experiments).toHaveLength(7);
+    expect(catalog.liveVariants).toHaveLength(25);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -64,8 +64,11 @@ describe("catalog inventory", () => {
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("components")).toEqual(["button", "card"]);
-    // 判断済みで掲載しない Experiment は削除した。残る Experiment はすべて topic を持つ。
-    expect(catalog.experiments.every((item) => item.topic !== null)).toBe(true);
+    // 判断済みで掲載しない Experiment は削除した。
+    // topic を持たないのは、Catalog 自体の見た目を比べている Experiment だけにする。
+    expect(
+      catalog.experiments.filter((item) => item.topic === null).map((item) => item.slug),
+    ).toEqual(["catalog-home-gallery"]);
   });
 
   it("token を正本のファイル単位で束ねる", () => {

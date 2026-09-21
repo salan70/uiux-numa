@@ -1,0 +1,90 @@
+/* 横に流れる帯を 3 段重ねる。段の高さを揃え、タイルの幅で大きさの差を出す。
+   流す速さと向きは index.tsx が持つ。ここは帯の形と、動きを止めたときの見え方を持つ。 */
+
+.gallery-marquee {
+  --mq-height: 13rem;
+  --mq-gap: var(--space-300);
+}
+
+@media (width < 40rem) {
+  .gallery-marquee {
+    --mq-height: 10rem;
+  }
+}
+
+.mq-rows {
+  display: grid;
+  gap: var(--mq-gap);
+}
+
+/* 帯は横スクロールの容器にし、スクロールバーは隠す。両端は背景へ溶かす。 */
+.mq-row {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--space-1000),
+    #000 calc(100% - var(--space-1000)),
+    transparent
+  );
+}
+
+.mq-row::-webkit-scrollbar {
+  display: none;
+}
+
+.mq-track {
+  display: flex;
+  inline-size: max-content;
+  /* focus の枠が帯の上下で切れないよう、枠の分だけ内側に余白を持つ。 */
+  padding-block: var(--space-200);
+}
+
+/* 1 周の長さは群の幅になる。末尾にも間隔を持たせ、複製との継ぎ目を他の間隔と揃える。 */
+.mq-group {
+  display: flex;
+  gap: var(--mq-gap);
+  padding: 0 var(--mq-gap) 0 0;
+  list-style: none;
+}
+
+.mq-group > li {
+  display: flex;
+  block-size: var(--mq-height);
+}
+
+.gallery-marquee .gtile--s {
+  inline-size: calc(var(--mq-height) * 0.9);
+}
+
+.gallery-marquee .gtile--w {
+  inline-size: calc(var(--mq-height) * 1.6);
+}
+
+.gallery-marquee .gtile--l {
+  inline-size: calc(var(--mq-height) * 2);
+}
+
+/* 止めたときは小さな見本の動きも止める。 */
+.gallery-marquee:has(.mq-rows[data-paused]) .gv-motion__dot {
+  animation-play-state: paused;
+}
+
+/* 動きを減らす設定では流さない。複製を外し、帯を指とトラックパッドで送る普通の横スクロールにする。 */
+@media (prefers-reduced-motion: reduce) {
+  .mq-group--clone,
+  .mq-control {
+    display: none;
+  }
+
+  .mq-row {
+    scrollbar-width: thin;
+    mask-image: none;
+  }
+
+  .mq-track {
+    padding-inline: clamp(var(--space-400), 4vw, var(--space-1000));
+  }
+}
