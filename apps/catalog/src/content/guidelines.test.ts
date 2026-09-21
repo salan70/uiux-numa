@@ -42,7 +42,7 @@ function doc(body = BODY, front = FRONT): string {
   return front + body;
 }
 
-describe("parseGuideline（新書式）", () => {
+describe("parseGuideline", () => {
   it("目的、コア、Tips を読む", () => {
     const guideline = parseGuideline("test", doc());
     expect(guideline.title).toBe("Test");
@@ -52,8 +52,6 @@ describe("parseGuideline（新書式）", () => {
     ]);
     expect(guideline.tips[0].applies).toBe("foundation");
     expect(guideline.tips[0].cores).toEqual(["配置を動かさない"]);
-    expect(guideline.scope).toBeNull();
-    expect(guideline.checklist).toEqual([]);
   });
 
   it("frontmatter が欠けていれば落とす", () => {
@@ -136,24 +134,14 @@ describe("ALL_GUIDELINES", () => {
     }
   });
 
-  it("新書式の文書は Tips に適用と関連するコアを持つ", () => {
-    const states = ALL_GUIDELINES.find((item) => item.slug === "states-and-feedback");
-    if (!states) throw new Error("states-and-feedback がない");
-    expect(states.scope).toBeNull();
-    for (const tip of states.tips) {
-      expect(tip.applies).not.toBeNull();
-      expect(tip.cores.length).toBeGreaterThan(0);
-      for (const core of tip.cores) {
-        expect(states.core.some((item) => item.title === core)).toBe(true);
+  it("どの文書も Tips に適用と関連するコアを持つ", () => {
+    for (const guideline of ALL_GUIDELINES) {
+      for (const tip of guideline.tips) {
+        expect(tip.cores.length).toBeGreaterThan(0);
+        for (const core of tip.cores) {
+          expect(guideline.core.some((item) => item.title === core)).toBe(true);
+        }
       }
     }
-  });
-
-  it("未移行の文書は旧書式のまま読める", () => {
-    const color = ALL_GUIDELINES.find((item) => item.slug === "color");
-    if (!color) throw new Error("color がない");
-    expect(color.scope).not.toBeNull();
-    expect(color.checklist.length).toBeGreaterThan(0);
-    expect(color.tips[0].applies).toBeNull();
   });
 });

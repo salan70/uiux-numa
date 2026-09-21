@@ -1,10 +1,4 @@
-import {
-  ALL_GUIDELINES,
-  renderInline,
-  resolveHref,
-  type Principle,
-  type Rule,
-} from "../content/guidelines";
+import { ALL_GUIDELINES, renderInline, type Principle, type Rule } from "../content/guidelines";
 
 /** 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。 */
 function goToRule(domId: string) {
@@ -52,58 +46,9 @@ export function GuidelinesPage({ slug }: { slug: string }) {
       <div className="guide-layout">
         <div className="guide-layout__main">
           <GuideProse id="guide-purpose" title="Purpose" body={guideline.purpose} />
-          {guideline.scope && <GuideProse id="guide-scope" title="Scope" body={guideline.scope} />}
 
           <CoreLayer layer={CORE_LAYER} cores={guideline.core} />
           <TipsLayer layer={TIPS_LAYER} rules={guideline.tips} />
-
-          {/* Checklist と Sources は未移行の文書だけが持つ。 */}
-          {guideline.checklist.length > 0 && (
-            <section className="guide-block" aria-labelledby="guide-checklist-head">
-              <div className="work-head">
-                <h2 className="work-head__title" id="guide-checklist-head">
-                  Checklist
-                </h2>
-              </div>
-              <ul className="guide-checklist">
-                {guideline.checklist.map((item, idx) => (
-                  <li key={idx} className="guide-checklist__item">
-                    <span className="guide-checklist__icon" aria-hidden="true" />
-                    <span>{renderInline(item)}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {guideline.sources.length > 0 && (
-            <section className="guide-block" aria-labelledby="guide-sources-head">
-              <div className="work-head">
-                <h2 className="work-head__title" id="guide-sources-head">
-                  Sources
-                </h2>
-              </div>
-              <ul className="guide-sources">
-                {guideline.sources.map((src, idx) => (
-                  <li key={idx} className="guide-sources__item">
-                    {src.url ? (
-                      <a
-                        href={resolveHref(src.url)}
-                        className="guide-link"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {src.text}
-                      </a>
-                    ) : (
-                      <span className="guide-strong">{src.text}</span>
-                    )}
-                    {src.description && <span>: {src.description}</span>}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
         </div>
 
         {/* 索引は本文の右へ置く。読んでいる途中でも規則の全体が見える。 */}

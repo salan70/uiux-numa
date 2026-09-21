@@ -94,13 +94,7 @@ const KNOWN_SECTIONS = ["目的", "コア", "Tips"] as const;
 const LEGACY_SECTIONS = ["目的", "適用範囲", "コア", "Tips", "確認項目", "出典", "判断"] as const;
 
 // 旧書式のまま残っている文書。移行するたびに外し、空になったら旧書式の分岐ごと消す。
-const LEGACY_SLUGS: readonly string[] = [
-  "ux-writing",
-  "information-architecture",
-  "design-four-principles",
-  "accessibility",
-  "color",
-];
+const LEGACY_SLUGS: readonly string[] = [];
 
 const VALID_APPLIES: readonly Applies[] = ["foundation", "module"];
 
