@@ -17,6 +17,10 @@ adopted:
   - hairline-float
 ---
 
+> 判断後に実装と preview を削除し、参照される記録だけを `docs/records/` へ移した。
+> Experiment の実装は Git 履歴にある。
+> Components の掲載方針は [Components と Button の ADR](../../decisions/2026-09-21-components-button-only.md) が置き換える。
+
 ## Problem
 
 Catalog の部品は要素セレクタの上書きと角丸 `0.25rem` で作っている。
@@ -61,7 +65,7 @@ variant で変える軸は角丸、面の階層、影、動きの 4 つである
 ### 削除した variant
 
 判断後にコードと専用の preview を削除した。
-理由は Rejected reasons、削除の判断と復元手順は [ADR](../../docs/decisions/2026-09-21-prune-decided-experiments.md) にある。
+削除の判断と復元方針は [ADR](../../decisions/2026-09-21-prune-decided-experiments.md) にある。
 
 - `tonal-layers`: 影も線もなく、色段差 3 層で階層が読める。変えた軸: 面の 3 層、選択は weight と ring。
 - `soft-pillow`: やわらかい 2 層の影で、面を層として浮かせられる。変えた軸: 線なし、弱いばね、press の縮小。
@@ -104,5 +108,5 @@ variant で変える軸は角丸、面の階層、影、動きの 4 つである
 
 ## Related patterns / assets
 
-- [soft-component-kit ADR](../../docs/decisions/2026-09-19-soft-component-kit.md)
-- [Catalog ホスト ADR](../../docs/decisions/2026-09-19-catalog-host.md)
+- [soft-component-kit ADR](../../decisions/2026-09-19-soft-component-kit.md)
+- [Catalog ホスト ADR](../../decisions/2026-09-19-catalog-host.md)

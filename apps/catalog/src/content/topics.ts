@@ -75,8 +75,9 @@ export function topicHref(id: TopicId): string {
   return topic.href;
 }
 
-/** 成果物の詳細 URL。topic の下に slug を置く。 */
+/** 成果物への URL。Components は詳細画面を持たず topic に集約する。 */
 export function workHref(topic: TopicId, slug: string): string {
+  if (topic === "components") return topicHref(topic);
   return `${topicHref(topic)}/${slug}`;
 }
 

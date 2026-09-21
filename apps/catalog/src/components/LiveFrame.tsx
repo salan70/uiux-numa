@@ -14,8 +14,11 @@ export function LiveFrame({ work, variant, tall, caption = "updated" }: Props) {
   const id = variant ?? defaultVariant(work);
   const src = previewPathFor(work, id);
   if (!src) return <p className="empty">この variant は描けない。</p>;
+  const className = ["live", tall && "live--tall", work.slug === "button" && "live--button"]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <div className={tall ? "live live--tall" : "live"}>
+    <div className={className}>
       <iframe className="live__frame" src={src} title={`${work.title} の ${id}`} loading="lazy" />
       <p className="live__caption">
         <span className="live__id">{id}</span>

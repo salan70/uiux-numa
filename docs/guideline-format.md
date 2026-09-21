@@ -100,7 +100,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 数字の表示幅を最大値で固定し、エラー文の行を `min-height` で予約する。
 - 悪い例: エラー文の要素ごと取り除き、下の送信ボタンをせり上がらせる。
 - 例外: 画面端まで flex で広がる流動的なグリッド配置。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](records/form-inline-validation/README.md)
 ```
 
 | 項目          | 必須 | 内容                                                                              |

@@ -32,11 +32,15 @@ describe("ナビのリンク先", () => {
     }
   });
 
-  it("掲載する成果物の詳細 URL はすべてルートに存在する", () => {
+  it("掲載する成果物のリンク先 URL はすべてルートに存在する", () => {
     for (const work of catalog.experiments) {
       if (!work.topic) continue;
       expect(matchRoute(workHref(work.topic, work.slug)).name).not.toBe("notfound");
     }
+  });
+
+  it("Components の成果物はトピック本文へ直接つなぐ", () => {
+    expect(workHref("components", "button")).toBe("/components");
   });
 
   it("tokens のトピックは成果物を持たない", () => {
@@ -51,7 +55,7 @@ describe("isCurrentPath", () => {
   });
 
   it("詳細を開いていてもトピックを現在地にする", () => {
-    expect(isCurrentPath(topicHref("components"), "/components/soft-component-kit")).toBe(true);
+    expect(isCurrentPath(topicHref("icons"), "/foundations/icons/class-tech-icons")).toBe(true);
     expect(isCurrentPath(topicHref("icons"), "/components")).toBe(false);
   });
 });

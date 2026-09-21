@@ -116,8 +116,8 @@ describe("resolveHref", () => {
     expect(resolveHref("../../docs/principles/x.md")).toBe(
       "https://github.com/salan70/uiux-numa/blob/main/docs/principles/x.md",
     );
-    expect(resolveHref("../../experiments/form-inline-validation/README.md")).toBe(
-      "https://github.com/salan70/uiux-numa/blob/main/experiments/form-inline-validation/README.md",
+    expect(resolveHref("../records/form-inline-validation/README.md")).toBe(
+      "https://github.com/salan70/uiux-numa/blob/main/docs/records/form-inline-validation/README.md",
     );
   });
 });

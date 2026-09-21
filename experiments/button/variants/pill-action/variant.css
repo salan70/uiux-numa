@@ -1,0 +1,62 @@
+.button-pill-action {
+  --button-motion-duration: 160ms;
+  --button-motion-ease: ease-out;
+}
+
+.button-pill-action .button {
+  border-radius: var(--radius-pill);
+}
+
+.button-pill-action .button:focus-visible {
+  border-radius: var(--radius-pill);
+}
+
+.button-pill-action .button--secondary {
+  --button-bg: transparent;
+  --button-fg: var(--color-on-surface);
+}
+
+.button-pill-action .button--quiet {
+  --button-bg: transparent;
+  --button-fg: var(--color-primary-text);
+  --button-border: transparent;
+  min-inline-size: auto;
+  min-height: auto;
+  padding: 0;
+  font-weight: var(--font-weight-regular);
+}
+
+.button-pill-action .button--danger {
+  --button-bg: transparent;
+  --button-fg: var(--color-error);
+  --button-border: var(--color-error);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button-pill-action .button--quiet:not(:disabled):hover {
+    transform: none;
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.button-pill-action .button.button--quiet:not(:disabled):active {
+  transform: none;
+}
+
+.button-pill-action .button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.button-pill-action .button:disabled {
+  filter: grayscale(0.25);
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-pill-action .button:not(:disabled):hover,
+  .button-pill-action .button:not(:disabled):active {
+    transform: none;
+  }
+}

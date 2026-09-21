@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-19
+- 置き換え: Components の掲載、Button の詳細 URL と表示方法は [Components と Button の ADR](2026-09-21-components-button-only.md) が置き換える。
 - 参照: [Catalog ホスト](2026-09-19-catalog-host.md)、[判断履歴](2026-09-13-decision-records.md)
 
 ## 背景
@@ -15,7 +16,7 @@
 
 ## 決定
 
-- 部品一式の見本比較の正本は、この ADR と Experiment `soft-component-kit` とする。
+- 部品一式の見本比較の正本は、この ADR と Experiment の記録とする。
 - 公開 Catalog の見た目は `hairline-float` とする。
 - 挙動の土台は `@base-ui/react` 1.8.0 とする。
 - 版は exact pin とし、`apps/catalog` と `platforms/web` の両方へ入れる。
@@ -27,8 +28,8 @@
 - preview の配色は variant 側で `localStorage` を読んで追従する。
 - `preview-main.tsx` で配色を一律適用しない。
 
-採用の記録は Experiment README の Decision と Rejected reasons にある。
-却下した 3 案の variant は比較記録として残す。
+採用の記録は [Experiment の記録](../records/soft-component-kit/README.md) の Decision と Rejected reasons にある。
+却下理由は残し、判断後に variant のコードを削除する。
 
 ## 理由
 
@@ -57,7 +58,7 @@ Radix UI や React Aria は、Catalog に載せる土台として重い。
 
 ## 影響
 
-Experiment は `experiments/soft-component-kit/` に置く。
+判断と評価の記録は [Experiment の記録](../records/soft-component-kit/README.md) に移した。
 `forms-input-ux` を domains に含め、Catalog の部品ページへ載せる。
-公開 Catalog は `apps/catalog/src/components/` と `catalog.css` を `hairline-float` へ合わせる。
-Kit 見本の 4 案は比較記録として残す。
+公開 Catalog の共有 chrome は `apps/catalog/src/components/` と `catalog.css` に置く。
+Components の Button 表示は [新しい ADR](2026-09-21-components-button-only.md) に従う。

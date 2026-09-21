@@ -56,7 +56,7 @@ updated: 2026-09-21
 - 良い例:「変更を保存」「アカウントを作成」
 - 悪い例:「はい」「OK」「決定」
 - 例外: 検索アイコン単体など、慣習が確立した単一目的のボタン。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.6（AA）](https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html)
 
 ### エラー文には起きたことと直し方を両方書く
@@ -68,7 +68,7 @@ updated: 2026-09-21
 - 良い例:「パスワードが短すぎます。8 文字以上の英数字を入力してください。」
 - 悪い例:「入力が正しくありません。」
 - 例外: ID とパスワードのどちらが誤りか伏せるべき認証失敗。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 3.3.1 / 3.3.3 達成基準](https://www.w3.org/WAI/WCAG22/quickref/#error-identification)
 
 ### 入力の形式はプレースホルダーではなく例で示す
