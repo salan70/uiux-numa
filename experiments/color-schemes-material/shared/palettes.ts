@@ -69,7 +69,7 @@ export const schemes: Scheme[] = [
   {
     id: "kingyo",
     label: "きんぎょ",
-    primary: { name: "朱色", hex: "#eb6101" },
+    primary: { name: "鮮やかな朱色", hex: "#ff7600" },
     secondary: { name: "藍色", hex: "#165e83" },
     tertiary: { name: "萌黄", hex: "#aacf53" },
   },
@@ -83,7 +83,7 @@ export const schemes: Scheme[] = [
 ];
 
 const families = ["primary", "secondary", "tertiary"] as const;
-const inkDark = "#201d1b";
+const inkDark = "#120d09";
 const inkLight = "#fffdf9";
 
 export function makePalette(scheme: Scheme, mode: Mode): Palette {
