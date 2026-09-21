@@ -13,6 +13,7 @@ import {
   ROLE_GROUPS,
 } from "../content/contrast";
 import {
+  bandInk,
   cardColors,
   codeInk,
   colorLabel,
@@ -20,13 +21,13 @@ import {
   hexOf,
   heroWeight,
   HERO_ROWS,
-  inkOn,
   labelInk,
   mergeRoles,
   type Mode,
 } from "../content/palette";
 import type { ColorScheme } from "../content/schemes";
 import { replaceLocation } from "../router";
+import { readSchemeChoice } from "../theme";
 import { NotFoundPage } from "./NotFoundPage";
 
 /** ポップアップで確かめる組み合わせ。閾値と相手の役割は ROLE_CONTRAST が正本。 */
@@ -73,7 +74,7 @@ export function ColorsPage({ openScheme }: { openScheme: string | null }) {
   };
 
   return (
-    <TopicScreen id="colors">
+    <TopicScreen id="colors" lead={false}>
       <div className="topic-body">
         <Feature mode={mode} shown={shown} copy={copy} />
 
@@ -87,7 +88,7 @@ export function ColorsPage({ openScheme }: { openScheme: string | null }) {
                       <button
                         type="button"
                         className="band__hit"
-                        style={{ color: inkOn(band.value) }}
+                        style={{ color: bandInk(scheme, mode, band) }}
                         onClick={() => copy(hexOf(band.value))}
                       >
                         <span className="band__info">
@@ -144,7 +145,13 @@ function Feature({
   shown: ColorScheme[];
   copy: (value: string) => void;
 }) {
-  const [index, setIndex] = useState(0);
+  // 最初は、いまカタログに当てている配色を見せる。
+  const [index, setIndex] = useState(() =>
+    Math.max(
+      0,
+      shown.findIndex((item) => item.id === readSchemeChoice()),
+    ),
+  );
   const scheme = shown[index] ?? shown[0];
   const at = (step: number) => (index + step + shown.length) % shown.length;
   const move = (step: number) => setIndex(at(step));
@@ -165,7 +172,7 @@ function Feature({
                 <button
                   type="button"
                   className="feature__hit"
-                  style={{ color: inkOn(band.value) }}
+                  style={{ color: bandInk(scheme, mode, band) }}
                   onClick={() => copy(hexOf(band.value))}
                 >
                   <span className="feature__hex">{hexOf(band.value)}</span>
