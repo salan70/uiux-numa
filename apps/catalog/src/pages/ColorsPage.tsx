@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { DetailIcon } from "../components/icons";
+import { Button } from "../../../../experiments/button/shared/Button";
+import { ArrowIcon, DetailIcon } from "../components/icons";
 import { Link } from "../components/Link";
 import { TopicScreen } from "../components/TopicScreen";
 import { useCopy } from "../components/useCopy";
@@ -193,28 +194,28 @@ function Feature({
         </p>
         {/* 送り先が何かを、方向ではなく配色の名前で示す。 */}
         <p className="feature__nav">
-          <button
-            type="button"
+          <Button
+            appearance="secondary"
             className="feature__step"
             aria-label={`前の配色 ${prev.label}`}
+            leadingIcon={<ArrowIcon direction="prev" />}
             onClick={() => move(-1)}
           >
-            <span aria-hidden="true">←</span>
             <span className="feature__step-name">{prev.label}</span>
-          </button>
+          </Button>
           {/* 桁数を揃える。1 / 10 と 10 / 10 で幅が変わると、両隣のボタンが動く。 */}
           <span className="feature__count">
             {String(index + 1).padStart(String(shown.length).length, "0")} / {shown.length}
           </span>
-          <button
-            type="button"
+          <Button
+            appearance="secondary"
             className="feature__step"
             aria-label={`次の配色 ${next.label}`}
+            trailingIcon={<ArrowIcon direction="next" />}
             onClick={() => move(1)}
           >
             <span className="feature__step-name">{next.label}</span>
-            <span aria-hidden="true">→</span>
-          </button>
+          </Button>
         </p>
       </div>
     </section>
@@ -278,14 +279,9 @@ function SchemeDialog({
               </span>
               <code style={{ color: codeInk(scheme, mode) }}>{scheme.id}</code>
             </p>
-            <button
-              type="button"
-              className="sheet-dialog__close"
-              autoFocus
-              onClick={() => ref.current?.close()}
-            >
+            <Button appearance="secondary" autoFocus onClick={() => ref.current?.close()}>
               閉じる
-            </button>
+            </Button>
           </div>
           <SchemeDetail scheme={scheme} mode={mode} copy={copy} />
         </div>

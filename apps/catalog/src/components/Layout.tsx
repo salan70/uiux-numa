@@ -1,4 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
+import "../../../../experiments/button/shared/button.css";
+import "../../../../experiments/button/variants/pill-action/variant.css";
+import "../../../../experiments/card/shared/card.css";
+import "../../../../experiments/card/variants/zoom-cover/variant.css";
 import { SITE_TITLE } from "../site";
 import { Sidebar, SidebarToggle } from "./Sidebar";
 
@@ -48,8 +52,12 @@ export function Layout({ path, title, children }: Props) {
     });
   };
 
+  // 採用 variant の class を根に置き、Catalog 自身の Button と Card にも採用実装の見た目を効かせる。
   return (
-    <div className="app-shell" data-sidebar={collapsed ? "collapsed" : "open"}>
+    <div
+      className="app-shell button-pill-action card-zoom-cover"
+      data-sidebar={collapsed ? "collapsed" : "open"}
+    >
       <a className="skip" href="#main">
         本文へスキップ
       </a>

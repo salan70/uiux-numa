@@ -183,6 +183,11 @@
   color: var(--color-on-surface, #242424);
 }
 
+/* 置かれた画面の見出しと段落の余白を持ち込まない。文字の高さを固定しているので、余白があると題名が枠の外へ押し出される。 */
+.card :where(h3, p) {
+  margin: 0;
+}
+
 .card__frame {
   order: -1;
   overflow: hidden;

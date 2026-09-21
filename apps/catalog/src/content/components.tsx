@@ -1,12 +1,8 @@
 import type { ComponentType } from "react";
-import "../../../../experiments/button/shared/button.css";
-import "../../../../experiments/button/variants/pill-action/variant.css";
 import { Button } from "../../../../experiments/button/shared/Button";
 import { Showcase } from "../../../../experiments/button/shared/Showcase";
-import "../../../../experiments/card/shared/card.css";
-import "../../../../experiments/card/variants/zoom-cover/variant.css";
 import { Card } from "../../../../experiments/card/shared/Card";
-import { IconsCover, TypographyCover } from "../../../../experiments/card/shared/covers";
+import { ColorsCover } from "../../../../experiments/card/shared/covers";
 import { Showcase as CardShowcase } from "../../../../experiments/card/shared/Showcase";
 
 /**
@@ -18,7 +14,7 @@ export type CatalogComponent = {
   slug: string;
   /** 部品の名前。Experiment の題名は検討の名前なので、Catalog ではこちらを見出しにする。 */
   title: string;
-  /** 一覧のカードに置く見本。操作させない飾りとして描く。 */
+  /** 一覧の Card のカバーに置く見本。Card が操作させない飾りとして描く。 */
   Preview: ComponentType;
   /** 詳細ページの本文。 */
   Detail: ComponentType;
@@ -41,7 +37,7 @@ export const CATALOG_COMPONENTS: CatalogComponent[] = [
 
 function ButtonPreview() {
   return (
-    <div className="button-pill-action">
+    <div className="component-preview-buttons">
       <Button appearance="primary">続ける</Button>
       <Button appearance="secondary">続ける</Button>
       <Button appearance="quiet">続ける</Button>
@@ -52,9 +48,14 @@ function ButtonPreview() {
 
 function CardPreview() {
   return (
-    <div className="card-zoom-cover card-catalog-preview">
-      <Card href="/foundations/typography" title="Typography" cover={<TypographyCover />} />
-      <Card href="/foundations/icons" title="Icons" cover={<IconsCover />} />
+    <div className="component-preview-card">
+      <Card
+        href="/foundations/colors"
+        title="Colors"
+        meta="1 件"
+        description="役割ごとに決めた色の組。"
+        cover={<ColorsCover />}
+      />
     </div>
   );
 }

@@ -1,9 +1,34 @@
+import type { ComponentType } from "react";
+import { Card } from "../../../../experiments/card/shared/Card";
+import {
+  ColorsCover,
+  ComponentsCover,
+  IconsCover,
+  TokensCover,
+  TypographyCover,
+} from "../../../../experiments/card/shared/covers";
 import { LiveFrame } from "../components/LiveFrame";
 import { Link } from "../components/Link";
 import { Meta } from "../components/Meta";
 import { dot } from "../components/work";
 import { catalog, worksByUpdated, worksInTopic } from "../content/collect";
-import { topicById, topicHref, workHref, TOPICS, type Topic } from "../content/topics";
+import {
+  topicById,
+  topicHref,
+  workHref,
+  TOPICS,
+  type Topic,
+  type TopicId,
+} from "../content/topics";
+
+/** トピックの入口に置くカバー。成果物の iframe ではなく、リポジトリの実物を縮小して置く。 */
+const TOPIC_COVERS: Record<TopicId, ComponentType> = {
+  colors: ColorsCover,
+  typography: TypographyCover,
+  tokens: TokensCover,
+  components: ComponentsCover,
+  icons: IconsCover,
+};
 
 /** 最後に更新した成果物を主役にし、その下にトピックの入口を並べる。 */
 export function HomePage() {
@@ -43,26 +68,17 @@ export function HomePage() {
         </h2>
         <ul className="topic-list">
           {TOPICS.map((topic) => {
-            const sample = topic.id === "tokens" ? null : worksInTopic(topic.id)[0];
+            const Cover = TOPIC_COVERS[topic.id];
             return (
-              <li className="topic" key={topic.id}>
-                <Link href={topicHref(topic.id)} className="topic__hit">
-                  <span className="topic__label">{topic.label}</span>
-                  <span className="topic__count">{countOf(topic)}</span>
-                </Link>
-                <p className="topic__lead">{topic.lead}</p>
-                {sample ? (
-                  <LiveFrame work={sample} />
-                ) : (
-                  <div className="token-strip">
-                    {catalog.tokenFamilies.map((family) => (
-                      <p className="token-strip__row" key={family.id}>
-                        <span className="token-strip__name">{family.label}</span>
-                        <span className="token-strip__count">{family.tokens.length}</span>
-                      </p>
-                    ))}
-                  </div>
-                )}
+              <li key={topic.id}>
+                <Card
+                  href={topicHref(topic.id)}
+                  title={topic.label}
+                  meta={countOf(topic)}
+                  description={topic.lead}
+                  cover={<Cover />}
+                  linkAs={Link}
+                />
               </li>
             );
           })}

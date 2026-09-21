@@ -754,16 +754,9 @@ body {
 
 /* ---- ここから topic-first の差分。入口をトピックにしたことで要る規則だけ ---- */
 
-@media (hover: hover) and (pointer: fine) {
-  .app-shell .topic__hit:hover .topic__label {
-    color: var(--cat-accent-text);
-  }
-}
-
 /* ---- 部品 ---- */
 
-/* 一覧は見本と名前のカードにする。見本は飾りで、押す先は名前のリンクだけにする。
-   リンクの ::after をカード全面へ広げ、カードのどこを押しても詳細へ移れるようにする。 */
+/* 一覧は採用済みの Card で並べ、部品の見本はカバーに置く。 */
 .app-shell .component-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
@@ -773,86 +766,28 @@ body {
   list-style: none;
 }
 
-.app-shell .component-card {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr;
+/* Card は 1 行に収まらない文字を … で切る。grid の項目が既定の min-width: auto のままだと、
+   切る前の文字幅まで項目が広がり、狭い画面で横にはみ出す。 */
+.app-shell .component-cards > li,
+.app-shell .topic-list > li {
   min-inline-size: 0;
-  border: var(--border-width-thin) solid var(--cat-line);
-  border-radius: var(--cat-radius);
-  overflow: hidden;
-  transition: border-color var(--cat-duration) var(--easing-standard);
-}
-
-.app-shell .component-card:has(.component-card__link:focus-visible) {
-  outline: var(--border-width-thick) solid var(--cat-focus);
-  outline-offset: 2px;
-}
-
-.app-shell .component-card__preview {
-  display: grid;
-  place-items: center;
-  min-block-size: 10rem;
-  padding: var(--space-600) var(--space-400);
-  background: var(--cat-surface);
 }
 
 /* 4 役割を 2 行 2 列に置く。折り返しに任せると幅次第で 3 と 1 に割れる。 */
-.app-shell .component-card__preview > * {
+.app-shell .component-preview-buttons {
   display: grid;
   grid-template-columns: repeat(2, max-content);
   justify-items: center;
   gap: var(--space-200);
 }
 
-/* Card の見本は幅を持たないので、2 枚を見本の幅いっぱいに等分する。 */
-.app-shell .component-card__preview > .card-catalog-preview {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-items: stretch;
-  inline-size: 100%;
-  gap: var(--space-400);
-}
-
-.app-shell .component-card__body {
-  display: grid;
-  gap: var(--space-100);
-  align-content: start;
-  padding: var(--space-400);
-  border-block-start: var(--border-width-thin) solid var(--cat-line);
-}
-
-.app-shell .component-card__title {
-  margin: 0;
-  font-size: var(--cat-item);
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.app-shell .component-card__link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-
-/* 枠はカードの outline が持つ。リンク自身に出すと名前の周りにも二重に出る。 */
-.app-shell .component-card__link:focus-visible {
-  outline: none;
-}
-
-.app-shell .component-card__lead {
-  margin: 0;
-  font-size: var(--cat-label);
-  color: var(--cat-muted);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .app-shell .component-card:hover {
-    border-color: var(--cat-accent-text);
-  }
-
-  .app-shell .component-card:hover .component-card__title {
-    color: var(--cat-accent-text);
-  }
+/* Card の見本は補足、題名、要約の 3 行を揃えた 1 枚にする。
+   文字の箱は 3 行分の高さを常に取るので、題名だけだと下が空いて枠が上へ寄って見える。
+   文字は token の rem で決まり幅に追従しないので、カバーの中に余白を残すよう全体を縮める。
+   transform で縮めると、カバーの中身を拡大する hover と打ち消し合う。 */
+.app-shell .component-preview-card {
+  inline-size: 12rem;
+  zoom: 0.7;
 }
 
 /* Card の枠はカードの outline が持つ。全体の :focus-visible がリンクにも枠を出すと二重になる。 */
@@ -1019,80 +954,6 @@ body {
   gap: var(--cat-section) var(--space-600);
 }
 
-.app-shell .topic {
-  display: grid;
-  gap: var(--space-200);
-  align-content: start;
-  min-inline-size: 0;
-}
-
-.app-shell .topic__hit {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-400);
-  min-block-size: var(--cat-tap);
-  padding-block-end: var(--space-200);
-  border-block-end: var(--border-width-thick) solid var(--cat-text);
-}
-
-.app-shell .topic__label {
-  font-size: var(--cat-h2);
-  font-weight: 700;
-  line-height: 1.3;
-  transition: color var(--cat-duration) var(--easing-standard);
-}
-
-.app-shell .topic__count {
-  flex: none;
-  font-size: var(--cat-label);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--cat-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.app-shell .topic__lead {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--cat-muted);
-}
-
-/* token のトピックには標本がないので、族と件数の帯を置く。 */
-.app-shell .token-strip {
-  display: grid;
-  gap: 0;
-  padding: var(--space-300) var(--space-400);
-  border: var(--border-width-thin) solid var(--cat-line);
-  border-radius: var(--cat-radius);
-  background: var(--cat-surface);
-  block-size: 16rem;
-  align-content: start;
-}
-
-.app-shell .token-strip__row {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-400);
-  margin: 0;
-  padding-block: var(--space-200);
-  font-size: 0.875rem;
-}
-
-.app-shell .token-strip__row + .token-strip__row {
-  border-block-start: var(--border-width-thin) solid var(--cat-line);
-}
-
-.app-shell .token-strip__name {
-  font-weight: 700;
-}
-
-.app-shell .token-strip__count {
-  color: var(--cat-muted);
-  font-variant-numeric: tabular-nums;
-}
-
 /* ---- トピックの画面 ---- */
 
 .app-shell .index .section-title {
@@ -1252,10 +1113,6 @@ body {
 @media (width <= 40rem) {
   .app-shell .topic-list {
     grid-template-columns: 1fr;
-  }
-
-  .app-shell .token-strip {
-    block-size: auto;
   }
 }
 
@@ -1713,25 +1570,13 @@ body {
 /* 幅は内容によらず固定にする。配色名の字数で送りのボタンが伸び縮みすると、
    次を押すたびにボタンの位置が動く。 */
 .app-shell .feature__step {
-  appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-150);
   inline-size: 8rem;
-  min-block-size: var(--cat-tap);
-  padding: 0 var(--space-300);
-  border: var(--border-width-thin) solid var(--cat-line-strong);
-  border-radius: var(--cat-radius);
-  background: none;
-  color: var(--cat-text);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    color var(--cat-duration) var(--easing-standard),
-    border-color var(--cat-duration) var(--easing-standard);
+}
+
+/* 長い配色名は幅を広げず … で切る。ラベルの箱が縮めないと名前の span が切れない。 */
+.app-shell .feature__step .button__label {
+  display: flex;
+  min-inline-size: 0;
 }
 
 .app-shell .feature__step-name {
@@ -1840,7 +1685,6 @@ body {
     opacity: 1;
   }
 
-  .app-shell .feature__step:hover,
   .app-shell .palette__more:hover {
     color: var(--cat-accent-text);
     border-color: var(--cat-accent-text);
@@ -1920,6 +1764,12 @@ body {
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* Button の中の印は Button の icon 枠（1em）に合わせる。 */
+.app-shell .button .icon {
+  inline-size: 1em;
+  block-size: 1em;
 }
 
 .app-shell .icon__dot {
@@ -2187,30 +2037,6 @@ body {
 .app-shell .sheet-dialog__label {
   font-size: var(--cat-h2);
   font-weight: 700;
-}
-
-.app-shell .sheet-dialog__close {
-  appearance: none;
-  min-block-size: var(--cat-tap);
-  padding: 0 0.875rem;
-  border: var(--border-width-thin) solid var(--cat-line-strong);
-  border-radius: var(--cat-radius);
-  background: none;
-  color: var(--cat-text);
-  font: inherit;
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    color var(--cat-duration) var(--easing-standard),
-    border-color var(--cat-duration) var(--easing-standard);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .app-shell .sheet-dialog__close:hover {
-    color: var(--cat-accent-text);
-    border-color: var(--cat-accent-text);
-  }
 }
 
 @media (width <= 40rem) {
