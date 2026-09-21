@@ -74,6 +74,7 @@
 }
 
 .card-showcase__eyebrow,
+.card-showcase__lead,
 .card-showcase__spec > p,
 .card-showcase__tokens {
   color: var(--color-on-surface-variant, #666);
@@ -103,7 +104,8 @@
 }
 
 /* Button の見本と同じく、左に名前と説明と token、右に実物を置く行で並べる。 */
-.card-showcase__section > h2 {
+.card-showcase__lead {
+  margin-block-start: var(--space-100);
   padding-block-end: var(--space-300);
   border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
 }
