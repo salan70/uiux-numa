@@ -6,61 +6,90 @@ export type ContrastPair = {
   minimum: 4.5 | 3;
 };
 
-/** 役割の意味で束ねる。全 19 役割がいずれかの群に入る。 */
+/** 役割の意味で束ねる。全 24 役割がいずれかの群に入る。並びは experiments/color-schemes-material/shared/ColorShowcase.tsx に揃える。 */
 export const ROLE_GROUPS = [
-  { id: "surface", label: "面", roles: ["bg", "bg-subtle", "surface"] },
-  { id: "line", label: "線", roles: ["border", "border-strong", "focus"] },
-  { id: "text", label: "文字", roles: ["text", "text-muted"] },
   {
-    id: "accent",
-    label: "強調",
-    roles: ["accent", "accent-hover", "accent-strong", "accent-subtle", "on-accent"],
+    id: "primary",
+    label: "主色",
+    roles: ["primary", "on-primary", "primary-text", "primary-container", "on-primary-container"],
   },
   {
-    id: "semantic",
-    label: "意味",
-    roles: ["success", "success-subtle", "warning", "warning-subtle", "danger", "danger-subtle"],
+    id: "secondary",
+    label: "副色",
+    roles: ["secondary", "on-secondary", "secondary-container", "on-secondary-container"],
   },
+  {
+    id: "tertiary",
+    label: "第三色",
+    roles: ["tertiary", "on-tertiary", "tertiary-container", "on-tertiary-container"],
+  },
+  {
+    id: "surface",
+    label: "面・線",
+    roles: [
+      "background",
+      "surface",
+      "on-surface",
+      "surface-container",
+      "surface-variant",
+      "on-surface-variant",
+      "outline",
+      "focus",
+    ],
+  },
+  { id: "status", label: "状態", roles: ["success", "warning", "error"] },
 ] as const;
 
+/** 画面へ 1 行で出す代表の組み合わせ。規則の正本は palettes.ts:paletteContrastFailures()。 */
 export const ROLE_CONTRAST: Record<string, { against: string; minimum: 4.5 | 3 } | undefined> = {
-  text: { against: "bg", minimum: 4.5 },
-  "text-muted": { against: "bg", minimum: 4.5 },
-  "on-accent": { against: "accent", minimum: 4.5 },
-  "accent-strong": { against: "bg", minimum: 4.5 },
-  success: { against: "success-subtle", minimum: 4.5 },
-  warning: { against: "warning-subtle", minimum: 4.5 },
-  danger: { against: "danger-subtle", minimum: 4.5 },
-  "border-strong": { against: "bg", minimum: 3 },
-  focus: { against: "bg", minimum: 3 },
+  "on-surface": { against: "surface", minimum: 4.5 },
+  "on-surface-variant": { against: "surface-variant", minimum: 4.5 },
+  "on-primary": { against: "primary", minimum: 4.5 },
+  "on-secondary": { against: "secondary", minimum: 4.5 },
+  "on-tertiary": { against: "tertiary", minimum: 4.5 },
+  "on-primary-container": { against: "primary-container", minimum: 4.5 },
+  "on-secondary-container": { against: "secondary-container", minimum: 4.5 },
+  "on-tertiary-container": { against: "tertiary-container", minimum: 4.5 },
+  "primary-text": { against: "background", minimum: 4.5 },
+  success: { against: "surface", minimum: 4.5 },
+  warning: { against: "surface", minimum: 4.5 },
+  error: { against: "surface", minimum: 4.5 },
+  outline: { against: "background", minimum: 3 },
+  focus: { against: "background", minimum: 3 },
 };
 
+const SURFACES = ["background", "surface", "surface-container", "surface-variant"];
+const FAMILIES = ["primary", "secondary", "tertiary"];
+
+/**
+ * 全 scheme が満たす組み合わせ。palettes.ts:paletteContrastFailures() と同じ規則を持つ。
+ * 生成側は throw で止め、こちらは表示前に検査する。片方だけ直すと、Catalog が読めない値を描く。
+ */
 export const CONTRAST_PAIRS: ContrastPair[] = [
-  { foreground: "text", background: "bg", minimum: 4.5 },
-  { foreground: "text", background: "bg-subtle", minimum: 4.5 },
-  { foreground: "text", background: "surface", minimum: 4.5 },
-  { foreground: "text-muted", background: "bg", minimum: 4.5 },
-  { foreground: "text-muted", background: "bg-subtle", minimum: 4.5 },
-  { foreground: "text-muted", background: "surface", minimum: 4.5 },
-  { foreground: "on-accent", background: "accent", minimum: 4.5 },
-  { foreground: "on-accent", background: "accent-hover", minimum: 4.5 },
-  { foreground: "accent-strong", background: "bg", minimum: 4.5 },
-  { foreground: "accent-strong", background: "bg-subtle", minimum: 4.5 },
-  { foreground: "accent-strong", background: "surface", minimum: 4.5 },
-  { foreground: "accent-strong", background: "accent-subtle", minimum: 4.5 },
-  { foreground: "focus", background: "bg", minimum: 3 },
-  { foreground: "focus", background: "bg-subtle", minimum: 3 },
-  { foreground: "focus", background: "surface", minimum: 3 },
-  { foreground: "border-strong", background: "bg", minimum: 3 },
-  { foreground: "border-strong", background: "bg-subtle", minimum: 3 },
-  { foreground: "border-strong", background: "surface", minimum: 3 },
-  { foreground: "success", background: "success-subtle", minimum: 4.5 },
-  { foreground: "success", background: "surface", minimum: 4.5 },
-  { foreground: "success", background: "bg", minimum: 4.5 },
-  { foreground: "warning", background: "warning-subtle", minimum: 4.5 },
-  { foreground: "warning", background: "surface", minimum: 4.5 },
-  { foreground: "danger", background: "danger-subtle", minimum: 4.5 },
-  { foreground: "danger", background: "surface", minimum: 4.5 },
+  ...FAMILIES.flatMap((family): ContrastPair[] => [
+    { foreground: `on-${family}`, background: family, minimum: 4.5 },
+    {
+      foreground: `on-${family}-container`,
+      background: `${family}-container`,
+      minimum: 4.5,
+    },
+  ]),
+  ...["background", "surface", "surface-container"].map(
+    (surface): ContrastPair => ({ foreground: "on-surface", background: surface, minimum: 4.5 }),
+  ),
+  { foreground: "on-surface-variant", background: "surface-variant", minimum: 4.5 },
+  ...SURFACES.flatMap((surface): ContrastPair[] => [
+    { foreground: "outline", background: surface, minimum: 3 },
+    { foreground: "focus", background: surface, minimum: 3 },
+    { foreground: "primary-text", background: surface, minimum: 4.5 },
+  ]),
+  ...["success", "warning", "error"].flatMap((status): ContrastPair[] =>
+    ["surface", "surface-variant"].map((surface) => ({
+      foreground: status,
+      background: surface,
+      minimum: 4.5,
+    })),
+  ),
 ];
 
 export function parseCssColor(value: string): Rgb {

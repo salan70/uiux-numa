@@ -269,7 +269,8 @@ export const catalog = loadCatalog();
  * 却下した案は experiments/color-schemes の記録に残っている。
  */
 export function adoptedSchemes(): ColorScheme[] {
-  const adopted = catalog.experiments.find((item) => item.slug === "color-schemes")?.adopted ?? [];
+  const adopted =
+    catalog.experiments.find((item) => item.slug === "color-schemes-material")?.adopted ?? [];
   if (adopted.length === 0) return catalog.schemes;
   return catalog.schemes.filter((item) => adopted.includes(item.id));
 }

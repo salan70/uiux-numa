@@ -30,7 +30,14 @@ import { replaceLocation } from "../router";
 import { NotFoundPage } from "./NotFoundPage";
 
 /** ポップアップで確かめる組み合わせ。閾値と相手の役割は ROLE_CONTRAST が正本。 */
-const DIALOG_PAIRS = ["text", "text-muted", "on-accent", "border-strong", "focus"];
+const DIALOG_PAIRS = [
+  "on-surface",
+  "on-surface-variant",
+  "on-primary",
+  "primary-text",
+  "outline",
+  "focus",
+];
 
 /**
  * 配色の一覧。coolors のパレットカードを参考にする。
@@ -280,7 +287,7 @@ function SchemeDialog({
   );
 }
 
-/** ポップアップの中身。19 役割すべてと、主要な組み合わせのコントラスト。 */
+/** ポップアップの中身。24 役割すべてと、主要な組み合わせのコントラスト。 */
 function SchemeDetail({
   scheme,
   mode,

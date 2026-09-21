@@ -12,40 +12,51 @@ import type { ColorScheme, SchemeColor } from "./schemes";
 export type Mode = "light" | "dark";
 
 /**
- * カードの帯に出す役割と、その並び。配色ごとに値が変わる役割だけを出す。
- * 文字、線、地、意味色は 14 案すべてで同じ値なので、並べてもカードの差にならない。
- * 差になるのは accent 系と focus、on-accent の 6 役割だけで、配色の性格もここに出る。
+ * カードの帯に出す役割と、その並び。配色ごとに性格が出る役割だけを出す。
+ * 3 系統の基準色が配色の名前そのものなので、まずこれを並べる。
+ * 残りは container と、面の上に置く文字と focus。面と状態色はカードでは出さない。
  */
 export const CARD_ROLES = [
-  "accent",
-  "accent-hover",
-  "accent-strong",
-  "accent-subtle",
+  "primary",
+  "secondary",
+  "tertiary",
+  "primary-container",
+  "primary-text",
   "focus",
-  "on-accent",
 ];
 
 /**
  * 大きな帯は 2 段にして、カードより多くの役割を出す。
- * 上段は主役と文字、下段は面と線と意味色。カードで外した役割もここで見られる。
+ * 上段は 3 系統、下段は面と線と状態色。カードで外した役割もここで見られる。
  */
 export const HERO_ROWS: string[][] = [
-  ["accent", "accent-hover", "accent-strong", "accent-subtle", "on-accent", "text", "text-muted"],
   [
-    "bg",
-    "bg-subtle",
+    "primary",
+    "on-primary",
+    "primary-container",
+    "secondary",
+    "secondary-container",
+    "tertiary",
+    "tertiary-container",
+    "primary-text",
+  ],
+  [
+    "background",
     "surface",
-    "border",
-    "border-strong",
+    "surface-container",
+    "surface-variant",
+    "on-surface",
+    "on-surface-variant",
+    "outline",
     "focus",
     "success",
     "warning",
-    "danger",
+    "error",
   ],
 ];
 
-// accent、text、bg だけ幅を 2 倍にする。配色の性格を決める 3 色なので、大きさでも他と区別する。
-const HERO_WEIGHT: Record<string, number> = { accent: 2, text: 2, bg: 2 };
+// primary、background、on-surface だけ幅を 2 倍にする。配色の性格を決める 3 色なので、大きさでも他と区別する。
+const HERO_WEIGHT: Record<string, number> = { primary: 2, background: 2, "on-surface": 2 };
 
 export function heroWeight(band: Band): number {
   return Math.max(...band.roles.map((role) => HERO_WEIGHT[role] ?? 1));
@@ -139,7 +150,7 @@ export function colorOf(scheme: ColorScheme, mode: Mode, role: string): SchemeCo
 
 /**
  * 配色の名に当てる文字色。
- * その配色の色を使い、地（bg）に対して読めない値だけ順に次の候補へ落とす。
+ * その配色の色を使い、地（background）に対して読めない値だけ順に次の候補へ落とす。
  * 新しい色は作らない。候補がどれも足りなければ、比が最大の候補を使う。
  */
 export function schemeInk(
@@ -148,7 +159,8 @@ export function schemeInk(
   roles: string[],
   minimum: 4.5 | 3,
 ): string | undefined {
-  const paper = colorOf(scheme, mode, "bg")?.value ?? (mode === "dark" ? "#000000" : "#ffffff");
+  const paper =
+    colorOf(scheme, mode, "background")?.value ?? (mode === "dark" ? "#000000" : "#ffffff");
   let best = "";
   let bestRatio = -1;
   for (const role of roles) {
@@ -171,12 +183,12 @@ export function schemeInk(
 
 /** 名は主色。20px の太字なので 3:1 を満たせばよい。 */
 export function labelInk(scheme: ColorScheme, mode: Mode): string | undefined {
-  return schemeInk(scheme, mode, ["accent", "accent-strong", "accent-hover", "text"], 3);
+  return schemeInk(scheme, mode, ["primary", "primary-text", "on-surface"], 3);
 }
 
 /** id は副となる色。12px なので 4.5:1 を求める。 */
 export function codeInk(scheme: ColorScheme, mode: Mode): string | undefined {
-  return schemeInk(scheme, mode, ["accent-hover", "accent-strong", "accent", "text-muted"], 4.5);
+  return schemeInk(scheme, mode, ["primary-text", "primary", "on-surface-variant"], 4.5);
 }
 
 /** 帯の上に置く文字の色。新しい色を作らず、その帯の明るさで黒か白を選ぶ。 */
@@ -193,8 +205,8 @@ export type Band = { value: string; name: string; roles: string[] };
 
 /**
  * 同じ値の役割は 1 本にまとめ、役割名をスラッシュで並べる。
- * aizome のように accent と accent-strong と focus が同じ値の配色があり、分けると同じ帯が 3 本並ぶ。
- * まとめれば色の面は重複せず、その配色が 1 色を 3 役に当てていることも読める。
+ * sumi のように primary と primary-container が近い配色でも、同じ値なら 1 本にまとまる。
+ * まとめれば色の面は重複せず、その配色が 1 色を複数の役に当てていることも読める。
  */
 export function mergeRoles(scheme: ColorScheme, mode: Mode, roles: string[]): Band[] {
   const out: Band[] = [];

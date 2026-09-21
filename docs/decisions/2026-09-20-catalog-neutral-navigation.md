@@ -5,6 +5,7 @@
 - 参照: [Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
 - 置き換え: 上記 ADR の色面とナビゲーション
 - 更新: 公開カテゴリの決定は [topic-first ADR](2026-09-20-catalog-topic-first.md) が置き換えた。Graphics も公開面から外した。
+- 更新: 「背景、surface、本文、通常の罫線は白黒を基準にする」は [24 役割の ADR](2026-09-20-catalog-material-color-roles.md) が置き換えた。面はテーマの色相へ低彩度で寄せる。
 
 ## 背景
 
