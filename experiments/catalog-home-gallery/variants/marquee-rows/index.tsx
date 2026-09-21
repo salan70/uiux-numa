@@ -151,11 +151,11 @@ function MarqueeRow({
             </li>
           ))}
         </ul>
-        {/* 継ぎ目なく流すための複製。読み上げとフォーカスには出さない。 */}
-        <ul className="mq-group mq-group--clone" aria-hidden="true" inert>
+        {/* 継ぎ目なく流すための複製。読み上げと Tab には出さず、hover と押下は本物と同じく受ける。 */}
+        <ul className="mq-group mq-group--clone" aria-hidden="true">
           {tiles.map((tile) => (
             <li key={tile.id}>
-              <TileView tile={tile} />
+              <TileView tile={tile} decorative />
             </li>
           ))}
         </ul>

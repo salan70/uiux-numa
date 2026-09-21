@@ -1,16 +1,14 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { GalleryFrame } from "../../shared/GalleryFrame";
-import { TILES, TileView, type Tile } from "../../shared/tiles";
+import { TILES, TileView } from "../../shared/tiles";
 import "./variant.css";
 
 // タイル単体の最大の傾き（度）。視差の量は variant.css の --dt-parallax が持つ。
 const TILT_DEG = 7;
 
-/** 大きいタイルほど手前に置き、ポインタに合わせて大きくずらす。 */
-function depthOf(tile: Tile, index: number): number {
-  if (tile.size === "l") return 2;
-  if (tile.size === "w") return 1;
-  return index % 2;
+/** 3 枚ごとに奥、中、手前の層を割り当て、隣り合うカードの層をずらす。 */
+function depthOf(index: number): number {
+  return [2, 0, 1][index % 3];
 }
 
 /**
@@ -89,9 +87,9 @@ export default function Variant() {
       <ul className="dt-wall" ref={wallRef}>
         {TILES.map((tile, index) => (
           <li
-            className={`dt-item dt-item--${tile.size}`}
+            className="dt-item"
             key={tile.id}
-            style={{ "--dt-depth": depthOf(tile, index) } as CSSProperties}
+            style={{ "--dt-depth": depthOf(index) } as CSSProperties}
           >
             <div className="dt-layer">
               <TileView tile={tile} />

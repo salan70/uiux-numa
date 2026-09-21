@@ -1,15 +1,8 @@
-/* 横に流れる帯を 3 段重ねる。段の高さを揃え、タイルの幅で大きさの差を出す。
+/* 横に流れる帯を 3 段重ねる。Card は幅で高さが決まるので、段ごとに幅を揃え、段どうしで幅を変える。
    流す速さと向きは index.tsx が持つ。ここは帯の形と、動きを止めたときの見え方を持つ。 */
 
 .gallery-marquee {
-  --mq-height: 13rem;
-  --mq-gap: var(--space-300);
-}
-
-@media (width < 40rem) {
-  .gallery-marquee {
-    --mq-height: 10rem;
-  }
+  --mq-gap: var(--space-400);
 }
 
 .mq-rows {
@@ -52,19 +45,20 @@
 
 .mq-group > li {
   display: flex;
-  block-size: var(--mq-height);
+  inline-size: var(--mq-card);
 }
 
-.gallery-marquee .gtile--s {
-  inline-size: calc(var(--mq-height) * 0.9);
+/* 1 段目を大きく、2 段目を小さくし、3 段で奥行きのある流れにする。狭い幅では全体を縮める。 */
+.mq-row:nth-child(1) {
+  --mq-card: clamp(14rem, 28vw, 22rem);
 }
 
-.gallery-marquee .gtile--w {
-  inline-size: calc(var(--mq-height) * 1.6);
+.mq-row:nth-child(2) {
+  --mq-card: clamp(10rem, 18vw, 15rem);
 }
 
-.gallery-marquee .gtile--l {
-  inline-size: calc(var(--mq-height) * 2);
+.mq-row:nth-child(3) {
+  --mq-card: clamp(12rem, 22vw, 18rem);
 }
 
 /* 止めたときは小さな見本の動きも止める。 */
