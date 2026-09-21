@@ -74,7 +74,7 @@ export function ColorsPage({ openScheme }: { openScheme: string | null }) {
   };
 
   return (
-    <TopicScreen id="colors" lead={false}>
+    <TopicScreen id="colors">
       <div className="topic-body">
         <Feature mode={mode} shown={shown} copy={copy} />
 

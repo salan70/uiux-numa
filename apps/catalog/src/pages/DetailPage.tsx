@@ -51,9 +51,6 @@ export function DetailPage({ slug }: { slug: string }) {
         </ul>
         <h2 className="detail__side-head">前提</h2>
         <Meta work={work} />
-        <p className="detail__source">
-          正本は <code>{work.repoPath}</code>
-        </p>
       </div>
     </article>
   );

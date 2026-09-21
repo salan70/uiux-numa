@@ -11,8 +11,7 @@ import { renderSentences } from "./Sentences";
 const ROLE_SAMPLES: Record<string, string> = {
   "typography.title": "文字の役割を決める",
   "typography.heading": "本文と見出しの組み方",
-  "typography.body":
-    "読む人が迷わないように、行の長さと行間を先に決める。日本語は字面が詰まるので、欧文より行間を広く取る。",
+  "typography.body": "行の長さを決める。日本語は行間を広く取る。",
   "typography.ui": "この書体は 2 つのウェイトを持つ",
   "typography.control": "この成果物を開く",
   "typography.caption": "文字の値は tokens/typography が正本",
