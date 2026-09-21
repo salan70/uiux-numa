@@ -1,0 +1,34 @@
+/* zoom-cover の動きに、題名の色の変化を足す。
+   色は Catalog のリンクの hover と同じ --color-primary-text にする。
+   どの配色でも面に対して 4.5:1 を満たす役割なので、配色を切り替えても読める。 */
+.card-zoom-tint .card__cover > * {
+  transition: transform var(--duration-press) var(--easing-out);
+}
+
+.card-zoom-tint .card--text .card__frame {
+  transition: background-color var(--duration-state) var(--easing-standard);
+}
+
+.card-zoom-tint .card__link {
+  transition: color var(--duration-state) var(--easing-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-zoom-tint .card:hover .card__cover > * {
+    transform: scale(1.04);
+  }
+
+  .card-zoom-tint .card--text:hover .card__frame {
+    background: var(--color-surface-container);
+  }
+
+  .card-zoom-tint .card:hover .card__link {
+    color: var(--color-primary-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-zoom-tint .card:hover .card__cover > * {
+    transform: none;
+  }
+}

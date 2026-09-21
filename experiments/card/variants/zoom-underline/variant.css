@@ -1,0 +1,30 @@
+/* zoom-cover の動きに、題名の下線を足す。HIG でもリンク文言を持つカードは hover で下線を出す。
+   下線は色に頼らないので、配色によらず同じ強さで出る。 */
+.card-zoom-underline .card__cover > * {
+  transition: transform var(--duration-press) var(--easing-out);
+}
+
+.card-zoom-underline .card--text .card__frame {
+  transition: background-color var(--duration-state) var(--easing-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-zoom-underline .card:hover .card__cover > * {
+    transform: scale(1.04);
+  }
+
+  .card-zoom-underline .card--text:hover .card__frame {
+    background: var(--color-surface-container);
+  }
+
+  .card-zoom-underline .card:hover .card__link {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-zoom-underline .card:hover .card__cover > * {
+    transform: none;
+  }
+}
