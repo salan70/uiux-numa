@@ -3,10 +3,11 @@ import { LiveFrame } from "../components/LiveFrame";
 import { Link } from "../components/Link";
 import { Meta } from "../components/Meta";
 import { defaultVariant, dot } from "../components/work";
-import { catalog } from "../content/collect";
+import { catalog, isInProgress } from "../content/collect";
 import { topicById, topicHref } from "../content/topics";
 import { NotFoundPage } from "./NotFoundPage";
 import { renderSentences } from "../components/Sentences";
+import { WipMark } from "../components/WipMark";
 
 /** 成果物 1 件。live を主役にし、variant の切替と前提を脇に置く。 */
 export function DetailPage({ slug }: { slug: string }) {
@@ -26,6 +27,7 @@ export function DetailPage({ slug }: { slug: string }) {
         <span>{dot(work.updated)}</span>
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
+        {isInProgress(work.status) && <WipMark />}
         {work.title}
       </h1>
       <p className="detail__lead">{renderSentences(work.lead)}</p>
