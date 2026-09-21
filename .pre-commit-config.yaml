@@ -3,7 +3,7 @@
 # .claude/ と .agents/ 配下は正本（dotfiles）からコピーした vendor 資産のため
 # lint / format の対象外にする。整形すると正本との差分が生まれ、再同期のたびに衝突する。
 # flake.lock と pnpm-lock.yaml は生成物のため整形しない。
-exclude: '^(\.(claude|agents)/|flake\.lock$|pnpm-lock\.yaml$)'
+exclude: '^(\.(claude|agents)/|flake\.lock$)|(^|/)pnpm-lock\.yaml$'
 
 repos:
   # oxfmt — JSON / YAML / Markdown / TypeScript の整形

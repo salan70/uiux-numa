@@ -51,5 +51,3 @@ function toRepoPath(globKey: string): string {
   if (!match) throw new Error(`リポジトリパスに変換できない: ${globKey}`);
   return match[1];
 }
-
-export const svgVariants = collectSvgs(svgFiles);

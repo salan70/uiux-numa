@@ -257,16 +257,12 @@ function leadSentence(source: string): string {
   return line?.trim() ?? "";
 }
 
-export function defaultVariantId(experiment: ExperimentRecord): string | undefined {
-  return experiment.variants.find((item) => item.status === "adopted")?.id;
-}
-
 export const catalog = loadCatalog();
 
 /**
  * 却下した配色は公開面に出さない。
  * 使える配色だけを並べたほうが、選ぶ面として迷いがない。
- * 却下した案は experiments/color-schemes の記録に残っている。
+ * 却下した案は experiments/color-schemes-material の記録に残っている。
  */
 export function adoptedSchemes(): ColorScheme[] {
   const adopted =

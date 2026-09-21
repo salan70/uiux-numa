@@ -93,12 +93,6 @@ export function topicById(id: string | null): Topic | undefined {
   return TOPICS.find((topic) => topic.id === id);
 }
 
-export function topicLabel(id: TopicId): string {
-  const topic = TOPICS.find((item) => item.id === id);
-  if (!topic) throw new Error(`Catalog の topic が不正: ${id}`);
-  return topic.label;
-}
-
 export function topicHref(id: TopicId): string {
   const topic = TOPICS.find((item) => item.id === id);
   if (!topic) throw new Error(`Catalog の topic が不正: ${id}`);
