@@ -18,6 +18,10 @@ adopted:
   - on-submit
 ---
 
+> 判断後に実装と preview を削除し、参照される記録だけを `docs/records/` へ移した。
+> 評価の時点で参照した `variants/` と `previews/` は Git 履歴にある。
+> 削除の判断と復元方針は [ADR](../../decisions/2026-09-21-prune-decided-experiments.md) にある。
+
 ## Problem
 
 アカウント登録フォームでは、入力エラーの伝え方が完了率と体感を左右する。
@@ -69,7 +73,7 @@ variant で変える軸は次の 3 つ。
 ### 削除した variant
 
 判断後にコードと専用の preview を削除した。
-理由は Rejected reasons、削除の判断と復元手順は [ADR](../../docs/decisions/2026-09-21-prune-decided-experiments.md) にある。
+削除の判断と復元方針は [ADR](../../decisions/2026-09-21-prune-decided-experiments.md) にある。
 
 - `on-blur`: 基準: フィールド離脱時の検証は入力の流れを妨げず、必要な時に指摘できる。変えた軸: 検証タイミング = 離脱時、文言 = 事実のみ、feedback = エラーのみ。
 - `realtime`: 初回離脱後は入力中に検証し、成功も示せば、修正の完了が即座に分かる。変えた軸: 検証タイミング = 初回離脱後は入力中、文言 = 対処法つき、feedback = エラーと成功。

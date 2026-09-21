@@ -4,7 +4,7 @@
 - 評価日: 2026-09-13（hybrid の追記と保留の確認は 2026-09-17）
 - 対象 variant: on-blur、on-submit、realtime、hybrid
 - 観点: designer、UX writing、accessibility、interaction / motion、implementation
-- 手順: [docs/evaluation/review.md](../../docs/evaluation/review.md)
+- 手順: [評価手順](../../evaluation/review.md)
 
 ## 評価の経緯
 

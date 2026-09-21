@@ -110,7 +110,7 @@ function pageForRoute(route: Route): {
       body: <ComponentsPage />,
     };
   }
-  if (route.name === "icon" || route.name === "component" || route.name === "typographyDetail") {
+  if (route.name === "icon" || route.name === "typographyDetail") {
     const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
     return {
       title: experiment?.title ?? "ページが見つかりません",

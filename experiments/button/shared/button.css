@@ -1,0 +1,483 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+
+:where(.button-showcase) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:where(.button-showcase) :where(h1, h2, h3, h4, p, dl, dt, dd) {
+  margin: 0;
+}
+
+.button-showcase {
+  --button-motion-duration: 140ms;
+  --button-motion-ease: ease-out;
+  color: var(--color-on-surface, #242424);
+  font-family: var(--typography-ui-font-family);
+  font-size: var(--typography-ui-font-size);
+  font-weight: var(--typography-ui-font-weight);
+  line-height: var(--typography-ui-line-height);
+}
+
+.button-showcase:not(.button-showcase--embedded) {
+  --color-background: #f9f8f8;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-primary: #2b2b2b;
+  --color-on-primary: #fffdf9;
+  --color-primary-text: #4d4d4d;
+  --color-primary-container: #e6e6e6;
+  --color-on-primary-container: #201d1b;
+  --color-focus: #525252;
+  --color-error: #9c3e37;
+  min-height: 100vh;
+  padding: clamp(var(--space-400), 4vw, var(--space-600));
+  background: var(--color-background, #fff);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button-showcase:not(.button-showcase--embedded):not([data-theme="light"]) {
+    --color-background: #1b1a1a;
+    --color-surface: #272525;
+    --color-on-surface: #f0f0f0;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8b8b;
+    --color-primary: #2b2b2b;
+    --color-on-primary: #fffdf9;
+    --color-primary-text: #c7c7c7;
+    --color-primary-container: #4d4d4d;
+    --color-on-primary-container: #fffdf9;
+    --color-focus: #eb6101;
+    --color-error: #e59a91;
+  }
+}
+
+.button-showcase__header {
+  display: grid;
+  gap: var(--space-100);
+  margin-block-end: var(--space-500);
+}
+
+.button-showcase__eyebrow,
+.button-showcase__section-head > p,
+.button-showcase__role > p,
+.button-showcase__tokens,
+.button-showcase__size-spec,
+.button-showcase__size > span {
+  color: var(--color-on-surface-variant, #666);
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+.button-showcase__eyebrow {
+  letter-spacing: 0.12em;
+}
+
+.button-showcase h1 {
+  font-family: var(--typography-title-font-family);
+  font-size: var(--typography-title-font-size);
+  font-weight: var(--typography-title-font-weight);
+  letter-spacing: var(--typography-title-letter-spacing);
+  line-height: var(--typography-title-line-height);
+}
+
+.button-showcase h2 {
+  font-family: var(--typography-heading-font-family);
+  font-size: var(--typography-heading-font-size);
+  font-weight: var(--typography-heading-font-weight);
+  letter-spacing: var(--typography-heading-letter-spacing);
+  line-height: var(--typography-heading-line-height);
+}
+
+.button-showcase h3 {
+  font-family: var(--typography-heading-font-family);
+  font-size: var(--typography-heading-font-size);
+  font-weight: var(--typography-heading-font-weight);
+  letter-spacing: var(--typography-heading-letter-spacing);
+  line-height: var(--typography-heading-line-height);
+}
+
+.button-showcase--embedded {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-height: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+}
+
+.button-showcase__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-100) var(--space-300);
+  margin-block-end: var(--space-200);
+}
+
+.button-showcase__rows {
+  display: grid;
+}
+
+.button-showcase__size-header {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.8fr);
+  gap: var(--space-400);
+  padding-block: var(--space-300) var(--space-100);
+  border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
+}
+
+.button-showcase__size-title {
+  align-self: end;
+}
+
+.button-showcase__size-specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(9rem, 1fr));
+  align-items: start;
+  justify-items: center;
+  gap: var(--space-300) var(--space-500);
+}
+
+.button-showcase__size-spec {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-100);
+  min-inline-size: 0;
+  text-align: start;
+}
+
+.button-showcase__size-spec > p {
+  justify-self: center;
+  color: var(--color-on-surface, #242424);
+  font-family: var(--typography-control-font-family);
+  font-size: 0.8125rem;
+  font-weight: var(--typography-control-font-weight);
+  line-height: 1.45;
+}
+
+.button-showcase__size-spec dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-50) var(--space-300);
+}
+
+.button-showcase__size-spec dl > div {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+}
+
+.button-showcase__size-spec dt {
+  color: var(--color-on-surface-variant, #666);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.button-showcase__size-spec dd {
+  min-inline-size: 0;
+  color: var(--color-on-surface, #242424);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.button-showcase__size-spec > span {
+  display: none;
+}
+
+.button-showcase__row {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.8fr);
+  align-items: end;
+  gap: var(--space-400);
+  padding-block: var(--space-500);
+  border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
+}
+
+.button-showcase__role {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-100) var(--space-400);
+}
+
+.button-showcase__role > p {
+  font-size: 0.75rem;
+}
+
+.button-showcase__role h3,
+.button-showcase__role h4 {
+  font-family: var(--typography-control-font-family);
+  font-size: var(--typography-control-font-size);
+  font-weight: var(--typography-control-font-weight);
+  line-height: var(--typography-control-line-height);
+}
+
+.button-showcase__tokens {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: var(--space-100);
+  margin-block-start: var(--space-100);
+}
+
+.button-showcase__tokens > div {
+  display: grid;
+  grid-template-columns: minmax(4.25rem, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-100);
+}
+
+.button-showcase__tokens dt {
+  color: var(--color-on-surface-variant, #666);
+}
+
+.button-showcase__tokens dd {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-on-surface, #242424);
+}
+
+.button-showcase__sizes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(9rem, 1fr));
+  align-items: end;
+  gap: var(--space-300) var(--space-500);
+}
+
+.button-showcase__size {
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  min-block-size: 5.75rem;
+  gap: var(--space-150);
+}
+
+.button-showcase__size > span {
+  display: none;
+  color: var(--color-on-surface, #242424);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--typography-control-font-weight);
+  text-align: center;
+}
+
+.button-showcase__states {
+  margin-block-start: var(--space-500);
+}
+
+.button-showcase__examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-200);
+}
+
+.button {
+  --button-bg: var(--color-primary, #333);
+  --button-fg: var(--color-on-primary, #fff);
+  --button-border: var(--color-primary, #333);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  --button-padding-inline: var(--space-500);
+  gap: var(--space-150);
+  min-height: 2.5rem;
+  padding: 0 var(--button-padding-inline);
+  border: var(--border-width-thin) solid var(--button-border);
+  border-radius: var(--radius-control);
+  color: var(--button-fg);
+  background: var(--button-bg);
+  font-family: var(--typography-control-font-family);
+  font-size: var(--typography-control-font-size);
+  font-weight: var(--typography-control-font-weight);
+  line-height: var(--typography-control-line-height);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    transform var(--button-motion-duration) var(--button-motion-ease),
+    box-shadow var(--button-motion-duration) var(--button-motion-ease);
+}
+
+.button--small {
+  --button-padding-inline: var(--space-300);
+  min-inline-size: 4.5rem;
+  min-height: 2rem;
+  font-size: var(--typography-caption-font-size);
+}
+
+.button--medium {
+  --button-padding-inline: var(--space-500);
+  min-inline-size: 6rem;
+  min-height: 2.5rem;
+}
+
+.button--large {
+  --button-padding-inline: var(--space-600);
+  min-inline-size: 7.5rem;
+  min-height: 3rem;
+}
+
+.button--secondary {
+  --button-bg: var(--color-surface, #fff);
+  --button-fg: var(--color-on-surface, #242424);
+  --button-border: var(--color-outline, #777);
+}
+
+.button--quiet {
+  --button-bg: transparent;
+  --button-fg: var(--color-primary-text, var(--color-on-surface, #242424));
+  --button-border: transparent;
+}
+
+.button--danger {
+  --button-bg: var(--color-surface, #fff);
+  --button-fg: var(--color-error, #b3261e);
+  --button-border: var(--color-error, #b3261e);
+}
+
+.button:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-focus, #005fcc);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button__leading,
+.button__trailing {
+  display: inline-grid;
+  width: 1em;
+  height: 1em;
+  place-items: center;
+  flex: none;
+}
+
+.button__leading:empty,
+.button__trailing:empty {
+  display: none;
+}
+
+.button__leading svg,
+.button__trailing svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.button:has(.button__leading:not(:empty)) {
+  padding-inline-start: calc(var(--button-padding-inline) - var(--space-100));
+}
+
+.button:has(.button__trailing:not(:empty)) {
+  padding-inline-end: calc(var(--button-padding-inline) - var(--space-100));
+}
+
+.button__spinner {
+  display: block;
+  width: 0.8em;
+  height: 0.8em;
+  border: 1.5px solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: button-spin 700ms linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--button-fg) 35%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    --button-motion-duration: 0ms;
+  }
+
+  .button__spinner {
+    animation: none;
+    border-inline-end-color: currentColor;
+  }
+}
+
+@media (width <= 34rem) {
+  .button-showcase__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-100);
+  }
+
+  .button-showcase__size-header {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .button-showcase__size-title {
+    align-self: start;
+    margin-block-end: var(--space-200);
+  }
+
+  .button-showcase__size-specs,
+  .button-showcase__sizes {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: var(--space-300);
+  }
+
+  .button-showcase__size-spec {
+    justify-items: start;
+    gap: var(--space-50);
+    text-align: start;
+  }
+
+  .button-showcase__size-spec dl {
+    display: none;
+  }
+
+  .button-showcase__size-spec > span {
+    display: block;
+    color: var(--color-on-surface, #242424);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .button-showcase__role {
+    grid-template-columns: 1fr;
+  }
+
+  .button-showcase__size {
+    justify-items: start;
+    min-block-size: 0;
+  }
+
+  .button-showcase__size > span {
+    display: block;
+    justify-items: start;
+    text-align: start;
+  }
+
+  .button-showcase__examples {
+    align-items: stretch;
+  }
+
+  .button-showcase__examples > .button {
+    flex: 1 1 auto;
+  }
+}

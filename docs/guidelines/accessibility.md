@@ -186,7 +186,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: `label` の `for` と `aria-describedby` で、名前と説明を入力欄に結ぶ。
 - 悪い例: 入力欄の上に文字を置くだけで、要素として関連付けない。
 - 例外: 入力欄自身の `aria-label` で名前が完結する検索窓など。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 1.3.1](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
 ### 操作の名前は「何が起きるか」で付ける

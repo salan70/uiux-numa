@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(6);
-    expect(catalog.liveVariants).toHaveLength(22);
+    expect(catalog.experiments).toHaveLength(5);
+    expect(catalog.liveVariants).toHaveLength(21);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -49,7 +49,7 @@ describe("catalog inventory", () => {
     expect(slugs("colors")).toEqual(["color-schemes-material"]);
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
-    expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
+    expect(slugs("components")).toEqual(["button"]);
     // 判断済みで掲載しない Experiment は削除した。残る Experiment はすべて topic を持つ。
     expect(catalog.experiments.every((item) => item.topic !== null)).toBe(true);
   });
@@ -89,6 +89,7 @@ describe("catalog inventory", () => {
 
   it("adopted 件数と variant のステータスを検査する", () => {
     expect(ids("adopted")).toEqual([
+      "button/pill-action",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",
@@ -100,9 +101,7 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
-      "form-inline-validation/on-submit",
       "product-ui-typography/line-seed-minimal",
-      "soft-component-kit/hairline-float",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
     expect(ids("exploring").every((id) => exploringSlugs().includes(id.split("/")[0]))).toBe(true);

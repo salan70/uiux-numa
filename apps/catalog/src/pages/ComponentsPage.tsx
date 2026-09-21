@@ -1,36 +1,27 @@
-import { useState } from "react";
-import { LiveFrame } from "../components/LiveFrame";
-import { VariantChips } from "../components/VariantChips";
-import { WorkHead } from "../components/WorkHead";
-import { defaultVariant } from "../components/work";
-import { worksInTopic, type ExperimentRecord } from "../content/collect";
+import "../../../../experiments/button/shared/button.css";
+import "../../../../experiments/button/variants/pill-action/variant.css";
+import { Showcase } from "../../../../experiments/button/shared/Showcase";
 import { TopicScreen } from "../components/TopicScreen";
+import { catalog } from "../content/collect";
 
-/** 入力と操作の部品。live 標本を大きく出す。 */
+/** Button の採用実装を topic の本文へ直接表示する。 */
 export function ComponentsPage() {
-  const list = worksInTopic("components");
+  const button = catalog.experiments.find((work) => work.slug === "button");
+
   return (
     <TopicScreen id="components">
-      {list.length === 0 ? (
-        <p className="empty">まだ成果物がない。</p>
+      {button ? (
+        <section className="component-work" aria-labelledby="component-button-title">
+          <div className="work-head">
+            <h2 className="work-head__title" id="component-button-title">
+              Button
+            </h2>
+          </div>
+          <Showcase variantClass="button-pill-action" embedded />
+        </section>
       ) : (
-        <div className="topic-body">
-          {list.map((work) => (
-            <LiveWork key={work.slug} work={work} />
-          ))}
-        </div>
+        <p className="empty">まだ成果物がない。</p>
       )}
     </TopicScreen>
-  );
-}
-
-function LiveWork({ work }: { work: ExperimentRecord }) {
-  const [current, setCurrent] = useState(defaultVariant(work));
-  return (
-    <div className="work">
-      <WorkHead work={work} />
-      <VariantChips work={work} current={current} onSelect={setCurrent} />
-      <LiveFrame work={work} variant={current} tall caption="platforms" />
-    </div>
   );
 }

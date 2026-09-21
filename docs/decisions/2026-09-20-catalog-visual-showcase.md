@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
+- 置き換え: Components の Button 表示と個別コンポーネントの掲載方針は [Components と Button の ADR](2026-09-21-components-button-only.md) が置き換える。
 - 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](2026-09-20-asset-composition-model.md)、[UI/UX 沼の構成と公開先](2026-09-19-uiux-rd-catalog.md)、[Catalog のホスト](2026-09-19-catalog-host.md)、[公開手順](../catalog-publishing.md)
 - 置き換え: [公開デザインシステムサイト](2026-09-19-catalog-design-system-site.md) の全体。[見本帳へ絞る ADR](2026-09-19-catalog-artifacts-only.md) の掲載対象（採用成果に限る点）。[ホスト ADR](2026-09-19-catalog-host.md) の「Catalog 全体を 3 案 Experiment にしない」条項。
 - 更新: 公開殻と情報設計の決定は [topic-first ADR](2026-09-20-catalog-topic-first.md) が置き換えた。

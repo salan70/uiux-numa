@@ -61,7 +61,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 数字の表示幅を最大値で固定し、エラー文の行を `min-height` で予約する。
 - 悪い例: エラー文の要素ごと取り除き、下の送信ボタンをせり上がらせる。
 - 例外: 画面端まで flex で広がる流動的なグリッド配置。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 
 ### 100ms 以内に受け付けを返し、1 秒を超えたら進行を示す
 
@@ -72,7 +72,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 保存ボタンを押した瞬間に処理中の表示へ切り替え、1 秒を超える処理には進行を出す。
 - 悪い例: 送信を押しても数秒間画面に変化がなく、多重クリックを誘発する。
 - 例外: 利用者が待つ必要のない、裏で進む処理。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
 ### 要素の状態は排他の集合として定義する
@@ -95,7 +95,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 送信エラー時に、上部に表示したエラー要約へフォーカスを移す。
 - 悪い例: 送信ボタンの位置にフォーカスが留まり、画面上部のエラーに気づかない。
 - 例外: 入力中のフィールドの直下でリアルタイムに表示する軽微な警告。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 3.3.1](https://www.w3.org/WAI/WCAG22/quickref/#error-identification)
 
 ### 処理の完了を支援技術へ伝える
@@ -107,7 +107,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 登録完了画面への切り替えと同時に、完了見出しへフォーカスを移す。
 - 悪い例: フォームが消えてフォーカスが body に落ち、読み上げが途絶える。
 - 例外: 画面を切り替えない副次的な保存。`role="status"` に文言を入れ、フォーカスは動かさない。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 4.1.3](https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html)
 
 ### 削除は確認ではなく取り消しで守る
@@ -131,4 +131,4 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 初回は送信時にまとめて検証し、以後は修正のたびにその項目を再検証する。
 - 悪い例: フィールドから離脱するたび、または 1 文字目の入力で警告を出す。
 - 例外: ユーザー名の重複確認など、即時の確認に明確な価値がある場合。
-- 実験: [form-inline-validation](../../experiments/form-inline-validation/README.md)
+- 実験: [form-inline-validation](../records/form-inline-validation/README.md)

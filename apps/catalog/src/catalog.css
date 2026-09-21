@@ -483,6 +483,10 @@ body {
   block-size: 30rem;
 }
 
+.app-shell .live--button .live__frame {
+  block-size: 54rem;
+}
+
 .app-shell .live__caption {
   display: flex;
   flex-wrap: wrap;
@@ -709,6 +713,18 @@ body {
 @media (width <= 40rem) {
   .app-shell .live--tall .live__frame {
     block-size: 20rem;
+  }
+
+  .app-shell .live--button .live__frame {
+    block-size: 68rem;
+  }
+
+  .app-shell .component-work .work-head__meta {
+    column-gap: var(--space-100);
+  }
+
+  .app-shell .component-work .work-head__meta span + span::before {
+    margin-inline-end: var(--space-100);
   }
 }
 
@@ -1153,6 +1169,18 @@ body {
 .app-shell .work {
   display: grid;
   gap: var(--cat-gap-lg);
+}
+
+.app-shell .component-work {
+  display: grid;
+  gap: var(--cat-gap-lg);
+  min-inline-size: 0;
+  margin-block-start: var(--cat-section);
+}
+
+.app-shell .component-work .work-head__meta {
+  max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .app-shell .work-head {
