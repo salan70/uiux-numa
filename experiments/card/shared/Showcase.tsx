@@ -1,22 +1,31 @@
 import { useState, type MouseEvent } from "react";
 import { useCatalogColors } from "../../button/shared/useCatalogColors";
 import { Card, type CardProps } from "./Card";
+import {
+  ColorsCover,
+  ComponentsCover,
+  GuidelinesCover,
+  IconsCover,
+  TokensCover,
+  TypographyCover,
+} from "./covers";
 
 const SINGLES: { id: string; label: string; description: string; card: CardProps }[] = [
   {
-    id: "basic",
-    label: "基本",
-    description: "題名と要約",
+    id: "cover",
+    label: "カバーあり",
+    description: "枠はカバーだけが持ち、題名は下に置く",
     card: {
-      href: "/guidelines/spacing",
-      title: "余白の刻み",
-      description: "部品の内側と外側の余白を、同じ刻みから選ぶ。",
+      href: "/components/button",
+      title: "Button",
+      description: "操作の役割と状態を、同じ形の規則で伝える。",
+      cover: <ComponentsCover />,
     },
   },
   {
-    id: "meta",
-    label: "補足つき",
-    description: "種別と日付を題名の上に置く",
+    id: "text",
+    label: "カバーなし",
+    description: "文字を枠の中に置く",
     card: {
       href: "/guidelines/ux-writing",
       title: "ボタンの文言",
@@ -27,53 +36,23 @@ const SINGLES: { id: string; label: string; description: string; card: CardProps
   {
     id: "long",
     label: "長い題名",
-    description: "題名が折り返しても形を保つ",
+    description: "題名が折り返しても枠の形を保つ",
     card: {
-      href: "/components/button",
-      title: "役割と状態を同じ形の規則で伝える、画面の主要な操作と補助操作のための Button",
-      description: "4 種の役割と 3 サイズを同じ API で扱う。",
-      meta: "Component",
+      href: "/foundations/typography",
+      title: "プロダクト画面で使う書体と、見出しから注記までの文字の役割",
+      meta: "Foundation",
+      cover: <TypographyCover />,
     },
   },
 ];
 
 const LIST: CardProps[] = [
-  {
-    href: "/foundations/colors",
-    title: "Colors",
-    description: "役割ごとに決めた色の組。",
-    meta: "Foundation",
-  },
-  {
-    href: "/foundations/typography",
-    title: "Typography",
-    description: "書体と文字の役割。",
-    meta: "Foundation",
-  },
-  {
-    href: "/foundations/tokens",
-    title: "Tokens",
-    description: "正本の値そのもの。",
-    meta: "Foundation",
-  },
-  {
-    href: "/foundations/icons",
-    title: "Icons",
-    description: "画面で使う記号の組。",
-    meta: "Foundation",
-  },
-  {
-    href: "/components",
-    title: "Components",
-    description: "画面を組む部品。",
-    meta: "Component",
-  },
-  {
-    href: "/guidelines",
-    title: "Guidelines",
-    description: "主題ごとの方針。",
-    meta: "Guideline",
-  },
+  { href: "/foundations/colors", title: "Colors", cover: <ColorsCover /> },
+  { href: "/foundations/typography", title: "Typography", cover: <TypographyCover /> },
+  { href: "/foundations/tokens", title: "Tokens", cover: <TokensCover /> },
+  { href: "/foundations/icons", title: "Icons", cover: <IconsCover /> },
+  { href: "/components", title: "Components", cover: <ComponentsCover /> },
+  { href: "/guidelines", title: "Guidelines", cover: <GuidelinesCover /> },
 ];
 
 export function Showcase({

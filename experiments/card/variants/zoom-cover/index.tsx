@@ -3,5 +3,5 @@ import "../../shared/card.css";
 import "./variant.css";
 
 export default function Variant() {
-  return <Showcase variantClass="card-tonal-raise" />;
+  return <Showcase variantClass="card-zoom-cover" />;
 }
