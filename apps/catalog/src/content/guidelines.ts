@@ -1,6 +1,6 @@
 // docs/guidelines/*.md の読み込みと検証。
 // 依存を足さず、決めた書式だけを読む小さな解析器。
-// 知らない節や欠けた項目、未知の図版キーは throw して build を落とす。
+// 知らない節や欠けた項目は throw して build を落とす。
 import React from "react";
 import { repoBlobUrl } from "./github";
 import { parseFrontmatter } from "./parseFrontmatter";
@@ -29,7 +29,6 @@ export type Rule = {
   good: string;
   bad: string;
   exception: string | null;
-  figureKey: FigureKey | null;
   experiment: LinkItem | null;
   source: LinkItem | null;
 };
@@ -55,18 +54,6 @@ export type Guideline = {
   checklist: string[];
   sources: SourceItem[];
 };
-
-// 図版キーの正本。図版そのものは見本帳（variants/*/figures.tsx）が持つ。
-export const VALID_FIGURE_KEYS = [
-  "proximity",
-  "alignment",
-  "repetition",
-  "contrast",
-  "state-layout-shift",
-  "state-stable",
-] as const;
-
-export type FigureKey = (typeof VALID_FIGURE_KEYS)[number];
 
 // docs/evaluation/axes.md の 17 軸。
 const VALID_AXES = [
@@ -325,7 +312,6 @@ function parseSingleRule(
   let good: string | null = null;
   let bad: string | null = null;
   let exception: string | null = null;
-  let figureKey: FigureKey | null = null;
   let experiment: LinkItem | null = null;
   let source: LinkItem | null = null;
 
@@ -384,16 +370,6 @@ function parseSingleRule(
         continue;
       }
 
-      const figMatch = itemText.match(/^図:\s*(.*)$/);
-      if (figMatch) {
-        const key = figMatch[1].trim();
-        if (!(VALID_FIGURE_KEYS as readonly string[]).includes(key)) {
-          throw new Error(`[guidelines/${slug}] rule '${title}' has unknown figure key: '${key}'`);
-        }
-        figureKey = key as FigureKey;
-        continue;
-      }
-
       const experimentMatch = itemText.match(/^実験:\s*(.*)$/);
       if (experimentMatch) {
         experiment = parseLinkItem(slug, title, "実験", experimentMatch[1].trim());
@@ -442,7 +418,6 @@ function parseSingleRule(
     good,
     bad,
     exception,
-    figureKey,
     experiment,
     source,
   };

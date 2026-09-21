@@ -40,7 +40,6 @@ updated: 2026-09-20
 
 - 良い例: ラベルと入力欄を 8px、項目の間を 24px にする。
 - 悪い例: ラベルと入力欄を 12px、項目の間を 16px にする。
-- 図: proximity
 
 ### 文字の階梯は 4〜6 段に収める
 
@@ -61,7 +60,6 @@ updated: 2026-09-20
 - 良い例: 巨大見出しを 1 つ置き、他は本文と補助の 2 段に収める。
 - 悪い例: 見出し、警告、主要ボタンが同じ強さで並ぶ。
 - 例外: 対等な選択肢を並べる比較画面。
-- 図: contrast
 
 ### 整列の基準線は 2 本までにする
 
@@ -72,7 +70,6 @@ updated: 2026-09-20
 - 良い例: 見出し、本文、入力欄の左端を 1 本に揃える。
 - 悪い例: 要素ごとに中央揃えと左揃えを混ぜる。
 - 例外: 単独で置く題字や、空状態の案内。
-- 図: alignment
 
 ## Tips
 
@@ -84,7 +81,6 @@ updated: 2026-09-20
 - 良い例: ラベルと入力欄を近づけ、項目間はそれ以上の余白を空ける。
 - 悪い例: ラベルと入力欄の余白が、前後の項目間と同じ広さである。
 - 例外: 表形式のセルなど、境界線で所属が明確に区切られる場合。
-- 図: proximity
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
@@ -96,7 +92,6 @@ updated: 2026-09-20
 - 良い例: 見出し、本文、入力欄の左端を 1 本のグリッド線に揃える。
 - 悪い例: 見出しや本文の左端がバラバラで、視線が左右に揺れる。
 - 例外: 強調のために意図して突出させるバッジや装飾。
-- 図: alignment
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
@@ -108,7 +103,6 @@ updated: 2026-09-20
 - 良い例: 線幅、角丸、山形矢印アイコンの造形をすべての部品で統一する。
 - 悪い例: 角丸や線の太さが部品ごとに異なり、OS 既定の矢印が混ざる。
 - 例外: 画面内で唯一の破壊的操作を警告する場合。
-- 図: repetition
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
@@ -120,7 +114,6 @@ updated: 2026-09-20
 - 良い例: 説明に縦罫を引いて文字色を落とし、見本は素のまま立たせる。
 - 悪い例: 見本と説明が同じ文字サイズと色で並び、どちらが見本か読めない。
 - 例外: 意図的に均一な視認性を保つべきデータ一覧表。
-- 図: contrast
 - 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 

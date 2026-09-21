@@ -66,3 +66,18 @@ export function DetailIcon() {
     </svg>
   );
 }
+
+/**
+ * ナビの開閉の印。
+ * 枠の中を左の桁と版面に分けた形で、サイドバーの並びそのものを表す。
+ * 開閉で形を変えない。状態は左の桁の塗りだけで示し、押し先の寸法を動かさない。
+ * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2）。
+ */
+export function SidebarIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M9.5 5v14" />
+    </svg>
+  );
+}

@@ -1,0 +1,106 @@
+/* 本文とメタを桁で分ける。分類と出典は読む筋の外にあると示す。 */
+.ma-rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11rem;
+  gap: var(--gr-gap-lg) var(--gr-section);
+  align-items: start;
+}
+
+.ma-title {
+  margin: 0 0 var(--gr-gap-lg);
+  font-size: var(--gr-item);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+
+.ma-rationale {
+  margin: 0 0 var(--gr-gap-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+.ma-examples {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gr-gap) var(--gr-gap-lg);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+.ma-example {
+  margin: 0;
+}
+
+.ma-mark {
+  font-size: var(--gr-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--gr-muted);
+}
+
+.ma-mark--bad {
+  color: var(--gr-text);
+}
+
+.ma-mark--good {
+  color: var(--gr-accent-text);
+}
+
+.ma-exception {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 var(--gr-gap-lg);
+  margin: var(--gr-gap-lg) 0 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--gr-muted);
+}
+
+.ma-figure {
+  margin-block: var(--gr-gap);
+}
+
+/* メタの桁。罫 1 本で本文と分ける。 */
+.ma-meta {
+  padding-inline-start: var(--gr-gap-lg);
+  border-inline-start: 1px solid var(--gr-line);
+  font-size: var(--gr-label);
+  line-height: var(--font-line-height-ui);
+}
+
+.ma-meta__list {
+  margin: 0;
+}
+
+.ma-meta__list dt {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--gr-muted);
+}
+
+.ma-meta__list dd {
+  margin: 0 0 var(--gr-gap-lg);
+}
+
+.ma-meta__core {
+  display: block;
+}
+
+/* 狭い幅ではメタを本文の下へ戻す。右に置くと本文が 2 桁に割れて読めない。 */
+@media (width < 52rem) {
+  .ma-rule {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ma-meta {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--gr-line);
+    padding-block-start: var(--gr-gap-lg);
+  }
+
+  .ma-meta__list dd:last-child {
+    margin-block-end: 0;
+  }
+}

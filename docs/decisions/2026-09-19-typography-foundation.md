@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-19
 - 参照: [日本語プロダクト UI の Typography](../../experiments/product-ui-typography/README.md)
+- 更新: 行長の上限（`40rem` / `40ic`）の使用規則に例外を足した。[行長の上限の ADR](2026-09-21-measure-cap-follows-the-column.md) を参照する。
 
 ## 背景
 

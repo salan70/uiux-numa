@@ -1,0 +1,104 @@
+/* 対比を版面の形にする。good と bad を同じ幅の桁に置き、差だけが残るようにする。 */
+.cp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gr-gap) var(--gr-gap-lg);
+  margin-block-end: var(--gr-gap);
+}
+
+.cp-title {
+  margin: 0;
+  font-size: var(--gr-item);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+
+/* 適用は題名の従属物なので、題名より小さく薄くする。 */
+.cp-applies {
+  font-size: var(--gr-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-ui);
+  color: var(--gr-muted);
+}
+
+.cp-rationale {
+  margin: 0 0 var(--gr-gap-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--gr-muted);
+}
+
+.cp-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--gr-gap-lg) * 2);
+}
+
+/* 桁の境は罫 1 本。面を敷くと対比より器が先に読まれる。
+   罫を溝の中央に置き、左右の文から同じ距離にする。
+   溝が広いと 2 つの桁が別々の節に見え、対であることが読めない。 */
+.cp-side--bad {
+  padding-inline-start: var(--gr-gap-lg);
+  border-inline-start: 1px solid var(--gr-line);
+  margin-inline-start: calc(var(--gr-gap-lg) * -1);
+}
+
+/* good と bad は正本の 24 役割から success と error を当てる。
+   画面の強調色（primary）を good に使うと、配色を変えたときに
+   「その配色の色」と「良し悪し」が同じ色で出て読み分けられない。
+   色だけに頼らないよう、語そのものも残す。 */
+.cp-mark {
+  margin: 0 0 var(--gr-gap);
+  font-size: var(--gr-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-ui);
+}
+
+.cp-mark--good {
+  color: var(--color-success, #0b6f3a);
+}
+
+.cp-mark--bad {
+  color: var(--color-error, #9d1d0c);
+}
+
+.cp-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+/* 例外は対比の外にある注記。ラベルの桁を 1 本持たせ、折り返しても左端が揃うようにする。 */
+.cp-exception {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 var(--gr-gap-lg);
+  margin: var(--gr-gap-lg) 0 0;
+  font-size: var(--gr-label);
+  line-height: var(--font-line-height-ui);
+  color: var(--gr-muted);
+}
+
+.cp-exception__label {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--gr-text);
+}
+
+@media (width < 44rem) {
+  .cp-pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gr-gap-lg);
+  }
+
+  .cp-side--bad {
+    margin-inline-start: 0;
+    padding-inline-start: 0;
+    border-inline-start: 0;
+    padding-block-start: var(--gr-gap-lg);
+    border-block-start: 1px solid var(--gr-line);
+  }
+}

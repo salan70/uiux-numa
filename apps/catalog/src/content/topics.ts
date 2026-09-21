@@ -61,7 +61,11 @@ export const TOPICS: Topic[] = [
 const RETIRED_DOMAINS = new Set(["logo-brand-identity", "illustration-svg", "animation-motion"]);
 
 /** Catalog 自身の設計を比べる Experiment は公開ナビに出さない。比較記録として metadata だけ集める。 */
-export const UNCATEGORIZED_SLUGS = new Set(["catalog-redesign", "catalog-editorial"]);
+export const UNCATEGORIZED_SLUGS = new Set([
+  "catalog-redesign",
+  "catalog-editorial",
+  "guideline-rule-structure",
+]);
 
 /**
  * 後継の Experiment へ置き換えた成果物。判断の経緯を残すため削除はせず、公開面からだけ外す。

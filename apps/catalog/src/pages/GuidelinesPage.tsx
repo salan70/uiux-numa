@@ -1,16 +1,10 @@
-import { FIGURE_COMPONENTS } from "../components/figures";
-import { Link } from "../components/Link";
-import { catalog } from "../content/collect";
 import {
   ALL_GUIDELINES,
   renderInline,
   resolveHref,
-  type Guideline,
-  type LinkItem,
   type Principle,
   type Rule,
 } from "../content/guidelines";
-import { workHref } from "../content/topics";
 
 /** 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。 */
 function goToRule(domId: string) {
@@ -21,37 +15,19 @@ function goToRule(domId: string) {
   target.focus();
 }
 
-type Layer = { id: string; title: string; lead: string };
+// 節の名は英語にする。文書名とナビが英語なので、節だけ日本語だと語が混じる。
+type Layer = { id: string; title: string };
 
-const CORE_LAYER: Layer = {
-  id: "core",
-  title: "コア",
-  lead: "この主題の考え方。ぶつかったときは上にあるものを優先する。",
-};
-const TIPS_LAYER: Layer = {
-  id: "tips",
-  title: "Tips",
-  lead: "具体的な場面の規則。foundation はどのプロジェクトでも守り、module はこの主題を重視するときに選ぶ。",
-};
-
-// 未移行の文書は優先順位も適用も持たない。書いていない意味を lead で語らせない。
-const LEGACY_CORE_LAYER: Layer = { ...CORE_LAYER, lead: "この主題で守る土台。場面によらず効く。" };
-const LEGACY_TIPS_LAYER: Layer = {
-  ...TIPS_LAYER,
-  lead: "コアを個別の場面へ当てたもの。場面が変われば入れ替わる。",
-};
+const CORE_LAYER: Layer = { id: "core", title: "Core" };
+const TIPS_LAYER: Layer = { id: "tips", title: "Tips" };
 
 export function GuidelinesPage({ slug }: { slug: string }) {
   const guideline = ALL_GUIDELINES.find((item) => item.slug === slug);
   if (!guideline) return <p className="empty">その方針の文書がない。</p>;
 
-  // scope を持つのは未移行の文書だけ。
-  const legacy = guideline.scope !== null;
-  const coreLayer = legacy ? LEGACY_CORE_LAYER : CORE_LAYER;
-  const tipsLayer = legacy ? LEGACY_TIPS_LAYER : TIPS_LAYER;
   const layers = [
-    { ...coreLayer, rules: guideline.core },
-    { ...tipsLayer, rules: guideline.tips },
+    { ...CORE_LAYER, rules: guideline.core },
+    { ...TIPS_LAYER, rules: guideline.tips },
   ];
 
   return (
@@ -63,17 +39,18 @@ export function GuidelinesPage({ slug }: { slug: string }) {
 
       <div className="guide-layout">
         <div className="guide-layout__main">
-          <GuideFacts guideline={guideline} />
+          <GuideProse id="guide-purpose" title="Purpose" body={guideline.purpose} />
+          {guideline.scope && <GuideProse id="guide-scope" title="Scope" body={guideline.scope} />}
 
-          <CoreLayer layer={coreLayer} cores={guideline.core} />
-          <TipsLayer layer={tipsLayer} rules={guideline.tips} cores={guideline.core} />
+          <CoreLayer layer={CORE_LAYER} cores={guideline.core} />
+          <TipsLayer layer={TIPS_LAYER} rules={guideline.tips} />
 
-          {/* 確認項目と出典は未移行の文書だけが持つ。 */}
+          {/* Checklist と Sources は未移行の文書だけが持つ。 */}
           {guideline.checklist.length > 0 && (
             <section className="guide-block" aria-labelledby="guide-checklist-head">
               <div className="work-head">
                 <h2 className="work-head__title" id="guide-checklist-head">
-                  確認項目
+                  Checklist
                 </h2>
               </div>
               <ul className="guide-checklist">
@@ -91,7 +68,7 @@ export function GuidelinesPage({ slug }: { slug: string }) {
             <section className="guide-block" aria-labelledby="guide-sources-head">
               <div className="work-head">
                 <h2 className="work-head__title" id="guide-sources-head">
-                  出典
+                  Sources
                 </h2>
               </div>
               <ul className="guide-sources">
@@ -121,7 +98,7 @@ export function GuidelinesPage({ slug }: { slug: string }) {
         <aside className="guide-aside" aria-labelledby="guide-toc-head">
           <div className="guide-aside__inner">
             <h2 className="guide-aside__title" id="guide-toc-head">
-              規則の索引
+              Index
             </h2>
             {layers.map((layer) => (
               <nav
@@ -155,24 +132,20 @@ export function GuidelinesPage({ slug }: { slug: string }) {
   );
 }
 
-function GuideFacts({ guideline }: { guideline: Guideline }) {
+/**
+ * 目的と適用範囲。
+ * 「この方針について」という器の見出しをやめ、節の名を中身そのものにした。
+ * 項目が 1 つしかない定義リストは、見出しと dt が同じことを 2 度言っていた。
+ */
+function GuideProse({ id, title, body }: { id: string; title: string; body: string }) {
   return (
-    <section className="guide-block" aria-labelledby="guide-about">
+    <section className="guide-block" aria-labelledby={id}>
       <div className="work-head">
-        <h2 className="work-head__title" id="guide-about">
-          この方針について
+        <h2 className="work-head__title" id={id}>
+          {title}
         </h2>
       </div>
-      <dl className="guide-facts">
-        <dt>目的</dt>
-        <dd>{guideline.purpose}</dd>
-        {guideline.scope && (
-          <>
-            <dt>適用範囲</dt>
-            <dd>{guideline.scope}</dd>
-          </>
-        )}
-      </dl>
+      <p className="guide-prose">{body}</p>
     </section>
   );
 }
@@ -187,7 +160,6 @@ function CoreLayer({ layer, cores }: { layer: Layer; cores: Principle[] }) {
         </h2>
         <p className="work-head__meta">{cores.length} 件</p>
       </div>
-      <p className="guide-layer__lead">{layer.lead}</p>
       <ol className="guide-cores">
         {cores.map((core, idx) => (
           <li key={idx} id={`rule-${layer.id}-${idx}`} className="guide-core" tabIndex={-1}>
@@ -201,7 +173,7 @@ function CoreLayer({ layer, cores }: { layer: Layer; cores: Principle[] }) {
 }
 
 /** Tips は具体的な場面の規則。適用と、結び付くコアをタグで示す。 */
-function TipsLayer({ layer, rules, cores }: { layer: Layer; rules: Rule[]; cores: Principle[] }) {
+function TipsLayer({ layer, rules }: { layer: Layer; rules: Rule[] }) {
   const id = layer.id;
   return (
     <section className="guide-block" aria-labelledby={`guide-${id}-head`}>
@@ -211,110 +183,35 @@ function TipsLayer({ layer, rules, cores }: { layer: Layer; rules: Rule[]; cores
         </h2>
         <p className="work-head__meta">{rules.length} 件</p>
       </div>
-      <p className="guide-layer__lead">{layer.lead}</p>
       <div className="guide-rules">
-        {rules.map((rule, idx) => {
-          const Figure = rule.figureKey ? FIGURE_COMPONENTS[rule.figureKey] : null;
-          return (
-            <article key={idx} id={`rule-${id}-${idx}`} className="guide-rule" tabIndex={-1}>
+        {rules.map((rule, idx) => (
+          <article key={idx} id={`rule-${id}-${idx}`} className="guide-rule" tabIndex={-1}>
+            {/* 適用は規則の題名のすぐ横に置く。どのプロジェクトで守るかは題名と対で読む情報である。 */}
+            <div className="guide-rule__head">
               <h3 className="guide-rule__title">{rule.title}</h3>
-              {rule.applies && (
-                <p className="guide-rule__tags">
-                  <span className="guide-tag">{rule.applies}</span>
-                  {rule.cores.map((coreTitle) => {
-                    const coreId = `rule-${CORE_LAYER.id}-${cores.findIndex(
-                      (core) => core.title === coreTitle,
-                    )}`;
-                    return (
-                      <a
-                        key={coreTitle}
-                        className="guide-tag guide-tag--core"
-                        href={`#${coreId}`}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          goToRule(coreId);
-                        }}
-                      >
-                        {coreTitle}
-                      </a>
-                    );
-                  })}
-                </p>
-              )}
-              {Figure && (
-                <div className="guide-rule__figure">
-                  <Figure />
-                </div>
-              )}
-              <div className="guide-rule__rationale">{renderInline(rule.rationale)}</div>
-              <div className="guide-examples">
-                <div className="guide-example guide-example--bad">
-                  <div className="guide-example__header">
-                    <span className="guide-example__tag guide-example__tag--bad">悪い例</span>
-                  </div>
-                  <div className="guide-example__body">{renderInline(rule.bad)}</div>
-                </div>
-                <div className="guide-example guide-example--good">
-                  <div className="guide-example__header">
-                    <span className="guide-example__tag guide-example__tag--good">良い例</span>
-                  </div>
-                  <div className="guide-example__body">{renderInline(rule.good)}</div>
-                </div>
-              </div>
-              {rule.exception && (
-                <div className="guide-rule__exception">
-                  <span className="guide-rule__exception-label">例外:</span>
-                  {renderInline(rule.exception)}
-                </div>
-              )}
-              {(rule.experiment || rule.source) && (
-                <div className="guide-rule__origins">
-                  {rule.experiment && (
-                    <span className="guide-rule__origin-item">
-                      <span className="guide-rule__origin-label">実験:</span>
-                      <ExperimentLink item={rule.experiment} />
-                    </span>
-                  )}
-                  {rule.source && (
-                    <span className="guide-rule__origin-item">
-                      <span className="guide-rule__origin-label">出典:</span>
-                      <a
-                        href={resolveHref(rule.source.url)}
-                        className="guide-link"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {rule.source.text}
-                      </a>
-                    </span>
-                  )}
-                </div>
-              )}
-            </article>
-          );
-        })}
+              {rule.applies && <span className="guide-rule__applies">{rule.applies}</span>}
+            </div>
+            <p className="guide-rule__rationale">{renderInline(rule.rationale)}</p>
+            {/* 採る側を先に読ませる。bad から読むと、正しい形に辿り着くまで 2 度読むことになる。 */}
+            <div className="guide-pair">
+              <section className="guide-side guide-side--good">
+                <h4 className="guide-mark guide-mark--good">good</h4>
+                <p className="guide-side__body">{renderInline(rule.good)}</p>
+              </section>
+              <section className="guide-side guide-side--bad">
+                <h4 className="guide-mark guide-mark--bad">bad</h4>
+                <p className="guide-side__body">{renderInline(rule.bad)}</p>
+              </section>
+            </div>
+            {rule.exception && (
+              <p className="guide-rule__exception">
+                <span className="guide-rule__exception-label">例外</span>
+                <span>{renderInline(rule.exception)}</span>
+              </p>
+            )}
+          </article>
+        ))}
       </div>
     </section>
-  );
-}
-
-/**
- * 出どころへのリンク。
- * 公開している成果物を指しているならその詳細へ、そうでなければリポジトリの該当ファイルへ送る。
- */
-function ExperimentLink({ item }: { item: LinkItem }) {
-  const match = item.url.match(/experiments\/([a-z0-9-]+)/);
-  const work = match ? catalog.experiments.find((record) => record.slug === match[1]) : undefined;
-  if (work?.topic) {
-    return (
-      <Link href={workHref(work.topic, work.slug)} className="guide-link">
-        {item.text}
-      </Link>
-    );
-  }
-  return (
-    <a href={resolveHref(item.url)} className="guide-link" target="_blank" rel="noreferrer">
-      {item.text}
-    </a>
   );
 }

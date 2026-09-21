@@ -46,7 +46,7 @@ export function App() {
   if (route.name === "redirect") {
     const page = pageForRoute(matchRoute(route.to));
     return (
-      <Layout path={route.to} title={page.title} updated={page.updated}>
+      <Layout path={route.to} title={page.title}>
         {page.body}
       </Layout>
     );
@@ -54,7 +54,7 @@ export function App() {
 
   const page = pageForRoute(route);
   return (
-    <Layout path={path} title={page.title} updated={page.updated}>
+    <Layout path={path} title={page.title}>
       {page.body}
     </Layout>
   );

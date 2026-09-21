@@ -136,6 +136,8 @@ A9 では版面の開始位置を全画面で揃え、Illustrations と Motion �
 A10 では方針の書式を作り直し、コアを思想の短文に、Tips を適用と関連コアを持つ具体の規則にした。States & Feedback だけを新書式へ移し、残り 5 文書は旧書式のまま読んでいる。
 段階 C では `topic-first` を採用し、`apps/catalog` の表示層をこの案の構造へ置き換えた。URL は path ベースを維持し、`/foundations/tokens` と `/guidelines` を足し、Graphics を公開面から外した。
 トップ、トピック 5 面、詳細、見本、方針 6 面を実データで実装した。
+この Experiment は段階 A10 時点の造形で凍結した。
+2026-09-21 以降の方針画面とサイドバーの変更は公開面（`apps/catalog`）だけに入れており、`topic-first` の実装とは一致しない（[箱をやめる ADR](../../docs/decisions/2026-09-21-catalog-guideline-plain-layout.md)）。
 
 ## Evaluation
 
