@@ -98,7 +98,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
   - `/foundations/typography`、`/foundations/typography/product-ui-typography`
   - `/foundations/tokens`
   - `/foundations/icons`、`/foundations/icons/<Experiment>`
-  - `/components`
+  - `/components`、`/components/button`
   - `/guidelines`（先頭の文書へ置き換わる）、`/guidelines/<slug>`
 - 次の URL が NotFound になる
   - `/foundations/graphics`、`/foundations/graphics/class-doc-logo`、`/graphics`
@@ -111,8 +111,9 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
 - ライト / ダークの切り替えで選択中の配色の値が変わる
 - 配色の詳細を開くと URL が変わり、Esc、背景、閉じるボタンのどれでも一覧へ戻る
 - 配色の詳細を開閉しても、ページのスクロール位置が動かない
-- Components では採用 Button がページ本文へ直接表示され、Home の live は `/preview/<exp>/<variant>` の iframe で表示される
-- `/components/button` と廃止した Component の詳細 URL が NotFound になる
+- Components の一覧に Button のカードが出て、カードから `/components/button` へ移れる
+- `/components/button` では採用 Button がページ本文へ直接表示され、Home の live は `/preview/<exp>/<variant>` の iframe で表示される
+- 廃止した Component の詳細 URL が NotFound になる
 - Icons の SVG が表示される
 - 方針の索引から規則へ飛べる。本文中の相対リンクがリポジトリの該当ファイルへ解決される
 - preview PNG が Catalog の画面へ収集されていない

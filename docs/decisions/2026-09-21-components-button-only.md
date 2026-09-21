@@ -6,6 +6,7 @@
 - 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)
 - 参照: [Experiment 削除 ADR](2026-09-21-prune-decided-experiments.md)
 - 置き換え: Components の構成は本 ADR に従う。
+- 置き換えられた条項: 本文直載と詳細 route 削除は [部品ごとの詳細ページ ADR](2026-09-21-component-detail-pages.md) が置き換える。
 - 置き換え: [soft-component-kit ADR](2026-09-19-soft-component-kit.md) の Components 関連条項。
 
 ## 背景
