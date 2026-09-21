@@ -72,12 +72,3 @@ export function ComponentsCover() {
     </div>
   );
 }
-
-export function GuidelinesCover() {
-  return (
-    <div className="card-cover-text">
-      <p>操作の対象、結果、状態を利用者の言葉で伝える。</p>
-      <p>文言で迷わせず、最短で目的を達成できるようにする。</p>
-    </div>
-  );
-}
