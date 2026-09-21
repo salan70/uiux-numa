@@ -1,25 +1,22 @@
 /* 枠と題名は動かさず、枠の中身だけを 1.04 倍にする。枠の外へははみ出さない。
-   カバーの無いカードは、枠の中の文字を同じように拡大する。 */
-.card-zoom-cover .card__cover > *,
-.card-zoom-cover .card--text .card__text {
+   文字だけのカードも、枠の中の要約を同じように拡大する。 */
+.card-zoom-cover .card__cover > * {
   transition: transform var(--duration-press) var(--easing-out);
 }
 
-/* 文字は左上を起点に拡大し、右と下へ広げる。中央起点だと左端の文字が枠の余白へ食い込む。 */
-.card-zoom-cover .card--text .card__text {
+/* 要約は左上を起点に拡大する。中央起点だと左端の文字が枠の余白へ食い込む。 */
+.card-zoom-cover .card__excerpt {
   transform-origin: top left;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card-zoom-cover .card:hover .card__cover > *,
-  .card-zoom-cover .card--text:hover .card__text {
+  .card-zoom-cover .card:hover .card__cover > * {
     transform: scale(1.04);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card-zoom-cover .card:hover .card__cover > *,
-  .card-zoom-cover .card--text:hover .card__text {
+  .card-zoom-cover .card:hover .card__cover > * {
     transform: none;
   }
 }

@@ -75,8 +75,7 @@
 
 .card-showcase__eyebrow,
 .card-showcase__spec > p,
-.card-showcase__tokens,
-.card-showcase__status {
+.card-showcase__tokens {
   color: var(--color-on-surface-variant, #666);
   font-family: var(--typography-caption-font-family);
   font-size: var(--typography-caption-font-size);
@@ -104,11 +103,6 @@
 }
 
 /* Button の見本と同じく、左に名前と説明と token、右に実物を置く行で並べる。 */
-.card-showcase__section + .card-showcase__section,
-.card-showcase__examples {
-  margin-block-start: var(--space-1000);
-}
-
 .card-showcase__section > h2 {
   padding-block-end: var(--space-300);
   border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
@@ -149,40 +143,18 @@
 
 .card-showcase__tokens dd {
   min-inline-size: 0;
-  overflow-wrap: anywhere;
   color: var(--color-on-surface, #242424);
+}
+
+/* token 名の途中では折らず、区切りの / の後だけで折り返す。 */
+.card-showcase__tokens dd > span {
+  white-space: nowrap;
 }
 
 /* 実物は一覧で使う幅に揃える。行の幅いっぱいに広げると、カバーが実際より大きく見える。 */
 .card-showcase__sample {
   display: grid;
   inline-size: min(100%, 18rem);
-}
-
-.card-showcase__press {
-  display: grid;
-  gap: var(--space-200);
-}
-
-.card-showcase__status {
-  min-block-size: calc(var(--typography-caption-font-size) * var(--typography-caption-line-height));
-}
-
-.card-showcase__examples > h2 {
-  margin-block-end: var(--space-300);
-}
-
-.card-showcase__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
-  gap: var(--space-400);
-  padding: 0;
-  list-style: none;
-}
-
-.card-showcase__list > li {
-  display: grid;
-  min-inline-size: 0;
 }
 
 @media (width <= 34rem) {
@@ -193,9 +165,14 @@
 
 /* ---- Card ---- */
 
-/* 面を持たず、枠はカバーだけが持つ。カバーが無いときは文字を枠の中に置き、面の色はカバーと揃える。
+/* 面を持たず、枠は 16:9 のカバーだけが持つ。カバーが無いときは要約を同じ枠の中に置く。
+   枠の下は補足、題名、要約の 3 行分の高さを常に確保し、どのカードも同じ高さにする。
    hover の動きは variant が決める。ここは構造と静止時の見た目だけを持つ。 */
 .card {
+  --card-caption-line: calc(
+    var(--typography-caption-font-size) * var(--typography-caption-line-height)
+  );
+  --card-title-line: calc(var(--typography-body-font-size) * var(--font-line-height-tight));
   position: relative;
   display: flex;
   flex-direction: column;
@@ -205,6 +182,7 @@
 }
 
 .card__frame {
+  order: -1;
   overflow: hidden;
   border: var(--border-width-thin) solid var(--color-surface-variant, #e3dede);
   border-radius: var(--radius-surface);
@@ -218,15 +196,28 @@
   overflow: hidden;
 }
 
+/* 要約は枠の左上から読み始め、収まらない分は … で切る。 */
+.card__excerpt {
+  display: -webkit-box;
+  align-self: stretch;
+  justify-self: stretch;
+  margin: var(--space-400);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
 .card__text {
   display: flex;
   flex-direction: column;
   gap: var(--space-100);
-  padding-block: var(--space-300) 0;
-}
-
-.card--text .card__text {
-  padding: var(--space-400);
+  block-size: calc(
+    var(--space-300) + var(--card-caption-line) * 2 + var(--card-title-line) + var(--space-100) * 2
+  );
+  padding-block-start: var(--space-300);
+  overflow: hidden;
 }
 
 /* 枠はカードの外周に出す。リンク自身に出すと題名の周りだけが囲まれる。 */
@@ -235,12 +226,21 @@
   outline-offset: 4px;
 }
 
+/* 題名、補足、要約は 1 行に収め、収まらない分は … で切る。全文はリンク名として読み上げる。 */
+.card__title,
+.card__meta,
+.card__description {
+  flex: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .card__title {
   font-family: var(--typography-control-font-family);
   font-size: var(--typography-body-font-size);
   font-weight: var(--font-weight-bold);
   line-height: var(--font-line-height-tight);
-  overflow-wrap: anywhere;
 }
 
 .card__link {
@@ -335,14 +335,4 @@
 .card-cover-components {
   display: flex;
   gap: var(--space-200);
-}
-
-.card-cover-text {
-  display: grid;
-  gap: var(--space-100);
-  align-self: stretch;
-  justify-self: stretch;
-  padding: var(--space-400);
-  font-size: var(--typography-caption-font-size);
-  line-height: var(--typography-caption-line-height);
 }
