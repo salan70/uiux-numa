@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-19
 - 置き換え: 2026-09-20。角丸と影は [soft-component-kit](2026-09-19-soft-component-kit.md) が正本。「Catalog 全体の見た目を 3 案の Experiment にはしない」は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md) が部分置換する。比較は `experiments/catalog-redesign/` に閉じた。公開殻は人間判断のあとでも `hairline-float` を続ける。
+- 置き換え: 2026-09-21。「token の取り込み規則」と、余白を 2 個に限る決定は [階梯の ADR](2026-09-21-token-scale-foundation.md) が置き換える。角丸の token 化も同 ADR が正本。
 - 参照: [Typography foundation](2026-09-19-typography-foundation.md)、[判断履歴](2026-09-13-decision-records.md)、[評価を経ない判断](2026-09-17-named-variants-and-unevaluated-decisions.md)、[color-schemes](../records/color-schemes/README.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)、[visual showcase](2026-09-20-catalog-visual-showcase.md)
 
 ## 背景

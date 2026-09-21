@@ -48,12 +48,12 @@ format:
 # canonical token から Web 用 CSS を生成する
 tokens-build:
     node scripts/build-typography-tokens.mjs
-    node scripts/build-space-tokens.mjs
+    node scripts/build-dimension-tokens.mjs
 
 # token の構造、参照、生成差分を検査する
 tokens-check:
     node scripts/build-typography-tokens.mjs --check
-    node scripts/build-space-tokens.mjs --check
+    node scripts/build-dimension-tokens.mjs --check
 
 # 配色の正本 palettes.ts から variant ごとの scheme.css を生成する
 schemes-build:

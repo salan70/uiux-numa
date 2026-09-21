@@ -1,5 +1,7 @@
 @import "../../../tokens/typography/typography.css";
 @import "../../../tokens/space/space.css";
+@import "../../../tokens/radius/radius.css";
+@import "../../../tokens/border/border.css";
 
 @font-face {
   font-family: "LINE Seed JP";
@@ -124,14 +126,14 @@ body {
   --cat-label: var(--font-size-sm);
 
   /* 余白。page-inline と section は token の値をそのまま使う。 */
-  --cat-gap: 0.5rem;
-  --cat-gap-lg: 1rem;
+  --cat-gap: var(--space-200);
+  --cat-gap-lg: var(--space-400);
   --cat-inline: var(--space-page-inline, 1.5rem);
   --cat-section: var(--space-section, 2.5rem);
-  --cat-block: 5rem;
+  --cat-block: var(--space-2000);
 
   /* 画面の部品。角丸は小さく取り、印刷ではなく操作面であることを示す。 */
-  --cat-radius: 0.375rem;
+  --cat-radius: var(--radius-control);
   --cat-tap: 2.5rem;
   --cat-duration: 120ms;
 
@@ -159,9 +161,9 @@ body {
 }
 
 .app-shell :focus-visible {
-  outline: 2px solid var(--cat-focus);
+  outline: var(--border-width-thick) solid var(--cat-focus);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-mark);
 }
 
 .app-shell a {
@@ -180,7 +182,7 @@ body {
   inset-inline-start: var(--cat-inline);
   inset-block-start: -4rem;
   z-index: 2;
-  padding: 0.5rem 1rem;
+  padding: var(--space-200) var(--space-400);
   background: var(--cat-text);
   color: var(--cat-bg);
   border-radius: var(--cat-radius);
@@ -210,7 +212,7 @@ body {
   overflow: auto;
   padding: var(--cat-gap-lg) var(--cat-gap-lg) var(--cat-section);
   background: var(--cat-bg);
-  border-inline-end: 1px solid var(--cat-line);
+  border-inline-end: var(--border-width-thin) solid var(--cat-line);
 }
 
 /* 題字と開閉ボタンを 1 行に並べる。ボタンを本文側へ置くと、
@@ -281,7 +283,7 @@ body {
   margin: 0 0 var(--cat-gap);
   padding-inline: var(--cat-gap);
   padding-block-end: var(--cat-gap);
-  border-block-end: 1px solid var(--cat-line);
+  border-block-end: var(--border-width-thin) solid var(--cat-line);
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -302,7 +304,7 @@ body {
   align-items: center;
   min-block-size: var(--cat-tap);
   padding-inline: var(--cat-gap);
-  border-inline-start: 2px solid transparent;
+  border-inline-start: var(--border-width-thick) solid transparent;
   color: var(--cat-muted);
   font-size: 1rem;
   transition: color var(--cat-duration) ease;
@@ -355,7 +357,7 @@ body {
     padding-block: var(--cat-gap);
     padding-inline: var(--cat-inline);
     border-inline-end: 0;
-    border-block-end: 1px solid var(--cat-line);
+    border-block-end: var(--border-width-thin) solid var(--cat-line);
     background: color-mix(in srgb, var(--cat-bg) 92%, transparent);
     backdrop-filter: blur(8px);
   }
@@ -410,7 +412,7 @@ body {
 
   .app-shell .sidebar__link {
     border-inline-start: 0;
-    border-block-end: 2px solid transparent;
+    border-block-end: var(--border-width-thick) solid transparent;
     white-space: nowrap;
   }
 
@@ -458,20 +460,20 @@ body {
 
 .app-shell .section-title {
   padding-block-end: var(--cat-gap-lg);
-  border-block-end: 2px solid var(--cat-text);
+  border-block-end: var(--border-width-thick) solid var(--cat-text);
 }
 
 /* ---- 標本 ---- */
 
 .app-shell .live {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--space-200);
 }
 
 .app-shell .live__frame {
   inline-size: 100%;
   block-size: 16rem;
-  border: 1px solid var(--cat-line);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   background: var(--cat-surface);
   display: block;
@@ -484,7 +486,7 @@ body {
 .app-shell .live__caption {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+  gap: var(--space-100) var(--space-400);
   margin: 0;
   font-size: var(--cat-label);
   font-weight: 700;
@@ -503,7 +505,7 @@ body {
 .app-shell .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
+  gap: var(--space-100) var(--space-300);
   margin: 0;
   font-size: var(--cat-label);
   font-weight: 700;
@@ -514,7 +516,7 @@ body {
 
 .app-shell .meta span + span::before {
   content: "／";
-  margin-inline-end: 0.75rem;
+  margin-inline-end: var(--space-300);
   color: var(--cat-line-strong);
 }
 
@@ -523,7 +525,7 @@ body {
 .app-shell .detail {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 1.5rem;
+  column-gap: var(--space-600);
   row-gap: var(--cat-gap-lg);
 }
 
@@ -534,7 +536,7 @@ body {
 .app-shell .detail__crumb {
   grid-column: 1 / -1;
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-200);
   margin: 0;
   font-size: var(--cat-label);
   font-weight: 700;
@@ -574,8 +576,8 @@ body {
   display: grid;
   gap: var(--cat-gap);
   align-content: start;
-  padding-inline-start: 1.5rem;
-  border-inline-start: 1px solid var(--cat-line);
+  padding-inline-start: var(--space-600);
+  border-inline-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .detail__source {
@@ -593,13 +595,13 @@ body {
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 0.25rem;
+  gap: var(--space-100);
 }
 
 .app-shell .variants--row {
   grid-auto-flow: column;
   grid-auto-columns: max-content;
-  gap: 0.5rem;
+  gap: var(--space-200);
 }
 
 .app-shell .variants__item {
@@ -609,9 +611,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0 0.75rem;
-  border: 1px solid transparent;
+  gap: var(--space-200);
+  padding: 0 var(--space-300);
+  border: var(--border-width-thin) solid transparent;
   border-radius: var(--cat-radius);
   background: none;
   color: var(--cat-muted);
@@ -651,8 +653,8 @@ body {
   align-items: center;
   justify-content: center;
   min-block-size: var(--cat-tap);
-  padding: 0 1.25rem;
-  border: 1px solid var(--cat-text);
+  padding: 0 var(--space-500);
+  border: var(--border-width-thin) solid var(--cat-text);
   border-radius: var(--cat-radius);
   background: var(--cat-text);
   color: var(--cat-bg);
@@ -710,7 +712,7 @@ body {
     padding-inline-start: 0;
     padding-block-start: var(--cat-gap-lg);
     border-inline-start: 0;
-    border-block-start: 1px solid var(--cat-line);
+    border-block-start: var(--border-width-thin) solid var(--cat-line);
   }
 }
 
@@ -741,7 +743,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 0.75rem;
+  gap: var(--space-200) var(--space-300);
 }
 
 /* 語を出さず、アイコンのボタン 2 つにする。
@@ -770,7 +772,7 @@ body {
   place-items: center;
   inline-size: 100%;
   block-size: 100%;
-  border: 1px solid var(--cat-line);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   background: var(--cat-surface);
   color: var(--cat-text);
@@ -807,7 +809,7 @@ body {
 .app-shell .hero {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 1.5rem;
+  column-gap: var(--space-600);
   row-gap: var(--cat-gap-lg);
 }
 
@@ -820,7 +822,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1rem;
+  gap: var(--space-200) var(--space-400);
   margin: 0;
   font-size: var(--cat-label);
   font-weight: 700;
@@ -833,7 +835,7 @@ body {
   display: inline-flex;
   align-items: center;
   min-block-size: 1.5rem;
-  padding: 0 0.5rem;
+  padding: 0 var(--space-200);
   border-radius: var(--cat-radius);
   background: var(--cat-accent);
   color: var(--cat-on-accent);
@@ -868,8 +870,8 @@ body {
   display: grid;
   gap: var(--cat-gap-lg);
   align-content: start;
-  padding-inline-start: 1.5rem;
-  border-inline-start: 1px solid var(--cat-line);
+  padding-inline-start: var(--space-600);
+  border-inline-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .hero__action {
@@ -884,12 +886,12 @@ body {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--cat-section) 1.5rem;
+  gap: var(--cat-section) var(--space-600);
 }
 
 .app-shell .topic {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--space-200);
   align-content: start;
   min-inline-size: 0;
 }
@@ -898,10 +900,10 @@ body {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-400);
   min-block-size: var(--cat-tap);
-  padding-block-end: 0.5rem;
-  border-block-end: 2px solid var(--cat-text);
+  padding-block-end: var(--space-200);
+  border-block-end: var(--border-width-thick) solid var(--cat-text);
 }
 
 .app-shell .topic__label {
@@ -931,8 +933,8 @@ body {
 .app-shell .token-strip {
   display: grid;
   gap: 0;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--cat-line);
+  padding: var(--space-300) var(--space-400);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   background: var(--cat-surface);
   block-size: 16rem;
@@ -942,14 +944,14 @@ body {
 .app-shell .token-strip__row {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-400);
   margin: 0;
-  padding-block: 0.5rem;
+  padding-block: var(--space-200);
   font-size: 0.875rem;
 }
 
 .app-shell .token-strip__row + .token-strip__row {
-  border-block-start: 1px solid var(--cat-line);
+  border-block-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .token-strip__name {
@@ -996,14 +998,14 @@ body {
 }
 
 .app-shell .token-family__head {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-200);
   font-size: var(--cat-h2);
   font-weight: 700;
   line-height: 1.3;
 }
 
 .app-shell .token-family__source {
-  margin: 0.5rem 0 0;
+  margin: var(--space-200) 0 0;
   font-size: var(--cat-label);
   color: var(--cat-muted);
 }
@@ -1022,10 +1024,10 @@ body {
 
 .app-shell .token-table th,
 .app-shell .token-table td {
-  padding: 0.875rem 1rem 0.875rem 0;
+  padding: 0.875rem var(--space-400) 0.875rem 0;
   text-align: start;
   vertical-align: top;
-  border-block-end: 1px solid var(--cat-line);
+  border-block-end: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .token-table thead th {
@@ -1044,7 +1046,7 @@ body {
 
 .app-shell .token-table__kind {
   display: block;
-  margin-block-start: 0.25rem;
+  margin-block-start: var(--space-100);
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1083,7 +1085,7 @@ body {
     padding-inline-start: 0;
     padding-block-start: var(--cat-gap-lg);
     border-inline-start: 0;
-    border-block-start: 1px solid var(--cat-line);
+    border-block-start: var(--border-width-thin) solid var(--cat-line);
   }
 
   .app-shell .topic-list {
@@ -1105,8 +1107,22 @@ body {
 .app-shell .token-table__bar {
   display: block;
   block-size: 0.75rem;
-  border-radius: 1px;
+  border-radius: var(--radius-mark);
   background: var(--cat-accent);
+}
+
+.app-shell .token-table__corner {
+  display: block;
+  inline-size: var(--space-1000);
+  block-size: var(--space-1000);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
+  background: var(--cat-surface);
+}
+
+.app-shell .token-table__rule {
+  display: block;
+  inline-size: var(--space-2000);
+  border-block-start: var(--border-width-thin) solid var(--cat-text);
 }
 
 /* ---- トピックの中身。一覧を挟まず、成果物そのものを出す ---- */
@@ -1127,9 +1143,9 @@ body {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  padding-block-end: 0.5rem;
-  border-block-end: 2px solid var(--cat-text);
+  gap: var(--space-200) var(--space-600);
+  padding-block-end: var(--space-200);
+  border-block-end: var(--border-width-thick) solid var(--cat-text);
 }
 
 .app-shell .work-head__title {
@@ -1142,7 +1158,7 @@ body {
 .app-shell .work-head__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
+  gap: var(--space-100) var(--space-300);
   margin: 0;
   font-size: var(--cat-label);
   font-weight: 700;
@@ -1157,7 +1173,7 @@ body {
 
 .app-shell .work-head__meta span + span::before {
   content: "／";
-  margin-inline-end: 0.75rem;
+  margin-inline-end: var(--space-300);
   color: var(--cat-line-strong);
 }
 
@@ -1166,10 +1182,10 @@ body {
 /* 配色を当てた標本。色の一覧だけでは、組んだときの見え方が分からない。 */
 .app-shell .specimen {
   display: grid;
-  gap: 0.5rem;
-  padding: 1.25rem;
-  border: 1px solid var(--cs-surface-variant);
-  border-radius: var(--cat-radius);
+  gap: var(--space-200);
+  padding: var(--space-500);
+  border: var(--border-width-thin) solid var(--cs-surface-variant);
+  border-radius: var(--radius-surface);
   background: var(--cs-background);
   color: var(--cs-on-surface);
 }
@@ -1190,15 +1206,15 @@ body {
 .app-shell .specimen__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.25rem 0 0;
+  gap: var(--space-200);
+  margin: var(--space-100) 0 0;
 }
 
 .app-shell .specimen__btn {
   display: inline-flex;
   align-items: center;
   min-block-size: 2.25rem;
-  padding: 0 1rem;
+  padding: 0 var(--space-400);
   border-radius: var(--cat-radius);
   background: var(--cs-primary);
   color: var(--cs-on-primary);
@@ -1209,7 +1225,7 @@ body {
 .app-shell .specimen__btn--quiet {
   background: none;
   color: var(--cs-on-surface);
-  border: 1px solid var(--cs-outline);
+  border: var(--border-width-thin) solid var(--cs-outline);
 }
 
 .app-shell .specimen__field {
@@ -1217,8 +1233,8 @@ body {
   align-items: center;
   min-block-size: 2.25rem;
   margin: 0;
-  padding: 0 0.75rem;
-  border: 1px solid var(--cs-outline);
+  padding: 0 var(--space-300);
+  border: var(--border-width-thin) solid var(--cs-outline);
   border-radius: var(--cat-radius);
   background: var(--cs-surface);
   color: var(--cs-on-surface-variant);
@@ -1231,7 +1247,7 @@ body {
    出すのは名前と字形だけにする。素性の全文は token の README にある。 */
 .app-shell .typeface {
   padding-block-end: var(--cat-gap-lg);
-  border-block-end: 1px solid var(--cat-line-strong);
+  border-block-end: var(--border-width-thin) solid var(--cat-line-strong);
 }
 
 .app-shell .typeface__name {
@@ -1244,7 +1260,7 @@ body {
 
 /* 字形は大きく出す。仮名、片仮名、漢字、欧字、数字の字面を 1 度に比べるためである。 */
 .app-shell .typeface__glyphs {
-  margin: 0.5rem 0 0;
+  margin: var(--space-200) 0 0;
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 700;
   line-height: 1.2;
@@ -1268,8 +1284,8 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 34em) minmax(0, 1fr);
   gap: var(--cat-gap-lg) var(--cat-section);
-  padding-block: 1.5rem;
-  border-block-end: 1px solid var(--cat-line);
+  padding-block: var(--space-600);
+  border-block-end: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .role__main {
@@ -1277,7 +1293,7 @@ body {
 }
 
 .app-shell .role__name {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-200);
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1289,7 +1305,7 @@ body {
   display: grid;
   justify-self: end;
   inline-size: 15rem;
-  gap: 0.25rem;
+  gap: var(--space-100);
   margin: 0;
   font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
@@ -1298,9 +1314,9 @@ body {
 .app-shell .role__spec-row {
   display: grid;
   grid-template-columns: 4rem minmax(0, 1fr);
-  gap: 0.75rem;
-  padding-block: 0.25rem;
-  border-block-end: 1px solid var(--cat-line);
+  gap: var(--space-300);
+  padding-block: var(--space-100);
+  border-block-end: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .role__spec-row:last-child {
@@ -1349,17 +1365,17 @@ body {
 
 .app-shell .topic-source a {
   color: var(--cat-accent-text);
-  border-block-end: 1px solid currentcolor;
+  border-block-end: var(--border-width-thin) solid currentcolor;
 }
 
 /* 説明には縦の罫を引く。
    caption の見本は 0.875rem の並文字なので、印がないと説明と見分けが付かなかった。
    印は注釈の側に付ける。見本の側に付けると、見本が素のまま見られなくなる。 */
 .app-shell .role__desc {
-  margin: 0.75rem 0 0;
+  margin: var(--space-300) 0 0;
   max-inline-size: 38em;
-  padding-inline-start: 1rem;
-  border-inline-start: 2px solid var(--cat-line);
+  padding-inline-start: var(--space-400);
+  border-inline-start: var(--border-width-thick) solid var(--cat-line);
   font-size: 0.875rem;
   color: var(--cat-muted);
 }
@@ -1374,7 +1390,7 @@ body {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
-  gap: 0.75rem;
+  gap: var(--space-300);
 }
 
 .app-shell .svg-grid--large {
@@ -1383,11 +1399,11 @@ body {
 
 .app-shell .svg-cell {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--space-200);
   justify-items: center;
   align-content: center;
-  padding: 1.25rem 0.75rem;
-  border: 1px solid var(--cat-line);
+  padding: var(--space-500) var(--space-300);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   background: var(--cat-bg);
   /* SVG は currentColor を使う。土台の文字色を渡す。 */
@@ -1425,7 +1441,7 @@ body {
 /* 1 配色を全幅で見せる帯。ページの顔として置く。 */
 .app-shell .feature {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--space-300);
 }
 
 /* 大きな帯は 2 段にして、カードより多くの役割を出す。
@@ -1434,7 +1450,7 @@ body {
   display: grid;
   grid-template-rows: repeat(2, 1fr);
   block-size: 15rem;
-  border: 1px solid var(--cat-line);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   overflow: hidden;
 }
@@ -1461,10 +1477,10 @@ body {
   inline-size: 100%;
   block-size: 100%;
   display: grid;
-  gap: 0.125rem;
+  gap: var(--space-50);
   align-content: end;
   justify-items: start;
-  padding: 0.75rem;
+  padding: var(--space-300);
   border: 0;
   background: none;
   font: inherit;
@@ -1499,13 +1515,13 @@ body {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
+  gap: var(--space-200) var(--space-600);
 }
 
 .app-shell .feature__name {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: var(--space-300);
   margin: 0;
 }
 
@@ -1517,7 +1533,7 @@ body {
 .app-shell .feature__nav {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-300);
   margin: 0;
 }
 
@@ -1528,11 +1544,11 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375rem;
+  gap: var(--space-150);
   inline-size: 8rem;
   min-block-size: var(--cat-tap);
-  padding: 0 0.75rem;
-  border: 1px solid var(--cat-line-strong);
+  padding: 0 var(--space-300);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
   border-radius: var(--cat-radius);
   background: none;
   color: var(--cat-text);
@@ -1578,12 +1594,12 @@ body {
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--cat-section) 1.5rem;
+  gap: var(--cat-section) var(--space-600);
 }
 
 .app-shell .palette {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--space-200);
   align-content: start;
   min-inline-size: 0;
 }
@@ -1597,7 +1613,7 @@ body {
   padding: 0;
   list-style: none;
   block-size: 9rem;
-  border: 1px solid var(--cat-line);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   overflow: hidden;
 }
@@ -1614,7 +1630,7 @@ body {
   block-size: 100%;
   display: grid;
   place-items: center;
-  padding: 0.5rem 0.25rem;
+  padding: var(--space-200) var(--space-100);
   border: 0;
   background: none;
   font: inherit;
@@ -1623,7 +1639,7 @@ body {
 
 .app-shell .band__info {
   display: grid;
-  gap: 0.125rem;
+  gap: var(--space-50);
   justify-items: center;
   /* 情報は hover だけに頼らない。focus でも出し、粗いポインタでは常時出す。 */
   opacity: 0;
@@ -1692,13 +1708,13 @@ body {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.25rem 0.75rem;
+  gap: var(--space-100) var(--space-300);
 }
 
 .app-shell .palette__name {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: var(--space-200);
   margin: 0;
 }
 
@@ -1753,7 +1769,7 @@ body {
 }
 
 .app-shell .role-group__label {
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--space-200);
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1771,7 +1787,7 @@ body {
 
 .app-shell .role-item + .role-item,
 .app-shell .ratio + .ratio {
-  border-block-start: 1px solid var(--cat-line);
+  border-block-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .role-item__hit {
@@ -1781,8 +1797,8 @@ body {
   display: grid;
   grid-template-columns: 1.25rem minmax(0, 7rem) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0;
+  gap: var(--space-200);
+  padding: var(--space-100) 0;
   border: 0;
   background: none;
   color: inherit;
@@ -1794,8 +1810,8 @@ body {
 
 .app-shell .role-item__chip {
   block-size: 1.25rem;
-  border: 1px solid var(--cat-line);
-  border-radius: 2px;
+  border: var(--border-width-thin) solid var(--cat-line);
+  border-radius: var(--radius-mark);
 }
 
 .app-shell .role-item__role,
@@ -1823,8 +1839,8 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
   align-items: baseline;
-  gap: 0.5rem;
-  padding-block: 0.375rem;
+  gap: var(--space-200);
+  padding-block: var(--space-150);
   font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
 }
@@ -1899,9 +1915,9 @@ body {
     justify-content: start;
     align-items: center;
     align-content: center;
-    gap: 0.75rem;
+    gap: var(--space-300);
     min-block-size: 2.5rem;
-    padding: 0.375rem 0.75rem;
+    padding: var(--space-150) var(--space-300);
   }
 
   .app-shell .feature__hex {
@@ -1911,7 +1927,7 @@ body {
   /* 狭い幅は 2 行にする。位置を明示しないと hex が細い列へ流れ、1 文字ずつ折り返す。 */
   .app-shell .role-item__hit {
     grid-template-columns: 1.25rem minmax(0, 1fr) auto;
-    row-gap: 0.125rem;
+    row-gap: var(--space-50);
   }
 
   .app-shell .role-item__chip {
@@ -1937,7 +1953,7 @@ body {
 
   .app-shell .ratio {
     grid-template-columns: 1fr auto;
-    row-gap: 0.125rem;
+    row-gap: var(--space-50);
   }
 
   .app-shell .ratio__pair {
@@ -1954,8 +1970,8 @@ body {
   max-block-size: min(46rem, calc(100% - 2 * var(--cat-inline)));
   margin: auto;
   padding: 0;
-  border: 1px solid var(--cat-line-strong);
-  border-radius: var(--cat-radius);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
+  border-radius: var(--radius-surface);
   background: var(--cat-bg);
   color: var(--cat-text);
   font-family: var(--font-family-sans);
@@ -1981,17 +1997,17 @@ body {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
+  gap: var(--space-200) var(--space-600);
   margin: calc(var(--cat-section) * -1) calc(var(--cat-section) * -1) var(--cat-gap-lg);
   padding: var(--cat-gap-lg) var(--cat-section);
   background: var(--cat-bg);
-  border-block-end: 2px solid var(--cat-text);
+  border-block-end: var(--border-width-thick) solid var(--cat-text);
 }
 
 .app-shell .sheet-dialog__name {
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: var(--space-300);
   margin: 0;
 }
 
@@ -2004,7 +2020,7 @@ body {
   appearance: none;
   min-block-size: var(--cat-tap);
   padding: 0 0.875rem;
-  border: 1px solid var(--cat-line-strong);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
   border-radius: var(--cat-radius);
   background: none;
   color: var(--cat-text);
@@ -2038,7 +2054,7 @@ body {
   .app-shell .sheet-dialog__head {
     inset-block-start: calc(var(--cat-gap-lg) * -1);
     margin: calc(var(--cat-gap-lg) * -1) calc(var(--cat-gap-lg) * -1) var(--cat-gap-lg);
-    padding: 0.75rem var(--cat-gap-lg);
+    padding: var(--space-300) var(--cat-gap-lg);
   }
 }
 
@@ -2088,7 +2104,7 @@ body {
   flex-direction: column;
   gap: var(--cat-gap-lg);
   padding-inline-start: var(--cat-gap-lg);
-  border-inline-start: 1px solid var(--cat-line);
+  border-inline-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .guide-aside__title {
@@ -2109,7 +2125,7 @@ body {
 .app-shell .guide-aside__list {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: var(--space-50);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2119,8 +2135,8 @@ body {
    規則そのものより索引の方が強く見える。 */
 .app-shell .guide-aside__link {
   display: block;
-  padding: 0.25rem 0 0.25rem var(--cat-gap);
-  border-inline-start: 2px solid transparent;
+  padding: var(--space-100) 0 var(--space-100) var(--cat-gap);
+  border-inline-start: var(--border-width-thick) solid transparent;
   color: var(--cat-muted);
   font-size: 0.875rem;
   line-height: 1.5;
@@ -2171,7 +2187,7 @@ body {
 
 /* 罫は項目の間だけに引く。見出し直下に引くと節の区切りと二重になる。 */
 .app-shell .guide-core + .guide-core {
-  border-block-start: 1px solid var(--cat-line);
+  border-block-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .guide-core:first-child {
@@ -2207,7 +2223,7 @@ body {
 .app-shell .guide-rule {
   margin-block-start: var(--cat-section);
   padding-block-start: var(--cat-section);
-  border-block-start: 1px solid var(--cat-line);
+  border-block-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .guide-rule:first-child {
@@ -2260,7 +2276,7 @@ body {
 .app-shell .guide-side--bad {
   padding-inline-start: var(--cat-gap-lg);
   margin-inline-start: calc(var(--cat-gap-lg) * -1);
-  border-inline-start: 1px solid var(--cat-line);
+  border-inline-start: var(--border-width-thin) solid var(--cat-line);
 }
 
 .app-shell .guide-side__body {
@@ -2314,7 +2330,7 @@ body {
   font-family: inherit;
   font-size: var(--font-size-sm);
   background: var(--cat-surface);
-  border: 1px solid var(--cat-line);
+  border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
 }
 
@@ -2340,6 +2356,6 @@ body {
     padding-inline-start: 0;
     padding-block-start: var(--cat-gap-lg);
     border-inline-start: 0;
-    border-block-start: 1px solid var(--cat-line);
+    border-block-start: var(--border-width-thin) solid var(--cat-line);
   }
 }

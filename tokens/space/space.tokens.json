@@ -1,18 +1,90 @@
 {
+  "$extensions": {
+    "uiux-numa": {
+      "role": "foundation",
+      "maturity": "candidate",
+      "platforms": ["web"],
+      "sources": []
+    }
+  },
   "space": {
-    "$type": "dimension",
-    "page-inline": {
+    "100": {
+      "$value": {
+        "value": 0.25,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。4px。"
+    },
+    "150": {
+      "$value": {
+        "value": 0.375,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。6px。"
+    },
+    "200": {
+      "$value": {
+        "value": 0.5,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。8px。"
+    },
+    "300": {
+      "$value": {
+        "value": 0.75,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。12px。"
+    },
+    "400": {
+      "$value": {
+        "value": 1,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。16px。"
+    },
+    "500": {
+      "$value": {
+        "value": 1.25,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。20px。"
+    },
+    "600": {
       "$value": {
         "value": 1.5,
         "unit": "rem"
       },
-      "$description": "ページ左右の余白。本文と画面端の距離。"
+      "$description": "余白の階梯。24px。"
     },
-    "section": {
+    "1000": {
       "$value": {
         "value": 2.5,
         "unit": "rem"
       },
+      "$description": "余白の階梯。40px。"
+    },
+    "2000": {
+      "$value": {
+        "value": 5,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。80px。"
+    },
+    "$type": "dimension",
+    "50": {
+      "$value": {
+        "value": 0.125,
+        "unit": "rem"
+      },
+      "$description": "余白の階梯。2px。"
+    },
+    "page-inline": {
+      "$value": "{space.600}",
+      "$description": "ページ左右の余白。本文と画面端の距離。"
+    },
+    "section": {
+      "$value": "{space.1000}",
       "$description": "主要セクションの開始までの縦の間隔。"
     }
   }
