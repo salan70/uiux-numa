@@ -81,3 +81,15 @@ export function SidebarIcon() {
     </svg>
   );
 }
+
+/**
+ * 前後へ送る印。文字の矢印は書体の字面で下へ寄るため、Button の icon 枠の中心に置けない。
+ * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2）。
+ */
+export function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d={direction === "next" ? "M4 12h16m-6-6 6 6-6 6" : "M20 12H4m6-6-6 6 6 6"} />
+    </svg>
+  );
+}
