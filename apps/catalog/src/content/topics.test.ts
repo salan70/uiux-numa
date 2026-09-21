@@ -39,8 +39,8 @@ describe("ナビのリンク先", () => {
     }
   });
 
-  it("Components の成果物はトピック本文へ直接つなぐ", () => {
-    expect(workHref("components", "button")).toBe("/components");
+  it("Components の成果物は部品ごとの詳細へつなぐ", () => {
+    expect(workHref("components", "button")).toBe("/components/button");
   });
 
   it("tokens のトピックは成果物を持たない", () => {

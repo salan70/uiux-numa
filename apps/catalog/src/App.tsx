@@ -3,6 +3,8 @@ import { Layout } from "./components/Layout";
 import { catalog } from "./content/collect";
 import { ALL_GUIDELINES } from "./content/guidelines";
 import { ColorsPage } from "./pages/ColorsPage";
+import { catalogComponent } from "./content/components";
+import { ComponentPage } from "./pages/ComponentPage";
 import { ComponentsPage } from "./pages/ComponentsPage";
 import { DetailPage } from "./pages/DetailPage";
 import { GuidelinesPage } from "./pages/GuidelinesPage";
@@ -108,6 +110,14 @@ function pageForRoute(route: Route): {
       title: "Components",
       updated: topicUpdated("components"),
       body: <ComponentsPage />,
+    };
+  }
+  if (route.name === "component") {
+    const experiment = catalog.experiments.find((item) => item.slug === route.slug);
+    return {
+      title: catalogComponent(route.slug)?.title ?? "ページが見つかりません",
+      updated: experiment?.updated,
+      body: <ComponentPage slug={route.slug} />,
     };
   }
   if (route.name === "icon" || route.name === "typographyDetail") {
