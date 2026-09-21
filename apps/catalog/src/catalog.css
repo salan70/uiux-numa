@@ -718,14 +718,6 @@ body {
   .app-shell .live--button .live__frame {
     block-size: 68rem;
   }
-
-  .app-shell .component-work .work-head__meta {
-    column-gap: var(--space-100);
-  }
-
-  .app-shell .component-work .work-head__meta span + span::before {
-    margin-inline-end: var(--space-100);
-  }
 }
 
 .app-shell code {
@@ -743,6 +735,91 @@ body {
 }
 
 /* ---- 部品 ---- */
+
+/* 一覧は見本と名前のカードにする。見本は飾りで、押す先は名前のリンクだけにする。
+   リンクの ::after をカード全面へ広げ、カードのどこを押しても詳細へ移れるようにする。 */
+.app-shell .component-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: var(--space-600);
+  margin: var(--cat-section) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .component-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-inline-size: 0;
+  border: var(--border-width-thin) solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  overflow: hidden;
+  transition: border-color var(--cat-duration) ease;
+}
+
+.app-shell .component-card:has(.component-card__link:focus-visible) {
+  outline: var(--border-width-thick) solid var(--cat-focus);
+  outline-offset: 2px;
+}
+
+.app-shell .component-card__preview {
+  display: grid;
+  place-items: center;
+  min-block-size: 10rem;
+  padding: var(--space-600) var(--space-400);
+  background: var(--cat-surface);
+}
+
+/* 4 役割を 2 行 2 列に置く。折り返しに任せると幅次第で 3 と 1 に割れる。 */
+.app-shell .component-card__preview > * {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  justify-items: center;
+  gap: var(--space-200);
+}
+
+.app-shell .component-card__body {
+  display: grid;
+  gap: var(--space-100);
+  align-content: start;
+  padding: var(--space-400);
+  border-block-start: var(--border-width-thin) solid var(--cat-line);
+}
+
+.app-shell .component-card__title {
+  margin: 0;
+  font-size: var(--cat-item);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.app-shell .component-card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* 枠はカードの outline が持つ。リンク自身に出すと名前の周りにも二重に出る。 */
+.app-shell .component-card__link:focus-visible {
+  outline: none;
+}
+
+.app-shell .component-card__lead {
+  margin: 0;
+  font-size: var(--cat-label);
+  color: var(--cat-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .component-card:hover {
+    border-color: var(--cat-accent-text);
+  }
+
+  .app-shell .component-card:hover .component-card__title {
+    color: var(--cat-accent-text);
+  }
+}
 
 /* 詳細の見本は横に広いので、題名と同じ 7 列ではなく全幅に置く。 */
 .app-shell .component-detail__body {
@@ -1177,18 +1254,6 @@ body {
 .app-shell .work {
   display: grid;
   gap: var(--cat-gap-lg);
-}
-
-.app-shell .component-work {
-  display: grid;
-  gap: var(--cat-gap-lg);
-  min-inline-size: 0;
-  margin-block-start: var(--cat-section);
-}
-
-.app-shell .component-work .work-head__meta {
-  max-inline-size: 100%;
-  min-inline-size: 0;
 }
 
 .app-shell .work-head {
