@@ -1,48 +1,31 @@
-/* 大小のタイルを非対称のグリッドに敷き詰める。枠の数が重要度を表す。
-   l は横 3 枠 x 縦 2 枠、w は横 2 枠、s は 1 枠。狭い幅では l を横 2 枠に落とす。dense で隙間を後ろのタイルが埋める。 */
+/* 12 桁のグリッドに、2 件、3 件、4 件の段を積む。段抜きの幅が重要度を表す。
+   件数と幅は index.tsx が --mz-span で渡す。狭い幅では 16:9 のカバーが小さくなりすぎるので 1 列にする。 */
 
 .gallery-mosaic {
-  --mz-cell: 9rem;
-  --mz-gap: var(--space-300);
-}
-
-@media (width < 40rem) {
-  .gallery-mosaic {
-    --mz-cell: 8.5rem;
-  }
+  --mz-gap: var(--space-500);
 }
 
 .mz-wall {
   display: grid;
-  grid-auto-flow: dense;
-  grid-auto-rows: calc(var(--mz-cell) * 1.15);
-  grid-template-columns: repeat(auto-fill, minmax(min(var(--mz-cell), 45%), 1fr));
-  gap: var(--mz-gap);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-1000) var(--mz-gap);
   padding: 0 clamp(var(--space-400), 4vw, var(--space-1000));
   list-style: none;
 }
 
 .mz-item {
   display: flex;
+  grid-column: span var(--mz-span, 3);
   min-inline-size: 0;
 }
 
-.mz-item > .gtile {
-  flex: 1;
-}
-
-.mz-item--w {
-  grid-column: span 2;
-}
-
-.mz-item--l {
-  grid-column: span 3;
-  grid-row: span 2;
-}
-
 @media (width < 40rem) {
-  .mz-item--l {
-    grid-column: span 2;
+  .mz-wall {
+    row-gap: var(--space-600);
+  }
+
+  .mz-item {
+    grid-column: span 12;
   }
 }
 

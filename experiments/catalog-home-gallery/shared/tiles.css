@@ -139,99 +139,16 @@
 
 /* ---- タイル ---- */
 
-/* 枠は線と角丸を持ち、見本の面と題名の帯に分ける。
-   寸法は並べ方の側が決めるので、ここは中を埋める構造だけを持つ。 */
+/* タイルは採用済みの Card をそのまま使う。ここは並べる側の箱として、幅を Card へ渡すだけにする。
+   hover の動きは Card の zoom-cover が持つ。 */
 .gtile {
-  position: relative;
-  display: flex;
-  min-inline-size: 0;
-  border-radius: var(--radius-surface);
-  container-type: inline-size;
-}
-
-.gtile__frame {
   display: flex;
   flex: 1;
-  flex-direction: column;
   min-inline-size: 0;
-  overflow: hidden;
-  border: var(--border-width-thin) solid var(--color-surface-variant, #e3e1de);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface-container, #f1f0ef);
 }
 
-.gtile__visual {
-  display: grid;
+.gtile > .card {
   flex: 1;
-  place-items: center;
-  min-block-size: 0;
-  overflow: hidden;
-}
-
-.gtile__visual > * {
-  transition: transform var(--duration-press) var(--easing-out);
-}
-
-.gtile__caption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-200);
-  padding: var(--space-200) var(--space-300);
-  border-block-start: var(--border-width-thin) solid var(--color-surface-variant, #e3e1de);
-  background: var(--color-surface, #fefefe);
-  font-size: var(--typography-caption-font-size);
-  line-height: var(--typography-caption-line-height);
-}
-
-.gtile__link {
-  overflow: hidden;
-  color: inherit;
-  font-weight: var(--font-weight-bold);
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.gtile__link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-}
-
-.gtile__link:focus-visible {
-  outline: none;
-}
-
-.gtile:has(.gtile__link:focus-visible) {
-  outline: var(--border-width-thick) solid var(--color-focus, #005fcc);
-  outline-offset: 3px;
-}
-
-.gtile__kind {
-  flex: none;
-  color: var(--color-on-surface-variant, #4d4d4d);
-}
-
-/* 狭いタイルでは種別を外し、題名を優先する。種別は見本からも読める。 */
-@container (width < 12rem) {
-  .gtile__kind {
-    display: none;
-  }
-}
-
-/* 採用済みの Card と同じく、枠を止めて見本の中身だけを拡大する。 */
-@media (hover: hover) and (pointer: fine) {
-  .gtile:hover .gtile__visual > * {
-    transform: scale(1.04);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gtile:hover .gtile__visual > * {
-    transform: none;
-  }
 }
 
 /* ---- タイルの中身の見本 ---- */
@@ -373,8 +290,8 @@
 
 /* 5 秒を超えて動かし続けないよう、往復は 3 回で止める。hover と focus で同じ往復をやり直す。
    animation-name を替えないと再生が始まらないので、同じ中身の keyframes を別名で持つ。 */
-.gtile:hover .gv-motion__dot,
-.gtile:focus-within .gv-motion__dot {
+.card:hover .gv-motion__dot,
+.card:focus-within .gv-motion__dot {
   animation-name: gv-motion-replay;
 }
 
@@ -391,30 +308,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .gv-motion__dot,
-  .gtile:hover .gv-motion__dot,
-  .gtile:focus-within .gv-motion__dot {
+  .card:hover .gv-motion__dot,
+  .card:focus-within .gv-motion__dot {
     animation: none;
     inset-inline-start: calc(100% - 1rem);
   }
 }
 
 .gv-card {
-  inline-size: min(8rem, 70%);
-}
-
-.gv-guideline {
-  align-self: stretch;
-  justify-self: stretch;
-  padding: var(--space-400) var(--space-500);
-}
-
-.gv-guideline p {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  font-size: var(--typography-heading-font-size);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--typography-heading-line-height);
-  text-wrap: pretty;
+  inline-size: min(10rem, 60%);
 }

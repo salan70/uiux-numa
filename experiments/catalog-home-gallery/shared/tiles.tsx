@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ComponentProps, CSSProperties, ReactNode } from "react";
+import { Card, type CardProps } from "../../card/shared/Card";
 import {
   ColorsCover,
   ComponentsCover,
@@ -8,21 +9,23 @@ import {
 } from "../../card/shared/covers";
 import { GUIDELINES, ICONS, SCHEMES, type Scheme, type SchemeRoles } from "./content";
 
-// タイルは挿絵を新しく描かず、リポジトリの実物を縮小して置く。
+// タイルは採用済みの Card で描き、カバーには挿絵を新しく描かずリポジトリの実物を縮小して置く。
 // 3 案はこの並びと中身を共有し、並べ方と動きだけを変える。
+// Card は 16:9 の枠と 3 行分の文字で高さが決まるので、大きさの差は並べる側が幅で付ける。
+
+type CardLinkProps = ComponentProps<NonNullable<CardProps["linkAs"]>>;
 
 export type TileKind = "color" | "icon" | "type" | "token" | "component" | "guideline";
-
-/** 並べ方の目安。s は 1 枠、w は横 2 枠、l は縦横 2 枠。 */
-export type TileSize = "s" | "w" | "l";
 
 export type Tile = {
   id: string;
   kind: TileKind;
-  size: TileSize;
   title: string;
   href: string;
-  visual: ReactNode;
+  /** 題名の下の 1 行。カバーが無いカードでは、枠の中に置く要約になる。 */
+  description: string;
+  /** 無ければ Card は要約を枠の中に置く。 */
+  cover?: ReactNode;
 };
 
 const KIND_LABEL: Record<TileKind, string> = {
@@ -94,41 +97,29 @@ function MotionVisual() {
   );
 }
 
-// Card は親のタイルがリンクを持つので、見本からリンクを外して構造だけを描く。
+// Card の見本は Card そのもの。カバーは飾りとして inert になるので、中のリンクには届かない。
 function CardVisual() {
   return (
     <div className="gv-card">
-      <article className="card">
-        <div className="card__frame">
-          <div className="card__cover">
-            <ColorsCover />
-          </div>
-        </div>
-        <div className="card__text">
-          <p className="card__title">Colors</p>
-        </div>
-      </article>
-    </div>
-  );
-}
-
-function GuidelineVisual({ summary }: { summary: string }) {
-  return (
-    <div className="gv-guideline">
-      <p>{summary}</p>
+      <Card
+        href="/foundations/colors"
+        title="Colors"
+        meta="Color"
+        description="役割ごとに決めた色の組。"
+        cover={<ColorsCover />}
+      />
     </div>
   );
 }
 
 function colorTiles(): Tile[] {
-  return SCHEMES.map((scheme, index) => ({
+  return SCHEMES.map((scheme) => ({
     id: `color-${scheme.id}`,
     kind: "color",
-    // 先頭の採用 2 案だけを大きくし、壁に主役を作る。
-    size: index < 2 ? "l" : "s",
     title: `${scheme.id}（${scheme.kana}）`,
     href: `/foundations/colors/${scheme.id}`,
-    visual: <SchemeVisual scheme={scheme} />,
+    description: `primary は${scheme.primaryName}`,
+    cover: <SchemeVisual scheme={scheme} />,
   }));
 }
 
@@ -136,18 +127,18 @@ function iconTiles(): Tile[] {
   const set: Tile = {
     id: "icon-set",
     kind: "icon",
-    size: "w",
     title: "技術分類のアイコン",
     href: "/foundations/icons/class-tech-icons",
-    visual: <IconsCover />,
+    description: `線と角丸で揃えた ${ICONS.length} 個の組`,
+    cover: <IconsCover />,
   };
   const singles: Tile[] = ICONS.slice(0, 4).map((icon) => ({
     id: `icon-${icon.name}`,
     kind: "icon",
-    size: "s",
     title: icon.title,
     href: "/foundations/icons/class-tech-icons",
-    visual: <IconVisual svg={icon.svg} />,
+    description: `${icon.name}.svg`,
+    cover: <IconVisual svg={icon.svg} />,
   }));
   return [set, ...singles];
 }
@@ -157,18 +148,18 @@ function typeTiles(): Tile[] {
     {
       id: "type-face",
       kind: "type",
-      size: "l",
       title: "LINE Seed JP",
       href: "/foundations/typography/product-ui-typography",
-      visual: <TypographyCover />,
+      description: "和文と欧文を 1 書体で組む",
+      cover: <TypographyCover />,
     },
     {
       id: "type-scale",
       kind: "type",
-      size: "w",
       title: "文字の役割",
       href: "/foundations/typography/product-ui-typography",
-      visual: <TypeScaleVisual />,
+      description: "見出しから本文までの大きさ",
+      cover: <TypeScaleVisual />,
     },
   ];
 }
@@ -178,26 +169,26 @@ function tokenTiles(): Tile[] {
     {
       id: "token-space",
       kind: "token",
-      size: "w",
       title: "余白の階梯",
       href: "/foundations/tokens",
-      visual: <TokensCover />,
+      description: "4px を基準にした間隔",
+      cover: <TokensCover />,
     },
     {
       id: "token-radius",
       kind: "token",
-      size: "s",
       title: "角丸",
       href: "/foundations/tokens",
-      visual: <RadiusVisual />,
+      description: "面と操作で使い分ける丸み",
+      cover: <RadiusVisual />,
     },
     {
       id: "token-motion",
       kind: "token",
-      size: "s",
       title: "動きの曲線",
       href: "/foundations/tokens",
-      visual: <MotionVisual />,
+      description: "状態と押下の長さと曲線",
+      cover: <MotionVisual />,
     },
   ];
 }
@@ -207,18 +198,18 @@ function componentTiles(): Tile[] {
     {
       id: "component-button",
       kind: "component",
-      size: "w",
       title: "Button",
       href: "/components/button",
-      visual: <ComponentsCover />,
+      description: "操作の役割と状態を同じ形で伝える",
+      cover: <ComponentsCover />,
     },
     {
       id: "component-card",
       kind: "component",
-      size: "s",
       title: "Card",
       href: "/components/card",
-      visual: <CardVisual />,
+      description: "一覧の 1 件を全体で押せる面にする",
+      cover: <CardVisual />,
     },
   ];
 }
@@ -227,10 +218,9 @@ function guidelineTiles(): Tile[] {
   return GUIDELINES.map((guideline) => ({
     id: `guideline-${guideline.slug}`,
     kind: "guideline",
-    size: "w",
     title: guideline.title,
     href: `/guidelines/${guideline.slug}`,
-    visual: <GuidelineVisual summary={guideline.summary} />,
+    description: guideline.summary,
   }));
 }
 
@@ -270,23 +260,38 @@ export const TOPIC_LINKS = [
 ];
 
 /**
- * 1 枚のタイル。Card と同じく、題名のリンクの ::after をタイル全面へ広げて全体を押せるようにする。
- * 見本は Button などの操作要素を含むので、リンクの中に入れず、飾りとして aria-hidden と inert にする。
+ * 流れる帯の複製に置くリンク。読み上げは複製の群ごと aria-hidden で隠し、Tab でも辿らせない。
+ * inert にすると hover も押下も届かなくなり、帯の半分が押せない面になるので使わない。
  */
-export function TileView({ tile, style }: { tile: Tile; style?: CSSProperties }) {
+function DecorativeLink({ href, className, children }: CardLinkProps) {
   return (
-    <article className={`gtile gtile--${tile.kind} gtile--${tile.size}`} style={style}>
-      <div className="gtile__frame">
-        <div className="gtile__visual" aria-hidden="true" inert>
-          {tile.visual}
-        </div>
-        <p className="gtile__caption">
-          <a className="gtile__link" href={tile.href}>
-            {tile.title}
-          </a>
-          <span className="gtile__kind">{KIND_LABEL[tile.kind]}</span>
-        </p>
-      </div>
-    </article>
+    <a className={className} href={href} tabIndex={-1}>
+      {children}
+    </a>
+  );
+}
+
+/** 1 枚のタイル。採用済みの Card に、種別を補足として渡す。 */
+export function TileView({
+  tile,
+  decorative = false,
+  style,
+}: {
+  tile: Tile;
+  /** 読み上げと Tab から外した複製として描く。 */
+  decorative?: boolean;
+  style?: CSSProperties;
+}) {
+  return (
+    <div className={`gtile gtile--${tile.kind}`} style={style}>
+      <Card
+        href={tile.href}
+        title={tile.title}
+        meta={KIND_LABEL[tile.kind]}
+        description={tile.description}
+        cover={tile.cover}
+        linkAs={decorative ? DecorativeLink : undefined}
+      />
+    </div>
   );
 }

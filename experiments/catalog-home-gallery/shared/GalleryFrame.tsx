@@ -1,5 +1,6 @@
 import { useState, type MouseEvent, type ReactNode } from "react";
 import "../../card/shared/card.css";
+import "../../card/variants/zoom-cover/variant.css";
 import "../../color-schemes-material/variants/sumi/scheme.css";
 import { useCatalogColors } from "../../button/shared/useCatalogColors";
 import { TOPIC_LINKS } from "./tiles";
@@ -10,6 +11,7 @@ import "./tiles.css";
  * 案ごとに違うのは children に渡すギャラリーだけにする。
  * 単体表示は無彩の sumi を代替配色にし、タイルの色を面より先に立たせる。
  * Catalog の中では Catalog の配色と light / dark を継承する。
+ * タイルの Card には、Catalog と同じく採用 variant の zoom-cover を効かせる。
  */
 export function GalleryFrame({
   variantClass,
@@ -34,7 +36,11 @@ export function GalleryFrame({
   }
 
   return (
-    <main ref={setRoot} className={`gallery cs-sumi ${variantClass}`} onClick={openLink}>
+    <main
+      ref={setRoot}
+      className={`gallery cs-sumi card-zoom-cover ${variantClass}`}
+      onClick={openLink}
+    >
       <header className="gallery__header">
         <div className="gallery__heading">
           <h1 className="gallery__title">UI/UX 沼</h1>

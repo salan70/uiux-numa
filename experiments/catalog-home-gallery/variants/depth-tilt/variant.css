@@ -1,26 +1,16 @@
-/* 奥行きの層を持つ壁。並びは大小のグリッドにし、層の深さで視差の量を変える。
+/* 奥行きの層を持つ壁。並びは同じ幅の Card のグリッドにし、層の深さで視差の量と大きさを変える。
    奥の層は少し縮め、手前の層との差を大きさでも見せる。 */
 
 .gallery-depth {
-  --dt-cell: 12rem;
-  --dt-gap: var(--space-500);
+  --dt-gap: var(--space-600);
   --dt-parallax: 14px;
-}
-
-@media (width < 40rem) {
-  .gallery-depth {
-    --dt-cell: 8.5rem;
-    --dt-gap: var(--space-300);
-  }
 }
 
 .dt-wall {
   --dt-mx: 0;
   --dt-my: 0;
   display: grid;
-  grid-auto-flow: dense;
-  grid-auto-rows: var(--dt-cell);
-  grid-template-columns: repeat(auto-fill, minmax(min(var(--dt-cell), 45%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
   gap: var(--dt-gap);
   padding: var(--space-400) clamp(var(--space-400), 4vw, var(--space-1000));
   list-style: none;
@@ -35,23 +25,10 @@
   min-inline-size: 0;
 }
 
-.dt-item--w {
-  grid-column: span 2;
-}
-
-.dt-item--l {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
 .dt-layer {
   display: flex;
   flex: 1;
   min-inline-size: 0;
-}
-
-.dt-layer > .gtile {
-  flex: 1;
 }
 
 /* 奥の層ほど小さく、手前の層ほど原寸に近い。静止した壁でも層の差が読める。 */
@@ -76,17 +53,17 @@
   transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.dt-wall[data-depth="on"] .gtile__frame {
+.dt-wall[data-depth="on"] .card__frame {
   transform: perspective(56rem) rotateX(var(--dt-rx)) rotateY(var(--dt-ry));
   transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 /* 光の当たり。ポインタの位置に白を淡く重ね、傾きの向きを明るさでも伝える。 */
-.dt-wall[data-depth="on"] .gtile__visual {
+.dt-wall[data-depth="on"] .card__cover {
   position: relative;
 }
 
-.dt-wall[data-depth="on"] .gtile__visual::after {
+.dt-wall[data-depth="on"] .card__cover::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -100,7 +77,7 @@
   transition: opacity var(--duration-press) var(--easing-standard);
 }
 
-.dt-wall[data-depth="on"] .dt-item:hover .gtile__visual::after {
+.dt-wall[data-depth="on"] .dt-item:hover .card__cover::after {
   opacity: 1;
 }
 
