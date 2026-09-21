@@ -12,7 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(6);
-    expect(catalog.liveVariants).toHaveLength(22);
+    expect(catalog.liveVariants).toHaveLength(24);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
