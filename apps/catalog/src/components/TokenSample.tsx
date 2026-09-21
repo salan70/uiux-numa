@@ -1,6 +1,5 @@
 import { formatTokenValue, type CatalogToken } from "../content/tokens";
 import { renderSentences } from "./Sentences";
-import { primaryFamily } from "../content/typeface";
 
 /**
  * 役割の token に入れる文。
@@ -131,14 +130,13 @@ function TypographySample({ value, text }: { value: unknown; text?: string }) {
  * composite な token を項目名つきの組にする。
  * 値だけを並べていたときは「1.5rem 700 行 1.3 字間 0px」となり、
  * どの数が何を指すのかが、行 と 字間 の 2 つ以外は読めなかった。
+ * 書体は画面の先頭で 1 度だけ出し、役割ごとには出さない（利用者の判断、2026-09-21）。
+ * 全役割が同じ書体なので、各組に同じ名前が並ぶだけになる。
  */
 export function compositeSpec(value: unknown): Array<{ label: string; value: string }> {
   const fields = asRecord(value);
   if (!fields) return [];
   const out: Array<{ label: string; value: string }> = [];
-  if (Array.isArray(fields.fontFamily)) {
-    out.push({ label: "書体", value: primaryFamily(fields.fontFamily.join(", ")) });
-  }
   const size = dimension(fields.fontSize);
   if (size) out.push({ label: "大きさ", value: size });
   if (fields.fontWeight != null) out.push({ label: "太さ", value: String(fields.fontWeight) });

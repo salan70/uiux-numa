@@ -9,13 +9,3 @@ import typographyReadme from "../../../../tokens/typography/README.md?raw";
 export function typefaceName(): string | undefined {
   return typographyReadme.match(/書体は\s*(.+?)\s*の\s*.+?\s*を使う。/)?.[1];
 }
-
-/** 指定の先頭だけを出す。以降は書体が無いときの代替なので、見本を組んだ書体ではない。 */
-export function primaryFamily(stack: string): string {
-  return (
-    stack
-      .split(",")[0]
-      ?.replace(/^["']|["']$/g, "")
-      .trim() ?? stack
-  );
-}
