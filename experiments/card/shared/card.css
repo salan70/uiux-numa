@@ -1,0 +1,205 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/motion/index.css";
+
+:where(.card-showcase) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:where(.card-showcase) :where(h1, h2, h3, p, ul) {
+  margin: 0;
+}
+
+.card-showcase {
+  color: var(--color-on-surface, #242424);
+  font-family: var(--typography-ui-font-family);
+  font-size: var(--typography-ui-font-size);
+  font-weight: var(--typography-ui-font-weight);
+  line-height: var(--typography-ui-line-height);
+}
+
+/* 単体表示の代替配色。値は sumi の配色から取る。Catalog 内では親の配色を継承する。 */
+.card-showcase:not(.card-showcase--embedded) {
+  --color-background: #f9f8f8;
+  --color-surface: #fefefe;
+  --color-surface-container: #f0efef;
+  --color-surface-variant: #e3dede;
+  --color-on-surface: #1f1f1f;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-primary-text: #4d4d4d;
+  --color-focus: #525252;
+  min-height: 100vh;
+  padding: clamp(var(--space-400), 4vw, var(--space-600));
+  background: var(--color-background, #fff);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-showcase:not(.card-showcase--embedded):not([data-theme="light"]) {
+    --color-background: #1b1a1a;
+    --color-surface: #272525;
+    --color-surface-container: #343232;
+    --color-surface-variant: #4c3e3e;
+    --color-on-surface: #f0f0f0;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8b8b;
+    --color-primary-text: #c7c7c7;
+    --color-focus: #eb6101;
+  }
+}
+
+.card-showcase--embedded {
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.card-showcase__header {
+  display: grid;
+  gap: var(--space-100);
+  margin-block-end: var(--space-500);
+}
+
+.card-showcase__eyebrow,
+.card-showcase__label,
+.card-showcase__status {
+  color: var(--color-on-surface-variant, #666);
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+.card-showcase__eyebrow {
+  letter-spacing: 0.12em;
+}
+
+.card-showcase h1 {
+  font-family: var(--typography-title-font-family);
+  font-size: var(--typography-title-font-size);
+  font-weight: var(--typography-title-font-weight);
+  letter-spacing: var(--typography-title-letter-spacing);
+  line-height: var(--typography-title-line-height);
+}
+
+.card-showcase h2 {
+  font-family: var(--typography-heading-font-family);
+  font-size: var(--typography-heading-font-size);
+  font-weight: var(--typography-heading-font-weight);
+  letter-spacing: var(--typography-heading-letter-spacing);
+  line-height: var(--typography-heading-line-height);
+}
+
+.card-showcase__status {
+  min-block-size: calc(var(--typography-caption-font-size) * var(--typography-caption-line-height));
+  margin-block-end: var(--space-500);
+}
+
+.card-showcase__section-head {
+  margin-block-end: var(--space-300);
+}
+
+.card-showcase__singles,
+.card-showcase__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-400);
+}
+
+.card-showcase__single {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-200);
+  min-inline-size: 0;
+}
+
+.card-showcase__label span {
+  margin-inline-end: var(--space-200);
+  color: var(--color-on-surface, #242424);
+  font-weight: var(--font-weight-bold);
+}
+
+.card-showcase__list-section {
+  margin-block-start: var(--space-1000);
+}
+
+.card-showcase__list {
+  padding: 0;
+  list-style: none;
+}
+
+.card-showcase__list > li {
+  display: grid;
+  min-inline-size: 0;
+}
+
+/* ---- Card ---- */
+
+/* 面、線、動きは variant が --card-* を上書きして決める。ここは構造だけを持つ。 */
+.card {
+  --card-bg: var(--color-surface, #fff);
+  --card-border: var(--color-surface-variant, #e3dede);
+  --card-title: var(--color-on-surface, #242424);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+  min-inline-size: 0;
+  padding: var(--space-500);
+  border: var(--border-width-thin) solid var(--card-border);
+  border-radius: var(--radius-surface);
+  color: var(--color-on-surface, #242424);
+  background: var(--card-bg);
+  transition:
+    background-color var(--duration-state) var(--easing-standard),
+    border-color var(--duration-state) var(--easing-standard);
+}
+
+/* 枠はカードの外周に出す。リンク自身に出すと題名の周りだけが囲まれる。 */
+.card:has(.card__link:focus-visible) {
+  outline: var(--border-width-thick) solid var(--color-focus, #005fcc);
+  outline-offset: 2px;
+}
+
+.card__title {
+  font-family: var(--typography-control-font-family);
+  font-size: var(--typography-body-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.card__link {
+  color: var(--card-title);
+  text-decoration: none;
+  transition: color var(--duration-state) var(--easing-standard);
+}
+
+.card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.card__link:focus-visible {
+  outline: none;
+}
+
+/* 読み上げは題名が先。見た目だけ補足を題名の上へ出す。 */
+.card__meta {
+  order: -1;
+  color: var(--color-on-surface-variant, #666);
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+.card__description {
+  color: var(--color-on-surface-variant, #666);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}

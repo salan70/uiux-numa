@@ -1,0 +1,31 @@
+/* 細線の枠に、Button の pill-action と同じ系統の動きを足す。
+   hover で 1px 浮かせて影を出し、押下で少し縮めて沈める。 */
+.card-press-settle .card {
+  transition:
+    background-color var(--duration-state) var(--easing-standard),
+    border-color var(--duration-state) var(--easing-standard),
+    transform var(--duration-press) var(--easing-out),
+    box-shadow var(--duration-press) var(--easing-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-press-settle .card:hover {
+    --card-border: var(--color-outline);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--color-on-surface) 18%, transparent);
+  }
+}
+
+/* 面が大きいので、Button の 0.97 より縮みを弱める。 */
+.card-press-settle .card:active {
+  transform: scale(0.985);
+  box-shadow: none;
+}
+
+/* 移動と縮みは止め、影と線の色の差で状態を残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .card-press-settle .card:hover,
+  .card-press-settle .card:active {
+    transform: none;
+  }
+}

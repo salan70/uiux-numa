@@ -39,9 +39,9 @@ export const TOPICS: Topic[] = [
   {
     id: "components",
     label: "Components",
-    lead: "入力と操作の部品。",
+    lead: "画面を組む部品。",
     href: "/components",
-    domains: ["forms-input-ux"],
+    domains: ["forms-input-ux", "layout"],
   },
   {
     id: "icons",

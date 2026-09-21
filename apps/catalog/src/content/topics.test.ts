@@ -8,6 +8,7 @@ describe("topicForExperiment", () => {
   it("domain の並び順で最初に当たった topic を採る", () => {
     expect(topicForExperiment(["color", "typography"])).toBe("colors");
     expect(topicForExperiment(["typography", "color"])).toBe("typography");
+    expect(topicForExperiment(["layout", "interaction-design"])).toBe("components");
   });
 
   it("どの domain にも当たらなければ null を返す", () => {
