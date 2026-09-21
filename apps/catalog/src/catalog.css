@@ -666,39 +666,7 @@ body {
   margin: 0 0 var(--space-200);
 }
 
-/* ---- 操作部品 ---- */
-
-.app-shell .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--cat-tap);
-  padding: 0 var(--space-500);
-  border: var(--border-width-thin) solid var(--cat-text);
-  border-radius: var(--cat-radius);
-  background: var(--cat-text);
-  color: var(--cat-bg);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition:
-    background-color var(--cat-duration) var(--easing-standard),
-    border-color var(--cat-duration) var(--easing-standard);
-}
-
-.app-shell .btn--quiet {
-  background: none;
-  color: var(--cat-text);
-  border-color: var(--cat-line-strong);
-}
-
 @media (hover: hover) and (pointer: fine) {
-  .app-shell .btn:hover {
-    background: var(--cat-accent);
-    border-color: var(--cat-accent);
-    color: var(--cat-on-accent);
-  }
-
   .app-shell .variants__item:hover {
     color: var(--cat-text);
     border-color: var(--cat-line-strong);
@@ -716,16 +684,12 @@ body {
     margin-block-start: var(--cat-section);
   }
 
-  .app-shell .hero__title,
-  .app-shell .hero__lead,
-  .app-shell .hero__live,
   .app-shell .detail__title,
   .app-shell .detail__lead,
   .app-shell .detail__live {
     grid-column: 1 / -1;
   }
 
-  .app-shell .hero__side,
   .app-shell .detail__side {
     grid-column: 1 / -1;
     grid-row: auto;
@@ -869,78 +833,253 @@ body {
   }
 }
 
-/* ---- トップの 1 件 ---- */
+/* ---- トップの流れる帯 ---- */
 
-.app-shell .hero {
+/* 題字と帯を縦に積む。帯は版面の左右いっぱいまで広げ、両端を背景へ溶かす。
+   判断は docs/decisions/2026-09-21-catalog-home-marquee.md に残す。 */
+.app-shell .home-hero {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  column-gap: var(--space-600);
-  row-gap: var(--cat-gap-lg);
+  gap: var(--cat-gap-lg);
 }
 
-.app-shell .hero > * {
-  min-inline-size: 0;
-}
-
-.app-shell .hero__kicker {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-200) var(--space-400);
+.app-shell .home-hero__title {
   margin: 0;
-  font-size: var(--cat-label);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--cat-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.app-shell .hero__topic {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: 1.5rem;
-  padding: 0 var(--space-200);
-  border-radius: var(--cat-radius);
-  background: var(--cat-accent);
-  color: var(--cat-on-accent);
-  letter-spacing: 0.06em;
-}
-
-.app-shell .hero__title {
-  grid-column: 1 / span 7;
-  margin: var(--cat-gap) 0 0;
   font-size: var(--cat-display);
   font-weight: 700;
   line-height: 1.06;
   letter-spacing: -0.03em;
 }
 
-.app-shell .hero__lead {
-  grid-column: 1 / span 7;
-  margin: 0;
-  max-inline-size: 36em;
-  color: var(--cat-muted);
-}
-
-.app-shell .hero__live {
-  grid-column: 1 / span 7;
+.app-shell .marquee {
+  --marquee-gap: var(--space-400);
+  display: grid;
+  gap: var(--marquee-gap);
   margin-block-start: var(--cat-gap-lg);
 }
 
-.app-shell .hero__side {
-  grid-column: 9 / -1;
-  grid-row: 2 / span 3;
-  align-self: start;
-  display: grid;
-  gap: var(--cat-gap-lg);
-  align-content: start;
-  padding-inline-start: var(--space-600);
-  border-inline-start: var(--border-width-thin) solid var(--cat-line);
+/* 帯は横スクロールの容器にし、スクロールバーは隠す。両端は背景へ溶かす。 */
+/* scroll-padding は両端の溶かしと同じ幅にし、フォーカスで見える位置へ出したカードを溶かしの外に置く。 */
+.app-shell .marquee__row {
+  overflow-x: auto;
+  scroll-padding-inline: var(--space-1000);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 var(--space-1000),
+    #000 calc(100% - var(--space-1000)),
+    transparent
+  );
 }
 
-.app-shell .hero__action {
+.app-shell .marquee__row::-webkit-scrollbar {
+  display: none;
+}
+
+/* focus の枠が帯の上下で切れないよう、枠の分だけ内側に余白を持つ。
+   左右にも溶かしと同じ幅を持たせ、先頭と末尾のカードが溶かしの下に隠れないようにする。 */
+.app-shell .marquee__track {
+  display: flex;
+  inline-size: max-content;
+  padding: var(--space-200) var(--space-1000);
+}
+
+/* 1 周の長さは群の幅になる。末尾にも間隔を持たせ、複製との継ぎ目を他の間隔と揃える。 */
+.app-shell .marquee__group {
+  display: flex;
+  gap: var(--marquee-gap);
   margin: 0;
+  padding: 0 var(--marquee-gap) 0 0;
+  list-style: none;
+}
+
+/* Card は幅で高さが決まるので、段ごとに幅を揃え、段どうしで幅を変える。 */
+.app-shell .marquee__group > li {
+  display: flex;
+  inline-size: var(--marquee-card);
+}
+
+.app-shell .marquee__group > li > .card {
+  flex: 1;
+}
+
+.app-shell .marquee__row:nth-of-type(1) {
+  --marquee-card: clamp(14rem, 24vw, 20rem);
+}
+
+.app-shell .marquee__row:nth-of-type(2) {
+  --marquee-card: clamp(10rem, 15vw, 13rem);
+}
+
+.app-shell .marquee__row:nth-of-type(3) {
+  --marquee-card: clamp(12rem, 19vw, 16rem);
+}
+
+/* 動きを減らす設定では流さない。複製を外し、指とトラックパッドで送る横スクロールにする。 */
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .marquee__group--clone {
+    display: none;
+  }
+
+  .app-shell .marquee__row {
+    scrollbar-width: thin;
+    mask-image: none;
+  }
+}
+
+/* ---- 帯のカードのカバー ---- */
+
+/* 配色は面いっぱいに色を敷く。値はカードごとの変数で渡し、明暗で切り替える。 */
+.app-shell .cover-scheme {
+  --primary: var(--light-primary);
+  --on-primary: var(--light-on-primary);
+  --secondary: var(--light-secondary);
+  --tertiary: var(--light-tertiary);
+  --container: var(--light-primary-container);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr 0.5fr;
+  align-self: stretch;
+  justify-self: stretch;
+}
+
+:root[data-theme="dark"] .app-shell .cover-scheme {
+  --primary: var(--dark-primary);
+  --on-primary: var(--dark-on-primary);
+  --secondary: var(--dark-secondary);
+  --tertiary: var(--dark-tertiary);
+  --container: var(--dark-primary-container);
+}
+
+.app-shell .cover-scheme__primary {
+  display: flex;
+  grid-row: 1 / 3;
+  align-items: end;
+  padding: var(--space-300);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--cat-label);
+  font-weight: 700;
+}
+
+.app-shell .cover-scheme__secondary {
+  background: var(--secondary);
+}
+
+.app-shell .cover-scheme__tertiary {
+  background: var(--tertiary);
+}
+
+.app-shell .cover-scheme__container {
+  grid-column: 1 / 3;
+  background: var(--container);
+}
+
+.app-shell .cover-icon svg {
+  display: block;
+  inline-size: 3rem;
+  block-size: 3rem;
+}
+
+.app-shell .cover-scale {
+  display: grid;
+  align-content: center;
+  align-self: stretch;
+  justify-self: stretch;
+  gap: var(--space-100);
+  padding-inline: var(--space-500);
+  overflow: hidden;
+}
+
+.app-shell .cover-scale > span {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.app-shell .cover-scale__title {
+  font-size: var(--typography-title-font-size);
+  font-weight: 700;
+  line-height: var(--font-line-height-tight);
+}
+
+.app-shell .cover-scale__heading {
+  font-size: var(--typography-heading-font-size);
+  font-weight: 700;
+}
+
+.app-shell .cover-scale__body {
+  font-size: var(--typography-body-font-size);
+}
+
+.app-shell .cover-radius {
+  display: grid;
+  grid-template-columns: repeat(2, 2.5rem);
+  gap: var(--space-300);
+}
+
+.app-shell .cover-radius > span {
+  aspect-ratio: 1;
+  border: var(--border-width-thick) solid var(--cat-text);
+}
+
+.app-shell .cover-motion {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-300);
+  inline-size: 70%;
+}
+
+.app-shell .cover-motion__track {
+  position: relative;
+  inline-size: 100%;
+  block-size: 1rem;
+  border-block-end: var(--border-width-thin) solid var(--cat-line-strong);
+}
+
+/* 曲線の見本なので、token の easing-out で往復させる。1 往復の長さは見本のための値で token にしない。
+   5 秒を超えて動かし続けないよう、往復は 3 回で止め、hover と focus でやり直す。 */
+.app-shell .cover-motion__dot {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: var(--radius-full);
+  background: var(--cat-text);
+  animation: cover-motion-slide 1.4s var(--easing-out) 3 alternate both;
+}
+
+/* animation-name を替えないと再生が始まらないので、同じ中身の keyframes を別名で持つ。 */
+.app-shell .card:hover .cover-motion__dot,
+.app-shell .card:focus-within .cover-motion__dot {
+  animation-name: cover-motion-replay;
+}
+
+@keyframes cover-motion-slide {
+  to {
+    inset-inline-start: calc(100% - 1rem);
+  }
+}
+
+@keyframes cover-motion-replay {
+  to {
+    inset-inline-start: calc(100% - 1rem);
+  }
+}
+
+.app-shell .cover-motion__label {
+  color: var(--cat-muted);
+  font-size: var(--cat-label);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .cover-motion__dot,
+  .app-shell .card:hover .cover-motion__dot,
+  .app-shell .card:focus-within .cover-motion__dot {
+    animation: none;
+    inset-inline-start: calc(100% - 1rem);
+  }
 }
 
 /* ---- トピック一覧。入口は 7 つとも同じ重さにする ---- */
@@ -1090,21 +1229,6 @@ body {
 }
 
 @media (width <= 60rem) {
-  .app-shell .hero__title,
-  .app-shell .hero__lead,
-  .app-shell .hero__live {
-    grid-column: 1 / -1;
-  }
-
-  .app-shell .hero__side {
-    grid-column: 1 / -1;
-    grid-row: auto;
-    padding-inline-start: 0;
-    padding-block-start: var(--cat-gap-lg);
-    border-inline-start: 0;
-    border-block-start: var(--border-width-thin) solid var(--cat-line);
-  }
-
   .app-shell .topic-list {
     grid-template-columns: repeat(2, 1fr);
   }

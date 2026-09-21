@@ -292,13 +292,6 @@ export function worksInTopic(topic: TopicId): ExperimentRecord[] {
     .sort((a, b) => b.updated.localeCompare(a.updated) || a.slug.localeCompare(b.slug));
 }
 
-/** 更新の新しい順。トップの hero に使う。 */
-export function worksByUpdated(): ExperimentRecord[] {
-  return catalog.experiments
-    .filter((item) => item.topic !== null)
-    .sort((a, b) => b.updated.localeCompare(a.updated) || a.slug.localeCompare(b.slug));
-}
-
 /** variant が持つ配布用の SVG。 */
 export function svgsFor(experiment: string, variant: string) {
   return (

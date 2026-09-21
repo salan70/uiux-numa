@@ -36,4 +36,4 @@ Catalog はこれらを見本として載せるだけで、自身の一覧とボ
 ## 影響
 
 - Home のトピック一覧は成果物の live 標本を出さなくなる。
-- `catalog-home-gallery` Experiment はトップを別案で試作中であり、その採否でトピック一覧を再び変える可能性がある。
+- `catalog-home-gallery` Experiment はトップを別案で試作中であり、その採否でトピック一覧を再び変える可能性がある。2026-09-21 に `marquee-rows` を採用し、トピック一覧は残した（[流れる帯の ADR](2026-09-21-catalog-home-marquee.md)）。
