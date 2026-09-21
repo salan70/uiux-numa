@@ -427,13 +427,6 @@
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .button:not(:disabled):hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 0 color-mix(in srgb, var(--button-fg) 35%, transparent);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .button {
     --button-motion-duration: 0ms;
