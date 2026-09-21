@@ -136,8 +136,8 @@ body {
 
   /* 画面の部品。角丸は小さく取り、印刷ではなく操作面であることを示す。 */
   --cat-radius: var(--radius-control);
-  --cat-tap: 2.5rem;
-  --cat-duration: 120ms;
+  --cat-tap: var(--size-control-height-md);
+  --cat-duration: var(--duration-state);
 
   background: var(--cat-bg);
   color: var(--cat-text);
@@ -247,7 +247,7 @@ body {
   background: none;
   color: var(--cat-muted);
   cursor: pointer;
-  transition: color var(--cat-duration) ease;
+  transition: color var(--cat-duration) var(--easing-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -309,7 +309,7 @@ body {
   border-inline-start: var(--border-width-thick) solid transparent;
   color: var(--cat-muted);
   font-size: 1rem;
-  transition: color var(--cat-duration) ease;
+  transition: color var(--cat-duration) var(--easing-standard);
 }
 
 /* 現在地は色と縦の線で示す。太さや余白を変えると、移るたびにナビ全体が動く。 */
@@ -618,8 +618,8 @@ body {
   text-align: start;
   cursor: pointer;
   transition:
-    color var(--cat-duration) ease,
-    background-color var(--cat-duration) ease;
+    color var(--cat-duration) var(--easing-standard),
+    background-color var(--cat-duration) var(--easing-standard);
 }
 
 /* 選択は色と面で示す。太さを変えると chip の幅が変わり、切り替えるたびに並びが動く。 */
@@ -658,8 +658,8 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition:
-    background-color var(--cat-duration) ease,
-    border-color var(--cat-duration) ease;
+    background-color var(--cat-duration) var(--easing-standard),
+    border-color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .btn--quiet {
@@ -757,7 +757,7 @@ body {
   border: var(--border-width-thin) solid var(--cat-line);
   border-radius: var(--cat-radius);
   overflow: hidden;
-  transition: border-color var(--cat-duration) ease;
+  transition: border-color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .component-card:has(.component-card__link:focus-visible) {
@@ -869,7 +869,7 @@ body {
   border-radius: var(--cat-radius);
   background: var(--cat-surface);
   color: var(--cat-text);
-  transition: border-color var(--cat-duration) ease;
+  transition: border-color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .theme__icon svg {
@@ -1003,7 +1003,7 @@ body {
   font-size: var(--cat-h2);
   font-weight: 700;
   line-height: 1.3;
-  transition: color var(--cat-duration) ease;
+  transition: color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .topic__count {
@@ -1693,8 +1693,8 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition:
-    color var(--cat-duration) ease,
-    border-color var(--cat-duration) ease;
+    color var(--cat-duration) var(--easing-standard),
+    border-color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .feature__step-name {
@@ -1757,7 +1757,7 @@ body {
 .app-shell .band {
   flex: 1 1 0;
   min-inline-size: 0;
-  transition: flex-grow var(--cat-duration) ease;
+  transition: flex-grow var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .band__hit {
@@ -1779,7 +1779,7 @@ body {
   justify-items: center;
   /* 情報は hover だけに頼らない。focus でも出し、粗いポインタでは常時出す。 */
   opacity: 0;
-  transition: opacity var(--cat-duration) ease;
+  transition: opacity var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .band:has(.band__hit:focus-visible) {
@@ -1872,7 +1872,7 @@ body {
   background: none;
   color: var(--cat-muted);
   cursor: pointer;
-  transition: color var(--cat-duration) ease;
+  transition: color var(--cat-duration) var(--easing-standard);
 }
 
 .app-shell .icon {
@@ -2165,8 +2165,8 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition:
-    color var(--cat-duration) ease,
-    border-color var(--cat-duration) ease;
+    color var(--cat-duration) var(--easing-standard),
+    border-color var(--cat-duration) var(--easing-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2276,7 +2276,7 @@ body {
   color: var(--cat-muted);
   font-size: 0.875rem;
   line-height: 1.5;
-  transition: color var(--cat-duration) ease;
+  transition: color var(--cat-duration) var(--easing-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {

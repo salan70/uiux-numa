@@ -85,8 +85,10 @@ Catalog に直接表示する場合も、親ページの配色と明暗設定を
 半円形では端の丸みが余白を食うため、Button の左右余白は高さの半分弱に比例させる。
 高さは上下余白ではなく `min-height` で決める。上下余白で高さを作る案は、サイズごとの line-height 差と縦位置のずれが出るため却下した。
 アイコンとラベルは一つのまとまりとして中央に置く。
-頻繁に使う Button の hover は操作対象のフィードバックに限り、精密ポインタ上で 140–160ms の 1px リフトと影を出す。
+頻繁に使う Button の hover は操作対象のフィードバックに限り、精密ポインタ上で `duration.press`(160ms)の 1px リフトと影を出す。
 `prefers-reduced-motion` では移動を止め、hover の影による状態差は残す。
+高さ、最小幅、動きは `tokens/size` と `tokens/motion` を参照し、見本には数値ではなく token 名を出す。
+Quiet は面と余白を持たないが、`size.target-min` で当たり領域を 24px 以上に保つ。
 
 ## Related patterns / assets
 
