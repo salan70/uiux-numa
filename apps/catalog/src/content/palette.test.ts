@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { contrastRatioFromCss } from "./contrast";
 import {
+  bandInk,
   cardColors,
+  codeInk,
   colorLabel,
+  colorOf,
   derivedName,
   heroWeight,
   hexOf,
@@ -115,10 +119,47 @@ describe("cardColors", () => {
 });
 
 describe("heroWeight", () => {
-  it("primary、on-surface、background だけ幅を 2 倍にする", () => {
+  it("primary と background だけ幅を 2 倍にする", () => {
     expect(heroWeight({ value: "#000", name: "黒", roles: ["primary"] })).toBe(2);
     expect(heroWeight({ value: "#000", name: "黒", roles: ["outline"] })).toBe(1);
     expect(heroWeight({ value: "#000", name: "黒", roles: ["outline", "background"] })).toBe(2);
+  });
+});
+
+describe("bandInk", () => {
+  it("対になる on- の役割があれば、その色を文字色にする", () => {
+    if (!sumi) throw new Error("sumi がない");
+    const [primary] = mergeRoles(sumi, "light", ["primary"]);
+    expect(bandInk(sumi, "light", primary)).toBe(colorOf(sumi, "light", "on-primary")?.value);
+    const [variant] = mergeRoles(sumi, "light", ["surface-variant"]);
+    expect(bandInk(sumi, "light", variant)).toBe(
+      colorOf(sumi, "light", "on-surface-variant")?.value,
+    );
+  });
+
+  it("対が無い役割は明るさで黒か白を選ぶ", () => {
+    if (!sumi) throw new Error("sumi がない");
+    const [outline] = mergeRoles(sumi, "light", ["outline"]);
+    expect(bandInk(sumi, "light", outline)).toBe(inkOn(outline.value));
+  });
+});
+
+describe("codeInk", () => {
+  it("secondary が地に 4.5:1 を満たせばそのまま使う", () => {
+    const yuzu = schemes.find((item) => item.id === "yuzu");
+    if (!yuzu) throw new Error("yuzu がない");
+    expect(codeInk(yuzu, "light")).toBe(colorOf(yuzu, "light", "secondary")?.value);
+  });
+
+  it("どの配色でも地に 4.5:1 を満たす", () => {
+    for (const scheme of schemes) {
+      for (const mode of ["light", "dark"] as const) {
+        const ink = codeInk(scheme, mode);
+        const paper = colorOf(scheme, mode, "background")?.value;
+        if (!ink || !paper) throw new Error(`${scheme.id}/${mode}: 色がない`);
+        expect(contrastRatioFromCss(ink, paper)).toBeGreaterThanOrEqual(4.5);
+      }
+    }
   });
 });
 

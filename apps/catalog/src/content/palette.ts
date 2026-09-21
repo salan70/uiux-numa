@@ -1,5 +1,6 @@
 // 配色カードの帯を組み立てる純関数。
 // 新しい色は作らない。正本の配色が持つ値だけを並べ替え、束ね、名を付ける。
+// 例外は codeInk だけで、secondary の明度だけを動かす。
 import {
   contrastRatioFromCss,
   hexFromCssColor,
@@ -28,11 +29,11 @@ export const CARD_ROLES = [
 /**
  * 大きな帯は 2 段にして、カードより多くの役割を出す。
  * 上段は 3 系統、下段は面と線と状態色。カードで外した役割もここで見られる。
+ * on- の役割は帯にしない。対になる帯の文字色として見せる。
  */
 export const HERO_ROWS: string[][] = [
   [
     "primary",
-    "on-primary",
     "primary-container",
     "secondary",
     "secondary-container",
@@ -45,8 +46,6 @@ export const HERO_ROWS: string[][] = [
     "surface",
     "surface-container",
     "surface-variant",
-    "on-surface",
-    "on-surface-variant",
     "outline",
     "focus",
     "success",
@@ -55,8 +54,8 @@ export const HERO_ROWS: string[][] = [
   ],
 ];
 
-// primary、background、on-surface だけ幅を 2 倍にする。配色の性格を決める 3 色なので、大きさでも他と区別する。
-const HERO_WEIGHT: Record<string, number> = { primary: 2, background: 2, "on-surface": 2 };
+// primary と background だけ幅を 2 倍にする。配色の性格を決める色なので、大きさでも他と区別する。
+const HERO_WEIGHT: Record<string, number> = { primary: 2, background: 2 };
 
 export function heroWeight(band: Band): number {
   return Math.max(...band.roles.map((role) => HERO_WEIGHT[role] ?? 1));
@@ -186,9 +185,61 @@ export function labelInk(scheme: ColorScheme, mode: Mode): string | undefined {
   return schemeInk(scheme, mode, ["primary", "primary-text", "on-surface"], 3);
 }
 
-/** id は副となる色。12px なので 4.5:1 を求める。 */
+/**
+ * id は secondary で書く。12px なので地に 4.5:1 を求める。
+ * secondary のままでは半数の配色で足りない（ふじの萌黄は明るい地に 1.68:1）。
+ * 足りなければ、色相と彩度は secondary のまま、4.5:1 を満たす最も近い明度へ寄せる。
+ * 正本の primary-text と同じ作り方で、secondary には対応する役割が無いのでここで作る。
+ */
 export function codeInk(scheme: ColorScheme, mode: Mode): string | undefined {
-  return schemeInk(scheme, mode, ["primary-text", "primary", "on-surface-variant"], 4.5);
+  const secondary = colorOf(scheme, mode, "secondary")?.value;
+  const paper = colorOf(scheme, mode, "background")?.value;
+  if (!secondary || !paper) return schemeInk(scheme, mode, ["on-surface-variant"], 4.5);
+  let hue = 0;
+  let saturation = 0;
+  let lightness = 0;
+  try {
+    [hue, saturation, lightness] = toHsl(parseCssColor(secondary));
+    if (passesWcag(contrastRatioFromCss(secondary, paper), 4.5)) return secondary;
+  } catch {
+    return schemeInk(scheme, mode, ["on-surface-variant"], 4.5);
+  }
+  let best: string | undefined;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  for (let step = 0; step <= 100; step += 1) {
+    const candidate = fromHsl(hue, saturation, step / 100);
+    const distance = Math.abs(step / 100 - lightness);
+    if (distance < bestDistance && passesWcag(contrastRatioFromCss(candidate, paper), 4.5)) {
+      best = candidate;
+      bestDistance = distance;
+    }
+  }
+  return best ?? schemeInk(scheme, mode, ["on-surface-variant"], 4.5);
+}
+
+function fromHsl(hue: number, saturation: number, lightness: number): string {
+  const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+  const x = chroma * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const m = lightness - chroma / 2;
+  const [r, g, b] =
+    hue < 60
+      ? [chroma, x, 0]
+      : hue < 120
+        ? [x, chroma, 0]
+        : hue < 180
+          ? [0, chroma, x]
+          : hue < 240
+            ? [0, x, chroma]
+            : hue < 300
+              ? [x, 0, chroma]
+              : [chroma, 0, x];
+  return `#${[r, g, b]
+    .map((channel) =>
+      Math.round((channel + m) * 255)
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
 }
 
 /** 帯の上に置く文字の色。新しい色を作らず、その帯の明るさで黒か白を選ぶ。 */
@@ -198,6 +249,29 @@ export function inkOn(value: string): string {
   } catch {
     return "#0c0c0c";
   }
+}
+
+/** 面の役割と、その上に置く文字の役割。正本の配色が組として保証する対だけを持つ。 */
+const ON_ROLE: Record<string, string> = {
+  primary: "on-primary",
+  "primary-container": "on-primary-container",
+  secondary: "on-secondary",
+  "secondary-container": "on-secondary-container",
+  tertiary: "on-tertiary",
+  "tertiary-container": "on-tertiary-container",
+  background: "on-surface",
+  surface: "on-surface",
+  "surface-container": "on-surface",
+  "surface-variant": "on-surface-variant",
+};
+
+/** 帯の文字色。対になる on- の役割があればその色を使い、無ければ inkOn に任せる。 */
+export function bandInk(scheme: ColorScheme, mode: Mode, band: Band): string {
+  for (const role of band.roles) {
+    const on = ON_ROLE[role] && colorOf(scheme, mode, ON_ROLE[role]);
+    if (on) return on.value;
+  }
+  return inkOn(band.value);
 }
 
 /** 帯 1 本。同じ値の役割はここでまとまる。 */
