@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-20
 - 参照: [Catalog に方針を載せる ADR](2026-09-20-catalog-guidelines.md)、[asset-model](../asset-model.md)
+- 更新: コアに主題全体へ効く数値を書けるようにした。[コアの数値 ADR](2026-09-21-guideline-core-values.md) を参照する。
 
 ## 背景
 
