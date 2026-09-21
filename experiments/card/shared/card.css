@@ -74,7 +74,8 @@
 }
 
 .card-showcase__eyebrow,
-.card-showcase__label,
+.card-showcase__spec > p,
+.card-showcase__tokens,
 .card-showcase__status {
   color: var(--color-on-surface-variant, #666);
   font-family: var(--typography-caption-font-family);
@@ -102,40 +103,79 @@
   line-height: var(--typography-heading-line-height);
 }
 
-.card-showcase__status {
-  min-block-size: calc(var(--typography-caption-font-size) * var(--typography-caption-line-height));
-  margin-block-end: var(--space-500);
+/* Button の見本と同じく、左に名前と説明と token、右に実物を置く行で並べる。 */
+.card-showcase__section + .card-showcase__section,
+.card-showcase__examples {
+  margin-block-start: var(--space-1000);
 }
 
-.card-showcase__section-head {
+.card-showcase__section > h2 {
+  padding-block-end: var(--space-300);
+  border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
+}
+
+.card-showcase__row {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.8fr);
+  align-items: start;
+  gap: var(--space-400);
+  padding-block: var(--space-500);
+  border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
+}
+
+.card-showcase__spec {
+  display: grid;
+  gap: var(--space-100);
+}
+
+.card-showcase__spec h3 {
+  font-family: var(--typography-control-font-family);
+  font-size: var(--typography-control-font-size);
+  font-weight: var(--typography-control-font-weight);
+  line-height: var(--typography-control-line-height);
+}
+
+.card-showcase__tokens {
+  display: grid;
+  gap: var(--space-100);
+  margin-block-start: var(--space-100);
+}
+
+.card-showcase__tokens > div {
+  display: grid;
+  grid-template-columns: minmax(3rem, max-content) minmax(0, 1fr);
+  gap: var(--space-100);
+}
+
+.card-showcase__tokens dd {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-on-surface, #242424);
+}
+
+/* 実物は一覧で使う幅に揃える。行の幅いっぱいに広げると、カバーが実際より大きく見える。 */
+.card-showcase__sample {
+  display: grid;
+  inline-size: min(100%, 18rem);
+}
+
+.card-showcase__press {
+  display: grid;
+  gap: var(--space-200);
+}
+
+.card-showcase__status {
+  min-block-size: calc(var(--typography-caption-font-size) * var(--typography-caption-line-height));
+}
+
+.card-showcase__examples > h2 {
   margin-block-end: var(--space-300);
 }
 
-.card-showcase__singles,
 .card-showcase__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
   gap: var(--space-400);
-}
-
-.card-showcase__single {
-  display: grid;
-  align-content: start;
-  gap: var(--space-200);
-  min-inline-size: 0;
-}
-
-.card-showcase__label span {
-  margin-inline-end: var(--space-200);
-  color: var(--color-on-surface, #242424);
-  font-weight: var(--font-weight-bold);
-}
-
-.card-showcase__list-section {
-  margin-block-start: var(--space-1000);
-}
-
-.card-showcase__list {
   padding: 0;
   list-style: none;
 }
@@ -145,9 +185,15 @@
   min-inline-size: 0;
 }
 
+@media (width <= 34rem) {
+  .card-showcase__row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---- Card ---- */
 
-/* 面を持たず、枠はカバーだけが持つ。カバーが無いときは文字を枠の中に置く。
+/* 面を持たず、枠はカバーだけが持つ。カバーが無いときは文字を枠の中に置き、面の色はカバーと揃える。
    hover の動きは variant が決める。ここは構造と静止時の見た目だけを持つ。 */
 .card {
   position: relative;
@@ -163,10 +209,6 @@
   border: var(--border-width-thin) solid var(--color-surface-variant, #e3dede);
   border-radius: var(--radius-surface);
   background: var(--color-surface-container, #f0efef);
-}
-
-.card--text .card__frame {
-  background: var(--color-surface, #fff);
 }
 
 .card__cover {
