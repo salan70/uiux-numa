@@ -8,8 +8,9 @@
 読み手向けの説明は [docs/guidelines/README.md](guidelines/README.md) に置く。
 書式の量と読み方の量が釣り合わないため、1 文書に混ぜず分けた。
 
-書式の判断は [方針の書式 ADR](decisions/2026-09-20-guideline-format.md) と
-[対比の対 ADR](decisions/2026-09-21-catalog-guideline-contrast-pair.md) に残す。
+書式の判断は [方針の書式 ADR](decisions/2026-09-20-guideline-format.md)、
+[対比の対 ADR](decisions/2026-09-21-catalog-guideline-contrast-pair.md)、
+[コアの数値 ADR](decisions/2026-09-21-guideline-core-values.md) に残す。
 Catalog に載せる理由と範囲は [方針を二次情報として載せる ADR](decisions/2026-09-20-catalog-guidelines.md) に残す。
 
 ## ディレクトリ構成
@@ -77,10 +78,12 @@ updated: YYYY-MM-DD
 
 - 見出し: 短い名詞句か短文にする。Tips がこの見出しで引くので、後から変えると Tips も直る。
 - 本文: 目指す状態を 1 文で書き、「A より B を優先する」の形でトレードオフを 1 文で締める。
+- 数値: 主題のすべての場面に当てはまる数値は本文に書いてよい。数値があると、Tips に無い場面でも守れたかを確かめられる。
 - 並び順: コア同士が衝突したときの優先順位を表す。上が勝つ。
-- 箇条書きを書かない。具体例、値、出典を持たせない。書きたくなったら Tips へ送る。
+- 箇条書きを書かない。具体例と出典を持たせない。書きたくなったら Tips へ送る。数値の出典は ADR に残す。
 
-部品、画面、操作の名前や具体的な値が出るものは Tips に置く。
+部品、画面、操作の名前や、特定の場面に限られる数値は Tips に置く。
+Tips はコアの数値を繰り返さない。
 
 ## Tips の項目
 
