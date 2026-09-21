@@ -66,7 +66,7 @@ updated: 2026-09-21
 - 良い例: ナビゲーションの親を 7 件までに保つ。
 - 悪い例: 13 の面を 1 段に並べ、折り返しで 3 行になる。
 - 例外: 五十音順や日付順など、順序そのものが探す手がかりになる一覧。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 分類は重なりなく、漏れなく作る
 
@@ -88,7 +88,7 @@ updated: 2026-09-21
 - 良い例: アイコンやイラストなど、具体的な行き先トピックを足す。
 - 悪い例: 主たる 4 項目に入らない要素を「その他」にまとめる。
 - 例外: ユーザー自身が任意に作成する分類不能なフォルダ。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
 
 ### 1 件の置き場は 1 つに決め、決め方を固定する
@@ -101,7 +101,7 @@ updated: 2026-09-21
 - 良い例: 領域の優先度順で最初に一致したトピックに割り当てる。
 - 悪い例: 同じ成果物が複数のトピックに重複して現れる。
 - 例外: 検索やタグなど、多軸での探索を目的とする機能。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
 
 ### 主要な対象へ 3 操作以内で届かせる
@@ -124,7 +124,7 @@ updated: 2026-09-21
 - 良い例:「配色」「タイポグラフィ」「トークン」「コンポーネント」
 - 悪い例:「第 1 号」「第 2 号」などの号数や、「色」「文字」「記号」という抽象的な種別。
 - 例外: 雑誌など号数そのものを探す編集媒体。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Information Architecture 第 4 版](https://www.oreilly.com/library/view/information-architecture-4th/9781491913529/)
 
 ### 入口のラベルは 2〜8 字の名詞句にする
@@ -147,7 +147,7 @@ updated: 2026-09-21
 - 良い例: 利用者が重視する順序でナビゲーションの並びを固定する。
 - 悪い例: 更新のたびにナビの並び順が入れ替わる。
 - 例外: 更新順の閲覧そのものが主目的であるタイムライン。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 詳細画面からの戻り先を 1 つにする
 
@@ -159,7 +159,7 @@ updated: 2026-09-21
 - 良い例: トピック、成果物、案の階層に沿って 1 つ上の戻り先を示す。
 - 悪い例: 直前の履歴によってトップに戻ったり一覧に戻ったりする。
 - 例外: モーダルダイアログの閉じる操作。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Dan Brown: Eight Principles of Information Architecture](https://doi.org/10.1002/bult.2010.1720360605)
 
 ### 同じ内容を 2 度見せず、同じ操作を 2 か所に置かない
@@ -171,7 +171,7 @@ updated: 2026-09-21
 - 良い例: 実寸見本があるなら小標本は省き、テーマ切替は 1 つにする。
 - 悪い例: 実寸見本の下に同じ内容の小さなプレビュー枠を重ねる。
 - 例外: 画面上部と下部の両方に配置すべき長いフォームの送信ボタン。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 入口は中身が始まる場所にする
 
@@ -182,7 +182,7 @@ updated: 2026-09-21
 - 良い例: トピックを選ぶと、代表成果物や標本が直接始まる。
 - 悪い例: トピックを選ぶと、一覧リンクだけが並ぶ中間画面を挟む。
 - 例外: 件数が数百件におよび、先頭の選定が難しい場合。
-- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 
 ### 形の違う中身を同じ枠に入れない
 
@@ -193,7 +193,7 @@ updated: 2026-09-21
 - 良い例: 配色は色面、トークンは仕様表、アイコンは等幅格子で組む。
 - 悪い例: すべての要素を同一寸法のカードの中に無理に押し込める。
 - 例外: 多様な形式を均一なサムネイルで並べる統合検索結果。
-- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 
 ### 件数に見合った構造にする
 
@@ -204,7 +204,7 @@ updated: 2026-09-21
 - 良い例: 14 件程度の要素は 1 画面で一望できるようにする。
 - 悪い例: 14 件の一覧に並び替えや複数条件フィルターを設ける。
 - 例外: 数千件を超える大規模なデータ一覧。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 見本にはそれが何かを添える
 
@@ -215,4 +215,4 @@ updated: 2026-09-21
 - 良い例: 見本の先頭に書体名を添えて何の標本かを示す。
 - 悪い例: 見本だけが並び、書体名がどこにも書かれていない。
 - 例外: 装飾的な幾何学パターンなど、固有の仕様名を持たないもの。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)

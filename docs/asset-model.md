@@ -86,11 +86,11 @@ Catalog 固有の copy や metadata を正本にしない。
 性質の異なる 3 件で、role の差を固定する。
 詳細は ADR の実例節に書く。
 
-| 成果物                   | role         | maturity       | 置き場                          |
-| ------------------------ | ------------ | -------------- | ------------------------------- |
-| Typography token         | `foundation` | `candidate`    | `tokens/typography/`            |
-| `exploring-ui-variants`  | `module`     | `experimental` | `skills/exploring-ui-variants/` |
-| 授業資料のシンボルマーク | `reference`  | `experimental` | `experiments/class-doc-logo/`   |
+| 成果物                  | role         | maturity       | 置き場                            |
+| ----------------------- | ------------ | -------------- | --------------------------------- |
+| Typography token        | `foundation` | `candidate`    | `tokens/typography/`              |
+| `exploring-ui-variants` | `module`     | `experimental` | `skills/exploring-ui-variants/`   |
+| Hako の機能アイコン     | `reference`  | `experimental` | `experiments/hako-feature-icons/` |
 
 ## 他プロジェクトでの具体例
 
@@ -105,5 +105,5 @@ Typography token は `foundation` かつ `candidate` である。
 複数案を分岐する依頼のときだけ選ぶ。
 常時の開発手順には入れない。
 
-`class-doc-logo` は `reference` かつ `experimental` である。
+`hako-feature-icons` は `reference` かつ `experimental` である。
 構図や比較の着想に使い、SVG を依存にコピーしない。

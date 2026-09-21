@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <title>テスト</title>
-  <!-- 口のふち -->
-  <path id="part-test-rim" d="M9 3h6"/>
-  <!-- 首から裾へ。底の角は半径 2 で丸める -->
-  <path id="part-test-body" d="M9 3v7L5 18q0 2 2 2h10q2 0 2-2l-4-8V3"/>
-</svg>

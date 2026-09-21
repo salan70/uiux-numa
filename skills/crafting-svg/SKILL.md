@@ -39,7 +39,7 @@ description: SVG のアイコン、ロゴ、イラストを要求文から制作
 プロダクト固有の制約は要求文と Experiment の README の Constraints に置く。Skill には書かない。
 
 ロゴ、挿絵、キーヴィジュアルなど、ブランドを表す成果物では、比喩と目指す印象を制作の前に依頼者と決める。
-テーマだけを受け取って比喩を自分で選ぶと、機能アイコンでは成立しても、これらでは外れる（`experiments/class-doc-logo/` と `experiments/class-chapter-illustration/` の Learnings）。
+テーマだけを受け取って比喩を自分で選ぶと、機能アイコンでは成立しても、これらでは外れる（削除した Experiment `class-doc-logo` と `class-chapter-illustration` の Learnings）。
 参照（好きな意匠、作風、既存の例）を受け取るか、比喩の候補だけを軽い下書きで見せて選んでもらう。
 
 ### 2. 方針を選び、比較する違いを明確にする

@@ -4,6 +4,7 @@
 - 日付: 2026-09-20
 - 参照: [役割を絞って組み直す配色](../../experiments/color-schemes-material/README.md)、[Catalog の面を無彩色にし、公開カテゴリを絞る](2026-09-20-catalog-neutral-navigation.md)、[Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
 - 置き換え: [無彩色ナビの ADR](2026-09-20-catalog-neutral-navigation.md) の「背景、surface、本文、通常の罫線は白黒を基準にする」条項
+- 置き換え: 2026-09-21。Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
 
 ## 背景
 

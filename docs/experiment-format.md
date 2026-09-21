@@ -132,7 +132,8 @@ status を変えたら `updated` も更新する。
 - `id` は variant-id と同じにする。
 - `変えた軸` は Scope / Domains で挙げた軸から選ぶ。
 - 基準となる variant がある場合は、仮説の先頭に `基準:` と書く。
-- 評価の前に却下した variant も `variants/` と表に残し、仮説の先頭に `却下:` と書く。評価の対象には含めない。
+- 評価の前に却下した variant も、判断までは `variants/` と表に残し、仮説の先頭に `却下:` と書く。評価の対象には含めない。
+- 判断後は却下 variant のコードを削除する。表から行を外し、仮説と変えた軸を「削除した variant」の箇条書きへ移す（[削除の ADR](decisions/2026-09-21-prune-decided-experiments.md)）。
 
 ### 反復の記録
 

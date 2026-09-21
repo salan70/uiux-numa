@@ -54,7 +54,7 @@ updated: 2026-09-21
 - 良い例: ラベルと入力欄を近づけ、項目間はそれ以上の余白を空ける。
 - 悪い例: ラベルと入力欄の余白が、前後の項目間と同じ広さである。
 - 例外: 表形式のセルなど、境界線で所属が明確に区切られる場合。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
 ### 意味の違う余白は 1.5 倍以上離す
@@ -88,7 +88,7 @@ updated: 2026-09-21
 - 良い例: 0.75 / 1 / 1.125 / 1.5 / 巨大見出しの 5 段で組む。
 - 悪い例: 比率 1.25 の等比数列で 9 段を用意する。
 - 例外: 数値そのものを主役にする表示。
-- 実験: [catalog-editorial/rationale/issue-feature.md](../../experiments/catalog-editorial/rationale/issue-feature.md)
+- 実験: [catalog-editorial/rationale/issue-feature.md](../records/catalog-editorial/rationale/issue-feature.md)
 
 ### すべての要素を意識的な線に沿わせて揃える
 
@@ -99,7 +99,7 @@ updated: 2026-09-21
 - 良い例: 見出し、本文、入力欄の左端を 1 本のグリッド線に揃える。
 - 悪い例: 見出しや本文の左端がバラバラで、視線が左右に揺れる。
 - 例外: 強調のために意図して突出させるバッジや装飾。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
 ### 整列の基準線は 2 本までにし、中央揃えを並びに使わない
@@ -122,7 +122,7 @@ updated: 2026-09-21
 - 良い例: 線幅、角丸、山形矢印アイコンの造形をすべての部品で統一する。
 - 悪い例: 角丸や線の太さが部品ごとに異なり、OS 既定の矢印が混ざる。
 - 例外: 画面内で唯一の破壊的操作を警告する場合。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
 ### 異なるものははっきりと違わせる
@@ -134,7 +134,7 @@ updated: 2026-09-21
 - 良い例: 説明に縦罫を引いて文字色を落とし、見本は素のまま立たせる。
 - 悪い例: 見本と説明が同じ文字サイズと色で並び、どちらが見本か読めない。
 - 例外: 意図的に均一な視認性を保つべきデータ一覧表。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
 ### 1 画面の主役は 1 つにする
@@ -157,7 +157,7 @@ updated: 2026-09-21
 - 良い例: 近接と整列で骨格を作り、反復と対比で要素を立たせる。
 - 悪い例: コントラストだけを強めて整列を崩し、視線を混乱させる。
 - 例外: 単一の大きな見本標本など、要素が 1 つしかない画面。
-- 実験: [catalog-editorial/rationale/issue-feature.md](../../experiments/catalog-editorial/rationale/issue-feature.md)
+- 実験: [catalog-editorial/rationale/issue-feature.md](../records/catalog-editorial/rationale/issue-feature.md)
 - 出典: [ノンデザイナーズ・デザインブック](https://www.peachpit.com/store/non-designers-design-book-9780133966152)
 
 ### 4 原則で決まらない意味と文脈を先に確かめる
@@ -170,4 +170,4 @@ updated: 2026-09-21
 - 良い例: 利用者の探し方を先に決め、その構造を 4 原則で視覚化する。
 - 悪い例: 意味のない構造を 4 原則で綺麗に整え、利用者の目的と乖離させる。
 - 例外: 造形の方向性だけを比較検証するための初期モックアップ。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)

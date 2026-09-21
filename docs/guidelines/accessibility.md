@@ -77,7 +77,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 背景に対して 4.5:1 を超える文字色をコントラスト計算して設定する。
 - 悪い例: コントラスト比が 3.8:1 の淡いグレー文字を本文に使う。
 - 例外: 24px 以上、または 19px 以上の太字は 3:1 でよい。操作不能な無効化テキストと純粋な装飾も対象外。
-- 実験: [catalog-editorial/shared/contrast.ts](../../experiments/catalog-editorial/shared/contrast.ts)
+- 実験: [apps/catalog/src/content/contrast.ts](../../apps/catalog/src/content/contrast.ts)
 - 出典: [WCAG 2.2 達成基準 1.4.3](https://www.w3.org/WAI/WCAG22/quickref/#contrast-minimum)
 
 ### UI 部品と意味を持つ図形は 3:1 以上のコントラストを確保する
@@ -101,7 +101,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 良い例と悪い例を、`good` / `bad` の語と、成功色・エラー色の両方で分ける。
 - 悪い例: 成功とエラーを緑と赤の円だけで示し、文字や形を変えない。
 - 例外: 配色見本帳など、色そのものを鑑賞・選択する目的の領域。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 1.4.1](https://www.w3.org/WAI/WCAG22/quickref/#use-of-color)
 
 ### 意味を持つ画像に代替テキストを付け、装飾は読み上げから外す
@@ -124,7 +124,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: ホバーとフォーカスの両方で表示し、タッチ環境では常時展開する。
 - 悪い例: マウスホバー時のみツールチップで必須の注記を出す。
 - 例外: ホバーによって得られる純粋な視覚的装飾や演出効果。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 1.4.13](https://www.w3.org/WAI/WCAG22/quickref/#content-on-hover-or-focus)
 
 ### すべての操作をキーボードだけで完結させる
@@ -137,7 +137,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: タブやボタンをネイティブ要素で組み、キーボードで操作可能にする。
 - 悪い例: `div` や `span` に `onClick` だけを付け、キーボードで押せないようにする。
 - 例外: 自由描画キャンバスなど、ポインタの連続軌跡が必須の操作。
-- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.1.1](https://www.w3.org/WAI/WCAG22/quickref/#keyboard)
 
 ### フォーカスを可視化し sticky な帯で隠さない
@@ -149,7 +149,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 2px の鮮明な輪郭線を出し、`scroll-margin` で固定帯との重なりを防ぐ。
 - 悪い例: `outline: none` で枠を消し、固定ヘッダーの背後に要素が潜り込む。
 - 例外: ポインタで押した直後。`:focus-visible` を使い、キーボード操作のときだけ枠を出す。
-- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.7 / 2.4.11](https://www.w3.org/WAI/WCAG22/quickref/#focus-visible)
 
 ### ポインタのターゲット領域は 24px 以上にする
@@ -174,7 +174,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: `header`、`nav`、`main` で領域を分け、見出しを h1 から順に置く。
 - 悪い例: 文字を大きくした `div` を見出しの代わりに使い、階層を飛ばす。
 - 例外: 視覚的に見出しを出さない領域。`aria-label` でランドマークに名前を付ける。
-- 実験: [catalog-editorial/variants/topic-first/index.tsx](../../experiments/catalog-editorial/variants/topic-first/index.tsx)
+- 実験: [apps/catalog/src/components/Layout.tsx](../../apps/catalog/src/components/Layout.tsx)
 - 出典: [WCAG 2.2 達成基準 1.3.1](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
 ### ラベル、エラー文、補足を入力欄と結び付ける
@@ -221,7 +221,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: `prefers-reduced-motion` 時に遷移時間や移動距離を 0 に近づける。
 - 悪い例: 端末設定を無視して常に画面全体がスライドや拡大縮小する。
 - 例外: 動画再生など、動きそのものがコンテンツの本質である場合。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 2.3.3（AAA）](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html)
 
 ### 画面遷移後は見出しにフォーカスを移し skip link を置く
@@ -233,7 +233,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 画面遷移後に h1 要素へフォーカスを移し、最上部に skip link を置く。
 - 悪い例: 画面が切り替わっても直前のボタンにフォーカスが残留する。
 - 例外: 遷移を伴わない同一画面内の小さな開閉操作。
-- 実験: [catalog-editorial/shared/useScreen.ts](../../experiments/catalog-editorial/shared/useScreen.ts)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.1](https://www.w3.org/WAI/WCAG22/quickref/#bypass-blocks)
 
 ### モーダル表示にはネイティブの dialog 要素を使う
@@ -245,5 +245,5 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: ネイティブの `dialog` 要素を使い、Esc での終了と背景不活性化を得る。
 - 悪い例: `div` 要素でモーダルを自作し、背後の要素にフォーカスが漏れる。
 - 例外: 簡易なポップオーバーなど、非モーダルな浮動表示。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [MDN dialog 要素](https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/dialog)

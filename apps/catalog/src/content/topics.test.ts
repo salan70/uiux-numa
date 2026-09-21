@@ -6,26 +6,13 @@ import { isCurrentPath, topicForExperiment, topicHref, TOPICS, workHref } from "
 
 describe("topicForExperiment", () => {
   it("domain の並び順で最初に当たった topic を採る", () => {
-    expect(topicForExperiment("x", ["color", "typography"])).toBe("colors");
-    expect(topicForExperiment("x", ["typography", "color"])).toBe("typography");
-  });
-
-  it("公開面から外した domain は topic を持たない", () => {
-    expect(topicForExperiment("x", ["logo-brand-identity"])).toBeNull();
-    expect(topicForExperiment("x", ["illustration-svg"])).toBeNull();
-    expect(topicForExperiment("x", ["animation-motion"])).toBeNull();
-    // 別の domain も持つ成果物が、次の domain へ流れて無関係な topic に入らないこと。
-    expect(topicForExperiment("x", ["logo-brand-identity", "iconography"])).toBeNull();
-  });
-
-  it("Catalog 自身を比べる Experiment は出さない", () => {
-    expect(topicForExperiment("catalog-editorial", ["color"])).toBeNull();
-    expect(topicForExperiment("catalog-redesign", ["color"])).toBeNull();
+    expect(topicForExperiment(["color", "typography"])).toBe("colors");
+    expect(topicForExperiment(["typography", "color"])).toBe("typography");
   });
 
   it("どの domain にも当たらなければ null を返す", () => {
-    expect(topicForExperiment("x", ["not-a-domain"])).toBeNull();
-    expect(topicForExperiment("x", [])).toBeNull();
+    expect(topicForExperiment(["not-a-domain"])).toBeNull();
+    expect(topicForExperiment([])).toBeNull();
   });
 });
 

@@ -5,7 +5,7 @@ import { Radio } from "@base-ui/react/radio";
 import { RadioGroup } from "@base-ui/react/radio-group";
 import { Select } from "@base-ui/react/select";
 import { Slider } from "@base-ui/react/slider";
-import "../../color-schemes/variants/sumi/scheme.css";
+import "./scheme.css";
 import "../../../tokens/space/index.css";
 import "../../../tokens/typography/index.css";
 import { CopyField } from "./parts/CopyField";
@@ -103,7 +103,7 @@ export function Kit({ variantClass }: Props) {
           <p className="sk-kicker">比較案: {variantClass.replace("sk-", "")}</p>
           <h1>部品の見本</h1>
           <p className="sk-intro">
-            Catalog で使う操作部品と面を、同じ内容で 4 案並べます。公開面の CSS はまだ変えません。
+            Catalog で使う操作部品と面を、採用案で並べます。公開面の CSS はまだ変えません。
           </p>
 
           <section className="sk-card" id="sk-form" aria-labelledby={`${formId}-heading`}>

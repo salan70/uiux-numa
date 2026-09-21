@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="currentColor" stroke="none">
-  <title>ターミナル</title>
-  <!--
-    窓の塗り 1 枚に、プロンプト > と入力行 _ を負の空間で抜く。
-    外形は 18x14 の角丸 2。切り抜きは幅 2、端点の半径 1。切り抜きと外形の間は 2.5 以上空ける。
-  -->
-  <path id="part-terminal-window" fill-rule="evenodd" d="M5 5H19A2 2 0 0 1 21 7V17A2 2 0 0 1 19 19H5A2 2 0 0 1 3 17V7A2 2 0 0 1 5 5Z M6.29 9.71 L8.59 12 L6.29 14.29 A1 1 0 0 0 7.71 15.71 L10.71 12.71 A1 1 0 0 0 10.71 11.29 L7.71 8.29 A1 1 0 0 0 6.29 9.71 Z M13 16 L17.5 16 A1 1 0 0 0 17.5 14 L13 14 A1 1 0 0 0 13 16 Z"/>
-</svg>

@@ -3,7 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-21
 - 参照: [規則の構造 ADR](2026-09-21-catalog-guideline-rule-structure.md)、[方針を二次情報として載せる ADR](2026-09-20-catalog-guidelines.md)、[24 役割の ADR](2026-09-20-catalog-material-color-roles.md)
-- 出どころ: [guideline-rule-structure](../../experiments/guideline-rule-structure/README.md)
+- 出どころ: [guideline-rule-structure](../records/guideline-rule-structure/README.md)
 
 ## 背景
 
@@ -11,7 +11,7 @@
 「各情報がぱっとみで何を表しているか、どういう構造かがわからない」だった。
 bad と good だけがラベルを持ち、分類、根拠、例外、出典は素の段として同じ強さで積まれていた。
 
-[guideline-rule-structure](../../experiments/guideline-rule-structure/README.md) で
+[guideline-rule-structure](../records/guideline-rule-structure/README.md) で
 役割の示し方を軸にした 4 案（`labelled-column`、`heading-blocks`、`meta-aside`、`contrast-pair`）を
 実データで組み、利用者が `contrast-pair` を選んだ。
 

@@ -54,12 +54,18 @@ variant で変える軸は角丸、面の階層、影、動きの 4 つである
 
 ## Variants
 
-| id               | 仮説                                            | 変えた軸                         | 実装                       |
-| ---------------- | ----------------------------------------------- | -------------------------------- | -------------------------- |
-| `hairline-float` | 基準: 線で区切り、浮く面だけに影を置けば足りる  | 1px の境界、popup と drawer の影 | `variants/hairline-float/` |
-| `tonal-layers`   | 影も線もなく、色段差 3 層で階層が読める         | 面の 3 層、選択は weight と ring | `variants/tonal-layers/`   |
-| `soft-pillow`    | やわらかい 2 層の影で、面を層として浮かせられる | 線なし、弱いばね、press の縮小   | `variants/soft-pillow/`    |
-| `capsule-spring` | 操作部品をカプセルにし、ばねを主役にできる      | 999px、accent 塗り、強いばね     | `variants/capsule-spring/` |
+| id               | 仮説                                           | 変えた軸                         | 実装                       |
+| ---------------- | ---------------------------------------------- | -------------------------------- | -------------------------- |
+| `hairline-float` | 基準: 線で区切り、浮く面だけに影を置けば足りる | 1px の境界、popup と drawer の影 | `variants/hairline-float/` |
+
+### 削除した variant
+
+判断後にコードと専用の preview を削除した。
+理由は Rejected reasons、削除の判断と復元手順は [ADR](../../docs/decisions/2026-09-21-prune-decided-experiments.md) にある。
+
+- `tonal-layers`: 影も線もなく、色段差 3 層で階層が読める。変えた軸: 面の 3 層、選択は weight と ring。
+- `soft-pillow`: やわらかい 2 層の影で、面を層として浮かせられる。変えた軸: 線なし、弱いばね、press の縮小。
+- `capsule-spring`: 操作部品をカプセルにし、ばねを主役にできる。変えた軸: 999px、accent 塗り、強いばね。
 
 ## Evaluation
 
@@ -89,7 +95,7 @@ variant で変える軸は角丸、面の階層、影、動きの 4 つである
 - `soft-pillow`: 面全体に拡散影を置く。全面の elevation になり、ホストが避けてきた影の使い方に戻る。ばねのイージングも CSS だけで揃える負荷が大きい。
 - `capsule-spring`: 角丸 999px と accent 塗り、強いばねが主役になる。表やカードと操作部品の形が分かれ、見本帳の紙をカプセルに寄せすぎる。
 
-却下した 3 案の `variants/` は比較記録として残す。
+却下した 3 案の `variants/` は判断後に削除した。
 
 ## Learnings
 

@@ -3,11 +3,12 @@
 - 状態: Accepted
 - 日付: 2026-09-20
 - 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)、[無彩のナビ ADR](2026-09-20-catalog-neutral-navigation.md)、[方針の掲載 ADR](2026-09-20-catalog-guidelines.md)、[ホスト ADR](2026-09-19-catalog-host.md)
+- 置き換え: 2026-09-21。Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
 
 ## 背景
 
 公開 Catalog は 6 種別のナビと、一覧から詳細へ送る 2 段の構成だった。
-[catalog-editorial](../../experiments/catalog-editorial/README.md) で情報設計を作り直し、`topic-first` が A1 から A10 の反復を経て実装が揃った。
+[catalog-editorial](../records/catalog-editorial/README.md) で情報設計を作り直し、`topic-first` が A1 から A10 の反復を経て実装が揃った。
 この案は入口をトピックにし、トピックの画面が中身そのものを出す。
 方針（Guidelines）の画面も持つが、公開面には出ていなかった。
 

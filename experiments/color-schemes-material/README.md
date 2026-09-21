@@ -13,7 +13,7 @@ domains:
   - design-tokens
   - accessibility
 sources:
-  - experiments/color-schemes
+  - docs/records/color-schemes
 adopted:
   - wasabi
   - yuzu
@@ -108,7 +108,7 @@ Catalog への反映後は `just catalog-test` が同じ組み合わせを再検
 ## Decision
 
 10 テーマすべてを採用し、24 役割の体系を配色の正本にする。
-`experiments/color-schemes` の 19 役割を置き換える。
+`docs/records/color-schemes`（削除済みの記録） の 19 役割を置き換える。
 旧 Experiment は判断の経緯として残し、公開 Catalog からは案内しない。
 
 Catalog は `variants/<id>/scheme.css` を読む。

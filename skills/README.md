@@ -96,12 +96,12 @@ symlink の解決は次を確認した。
 | Codex        | 未確認 | 同じ symlink 経路を使う想定。起動確認はしていない                         |
 
 読み込み確認はデザイン上の効果の確認ではない。
-効果の比較は `experiments/registration-completion-feedback/` で行う。
+効果の比較は Experiment `registration-completion-feedback` で行った。
 
 ## 派生 3 Skill の効果と限界（2026-09-20）
 
 同じ要求文とモデル（`claude-fable-5-1`）で、Skill の有無を比べた。
-記録は `experiments/registration-completion-feedback/README.md` にある。
+Experiment は判断後に削除した。記録は commit `eff731b` の `experiments/registration-completion-feedback/README.md` で辿る。
 人間判断は 3 本とも継続利用である。成熟度は `experimental` のままである。
 
 | 項目       | Skill なし                          | Skill あり                                       |

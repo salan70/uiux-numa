@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(12);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(6);
     expect(catalog.schemes).toHaveLength(10);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(69);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(29);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(13);
-    expect(catalog.liveVariants).toHaveLength(74);
+    expect(catalog.experiments).toHaveLength(6);
+    expect(catalog.liveVariants).toHaveLength(22);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/typography/typography.tokens.json",
@@ -25,21 +25,12 @@ describe("catalog inventory", () => {
   });
 
   it("Experiment を topic へ割り当てる", () => {
-    // color-schemes は color-schemes-material へ置き換えた。記録は残すが topic を持たない。
     expect(slugs("colors")).toEqual(["color-schemes-material"]);
-    expect(catalog.experiments.find((item) => item.slug === "color-schemes")?.topic).toBeNull();
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
-    // 公開面から外した domain と、Catalog 自身を比べる Experiment は topic を持たない。
-    for (const slug of [
-      "class-doc-logo",
-      "class-chapter-illustration",
-      "registration-completion-feedback",
-      "guideline-rule-structure",
-    ]) {
-      expect(catalog.experiments.find((item) => item.slug === slug)?.topic).toBeNull();
-    }
+    // 判断済みで掲載しない Experiment は削除した。残る Experiment はすべて topic を持つ。
+    expect(catalog.experiments.every((item) => item.topic !== null)).toBe(true);
   });
 
   it("token を正本のファイル単位で束ねる", () => {
@@ -57,7 +48,7 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "product-ui-typography")?.role).toBe(
       "foundation",
     );
-    expect(catalog.experiments.find((item) => item.slug === "class-doc-logo")?.role).toBe(
+    expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.role).toBe(
       "reference",
     );
     expect(catalog.tokenAssets[0]?.role).toBe("foundation");
@@ -72,7 +63,6 @@ describe("catalog inventory", () => {
 
   it("adopted 件数と variant のステータスを検査する", () => {
     expect(ids("adopted")).toEqual([
-      "catalog-editorial/topic-first",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",
@@ -84,16 +74,6 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
-      "color-schemes/aizome",
-      "color-schemes/azuki",
-      "color-schemes/fuji",
-      "color-schemes/kingyo",
-      "color-schemes/shinbashi",
-      "color-schemes/sumi",
-      "color-schemes/tsukiyo",
-      "color-schemes/ume",
-      "color-schemes/wasabi",
-      "color-schemes/yuzu",
       "form-inline-validation/on-submit",
       "product-ui-typography/line-seed-minimal",
       "soft-component-kit/hairline-float",
@@ -107,28 +87,9 @@ describe("catalog inventory", () => {
         0,
       ),
     );
-    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.status).toBe(
-      "decided",
-    );
-    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.adopted).toEqual(
-      [],
-    );
-    expect(catalog.experiments.find((item) => item.slug === "catalog-redesign")?.topic).toBeNull();
-    expect(
-      catalog.experiments
-        .filter((item) => item.status === "decided" && item.adopted.length === 0)
-        .map((item) => item.slug)
-        .sort(),
-    ).toEqual([
-      "catalog-redesign",
-      "class-chapter-illustration",
-      "class-doc-logo",
-      "registration-completion-feedback",
-    ]);
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );
-    expect(catalog.experiments.find((item) => item.slug === "catalog-editorial")?.topic).toBeNull();
   });
 
   it("adopted に Variants 表にない ID があると失敗する", () => {
