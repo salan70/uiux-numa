@@ -35,9 +35,9 @@ lint:
 
 # Markdown を lint する
 # .direnv（flake inputs）と vendor 資産（.claude / .agents）は対象外。
-# pre-commit 側の exclude と範囲を揃えている。
+# Git 管理外の作業メモも除外し、pre-commit の対象に揃える。
 lint-md:
-    markdownlint-cli2 "**/*.md" "!.direnv/**" "!.claude/**" "!.agents/**" "!**/node_modules/**"
+    markdownlint-cli2 "**/*.md" "!.direnv/**" "!.claude/**" "!.agents/**" "!**/node_modules/**" "!untitled.md"
 
 # Markdown / JSON / YAML を整形する
 # .claude / .agents は正本からコピーした vendor 資産のため整形しない。

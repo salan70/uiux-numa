@@ -46,15 +46,15 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 実装は `apps/catalog/` にある。
 Catalog は成果物の visual showcase である。
 仕様書や Asset の正本にはしない。
-公開殻は `hairline-float` である。中身は静かな階層で、標本を先に置く。
+表示層は `topic-first` を基にし、トピックごとに成果物を直接見せる。
 背景と主要な面は白黒を基準にし、選択した Colors の accent を限定して使う。
-ナビは 6 カテゴリで構成する。
+ナビは Works（Colors / Typography / Tokens / Components / Icons）と Guidelines の 2 群で構成する。
 `role` と `maturity` は正本 metadata を二次情報として出す。
-Colors はヘッダーで選び、ライト / ダークのテーマと組み合わせて表示できる。
+配色とライト / ダークのテーマはサイドバー下部で選ぶ。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
 production URL は `https://uiux.oda79.me/` とする。
 Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。
-構成の判断は [visual showcase の ADR](docs/decisions/2026-09-20-catalog-visual-showcase.md) に残す。
+責務の判断は [visual showcase の ADR](docs/decisions/2026-09-20-catalog-visual-showcase.md)、表示層の判断は [topic-first の ADR](docs/decisions/2026-09-20-catalog-topic-first.md) に残す。
 
 ## 開発環境
 
