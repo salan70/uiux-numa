@@ -7,7 +7,6 @@ const APPEARANCES: {
   label: string;
   description: string;
   colorTokens: { surface: string; border: string; text: string };
-  sizeNote?: string;
 }[] = [
   {
     id: "primary",
@@ -38,7 +37,6 @@ const APPEARANCES: {
       border: "transparent",
       text: "--color-primary-text",
     },
-    sizeNote: "--size-target-min(当たり領域だけを確保する)",
   },
   {
     id: "danger",
@@ -131,6 +129,12 @@ export function Showcase({
           <div className="button-showcase__size-header" aria-label="サイズ仕様">
             <div className="button-showcase__size-title">
               <h2 id="button-appearances">役割とサイズ</h2>
+              {/* 項目名は S の左に 1 度だけ出す。読み上げは各サイズの dt が担う。 */}
+              <ul className="button-showcase__size-keys" aria-hidden="true">
+                <li>高さ</li>
+                <li>左右</li>
+                <li>最小幅</li>
+              </ul>
             </div>
             <div className="button-showcase__size-specs">
               {SIZE_SPECS.map((spec) => (
@@ -152,12 +156,6 @@ export function Showcase({
                     values={[appearance.colorTokens.surface, appearance.colorTokens.border]}
                   />
                   <ColorToken label="文字" values={[appearance.colorTokens.text]} />
-                  {appearance.sizeNote ? (
-                    <div>
-                      <dt>寸法</dt>
-                      <dd>{appearance.sizeNote}</dd>
-                    </div>
-                  ) : null}
                 </dl>
               </div>
               <div className="button-showcase__sizes">
@@ -206,15 +204,15 @@ function SizeSpec({ spec }: { spec: (typeof SIZE_SPECS)[number] }) {
       <p>{spec.label}</p>
       <dl>
         <div>
-          <dt>高さ</dt>
+          <dt className="button-showcase__visually-hidden">高さ</dt>
           <dd>{spec.height}</dd>
         </div>
         <div>
-          <dt>左右</dt>
+          <dt className="button-showcase__visually-hidden">左右</dt>
           <dd>{spec.paddingInline}</dd>
         </div>
         <div>
-          <dt>最小幅</dt>
+          <dt className="button-showcase__visually-hidden">最小幅</dt>
           <dd>{spec.minWidth}</dd>
         </div>
       </dl>
