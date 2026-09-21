@@ -58,10 +58,8 @@ export function formatTokenValue(type: string, value: unknown): string {
   if (type === "typography" && value && typeof value === "object") {
     const fields = value as Record<string, unknown>;
     return [
-      `fontFamily: ${formatTokenValue("fontFamily", fields.fontFamily)}`,
       `fontSize: ${formatTokenValue("dimension", fields.fontSize)}`,
       `fontWeight: ${fields.fontWeight}`,
-      `letterSpacing: ${formatTokenValue("dimension", fields.letterSpacing)}`,
       `lineHeight: ${fields.lineHeight}`,
     ].join(" / ");
   }

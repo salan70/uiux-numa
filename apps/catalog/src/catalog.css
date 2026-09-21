@@ -580,16 +580,6 @@ body {
   border-inline-start: var(--border-width-thin) solid var(--cat-line);
 }
 
-.app-shell .detail__source {
-  margin: var(--cat-gap) 0 0;
-  font-size: var(--cat-label);
-  color: var(--cat-muted);
-}
-
-.app-shell .detail__source code {
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-}
-
 .app-shell .variants {
   margin: 0;
   padding: 0;
@@ -1004,12 +994,6 @@ body {
   line-height: 1.3;
 }
 
-.app-shell .token-family__source {
-  margin: var(--space-200) 0 0;
-  font-size: var(--cat-label);
-  color: var(--cat-muted);
-}
-
 .app-shell .token-table-wrap {
   overflow-x: auto;
   margin-block-start: var(--cat-gap-lg);
@@ -1017,9 +1001,31 @@ body {
 
 .app-shell .token-table {
   inline-size: 100%;
+  min-inline-size: 64rem;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.875rem;
   line-height: 1.6;
+}
+
+.app-shell .token-table__column--name {
+  width: 22%;
+}
+
+.app-shell .token-table__column--value {
+  width: 16%;
+}
+
+.app-shell .token-table__column--sample {
+  width: 21%;
+}
+
+.app-shell .token-table__column--desc {
+  width: 31%;
+}
+
+.app-shell .token-table__column--kind {
+  width: 10%;
 }
 
 .app-shell .token-table th,
@@ -1045,19 +1051,28 @@ body {
 }
 
 .app-shell .token-table__kind {
-  display: block;
-  margin-block-start: var(--space-100);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--cat-muted);
+  white-space: nowrap;
 }
 
+/* 値列は全ファミリーで幅を揃え、書体と複合値は列内で折り返す。 */
 .app-shell .token-table__value {
-  min-inline-size: 14rem;
+  white-space: nowrap;
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 0.75rem;
   color: var(--cat-muted);
+}
+
+.app-shell .token-table__value--long {
+  min-inline-size: 0;
+  white-space: normal;
+}
+
+.app-shell .token-table__value--composite {
+  white-space: pre-line;
 }
 
 /* composite な token は値だけでは字面が判断できないので、実スタイルで見本を描く。 */
@@ -1067,6 +1082,7 @@ body {
   overflow-wrap: anywhere;
 }
 
+/* 説明列の幅を固定し、表ごとに文章の折り返し位置が変わらないようにする。 */
 .app-shell .token-table__desc {
   min-inline-size: 16rem;
   color: var(--cat-muted);
@@ -1116,14 +1132,14 @@ body {
   display: block;
   inline-size: var(--space-2000);
   block-size: var(--space-1000);
-  border: var(--border-width-thin) solid var(--cat-line-strong);
-  background: var(--cat-surface);
+  border: var(--border-width-thin) solid var(--cat-focus);
+  background: var(--color-primary-container);
 }
 
 .app-shell .token-table__rule {
   display: block;
   inline-size: var(--space-2000);
-  border-block-start: var(--border-width-thin) solid var(--cat-text);
+  border-block-start: var(--border-width-thin) solid var(--cat-focus);
 }
 
 /* ---- トピックの中身。一覧を挟まず、成果物そのものを出す ---- */

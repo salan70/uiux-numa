@@ -17,37 +17,51 @@ export function TokensPage() {
             <p className="meta">
               {family.role && <span>{family.role}</span>}
               {family.maturity && <span>{family.maturity}</span>}
-              <span>{family.tokens.length} token</span>
-            </p>
-            <p className="token-family__source">
-              正本は <code>{family.sourcePath}</code>
             </p>
             <div className="token-table-wrap">
               <table className="token-table">
+                <colgroup>
+                  <col className="token-table__column--name" />
+                  <col className="token-table__column--value" />
+                  <col className="token-table__column--sample" />
+                  <col className="token-table__column--desc" />
+                  <col className="token-table__column--kind" />
+                </colgroup>
                 <thead>
                   <tr>
                     <th scope="col">名前</th>
                     <th scope="col">値</th>
                     <th scope="col">見本</th>
                     <th scope="col">説明</th>
+                    <th scope="col">種別</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {family.tokens.map((token) => (
-                    <tr key={token.name}>
-                      <th scope="row">
-                        <code>{token.cssNames[0]}</code>
-                        <span className="token-table__kind">{token.kind}</span>
-                      </th>
-                      <td className="token-table__value">
-                        {formatTokenValue(token.type, token.resolvedValue)}
-                      </td>
-                      <td>
-                        <TokenSample token={token} />
-                      </td>
-                      <td className="token-table__desc">{renderSentences(token.description)}</td>
-                    </tr>
-                  ))}
+                  {family.tokens.map((token) => {
+                    const value = formatTokenValue(token.type, token.resolvedValue);
+                    const valueClassName =
+                      token.type === "typography"
+                        ? "token-table__value token-table__value--long token-table__value--composite"
+                        : token.type === "fontFamily"
+                          ? "token-table__value token-table__value--long"
+                          : "token-table__value";
+
+                    return (
+                      <tr key={token.name}>
+                        <th scope="row">
+                          <code>{token.cssNames[0]}</code>
+                        </th>
+                        <td className={valueClassName}>
+                          {token.type === "typography" ? value.replaceAll(" / ", " /\n") : value}
+                        </td>
+                        <td>
+                          <TokenSample token={token} />
+                        </td>
+                        <td className="token-table__desc">{renderSentences(token.description)}</td>
+                        <td className="token-table__kind">{token.kind}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
