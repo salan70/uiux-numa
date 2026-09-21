@@ -1,7 +1,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import { useCatalogColors } from "../../button/shared/useCatalogColors";
 import { Card } from "./Card";
-import { ComponentsCover, IconsCover, TypographyCover } from "./covers";
+import { ComponentsCover } from "./covers";
 
 type Row = {
   id: string;
@@ -48,34 +48,6 @@ const ROWS: Row[] = [
       />
     ),
   },
-  {
-    id: "long",
-    label: "長い題名",
-    description: "高さは変えず、収まらない題名と要約は … で切る",
-    tokens: [{ label: "題名", values: ["--typography-body-font-size", "--font-weight-bold"] }],
-    sample: (
-      <Card
-        href="/foundations/typography"
-        title="プロダクト画面で使う書体と、見出し、本文、操作、注記まで、画面の中で文字が担う役割を 1 つの規則で揃える"
-        description="見出しから注記まで、役割ごとに書体、大きさ、太さ、行の高さを決める。"
-        meta="Foundation"
-        cover={<TypographyCover />}
-      />
-    ),
-  },
-  {
-    id: "response",
-    label: "反応",
-    description:
-      "ポインタを載せると、枠と題名は止めたまま枠の中身だけを 1.04 倍にする。Tab で移るとカードの外周に枠を出す",
-    tokens: [
-      { label: "動き", values: ["--duration-press", "--easing-out"] },
-      { label: "枠", values: ["--border-width-thick", "--color-focus"] },
-    ],
-    sample: (
-      <Card href="/foundations/icons" title="Icons" meta="Foundation" cover={<IconsCover />} />
-    ),
-  },
 ];
 
 export function Showcase({
@@ -105,6 +77,10 @@ export function Showcase({
 
       <section className="card-showcase__section" aria-labelledby="card-parts">
         <h2 id="card-parts">構成</h2>
+        <p className="card-showcase__lead">
+          どのカードも同じ高さにし、1 行に収まらない文字は …
+          で切る。ポインタを載せると枠の中身だけを拡大し、Tab で移るとカードの外周に枠を出す。
+        </p>
         <div className="card-showcase__rows">
           {ROWS.map((row) => (
             <div className="card-showcase__row" key={row.id}>
