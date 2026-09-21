@@ -30,9 +30,9 @@
   --color-outline: #757575;
   --color-focus: #1a7c89;
 
-  --color-success: #0b6f3a;
-  --color-warning: #786002;
-  --color-error: #9d1d0c;
+  --color-success: #356f52;
+  --color-warning: #71602f;
+  --color-error: #a13945;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,8 +62,8 @@
     --color-outline: #8b9a9c;
     --color-focus: #87dde8;
 
-    --color-success: #7df2b4;
-    --color-warning: #fce173;
-    --color-error: #f7a297;
+    --color-success: #69d29e;
+    --color-warning: #d5b65f;
+    --color-error: #eca3a5;
   }
 }

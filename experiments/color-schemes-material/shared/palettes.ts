@@ -149,26 +149,67 @@ export function makePalette(scheme: Scheme, mode: Mode): Palette {
     4.5,
   );
 
-  const semanticGroups = [
-    { name: "success", hue: 148, sat: 0.82 },
-    { name: "warning", hue: 48, sat: 0.96 },
-    { name: "error", hue: 7, sat: 0.86 },
-  ];
-  for (const group of semanticGroups) {
-    palette[group.name] = toneAgainstSurfaces(
-      group.hue,
-      group.sat,
-      isDark ? 0.72 : 0.33,
-      [palette.surface, palette["surface-variant"]],
-      4.5,
-    );
-  }
+  const status = statusColors(scheme, [palette.surface, palette["surface-variant"]], isDark);
+  Object.assign(palette, status);
 
   const failures = paletteContrastFailures(palette);
   if (failures.length > 0) {
     throw new Error(`${scheme.id}/${mode}: コントラスト条件を満たさない: ${failures.join(", ")}`);
   }
   return palette;
+}
+
+/**
+ * 状態色の基準の色相（OKLCH）。error は sRGB の赤の色相 29° の近く、success は緑、warning は琥珀に置く。
+ * 配色へ寄せても隣の状態色へ届かないよう、3 色を 50° 以上離す。
+ */
+const STATUS_HUES = { success: 150, warning: 80, error: 27 } as const;
+
+/**
+ * 基準の色相を配色へ寄せる上限。
+ * Material Color Utilities の harmonize は差の半分、最大 15° を回す。
+ * ここは 10° にし、寄せた後も error と warning の間に 30° 以上を残す。
+ */
+const STATUS_HUE_SHIFT = 10;
+
+/**
+ * 状態色を配色から決める。値を固定せず、次の 3 つを配色の基準色から計算する。
+ *
+ * - 色相: 基準の色相を、配色の主な色相へ差の半分だけ回す（上限 STATUS_HUE_SHIFT）。
+ *   主な色相は primary、無彩なら secondary、tertiary の順で最初の有彩色にする。
+ * - 明度: 3 色を同じ OKLCH L に揃え、1 色だけ明るく目立つことを防ぐ。
+ *   L は 3 色すべてが面に 4.5:1 を満たす範囲で、面から最も遠くない値にする。
+ * - 彩度: 基準色 3 色の相対彩度（その明度と色相で sRGB が出せる最大彩度に対する比）の平均を掛ける。
+ *   鮮やかな配色では状態色も鮮やかに、落ち着いた配色では落ち着く。
+ */
+function statusColors(scheme: Scheme, surfaces: string[], isDark: boolean): Palette {
+  const seeds = families.map((family) => toOklch(scheme[family].hex));
+  const key = seeds.find((seed) => seed.c >= 0.03) ?? seeds[0];
+  const vividness =
+    seeds.reduce((sum, seed) => sum + seed.c / maxChroma(seed.l, seed.h), 0) / seeds.length;
+  const hues = Object.entries(STATUS_HUES).map(([name, base]) => {
+    const difference = ((key.h - base + 540) % 360) - 180;
+    const shift = Math.sign(difference) * Math.min(Math.abs(difference) / 2, STATUS_HUE_SHIFT);
+    return { name, hue: base + shift };
+  });
+  const colorsAt = (lightness: number) =>
+    hues.map(({ name, hue }) => ({
+      name,
+      hex: fromOklch(lightness, maxChroma(lightness, hue) * vividness, hue),
+    }));
+  const passes = (lightness: number) =>
+    colorsAt(lightness).every(({ hex }) =>
+      surfaces.every((surface) => contrastRatio(hex, surface) >= 4.5),
+    );
+
+  // ライトは明るい側から、ダークは暗い側から探し、最初に全色が通る L を採る。
+  // 面に最も近い L ほど、同じ色相で sRGB が出せる彩度が大きい。
+  for (let step = 0; step <= 1000; step += 1) {
+    const lightness = isDark ? step / 1000 : 1 - step / 1000;
+    if (passes(lightness))
+      return Object.fromEntries(colorsAt(lightness).map(({ name, hex }) => [name, hex]));
+  }
+  throw new Error(`${scheme.id}: 状態色が面に 4.5:1 を満たさない`);
 }
 
 export function paletteContrastFailures(palette: Palette): string[] {
@@ -289,5 +330,66 @@ function hslToHex(h: number, s: number, l: number): string {
         .toString(16)
         .padStart(2, "0"),
     )
+    .join("")}`;
+}
+
+type Oklch = { l: number; c: number; h: number };
+
+function toOklch(hex: string): Oklch {
+  const { r, g, b } = rgbToHsl(hex, true);
+  const [lr, lg, lb] = [r, g, b].map((channel) =>
+    channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4,
+  );
+  const l = Math.cbrt(0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb);
+  const m = Math.cbrt(0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb);
+  const s = Math.cbrt(0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb);
+  const lightness = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+  const bAxis = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+  return {
+    l: lightness,
+    c: Math.hypot(a, bAxis),
+    h: ((Math.atan2(bAxis, a) * 180) / Math.PI + 360) % 360,
+  };
+}
+
+/** OKLCH から線形 sRGB。範囲外の値もそのまま返し、色域の判定に使う。 */
+function oklchToLinear(lightness: number, chroma: number, hue: number): number[] {
+  const a = chroma * Math.cos((hue * Math.PI) / 180);
+  const b = chroma * Math.sin((hue * Math.PI) / 180);
+  const l = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (lightness - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+}
+
+/** その明度と色相で sRGB が出せる最大の彩度。二分探索で求める。 */
+function maxChroma(lightness: number, hue: number): number {
+  let low = 0;
+  let high = 0.4;
+  for (let index = 0; index < 30; index += 1) {
+    const middle = (low + high) / 2;
+    const inGamut = oklchToLinear(lightness, middle, hue).every(
+      (channel) => channel >= -1e-6 && channel <= 1 + 1e-6,
+    );
+    if (inGamut) low = middle;
+    else high = middle;
+  }
+  return low;
+}
+
+function fromOklch(lightness: number, chroma: number, hue: number): string {
+  return `#${oklchToLinear(lightness, chroma, hue)
+    .map((channel) => {
+      const linear = Math.min(1, Math.max(0, channel));
+      const encoded = linear <= 0.0031308 ? 12.92 * linear : 1.055 * linear ** (1 / 2.4) - 0.055;
+      return Math.round(encoded * 255)
+        .toString(16)
+        .padStart(2, "0");
+    })
     .join("")}`;
 }
