@@ -6,20 +6,20 @@
 
 :root:has(.cs-shinbashi) {
   --color-primary: #59b9c6; /* 新橋色 */
-  --color-on-primary: #201d1b;
+  --color-on-primary: #120d09;
   --color-primary-text: #176c78;
   --color-primary-container: #d7f0f4;
-  --color-on-primary-container: #201d1b;
+  --color-on-primary-container: #120d09;
 
   --color-secondary: #f19072; /* 東雲色 */
-  --color-on-secondary: #201d1b;
+  --color-on-secondary: #120d09;
   --color-secondary-container: #f9dbd2;
-  --color-on-secondary-container: #201d1b;
+  --color-on-secondary-container: #120d09;
 
   --color-tertiary: #674196; /* 菖蒲色 */
   --color-on-tertiary: #fffdf9;
   --color-tertiary-container: #e4d7f4;
-  --color-on-tertiary-container: #201d1b;
+  --color-on-tertiary-container: #120d09;
 
   --color-background: #f8f9f9;
   --color-surface: #fefefe;
@@ -38,13 +38,13 @@
 @media (prefers-color-scheme: dark) {
   :root:has(.cs-shinbashi) {
     --color-primary: #59b9c6; /* 新橋色 */
-    --color-on-primary: #201d1b;
+    --color-on-primary: #120d09;
     --color-primary-text: #a1e4ed;
     --color-primary-container: #226d77;
     --color-on-primary-container: #fffdf9;
 
     --color-secondary: #f19072; /* 東雲色 */
-    --color-on-secondary: #201d1b;
+    --color-on-secondary: #120d09;
     --color-secondary-container: #872d12;
     --color-on-secondary-container: #fffdf9;
 

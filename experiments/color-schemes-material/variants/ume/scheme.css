@@ -9,17 +9,17 @@
   --color-on-primary: #fffdf9;
   --color-primary-text: #811863;
   --color-primary-container: #f4d7ec;
-  --color-on-primary-container: #201d1b;
+  --color-on-primary-container: #120d09;
 
   --color-secondary: #006e54; /* 萌葱色 */
   --color-on-secondary: #fffdf9;
   --color-secondary-container: #d1faf0;
-  --color-on-secondary-container: #201d1b;
+  --color-on-secondary-container: #120d09;
 
   --color-tertiary: #59b9c6; /* 新橋色 */
-  --color-on-tertiary: #201d1b;
+  --color-on-tertiary: #120d09;
   --color-tertiary-container: #d7f0f4;
-  --color-on-tertiary-container: #201d1b;
+  --color-on-tertiary-container: #120d09;
 
   --color-background: #f9f8f9;
   --color-surface: #fefefe;
@@ -49,7 +49,7 @@
     --color-on-secondary-container: #fffdf9;
 
     --color-tertiary: #59b9c6; /* 新橋色 */
-    --color-on-tertiary: #201d1b;
+    --color-on-tertiary: #120d09;
     --color-tertiary-container: #226d77;
     --color-on-tertiary-container: #fffdf9;
 

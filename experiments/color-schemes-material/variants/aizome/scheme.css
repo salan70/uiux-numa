@@ -9,17 +9,17 @@
   --color-on-primary: #fffdf9;
   --color-primary-text: #0d618c;
   --color-primary-container: #d4ebf7;
-  --color-on-primary-container: #201d1b;
+  --color-on-primary-container: #120d09;
 
   --color-secondary: #bf783a; /* 琥珀色 */
-  --color-on-secondary: #201d1b;
+  --color-on-secondary: #120d09;
   --color-secondary-container: #f4e5d7;
-  --color-on-secondary-container: #201d1b;
+  --color-on-secondary-container: #120d09;
 
   --color-tertiary: #aa4c8f; /* 梅紫 */
   --color-on-tertiary: #fffdf9;
   --color-tertiary-container: #f4d7ec;
-  --color-on-tertiary-container: #201d1b;
+  --color-on-tertiary-container: #120d09;
 
   --color-background: #f8f9f9;
   --color-surface: #fefefe;
@@ -44,7 +44,7 @@
     --color-on-primary-container: #fffdf9;
 
     --color-secondary: #bf783a; /* 琥珀色 */
-    --color-on-secondary: #201d1b;
+    --color-on-secondary: #120d09;
     --color-secondary-container: #774a22;
     --color-on-secondary-container: #fffdf9;
 
