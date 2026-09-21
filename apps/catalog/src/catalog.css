@@ -642,6 +642,30 @@ body {
   color: var(--cat-accent-text);
 }
 
+/* 判断を終えていない印。注意でも警告でもない中立の情報なので、accent や good/bad を借りず
+   muted の文字と罫線で控えめに示す。題字の寸法によらず同じ大きさにし、題字の行へ並べる。 */
+.app-shell .wip-mark {
+  display: inline-block;
+  margin-inline-start: 0.5em;
+  padding: var(--space-50) var(--space-100);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
+  border-radius: var(--cat-radius);
+  font-size: var(--cat-label);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  color: var(--cat-muted);
+  vertical-align: middle;
+}
+
+/* display 寸法の題字では、末尾に置くと印だけが次の行へ落ち、横に並べると題字から離れる。
+   題字の直前に置き、1 行目の上へ単独で出す。 */
+.app-shell .detail__title .wip-mark {
+  display: block;
+  inline-size: fit-content;
+  margin: 0 0 var(--space-200);
+}
+
 /* ---- 操作部品 ---- */
 
 .app-shell .btn {

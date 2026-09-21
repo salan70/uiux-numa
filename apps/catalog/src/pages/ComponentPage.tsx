@@ -1,5 +1,6 @@
 import { Link } from "../components/Link";
-import { catalog } from "../content/collect";
+import { WipMark } from "../components/WipMark";
+import { catalog, isInProgress } from "../content/collect";
 import { catalogComponent } from "../content/components";
 import { topicHref } from "../content/topics";
 import { NotFoundPage } from "./NotFoundPage";
@@ -21,6 +22,7 @@ export function ComponentPage({ slug }: { slug: string }) {
         <span>{work.maturity}</span>
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
+        {isInProgress(work.status) && <WipMark />}
         {entry.title}
       </h1>
       <div className="component-detail__body">

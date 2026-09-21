@@ -31,6 +31,16 @@ export type LiveVariant = {
 
 export type VariantStatus = "adopted" | "rejected" | "exploring";
 
+/**
+ * 判断を終えていない status。docs/experiment-format.md の status 表の手順 1〜4 に当たる。
+ * abandoned は進行中ではないので含めない。
+ */
+const IN_PROGRESS_STATUSES: ExperimentStatus[] = ["draft", "implementing", "evaluating"];
+
+export function isInProgress(status: ExperimentStatus): boolean {
+  return IN_PROGRESS_STATUSES.includes(status);
+}
+
 export type ExperimentVariant = {
   id: string;
   status: VariantStatus;
