@@ -1,0 +1,69 @@
+/*
+ * variant `azuki`（あずき）の配色。
+ * shared/palettes.ts からの生成物。直接編集しない。
+ * 値を変えるときは palettes.ts を直し、just schemes-build を実行する。
+ */
+
+:root:has(.cs-azuki) {
+  --color-primary: #96514d; /* 小豆色 */
+  --color-on-primary: #fffdf9;
+  --color-primary-text: #811e18;
+  --color-primary-container: #f4d9d7;
+  --color-on-primary-container: #201d1b;
+
+  --color-secondary: #006e54; /* 萌葱色 */
+  --color-on-secondary: #fffdf9;
+  --color-secondary-container: #d1faf0;
+  --color-on-secondary-container: #201d1b;
+
+  --color-tertiary: #e6b422; /* 黄金 */
+  --color-on-tertiary: #201d1b;
+  --color-tertiary-container: #f9efd2;
+  --color-on-tertiary-container: #201d1b;
+
+  --color-background: #f9f8f8;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-surface-container: #f1efef;
+  --color-surface-variant: #e3dede;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #89201a;
+
+  --color-success: #0b6f3a;
+  --color-warning: #786002;
+  --color-error: #9d1d0c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-azuki) {
+    --color-primary: #96514d; /* 小豆色 */
+    --color-on-primary: #fffdf9;
+    --color-primary-text: #eda5a1;
+    --color-primary-container: #772722;
+    --color-on-primary-container: #fffdf9;
+
+    --color-secondary: #006e54; /* 萌葱色 */
+    --color-on-secondary: #fffdf9;
+    --color-secondary-container: #108469;
+    --color-on-secondary-container: #fffdf9;
+
+    --color-tertiary: #e6b422; /* 黄金 */
+    --color-on-tertiary: #201d1b;
+    --color-tertiary-container: #866913;
+    --color-on-tertiary-container: #fffdf9;
+
+    --color-background: #1c1919;
+    --color-surface: #282424;
+    --color-on-surface: #f0f0f0;
+    --color-surface-container: #363130;
+    --color-surface-variant: #4c3f3e;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8c8b;
+    --color-focus: #e88c87;
+
+    --color-success: #7df2b4;
+    --color-warning: #fce173;
+    --color-error: #f69588;
+  }
+}

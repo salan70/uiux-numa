@@ -1,0 +1,69 @@
+/*
+ * variant `kingyo`（きんぎょ）の配色。
+ * shared/palettes.ts からの生成物。直接編集しない。
+ * 値を変えるときは palettes.ts を直し、just schemes-build を実行する。
+ */
+
+:root:has(.cs-kingyo) {
+  --color-primary: #eb6101; /* 朱色 */
+  --color-on-primary: #201d1b;
+  --color-primary-text: #963f03;
+  --color-primary-container: #fae2d1;
+  --color-on-primary-container: #201d1b;
+
+  --color-secondary: #165e83; /* 藍色 */
+  --color-on-secondary: #fffdf9;
+  --color-secondary-container: #d4ebf7;
+  --color-on-secondary-container: #201d1b;
+
+  --color-tertiary: #aacf53; /* 萌黄 */
+  --color-on-tertiary: #201d1b;
+  --color-tertiary-container: #ebf4d7;
+  --color-on-tertiary-container: #201d1b;
+
+  --color-background: #f9f9f8;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-surface-container: #f1f0ef;
+  --color-surface-variant: #e3e0de;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #a04403;
+
+  --color-success: #0b6f3a;
+  --color-warning: #786002;
+  --color-error: #9d1d0c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-kingyo) {
+    --color-primary: #eb6101; /* 朱色 */
+    --color-on-primary: #201d1b;
+    --color-primary-text: #fdbd91;
+    --color-primary-container: #894210;
+    --color-on-primary-container: #fffdf9;
+
+    --color-secondary: #165e83; /* 藍色 */
+    --color-on-secondary: #fffdf9;
+    --color-secondary-container: #185d81;
+    --color-on-secondary-container: #fffdf9;
+
+    --color-tertiary: #aacf53; /* 萌黄 */
+    --color-on-tertiary: #201d1b;
+    --color-tertiary-container: #5e7722;
+    --color-on-tertiary-container: #fffdf9;
+
+    --color-background: #1c1b19;
+    --color-surface: #282624;
+    --color-on-surface: #f0f0f0;
+    --color-surface-container: #363230;
+    --color-surface-variant: #4c443e;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c928b;
+    --color-focus: #fcab73;
+
+    --color-success: #7df2b4;
+    --color-warning: #fce173;
+    --color-error: #f79e92;
+  }
+}
