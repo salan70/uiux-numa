@@ -10,6 +10,7 @@ type Props = {
   id?: string;
   "aria-haspopup"?: "dialog";
   "aria-label"?: string;
+  tabIndex?: number;
   onNavigate?: () => void;
 };
 

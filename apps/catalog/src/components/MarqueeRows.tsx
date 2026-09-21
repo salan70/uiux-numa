@@ -1,24 +1,57 @@
-import { useEffect, useRef, useState } from "react";
-import { GalleryFrame } from "../../shared/GalleryFrame";
-import { TILES, TileView, type Tile } from "../../shared/tiles";
-import "./variant.css";
+import { useEffect, useRef, type ReactNode } from "react";
+import { Card } from "../../../../experiments/card/shared/Card";
+import { GALLERY_KIND_LABEL, type GalleryTile } from "../content/galleryTiles";
+import { Link } from "./Link";
 
-// 段ごとの速さ（px/秒）と向き。隣り合う段を逆向きにし、速さも揃えない。
+// 段ごとの速さ（px/秒）と向き、始まりの位置。隣り合う段を逆向きにし、速さと継ぎ目を揃えない。
 const ROWS = [
   { speed: 26, direction: -1, start: 0.1 },
   { speed: 18, direction: 1, start: 0.55 },
   { speed: 32, direction: -1, start: 0.3 },
 ];
 
-function splitRows(tiles: Tile[], count: number): Tile[][] {
-  const rows: Tile[][] = Array.from({ length: count }, () => []);
+function splitRows(tiles: GalleryTile[], count: number): GalleryTile[][] {
+  const rows: GalleryTile[][] = Array.from({ length: count }, () => []);
   tiles.forEach((tile, index) => rows[index % count].push(tile));
   return rows;
 }
 
 /**
+ * 流れる帯の複製に置くリンク。読み上げは複製の群ごと aria-hidden で隠し、Tab でも辿らせない。
+ * inert にすると hover も押下も届かなくなり、帯の半分が押せない面になるので使わない。
+ */
+function DecorativeLink({
+  href,
+  className,
+  children,
+}: {
+  href: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link href={href} className={className} tabIndex={-1}>
+      {children}
+    </Link>
+  );
+}
+
+function TileCard({ tile, decorative }: { tile: GalleryTile; decorative: boolean }) {
+  return (
+    <Card
+      href={tile.href}
+      title={tile.title}
+      meta={GALLERY_KIND_LABEL[tile.kind]}
+      description={tile.description}
+      cover={tile.cover}
+      linkAs={decorative ? DecorativeLink : Link}
+    />
+  );
+}
+
+/**
  * 1 段の流れる帯。transform ではなく横スクロールの位置を動かす。
- * キーボードで帯の外のタイルへ進んだとき、ブラウザが自分でスクロールして見える位置へ出すためである。
+ * キーボードで帯の外のカードへ進んだとき、ブラウザが自分でスクロールして見える位置へ出すためである。
  * 利用者はトラックパッドや指でも帯を送れる。
  */
 function MarqueeRow({
@@ -26,23 +59,14 @@ function MarqueeRow({
   speed,
   direction,
   start,
-  paused,
 }: {
-  tiles: Tile[];
+  tiles: GalleryTile[];
   speed: number;
   direction: number;
   start: number;
-  paused: boolean;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const groupRef = useRef<HTMLUListElement>(null);
-  const pausedRef = useRef(paused);
-  const wakeRef = useRef<() => void>(() => {});
-
-  useEffect(() => {
-    pausedRef.current = paused;
-    wakeRef.current();
-  }, [paused]);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -62,7 +86,7 @@ function MarqueeRow({
     const focusInside = () => row.contains(document.activeElement);
 
     // 複製の帯を並べているので、1 周分ずれたら同じ見た目の位置へ戻す。
-    // フォーカスが帯の中にある間は戻さない。戻すとフォーカスしたタイルが画面外へ飛ぶ。
+    // フォーカスが帯の中にある間は戻さない。戻すとフォーカスしたカードが画面外へ飛ぶ。
     const wrap = (value: number) => {
       if (reduce.matches || focusInside()) return value;
       const width = loop();
@@ -71,7 +95,7 @@ function MarqueeRow({
       return value;
     };
 
-    const target = () => (held || pausedRef.current || reduce.matches ? 0 : speed * direction);
+    const target = () => (held || reduce.matches ? 0 : speed * direction);
 
     const tick = (now: number) => {
       const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
@@ -93,10 +117,13 @@ function MarqueeRow({
       last = 0;
       frame = requestAnimationFrame(tick);
     };
-    wakeRef.current = wake;
-
     const hold = () => {
       held = true;
+    };
+    // フォーカスが入った段はすぐ止める。減速の間に流れると、見える位置へ出したカードがずれていく。
+    const holdForFocus = () => {
+      held = true;
+      velocity = 0;
     };
     const release = () => {
       if (focusInside() || row.matches(":hover")) return;
@@ -111,7 +138,7 @@ function MarqueeRow({
       position = row.scrollLeft;
     };
 
-    // 段ごとに始まりの位置をずらし、3 段の継ぎ目を揃えない。流さないときは先頭から見せる。
+    // 流さないときは先頭から見せる。
     position = reduce.matches ? 0 : loop() * start;
     row.scrollLeft = position;
 
@@ -124,7 +151,7 @@ function MarqueeRow({
     reduce.addEventListener("change", wake);
     row.addEventListener("pointerenter", hold);
     row.addEventListener("pointerleave", release);
-    row.addEventListener("focusin", hold);
+    row.addEventListener("focusin", holdForFocus);
     row.addEventListener("focusout", release);
     row.addEventListener("scroll", onScroll, { passive: true });
 
@@ -135,27 +162,27 @@ function MarqueeRow({
       reduce.removeEventListener("change", wake);
       row.removeEventListener("pointerenter", hold);
       row.removeEventListener("pointerleave", release);
-      row.removeEventListener("focusin", hold);
+      row.removeEventListener("focusin", holdForFocus);
       row.removeEventListener("focusout", release);
       row.removeEventListener("scroll", onScroll);
     };
   }, [speed, direction, start]);
 
   return (
-    <div className="mq-row" ref={rowRef}>
-      <div className="mq-track">
-        <ul className="mq-group" ref={groupRef}>
+    <div className="marquee__row" ref={rowRef}>
+      <div className="marquee__track">
+        <ul className="marquee__group" ref={groupRef}>
           {tiles.map((tile) => (
             <li key={tile.id}>
-              <TileView tile={tile} />
+              <TileCard tile={tile} decorative={false} />
             </li>
           ))}
         </ul>
         {/* 継ぎ目なく流すための複製。読み上げと Tab には出さず、hover と押下は本物と同じく受ける。 */}
-        <ul className="mq-group mq-group--clone" aria-hidden="true">
+        <ul className="marquee__group marquee__group--clone" aria-hidden="true">
           {tiles.map((tile) => (
             <li key={tile.id}>
-              <TileView tile={tile} decorative />
+              <TileCard tile={tile} decorative />
             </li>
           ))}
         </ul>
@@ -164,29 +191,15 @@ function MarqueeRow({
   );
 }
 
-export default function Variant() {
-  const [paused, setPaused] = useState(false);
-  const rows = splitRows(TILES, ROWS.length);
+/** 逆向きに流れる 3 段の帯。 */
+export function MarqueeRows({ tiles }: { tiles: GalleryTile[] }) {
+  const rows = splitRows(tiles, ROWS.length);
 
   return (
-    <GalleryFrame
-      variantClass="gallery-marquee"
-      toolbar={
-        <button
-          type="button"
-          className="gallery__control mq-control"
-          aria-pressed={paused}
-          onClick={() => setPaused((current) => !current)}
-        >
-          {paused ? "流す" : "止める"}
-        </button>
-      }
-    >
-      <div className="mq-rows" data-paused={paused || undefined}>
-        {rows.map((tiles, index) => (
-          <MarqueeRow key={index} tiles={tiles} paused={paused} {...ROWS[index]} />
-        ))}
-      </div>
-    </GalleryFrame>
+    <div className="marquee">
+      {rows.map((row, index) => (
+        <MarqueeRow key={index} tiles={row} {...ROWS[index]} />
+      ))}
+    </div>
   );
 }
