@@ -6,13 +6,14 @@
 
 ## 採用範囲
 
-| primitive   | 値       | px  | semantic         | 用途                 |
-| ----------- | -------- | --- | ---------------- | -------------------- |
-| `radius.xs` | 0.125rem | 2   | `radius.mark`    | 帯、印、コード片     |
-| `radius.sm` | 0.375rem | 6   | `radius.control` | ボタン、入力欄       |
-| `radius.md` | 0.625rem | 10  | `radius.surface` | 操作部品を内包する面 |
+| primitive     | 値       | px   | semantic         | 用途                       |
+| ------------- | -------- | ---- | ---------------- | -------------------------- |
+| `radius.xs`   | 0.125rem | 2    | `radius.mark`    | 帯、印、コード片           |
+| `radius.sm`   | 0.375rem | 6    | `radius.control` | ボタン、入力欄             |
+| `radius.md`   | 0.625rem | 10   | `radius.surface` | 操作部品を内包する面       |
+| `radius.full` | 9999px   | 9999 | `radius.pill`    | 端を半円にするボタン、chip |
 
-合計は 6 個である。
+合計は 8 個である。
 CSS では semantic を使う。primitive は semantic の参照元である。
 
 ## 使用規則
@@ -33,10 +34,22 @@ border-radius: max(0px, calc(var(--radius-surface) - var(--border-width-thin) - 
 段の差は 4px で、`space.100` と一致する。
 padding が `space.100` なら、減算の結果は 1 段下の token と同じ値になる。
 
+## `radius.full`
+
+`radius.full` は階梯の外の特別値である。
+寸法ではなく「端を半円にする」という形の指定として使う。
+
+- ブラウザは半径を短辺の半分で頭打ちにする。`9999px` は頭打ちを確実に起こすための値である。
+- 正方形に当てると円になる。横長に当てると両端が半円になる。
+- `50%` は使わない。横長の要素で楕円になる。
+- 減算式の対象にしない。内側の子にも `radius.pill` をそのまま当てる。
+- 段の差を space token に合わせる規則の対象にしない。
+- ボタンの既定は `radius.control` のままである。`radius.pill` は部品が明示して選ぶ。
+
 ## 追加の規則
 
-- 追加する段は、隣の段との差が space token になる値に限る。
-- 公開 Catalog に実利用がある値だけを追加する。
+- 追加する段は、隣の段との差が space token になる値に限る。`radius.full` は例外である。
+- 公開 Catalog に実利用がある値だけを追加する。`radius.full` は利用者の判断で先に追加した。
 - 半径を高さの比率や黄金比で決めない。
 
 判断と根拠は [階梯の ADR](../../docs/decisions/2026-09-21-token-scale-foundation.md) に残す。

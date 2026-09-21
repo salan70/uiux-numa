@@ -4,7 +4,7 @@ import process from "node:process";
 // dimension だけを持つ家族。個数は正本の README と揃える。
 const FAMILIES = [
   { id: "space", count: 12 },
-  { id: "radius", count: 6 },
+  { id: "radius", count: 8 },
   { id: "border", count: 2 },
 ];
 const checkOnly = process.argv.includes("--check");

@@ -1111,9 +1111,10 @@ body {
   background: var(--cat-accent);
 }
 
+/* 角丸の見本は横長にする。正方形では radius.full が円になり、端が半円になる形が見えない。 */
 .app-shell .token-table__corner {
   display: block;
-  inline-size: var(--space-1000);
+  inline-size: var(--space-2000);
   block-size: var(--space-1000);
   border: var(--border-width-thin) solid var(--cat-line-strong);
   background: var(--cat-surface);
