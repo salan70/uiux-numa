@@ -184,10 +184,10 @@ export function Showcase({
             onClick={startLoading}
             loading={loading}
           >
-            保存を試す
+            保存
           </Button>
           <Button appearance="secondary" trailingIcon={<ArrowIcon />}>
-            詳細を見る
+            詳細
           </Button>
           <Button appearance="secondary" disabled>
             利用できません
