@@ -90,7 +90,7 @@ Web のプロダクト画面で記事や部品の一覧から 1 件を選ぶ人�
 
 HIG の一覧カードは面を持たず、線と 18px の角丸をカバーだけに付ける。
 hover は `transform: scale(1.007)` を 160ms の ease-out で行い、色は変えない。reduced motion では拡大を止める。
-`zoom-tint` の色は Catalog のリンクの hover と同じ `color.primary-text` にした。どの配色でも面に対して 4.5:1 を満たす役割のためである。sumi では灰色になり、差は小さい。
+`zoom-tint` の色は Catalog のリンクの hover と同じ `color.primary-text` にした。どの配色でも面に対して 4.5:1 を満たす役割のためである。sumi では灰色になり差が小さいため、単体表示の代替配色は yuzu にした。
 角丸は既存の `radius.surface`(10px) を使い、HIG の 18px には合わせていない。
 1.007 倍は幅 240px で約 1.7px になる。幅 100px の Button では約 0.7px で見えないため、Button へ移すなら倍率を別に決める。
 

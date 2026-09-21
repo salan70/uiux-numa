@@ -20,23 +20,24 @@
   line-height: var(--typography-ui-line-height);
 }
 
-/* 単体表示の代替配色。値は sumi の配色から取る。Catalog 内では親の配色を継承する。 */
+/* 単体表示の代替配色。値は yuzu の配色から取る。Catalog 内では親の配色を継承する。
+   題名の色の変化を比べるため、primary-text が本文の色と見分けやすい有彩色の配色にする。 */
 .card-showcase:not(.card-showcase--embedded) {
-  --color-primary: #2b2b2b;
-  --color-on-primary: #fffdf9;
-  --color-primary-text: #4d4d4d;
-  --color-primary-container: #e6e6e6;
-  --color-secondary: #c9171e;
-  --color-tertiary: #e6b422;
-  --color-background: #f9f8f8;
+  --color-primary: #fabf14;
+  --color-on-primary: #120d09;
+  --color-primary-text: #7d5e03;
+  --color-primary-container: #faefd1;
+  --color-secondary: #316745;
+  --color-tertiary: #674196;
+  --color-background: #f9f9f8;
   --color-surface: #fefefe;
   --color-on-surface: #1f1f1f;
-  --color-surface-container: #f0efef;
-  --color-surface-variant: #e3dede;
+  --color-surface-container: #f1f0ef;
+  --color-surface-variant: #e3e1de;
   --color-on-surface-variant: #4d4d4d;
   --color-outline: #757575;
-  --color-focus: #525252;
-  --color-error: #9c3e37;
+  --color-focus: #a07803;
+  --color-error: #9b442a;
   min-height: 100vh;
   padding: clamp(var(--space-400), 4vw, var(--space-600));
   background: var(--color-background, #fff);
@@ -45,17 +46,17 @@
 
 @media (prefers-color-scheme: dark) {
   .card-showcase:not(.card-showcase--embedded):not([data-theme="light"]) {
-    --color-primary-text: #c7c7c7;
-    --color-primary-container: #4d4d4d;
-    --color-background: #1b1a1a;
-    --color-surface: #272525;
+    --color-primary-text: #fde191;
+    --color-primary-container: #896a10;
+    --color-background: #1c1b19;
+    --color-surface: #282724;
     --color-on-surface: #f0f0f0;
-    --color-surface-container: #343232;
-    --color-surface-variant: #4c3e3e;
+    --color-surface-container: #363430;
+    --color-surface-variant: #4c483e;
     --color-on-surface-variant: #c9c9c9;
-    --color-outline: #9c8b8b;
-    --color-focus: #b8b8b8;
-    --color-error: #e59a91;
+    --color-outline: #9c988b;
+    --color-focus: #fcd973;
+    --color-error: #efa48e;
   }
 }
 
