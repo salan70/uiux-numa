@@ -1,6 +1,4 @@
 import { Link } from "../components/Link";
-import { renderSentences } from "../components/Sentences";
-import { dot } from "../components/work";
 import { catalog } from "../content/collect";
 import { catalogComponent } from "../content/components";
 import { topicHref } from "../content/topics";
@@ -21,13 +19,10 @@ export function ComponentPage({ slug }: { slug: string }) {
         <span>{work.role}</span>
         <span aria-hidden="true">／</span>
         <span>{work.maturity}</span>
-        <span aria-hidden="true">／</span>
-        <span>{dot(work.updated)}</span>
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
         {entry.title}
       </h1>
-      <p className="detail__lead">{renderSentences(work.lead)}</p>
       <div className="component-detail__body">
         <entry.Detail />
       </div>

@@ -129,33 +129,61 @@
 .button-showcase__size-header {
   display: grid;
   grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.8fr);
-  gap: var(--space-400);
+  grid-template-rows: repeat(4, auto);
+  gap: var(--space-50) var(--space-400);
   padding-block: var(--space-300) var(--space-100);
   border-block-end: var(--border-width-thin) solid var(--color-outline, #d6d6d6);
 }
 
+/* 項目名の行と 3 サイズの値の行を揃えるため、行の分割を subgrid で共有する。 */
+.button-showcase__size-title,
+.button-showcase__size-specs,
+.button-showcase__size-spec {
+  display: grid;
+  grid-row: 1 / -1;
+  grid-template-rows: subgrid;
+}
+
 .button-showcase__size-title {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  column-gap: var(--space-300);
+}
+
+.button-showcase__size-title h2 {
+  grid-row: 1 / -1;
   align-self: end;
 }
 
-.button-showcase__size-specs {
+.button-showcase__size-keys {
   display: grid;
+  grid-column: 2;
+  grid-row: 2 / -1;
+  grid-template-rows: subgrid;
+  margin: 0;
+  padding: 0;
+  color: var(--color-on-surface-variant, #666);
+  font-family: var(--typography-caption-font-family);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  list-style: none;
+  text-align: end;
+}
+
+.button-showcase__size-specs {
   grid-template-columns: repeat(3, minmax(9rem, 1fr));
-  align-items: start;
   justify-items: center;
-  gap: var(--space-300) var(--space-500);
+  column-gap: var(--space-500);
 }
 
 .button-showcase__size-spec {
-  display: grid;
   justify-items: start;
-  gap: var(--space-100);
   min-inline-size: 0;
   text-align: start;
 }
 
 .button-showcase__size-spec > p {
   justify-self: center;
+  margin-block-end: var(--space-50);
   color: var(--color-on-surface, #242424);
   font-family: var(--typography-control-font-family);
   font-size: 0.8125rem;
@@ -165,20 +193,8 @@
 
 .button-showcase__size-spec dl {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: var(--space-50) var(--space-300);
-}
-
-.button-showcase__size-spec dl > div {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-}
-
-.button-showcase__size-spec dt {
-  color: var(--color-on-surface-variant, #666);
-  font-size: 0.75rem;
-  line-height: 1.4;
+  grid-row: 2 / -1;
+  grid-template-rows: subgrid;
 }
 
 .button-showcase__size-spec dd {
@@ -187,6 +203,15 @@
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
+}
+
+.button-showcase__visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .button-showcase__size-spec > span {
@@ -428,12 +453,24 @@
 
   .button-showcase__size-header {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     gap: 0;
   }
 
+  .button-showcase__size-title,
+  .button-showcase__size-specs,
+  .button-showcase__size-spec {
+    grid-row: auto;
+    grid-template-rows: none;
+  }
+
   .button-showcase__size-title {
-    align-self: start;
+    display: block;
     margin-block-end: var(--space-200);
+  }
+
+  .button-showcase__size-keys {
+    display: none;
   }
 
   .button-showcase__size-specs,
