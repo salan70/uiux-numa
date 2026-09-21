@@ -1,12 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FIGURE_COMPONENTS } from "../components/figures";
-import {
-  ALL_GUIDELINES,
-  GUIDELINE_ORDER,
-  parseGuideline,
-  resolveHref,
-  VALID_FIGURE_KEYS,
-} from "./guidelines";
+import { ALL_GUIDELINES, GUIDELINE_ORDER, parseGuideline, resolveHref } from "./guidelines";
 
 const FRONT = [
   "---",
@@ -114,14 +107,6 @@ describe("parseGuideline（新書式）", () => {
       parseGuideline("test", doc(BODY.replace("- 良い例: 色だけで示す。\n", ""))),
     ).toThrow(/missing '- 良い例'/);
   });
-
-  it("未知の図版キーで落とす", () => {
-    const body = BODY.replace(
-      "- 悪い例: 太字にする。",
-      "- 悪い例: 太字にする。\n- 図: not-a-figure",
-    );
-    expect(() => parseGuideline("test", doc(body))).toThrow(/unknown figure key/);
-  });
 });
 
 describe("resolveHref", () => {
@@ -170,22 +155,5 @@ describe("ALL_GUIDELINES", () => {
     expect(color.scope).not.toBeNull();
     expect(color.checklist.length).toBeGreaterThan(0);
     expect(color.tips[0].applies).toBeNull();
-  });
-});
-
-describe("図版", () => {
-  it("正本のキーがすべて描ける", () => {
-    for (const key of VALID_FIGURE_KEYS) {
-      expect(FIGURE_COMPONENTS[key]).toBeTypeOf("function");
-    }
-    expect(Object.keys(FIGURE_COMPONENTS).sort()).toEqual([...VALID_FIGURE_KEYS].sort());
-  });
-
-  it("文書が指す図版のキーは正本にある", () => {
-    for (const guideline of ALL_GUIDELINES) {
-      for (const tip of guideline.tips) {
-        if (tip.figureKey) expect(FIGURE_COMPONENTS[tip.figureKey]).toBeTypeOf("function");
-      }
-    }
   });
 });

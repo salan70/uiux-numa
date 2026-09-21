@@ -108,6 +108,11 @@ body {
   --cat-accent-text: var(--color-primary-text, #4d4d4d);
   /* focus ring。面に対して 3:1 を満たす。 */
   --cat-focus: var(--color-focus, #525252);
+  /* 良し悪しの色。強調色（accent）と分ける。
+     accent を good に使うと、配色を切り替えたときに
+     「その配色の色」と「良し悪し」が同じ色で出て読み分けられない。 */
+  --cat-good: var(--color-success, #0b6f3a);
+  --cat-bad: var(--color-error, #9d1d0c);
 
   /* 文字。役割の token をそのまま使い、画面ごとの寸法を持たない。
      number と display だけは token にない大きさなので、
@@ -136,6 +141,10 @@ body {
   font-size: var(--typography-body-font-size);
   line-height: var(--typography-body-line-height);
   font-feature-settings: "palt";
+  /* 和文は文節の切れ目で折る。既定の禁則だけだと「レイアウトシ / フトを」のように
+     語の途中で改行され、1 行目と 2 行目のどちらも読みにくくなる。
+     未対応のブラウザは宣言を落とすだけで、既定の折返しに戻る。 */
+  word-break: auto-phrase;
 }
 
 /* 明暗の上書きはここに書かない。
@@ -204,11 +213,58 @@ body {
   border-inline-end: 1px solid var(--cat-line);
 }
 
+/* 題字と開閉ボタンを 1 行に並べる。ボタンを本文側へ置くと、
+   閉じるときと開くときで押し先が画面の反対側へ飛ぶ。 */
+.app-shell .sidebar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cat-gap);
+}
+
 .app-shell .sidebar__name {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+/* 開閉ボタン。開閉で寸法も形も変えず、色だけが状態を示す。 */
+.app-shell .sidebar-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--cat-tap);
+  block-size: var(--cat-tap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--cat-radius);
+  background: none;
+  color: var(--cat-muted);
+  cursor: pointer;
+  transition: color var(--cat-duration) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .sidebar-toggle:hover {
+    color: var(--cat-text);
+  }
+}
+
+/* 畳んだときの開くボタン。版面の上余白（--cat-block）の中へ置くので本文は動かない。 */
+.app-shell .sidebar-toggle--floating {
+  position: absolute;
+  inset-block-start: var(--cat-gap-lg);
+  inset-inline-start: var(--cat-inline);
+}
+
+.app-shell[data-sidebar="collapsed"] {
+  grid-template-columns: 1fr;
+}
+
+.app-shell[data-sidebar="collapsed"] .sidebar {
+  display: none;
 }
 
 .app-shell .sidebar__nav {
@@ -279,7 +335,8 @@ body {
 /* 狭い幅ではサイドバーを畳まず、上の帯に戻して横へ流す。
    1 段に収めれば、折り返しで帯が伸びることはない。 */
 @media (width < 60rem) {
-  .app-shell {
+  .app-shell,
+  .app-shell[data-sidebar="collapsed"] {
     display: block;
   }
 
@@ -303,8 +360,17 @@ body {
     backdrop-filter: blur(8px);
   }
 
-  .app-shell .sidebar__name {
+  .app-shell .sidebar__head {
     grid-area: name;
+  }
+
+  /* 帯は 1 行しか占めないので畳む対象にしない。開閉ボタンも出さない。 */
+  .app-shell .sidebar-toggle {
+    display: none;
+  }
+
+  .app-shell[data-sidebar="collapsed"] .sidebar {
+    display: grid;
   }
 
   .app-shell .sidebar__nav {
@@ -365,6 +431,7 @@ body {
    inline-size を書かないと、auto margin を持つ grid の項目は伸びず内容の幅に縮む。
    縮むと Icons のように内容の幅が狭い画面だけ、見出しの開始位置が右へずれる。 */
 .app-shell .app-main {
+  position: relative;
   inline-size: 100%;
   max-inline-size: 84rem;
   margin: 0 auto;
@@ -373,6 +440,12 @@ body {
 
 .app-shell .app-main > * + * {
   margin-block-start: var(--cat-block);
+}
+
+/* 開くボタンは絶対配置なので流れの中では数えない。
+   節として数えると、畳むたびに本文が 1 節分下がる。 */
+.app-shell .app-main > .sidebar-toggle--floating + * {
+  margin-block-start: 0;
 }
 
 .app-shell .section-head,
@@ -1306,9 +1379,10 @@ body {
   letter-spacing: -0.02em;
 }
 
+/* 本文に行長の上限を置かない。桁の幅（版面 - 索引）がそのまま行長になる。
+   上限を置くと、広い画面でリードと本文だけが左へ寄り、見出しの罫と右端が合わなかった。 */
 .app-shell .index__lead {
   margin: var(--cat-gap-lg) 0 0;
-  max-inline-size: 36em;
   color: var(--cat-muted);
 }
 
@@ -2397,33 +2471,10 @@ body {
   margin-block-start: var(--cat-block);
 }
 
-.app-shell .guide-facts {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--cat-gap) var(--cat-gap-lg);
+.app-shell .guide-prose {
   margin: var(--cat-gap-lg) 0 0;
-}
-
-.app-shell .guide-facts dt {
-  font-size: var(--cat-label);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.08em;
-  color: var(--cat-muted);
-}
-
-.app-shell .guide-facts dd {
-  margin: 0;
-  /* 複数行の本文は 40rem を fallback にし、対応環境では 40ic を上限にする（token の README）。 */
-  max-inline-size: 40rem;
   font-size: var(--typography-body-font-size);
   line-height: var(--typography-body-line-height);
-}
-
-@supports (max-inline-size: 40ic) {
-  .app-shell .guide-facts dd,
-  .app-shell .guide-rule__rationale {
-    max-inline-size: 40ic;
-  }
 }
 
 .app-shell .guide-rule:focus {
@@ -2500,11 +2551,6 @@ body {
   }
 }
 
-.app-shell .guide-layer__lead {
-  margin: 0 0 var(--cat-gap-lg);
-  color: var(--cat-muted);
-}
-
 /* 狭い幅では索引を本文の前へ戻す。右に置くと本文が 2 桁に割れて読めない。 */
 @media (width < 72rem) {
   .app-shell .guide-layout {
@@ -2559,38 +2605,8 @@ body {
 
 .app-shell .guide-core__body {
   margin: var(--cat-gap) 0 0;
-  max-inline-size: 40rem;
   font-size: var(--font-size-sm);
   line-height: var(--font-line-height-ui);
-}
-
-/* タグは無彩色にする。色は良い例と悪い例のために取っておく。 */
-.app-shell .guide-rule__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--cat-gap);
-  margin: 0 0 var(--cat-gap-lg);
-}
-
-.app-shell .guide-tag {
-  padding: 0.125rem var(--cat-gap);
-  color: var(--cat-muted);
-  font-size: var(--font-size-sm);
-  line-height: var(--font-line-height-ui);
-  text-decoration: none;
-  border: 1px solid var(--cat-line);
-  border-radius: var(--cat-radius);
-}
-
-.app-shell .guide-tag--core {
-  color: var(--cat-text);
-  transition: border-color var(--cat-duration) ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .app-shell .guide-tag--core:hover {
-    border-color: var(--cat-text);
-  }
 }
 
 .app-shell .guide-rules {
@@ -2609,108 +2625,97 @@ body {
   border-block-start: none;
 }
 
+/* 題名と適用を 1 行に並べる。適用は題名の従属物なので、小さく薄くする。 */
+.app-shell .guide-rule__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--cat-gap) var(--cat-gap-lg);
+  margin-block-end: var(--cat-gap);
+}
+
 .app-shell .guide-rule__title {
-  margin: 0 0 var(--cat-gap-lg);
+  margin: 0;
   font-size: var(--cat-item);
   font-weight: var(--font-weight-bold);
   line-height: var(--font-line-height-tight);
 }
 
-.app-shell .guide-rule__figure {
-  margin-block-end: var(--cat-gap-lg);
-}
-
-.app-shell .guide-rule__rationale {
-  margin-block-end: var(--cat-gap-lg);
-  max-inline-size: 40rem;
-  font-size: var(--typography-body-font-size);
-  line-height: var(--typography-body-line-height);
-  color: var(--cat-text);
-}
-
-.app-shell .guide-examples {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--cat-gap-lg);
-  margin-block-end: var(--cat-gap-lg);
-}
-
-.app-shell .guide-example {
-  padding: var(--cat-gap-lg);
-  border-radius: var(--cat-radius);
-  background: var(--cat-surface);
-}
-
-/* 良い例と悪い例は線の種類で分ける。色だけで分けると、配色によっては差が読めない。 */
-.app-shell .guide-example--bad {
-  border: 1px dashed var(--cat-line-strong);
-}
-
-.app-shell .guide-example--good {
-  border: 1px solid var(--cat-line-strong);
-}
-
-.app-shell .guide-example__header {
-  margin-block-end: var(--cat-gap);
-}
-
-.app-shell .guide-example__tag {
-  display: inline-block;
+.app-shell .guide-rule__applies {
   font-size: var(--cat-label);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.05em;
-}
-
-.app-shell .guide-example__tag--bad {
+  line-height: var(--font-line-height-ui);
   color: var(--cat-muted);
 }
 
-.app-shell .guide-example__tag--good {
-  color: var(--cat-accent-text);
+.app-shell .guide-rule__rationale {
+  margin: 0 0 var(--cat-gap-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+  color: var(--cat-muted);
 }
 
-.app-shell .guide-example__body {
+/* good と bad を同じ幅の桁に置き、差だけが残るようにする。
+   good を左にするのは、採る側を先に読ませるためである。 */
+.app-shell .guide-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--cat-gap-lg) * 2);
+}
+
+/* 桁の境は罫 1 本。罫を溝の中央に置き、左右の文から同じ距離にする。
+   溝が広いと 2 つの桁が別々の節に見え、対であることが読めない。 */
+.app-shell .guide-side--bad {
+  padding-inline-start: var(--cat-gap-lg);
+  margin-inline-start: calc(var(--cat-gap-lg) * -1);
+  border-inline-start: 1px solid var(--cat-line);
+}
+
+.app-shell .guide-side__body {
+  margin: 0;
   font-size: var(--font-size-sm);
   line-height: var(--font-line-height-ui);
   color: var(--cat-text);
 }
 
+/* 方針画面の小さなラベルは 1 つの造形にする。good / bad / 例外 で形が違うと、
+   同じ強さの注記が別の種類に見える。 */
+.app-shell .guide-mark,
+.app-shell .guide-rule__exception-label {
+  font-size: var(--cat-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  line-height: var(--font-line-height-ui);
+}
+
+.app-shell .guide-mark {
+  margin: 0 0 var(--cat-gap);
+}
+
+/* 色は意味の役割（success / error）から引く。色だけに頼らないよう語も残す。 */
+.app-shell .guide-mark--good {
+  color: var(--cat-good);
+}
+
+.app-shell .guide-mark--bad {
+  color: var(--cat-bad);
+}
+
+/* 例外も bad / good と同じ「ラベルの桁 + 本文の桁」にする。
+   折り返した 2 行目が左端へ戻ると、隣の対と揃わない。 */
 .app-shell .guide-rule__exception {
-  margin-block-start: var(--cat-gap-lg);
-  padding: var(--cat-gap) var(--cat-gap-lg);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0 var(--cat-gap-lg);
+  margin: var(--cat-gap-lg) 0 0;
   font-size: var(--font-size-sm);
   line-height: var(--font-line-height-ui);
   color: var(--cat-muted);
-  background: var(--cat-bg);
-  border: 1px solid var(--cat-line);
-  border-radius: var(--cat-radius);
 }
 
 .app-shell .guide-rule__exception-label {
-  margin-inline-end: var(--cat-gap);
-  font-weight: var(--font-weight-bold);
   color: var(--cat-text);
-}
-
-.app-shell .guide-rule__origins {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--cat-gap-lg);
-  margin-block-start: var(--cat-gap-lg);
-  font-size: var(--font-size-sm);
-  line-height: var(--font-line-height-ui);
-  color: var(--cat-muted);
-}
-
-.app-shell .guide-rule__origin-item {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--cat-gap);
-}
-
-.app-shell .guide-rule__origin-label {
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.05em;
 }
 
 .app-shell .guide-checklist {
@@ -2774,65 +2779,20 @@ body {
   font-weight: var(--font-weight-bold);
 }
 
-/* ---- 方針の図版 ---- */
 
-.app-shell .guide-figure__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--cat-gap-lg);
-}
 
-.app-shell .guide-figure__card {
-  padding: var(--cat-gap-lg);
-  background: var(--cat-surface);
-  border: 1px solid var(--cat-line);
-  border-radius: var(--cat-radius);
-}
-
-.app-shell .guide-figure__card--bad {
-  border-style: dashed;
-}
-
-.app-shell .guide-figure__tag {
-  margin-block-end: var(--cat-gap-lg);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-}
-
-.app-shell .guide-figure__tag--bad {
-  color: var(--cat-muted);
-}
-
-.app-shell .guide-figure__tag--good {
-  color: var(--cat-accent-text);
-}
-
-/* 図版の器なので、高さは文字の寸法ではなく中身に合わせて決める。 */
-.app-shell .guide-figure__specimen {
-  min-block-size: 5rem;
-  padding: var(--cat-gap-lg);
-  background: var(--cat-bg);
-  border: 1px solid var(--cat-line);
-  border-radius: var(--cat-radius);
-}
-
-.app-shell .guide-figure__caption {
-  margin: var(--cat-gap) 0 0;
-  font-size: var(--font-size-sm);
-  line-height: var(--font-line-height-ui);
-  color: var(--cat-muted);
-}
-
-@media (width <= 40rem) {
-  .app-shell .guide-facts {
-    grid-template-columns: 1fr;
+/* 狭い幅では対を縦に積む。横に並べると和文が 1 行 8 字ほどになり、対比より折返しが目に付く。 */
+@media (width <= 44rem) {
+  .app-shell .guide-pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--cat-gap-lg);
   }
 
-  .app-shell .guide-examples {
-    grid-template-columns: 1fr;
-  }
-
-  .app-shell .guide-figure__grid {
-    grid-template-columns: 1fr;
+  .app-shell .guide-side--bad {
+    margin-inline-start: 0;
+    padding-inline-start: 0;
+    padding-block-start: var(--cat-gap-lg);
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--cat-line);
   }
 }

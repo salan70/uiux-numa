@@ -61,8 +61,10 @@ updated: YYYY-MM-DD
 
 ## 原則候補の一覧
 
-| 原則                                                                            | status      | 由来                                                                              |
-| ------------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
-| [組の一貫性は少数のパラメータで縛る](icon-set-consistency-by-few-parameters.md) | `candidate` | `experiments/class-tech-icons/`                                                   |
-| [比喩は描き方より先に効く](metaphor-decides-before-style.md)                    | `candidate` | `experiments/class-tech-icons/`、`class-doc-logo/`、`class-chapter-illustration/` |
-| [状態は色で示し、寸法で示さない](state-changes-must-not-move-layout.md)         | `candidate` | `experiments/catalog-editorial/`                                                  |
+| 原則                                                                                 | status      | 由来                                                                              |
+| ------------------------------------------------------------------------------------ | ----------- | --------------------------------------------------------------------------------- |
+| [組の一貫性は少数のパラメータで縛る](icon-set-consistency-by-few-parameters.md)      | `candidate` | `experiments/class-tech-icons/`                                                   |
+| [比喩は描き方より先に効く](metaphor-decides-before-style.md)                         | `candidate` | `experiments/class-tech-icons/`、`class-doc-logo/`、`class-chapter-illustration/` |
+| [状態は色で示し、寸法で示さない](state-changes-must-not-move-layout.md)              | `candidate` | `experiments/catalog-editorial/`                                                  |
+| [段の数は任意項目の有無で変えない](block-shape-must-not-vary-by-optional-parts.md)   | `candidate` | `experiments/guideline-rule-structure/`                                           |
+| [良し悪しの色に画面の強調色を借りない](semantic-color-must-not-borrow-the-accent.md) | `candidate` | `experiments/guideline-rule-structure/`                                           |

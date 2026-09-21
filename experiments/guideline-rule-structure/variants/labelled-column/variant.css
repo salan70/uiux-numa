@@ -1,0 +1,46 @@
+/* 役割の名を左の桁に固定する。桁の幅は最も長いラベルで決まり、全行で揃う。 */
+.lc-title {
+  margin: 0 0 var(--gr-gap-lg);
+  font-size: var(--gr-item);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+}
+
+.lc-rows {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gr-gap) var(--gr-gap-lg);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--font-line-height-ui);
+}
+
+.lc-label {
+  font-size: var(--gr-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  color: var(--gr-muted);
+}
+
+.lc-label--bad {
+  color: var(--gr-text);
+}
+
+.lc-label--good {
+  color: var(--gr-accent-text);
+}
+
+.lc-body {
+  margin: 0;
+}
+
+/* コアは分類の行の中で、中黒 1 つで区切る。 */
+.lc-core::before {
+  content: "·";
+  margin-inline: var(--gr-gap);
+  color: var(--gr-line-strong);
+}
+
+.lc-figure {
+  margin-block: var(--gr-gap);
+}

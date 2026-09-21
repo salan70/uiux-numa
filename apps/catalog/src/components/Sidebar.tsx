@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
 import { ALL_GUIDELINES } from "../content/guidelines";
 import { isCurrentPath, TOPICS } from "../content/topics";
 import { Link } from "./Link";
+import { SidebarIcon } from "./icons";
 import { ThemeControl } from "./ThemeControl";
 
 type NavGroup = {
@@ -35,12 +37,51 @@ const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
-export function Sidebar({ path, onNavigate }: { path: string; onNavigate?: () => void }) {
+/**
+ * ナビを畳むボタン。
+ * 開閉で形も寸法も変えない。文言と aria-expanded だけが変わる。
+ * floating は畳んだときの置き場で、版面の上余白へ絶対配置する。
+ */
+export function SidebarToggle({
+  collapsed,
+  onToggle,
+  floating,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+  floating?: boolean;
+}) {
   return (
-    <div className="sidebar">
-      <Link href="/" className="sidebar__name" onNavigate={onNavigate}>
-        UI／UX 沼
-      </Link>
+    <button
+      type="button"
+      className={floating ? "sidebar-toggle sidebar-toggle--floating" : "sidebar-toggle"}
+      aria-expanded={!collapsed}
+      aria-controls="sidebar"
+      aria-label={collapsed ? "ナビを開く" : "ナビを閉じる"}
+      onClick={onToggle}
+    >
+      <SidebarIcon />
+    </button>
+  );
+}
+
+export function Sidebar({
+  path,
+  onNavigate,
+  toggle,
+}: {
+  path: string;
+  onNavigate?: () => void;
+  toggle?: ReactNode;
+}) {
+  return (
+    <div className="sidebar" id="sidebar">
+      <div className="sidebar__head">
+        <Link href="/" className="sidebar__name" onNavigate={onNavigate}>
+          UI／UX 沼
+        </Link>
+        {toggle}
+      </div>
       <nav className="sidebar__nav" aria-label="主ナビゲーション">
         {NAV_GROUPS.map((group) => (
           <section className="sidebar__group" key={group.id}>

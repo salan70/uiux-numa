@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(12);
-    expect(catalog.liveVariants).toHaveLength(70);
+    expect(catalog.experiments).toHaveLength(13);
+    expect(catalog.liveVariants).toHaveLength(74);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/typography/typography.tokens.json",
@@ -31,11 +31,12 @@ describe("catalog inventory", () => {
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
-    // 公開面から外した domain は topic を持たない。
+    // 公開面から外した domain と、Catalog 自身を比べる Experiment は topic を持たない。
     for (const slug of [
       "class-doc-logo",
       "class-chapter-illustration",
       "registration-completion-feedback",
+      "guideline-rule-structure",
     ]) {
       expect(catalog.experiments.find((item) => item.slug === slug)?.topic).toBeNull();
     }
@@ -98,7 +99,7 @@ describe("catalog inventory", () => {
       "soft-component-kit/hairline-float",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
-    expect(ids("exploring").every((id) => id.startsWith("hako-feature-icons/"))).toBe(true);
+    expect(ids("exploring").every((id) => exploringSlugs().includes(id.split("/")[0]))).toBe(true);
     expect(ids("exploring")).toHaveLength(
       exploringSlugs().reduce(
         (total, slug) =>

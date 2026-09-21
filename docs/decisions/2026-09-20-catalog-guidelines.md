@@ -5,6 +5,8 @@
 - 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)、[見本帳へ絞る ADR](2026-09-19-catalog-artifacts-only.md)
 - 更新: 規則の書式は [方針の書式 ADR](2026-09-20-guideline-format.md) が置き換えた。
 - 更新: 公開実装は [topic-first ADR](2026-09-20-catalog-topic-first.md) で `/guidelines` と `/guidelines/:slug` として入れた。
+- 更新: 画面での見せ方は [箱をやめる ADR](2026-09-21-catalog-guideline-plain-layout.md) と[規則の構造 ADR](2026-09-21-catalog-guideline-rule-structure.md) が置き換えた。節の見出しも英語にし、実験の出どころは正本にだけ残す。
+- 更新: 「図版の正本は見本帳が持ち、規則からキーで参照する」は[対比の対 ADR](2026-09-21-catalog-guideline-contrast-pair.md) が取り消した。`- 図:` の項目と図版そのものを廃止した。
 
 ## 背景
 
