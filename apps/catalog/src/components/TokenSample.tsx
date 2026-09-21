@@ -43,6 +43,26 @@ export function TokenSample({ token }: { token: CatalogToken }) {
     );
   }
 
+  // 角丸は値を当てた枠で、線は値を当てた罫で見せる。数値だけでは丸みと太さが判断できない。
+  if (token.name.startsWith("radius.")) {
+    return (
+      <span
+        className="token-table__corner"
+        style={{ borderRadius: formatTokenValue("dimension", token.resolvedValue) }}
+        aria-hidden="true"
+      />
+    );
+  }
+  if (token.name.startsWith("border.")) {
+    return (
+      <span
+        className="token-table__rule"
+        style={{ borderBlockStartWidth: formatTokenValue("dimension", token.resolvedValue) }}
+        aria-hidden="true"
+      />
+    );
+  }
+
   if (token.type === "dimension") {
     return (
       <span

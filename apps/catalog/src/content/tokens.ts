@@ -32,7 +32,8 @@ export function collectTokens(
       if (!collected.has(ref)) throw new Error(`${sourcePath}: 未定義の参照 ${ref}`);
     }
     const resolvedValue = resolveValue(token.value, collected, [name]);
-    const kind: TokenKind = token.type === "typography" ? "semantic" : "primitive";
+    // 他の token を参照するものが semantic である。composite も参照を持つ。
+    const kind: TokenKind = references.length > 0 ? "semantic" : "primitive";
     byName.set(name, {
       name,
       jsonPath: name,

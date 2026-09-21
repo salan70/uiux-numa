@@ -85,6 +85,8 @@ export type CatalogData = {
 const FAMILY_LABELS: Record<string, string> = {
   typography: "文字",
   space: "余白",
+  radius: "角丸",
+  border: "線",
 };
 
 function loadCatalog(): CatalogData {

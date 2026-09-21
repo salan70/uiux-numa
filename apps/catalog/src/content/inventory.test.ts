@@ -3,9 +3,9 @@ import { assertAdoptedIds, catalog } from "./collect";
 
 describe("catalog inventory", () => {
   it("token、配色、SVG、Experiment を欠落なく集める", () => {
-    expect(catalog.tokens).toHaveLength(18);
-    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(12);
-    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(6);
+    expect(catalog.tokens).toHaveLength(36);
+    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(25);
+    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(11);
     expect(catalog.schemes).toHaveLength(10);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(29);
     expect(
@@ -14,6 +14,27 @@ describe("catalog inventory", () => {
     expect(catalog.experiments).toHaveLength(6);
     expect(catalog.liveVariants).toHaveLength(22);
     expect(catalog.tokenAssets).toEqual([
+      {
+        sourcePath: "tokens/border/border.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: [],
+      },
+      {
+        sourcePath: "tokens/radius/radius.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: [],
+      },
+      {
+        sourcePath: "tokens/space/space.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: [],
+      },
       {
         sourcePath: "tokens/typography/typography.tokens.json",
         role: "foundation",
@@ -34,7 +55,12 @@ describe("catalog inventory", () => {
   });
 
   it("token を正本のファイル単位で束ねる", () => {
-    expect(catalog.tokenFamilies.map((family) => family.id)).toEqual(["space", "typography"]);
+    expect(catalog.tokenFamilies.map((family) => family.id)).toEqual([
+      "border",
+      "radius",
+      "space",
+      "typography",
+    ]);
     for (const family of catalog.tokenFamilies) {
       expect(family.tokens.length).toBeGreaterThan(0);
       expect(family.sourcePath).toMatch(/^tokens\/.+\.tokens\.json$/);
@@ -51,7 +77,7 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.role).toBe(
       "reference",
     );
-    expect(catalog.tokenAssets[0]?.role).toBe("foundation");
+    expect(catalog.tokenAssets.every((asset) => asset.role === "foundation")).toBe(true);
   });
 
   it("live variant の id が重複しない", () => {

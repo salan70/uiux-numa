@@ -1,0 +1,5 @@
+/* border.tokens.json から生成する。直接編集しない。 */
+:root {
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+}

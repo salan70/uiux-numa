@@ -1,0 +1,46 @@
+{
+  "$extensions": {
+    "uiux-numa": {
+      "role": "foundation",
+      "maturity": "candidate",
+      "platforms": ["web"],
+      "sources": []
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "xs": {
+      "$value": {
+        "value": 0.125,
+        "unit": "rem"
+      },
+      "$description": "角丸の階梯。2px。"
+    },
+    "sm": {
+      "$value": {
+        "value": 0.375,
+        "unit": "rem"
+      },
+      "$description": "角丸の階梯。6px。"
+    },
+    "md": {
+      "$value": {
+        "value": 0.625,
+        "unit": "rem"
+      },
+      "$description": "角丸の階梯。10px。"
+    },
+    "mark": {
+      "$value": "{radius.xs}",
+      "$description": "帯、印、コード片の角丸。"
+    },
+    "control": {
+      "$value": "{radius.sm}",
+      "$description": "ボタンや入力欄など操作部品の角丸。"
+    },
+    "surface": {
+      "$value": "{radius.md}",
+      "$description": "操作部品を内包する面の角丸。"
+    }
+  }
+}
