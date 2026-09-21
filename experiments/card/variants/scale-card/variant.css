@@ -1,0 +1,17 @@
+/* Apple HIG の一覧カードと同じく、hover でカード全体を 1.007 倍にする。
+   幅 240px で約 1.7px の差になり、押せることだけを静かに伝える。色は変えない。 */
+.card-scale-card .card {
+  transition: transform var(--duration-press) var(--easing-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-scale-card .card:hover {
+    transform: scale(1.007);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-scale-card .card:hover {
+    transform: none;
+  }
+}

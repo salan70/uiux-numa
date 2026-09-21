@@ -22,15 +22,21 @@
 
 /* 単体表示の代替配色。値は sumi の配色から取る。Catalog 内では親の配色を継承する。 */
 .card-showcase:not(.card-showcase--embedded) {
+  --color-primary: #2b2b2b;
+  --color-on-primary: #fffdf9;
+  --color-primary-text: #4d4d4d;
+  --color-primary-container: #e6e6e6;
+  --color-secondary: #c9171e;
+  --color-tertiary: #e6b422;
   --color-background: #f9f8f8;
   --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
   --color-surface-container: #f0efef;
   --color-surface-variant: #e3dede;
-  --color-on-surface: #1f1f1f;
   --color-on-surface-variant: #4d4d4d;
   --color-outline: #757575;
-  --color-primary-text: #4d4d4d;
   --color-focus: #525252;
+  --color-error: #9c3e37;
   min-height: 100vh;
   padding: clamp(var(--space-400), 4vw, var(--space-600));
   background: var(--color-background, #fff);
@@ -39,15 +45,17 @@
 
 @media (prefers-color-scheme: dark) {
   .card-showcase:not(.card-showcase--embedded):not([data-theme="light"]) {
+    --color-primary-text: #c7c7c7;
+    --color-primary-container: #4d4d4d;
     --color-background: #1b1a1a;
     --color-surface: #272525;
+    --color-on-surface: #f0f0f0;
     --color-surface-container: #343232;
     --color-surface-variant: #4c3e3e;
-    --color-on-surface: #f0f0f0;
     --color-on-surface-variant: #c9c9c9;
     --color-outline: #9c8b8b;
-    --color-primary-text: #c7c7c7;
-    --color-focus: #eb6101;
+    --color-focus: #b8b8b8;
+    --color-error: #e59a91;
   }
 }
 
@@ -105,13 +113,13 @@
 .card-showcase__singles,
 .card-showcase__list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
   gap: var(--space-400);
 }
 
 .card-showcase__single {
   display: grid;
-  grid-template-rows: auto 1fr;
+  align-content: start;
   gap: var(--space-200);
   min-inline-size: 0;
 }
@@ -138,44 +146,63 @@
 
 /* ---- Card ---- */
 
-/* 面、線、動きは variant が --card-* を上書きして決める。ここは構造だけを持つ。 */
+/* 面を持たず、枠はカバーだけが持つ。カバーが無いときは文字を枠の中に置く。
+   hover の動きは variant が決める。ここは構造と静止時の見た目だけを持つ。 */
 .card {
-  --card-bg: var(--color-surface, #fff);
-  --card-border: var(--color-surface-variant, #e3dede);
-  --card-title: var(--color-on-surface, #242424);
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-200);
   min-inline-size: 0;
-  padding: var(--space-500);
-  border: var(--border-width-thin) solid var(--card-border);
   border-radius: var(--radius-surface);
   color: var(--color-on-surface, #242424);
-  background: var(--card-bg);
-  transition:
-    background-color var(--duration-state) var(--easing-standard),
-    border-color var(--duration-state) var(--easing-standard);
+}
+
+.card__frame {
+  overflow: hidden;
+  border: var(--border-width-thin) solid var(--color-surface-variant, #e3dede);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-container, #f0efef);
+}
+
+.card--text .card__frame {
+  background: var(--color-surface, #fff);
+}
+
+.card__cover {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-100);
+  padding-block: var(--space-300) 0;
+}
+
+.card--text .card__text {
+  padding: var(--space-400);
 }
 
 /* 枠はカードの外周に出す。リンク自身に出すと題名の周りだけが囲まれる。 */
 .card:has(.card__link:focus-visible) {
   outline: var(--border-width-thick) solid var(--color-focus, #005fcc);
-  outline-offset: 2px;
+  outline-offset: 4px;
 }
 
 .card__title {
   font-family: var(--typography-control-font-family);
   font-size: var(--typography-body-font-size);
   font-weight: var(--font-weight-bold);
-  line-height: 1.4;
+  line-height: var(--font-line-height-tight);
   overflow-wrap: anywhere;
 }
 
 .card__link {
-  color: var(--card-title);
+  color: inherit;
   text-decoration: none;
-  transition: color var(--duration-state) var(--easing-standard);
 }
 
 .card__link::after {
@@ -193,13 +220,86 @@
 .card__meta {
   order: -1;
   color: var(--color-on-surface-variant, #666);
-  font-family: var(--typography-caption-font-family);
   font-size: var(--typography-caption-font-size);
   line-height: var(--typography-caption-line-height);
 }
 
 .card__description {
   color: var(--color-on-surface-variant, #666);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+/* ---- カバーの見本 ---- */
+
+/* 色片は中身を持たないので、並びの幅をカバーに合わせて与える。 */
+.card-cover-colors {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-200);
+  inline-size: 100%;
+  padding-inline: var(--space-400);
+}
+
+/* 幅が狭いカバーでは色片を縮め、5 色を枠の中に収める。 */
+.card-cover-colors > span {
+  flex: 0 1 var(--space-1000);
+  aspect-ratio: 1;
+  border: var(--border-width-thin) solid var(--color-surface-variant, #e3dede);
+  border-radius: var(--radius-full);
+}
+
+.card-cover-type {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-100);
+}
+
+.card-cover-type > span {
+  font-family: var(--typography-title-font-family);
+  font-size: calc(var(--typography-title-font-size) * 2);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.card-cover-type > small {
+  color: var(--color-on-surface-variant, #666);
+  font-size: var(--typography-caption-font-size);
+}
+
+.card-cover-tokens {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-300);
+}
+
+.card-cover-tokens > span {
+  border-radius: var(--radius-xs);
+  background: var(--color-on-surface, #242424);
+}
+
+.card-cover-icons {
+  display: flex;
+  gap: var(--space-500);
+}
+
+.card-cover-icons svg {
+  display: block;
+  inline-size: 2rem;
+  block-size: 2rem;
+}
+
+.card-cover-components {
+  display: flex;
+  gap: var(--space-200);
+}
+
+.card-cover-text {
+  display: grid;
+  gap: var(--space-100);
+  align-self: stretch;
+  justify-self: stretch;
+  padding: var(--space-400);
   font-size: var(--typography-caption-font-size);
   line-height: var(--typography-caption-line-height);
 }
