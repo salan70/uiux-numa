@@ -23,6 +23,7 @@ describe("matchRoute", () => {
       name: "typographyDetail",
       experiment: "product-ui-typography",
     });
+    expect(matchRoute("/components/button")).toEqual({ name: "component", slug: "button" });
     expect(matchRoute("/guidelines/states-and-feedback")).toEqual({
       name: "guideline",
       slug: "states-and-feedback",
@@ -45,9 +46,6 @@ describe("matchRoute", () => {
     expect(matchRoute("/foundations/graphics/class-chapter-illustration")).toEqual({
       name: "notfound",
     });
-    expect(matchRoute("/components/button")).toEqual({ name: "notfound" });
-    expect(matchRoute("/components/form-inline-validation")).toEqual({ name: "notfound" });
-    expect(matchRoute("/components/soft-component-kit")).toEqual({ name: "notfound" });
   });
 
   it("旧 URL を新 URL へ送る", () => {

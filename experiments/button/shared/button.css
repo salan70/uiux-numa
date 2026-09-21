@@ -213,8 +213,7 @@
   font-size: 0.75rem;
 }
 
-.button-showcase__role h3,
-.button-showcase__role h4 {
+.button-showcase__role h3 {
   font-family: var(--typography-control-font-family);
   font-size: var(--typography-control-font-size);
   font-weight: var(--typography-control-font-weight);

@@ -91,8 +91,6 @@ export function Showcase({
   }
 
   const Root = embedded ? "div" : "main";
-  const SectionHeading = embedded ? "h3" : "h2";
-  const RoleHeading = embedded ? "h4" : "h3";
 
   return (
     <Root
@@ -112,7 +110,7 @@ export function Showcase({
         <div className="button-showcase__rows">
           <div className="button-showcase__size-header" aria-label="サイズ仕様">
             <div className="button-showcase__size-title">
-              <SectionHeading id="button-appearances">役割とサイズ</SectionHeading>
+              <h2 id="button-appearances">役割とサイズ</h2>
             </div>
             <div className="button-showcase__size-specs">
               {SIZE_SPECS.map((spec) => (
@@ -123,7 +121,7 @@ export function Showcase({
           {APPEARANCES.map((appearance) => (
             <div className="button-showcase__row" key={appearance.id}>
               <div className="button-showcase__role">
-                <RoleHeading>{appearance.label}</RoleHeading>
+                <h3>{appearance.label}</h3>
                 <p>{appearance.description}</p>
                 <dl
                   className="button-showcase__tokens"
@@ -153,7 +151,7 @@ export function Showcase({
 
       <section className="button-showcase__states" aria-labelledby="button-states">
         <div className="button-showcase__section-head">
-          <SectionHeading id="button-states">状態とアイコン</SectionHeading>
+          <h2 id="button-states">状態とアイコン</h2>
         </div>
         <div className="button-showcase__examples">
           <Button

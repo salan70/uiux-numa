@@ -10,6 +10,7 @@ export type Route =
   | { name: "icons" }
   | { name: "icon"; experiment: string }
   | { name: "components" }
+  | { name: "component"; slug: string }
   // slug が null のときは先頭の文書へ送る。
   | { name: "guideline"; slug: string | null }
   | { name: "redirect"; to: string }
@@ -75,6 +76,8 @@ export function matchRoute(path: string): Route {
   const icon = normalized.match(/^\/foundations\/icons\/([a-z0-9-]+)$/);
   if (icon) return { name: "icon", experiment: icon[1] };
   if (normalized === "/components") return { name: "components" };
+  const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
+  if (component) return { name: "component", slug: component[1] };
   if (normalized === "/guidelines") return { name: "guideline", slug: null };
   const guideline = normalized.match(/^\/guidelines\/([a-z0-9-]+)$/);
   if (guideline) return { name: "guideline", slug: guideline[1] };
