@@ -2159,8 +2159,16 @@ body {
   grid-template-columns: 2rem minmax(0, 1fr);
   column-gap: var(--cat-gap-lg);
   padding-block: var(--cat-gap-lg);
-  border-block-start: 1px solid var(--cat-line);
   counter-increment: guide-core;
+}
+
+/* 罫は項目の間だけに引く。見出し直下に引くと節の区切りと二重になる。 */
+.app-shell .guide-core + .guide-core {
+  border-block-start: 1px solid var(--cat-line);
+}
+
+.app-shell .guide-core:first-child {
+  padding-block-start: 0;
 }
 
 .app-shell .guide-core::before {
@@ -2230,6 +2238,12 @@ body {
   font-size: var(--font-size-sm);
   line-height: var(--font-line-height-ui);
   color: var(--cat-muted);
+}
+
+/* 文を inline-block にすると、残り幅に収まらない文だけが次の行へ落ちる。
+   1 行に収まる根拠は 1 行のまま読ませたいので、常に改行はしない。 */
+.app-shell .guide-sentence {
+  display: inline-block;
 }
 
 /* good と bad を同じ幅の桁に置き、差だけが残るようにする。

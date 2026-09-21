@@ -15,6 +15,18 @@ function goToRule(domId: string) {
   target.focus();
 }
 
+/** 文ごとに分けて包む。1 行に収まる間は続けて読ませ、折り返す時だけ文の切れ目で改行する。 */
+function renderSentences(text: string) {
+  return text
+    .split(/(?<=。)/)
+    .filter((part) => part.length > 0)
+    .map((sentence, i) => (
+      <span key={i} className="guide-sentence">
+        {renderInline(sentence)}
+      </span>
+    ));
+}
+
 // 節の名は英語にする。文書名とナビが英語なので、節だけ日本語だと語が混じる。
 type Layer = { id: string; title: string };
 
@@ -145,7 +157,7 @@ function GuideProse({ id, title, body }: { id: string; title: string; body: stri
           {title}
         </h2>
       </div>
-      <p className="guide-prose">{body}</p>
+      <p className="guide-prose">{renderSentences(body)}</p>
     </section>
   );
 }
@@ -191,7 +203,7 @@ function TipsLayer({ layer, rules }: { layer: Layer; rules: Rule[] }) {
               <h3 className="guide-rule__title">{rule.title}</h3>
               {rule.applies && <span className="guide-rule__applies">{rule.applies}</span>}
             </div>
-            <p className="guide-rule__rationale">{renderInline(rule.rationale)}</p>
+            <p className="guide-rule__rationale">{renderSentences(rule.rationale)}</p>
             {/* 採る側を先に読ませる。bad から読むと、正しい形に辿り着くまで 2 度読むことになる。 */}
             <div className="guide-pair">
               <section className="guide-side guide-side--good">
