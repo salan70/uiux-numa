@@ -805,6 +805,14 @@ body {
   gap: var(--space-200);
 }
 
+/* Card の見本は幅を持たないので、2 枚を見本の幅いっぱいに等分する。 */
+.app-shell .component-card__preview > .card-catalog-preview {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: stretch;
+  inline-size: 100%;
+  gap: var(--space-400);
+}
+
 .app-shell .component-card__body {
   display: grid;
   gap: var(--space-100);
@@ -845,6 +853,11 @@ body {
   .app-shell .component-card:hover .component-card__title {
     color: var(--cat-accent-text);
   }
+}
+
+/* Card の枠はカードの outline が持つ。全体の :focus-visible がリンクにも枠を出すと二重になる。 */
+.app-shell .card__link:focus-visible {
+  outline: none;
 }
 
 /* 詳細の見本は横に広いので、題名と同じ 7 列ではなく全幅に置く。 */
