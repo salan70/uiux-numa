@@ -1,0 +1,16 @@
+/* 線を持たない淡い面で区切る。hover と押下は面の濃さを一段ずつ上げる。
+   線は透明にして残し、variant 間で寸法を揃える。 */
+.card-tonal-raise .card {
+  --card-bg: var(--color-surface-container);
+  --card-border: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-tonal-raise .card:hover {
+    --card-bg: color-mix(in srgb, var(--color-surface-container), var(--color-on-surface) 6%);
+  }
+}
+
+.card-tonal-raise .card:active {
+  --card-bg: color-mix(in srgb, var(--color-surface-container), var(--color-on-surface) 10%);
+}
