@@ -42,7 +42,7 @@ export function TokensPage() {
                     const valueClassName =
                       token.type === "typography"
                         ? "token-table__value token-table__value--long token-table__value--composite"
-                        : token.type === "fontFamily"
+                        : token.type === "fontFamily" || token.type === "cubicBezier"
                           ? "token-table__value token-table__value--long"
                           : "token-table__value";
 

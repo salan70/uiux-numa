@@ -87,6 +87,8 @@ const FAMILY_LABELS: Record<string, string> = {
   space: "余白",
   radius: "角丸",
   border: "線",
+  size: "寸法",
+  motion: "動き",
 };
 
 function loadCatalog(): CatalogData {

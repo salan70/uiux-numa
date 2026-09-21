@@ -3,9 +3,9 @@ import { assertAdoptedIds, catalog } from "./collect";
 
 describe("catalog inventory", () => {
   it("token、配色、SVG、Experiment を欠落なく集める", () => {
-    expect(catalog.tokens).toHaveLength(38);
-    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(26);
-    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(12);
+    expect(catalog.tokens).toHaveLength(51);
+    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(37);
+    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(14);
     expect(catalog.schemes).toHaveLength(10);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(29);
     expect(
@@ -22,7 +22,21 @@ describe("catalog inventory", () => {
         sources: [],
       },
       {
+        sourcePath: "tokens/motion/motion.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: [],
+      },
+      {
         sourcePath: "tokens/radius/radius.tokens.json",
+        role: "foundation",
+        maturity: "candidate",
+        platforms: ["web"],
+        sources: [],
+      },
+      {
+        sourcePath: "tokens/size/size.tokens.json",
         role: "foundation",
         maturity: "candidate",
         platforms: ["web"],
@@ -57,7 +71,9 @@ describe("catalog inventory", () => {
   it("token を正本のファイル単位で束ねる", () => {
     expect(catalog.tokenFamilies.map((family) => family.id)).toEqual([
       "border",
+      "motion",
       "radius",
+      "size",
       "space",
       "typography",
     ]);

@@ -4,6 +4,7 @@
 - 日付: 2026-09-21
 - 参照: [Catalog ホスト](2026-09-19-catalog-host.md)、[Catalog をデザインシステムサイトにする](2026-09-19-catalog-design-system-site.md)、[topic-first](2026-09-20-catalog-topic-first.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)、[Typography foundation](2026-09-19-typography-foundation.md)
 - 対象: `tokens/space/`、`tokens/radius/`、`tokens/border/`、`apps/catalog/src/catalog.css`
+- 置き換え: 却下した案のうち size の家族は、[寸法と動きを token にする](2026-09-21-size-and-motion-tokens.md) が置き換えた。
 
 ## 背景
 

@@ -1,0 +1,9 @@
+/* motion.tokens.json から生成する。直接編集しない。 */
+:root {
+  --duration-120: 120ms;
+  --duration-160: 160ms;
+  --duration-state: 120ms;
+  --duration-press: 160ms;
+  --easing-standard: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --easing-out: cubic-bezier(0, 0, 0.58, 1);
+}

@@ -1,0 +1,66 @@
+{
+  "$extensions": {
+    "uiux-numa": {
+      "role": "foundation",
+      "maturity": "candidate",
+      "platforms": ["web"],
+      "sources": []
+    }
+  },
+  "size": {
+    "$type": "dimension",
+    "control-height": {
+      "sm": {
+        "$value": {
+          "value": 2,
+          "unit": "rem"
+        },
+        "$description": "操作部品の高さ。小。密な一覧と補助の操作に使う。"
+      },
+      "md": {
+        "$value": {
+          "value": 2.5,
+          "unit": "rem"
+        },
+        "$description": "操作部品の高さ。既定。"
+      },
+      "lg": {
+        "$value": {
+          "value": 3,
+          "unit": "rem"
+        },
+        "$description": "操作部品の高さ。大。画面の主操作を強く見せる場合に使う。"
+      }
+    },
+    "control-min-width": {
+      "sm": {
+        "$value": {
+          "value": 4.5,
+          "unit": "rem"
+        },
+        "$description": "操作部品の最小幅。小。短いラベルでも押し先の幅を保つ。"
+      },
+      "md": {
+        "$value": {
+          "value": 6,
+          "unit": "rem"
+        },
+        "$description": "操作部品の最小幅。既定。"
+      },
+      "lg": {
+        "$value": {
+          "value": 7.5,
+          "unit": "rem"
+        },
+        "$description": "操作部品の最小幅。大。"
+      }
+    },
+    "target-min": {
+      "$value": {
+        "value": 1.5,
+        "unit": "rem"
+      },
+      "$description": "ポインタで押す対象の最小の辺。WCAG 2.2 達成基準 2.5.8 の 24px。"
+    }
+  }
+}

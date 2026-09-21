@@ -1,17 +1,19 @@
 import { readFile, writeFile } from "node:fs/promises";
 import process from "node:process";
 
-// dimension だけを持つ家族。個数は正本の README と揃える。
+// 1 つの値を 1 つの CSS 変数へ出す家族。個数は正本の README と揃える。
 const FAMILIES = [
-  { id: "space", count: 12 },
-  { id: "radius", count: 8 },
-  { id: "border", count: 2 },
+  { id: "space", count: 12, types: ["dimension"] },
+  { id: "radius", count: 8, types: ["dimension"] },
+  { id: "border", count: 2, types: ["dimension"] },
+  { id: "size", count: 7, types: ["dimension"] },
+  { id: "motion", count: 6, types: ["duration", "cubicBezier"] },
 ];
 const checkOnly = process.argv.includes("--check");
 
 for (const family of FAMILIES) await build(family);
 
-async function build({ id, count }) {
+async function build({ id, count, types }) {
   const sourceUrl = new URL(`../tokens/${id}/${id}.tokens.json`, import.meta.url);
   const outputUrl = new URL(`../tokens/${id}/${id}.css`, import.meta.url);
 
@@ -73,9 +75,38 @@ async function build({ id, count }) {
     }
   }
 
+  function assertDuration(name, value) {
+    if (
+      !value ||
+      typeof value !== "object" ||
+      typeof value.value !== "number" ||
+      value.unit !== "ms"
+    ) {
+      throw new Error(`${name}: duration は数値と ms を持つ必要がある`);
+    }
+  }
+
+  function assertCubicBezier(name, value) {
+    if (!Array.isArray(value) || value.length !== 4 || value.some((n) => typeof n !== "number")) {
+      throw new Error(`${name}: cubicBezier は 4 個の数値を持つ必要がある`);
+    }
+  }
+
+  const ASSERTS = {
+    dimension: assertDimension,
+    duration: assertDuration,
+    cubicBezier: assertCubicBezier,
+  };
+
   for (const [name, token] of tokens) {
-    if (token.type !== "dimension") throw new Error(`${name}: ${id} は dimension にする`);
-    assertDimension(name, resolveValue(token.value, [name]));
+    if (!types.includes(token.type))
+      throw new Error(`${name}: ${id} は ${types.join(" か ")} にする`);
+    ASSERTS[token.type](name, resolveValue(token.value, [name]));
+  }
+
+  function cssValue(type, value) {
+    if (type === "cubicBezier") return `cubic-bezier(${value.join(", ")})`;
+    return `${value.value}${value.unit}`;
   }
 
   function cssName(name) {
@@ -85,7 +116,7 @@ async function build({ id, count }) {
   const lines = [];
   for (const [name, token] of tokens) {
     const value = resolveValue(token.value, [name]);
-    lines.push(`  ${cssName(name)}: ${value.value}${value.unit};`);
+    lines.push(`  ${cssName(name)}: ${cssValue(token.type, value)};`);
   }
 
   const output = `/* ${id}.tokens.json から生成する。直接編集しない。 */

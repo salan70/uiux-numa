@@ -2,6 +2,8 @@
 @import "../../../tokens/space/space.css";
 @import "../../../tokens/radius/radius.css";
 @import "../../../tokens/border/border.css";
+@import "../../../tokens/size/size.css";
+@import "../../../tokens/motion/motion.css";
 
 @font-face {
   font-family: "LINE Seed JP";
@@ -1241,6 +1243,22 @@ body {
   display: block;
   inline-size: var(--space-2000);
   border-block-start: var(--border-width-thin) solid var(--cat-focus);
+}
+
+.app-shell .token-table__curve {
+  display: block;
+  inline-size: var(--space-1000);
+  block-size: var(--space-1000);
+  overflow: visible;
+  border-inline-start: var(--border-width-thin) solid var(--cat-line);
+  border-block-end: var(--border-width-thin) solid var(--cat-line);
+}
+
+.app-shell .token-table__curve path {
+  fill: none;
+  stroke: var(--cat-focus);
+  stroke-width: var(--border-width-thick);
+  vector-effect: non-scaling-stroke;
 }
 
 /* ---- トピックの中身。一覧を挟まず、成果物そのものを出す ---- */
