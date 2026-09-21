@@ -312,7 +312,7 @@ body {
 
 /* 現在地は色と縦の線で示す。太さや余白を変えると、移るたびにナビ全体が動く。 */
 .app-shell .sidebar__link[aria-current="page"] {
-  color: var(--cat-text);
+  color: var(--cat-accent-text);
   border-inline-start-color: var(--cat-accent-text);
   font-weight: 700;
 }
