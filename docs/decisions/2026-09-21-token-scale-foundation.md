@@ -117,7 +117,7 @@ CSS 仕様も border の内側半径を同じ減算で求め、負の値を 0 �
 
 - グラデーション: 公開 Catalog で使用 0 件である。利用者が見送りを判断した。
 - shadow: 公開 Catalog で使用 0 件である。popup と drawer の影は局所変数のままにする。
-- `radius.full` と 14px 以上の段: Catalog に利用箇所がない。
+- `radius.full` と 14px 以上の段: Catalog に利用箇所がない。`radius.full` の却下は [radius.full の ADR](2026-09-21-radius-full.md) が置き換えた。
 - `corner-shape: squircle`: 6〜12px では円弧との差がほぼ見えない。対応は Chromium 系だけである。
 - 半径を高さの比率で決める: 親子を同じ比率にすると角の隙間が不均一になり、減算式と両立しない。相似に見えるという主張に実証はない。
 - 黄金比の階梯: 選好の実証がない。φ は 4px グリッドに乗らず、丸め誤差を常に生む。

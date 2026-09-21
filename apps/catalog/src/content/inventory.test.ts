@@ -3,9 +3,9 @@ import { assertAdoptedIds, catalog } from "./collect";
 
 describe("catalog inventory", () => {
   it("token、配色、SVG、Experiment を欠落なく集める", () => {
-    expect(catalog.tokens).toHaveLength(36);
-    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(25);
-    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(11);
+    expect(catalog.tokens).toHaveLength(38);
+    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(26);
+    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(12);
     expect(catalog.schemes).toHaveLength(10);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(29);
     expect(

@@ -30,6 +30,13 @@
       },
       "$description": "角丸の階梯。10px。"
     },
+    "full": {
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$description": "階梯の外の特別値。短辺の半分で頭打ちになり、端が半円になる。"
+    },
     "mark": {
       "$value": "{radius.xs}",
       "$description": "帯、印、コード片の角丸。"
@@ -41,6 +48,10 @@
     "surface": {
       "$value": "{radius.md}",
       "$description": "操作部品を内包する面の角丸。"
+    },
+    "pill": {
+      "$value": "{radius.full}",
+      "$description": "端を半円にするボタンや chip の角丸。正方形に当てると円になる。"
     }
   }
 }
