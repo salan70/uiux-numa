@@ -64,7 +64,7 @@ function FigureProximity() {
             <div
               style={{
                 padding: "0.375rem 0.5rem",
-                border: "1px solid var(--cat-border-strong)",
+                border: "1px solid var(--cat-line-strong)",
                 borderRadius: "0.375rem",
                 fontSize: "var(--font-size-sm)",
               }}
@@ -85,7 +85,7 @@ function FigureProximity() {
             <div
               style={{
                 padding: "0.375rem 0.5rem",
-                border: "1px solid var(--cat-border-strong)",
+                border: "1px solid var(--cat-line-strong)",
                 borderRadius: "0.375rem",
                 fontSize: "var(--font-size-sm)",
               }}
@@ -202,7 +202,7 @@ function FigureRepetition() {
           <div
             style={{
               padding: "0.375rem 0.625rem",
-              border: "1px solid var(--cat-border-strong)",
+              border: "1px solid var(--cat-line-strong)",
               borderRadius: "0.375rem",
               fontSize: "var(--font-size-sm)",
             }}
@@ -235,7 +235,7 @@ function FigureRepetition() {
           <div
             style={{
               padding: "0.375rem 0.625rem",
-              border: "1px solid var(--cat-border-strong)",
+              border: "1px solid var(--cat-line-strong)",
               borderRadius: "0.375rem",
               fontSize: "var(--font-size-sm)",
               color: "var(--cat-text)",
@@ -259,7 +259,7 @@ function FigureRepetition() {
           <div
             style={{
               padding: "0.375rem 0.625rem",
-              border: "1px solid var(--cat-border-strong)",
+              border: "1px solid var(--cat-line-strong)",
               borderRadius: "0.375rem",
               fontSize: "var(--font-size-sm)",
               color: "var(--cat-text)",
@@ -329,7 +329,7 @@ function FigureContrast() {
           </div>
           <div
             style={{
-              borderLeft: "2px solid var(--cat-border-strong)",
+              borderLeft: "2px solid var(--cat-line-strong)",
               paddingLeft: "0.5rem",
               fontSize: "var(--font-size-sm)",
               color: "var(--cat-muted)",

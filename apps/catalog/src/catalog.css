@@ -18,26 +18,34 @@
 }
 
 :root {
-  --color-bg: oklch(0.985 0 0);
-  --color-bg-subtle: oklch(0.955 0 0);
-  --color-surface: oklch(1 0 0);
-  --color-border: oklch(0.9 0 0);
-  --color-border-strong: oklch(0.611 0 0);
-  --color-text: oklch(0.2 0 0);
-  --color-text-muted: oklch(0.501 0 0);
-  --color-accent: oklch(0.2 0 0);
-  --color-accent-hover: oklch(0.14 0 0);
-  --color-on-accent: oklch(1 0 0);
-  --color-accent-strong: oklch(0.2 0 0);
-  --color-accent-text: oklch(0.2 0 0);
-  --color-accent-subtle: oklch(0.93 0 0);
-  --color-focus: oklch(0.2 0 0);
-  --color-success: oklch(0.51 0.11 150);
-  --color-success-subtle: oklch(0.955 0.035 150);
-  --color-warning: oklch(0.523 0.107 75);
-  --color-warning-subtle: oklch(0.955 0.035 75);
-  --color-danger: oklch(0.538 0.154 27);
-  --color-danger-subtle: oklch(0.955 0.021 27);
+  --color-primary: #2b2b2b;
+  --color-on-primary: #fffdf9;
+  --color-primary-text: #4d4d4d;
+  --color-primary-container: #e6e6e6;
+  --color-on-primary-container: #201d1b;
+
+  --color-secondary: #c9171e;
+  --color-on-secondary: #fffdf9;
+  --color-secondary-container: #f9d2d4;
+  --color-on-secondary-container: #201d1b;
+
+  --color-tertiary: #e6b422;
+  --color-on-tertiary: #201d1b;
+  --color-tertiary-container: #f9efd2;
+  --color-on-tertiary-container: #201d1b;
+
+  --color-background: #f9f8f8;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-surface-container: #f0efef;
+  --color-surface-variant: #e3dede;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #525252;
+
+  --color-success: #0b6f3a;
+  --color-warning: #786002;
+  --color-error: #9d1d0c;
 }
 
 * {
@@ -84,17 +92,22 @@ body {
   min-block-size: 100vh;
 
   /* 配色。カタログ自身も正本の配色を着る。
-     --color-* は theme.ts が選ばれた配色の 19 役割を :root へ当てる。
+     --color-* は theme.ts が選ばれた配色の 24 役割を :root へ当てる。
      ここでは役割の対応だけを決め、色の値は持たない。
      fallback は sumi のライトの値で、正本が読めない場合でも画面が壊れないようにする。 */
-  --cat-bg: var(--color-bg, #fbfaf5);
-  --cat-surface: var(--color-bg-subtle, #f3f3f2);
-  --cat-text: var(--color-text, #2b2b2b);
-  --cat-muted: var(--color-text-muted, #595857);
-  --cat-line: var(--color-border, #dcdddd);
-  --cat-line-strong: var(--color-border-strong, #7b7c7d);
-  --cat-accent: var(--color-accent, #2b2b2b);
-  --cat-on-accent: var(--color-on-accent, #fbfaf5);
+  --cat-bg: var(--color-background, #f9f8f8);
+  --cat-surface: var(--color-surface-container, #f0efef);
+  --cat-text: var(--color-on-surface, #1f1f1f);
+  --cat-muted: var(--color-on-surface-variant, #4d4d4d);
+  --cat-line: var(--color-surface-variant, #e3dede);
+  --cat-line-strong: var(--color-outline, #757575);
+  /* 塗り面の主色。相手の文字は必ず --cat-on-accent にする。面に対する 4.5:1 は保証しない。 */
+  --cat-accent: var(--color-primary, #2b2b2b);
+  --cat-on-accent: var(--color-on-primary, #fffdf9);
+  /* 面の上に置く色付きの文字と罫線。4 つの面すべてに 4.5:1 を満たす。 */
+  --cat-accent-text: var(--color-primary-text, #4d4d4d);
+  /* focus ring。面に対して 3:1 を満たす。 */
+  --cat-focus: var(--color-focus, #525252);
 
   /* 文字。役割の token をそのまま使い、画面ごとの寸法を持たない。
      number と display だけは token にない大きさなので、
@@ -137,7 +150,7 @@ body {
 }
 
 .app-shell :focus-visible {
-  outline: 2px solid var(--cat-accent);
+  outline: 2px solid var(--cat-focus);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -242,7 +255,7 @@ body {
 /* 現在地は色と縦の線で示す。太さや余白を変えると、移るたびにナビ全体が動く。 */
 .app-shell .sidebar__link[aria-current="page"] {
   color: var(--cat-text);
-  border-inline-start-color: var(--cat-accent);
+  border-inline-start-color: var(--cat-accent-text);
   font-weight: 700;
 }
 
@@ -254,7 +267,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .app-shell .sidebar__link:hover {
-    color: var(--cat-accent);
+    color: var(--cat-accent-text);
   }
 }
 
@@ -337,7 +350,7 @@ body {
 
   .app-shell .sidebar__link[aria-current="page"] {
     border-inline-start-color: transparent;
-    border-block-end-color: var(--cat-accent);
+    border-block-end-color: var(--cat-accent-text);
   }
 
   .app-shell .sidebar .theme {
@@ -380,7 +393,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .app-shell .card__hit:hover .card__title {
-    color: var(--cat-accent);
+    color: var(--cat-accent-text);
   }
 }
 
@@ -506,7 +519,7 @@ body {
 }
 
 .app-shell .detail__crumb a {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .detail__title {
@@ -604,7 +617,7 @@ body {
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 /* ---- 操作部品 ---- */
@@ -726,7 +739,7 @@ body {
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .ed-sheet__title {
@@ -877,7 +890,7 @@ body {
 }
 
 .app-shell .ed-sheet__contrast-row[data-pass="false"] {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .ed-sheet__dash {
@@ -909,7 +922,7 @@ body {
 }
 
 .app-shell .ed-sheet__step-name {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .ed-sheet__step-sample {
@@ -1006,7 +1019,7 @@ body {
 
 .app-shell .ed-sheet__open li {
   padding-inline-start: 1.25rem;
-  border-inline-start: 3px solid var(--cat-accent);
+  border-inline-start: 3px solid var(--cat-accent-text);
 }
 
 .app-shell .parts {
@@ -1055,7 +1068,7 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .app-shell .topic__hit:hover .topic__label {
-    color: var(--cat-accent);
+    color: var(--cat-accent-text);
   }
 }
 
@@ -1469,7 +1482,7 @@ body {
 }
 
 .app-shell .work-head__meta a {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .work-head__meta span + span::before {
@@ -1485,10 +1498,10 @@ body {
   display: grid;
   gap: 0.5rem;
   padding: 1.25rem;
-  border: 1px solid var(--cs-border);
+  border: 1px solid var(--cs-surface-variant);
   border-radius: var(--cat-radius);
-  background: var(--cs-bg);
-  color: var(--cs-text);
+  background: var(--cs-background);
+  color: var(--cs-on-surface);
 }
 
 .app-shell .specimen__title {
@@ -1501,7 +1514,7 @@ body {
 .app-shell .specimen__body {
   margin: 0;
   font-size: 0.875rem;
-  color: var(--cs-text-muted);
+  color: var(--cs-on-surface-variant);
 }
 
 .app-shell .specimen__row {
@@ -1517,16 +1530,16 @@ body {
   min-block-size: 2.25rem;
   padding: 0 1rem;
   border-radius: var(--cat-radius);
-  background: var(--cs-accent);
-  color: var(--cs-on-accent);
+  background: var(--cs-primary);
+  color: var(--cs-on-primary);
   font-size: 0.875rem;
   font-weight: 700;
 }
 
 .app-shell .specimen__btn--quiet {
   background: none;
-  color: var(--cs-text);
-  border: 1px solid var(--cs-border-strong);
+  color: var(--cs-on-surface);
+  border: 1px solid var(--cs-outline);
 }
 
 .app-shell .specimen__field {
@@ -1535,10 +1548,10 @@ body {
   min-block-size: 2.25rem;
   margin: 0;
   padding: 0 0.75rem;
-  border: 1px solid var(--cs-border-strong);
+  border: 1px solid var(--cs-outline);
   border-radius: var(--cat-radius);
   background: var(--cs-surface);
-  color: var(--cs-text-muted);
+  color: var(--cs-on-surface-variant);
   font-size: 0.875rem;
 }
 
@@ -1598,7 +1611,7 @@ body {
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 /* 仕様は定義の組で出す。項目名を先に置き、値の桁を揃える。 */
@@ -1665,7 +1678,7 @@ body {
 }
 
 .app-shell .topic-source a {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
   border-block-end: 1px solid currentcolor;
 }
 
@@ -1745,7 +1758,7 @@ body {
 }
 
 .app-shell .scheme__mark[data-adopted="true"] {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 /* ---- 配色。coolors のパレットカードを参考にする ----
@@ -1983,8 +1996,8 @@ body {
 
   .app-shell .feature__step:hover,
   .app-shell .palette__more:hover {
-    color: var(--cat-accent);
-    border-color: var(--cat-accent);
+    color: var(--cat-accent-text);
+    border-color: var(--cat-accent-text);
   }
 }
 
@@ -2177,7 +2190,7 @@ body {
 
 .app-shell .ratio[data-pass="false"] .ratio__mark,
 .app-shell .ratio[data-pass="false"] .ratio__value {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 /* コピーの結果は読み上げにも届くようにする。 */
@@ -2187,7 +2200,7 @@ body {
   font-size: var(--cat-label);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
   font-variant-numeric: tabular-nums;
 }
 
@@ -2349,8 +2362,8 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .app-shell .sheet-dialog__close:hover {
-    color: var(--cat-accent);
-    border-color: var(--cat-accent);
+    color: var(--cat-accent-text);
+    border-color: var(--cat-accent-text);
   }
 }
 
@@ -2482,8 +2495,8 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .app-shell .guide-aside__link:hover {
-    color: var(--cat-accent);
-    border-inline-start-color: var(--cat-accent);
+    color: var(--cat-accent-text);
+    border-inline-start-color: var(--cat-accent-text);
   }
 }
 
@@ -2653,7 +2666,7 @@ body {
 }
 
 .app-shell .guide-example__tag--good {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 .app-shell .guide-example__body {
@@ -2752,7 +2765,7 @@ body {
 }
 
 .app-shell .guide-link {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -2791,7 +2804,7 @@ body {
 }
 
 .app-shell .guide-figure__tag--good {
-  color: var(--cat-accent);
+  color: var(--cat-accent-text);
 }
 
 /* 図版の器なので、高さは文字の寸法ではなく中身に合わせて決める。 */

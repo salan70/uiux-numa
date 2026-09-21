@@ -12,7 +12,6 @@ import {
 } from "./palette";
 import { schemes } from "./schemes";
 
-const aizome = schemes.find((item) => item.id === "aizome");
 const sumi = schemes.find((item) => item.id === "sumi");
 
 describe("derivedName", () => {
@@ -46,13 +45,18 @@ describe("derivedName", () => {
 describe("colorLabel", () => {
   it("正本の行末コメントがあればそれを使う", () => {
     expect(
-      colorLabel({ role: "accent", cssName: "--color-accent", value: "#165e83", name: "藍" }),
+      colorLabel({ role: "primary", cssName: "--color-primary", value: "#165e83", name: "藍" }),
     ).toBe("藍");
   });
 
   it("名が役割名のままなら値から決める", () => {
     expect(
-      colorLabel({ role: "accent", cssName: "--color-accent", value: "#ffffff", name: "accent" }),
+      colorLabel({
+        role: "primary",
+        cssName: "--color-primary",
+        value: "#ffffff",
+        name: "primary",
+      }),
     ).toBe("白");
   });
 });
@@ -77,8 +81,9 @@ describe("hexOf", () => {
 
 describe("mergeRoles", () => {
   it("同じ値の役割を 1 本の帯にまとめる", () => {
-    if (!aizome) throw new Error("aizome がない");
-    const bands = mergeRoles(aizome, "light", ["accent", "accent-strong", "focus"]);
+    if (!sumi) throw new Error("sumi がない");
+    // すみは on-primary と on-secondary が同じ生成り色になる。
+    const bands = mergeRoles(sumi, "light", ["on-primary", "on-secondary", "primary"]);
     const values = bands.map((band) => band.value);
     expect(new Set(values).size).toBe(values.length);
     const merged = bands.find((band) => band.roles.length > 1);
@@ -87,8 +92,8 @@ describe("mergeRoles", () => {
 
   it("役割は渡した順に並ぶ", () => {
     if (!sumi) throw new Error("sumi がない");
-    const bands = mergeRoles(sumi, "light", ["text", "bg"]);
-    expect(bands[0].roles[0]).toBe("text");
+    const bands = mergeRoles(sumi, "light", ["on-surface", "background"]);
+    expect(bands[0].roles[0]).toBe("on-surface");
   });
 
   it("存在しない役割は飛ばす", () => {
@@ -110,10 +115,10 @@ describe("cardColors", () => {
 });
 
 describe("heroWeight", () => {
-  it("accent、text、bg だけ幅を 2 倍にする", () => {
-    expect(heroWeight({ value: "#000", name: "黒", roles: ["accent"] })).toBe(2);
-    expect(heroWeight({ value: "#000", name: "黒", roles: ["border"] })).toBe(1);
-    expect(heroWeight({ value: "#000", name: "黒", roles: ["border", "bg"] })).toBe(2);
+  it("primary、on-surface、background だけ幅を 2 倍にする", () => {
+    expect(heroWeight({ value: "#000", name: "黒", roles: ["primary"] })).toBe(2);
+    expect(heroWeight({ value: "#000", name: "黒", roles: ["outline"] })).toBe(1);
+    expect(heroWeight({ value: "#000", name: "黒", roles: ["outline", "background"] })).toBe(2);
   });
 });
 
@@ -131,6 +136,8 @@ describe("schemeVars", () => {
     if (!sumi) throw new Error("sumi がない");
     const vars = schemeVars(sumi, "light");
     expect(Object.keys(vars)).toHaveLength(sumi.light.length);
-    expect(vars["--color-bg"]).toBe(sumi.light.find((item) => item.role === "bg")?.value);
+    expect(vars["--color-background"]).toBe(
+      sumi.light.find((item) => item.role === "background")?.value,
+    );
   });
 });

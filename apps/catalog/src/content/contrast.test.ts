@@ -47,9 +47,9 @@ describe("WCAG contrast", () => {
     expect(hexFromCssColor("#fff")).toBe("#ffffff");
   });
 
-  it("19 role を面 / 線 / 文字 / 強調 / 意味に分ける", () => {
+  it("24 role を主色 / 副色 / 第三色 / 面・線 / 状態に分ける", () => {
     const roles = ROLE_GROUPS.flatMap((group) => group.roles);
-    expect(roles).toHaveLength(19);
-    expect(new Set(roles).size).toBe(19);
+    expect(roles).toHaveLength(24);
+    expect(new Set(roles).size).toBe(24);
   });
 });

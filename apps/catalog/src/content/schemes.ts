@@ -14,7 +14,7 @@ export type ColorScheme = {
 };
 
 const rawSchemeFiles = import.meta.glob<string>(
-  "../../../../experiments/color-schemes/variants/*/scheme.css",
+  "../../../../experiments/color-schemes-material/variants/*/scheme.css",
   {
     query: "?raw",
     import: "default",
@@ -24,7 +24,7 @@ const rawSchemeFiles = import.meta.glob<string>(
 
 export const schemeFiles: Record<string, string> = rawSchemeFiles;
 
-const COLOR_ROLE_COUNT = 19;
+const COLOR_ROLE_COUNT = 24;
 
 export function parseSchemeCss(source: string, sourcePath: string): ColorScheme {
   const idMatch = sourcePath.match(/variants\/([^/]+)\/scheme\.css$/);
@@ -98,7 +98,7 @@ function readBlock(source: string, selectorStart: number, sourcePath: string): s
 }
 
 function toRepoPath(globKey: string): string {
-  const match = globKey.match(/\/(experiments\/color-schemes\/.*)$/);
+  const match = globKey.match(/\/(experiments\/color-schemes-material\/.*)$/);
   if (!match) throw new Error(`リポジトリパスに変換できない: ${globKey}`);
   return match[1];
 }

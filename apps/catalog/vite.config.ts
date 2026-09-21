@@ -50,7 +50,10 @@ function rawSchemeCss() {
       if (!query.split("&").some((item) => item === "raw" || item.startsWith("raw="))) return;
       const absoluteFile =
         importer && file.startsWith(".") ? resolve(dirname(importer), file) : file;
-      if (!/\/experiments\/color-schemes\/variants\/[^/]+\/scheme\.css$/.test(absoluteFile)) return;
+      if (
+        !/\/experiments\/color-schemes-material\/variants\/[^/]+\/scheme\.css$/.test(absoluteFile)
+      )
+        return;
       return `${virtualPrefix}${encodeURIComponent(absoluteFile)}.js`;
     },
     load(id: string) {

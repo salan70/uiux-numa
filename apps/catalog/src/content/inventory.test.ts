@@ -6,13 +6,13 @@ describe("catalog inventory", () => {
     expect(catalog.tokens).toHaveLength(18);
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(12);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(6);
-    expect(catalog.schemes).toHaveLength(14);
+    expect(catalog.schemes).toHaveLength(10);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(69);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(11);
-    expect(catalog.liveVariants).toHaveLength(59);
+    expect(catalog.experiments).toHaveLength(12);
+    expect(catalog.liveVariants).toHaveLength(70);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/typography/typography.tokens.json",
@@ -25,7 +25,9 @@ describe("catalog inventory", () => {
   });
 
   it("Experiment を topic へ割り当てる", () => {
-    expect(slugs("colors")).toEqual(["color-schemes"]);
+    // color-schemes は color-schemes-material へ置き換えた。記録は残すが topic を持たない。
+    expect(slugs("colors")).toEqual(["color-schemes-material"]);
+    expect(catalog.experiments.find((item) => item.slug === "color-schemes")?.topic).toBeNull();
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
     expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
     expect(slugs("components")).toEqual(["form-inline-validation", "soft-component-kit"]);
@@ -71,6 +73,16 @@ describe("catalog inventory", () => {
     expect(ids("adopted")).toEqual([
       "catalog-editorial/topic-first",
       "class-tech-icons/line-round",
+      "color-schemes-material/aizome",
+      "color-schemes-material/azuki",
+      "color-schemes-material/fuji",
+      "color-schemes-material/kingyo",
+      "color-schemes-material/shinbashi",
+      "color-schemes-material/sumi",
+      "color-schemes-material/tsukiyo",
+      "color-schemes-material/ume",
+      "color-schemes-material/wasabi",
+      "color-schemes-material/yuzu",
       "color-schemes/aizome",
       "color-schemes/azuki",
       "color-schemes/fuji",
