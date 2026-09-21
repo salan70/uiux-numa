@@ -55,6 +55,14 @@ tokens-check:
     node scripts/build-typography-tokens.mjs --check
     node scripts/build-space-tokens.mjs --check
 
+# 配色の正本 palettes.ts から variant ごとの scheme.css を生成する
+schemes-build:
+    node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/build-scheme-css.mjs
+
+# scheme.css が palettes.ts と一致するか検査する
+schemes-check:
+    node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/build-scheme-css.mjs --check
+
 # Web 実行基盤（platforms/web）の依存を導入する
 web-install:
     cd platforms/web && pnpm install --frozen-lockfile
