@@ -2308,48 +2308,6 @@ body {
   color: var(--cat-text);
 }
 
-.app-shell .guide-checklist {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cat-gap);
-  margin: var(--cat-gap-lg) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.app-shell .guide-checklist__item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--cat-gap);
-  font-size: var(--typography-ui-font-size);
-  line-height: var(--font-line-height-ui);
-}
-
-/* 箱は文字を入れない印なので、行の中心に合わせて置く。 */
-.app-shell .guide-checklist__icon {
-  flex: none;
-  margin-block-start: calc((1em * var(--font-line-height-ui) - 1rem) / 2);
-  inline-size: 1rem;
-  block-size: 1rem;
-  border: 1px solid var(--cat-line-strong);
-  border-radius: var(--cat-radius);
-}
-
-.app-shell .guide-sources {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cat-gap);
-  margin: var(--cat-gap-lg) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.app-shell .guide-sources__item {
-  font-size: var(--font-size-sm);
-  line-height: var(--font-line-height-ui);
-  color: var(--cat-muted);
-}
-
 .app-shell .guide-code {
   padding-inline: var(--cat-gap);
   font-family: inherit;

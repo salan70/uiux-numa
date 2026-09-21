@@ -90,16 +90,14 @@ Catalog には規則を使うために要る情報だけを出す。
 ## 文書一覧
 
 文書名は Catalog の表示と揃えて英語にする。本文は日本語で書く。
-書式の欄は、[Guideline の記録形式](../guideline-format.md)の新書式へ移行済みかを表す。
 
-| 文書                                                       | title                    | 主題                 | status  | 書式 |
-| ---------------------------------------------------------- | ------------------------ | -------------------- | ------- | ---- |
-| [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `draft` | 旧   |
-| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft` | 旧   |
-| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft` | 旧   |
-| [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft` | 旧   |
-| [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft` | 新   |
-| [color.md](color.md)                                       | Color                    | 色の使い方           | `draft` | 旧   |
+| 文書                                                       | title                    | 主題                 | status  |
+| ---------------------------------------------------------- | ------------------------ | -------------------- | ------- |
+| [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `draft` |
+| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft` |
+| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft` |
+| [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft` |
+| [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft` |
+| [color.md](color.md)                                       | Color                    | 色の使い方           | `draft` |
 
-[states-and-feedback.md](states-and-feedback.md) が新書式の見本である。
-旧書式の 5 文書は節構成が違い、Tips に適用とコアを持たない。
+[states-and-feedback.md](states-and-feedback.md) が書式の見本である。
