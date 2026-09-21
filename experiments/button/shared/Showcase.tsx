@@ -7,6 +7,7 @@ const APPEARANCES: {
   label: string;
   description: string;
   colorTokens: { surface: string; border: string; text: string };
+  sizeNote?: string;
 }[] = [
   {
     id: "primary",
@@ -37,6 +38,7 @@ const APPEARANCES: {
       border: "transparent",
       text: "--color-primary-text",
     },
+    sizeNote: "--size-target-min(当たり領域だけを確保する)",
   },
   {
     id: "danger",
@@ -57,9 +59,27 @@ const SIZE_SPECS: {
   paddingInline: string;
   minWidth: string;
 }[] = [
-  { id: "small", label: "S", height: "2rem", paddingInline: "space-300", minWidth: "4.5rem" },
-  { id: "medium", label: "M", height: "2.5rem", paddingInline: "space-500", minWidth: "6rem" },
-  { id: "large", label: "L", height: "3rem", paddingInline: "space-600", minWidth: "7.5rem" },
+  {
+    id: "small",
+    label: "S",
+    height: "--size-control-height-sm",
+    paddingInline: "--space-300",
+    minWidth: "--size-control-min-width-sm",
+  },
+  {
+    id: "medium",
+    label: "M",
+    height: "--size-control-height-md",
+    paddingInline: "--space-500",
+    minWidth: "--size-control-min-width-md",
+  },
+  {
+    id: "large",
+    label: "L",
+    height: "--size-control-height-lg",
+    paddingInline: "--space-600",
+    minWidth: "--size-control-min-width-lg",
+  },
 ];
 
 export function Showcase({
@@ -132,6 +152,12 @@ export function Showcase({
                     values={[appearance.colorTokens.surface, appearance.colorTokens.border]}
                   />
                   <ColorToken label="文字" values={[appearance.colorTokens.text]} />
+                  {appearance.sizeNote ? (
+                    <div>
+                      <dt>寸法</dt>
+                      <dd>{appearance.sizeNote}</dd>
+                    </div>
+                  ) : null}
                 </dl>
               </div>
               <div className="button-showcase__sizes">

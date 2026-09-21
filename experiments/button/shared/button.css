@@ -2,6 +2,8 @@
 @import "../../../tokens/radius/index.css";
 @import "../../../tokens/border/index.css";
 @import "../../../tokens/typography/index.css";
+@import "../../../tokens/size/index.css";
+@import "../../../tokens/motion/index.css";
 
 :where(.button-showcase) :where(*, *::before, *::after) {
   box-sizing: border-box;
@@ -12,8 +14,6 @@
 }
 
 .button-showcase {
-  --button-motion-duration: 140ms;
-  --button-motion-ease: ease-out;
   color: var(--color-on-surface, #242424);
   font-family: var(--typography-ui-font-family);
   font-size: var(--typography-ui-font-size);
@@ -282,13 +282,15 @@
   --button-bg: var(--color-primary, #333);
   --button-fg: var(--color-on-primary, #fff);
   --button-border: var(--color-primary, #333);
+  --button-motion-duration: var(--duration-press);
+  --button-motion-ease: var(--easing-out);
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   --button-padding-inline: var(--space-500);
   gap: var(--space-150);
-  min-height: 2.5rem;
+  min-height: var(--size-control-height-md);
   padding: 0 var(--button-padding-inline);
   border: var(--border-width-thin) solid var(--button-border);
   border-radius: var(--radius-control);
@@ -302,30 +304,30 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
-    color 140ms ease,
-    background-color 140ms ease,
-    border-color 140ms ease,
+    color var(--duration-state) var(--easing-standard),
+    background-color var(--duration-state) var(--easing-standard),
+    border-color var(--duration-state) var(--easing-standard),
     transform var(--button-motion-duration) var(--button-motion-ease),
     box-shadow var(--button-motion-duration) var(--button-motion-ease);
 }
 
 .button--small {
   --button-padding-inline: var(--space-300);
-  min-inline-size: 4.5rem;
-  min-height: 2rem;
+  min-inline-size: var(--size-control-min-width-sm);
+  min-height: var(--size-control-height-sm);
   font-size: var(--typography-caption-font-size);
 }
 
 .button--medium {
   --button-padding-inline: var(--space-500);
-  min-inline-size: 6rem;
-  min-height: 2.5rem;
+  min-inline-size: var(--size-control-min-width-md);
+  min-height: var(--size-control-height-md);
 }
 
 .button--large {
   --button-padding-inline: var(--space-600);
-  min-inline-size: 7.5rem;
-  min-height: 3rem;
+  min-inline-size: var(--size-control-min-width-lg);
+  min-height: var(--size-control-height-lg);
 }
 
 .button--secondary {
