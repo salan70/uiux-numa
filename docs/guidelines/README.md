@@ -5,6 +5,9 @@
 現時点の記述は Web を前提とする。他の platform では同等の概念へ読み替える。
 判断の背景や検証手順はリポジトリ内の Experiment や原則候補へ結び付ける。
 
+この文書は読み手向けの入口である。
+書式の仕様と文書を足す手順は [Guideline の記録形式](../guideline-format.md) にある。
+
 ## docs/principles/ との違い
 
 | 項目   | docs/principles/               | docs/guidelines/                      |
@@ -18,84 +21,85 @@
 内容の重複は避ける。
 ガイドラインは規則を簡潔に述べ、詳細な値や検証結果は原則候補を指す。
 
-## 文書の構成
+## 読み方
 
-各ガイドラインは YAML frontmatter と本文で構成する。
+1 文書は Purpose、Core、Tips の 3 層でできている。
+上から通して読んでも、Tips だけを拾い読みしてもよい。
 
-```yaml
----
-title: <文書名>
-summary: <1〜2 文の要約>
-status: draft
-axes:
-  - <docs/evaluation/axes.md の 17 軸から選択>
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
----
-```
+### Purpose
 
-`summary` が文書の概要を兼ねる。
-本文の節は次の順で置く。
+その主題で目指す状態。
+自分のプロジェクトにこの主題が関係するかを、ここで判断する。
 
-| 節   | 書くこと                                                                 |
-| ---- | ------------------------------------------------------------------------ |
-| 目的 | その主題で目指す状態。2〜3 文。他の文書との境界は要るときだけ 1 文で書く |
-| コア | 主題の思想。3〜5 件                                                      |
-| Tips | 具体的な場面の規則。8 件までを目安にする                                 |
+### Core
 
-コアと Tips は書式が違う。
-コアは何を優先するかを決め、Tips は場面ごとに何をするかを決める。
+主題の思想。3〜5 件ある。
+番号は優先順位を表す。コア同士が衝突したら上が勝つ。
 
-## コアの項目
+Core は具体的な部品や値を持たない。
+Tips に無い場面に出会ったとき、Core だけで判断する。
 
-各コアは第 3 レベル見出し（`###`）と本文 1〜3 文で書く。
+### Tips
 
-- 見出し: 短い名詞句か短文にする。Tips がこの見出しで引く。
-- 本文: 目指す状態、優先するもの、受け入れるトレードオフを書く。
-- 並び順: コア同士が衝突したときの優先順位を表す。上が勝つ。
+具体的な場面の規則。8 件までを目安にする。
+規則 1 件は 4 段で固定されており、規則ごとに形が変わらない。
 
-部品、画面、操作の名前や具体的な値が出るものは Tips に置く。
+| 段  | 内容                                     |
+| --- | ---------------------------------------- |
+| 1   | 題名と適用（`foundation` / `module`）    |
+| 2   | 根拠。なぜこの規則があるか               |
+| 3   | good と bad の対。good が左、bad が右    |
+| 4   | 例外。規則が効かない場面。無い規則もある |
 
-## Tips の項目
+good を左に置くのは、bad から読むと正しい形へ辿り着くまで 2 度読むことになるからである。
+色だけに頼らないよう、`good` と `bad` の語そのものを残す。
 
-各 Tips は第 3 レベル見出し（`###`）で始め、次の項目を書く。
-
-- 見出し: 規則の内容を行動で示す。
-- 意図と根拠: なぜその規則が必要かを 1〜2 文で書く。コアの思想は繰り返さない。
-- 適用: `foundation` か `module`。必須とする。
-- コア: 関連するコアの見出し。必須とする。複数あれば行を繰り返す。
-- 良い例: 推奨する表現や実装。必須とする。
-- 悪い例: 避けるべき表現や実装。必須とする。
-- 例外: 規則が効かない場面があれば書く。
-- 実験: リポジトリ内の出どころへの相対リンク。Experiment、ADR、原則候補、Skill、実装ファイルのいずれか 1 つ。
-- 出典: 外部文献や WCAG 達成基準へのリンク。1 つだけ書く。規則がその文献の主張であるときに書く。
-
-適用の語は [asset-model](../asset-model.md) の role と揃える。
+適用は、その規則をどこまで持ち出すかを表す。
 
 | 値           | 意味                                       |
 | ------------ | ------------------------------------------ |
 | `foundation` | すべてのプロジェクトで守る                 |
 | `module`     | その主題を重視するプロジェクトで選んで守る |
 
-`foundation` を先、`module` を後に並べる。
-Tips は必ずコアに結び付ける。コアの言い換えになる Tips は置かない。
+`foundation` の規則が先、`module` の規則が後に並ぶ。
+
+### 画面に出ない記録
+
+Catalog には規則を使うために要る情報だけを出す。
+次の 3 つは正本の Markdown にあり、画面には出ない。
+
+- 結び付くコア: 規則がどの思想から来たか
+- 実験: リポジトリ内の出どころ（Experiment、ADR、原則候補）
+- 出典: 外部文献や WCAG 達成基準
+
+規則の出どころを辿るときは、下の文書一覧から正本の Markdown を開く。
+
+### status の読み方
+
+`draft` は未採用である。人間の確認を経ていない仮説として扱う。
+`adopted` は確認済みで、判断者と理由が [ADR](../decisions/) にある。
+現在はすべての文書が `draft` である。
 
 ## 改訂の手順
 
 1. 変更の理由と根拠を明らかにする。外部文献は原典を開き、URL が生きていること、その主張が規則と一致することを確かめる。
 2. リポジトリ内の実験で確かめた知見があれば出どころに結び付ける。
-3. 文書を作成または修正し、機械検査と文体基準を通す。
+3. 文書を作成または修正し、[Guideline の記録形式](../guideline-format.md)の機械検査と文体基準を通す。
 4. 人間が内容を確認し、status を `adopted` に変更する。判断者、判断日、理由は ADR に残す。
 
 ## 文書一覧
 
 文書名は Catalog の表示と揃えて英語にする。本文は日本語で書く。
+書式の欄は、[Guideline の記録形式](../guideline-format.md)の新書式へ移行済みかを表す。
 
-| 文書                                                       | title                    | 主題                 | status  |
-| ---------------------------------------------------------- | ------------------------ | -------------------- | ------- |
-| [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `draft` |
-| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft` |
-| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft` |
-| [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft` |
-| [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft` |
-| [color.md](color.md)                                       | Color                    | 色の使い方           | `draft` |
+| 文書                                                       | title                    | 主題                 | status  | 書式 |
+| ---------------------------------------------------------- | ------------------------ | -------------------- | ------- | ---- |
+| [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `draft` | 旧   |
+| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft` | 旧   |
+| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft` | 旧   |
+| [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft` | 旧   |
+| [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft` | 新   |
+| [color.md](color.md)                                       | Color                    | 色の使い方           | `draft` | 旧   |
+
+[states-and-feedback.md](states-and-feedback.md) が新書式の見本である。
+旧書式の 5 文書は節構成が違い、Tips に適用とコアを持たない。
