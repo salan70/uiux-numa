@@ -27,7 +27,14 @@
   --button-border: var(--color-error);
 }
 
+/* hover ではボタン全体を 1.03 倍にし、影は付けない。
+   Apple HIG の一覧カードと同じ全体の拡大で、HIG の 1.007 倍は幅 100px で見えないため 1.03 倍にした。
+   Quiet と押下の規則を後に置き、そちらを優先する。 */
 @media (hover: hover) and (pointer: fine) {
+  .button-pill-action .button:not(:disabled):hover {
+    transform: scale(1.03);
+  }
+
   .button-pill-action .button--quiet:not(:disabled):hover {
     transform: none;
     box-shadow: none;
