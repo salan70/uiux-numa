@@ -53,7 +53,8 @@ export function collectTokens(
 
 export function formatTokenValue(type: string, value: unknown): string {
   if (type === "fontFamily" && Array.isArray(value)) return formatFamily(value);
-  if (type === "dimension") return formatDimension(value);
+  if (type === "dimension" || type === "duration") return formatDimension(value);
+  if (type === "cubicBezier" && Array.isArray(value)) return `cubic-bezier(${value.join(", ")})`;
   if (type === "fontWeight" || type === "number") return String(value);
   if (type === "typography" && value && typeof value === "object") {
     const fields = value as Record<string, unknown>;

@@ -1,0 +1,46 @@
+{
+  "$extensions": {
+    "uiux-numa": {
+      "role": "foundation",
+      "maturity": "candidate",
+      "platforms": ["web"],
+      "sources": []
+    }
+  },
+  "duration": {
+    "120": {
+      "$value": {
+        "value": 120,
+        "unit": "ms"
+      },
+      "$description": "短い時間。色、面、線の変化に足りる長さ。"
+    },
+    "160": {
+      "$value": {
+        "value": 160,
+        "unit": "ms"
+      },
+      "$description": "位置と大きさが動く変化の長さ。"
+    },
+    "$type": "duration",
+    "state": {
+      "$value": "{duration.120}",
+      "$description": "色、面、線で示す状態変化の時間。"
+    },
+    "press": {
+      "$value": "{duration.160}",
+      "$description": "hover と押下で部品が動く時間。"
+    }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "standard": {
+      "$value": [0.25, 0.1, 0.25, 1],
+      "$description": "状態変化の既定の曲線。CSS の ease と同じ。"
+    },
+    "out": {
+      "$value": [0, 0, 0.58, 1],
+      "$description": "操作に応えて動き出す曲線。CSS の ease-out と同じ。"
+    }
+  }
+}

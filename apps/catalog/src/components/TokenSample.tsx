@@ -61,6 +61,27 @@ export function TokenSample({ token }: { token: CatalogToken }) {
     );
   }
 
+  // 寸法は高さと幅の値なので、余白と同じ長さの帯で見せる。
+  if (token.name.startsWith("size.")) {
+    return (
+      <span
+        className="token-table__bar"
+        style={{ inlineSize: formatTokenValue("dimension", token.resolvedValue) }}
+        aria-hidden="true"
+      />
+    );
+  }
+
+  // 曲線は 4 個の数では形が読めないので、時間に対する進み方を線で描く。
+  if (token.type === "cubicBezier" && Array.isArray(token.resolvedValue)) {
+    const [x1, y1, x2, y2] = token.resolvedValue.map(Number);
+    return (
+      <svg className="token-table__curve" viewBox="0 0 1 1" aria-hidden="true">
+        <path d={`M0 1 C${x1} ${1 - y1} ${x2} ${1 - y2} 1 0`} />
+      </svg>
+    );
+  }
+
   if (token.type === "dimension") {
     return (
       <span
