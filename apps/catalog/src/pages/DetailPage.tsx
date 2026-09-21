@@ -6,6 +6,7 @@ import { defaultVariant, dot } from "../components/work";
 import { catalog } from "../content/collect";
 import { topicById, topicHref } from "../content/topics";
 import { NotFoundPage } from "./NotFoundPage";
+import { renderSentences } from "../components/Sentences";
 
 /** 成果物 1 件。live を主役にし、variant の切替と前提を脇に置く。 */
 export function DetailPage({ slug }: { slug: string }) {
@@ -27,7 +28,7 @@ export function DetailPage({ slug }: { slug: string }) {
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
         {work.title}
       </h1>
-      <p className="detail__lead">{work.lead}</p>
+      <p className="detail__lead">{renderSentences(work.lead)}</p>
       <div className="detail__live">
         <LiveFrame work={work} variant={variant} tall />
       </div>

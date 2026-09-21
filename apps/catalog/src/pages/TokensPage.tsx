@@ -2,6 +2,7 @@ import { catalog } from "../content/collect";
 import { TopicScreen } from "../components/TopicScreen";
 import { formatTokenValue } from "../content/tokens";
 import { TokenSample } from "../components/TokenSample";
+import { renderSentences } from "../components/Sentences";
 
 /** token の正本をそのまま表にする。一覧を挟まず、値と見本を直接出す。 */
 export function TokensPage() {
@@ -44,7 +45,7 @@ export function TokensPage() {
                       <td>
                         <TokenSample token={token} />
                       </td>
-                      <td className="token-table__desc">{token.description}</td>
+                      <td className="token-table__desc">{renderSentences(token.description)}</td>
                     </tr>
                   ))}
                 </tbody>

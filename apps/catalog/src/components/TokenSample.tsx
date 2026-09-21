@@ -1,4 +1,5 @@
 import { formatTokenValue, type CatalogToken } from "../content/tokens";
+import { renderSentences } from "./Sentences";
 import { primaryFamily } from "../content/typeface";
 
 /**
@@ -101,7 +102,7 @@ function TypographySample({ value, text }: { value: unknown; text?: string }) {
         lineHeight: typeof fields.lineHeight === "number" ? fields.lineHeight : undefined,
       }}
     >
-      {text ?? GLYPHS}
+      {text ? renderSentences(text) : GLYPHS}
     </span>
   );
 }

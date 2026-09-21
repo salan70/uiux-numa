@@ -975,6 +975,13 @@ body {
   color: var(--cat-muted);
 }
 
+/* 文を inline-block にすると、残り幅に収まらない文だけが次の行へ落ちる。
+   1 行に収まる文は 1 行のまま読ませたいので、常に改行はしない。
+   Guideline の本文と Works の説明文で共有する。 */
+.app-shell .sentence {
+  display: inline-block;
+}
+
 .app-shell .empty {
   margin: var(--cat-section) 0 0;
   color: var(--cat-muted);
@@ -2238,12 +2245,6 @@ body {
   font-size: var(--font-size-sm);
   line-height: var(--font-line-height-ui);
   color: var(--cat-muted);
-}
-
-/* 文を inline-block にすると、残り幅に収まらない文だけが次の行へ落ちる。
-   1 行に収まる根拠は 1 行のまま読ませたいので、常に改行はしない。 */
-.app-shell .guide-sentence {
-  display: inline-block;
 }
 
 /* good と bad を同じ幅の桁に置き、差だけが残るようにする。
