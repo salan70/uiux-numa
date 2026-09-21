@@ -196,7 +196,7 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       domains: frontmatter.domains,
       sources: frontmatter.sources,
       platforms: frontmatter.platforms,
-      topic: topicForExperiment(slug, frontmatter.domains),
+      topic: topicForExperiment(frontmatter.domains),
       lead: leadSentence(source),
       repoPath,
       variantIds: actual,

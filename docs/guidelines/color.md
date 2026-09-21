@@ -54,7 +54,7 @@ updated: 2026-09-21
 - 良い例: CSS 変数 `--color-accent` や `--ed-surface` で指定する。
 - 悪い例: スタイルシートに `#165e83` などの固定値を直接記述する。
 - 例外: パレットの基礎となる元データを定義する定義体。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Design Tokens Community Group 仕様](https://design-tokens.github.io/community-group/format/)
 
 ### 余った色をそのまま残さない
@@ -66,7 +66,7 @@ updated: 2026-09-21
 - 良い例: 役割に割り当てられた必要な色のみを定義する。
 - 悪い例: 生成ツールが作った無関係な濃淡スケールを全件保持する。
 - 例外: 画面に出さない参照用の定義体。配色の元にした伝統色の一覧など。
-- 実験: [color-schemes](../../experiments/color-schemes/README.md)
+- 実験: [color-schemes](../records/color-schemes/README.md)
 
 ### 意味色は成功、警告、エラー、情報の 4 つに絞る
 
@@ -88,7 +88,7 @@ updated: 2026-09-21
 - 良い例: 全配色でエラーに赤系、成功に緑系の色を割り当て、accent は主たる操作に割り当てる。
 - 悪い例: ある配色だけ accent を装飾に使い、エラーの色を紫や青に変える。
 - 例外: OS 標準のセマンティックカラーに委ねる場合。
-- 実験: [color-schemes](../../experiments/color-schemes/README.md)
+- 実験: [color-schemes](../records/color-schemes/README.md)
 
 ### 面は無彩色を基準にし、固有色は操作と状態に限る
 
@@ -100,7 +100,7 @@ updated: 2026-09-21
 - 良い例: 背景を無彩色の白鼠や墨色にし、ボタンのみにアクセント色を使う。
 - 悪い例: カードの面やヘッダー全体を有彩色で塗りつぶす。
 - 例外: ブランドの告知など、強い情緒表現を意図する案内面。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 地、面、浮いた面は明度の段差で分ける
 
@@ -122,7 +122,7 @@ updated: 2026-09-21
 - 良い例: 計算ツールを用いて 4.5:1 や 3:1 の達成を数値で確認する。
 - 悪い例: 画面を目視して「読めそうだから問題ない」と判断する。
 - 例外: 写真やグラデーションなどの連続階調の上に重なる文字。
-- 実験: [catalog-editorial/shared/contrast.ts](../../experiments/catalog-editorial/shared/contrast.ts)
+- 実験: [apps/catalog/src/content/contrast.ts](../../apps/catalog/src/content/contrast.ts)
 - 出典: [WCAG 2.2 達成基準 1.4.3](https://www.w3.org/WAI/WCAG22/quickref/#contrast-minimum)
 
 ### 画面に組むより先に色だけの見本で判断する
@@ -134,7 +134,7 @@ updated: 2026-09-21
 - 良い例: パレットカードや色帯を並べ、相性と明度差を先に確認する。
 - 悪い例: 完成した画面にいきなり色を当てて全体の可否を議論する。
 - 例外: 微小な文字サイズにおける個別の視認性確認。
-- 実験: [catalog-editorial/README.md](../../experiments/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
 
 ### 見本帳は固有のブランド色を持たない
 

@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
-  <title>ソースコード</title>
-  <!-- 波括弧を直線で描く。中央の切り込みは 45° の 2 辺 -->
-  <path id="part-code-left" d="M10 4H7v6l-2 2 2 2v6h3"/>
-  <path id="part-code-right" d="M14 4h3v6l2 2-2 2v6h-3"/>
-</svg>

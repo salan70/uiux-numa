@@ -26,7 +26,8 @@ Asset の `maturity` を `stable` にしたことではない。
 
 見た目だけを比較しない。
 必要に応じて copy、情報構造、操作方法、motion、feedback も独立した variant として比較する。
-却下した variant も学習材料として残す。
+却下した variant は判断まで残す。
+判断後はコードを削除し、却下理由を README に残す（[削除の ADR](decisions/2026-09-21-prune-decided-experiments.md)）。
 
 ## Experiment で残す情報
 

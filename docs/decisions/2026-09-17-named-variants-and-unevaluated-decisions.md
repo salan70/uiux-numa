@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-17
-- 参照: [Experiment の記録形式](../experiment-format.md)、[Experiment 記録形式の ADR](2026-09-13-experiment-format.md)、[color-schemes](../../experiments/color-schemes/README.md)
+- 参照: [Experiment の記録形式](../experiment-format.md)、[Experiment 記録形式の ADR](2026-09-13-experiment-format.md)、[color-schemes](../records/color-schemes/README.md)
 
 ## 背景
 

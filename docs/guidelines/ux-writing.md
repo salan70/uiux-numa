@@ -90,7 +90,7 @@ updated: 2026-09-21
 - 良い例:「テーマ」
 - 悪い例:「appearance モード」「color-scheme 属性」
 - 例外: 開発者向けのコンソールログやデバッグ表示。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
 ### 同じものは画面内で同じ語で呼ぶ
@@ -102,7 +102,7 @@ updated: 2026-09-21
 - 良い例: ナビゲーションと設定の双方で「配色」「テーマ」と呼ぶ。
 - 悪い例: ある場所では「配色」、別の場所では「カラーパレット」と呼ぶ。
 - 例外: 外部サービス名や固有名詞をそのまま引用する場合。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
 ### 並列する項目の語尾と型を揃える
@@ -179,7 +179,7 @@ updated: 2026-09-21
 - 良い例:「前の配色: 墨」「次の配色: 柚子」
 - 悪い例:「前へ」「次へ」
 - 例外: ページネーションの番号や、前後の対象が自明な単一画面。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 値を並べるときは項目名を添える
 
@@ -190,7 +190,7 @@ updated: 2026-09-21
 - 良い例:「サイズ: 1.5rem / 太さ: 700 / 行送り: 1.3」
 - 悪い例:「1.5rem 700 1.3」
 - 例外:「2026.09.20」のように形式から自明な日付や時刻。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 見本の文面は断片ではなく文にする
 
@@ -201,7 +201,7 @@ updated: 2026-09-21
 - 良い例: その役割の用途に合わせた 1 つの完結した文を置く。
 - 悪い例:「あ Aa Ａ 日本語 UI」や「更新日 2026.09.20」のような断片。
 - 例外: 役割を持たない素のフォントサイズやウェイトの比較標本。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 
 ### 画面を見れば分かる操作説明を書かない
 
@@ -212,5 +212,5 @@ updated: 2026-09-21
 - 良い例: コピーボタンのアイコンとホバー効果だけで押せることを示す。
 - 悪い例:「帯をクリックするとカラーコードがコピーされます」と文を置く。
 - 例外: 特殊なジェスチャーなど、初見で推測できない操作。
-- 実験: [catalog-editorial/rationale/topic-first.md](../../experiments/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Nielsen Norman Group 10 ヒューリスティクス](https://www.nngroup.com/articles/ten-usability-heuristics/)

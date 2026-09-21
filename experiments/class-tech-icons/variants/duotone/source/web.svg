@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <title>ブラウザと Web</title>
-  <circle id="part-web-globe" cx="12" cy="12" r="9"/>
-  <path id="part-web-equator" d="M3 12h18"/>
-  <ellipse id="part-web-meridian" cx="12" cy="12" rx="5" ry="9"/>
-  <!-- accent: 経線と赤道が交わる節（1 つのサイト） -->
-  <circle id="part-web-accent" cx="7" cy="12" r="2" fill="#ce1126" stroke="none"/>
-</svg>

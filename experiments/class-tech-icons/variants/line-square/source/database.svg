@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
-  <title>データベース</title>
-  <!-- 上面。円筒の楕円を 2 の面取りに置き換える -->
-  <path id="part-database-top" d="M5 6l2-2h10l2 2-2 2H7z"/>
-  <!-- 胴と底。底の角も同じ面取りにする -->
-  <path id="part-database-body" d="M5 6v12l2 2h10l2-2V6"/>
-  <!-- 中段の継ぎ目。これがないと壺に見える -->
-  <path id="part-database-seam" d="M5 12l2 2h10l2-2"/>
-</svg>

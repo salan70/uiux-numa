@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <title>ソースコード</title>
-  <path id="part-code-left" d="M8 5l-5 7 5 7"/>
-  <path id="part-code-right" d="M16 5l5 7-5 7"/>
-  <!-- accent: 山括弧に挟まれた斜線。</> の標し -->
-  <rect id="part-code-accent" x="10" y="8" width="4" height="8" rx="2" fill="#ce1126" stroke="none" transform="rotate(25 12 12)"/>
-</svg>

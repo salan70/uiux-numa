@@ -30,7 +30,7 @@ updated: 2026-09-20
 
 ## 作例
 
-悪い例は `experiments/catalog-editorial` の `topic-first` にあった 3 箇所である。
+悪い例は `docs/records/catalog-editorial` の `topic-first` にあった 3 箇所である。
 
 - ナビの現在地を `font-weight: 700` で示していた。7 トピックを移るたびに項目の幅が変わり、ナビ全体が動いた。
 - variant の選択を `font-weight: 700` で示していた。切り替えるたびに chip の並びが動いた。
@@ -38,12 +38,12 @@ updated: 2026-09-20
 
 良い例は同じ画面の現行実装である。
 現在地は文字色と下線、選択は文字色と面で示し、数字は `4.5rem`、送りのボタンは `8rem` で固定した。
-判断と却下案は `experiments/catalog-editorial/rationale/topic-first.md` にある。
+判断と却下案は `docs/records/catalog-editorial/rationale/topic-first.md` にある。
 
 ## 例外
 
 - 開いて閉じる面（アコーディオン、ポップアップの中身）は、開けば下が動く。これは状態の表示ではなく内容の増減なので、この原則の対象外である。
-- 意図した動きは対象外である。`experiments/catalog-editorial` の配色カードは、hover した帯だけを広げて情報を出す。周りの帯は同じ入れ物の中で縮むだけで、入れ物の外は動かない。
+- 意図した動きは対象外である。`docs/records/catalog-editorial` の配色カードは、hover した帯だけを広げて情報を出す。周りの帯は同じ入れ物の中で縮むだけで、入れ物の外は動かない。
 - 寸法を変えずに状態を示せない場面はある。そのときは、太さを変えた文字の幅を擬似要素で先に確保する方法がある。仕組みが増えるので、色と線で足りるなら使わない。
 
 ## 検証結果

@@ -74,7 +74,7 @@ body {
 }
 
 /* 公開 Catalog の造形。
-   正本は experiments/catalog-editorial/variants/topic-first で作った案である。
+   正本はこのファイルである。出どころは topic-first 案（docs/records/catalog-editorial/）。
    面は無彩、線はヘアライン、強調は 1 色、部品は角丸と 120ms の色変化。
    判断は docs/decisions/2026-09-20-catalog-topic-first.md に残す。 */
 

@@ -117,7 +117,8 @@ preview PNG は Experiment の検証資産として `experiments/*/previews/` �
 公開時の表示名は「UI/UX 沼」とする。
 公開は Cloudflare Pages を使う。
 責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
-ホストの顔と情報設計は `experiments/catalog-editorial/` の `topic-first` を正本にする。
+ホストの顔と情報設計の正本は `apps/catalog/` 自身である。
+出どころは `topic-first` 案で、記録は `docs/records/catalog-editorial/` にある。
 入口は Works の 5 トピックと Guidelines の 2 群にする。
 ホストは固有の色を持たず、採用した配色のいずれかを着る（[ホスト ADR](decisions/2026-09-19-catalog-host.md)）。
 置き換えの判断は [topic-first ADR](decisions/2026-09-20-catalog-topic-first.md) に残す。

@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <title>ターミナル</title>
-  <!-- 窓枠。角丸 2 -->
-  <rect id="part-terminal-frame" x="3" y="4" width="18" height="16" rx="2"/>
-  <!-- プロンプト記号 -->
-  <path id="part-terminal-prompt" d="M7 9l3 3-3 3"/>
-  <!-- accent: 入力位置のブロックカーソル -->
-  <rect id="part-terminal-accent" x="13" y="10" width="4" height="4" rx="1" fill="#ce1126" stroke="none"/>
-</svg>
