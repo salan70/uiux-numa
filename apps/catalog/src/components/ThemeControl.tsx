@@ -9,7 +9,7 @@ import {
   type SchemeChoice,
   type ThemeChoice,
 } from "../theme";
-import { AppearanceIcon, MagatamaIcon } from "./icons";
+import { AppearanceIcon, SchemeIcon } from "./icons";
 
 const APPEARANCES: { value: ThemeChoice; label: string }[] = [
   { value: "system", label: "端末に従う" },
@@ -46,7 +46,7 @@ export function ThemeControl() {
       <label className="theme__pick">
         <span className="theme__label">配色</span>
         <span className="theme__icon">
-          <MagatamaIcon />
+          <SchemeIcon />
         </span>
         <select
           className="theme__native"

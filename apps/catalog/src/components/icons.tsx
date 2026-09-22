@@ -1,53 +1,61 @@
 import type { ThemeChoice } from "../theme";
 
 /**
- * 勾玉。配色を選ぶボタンの面に置く。
- * 形は太玉（頭）から尾へ細る曲がり玉で、頭に穴を 1 つ開ける。
- * 面は選択中の配色の accent を当てる。何色を着ているかを、名前ではなく色そのもので示す。
+ * 三つ巴。配色を選ぶボタンの面に置く。
+ * 3 領域には選択中の配色の primary、secondary、tertiary を当てる。
+ * 形の正本は experiments/catalog-theme-icons/variants/tomoe-classic/dist/scheme.svg。
+ * 座標の導出は同 Experiment の README にある。
  */
-export function MagatamaIcon() {
+export function SchemeIcon() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path
-        fill="var(--cat-accent)"
-        d="M12 2.5a9.5 9.5 0 0 1 0 19 4.75 4.75 0 0 1 0-9.5 4.75 4.75 0 0 0 0-9.5Z"
+        className="part-scheme-primary"
+        d="M12 3.75a8.25 8.25 0 0 1 7.145 12.375A4.125 4.125 0 0 1 12 12a4.125 4.125 0 0 0 0-8.25Z"
       />
-      <circle cx="11.2" cy="16.6" r="1.7" fill="var(--cat-surface)" />
+      <path
+        className="part-scheme-secondary"
+        d="M19.145 16.125a8.25 8.25 0 0 1-14.29 0A4.125 4.125 0 0 1 12 12a4.125 4.125 0 0 0 7.145 4.125Z"
+      />
+      <path
+        className="part-scheme-tertiary"
+        d="M4.855 16.125A8.25 8.25 0 0 1 12 3.75 4.125 4.125 0 0 1 12 12a4.125 4.125 0 0 0-7.145 4.125Z"
+      />
     </svg>
   );
 }
 
-/** 明暗の 3 状態。端末に従うは半分だけ塗った円、ライトは日、ダークは月。 */
+/**
+ * 明暗の 3 状態。端末に従うは半分だけ塗った円、ライトは日、ダークは月。
+ * 形の正本は experiments/catalog-theme-icons/variants/tomoe-classic/dist/appearance-*.svg。
+ * 座標の導出は同 Experiment の README にある。
+ */
 export function AppearanceIcon({ value }: { value: ThemeChoice }) {
   const common = {
+    className: "icon",
     viewBox: "0 0 24 24",
     "aria-hidden": true,
     focusable: "false" as const,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.5,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
   };
   if (value === "light") {
     return (
       <svg {...common}>
-        <circle cx="12" cy="12" r="4.25" />
-        <path d="M12 3v2.25M12 18.75V21M3 12h2.25M18.75 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6" />
+        <circle cx="12" cy="12" r="4.5" />
+        <path d="M12 3.75v1.5m0 13.5v1.5M3.75 12h1.5m13.5 0h1.5M6.17 6.17l1.06 1.06m9.54 9.54 1.06 1.06m0-11.66-1.06 1.06m-9.54 9.54-1.06 1.06" />
       </svg>
     );
   }
   if (value === "dark") {
     return (
       <svg {...common}>
-        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" />
+        <path d="M15.75 3.75a8.25 8.25 0 1 0 0 16.5 6 6 0 1 1 0-16.5Z" />
       </svg>
     );
   }
   return (
     <svg {...common}>
       <circle cx="12" cy="12" r="8.25" />
-      <path d="M12 3.75a8.25 8.25 0 0 1 0 16.5Z" fill="currentColor" stroke="none" />
+      <path d="M12 3.75a8.25 8.25 0 0 1 0 16.5Z" fill="currentColor" />
     </svg>
   );
 }
