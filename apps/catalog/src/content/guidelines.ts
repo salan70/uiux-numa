@@ -77,6 +77,7 @@ const guidelineFiles = import.meta.glob<string>("../../../../docs/guidelines/*.m
 
 export const GUIDELINE_ORDER: readonly string[] = [
   "ux-writing",
+  "japanese-notation",
   "information-architecture",
   "design-four-principles",
   "accessibility",
