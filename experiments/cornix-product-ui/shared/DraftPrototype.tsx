@@ -3,7 +3,11 @@ import { makePalette, schemes, type Mode } from "../../color-schemes-material/sh
 import { Button } from "../../button/shared/Button";
 import "./draft.css";
 
-export type DraftDirection = "chromatic-rail-next" | "target-library" | "focus-workbench";
+export type DraftDirection =
+  | "chromatic-rail-next"
+  | "target-library"
+  | "focus-workbench"
+  | "chromatic-rail-library";
 type TargetId = "cornix" | "mac-ansi" | "mac-jis";
 type TaskId = "keymap" | "overview" | "behaviors" | "validation";
 type SaveState = "saved" | "saving" | "conflict" | "error";
@@ -309,7 +313,7 @@ function DraftNavigation({
 }) {
   return (
     <nav className="draft-nav" aria-label="編集対象と作業">
-      {direction === "target-library" ? (
+      {direction === "target-library" || direction === "chromatic-rail-library" ? (
         <div className="draft-target-list">
           <p>編集対象</p>
           {targets.map((item) => (
