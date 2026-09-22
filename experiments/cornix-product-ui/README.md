@@ -1,6 +1,6 @@
 ---
 title: Cornix Bonsai のプロダクト UI
-status: implementing
+status: decided
 role: reference
 maturity: experimental
 created: 2026-09-22
@@ -17,7 +17,8 @@ sources:
   - color-schemes-material
   - product-ui-typography
   - button
-adopted: []
+adopted:
+  - chromatic-rail
 ---
 
 ## Problem
@@ -49,24 +50,36 @@ variant ではレイアウト、視覚階層、色面、情報密度を変える
 
 ## Variants
 
-| id                  | 仮説                                                                  | 変えた軸                         | 実装                          |
-| ------------------- | --------------------------------------------------------------------- | -------------------------------- | ----------------------------- |
-| `chromatic-rail`    | 強い縦レールと固定 action dock は、現在地と実行操作を明確に分離できる | レイアウト、色面、視覚階層       | `variants/chromatic-rail/`    |
-| `layer-stage`       | 盤面を大きな色面に置くと、編集対象と周辺操作の主従が明確になる        | 色面、余白、情報密度             | `variants/layer-stage/`       |
-| `editorial-console` | 大きな文字と罫線による非対称構成は、密な情報を大胆に整理できる        | 文字の階梯、レイアウト、視覚階層 | `variants/editorial-console/` |
+| id               | 仮説                                                                  | 変えた軸                   | 実装                       |
+| ---------------- | --------------------------------------------------------------------- | -------------------------- | -------------------------- |
+| `chromatic-rail` | 強い縦レールと固定 action dock は、現在地と実行操作を明確に分離できる | レイアウト、色面、視覚階層 | `variants/chromatic-rail/` |
+
+削除した variant:
+
+- `layer-stage`: 盤面を大きな色面に置くと、編集対象と周辺操作の主従が明確になる。
+- `editorial-console`: 大きな文字と罫線による非対称構成は、密な情報を大胆に整理できる。
 
 ## Evaluation
 
-未定。
-実寸の操作確認後に `evaluation.md` を作成する。
+正式な観点別評価は行っていない。
+2026-09-22 に 3 案を 1280 × 800 で表示し、編集面、現在地、選択中キー、保存状態、Apply への導線を比較した。
+判断はこの実寸確認と利用者の採用指定に基づく。
+キーボード操作、focus、文字拡大、reduced motion、明暗テーマ、保存失敗、実機適用は未評価である。
 
 ## Decision
 
-未定。
+`chromatic-rail` を採用する。
+判断者は利用者で、判断日は 2026-09-22 である。
+左の縦レールが現在地と編集対象を固定し、中央の Keymap と右の選択・保存パネルを分離する。
+Header に Workspace 操作を置く現行修正とも整合し、キー選択から割当変更、ローカル保存状態の確認までを同じ視線で追いやすい。
+未評価の軸は、利用者確認後に再検証する。
 
 ## Rejected reasons
 
-未定。
+- `layer-stage`: 画面全体の緑の色面で編集領域を強く見せるが、ナビゲーション、編集面、右パネルの境界が近く、保存状態の所在を追う基準が `chromatic-rail` より弱いと判断した。
+- `editorial-console`: 大きな見出しと番号ナビで個性は出るが、タイトルと罫線の強さがキー操作と保存確認より目立つと判断した。
+
+判断者は利用者で、判断日は 2026-09-22 である。
 
 ## Learnings
 
