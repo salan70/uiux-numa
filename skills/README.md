@@ -84,6 +84,22 @@ nix develop -c claude -p "/crafting-svg 授業資料サイトのサイドバー�
 
 Skill なし実行との比較は、Experiment `experiments/hako-feature-icons/` の Variants と Learnings に記録する。
 
+## 知識 ID の引用状況（2026-09-22 時点）
+
+改善手順 2 の集計である。
+`skills/crafting-svg/references/` は 58 個の知識 ID を定義し、Experiment と原則候補が引用したのは 26 個だった。
+
+引用が多い順に `ICON-06`（25 回）、`ICON-08`（14 回）、`ICON-02`（11 回）、`ICON-10`（9 回）、`ICON-09`（9 回）、`FORM-03`（8 回）である。
+アイコンの制作は、見かけの大きさ、内側の隙間、比喩、色、格子の 5 項目に議論が集中する。
+
+未引用は 32 個だが、**これを削る根拠にはしない**。
+理由は 2 つある。
+
+- LOGO 10 件と ILLUS 8 件は、由来 Experiment（`class-doc-logo`、`class-chapter-illustration`）が判断後に削除されたため、引用元が残っていない。知識の要否とは別である。
+- `UIFIT-04`（`role="img"` と `<title>`）や `SVG-06`（基本図形から始める）のように、毎回守られているが議論にならない項目は引用されない。引用数は「使われた量」ではなく「議論になった量」を測る。
+
+したがって改善手順 2 は、未引用を削除の基準にせず、引用の偏りから「どの項目が判断の中心か」を読む用途に使う。
+
 ## 派生 3 Skill の読み込み確認（2026-09-20）
 
 symlink の解決は次を確認した。
