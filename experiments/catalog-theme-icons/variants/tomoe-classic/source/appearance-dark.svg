@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <title>明暗：日と月、dark</title>
+  <!-- 曲線が主役なので 0.75 格子へは寄せず、外側 R=8.25 と内側 rho=6 の月形作図を小数第2位まで残す。 -->
+  <!-- 外周は keyline の円弧、内周は中心を 15.75 に移した半径 6 の円弧で、三日月の境界を一つの閉じた path にする。 -->
+  <path id="part-appearance-dark-crescent" d="M15.75 3.75A8.25 8.25 0 1 0 15.75 20.25A6 6 0 1 1 15.75 3.75Z" />
+</svg>

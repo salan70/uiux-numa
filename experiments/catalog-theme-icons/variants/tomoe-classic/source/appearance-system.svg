@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <title>明暗：日と月、system</title>
+  <!-- 円は比例で R=8.25 と決め、0.75 格子へ丸めた keyline の採用値も 8.25 なので誤差は 0。 -->
+  <circle id="part-appearance-system-ring" cx="12" cy="12" r="8.25" />
+  <!-- 縦の分割軸は比例上 x=12。0.75 格子の候補 11.25/12.75 へ丸めると半分でなくなるため、対称性を優先して x=12 を採り誤差 0 とする。曲線が主の組なので、軸だけを格子へ寄せない。 -->
+  <path id="part-appearance-system-dark" d="M12 3.75A8.25 8.25 0 0 1 12 20.25Z" fill="currentColor" />
+</svg>

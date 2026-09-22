@@ -1,0 +1,124 @@
+/* Catalog の `.theme` 2 マスを再現する利用画面モック。 */
+.cti-mock {
+  --cat-tap: var(--size-control-height-md, 2.75rem);
+  --cat-radius: var(--radius-control, 0.5rem);
+  --cat-line: var(--color-surface-variant, #e3dede);
+  --cat-surface: var(--color-surface-container, #f0efef);
+  --cat-text: var(--color-on-surface, #1f1f1f);
+  --cat-scheme-divider: #fffdf9;
+  min-block-size: 100vh;
+  padding: 2rem;
+  background: var(--color-background, #f9f8f8);
+  color: var(--cat-text);
+  font-family: var(--font-family-sans, system-ui, sans-serif);
+}
+
+:where(.cti-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.cti-mock) :where(p) {
+  margin: 0;
+}
+
+.cti-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.75rem;
+}
+
+.cti-cell {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--color-background);
+}
+
+/* `.theme` の flex、gap、折返し、2 マスの寸法を Catalog から写す。 */
+.cti-cell .theme,
+.cti-appearance-row .theme {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.theme__pick {
+  position: relative;
+  display: inline-flex;
+  inline-size: var(--cat-tap);
+  block-size: var(--cat-tap);
+}
+
+.theme__label,
+.cti-sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.theme__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--cat-radius);
+  background: var(--cat-surface);
+  color: var(--cat-text);
+}
+
+.theme__icon svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.cti-icon {
+  display: inline-flex;
+}
+
+.cti-cell .theme__icon [id$="part-scheme-primary"] {
+  fill: var(--color-primary);
+}
+
+.cti-cell .theme__icon [id$="part-scheme-secondary"] {
+  fill: var(--color-secondary);
+}
+
+.cti-cell .theme__icon [id$="part-scheme-tertiary"] {
+  fill: var(--color-tertiary);
+}
+
+.cti-cell .theme__icon [id$="part-appearance-system-dark"] {
+  fill: currentColor;
+}
+
+.cti-cell .theme__icon [id*="-part-scheme-"] {
+  stroke: var(--cat-scheme-divider);
+}
+
+@media (forced-colors: active) {
+  .cti-cell .theme__icon [id*="-part-scheme-"] {
+    fill: none;
+    stroke: currentColor;
+  }
+}
+
+.cti-caption,
+.cti-heading {
+  color: var(--color-on-surface-variant, #4d4d4d);
+  font-size: 0.75rem;
+}
+
+.cti-appearance-row {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-start: 2rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid var(--cat-line);
+}
