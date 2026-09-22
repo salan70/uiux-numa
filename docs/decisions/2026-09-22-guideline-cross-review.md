@@ -62,6 +62,9 @@ Issue #17 は、ガイドライン 7 本と運用文書を AI が専門観点で
 14pt と 18pt を約 18.5 CSS px と 24 CSS px に換算する。
 背景画像上の文字が比を満たさない場合を失敗例 F83 に挙げる。
 [Target Size Minimum の解説](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html) は 24×24 CSS px を下限とし、間隔や同等の操作などの例外を持つ。
+間隔の例外は、小さな対象の円が他の対象にも、他の小さな対象の円にも交差しないことを条件にする。
+[Resize Text の解説](https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html) の例外は字幕と文字画像だけで、表や地図を除外しない。
+2 次元の配置の例外は Reflow だけにある。
 
 ### モーダル
 
@@ -97,3 +100,6 @@ Issue のスコープは各 Issue と [Design Principles 再設計 ADR](2026-09-
 - draft 文書の `status` は変えていない。
 - Catalog の表示仕様と解析器は変えていない。
 - 解析器のテスト（`guidelines.test.ts`）の見本は独立した入力なので、旧コア名のまま残した。
+- c679af1 の再レビューを受け、同日に 3 点を補った。
+  ターゲット間隔の例外に円どうしの条件を足し、2 次元の配置の例外を Reflow に限った。
+  Information Architecture のコアにも、実体と主分類は 1 つ、入口は複数可という区別を書いた。
