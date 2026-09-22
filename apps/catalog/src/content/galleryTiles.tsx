@@ -4,7 +4,6 @@ import { adoptedSchemes, catalog, svgsFor, worksInTopic } from "./collect";
 import { CATALOG_COMPONENTS } from "./components";
 import { ALL_GUIDELINES } from "./guidelines";
 import type { ColorScheme, SchemeColor } from "./schemes";
-import { topicHref, workHref } from "./topics";
 
 // トップの流れる帯に並べるカード。中身は正本から読み、挿絵は新しく描かない。
 // 判断は docs/decisions/2026-09-21-catalog-home-marquee.md に残す。
@@ -15,7 +14,6 @@ export type GalleryTile = {
   id: string;
   kind: GalleryKind;
   title: string;
-  href: string;
   /** 題名の下の 1 行。カバーが無いカードでは、枠の中に置く要約になる。 */
   description: string;
   /** 無ければ Card は要約を枠の中に置く。 */
@@ -107,7 +105,6 @@ function colorTiles(): GalleryTile[] {
     id: `color-${scheme.id}`,
     kind: "color",
     title: `${scheme.id}（${scheme.label}）`,
-    href: `/foundations/colors/${scheme.id}`,
     description: `primary は${primaryName(scheme)}`,
     cover: <SchemeCover scheme={scheme} />,
   }));
@@ -122,7 +119,6 @@ function iconTiles(): GalleryTile[] {
       id: `icon-${work.slug}-${asset.name}`,
       kind: "icon" as const,
       title: asset.source.match(/<title>(.+?)<\/title>/)?.[1] ?? asset.name,
-      href: workHref("icons", work.slug),
       description: `${asset.name}.svg`,
       cover: <IconCover svg={asset.source} />,
     }));
@@ -135,7 +131,6 @@ function typeTiles(): GalleryTile[] {
       id: `type-face-${work.slug}`,
       kind: "type" as const,
       title: "LINE Seed JP",
-      href: workHref("typography", work.slug),
       description: "和文と欧文を 1 書体で組む",
       cover: <TypographyCover />,
     },
@@ -143,7 +138,6 @@ function typeTiles(): GalleryTile[] {
       id: `type-scale-${work.slug}`,
       kind: "type" as const,
       title: "文字の役割",
-      href: workHref("typography", work.slug),
       description: "見出しから本文までの大きさ",
       cover: <TypeScaleCover />,
     },
@@ -151,13 +145,11 @@ function typeTiles(): GalleryTile[] {
 }
 
 function tokenTiles(): GalleryTile[] {
-  const href = topicHref("tokens");
   return [
     {
       id: "token-space",
       kind: "token",
       title: "余白の階梯",
-      href,
       description: "4px を基準にした間隔",
       cover: <TokensCover />,
     },
@@ -165,7 +157,6 @@ function tokenTiles(): GalleryTile[] {
       id: "token-radius",
       kind: "token",
       title: "角丸",
-      href,
       description: "面と操作で使い分ける丸み",
       cover: <RadiusCover />,
     },
@@ -173,7 +164,6 @@ function tokenTiles(): GalleryTile[] {
       id: "token-motion",
       kind: "token",
       title: "動きの曲線",
-      href,
       description: "状態と押下の長さと曲線",
       cover: <MotionCover />,
     },
@@ -185,7 +175,6 @@ function componentTiles(): GalleryTile[] {
     id: `component-${component.slug}`,
     kind: "component",
     title: component.title,
-    href: workHref("components", component.slug),
     description: catalog.experiments.find((item) => item.slug === component.slug)?.lead ?? "",
     cover: <component.Preview />,
   }));
@@ -196,7 +185,6 @@ function guidelineTiles(): GalleryTile[] {
     id: `guideline-${guideline.slug}`,
     kind: "guideline",
     title: guideline.title,
-    href: `/guidelines/${guideline.slug}`,
     description: guideline.summary,
   }));
 }
