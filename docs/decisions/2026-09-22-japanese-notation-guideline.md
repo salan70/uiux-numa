@@ -133,8 +133,7 @@ writing-standard は半角括弧を外側の空白付きで許す。
 
 ## 採用
 
-`status` は `draft` で置く。
-利用者が文書を確認し、`adopted` にするかを判断する。
+2026-09-22 に利用者が確認し、`status` を `adopted` にした。
 
 ## 影響
 
