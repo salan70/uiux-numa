@@ -79,7 +79,7 @@ Catalog には規則を使うために要る情報だけを出す。
 
 `draft` は未採用である。人間の確認を経ていない仮説として扱う。
 `adopted` は確認済みで、判断者と理由が [ADR](../decisions/) にある。
-現在は UX Writing と Japanese Notation が `adopted` で、他の文書は `draft` である。
+現在は UX Writing、Japanese Notation、Information Architecture が `adopted` で、他の文書は `draft` である。
 
 ## 改訂の手順
 
@@ -96,7 +96,7 @@ Catalog には規則を使うために要る情報だけを出す。
 | ---------------------------------------------------------- | ------------------------ | -------------------- | --------- |
 | [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `adopted` |
 | [japanese-notation.md](japanese-notation.md)               | Japanese Notation        | 画面文言の日本語表記 | `adopted` |
-| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft`   |
+| [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `adopted` |
 | [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft`   |
 | [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft`   |
 | [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft`   |
