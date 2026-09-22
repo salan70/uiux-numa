@@ -95,7 +95,7 @@ Catalog には規則を使うために要る情報だけを出す。
 | 文書                                                       | title                    | 主題                 | status    |
 | ---------------------------------------------------------- | ------------------------ | -------------------- | --------- |
 | [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `adopted` |
-| [japanese-notation.md](japanese-notation.md)               | Japanese Notation        | 画面文言の日本語表記 | `draft`   |
+| [japanese-notation.md](japanese-notation.md)               | Japanese Notation        | 画面文言の日本語表記 | `adopted` |
 | [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `draft`   |
 | [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft`   |
 | [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft`   |
