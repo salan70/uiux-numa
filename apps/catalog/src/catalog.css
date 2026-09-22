@@ -110,6 +110,8 @@ body {
   --cat-on-accent: var(--color-on-primary, #fffdf9);
   /* 面の上に置く色付きの文字と罫線。4 つの面すべてに 4.5:1 を満たす。 */
   --cat-accent-text: var(--color-primary-text, #4d4d4d);
+  /* 24 役割に明暗どちらでも明るい役割がないため固定する。palettes.ts の inkLight と同じ値。 */
+  --cat-scheme-divider: #fffdf9;
   /* focus ring。面に対して 3:1 を満たす。 */
   --cat-focus: var(--color-focus, #525252);
   /* 良し悪しの色。強調色（accent）と分ける。
@@ -811,6 +813,29 @@ body {
 .app-shell .theme__icon svg {
   inline-size: 1.25rem;
   block-size: 1.25rem;
+}
+
+.app-shell .theme__icon .part-scheme-primary {
+  fill: var(--color-primary);
+}
+
+.app-shell .theme__icon .part-scheme-secondary {
+  fill: var(--color-secondary);
+}
+
+.app-shell .theme__icon .part-scheme-tertiary {
+  fill: var(--color-tertiary);
+}
+
+.app-shell .theme__icon [class^="part-scheme-"] {
+  stroke: var(--cat-scheme-divider);
+}
+
+@media (forced-colors: active) {
+  .app-shell .theme__icon [class^="part-scheme-"] {
+    fill: none;
+    stroke: currentColor;
+  }
 }
 
 /* select は面いっぱいに重ねる。見た目は持たないが、focus の輪郭はこの矩形に出る。 */
