@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(8);
-    expect(catalog.liveVariants).toHaveLength(24);
+    expect(catalog.experiments).toHaveLength(9);
+    expect(catalog.liveVariants).toHaveLength(25);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -69,8 +69,9 @@ describe("catalog inventory", () => {
       "hako-feature-icons",
     ]);
     expect(slugs("components")).toEqual(["button", "card"]);
-    // 判断済みで掲載しない Experiment は削除した。残る Experiment はすべて topic を持つ。
-    expect(catalog.experiments.every((item) => item.topic !== null)).toBe(true);
+    // topic に当たらない Experiment は Catalog に載せず、削除もしない。
+    // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
+    expect(unlisted()).toEqual(["cornix-product-ui"]);
   });
 
   it("token を正本のファイル単位で束ねる", () => {
@@ -125,6 +126,7 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
+      "cornix-product-ui/chromatic-rail",
       "product-ui-typography/line-seed-minimal",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
@@ -151,6 +153,12 @@ describe("catalog inventory", () => {
 function slugs(topic: string): string[] {
   return catalog.experiments
     .filter((experiment) => experiment.topic === topic)
+    .map((experiment) => experiment.slug);
+}
+
+function unlisted(): string[] {
+  return catalog.experiments
+    .filter((experiment) => experiment.topic === null)
     .map((experiment) => experiment.slug);
 }
 

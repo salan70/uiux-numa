@@ -107,6 +107,7 @@ Catalog は成果物の visual showcase とする。
 仕様書や Asset の正本にはしない。
 説明文より先に見て触れ、`role` と `maturity` で再利用の前提を確かめる。
 採用成果に限らず、`reference` も探索してよい。
+topic に当たらない Experiment は Catalog に載せず、削除もしない（[掲載しない Experiment の ADR](decisions/2026-09-22-unlisted-experiments.md)）。
 
 Experiment 本文、原則、開発者向け手順、ADR 全文は Catalog 内で描画しない。
 成果物の背景となる方針は二次情報として掲載する。
