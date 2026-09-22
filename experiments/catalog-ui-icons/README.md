@@ -181,7 +181,15 @@ round 2 で決めた規則を残す。
 
 preview は x86_64-darwin で作った。
 このとき `flake.nix` の devShell は評価できず、`nixpkgs-26.05-darwin` の resvg 0.47.0 と svgo 4.1.0 を一時的に使った。
-同じ svgo で `class-tech-icons` の配布用 8 件を作り直し、コミット済みの `dist/` とバイト単位で一致することを確かめてある。
+
+その後 aarch64-darwin の正本のツールチェーン（resvg 0.48.1、svgo 4.0.1、oxfmt 0.61.0）で作り直して照合した。
+シート 2 枚は resvg 0.48.1 で再描画してもピクセル単位で一致した（差 0 / 685248 サブピクセル）。
+差が出るのは PNG の deflate だけである。
+利用画面の preview も同じ Chrome で撮り直し、差は 31 / 1382 万サブピクセル、最大 4/255 だった。
+いずれも見た目は変わらないため、commit 済みの preview は差し替えていない。
+
+配布用 4 件のうち 3 件は svgo 4.0.1 でもバイト単位で一致した。
+`detail` だけは点が消えた。svgo の版差の扱いは[零長 subpath の ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)に残す。
 
 ## Evaluation
 
@@ -203,6 +211,7 @@ preview は x86_64-darwin で作った。
 - 箱の対称軸（12）は線の中心の格子（`0.75 + 1.5n`）に載らない。中心を通る 1 本の線は、対称性か 16px の鮮明さのどちらかを捨てることになる。囲み形の有無で分けると、どちらを捨てるかを規則にできる。
 - 黄金比は 0.75 格子の上では、18 を 2 つに割る場合だけ 5% 以内に載った。3 つ以上の要素を持つ形（detail）では、最寄りの格子でも 10% を超える。比例を根拠にできる場所は、格子の粗さが決める。
 - 零長の線に丸い端点を打つと、塗り要素を足さずに点を描ける。SVGO は `h0` を `z` に書き換える。閉じた零長の subpath の扱いは描画系で揺れうるが、resvg と Chrome の両方で同じ点として描かれることを確かめた。
+- 揺れるのは描画系だけではない。最適化系も揺れる。svgo 4.0.1 の `convertPathData` は零長の subpath を「無用」と見なして `path` ごと消し、4.1.0 は `z` に畳んで残す。`h0`、`z`、`v0`、`h0z` のどの書き方でも 4.0.1 は消す。造形の手段が最適化の既定に依存していたということで、`convertPathData: { removeUseless: false }` で明示的に守る形に直した（[ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)）。`svg-optimize` の `part-*` ID の一致検査がこれを検知した。検査が造形の前提を守った例である。
 
 ## Related patterns / assets
 
