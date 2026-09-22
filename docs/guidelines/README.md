@@ -79,7 +79,7 @@ Catalog には規則を使うために要る情報だけを出す。
 
 `draft` は未採用である。人間の確認を経ていない仮説として扱う。
 `adopted` は確認済みで、判断者と理由が [ADR](../decisions/) にある。
-現在は UX Writing だけが `adopted` で、他の文書は `draft` である。
+現在は UX Writing と Japanese Notation が `adopted` で、他の文書は `draft` である。
 
 ## 改訂の手順
 
