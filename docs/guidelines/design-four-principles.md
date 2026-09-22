@@ -7,14 +7,14 @@ axes:
   - consistency
   - information architecture
 created: 2026-09-20
-updated: 2026-09-21
+updated: 2026-09-22
 ---
 
 ## 目的
 
 視覚要素の主従、所属、まとまりを直感的に伝える。
 装飾ではなく、情報の構造を視覚化するために適用する。
-何を主役に置くかの決定は information-architecture、文言の作成は ux-writing が扱う。
+何をどの順に出すかの決定は information-architecture、文言の作成は ux-writing が扱う。
 
 ## コア
 
