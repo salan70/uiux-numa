@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>ナビを開閉する</title>
+  <!-- 枠: 外形 18×12（x 3..21、y 6..18）。軸に平行な 4 辺と桁の外縁はすべて 1.5 の倍数に載り、16px で整数ピクセルになる。 -->
+  <!-- 高さは 15 から 12 へ下げた。18×15 は detail の円（外形 18）より重く見えた（round 2 の観察、ICON-06）。 -->
+  <!-- 比 3:2 は Material の長方形 keyline 5:4 と異なる。ICON-06 の本質は見かけの大きさを揃えることなので、円との釣り合いを優先した。 -->
+  <!-- 角丸 2.25 = 線幅 1.5 × 1.5。角丸が線幅を下回ると角で線が潰れる。φ（1.5φ=2.427）は 0.75 格子で 2.25 に丸まる（-7.3%）ため 3:2 を採る。 -->
+  <rect id="part-sidebar-frame" x="3.75" y="6.75" width="16.5" height="10.5" rx="2.25" fill="none" stroke="currentColor"/>
+  <!-- 桁: 幅 18 の黄金分割。3 + 18/φ² = 9.876 → 格子 9.75。桁 6.75 : 版面 11.25 = 1.667 で φ に対し +3.0%。 -->
+  <!-- 内側の隙間は左 4.5、右 9.0、上下 9.0 で、いずれも線幅 1.5 以上（ICON-08）。 -->
+  <!-- 開閉で形を変えない。状態は形ではなく押し先の外側で示す（block-shape-must-not-vary-by-optional-parts）。 -->
+  <path id="part-sidebar-gutter" d="M9.75 6.75v10.5" fill="none" stroke="currentColor"/>
+</svg>

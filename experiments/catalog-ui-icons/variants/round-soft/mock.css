@@ -1,0 +1,155 @@
+/*
+ * Catalog の UI アイコンの利用画面モックのスタイル。
+ * 色は Catalog の中立な shell（灰の面に黒い文字）から写す。アイコンの評価に色を混ぜない。
+ * 寸法は Catalog の catalog.css と同じにする。.icon は 1.25rem、Button の中は 1em。
+ */
+@import "../../../button/shared/button.css";
+@import "../../../button/variants/pill-action/variant.css";
+
+.cui-mock {
+  --color-background: #f6f6f5;
+  --color-surface: #fdfdfc;
+  --color-on-surface: #1f1f1f;
+  --color-on-surface-variant: #5a5a58;
+  --color-outline: #757575;
+  --color-primary: #2b2b2b;
+  --color-on-primary: #fffdf9;
+  --color-primary-text: #4d4d4d;
+  --color-primary-container: #e6e6e6;
+  --color-on-primary-container: #201d1b;
+  --color-focus: #525252;
+  --color-error: #9c3e37;
+
+  min-height: 100vh;
+  padding: var(--space-500);
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--typography-ui-font-family);
+  font-size: var(--typography-ui-font-size);
+  line-height: var(--typography-ui-line-height);
+}
+
+:where(.cui-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.cui-mock) :where(p, ul) {
+  margin: 0;
+}
+
+/* アイコンの寸法と線は利用画面の CSS が持つ。SVG 側は形だけを持つ（ui-fit）。 */
+.cui-icon {
+  display: inline-flex;
+  color: inherit;
+}
+
+.cui-icon svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+/* Button の中の印は Button の icon 枠（1em）に合わせる。Catalog と同じ。 */
+.cui-mock .button .cui-icon svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+.cui-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  padding-block-end: var(--space-400);
+  border-block-end: var(--border-width-thin) solid var(--color-primary-container);
+}
+
+.cui-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-target-min);
+  block-size: var(--size-target-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-300);
+  background: none;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+}
+
+.cui-title {
+  font-size: var(--typography-title-font-size);
+  font-weight: var(--typography-title-font-weight);
+}
+
+.cui-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+  padding-block-start: var(--space-600);
+}
+
+.cui-card {
+  max-inline-size: 22rem;
+  padding: var(--space-400);
+  border: var(--border-width-thin) solid var(--color-primary-container);
+  border-radius: var(--radius-400);
+  background: var(--color-surface);
+}
+
+.cui-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0;
+  border-radius: var(--radius-200);
+  overflow: hidden;
+  list-style: none;
+}
+
+.cui-swatches li {
+  block-size: 3rem;
+}
+
+.cui-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-300);
+  padding-block-start: var(--space-300);
+}
+
+.cui-card-name {
+  font-weight: var(--typography-title-font-weight);
+}
+
+/* 詳細リンク。押し先は 44px を確保し、印だけが見える。 */
+.cui-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-target-min);
+  block-size: var(--size-target-min);
+  color: var(--color-on-surface-variant);
+}
+
+.cui-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+}
+
+/* 送り先の名前の長さでボタンが伸び縮みしないよう、固定幅にする。Catalog と同じ扱い。 */
+.cui-step {
+  inline-size: 9rem;
+}
+
+.cui-step-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cui-count {
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-caption-font-size);
+  font-variant-numeric: tabular-nums;
+}
