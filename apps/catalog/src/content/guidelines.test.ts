@@ -123,7 +123,7 @@ describe("resolveHref", () => {
 });
 
 describe("ALL_GUIDELINES", () => {
-  it("README を除いた 6 文書を指定の順で読む", () => {
+  it("README を除いた文書を指定の順で読む", () => {
     expect(ALL_GUIDELINES.map((item) => item.slug)).toEqual([...GUIDELINE_ORDER]);
   });
 
