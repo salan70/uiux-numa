@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(37);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(14);
     expect(catalog.schemes).toHaveLength(10);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(37);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(40);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(9);
-    expect(catalog.liveVariants).toHaveLength(25);
+    expect(catalog.experiments).toHaveLength(10);
+    expect(catalog.liveVariants).toHaveLength(32);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -71,7 +71,7 @@ describe("catalog inventory", () => {
     expect(slugs("components")).toEqual(["button", "card"]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
-    expect(unlisted()).toEqual(["cornix-product-ui"]);
+    expect(unlisted()).toEqual(["cornix-product-ui", "uiux-numa-logo"]);
   });
 
   it("token を正本のファイル単位で束ねる", () => {
@@ -126,7 +126,6 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
-      "cornix-product-ui/chromatic-rail",
       "product-ui-typography/line-seed-minimal",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。

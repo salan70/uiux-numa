@@ -1,0 +1,206 @@
+/*
+ * UI/UX NUMA のロゴの利用画面モックのスタイル。
+ * 色は Catalog の中立な shell（白の面に黒い文字）から写す。マークの評価に配色を混ぜない。
+ * 寸法と字の指定は apps/catalog/src/catalog.css の実値から写す。
+ * マークは currentColor だけを使う。形の評価に色を混ぜない。
+ */
+
+.lg-mock {
+  --lg-bg: #f9f8f8;
+  --lg-surface: #f0efef;
+  --lg-text: #1f1f1f;
+  --lg-muted: #4d4d4d;
+  --lg-line: #e3dede;
+  --lg-ink-dark: #1b1a1a;
+  --lg-ink-light: #fffdf9;
+
+  min-height: 100vh;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  background: var(--lg-bg);
+  color: var(--lg-text);
+  font-feature-settings: "palt";
+}
+
+:where(.lg-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.lg-mock) :where(p, h1) {
+  margin: 0;
+}
+
+/* マークの寸法は利用画面が持つ。SVG 側は形だけを持つ（UIFIT の分担）。 */
+.lg-mock .lg-mark {
+  display: inline-flex;
+  flex: none;
+  color: currentColor;
+}
+
+.lg-mock .lg-mark > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.lg-mock .lg-mark--16 {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.lg-mock .lg-mark--20 {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+.lg-mock .lg-mark--24 {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.lg-mock .lg-mark--32 {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+.lg-mock .lg-mark--48 {
+  inline-size: 48px;
+  block-size: 48px;
+}
+
+/* 見出しの字面に合わせる。大文字の高さに対して正方のマークは大きく見えるので 0.78em に落とす。 */
+.lg-mock .lg-mark--display {
+  inline-size: 0.78em;
+  block-size: 0.78em;
+}
+
+/* 1. ブラウザのタブ */
+.lg-mock .lg-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 15rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--lg-line);
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--lg-surface);
+  font-size: 0.8125rem;
+}
+
+.lg-mock .lg-tab__title {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.lg-mock .lg-tab__close {
+  color: var(--lg-muted);
+}
+
+/* 2 と 3 を横に並べる */
+.lg-mock .lg-panes {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+  border: 1px solid var(--lg-line);
+  background: var(--lg-surface);
+}
+
+.lg-mock .lg-sidebar {
+  inline-size: 15rem;
+  flex: none;
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+  padding: 1rem;
+  border-inline-end: 1px solid var(--lg-line);
+}
+
+.lg-mock .lg-sidebar__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* catalog.css の .sidebar__name と同じ値 */
+.lg-mock .lg-sidebar__name {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.lg-mock .lg-nav {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.lg-mock .lg-nav__group {
+  color: var(--lg-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.lg-mock .lg-home {
+  flex: 1;
+  display: grid;
+  gap: 1rem;
+  align-content: center;
+  padding: 2rem 1.5rem;
+  background: var(--lg-bg);
+}
+
+/* catalog.css の .home-hero__title と同じ値 */
+.lg-mock .lg-home__title {
+  display: flex;
+  align-items: center;
+  gap: 0.18em;
+  font-size: clamp(2.625rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+}
+
+.lg-mock .lg-home__lead {
+  color: var(--lg-muted);
+  font-size: 0.875rem;
+}
+
+/* 4. 単体の縮小列 */
+.lg-mock .lg-sizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.lg-mock .lg-sizes__label {
+  color: var(--lg-muted);
+  font-size: 0.75rem;
+}
+
+/* 5. 反転 */
+.lg-mock .lg-invert {
+  display: flex;
+  gap: 1rem;
+}
+
+.lg-mock .lg-tile {
+  display: grid;
+  place-items: center;
+  inline-size: 6rem;
+  block-size: 6rem;
+  border: 1px solid var(--lg-line);
+}
+
+.lg-mock .lg-tile--light {
+  background: var(--lg-ink-light);
+  color: var(--lg-ink-dark);
+}
+
+.lg-mock .lg-tile--dark {
+  background: var(--lg-ink-dark);
+  color: var(--lg-ink-light);
+}

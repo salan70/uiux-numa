@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- 組の規則: 32 の格子。面の外縁を偶数座標に置くと、16px（1/2 倍）で整数ピクセルに乗る。 -->
+  <!-- live area は 4..28。3 案で共通にする。 -->
+  <!-- round 2: 幅が同じで底辺が揃うと棒グラフに読めた。幅と丈の両方を変え、天地も揃えない。 -->
+  <!-- 並べた側: 外縁 4..16 x 10..28。広くて低い。輪郭だけで、選ばれていないことを示す。 -->
+  <rect id="part-mark-other" x="5" y="11" width="10" height="16" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- 選ばれた側: 外縁 20..28 x 4..28。狭くて高い。塗りで選択を示す。 -->
+  <rect id="part-mark-chosen" x="20" y="4" width="8" height="24" fill="currentColor"/>
+</svg>
