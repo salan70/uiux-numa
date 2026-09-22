@@ -1,22 +1,9 @@
-// UI/UX NUMA のロゴの利用画面モック。
-// Catalog で実際にロゴが出る面だけを切り出す。タブ 16px、サイドバー題字、ホーム大見出し、favicon 32px、反転。
-// 3 variant で同一にする。差分は dist/mark.svg だけである。
+// 1 案を利用画面で見るモック。Catalog で実際にロゴが出る面だけを切り出す。
+// 4 案で共通の実装を使う。差分は dist/mark.svg だけである。
 // lockup は形式 A（マーク + LINE Seed JP の HTML テキスト）で統一する。形式 B の比較はマークの選定後に行う。
+import { Mark } from "./Mark";
 
-// 配布用 SVG を inline に展開する。root に width / height がないので CSS で大きさを与える。
-// 同じ asset を 1 画面に何度も置くので、part-* の id は class へ書き換える。
-// Catalog 本体（apps/catalog/src/components/icons.tsx）と同じ扱いである。
-function Mark({ svg, className }: { svg: string; className: string }) {
-  return (
-    <span
-      className={className}
-      aria-hidden="true"
-      dangerouslySetInnerHTML={{ __html: svg.replaceAll('id="part-', 'class="part-') }}
-    />
-  );
-}
-
-export function Mock({ mark }: { mark: string }) {
+export function LogoMock({ mark }: { mark: string }) {
   return (
     <div className="lg-mock">
       {/* 1. ブラウザのタブ。favicon が 16px で出る、最小かつ最も頻度の高い面。 */}

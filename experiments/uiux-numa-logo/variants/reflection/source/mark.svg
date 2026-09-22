@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、線幅 2、単色。4 案で共通にする。 -->
+  <!-- 水面 y = 14。空気と水の面積比を 1:√2 にする位置である。24 / (1 + √2) = 9.9411 → 10、4 + 10 = 14。 -->
+  <!-- 実体: 一辺 10 の正方形を水面に載せる。底辺は引かず、水面線を底として使う（LOGO-08 の負の空間）。 -->
+  <path id="part-mark-body" d="M11 14V5h8v9" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- 水面線: live area の幅いっぱい 4..28 に引く。 -->
+  <path id="part-mark-waterline" d="M4 14h24" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- 映り込み: 実体の鏡像を水面下に置く。丈は 10 / √2 = 7.0711 → 7 に縮める。 -->
+  <!-- 横のずれは線幅 1 本分の 2 とする。揺らいだ水面で像がずれることを表し、対称軸も消える。 -->
+  <rect id="part-mark-reflection" x="12" y="14" width="10" height="7" fill="currentColor"/>
+</svg>
