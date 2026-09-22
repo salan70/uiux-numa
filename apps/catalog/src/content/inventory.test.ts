@@ -107,6 +107,7 @@ describe("catalog inventory", () => {
     expect(ids("adopted")).toEqual([
       "button/pill-action",
       "card/zoom-cover",
+      "catalog-ui-icons/round-soft",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",
