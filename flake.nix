@@ -10,7 +10,14 @@
   # このフレークの責務はツールチェーンの固定のみ。
   # コマンドの定義元は justfile（`just --list` で一覧）。両者で重複させない。
   outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+    # x86_64-darwin は対象外にする。nixpkgs-unstable が対応を打ち切っており、
+    # devShell を評価できない。理由と却下した案は
+    # docs/decisions/2026-09-22-drop-x86-64-darwin.md にある。
+    flake-utils.lib.eachSystem [
+      "aarch64-darwin"
+      "x86_64-linux"
+      "aarch64-linux"
+    ] (system:
       let
         pkgs = import nixpkgs { inherit system; };
         unstable = import nixpkgs-unstable { inherit system; };

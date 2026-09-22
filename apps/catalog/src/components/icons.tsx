@@ -55,14 +55,15 @@ export function AppearanceIcon({ value }: { value: ThemeChoice }) {
 /**
  * 詳細を開く印。
  * 線幅、端点、live area を 1 値に固定する規則は docs/principles/icon-set-consistency-by-few-parameters.md に従う。
- * 24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2。
+ * 24 の viewBox、線幅 1.5、端点は丸、live area の余白は 3。
+ * 形の正本は experiments/catalog-ui-icons/variants/round-soft/dist/detail.svg。座標の導出は同 Experiment の README にある。
  */
 export function DetailIcon() {
   return (
     <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 11v5.25" />
-      <circle cx="12" cy="7.75" r="0.75" className="icon__dot" />
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 7.5h0" />
+      <path d="M12 11.25v5.25" />
     </svg>
   );
 }
@@ -71,25 +72,28 @@ export function DetailIcon() {
  * ナビの開閉の印。
  * 枠の中を左の桁と版面に分けた形で、サイドバーの並びそのものを表す。
  * 開閉で形を変えない。状態は左の桁の塗りだけで示し、押し先の寸法を動かさない。
- * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2）。
+ * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 3）。
  */
 export function SidebarIcon() {
   return (
     <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M9.5 5v14" />
+      <rect x="3.75" y="6.75" width="16.5" height="10.5" rx="2.25" />
+      <path d="M9.75 6.75v10.5" />
     </svg>
   );
 }
 
 /**
  * 前後へ送る印。文字の矢印は書体の字面で下へ寄るため、Button の icon 枠の中心に置けない。
- * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 2）。
+ * 規則は DetailIcon と同じ（24 の viewBox、線幅 1.5、端点は丸、live area の余白は 3）。
+ * 幹は y=11.25 に置く。箱の中心 12 では 16px で線が半ピクセルにまたがり、頭より薄く出る。
  */
 export function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
   return (
     <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d={direction === "next" ? "M4 12h16m-6-6 6 6-6 6" : "M20 12H4m6-6-6 6 6 6"} />
+      <path
+        d={direction === "next" ? "M3.75 11.25h16.5m-6-6 6 6-6 6" : "M20.25 11.25H3.75m6-6-6 6 6 6"}
+      />
     </svg>
   );
 }

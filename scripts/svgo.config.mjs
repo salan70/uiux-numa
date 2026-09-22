@@ -12,6 +12,10 @@ export default {
           cleanupIds: { minify: false, preservePrefixes: ["part-"] },
           // 既定は role="img" を消す。支援技術向けの role と title は配布用でも残す。
           removeUnknownsAndDefaults: { keepRoleAttr: true },
+          // 零長の subpath は「無用」と見なされて path ごと消える。
+          // 丸い端点で打つ点（`M x y h0`）はこの形でしか描けず、塗り要素を足さない条件（ICON-10）を満たす唯一の手段である。
+          // 消さずに `z` へ畳ませる。閉じた path の末尾に `Z` が 1 バイト増えるが、形は変わらない。
+          convertPathData: { removeUseless: false },
         },
       },
     },

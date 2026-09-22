@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>詳細を見る</title>
+  <!-- 組の規則: 外形は 3..21 の 18 角。軸に平行な線の外縁を 1.5 の倍数へ載せると、16px（2/3 倍）で整数ピクセルになる。 -->
+  <!-- 対称軸（x=12）に載る線だけは対称性を優先する。12 は 0.75+1.5n に載らない。 -->
+  <!-- 輪: 円の keyline。12 を中心に対称な外形の幅は 3 の倍数しか取れないため、live area いっぱいの 18（r=8.25、外縁 3..21）を採る（ICON-06）。 -->
+  <circle id="part-detail-ring" cx="12" cy="12" r="8.25" fill="none" stroke="currentColor"/>
+  <!-- i の点: 零長の線を丸い端点で打ち、直径 1.5 の点にする。塗り要素を足さない（ICON-10）。 -->
+  <path id="part-detail-dot" d="M12 7.5h0" fill="none" stroke="currentColor"/>
+  <!-- i の縦棒: 長さ 5.25。点との隙間は 2.25（線幅の 1.5 倍）。1.5 では 16px で点と癒着した（下書きの観察、ICON-08）。 -->
+  <!-- 内容の外形は 6.75..17.25 の 10.5 で、輪の内径 4.5..19.5 の中に上下 2.25 ずつで収まる。 -->
+  <!-- φ 検討: 内径 15 の黄金分割は 9.27。10.5 は +13.3% で外れるが、9.75 へ詰めると隙間が 1.5 に戻り 16px で癒着する。可読性を優先した（ICON-09 より ICON-08）。 -->
+  <path id="part-detail-stem" d="M12 11.25v5.25" fill="none" stroke="currentColor"/>
+</svg>
