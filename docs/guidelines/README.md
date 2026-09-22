@@ -57,10 +57,10 @@ good を左に置くのは、bad から読むと正しい形へ辿り着くま�
 
 適用は、その規則をどこまで持ち出すかを表す。
 
-| 値           | 意味                                       |
-| ------------ | ------------------------------------------ |
-| `foundation` | すべてのプロジェクトで守る                 |
-| `module`     | その主題を重視するプロジェクトで選んで守る |
+| 値           | 意味                                                             |
+| ------------ | ---------------------------------------------------------------- |
+| `foundation` | 記した適用条件の範囲で共通の土台として使い、外す場合は理由を残す |
+| `module`     | その主題を重視するプロジェクトで選んで使う                       |
 
 `foundation` の規則が先、`module` の規則が後に並ぶ。
 
@@ -97,7 +97,7 @@ Catalog には規則を使うために要る情報だけを出す。
 | [ux-writing.md](ux-writing.md)                             | UX Writing               | UX ライティング      | `adopted` |
 | [japanese-notation.md](japanese-notation.md)               | Japanese Notation        | 画面文言の日本語表記 | `adopted` |
 | [information-architecture.md](information-architecture.md) | Information Architecture | 情報設計             | `adopted` |
-| [design-four-principles.md](design-four-principles.md)     | Design Principles        | デザイン 4 原則      | `draft`   |
+| [design-four-principles.md](design-four-principles.md)     | Design Principles        | 視覚構成と造形の判断 | `draft`   |
 | [accessibility.md](accessibility.md)                       | Accessibility            | アクセシビリティ     | `draft`   |
 | [states-and-feedback.md](states-and-feedback.md)           | States & Feedback        | 状態とフィードバック | `draft`   |
 | [color.md](color.md)                                       | Color                    | 色の使い方           | `draft`   |
