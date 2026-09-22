@@ -77,6 +77,6 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 - [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md): Experiment の手順と記録項目
 - [docs/evaluation/policy.md](docs/evaluation/policy.md): 評価の方針
 - [docs/principles/](docs/principles/): 原則候補と、採否の判断手順
-- [docs/guidelines/](docs/guidelines/): 主題ごとの方針（UX ライティング、情報設計、4 原則など）
+- [docs/guidelines/](docs/guidelines/): 主題ごとの方針（UX ライティング、情報設計、視覚構成と造形など）
 - [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)
 - [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX 沼の Cloudflare Pages 公開手順
