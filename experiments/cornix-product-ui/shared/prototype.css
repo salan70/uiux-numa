@@ -1,0 +1,123 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/size/index.css";
+@import "../../../tokens/motion/index.css";
+@import "../../button/shared/button.css";
+
+@font-face { font-family: "LINE Seed JP"; src: url("../../../tokens/typography/fonts/LINESeedJP-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "LINE Seed JP"; src: url("../../../tokens/typography/fonts/LINESeedJP-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+.cornix-prototype, .cornix-prototype * { box-sizing: border-box; }
+.cornix-prototype { min-height: 100vh; display: grid; grid-template-areas: "header header" "nav main" "nav status"; grid-template-columns: 13rem minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; background: var(--color-background); color: var(--color-on-surface); font-family: var(--font-family-sans); font-size: var(--typography-ui-font-size); line-height: var(--typography-ui-line-height); color-scheme: light; }
+.cornix-prototype[data-theme="dark"] { color-scheme: dark; }
+.cornix-prototype :where(button, input, select) { font: inherit; }
+.cornix-prototype :where(button, select) { cursor: pointer; }
+.cornix-prototype :where(h1, h2, h3, p, ol) { margin: 0; }
+.cornix-prototype :focus-visible { outline: var(--border-width-thick) solid var(--color-focus); outline-offset: 3px; }
+.cornix-skip { position: fixed; z-index: 20; inset: .5rem auto auto .5rem; transform: translateY(-200%); padding: var(--space-200) var(--space-400); border-radius: var(--radius-control); background: var(--color-on-surface); color: var(--color-background); }
+.cornix-skip:focus { transform: none; }
+.cornix-header { grid-area: header; display: flex; align-items: center; min-height: 5rem; padding: var(--space-300) var(--space-600); border-bottom: var(--border-width-thin) solid var(--color-surface-variant); background: var(--color-surface); }
+.cornix-brand { display: flex; align-items: center; gap: var(--space-300); min-width: 12rem; }
+.cornix-brand__mark { display: grid; width: 2.5rem; height: 2.5rem; place-items: center; border-radius: var(--radius-pill); background: var(--color-primary); color: var(--color-on-primary); font-weight: 700; }
+.cornix-brand strong, .cornix-brand small { display: block; line-height: 1.1; }
+.cornix-brand strong { font-size: var(--typography-heading-font-size); }
+.cornix-brand small { color: var(--color-on-surface-variant); }
+.cornix-workspace { display: grid; grid-template-columns: auto auto; gap: 0 var(--space-300); padding-inline: var(--space-500); border-inline-start: var(--border-width-thin) solid var(--color-surface-variant); }
+.cornix-workspace span { color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-workspace code { grid-column: 1 / -1; color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-connection { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-200); white-space: nowrap; }
+.cornix-connection i { width: .625rem; height: .625rem; border-radius: 50%; background: var(--color-success); }
+.cornix-appearance { display: flex; gap: var(--space-300); margin-inline-start: var(--space-500); }
+.cornix-appearance label { display: grid; color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-appearance select { min-height: 2rem; border: 0; border-bottom: var(--border-width-thin) solid var(--color-outline); background: transparent; color: var(--color-on-surface); }
+.cornix-nav { grid-area: nav; display: flex; flex-direction: column; padding: var(--space-600) var(--space-400); border-inline-end: var(--border-width-thin) solid var(--color-surface-variant); background: var(--color-surface); }
+.cornix-nav > p { margin-block-end: var(--space-300); color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); text-transform: uppercase; letter-spacing: .12em; }
+.cornix-nav > button { display: grid; grid-template-columns: 2rem 1fr; align-items: center; min-height: 3rem; padding: 0 var(--space-300); border: 0; border-radius: var(--radius-control); background: transparent; color: inherit; text-align: start; font-weight: 700; }
+.cornix-nav > button span { color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-nav > button:hover { background: var(--color-surface-container); }
+.cornix-nav > button.is-active { background: var(--color-primary-container); color: var(--color-on-primary-container); }
+.cornix-nav__tools { display: grid; gap: var(--space-100); margin-block-start: auto; padding-block-start: var(--space-500); border-block-start: var(--border-width-thin) solid var(--color-surface-variant); }
+.cornix-nav__tools button { min-height: 2rem; border: 0; background: transparent; color: var(--color-primary-text); text-align: start; }
+.cornix-main { grid-area: main; overflow: auto; padding: var(--space-600); }
+.cornix-page-head { display: flex; align-items: end; justify-content: space-between; margin-block-end: var(--space-500); }
+.cornix-page-head span, .cornix-inspector__head > span, .cornix-picker header span, .cornix-modal header span, .cornix-modal__body > span { color: var(--color-primary-text); font-size: var(--typography-caption-font-size); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.cornix-page-head h1 { font-size: clamp(2rem, 4vw, 4.5rem); line-height: 1; }
+.cornix-page-head p { max-width: 28rem; color: var(--color-on-surface-variant); }
+.cornix-editor { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: var(--space-400); }
+.cornix-stage, .cornix-inspector, .cornix-reference section { border: var(--border-width-thin) solid var(--color-surface-variant); border-radius: var(--radius-surface); background: var(--color-surface); }
+.cornix-stage { min-width: 0; padding: var(--space-400); }
+.cornix-layers { display: flex; align-items: center; gap: var(--space-200); margin-block-end: var(--space-400); }
+.cornix-layers > span { margin-inline-end: var(--space-200); color: var(--color-on-surface-variant); }
+.cornix-layers button { min-height: 2rem; padding-inline: var(--space-400); border: var(--border-width-thin) solid transparent; border-radius: var(--radius-pill); background: var(--color-surface-container); color: var(--color-on-surface); font-weight: 700; }
+.cornix-layers button.is-active { border-color: var(--color-primary-text); background: var(--color-primary); color: var(--color-on-primary); }
+.cornix-board { display: grid; grid-template-columns: repeat(12, minmax(2.5rem, 1fr)); gap: var(--space-100); padding: var(--space-500); border-radius: var(--radius-surface); background: var(--color-surface-container); }
+.cornix-board button { min-width: 0; aspect-ratio: 1; display: grid; place-content: center; border: var(--border-width-thin) solid var(--color-outline); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-on-surface); overflow: hidden; }
+.cornix-board button small { color: var(--color-primary-text); font-size: .625rem; white-space: nowrap; }
+.cornix-board button.is-layer { background: var(--color-tertiary-container); color: var(--color-on-tertiary-container); }
+.cornix-board button.is-selected { border-color: var(--color-primary-text); outline: var(--border-width-thick) solid var(--color-primary-text); background: var(--color-primary-container); color: var(--color-on-primary-container); }
+.cornix-encoders { display: flex; align-items: center; gap: var(--space-200); padding-block: var(--space-400); color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-encoders button { min-height: 2rem; padding-inline: var(--space-300); border: var(--border-width-thin) solid var(--color-outline); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-on-surface); }
+.cornix-picker { margin-block-start: var(--space-200); padding-block-start: var(--space-400); border-block-start: var(--border-width-thin) solid var(--color-surface-variant); }
+.cornix-picker header { display: flex; align-items: end; justify-content: space-between; gap: var(--space-400); margin-block-end: var(--space-300); }
+.cornix-picker h2 { font-size: var(--typography-heading-font-size); }
+.cornix-picker__target { display: flex; gap: var(--space-100); }
+.cornix-picker__target button { display: grid; min-width: 6rem; min-height: 2.5rem; padding: var(--space-100) var(--space-300); border: var(--border-width-thin) solid var(--color-outline); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-on-surface-variant); text-align: start; }
+.cornix-picker__target button.is-active { background: var(--color-secondary-container); color: var(--color-on-secondary-container); }
+.cornix-picker__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-50); }
+.cornix-picker__grid button { min-width: 0; min-height: 2rem; border: var(--border-width-thin) solid var(--color-surface-variant); border-radius: var(--radius-mark); background: var(--color-surface-container); color: var(--color-on-surface); }
+.cornix-picker__grid button:hover, .cornix-picker__grid button.is-selected { background: var(--color-secondary); color: var(--color-on-secondary); }
+.cornix-inspector { align-self: start; overflow: hidden; }
+.cornix-inspector__head { padding: var(--space-500); background: var(--color-primary); color: var(--color-on-primary); }
+.cornix-inspector__head strong { display: block; font-size: 3.5rem; line-height: 1; }
+.cornix-inspector__head code { color: inherit; }
+.cornix-inspector > label { display: grid; gap: var(--space-100); margin: var(--space-400); color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-inspector :where(select, input) { width: 100%; min-height: 2.5rem; padding-inline: var(--space-300); border: var(--border-width-thin) solid var(--color-outline); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-on-surface); }
+.cornix-save { display: grid; gap: var(--space-100); margin: var(--space-400); padding: var(--space-300); border-inline-start: var(--border-width-thick) solid var(--color-success); background: var(--color-surface-container); }
+.cornix-save--saving { border-color: var(--color-primary-text); }
+.cornix-save--conflict, .cornix-save--error { border-color: var(--color-error); color: var(--color-error); }
+.cornix-save code { color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-state-demo { display: flex; flex-wrap: wrap; gap: var(--space-100); margin: var(--space-400); }
+.cornix-state-demo span { width: 100%; color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-state-demo button { min-height: 1.5rem; border: 0; background: transparent; color: var(--color-primary-text); }
+.cornix-apply-note { margin: var(--space-400); color: var(--color-on-surface-variant); font-size: var(--typography-caption-font-size); }
+.cornix-status { grid-area: status; display: flex; align-items: center; gap: var(--space-300); min-height: 4rem; padding: var(--space-200) var(--space-600); border-block-start: var(--border-width-thin) solid var(--color-surface-variant); background: var(--color-surface); }
+.cornix-severity { min-height: 2rem; border: 0; border-radius: var(--radius-pill); background: var(--color-surface-container); color: var(--color-on-surface); }
+.cornix-severity--error { color: var(--color-error); }.cornix-severity--warning { color: var(--color-warning); }
+.cornix-status__message { flex: 1; color: var(--color-on-surface-variant); }
+.cornix-overview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-400); }
+.cornix-overview article { padding: var(--space-400); border-radius: var(--radius-surface); background: var(--color-surface); }
+.cornix-overview article header { display: flex; align-items: baseline; gap: var(--space-300); }
+.cornix-overview article header span { font-size: 2rem; color: var(--color-primary-text); }.cornix-overview article header b { margin-inline-start: auto; color: var(--color-on-surface-variant); }
+.cornix-mini-board { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-block: var(--space-300); }
+.cornix-mini-board i { display: grid; aspect-ratio: 1; place-items: center; border-radius: 2px; background: var(--color-surface-container); font-size: .5rem; font-style: normal; }.cornix-mini-board i.is-accent { background: var(--color-tertiary-container); }
+.cornix-reference { display: grid; gap: var(--space-300); }.cornix-reference section { display: grid; grid-template-columns: 3rem 1fr auto; align-items: center; gap: var(--space-300); padding: var(--space-400); }.cornix-reference section > span { grid-row: span 2; color: var(--color-primary-text); font-size: 2rem; }.cornix-reference section p { color: var(--color-on-surface-variant); }
+.cornix-modal-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: var(--space-600); background: color-mix(in srgb, var(--color-on-surface) 55%, transparent); }
+.cornix-modal { width: min(48rem, 100%); overflow: hidden; border-radius: var(--radius-surface); background: var(--color-surface); color: var(--color-on-surface); }
+.cornix-modal > header { display: flex; justify-content: space-between; padding: var(--space-500); background: var(--color-primary); color: var(--color-on-primary); }.cornix-modal > header button { border: 0; background: transparent; color: inherit; font-size: 2rem; }
+.cornix-modal ol { display: grid; grid-template-columns: repeat(5, 1fr); padding: 0; list-style: none; border-block-end: var(--border-width-thin) solid var(--color-surface-variant); }.cornix-modal li { display: grid; place-items: center; gap: var(--space-100); padding: var(--space-300); color: var(--color-on-surface-variant); }.cornix-modal li b { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border-radius: 50%; background: var(--color-surface-container); }.cornix-modal li.is-active b { background: var(--color-secondary); color: var(--color-on-secondary); }.cornix-modal li.is-done b { background: var(--color-success); color: var(--color-surface); }
+.cornix-modal__body { min-height: 16rem; padding: var(--space-600); }.cornix-modal__body h3 { margin-block: var(--space-200); font-size: var(--typography-title-font-size); }.cornix-modal__body p { color: var(--color-on-surface-variant); }.cornix-diff { display: flex; justify-content: space-between; margin-block-start: var(--space-500); padding: var(--space-400); border-radius: var(--radius-control); background: var(--color-surface-container); }
+.cornix-modal > footer { display: flex; justify-content: flex-end; gap: var(--space-200); padding: var(--space-400); border-block-start: var(--border-width-thin) solid var(--color-surface-variant); }
+@media (prefers-reduced-motion: no-preference) { .cornix-prototype :where(button, .cornix-save) { transition: background-color var(--duration-state) var(--easing-standard), color var(--duration-state) var(--easing-standard), transform var(--duration-press) var(--easing-out); } .cornix-prototype button:hover { transform: scale(1.02); } }
+@media (max-width: 75rem) {
+  .cornix-header { padding-inline: var(--space-400); }
+  .cornix-brand { min-width: 10rem; }
+  .cornix-workspace { padding-inline: var(--space-300); }
+  .cornix-workspace code { display: none; }
+  .cornix-connection { font-size: var(--typography-caption-font-size); }
+  .cornix-appearance { gap: var(--space-200); margin-inline-start: var(--space-300); }
+  .cornix-nav { padding-inline: var(--space-300); }
+  .cornix-main { padding: var(--space-400); }
+  .cornix-editor { grid-template-columns: minmax(0, 1fr) 16rem; }
+  .cornix-status { padding-inline: var(--space-400); }
+}
+@media (max-width: 60rem) {
+  .cornix-header { flex-wrap: wrap; gap: var(--space-300); }
+  .cornix-brand { min-width: 0; }
+  .cornix-workspace { order: 3; width: 100%; padding: var(--space-200) 0 0; border-inline-start: 0; border-block-start: var(--border-width-thin) solid var(--color-surface-variant); }
+  .cornix-connection { margin-inline-start: auto; }
+  .cornix-editor { grid-template-columns: 1fr; }
+  .cornix-inspector { order: -1; }
+  .cornix-status__message { display: none; }
+}

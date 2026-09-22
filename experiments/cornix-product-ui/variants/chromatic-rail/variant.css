@@ -1,0 +1,8 @@
+.cornix-prototype--chromatic-rail { grid-template-columns: 14rem minmax(0, 1fr); }
+.cornix-prototype--chromatic-rail .cornix-nav { border: 0; background: var(--color-primary); color: var(--color-on-primary); }
+.cornix-prototype--chromatic-rail .cornix-nav > p, .cornix-prototype--chromatic-rail .cornix-nav > button span { color: color-mix(in srgb, var(--color-on-primary) 72%, transparent); }
+.cornix-prototype--chromatic-rail .cornix-nav > button.is-active { background: var(--color-on-primary); color: var(--color-primary-text); }
+.cornix-prototype--chromatic-rail .cornix-nav__tools { border-color: color-mix(in srgb, var(--color-on-primary) 30%, transparent); }
+.cornix-prototype--chromatic-rail .cornix-nav__tools button { color: var(--color-on-primary); }
+.cornix-prototype--chromatic-rail .cornix-status { background: var(--color-secondary-container); }
+.cornix-prototype--chromatic-rail .cornix-stage { border-top: .45rem solid var(--color-tertiary); }
