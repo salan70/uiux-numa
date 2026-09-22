@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- 組の規則: 32 の格子。面の外縁を偶数座標に置くと、16px（1/2 倍）で整数ピクセルに乗る。 -->
+  <!-- live area は 4..28。3 案で共通にする。 -->
+  <!-- round 2: 手前を塗りにすると奥を覆い、比較ではなく複製に読めた。2 面を同じ輪郭にし、重なりだけを塗る。 -->
+  <!-- 奥の面: 16x20。外縁 4..20 x 8..28。線幅 2 の中心を外縁の 1 内側へ置く。 -->
+  <rect id="part-mark-back" x="5" y="9" width="14" height="18" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- 手前の面: 同じ 16x20 を (8,-4) ずらす（LOGO-03 非対称）。 -->
+  <rect id="part-mark-front" x="13" y="5" width="14" height="18" fill="none" stroke="currentColor" stroke-width="2"/>
+  <!-- 重なり: 12..20 x 8..24。2 案が一致した範囲を塗りで示す。ここが固有の要素になる（LOGO-04）。 -->
+  <rect id="part-mark-overlap" x="12" y="8" width="8" height="16" fill="currentColor"/>
+</svg>
