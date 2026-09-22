@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(37);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(14);
     expect(catalog.schemes).toHaveLength(10);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(29);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(33);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(6);
-    expect(catalog.liveVariants).toHaveLength(22);
+    expect(catalog.experiments).toHaveLength(7);
+    expect(catalog.liveVariants).toHaveLength(23);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -62,7 +62,7 @@ describe("catalog inventory", () => {
   it("Experiment を topic へ割り当てる", () => {
     expect(slugs("colors")).toEqual(["color-schemes-material"]);
     expect(slugs("typography")).toEqual(["product-ui-typography"]);
-    expect(slugs("icons")).toEqual(["class-tech-icons", "hako-feature-icons"]);
+    expect(slugs("icons")).toEqual(["catalog-ui-icons", "class-tech-icons", "hako-feature-icons"]);
     expect(slugs("components")).toEqual(["button", "card"]);
     // 判断済みで掲載しない Experiment は削除した。残る Experiment はすべて topic を持つ。
     expect(catalog.experiments.every((item) => item.topic !== null)).toBe(true);
@@ -107,6 +107,7 @@ describe("catalog inventory", () => {
     expect(ids("adopted")).toEqual([
       "button/pill-action",
       "card/zoom-cover",
+      "catalog-ui-icons/round-soft",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>前へ送る</title>
+  <!-- arrow-next を x=12 で鏡映した対。transform を使わず座標で書く（最適化と描画の差を避ける）。 -->
+  <!-- 幹の y=11.25 の理由は arrow-next と同じ。16px で外縁が 10.5/12 の整数ピクセルに乗る。 -->
+  <path id="part-arrow-prev-shaft" d="M20.25 11.25H3.75" fill="none" stroke="currentColor"/>
+  <!-- 尾 11.25 : 頭 6.75 = 1.667（φ に対し +3.0%）。頭の後端は 21 - 11.25 = 9.75、先端は 3.75。 -->
+  <path id="part-arrow-prev-head" d="M9.75 5.25 3.75 11.25 9.75 17.25" fill="none" stroke="currentColor"/>
+</svg>

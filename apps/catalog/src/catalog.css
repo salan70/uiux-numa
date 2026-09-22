@@ -1896,11 +1896,6 @@ body {
   block-size: 1em;
 }
 
-.app-shell .icon__dot {
-  fill: currentColor;
-  stroke: none;
-}
-
 /* ポップアップの中身。 */
 .app-shell .detail-panel {
   display: grid;
