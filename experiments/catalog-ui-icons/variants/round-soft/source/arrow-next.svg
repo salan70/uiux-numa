@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>次へ送る</title>
+  <!-- 幹: y=11.25。箱の対称軸 12 では外縁が 11.25/12.75 となり、16px で 1px の線が半ピクセルにまたがって薄く出た（round 2 の観察）。 -->
+  <!-- 0.75 上げると外縁は 10.5/12 になり、16px で整数ピクセルに乗る（ICON-09）。囲み形を持たない asset なので、箱の中心から外れても中心のずれとして見えない。 -->
+  <!-- 幹の外形は x 3..21 の 18。 -->
+  <path id="part-arrow-next-shaft" d="M3.75 11.25h16.5" fill="none" stroke="currentColor"/>
+  <!-- 頭: 45°（正方格子の対角、√2）。幅 18 の黄金分割 21 - 18/φ² = 14.124 → 格子 14.25。尾 11.25 : 頭 6.75 = 1.667 で φ に対し +3.0%。 -->
+  <!-- 先端 (20.25,11.25) は幹の端点と重なり、丸い接合で閉じる。頭の高さは 11.25±6 で外形 18:13.5 = 4:3。 -->
+  <path id="part-arrow-next-head" d="M14.25 5.25 20.25 11.25 14.25 17.25" fill="none" stroke="currentColor"/>
+</svg>
