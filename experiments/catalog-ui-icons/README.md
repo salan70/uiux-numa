@@ -1,6 +1,6 @@
 ---
 title: Catalog の UI アイコン
-status: implementing
+status: decided
 role: module
 maturity: experimental
 created: 2026-09-22
@@ -15,7 +15,8 @@ domains:
 sources:
   - class-tech-icons
   - hako-feature-icons
-adopted: []
+adopted:
+  - round-soft
 ---
 
 ## Problem
@@ -193,17 +194,32 @@ preview は x86_64-darwin で作った。
 
 ## Evaluation
 
-未定。
 観点別の評価は行っていない。
+現行の `apps/catalog/src/components/icons.tsx` の 4 asset を単体 SVG に起こし、`round-soft` と 16 / 20 / 24px で並べて利用者が見比べた。
+16px は resvg のラスタライズを nearest-neighbor で 8 倍に拡大し、ピクセルの当たり方を見た。
+
+未確認の軸は、支援技術による読み上げ、16px 未満での見え方、Catalog 以外のプロダクトへの適合である。
 
 ## Decision
 
-未定。
-採用の判断は人間が行う。
+`round-soft` を採用する。
+
+- 判断者: リポジトリの所有者
+- 判断日: 2026-09-22
+- 根拠: 利用者が現行と `round-soft` を 16px で見比べて選んだ。現行の `arrow` は幹が `y=12` にあるため 16px で 1px の線が半ピクセルにまたがり、灰色ににじんで頭より薄く出る。`round-soft` の `y=11.25` は実線になり、頭と同じ濃さで揃う。`detail` も点と棒の隙間が 1.5 から 2.25 に広がり、16px で i の字が読める。
+
+採用に伴い `apps/catalog/src/components/icons.tsx` の `DetailIcon`、`SidebarIcon`、`ArrowIcon` を差し替える。
+`MagatamaIcon` と `AppearanceIcon` はこの Experiment の対象外のため、現行の形のまま残る。
 
 ## Rejected reasons
 
-未定。
+却下した variant はない。
+`round-soft` の 1 案だけを作り、反復で磨いた（Variants の「反復の記録」）。
+
+round 0 で却下した `detail` の比喩 2 案の理由を残す。
+
+- 三点リーダ: 16px で見かけの重さが他の 3 asset より軽い。
+- 山形（シェブロン）: 形は明快だが「下へ開く」を意味し、詳細を開く用途と合わない。
 
 ## Learnings
 
