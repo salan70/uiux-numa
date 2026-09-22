@@ -78,7 +78,7 @@ export function Sidebar({
     <div className="sidebar" id="sidebar">
       <div className="sidebar__head">
         <Link href="/" className="sidebar__name" onNavigate={onNavigate}>
-          UI／UX 沼
+          UI/UX NUMA
         </Link>
         {toggle}
       </div>

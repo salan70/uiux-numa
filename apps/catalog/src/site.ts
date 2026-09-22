@@ -1,1 +1,1 @@
-export const SITE_TITLE = "UI/UX 沼";
+export const SITE_TITLE = "UI/UX NUMA";

@@ -1,6 +1,6 @@
-# UI/UX 沼の公開手順
+# UI/UX NUMA の公開手順
 
-公開サイト「UI/UX 沼」のコードは `apps/catalog/` にある。
+公開サイト「UI/UX NUMA」のコードは `apps/catalog/` にある。
 Catalog は成果物の visual showcase である。
 配色、文字、token、部品、アイコンの 5 トピックと、方針を掲載する。
 `role` と `maturity` で再利用の前提を示す。

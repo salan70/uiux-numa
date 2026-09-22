@@ -42,7 +42,7 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 ## Catalog
 
-公開サイトの表示名は「UI/UX 沼」である。
+公開サイトの表示名は「UI/UX NUMA」である。
 実装は `apps/catalog/` にある。
 Catalog は成果物の visual showcase である。
 仕様書や Asset の正本にはしない。
@@ -79,4 +79,4 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 - [docs/principles/](docs/principles/): 原則候補と、採否の判断手順
 - [docs/guidelines/](docs/guidelines/): 主題ごとの方針（UX ライティング、情報設計、視覚構成と造形など）
 - [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)
-- [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX 沼の Cloudflare Pages 公開手順
+- [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX NUMA の Cloudflare Pages 公開手順

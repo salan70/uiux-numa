@@ -115,7 +115,7 @@ live variant は専用 route と iframe へ隔離する。
 Components の採用部品（Button、Card）は Experiment の実装を直接表示し、ページ全体のスクロールへ統合する。
 preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
 実装は `apps/catalog/` に置く。
-公開時の表示名は「UI/UX 沼」とする。
+公開時の表示名は「UI/UX NUMA」とする。
 公開は Cloudflare Pages を使う。
 責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
 ホストの顔と情報設計の正本は `apps/catalog/` 自身である。
