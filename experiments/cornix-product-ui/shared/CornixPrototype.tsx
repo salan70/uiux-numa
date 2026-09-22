@@ -159,6 +159,17 @@ export function CornixPrototype({ direction }: { direction: CornixDirection }) {
         <div className="cornix-connection">
           <i aria-hidden="true" /> Cornix LP に接続済み
         </div>
+        <div className="cornix-header__actions" role="group" aria-label="Workspace操作">
+          <Button appearance="quiet" size="small">
+            Workspace を開く
+          </Button>
+          <details className="cornix-header__more">
+            <summary>その他</summary>
+            <div className="cornix-header__more-menu">
+              <button type="button">backup から復元</button>
+            </div>
+          </details>
+        </div>
         <div className="cornix-appearance">
           <label>
             配色
@@ -193,11 +204,6 @@ export function CornixPrototype({ direction }: { direction: CornixDirection }) {
             {item}
           </button>
         ))}
-        <div className="cornix-nav__tools">
-          <button>Workspace を開く</button>
-          <button>実機から再読込</button>
-          <button>backup から復元</button>
-        </div>
       </nav>
 
       <main id="cornix-main" className="cornix-main">
