@@ -1,7 +1,6 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef } from "react";
 import { Card } from "../../../../experiments/card/shared/Card";
 import { GALLERY_KIND_LABEL, type GalleryTile } from "../content/galleryTiles";
-import { Link } from "./Link";
 
 // 段ごとの速さ（px/秒）と向き、始まりの位置。隣り合う段を逆向きにし、速さと継ぎ目を揃えない。
 const ROWS = [
@@ -16,42 +15,20 @@ function splitRows(tiles: GalleryTile[], count: number): GalleryTile[][] {
   return rows;
 }
 
-/**
- * 流れる帯の複製に置くリンク。読み上げは複製の群ごと aria-hidden で隠し、Tab でも辿らせない。
- * inert にすると hover も押下も届かなくなり、帯の半分が押せない面になるので使わない。
- */
-function DecorativeLink({
-  href,
-  className,
-  children,
-}: {
-  href: string;
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <Link href={href} className={className} tabIndex={-1}>
-      {children}
-    </Link>
-  );
-}
-
-function TileCard({ tile, decorative }: { tile: GalleryTile; decorative: boolean }) {
+function TileCard({ tile }: { tile: GalleryTile }) {
   return (
     <Card
-      href={tile.href}
       title={tile.title}
       meta={GALLERY_KIND_LABEL[tile.kind]}
       description={tile.description}
       cover={tile.cover}
-      linkAs={decorative ? DecorativeLink : Link}
     />
   );
 }
 
 /**
  * 1 段の流れる帯。transform ではなく横スクロールの位置を動かす。
- * キーボードで帯の外のカードへ進んだとき、ブラウザが自分でスクロールして見える位置へ出すためである。
+ * カードは押さない。ポインタが乗った段は減速して止まる。
  * 利用者はトラックパッドや指でも帯を送れる。
  */
 function MarqueeRow({
@@ -83,12 +60,10 @@ function MarqueeRow({
     let position = 0;
 
     const loop = () => group.offsetWidth;
-    const focusInside = () => row.contains(document.activeElement);
 
     // 複製の帯を並べているので、1 周分ずれたら同じ見た目の位置へ戻す。
-    // フォーカスが帯の中にある間は戻さない。戻すとフォーカスしたカードが画面外へ飛ぶ。
     const wrap = (value: number) => {
-      if (reduce.matches || focusInside()) return value;
+      if (reduce.matches) return value;
       const width = loop();
       if (value >= width) return value - width;
       if (value < 0) return value + width;
@@ -120,13 +95,8 @@ function MarqueeRow({
     const hold = () => {
       held = true;
     };
-    // フォーカスが入った段はすぐ止める。減速の間に流れると、見える位置へ出したカードがずれていく。
-    const holdForFocus = () => {
-      held = true;
-      velocity = 0;
-    };
     const release = () => {
-      if (focusInside() || row.matches(":hover")) return;
+      if (row.matches(":hover")) return;
       held = false;
       wake();
     };
@@ -151,8 +121,6 @@ function MarqueeRow({
     reduce.addEventListener("change", wake);
     row.addEventListener("pointerenter", hold);
     row.addEventListener("pointerleave", release);
-    row.addEventListener("focusin", holdForFocus);
-    row.addEventListener("focusout", release);
     row.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
@@ -162,8 +130,6 @@ function MarqueeRow({
       reduce.removeEventListener("change", wake);
       row.removeEventListener("pointerenter", hold);
       row.removeEventListener("pointerleave", release);
-      row.removeEventListener("focusin", holdForFocus);
-      row.removeEventListener("focusout", release);
       row.removeEventListener("scroll", onScroll);
     };
   }, [speed, direction, start]);
@@ -174,15 +140,15 @@ function MarqueeRow({
         <ul className="marquee__group" ref={groupRef}>
           {tiles.map((tile) => (
             <li key={tile.id}>
-              <TileCard tile={tile} decorative={false} />
+              <TileCard tile={tile} />
             </li>
           ))}
         </ul>
-        {/* 継ぎ目なく流すための複製。読み上げと Tab には出さず、hover と押下は本物と同じく受ける。 */}
+        {/* 継ぎ目なく流すための複製。読み上げには出さない。 */}
         <ul className="marquee__group marquee__group--clone" aria-hidden="true">
           {tiles.map((tile) => (
             <li key={tile.id}>
-              <TileCard tile={tile} decorative />
+              <TileCard tile={tile} />
             </li>
           ))}
         </ul>
