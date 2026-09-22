@@ -68,3 +68,4 @@ updated: YYYY-MM-DD
 | [状態は色で示し、寸法で示さない](state-changes-must-not-move-layout.md)              | `candidate` | `docs/records/catalog-editorial/`                                                 |
 | [段の数は任意項目の有無で変えない](block-shape-must-not-vary-by-optional-parts.md)   | `candidate` | `docs/records/guideline-rule-structure/`                                          |
 | [良し悪しの色に画面の強調色を借りない](semantic-color-must-not-borrow-the-accent.md) | `candidate` | `docs/records/guideline-rule-structure/`                                          |
+| [テーマ色の塗りに意味を担わせない](theme-color-fill-carries-no-meaning.md)           | `candidate` | `experiments/catalog-theme-icons/`                                                |
