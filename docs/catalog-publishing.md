@@ -105,7 +105,7 @@ production の完了条件は `https://uiux.oda79.me/` が新しい Catalog と�
   - `/getting-started`、`/principles`、`/status`、`/resources`、`/motion`
   - `/foundations/colors/<却下した配色>`
 - `/colors`、`/typography`、`/icons` の旧 URL が新 URL へ 301 される
-- サイドバーが Works 5 件と Guidelines 6 件の 2 群である
+- サイドバーが Works 5 件と Guidelines 7 件の 2 群である
 - サイドバー最下段の配色と明暗の選択がサイト全体へ反映され、再読み込み後も保たれる
 - 選べる配色が採用したものだけである
 - ライト / ダークの切り替えで選択中の配色の値が変わる

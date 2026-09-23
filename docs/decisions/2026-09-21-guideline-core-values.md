@@ -4,6 +4,7 @@
 - 日付: 2026-09-21
 - 参照: [方針の書式 ADR](2026-09-20-guideline-format.md)、[方針画面の平らな版面 ADR](2026-09-21-catalog-guideline-plain-layout.md)
 - 対象: `docs/guideline-format.md`、`docs/templates/guideline/guideline.md`、`docs/guidelines/README.md`、`docs/guidelines/ux-writing.md`
+- 置き換え先: UX Writing のコアと Tips は [UX Writing の組み直し ADR](2026-09-22-ux-writing-redesign.md) が置き換えた。1 文 50 字とコアに数値を書く規則は継承する。
 
 ## 背景
 

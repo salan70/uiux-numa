@@ -9,7 +9,7 @@
 
 UI/UX とプロダクト体験の実験を行う層。
 同じ課題に対して UI、interaction、copy、motion などの複数案を実装し、比較・改善する。
-完成品だけでなく、却下した案も学習材料として残す。
+却下した案は判断までコードを残し、判断後は却下理由だけを README に残す（[削除の ADR](decisions/2026-09-21-prune-decided-experiments.md)）。
 置き場は `experiments/` とする。
 手順は [experiment-lifecycle.md](experiment-lifecycle.md) に定める。
 
@@ -28,6 +28,7 @@ UI/UX とプロダクト体験の実験を行う層。
 - interaction / motion learnings
 
 置き場は `docs/` と `patterns/` とする。
+`patterns/` は未作成で、最初の Pattern を抽出した時点で作る。
 原則は `docs/principles/`、評価基準は `docs/evaluation/`、設計判断は `docs/decisions/` に置く。
 Pattern と anti-pattern は `patterns/` に置く。
 
@@ -47,6 +48,7 @@ Pattern と anti-pattern は `patterns/` に置く。
 - motion / interaction patterns
 
 置き場は `skills/`、`tokens/`、`design-systems/` とする。
+`design-systems/` は未作成で、中身ができた時点で作る。
 
 ## Pattern first
 
@@ -99,38 +101,20 @@ Assets の Skill が `experimental` でもよい。
 Design System より早い段階から導入を検討する。
 Web、SwiftUI、Flutter などへ展開できる canonical token source を持つ。
 visual token だけでなく、必要性が確認できれば motion などの token 化も検討する。
-具体的な仕様、変換方式、ツール選定は後続 Issue で扱う。
+正本は `tokens/` の DTCG JSON で、`just tokens-build` で変換する。
+判断は [階梯の ADR](decisions/2026-09-21-token-scale-foundation.md) に残す。
 
 ## Catalog
 
-Catalog は成果物の visual showcase とする。
-仕様書や Asset の正本にはしない。
-説明文より先に見て触れ、`role` と `maturity` で再利用の前提を確かめる。
-採用成果に限らず、`reference` も探索してよい。
-topic に当たらない Experiment は Catalog に載せず、削除もしない（[掲載しない Experiment の ADR](decisions/2026-09-22-unlisted-experiments.md)）。
-
-Experiment 本文、原則、開発者向け手順、ADR 全文は Catalog 内で描画しない。
-成果物の背景となる方針は二次情報として掲載する。
-正本（`docs/guidelines/`）から glob で読み、成果物探索の邪魔をしない。
-live variant は専用 route と iframe へ隔離する。
-Components の採用部品（Button、Card）は Experiment の実装を直接表示し、ページ全体のスクロールへ統合する。
-preview PNG は Experiment の検証資産として `experiments/*/previews/` に残す。
-実装は `apps/catalog/` に置く。
-公開時の表示名は「UI/UX NUMA」とする。
-公開は Cloudflare Pages を使う。
-責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md) に残す。
-ホストの顔と情報設計の正本は `apps/catalog/` 自身である。
-出どころは `topic-first` 案で、記録は `docs/records/catalog-editorial/` にある。
-入口は Works の 5 トピックと Guidelines の 2 群にする。
-ホストは固有の色を持たず、採用した配色のいずれかを着る（[ホスト ADR](decisions/2026-09-19-catalog-host.md)）。
-置き換えの判断は [topic-first ADR](decisions/2026-09-20-catalog-topic-first.md) に残す。
+Catalog は成果物の visual showcase であり、仕様書や Asset の正本にはしない。
+責務と構成は [README](../README.md#catalog) と [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) に置く。
 
 ## AI Agent と Skill
 
 最終的な目的は、プロダクト体験の探索プロセス自体を再現可能にすることである。
 UI を生成する単発の Skill は目的ではない。
 
-候補:
+候補（未実装の構想）:
 
 - ui-explore
 - ui-critique
@@ -145,6 +129,8 @@ UI を生成する単発の Skill は目的ではない。
 - ui-state-review
 - ui-extract-pattern
 - ui-promote-pattern
+
+実装済みの Skill は [skills/README.md](../skills/README.md) にある。
 
 prompt、skill、reference、過去の decision の違いによる生成結果の差も研究対象に含める。
 AI から良い UI/UX を安定して引き出す方法そのものを成果物とする。

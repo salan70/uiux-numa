@@ -1,6 +1,6 @@
 ---
 title: 方針の規則ブロックの構造
-status: draft
+status: decided
 role: module
 maturity: experimental
 created: 2026-09-21
