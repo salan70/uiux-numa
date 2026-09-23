@@ -10,5 +10,3 @@ export function Mark({ svg, className }: { svg: string; className: string }) {
     />
   );
 }
-
-export type MarkEntry = { id: string; label: string; svg: string };

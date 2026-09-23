@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>UI/UX NUMA</title>
-  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、字画 4、単色、端点は round。melt 系の案で共通にする。 -->
-  <!-- 骨格は nu-round と同じ。肩の半径 4（中心 (10,12)）、底の半径 6、共有する縦画は x 14。 -->
-  <!-- 変えた点: 左の脚が底で溶けて広がる。脚は y 24 で止め、横半径 4・縦半径 2 の水たまりへ渡す。 -->
-  <path id="part-mark-letter" d="M6 24V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-  <!-- 水たまり: 中心 (8,26)。左端は live area の 4、底は 28。脚の中心 6 から右へ 2 ずらし、溶けて流れた向きを出す。 -->
-  <ellipse id="part-mark-puddle" cx="8" cy="26" rx="4" ry="2" fill="currentColor"/>
-</svg>

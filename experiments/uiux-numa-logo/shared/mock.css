@@ -1,5 +1,5 @@
 /*
- * UI/UX NUMA のロゴのモックのスタイル。1 案の利用画面（LogoMock）と 8 案の一覧（Overview）が共有する。
+ * UI/UX NUMA のロゴのモックのスタイル。採用した 1 案の利用画面（LogoMock）が使う。
  * 色は Catalog の中立な shell（白の面に黒い文字）から写す。マークの評価に配色を混ぜない。
  * 寸法と字の指定は apps/catalog/src/catalog.css の実値から写す。
  * マークは currentColor だけを使う。形の評価に色を混ぜない。
@@ -204,93 +204,4 @@
 .lg-mock .lg-invert {
   display: flex;
   gap: 1rem;
-}
-
-/* ここから Overview（8 案の一覧）だけが使う */
-
-.lg-overview {
-  gap: 1.5rem;
-}
-
-.lg-overview .lg-overview__title {
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.lg-overview .lg-overview__lead {
-  margin-block-start: 0.25rem;
-  color: var(--lg-muted);
-  font-size: 0.875rem;
-}
-
-.lg-overview .lg-overview__tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.lg-overview .lg-overview__tabs .lg-tab {
-  inline-size: 11rem;
-}
-
-.lg-overview .lg-row {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
-  border: 1px solid var(--lg-line);
-  background: var(--lg-surface);
-}
-
-.lg-overview .lg-row__name {
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-
-.lg-overview .lg-row__note {
-  color: var(--lg-muted);
-  font-size: 0.8125rem;
-}
-
-.lg-overview .lg-row__body {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2rem;
-  margin-block-start: 0.5rem;
-}
-
-.lg-overview .lg-row__sizes {
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  min-inline-size: 9rem;
-}
-
-.lg-overview .lg-row__lockup {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.lg-overview .lg-row__tiles {
-  display: flex;
-  gap: 0.75rem;
-  margin-inline-start: auto;
-}
-
-.lg-overview .lg-overview__display {
-  display: grid;
-  gap: 0.75rem;
-  padding-block-start: 0.5rem;
-  border-block-start: 1px solid var(--lg-line);
-}
-
-.lg-overview .lg-display__title {
-  display: flex;
-  align-items: center;
-  gap: 0.18em;
-  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
-  font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
 }

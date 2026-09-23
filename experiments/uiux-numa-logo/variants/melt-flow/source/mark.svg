@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>UI/UX NUMA</title>
-  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、字画 4、単色、端点は round。melt 系の案で共通にする。 -->
-  <!-- 変えた点: 直線をなくし、3 次曲線だけでつなぐ。頂点は肩 (10,8) と底 (20,26) で、底の外縁は 28。 -->
-  <!-- 制御点は格子に置き、s（滑らかな接続）で接線をつなぐ。共有する縦画は (14,16) を通る変曲点になる。 -->
-  <path id="part-mark-letter" d="M6 26C6 16 7 8 10 8s4 4 4 8 2 10 6 10 6-4 6-10V6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-</svg>
