@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、字画 4、単色。5 案で共通にする。 -->
+  <!-- N の縦画 2 本: 幅 4、live area の天地いっぱい。 -->
+  <path id="part-mark-stems" d="M4 4h4v24H4Z M24 4h4v24h-4Z" fill="currentColor"/>
+  <!-- N の斜画をポインタにする。先端 (10,6) は縦画と天から隙間 2 を空ける。 -->
+  <!-- 頭の右辺と切り欠きは 45°。尾は傾き 2 で、横幅 4（垂直な太さ 4 × 2 / √5 = 3.58）。尾の先は右の縦画の足に合流する。 -->
+  <path id="part-mark-cursor" d="M10 6l8 8 6 12v2h-4l-6-12-4 4Z" fill="currentColor"/>
+</svg>

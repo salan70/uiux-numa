@@ -1,5 +1,5 @@
 // 1 案を利用画面で見るモック。Catalog で実際にロゴが出る面だけを切り出す。
-// 4 案で共通の実装を使う。差分は dist/mark.svg だけである。
+// 5 案で共通の実装を使う。差分は dist/mark.svg だけである。
 // lockup は形式 A（マーク + LINE Seed JP の HTML テキスト）で統一する。形式 B の比較はマークの選定後に行う。
 import { Mark } from "./Mark";
 
@@ -36,7 +36,9 @@ export function LogoMock({ mark }: { mark: string }) {
             <Mark svg={mark} className="lg-mark lg-mark--display" />
             <span>UI/UX NUMA</span>
           </h1>
-          <p className="lg-home__lead">採用した配色、文字、SVG、コンポーネントを正として掲載する。</p>
+          <p className="lg-home__lead">
+            採用した配色、文字、SVG、コンポーネントを正として掲載する。
+          </p>
         </main>
       </div>
 
