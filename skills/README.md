@@ -112,7 +112,7 @@ symlink の解決は次を確認した。
 | Codex        | 未確認 | 同じ symlink 経路を使う想定。起動確認はしていない                         |
 
 読み込み確認はデザイン上の効果の確認ではない。
-効果の比較は Experiment `registration-completion-feedback` で行った。
+効果の比較は Experiment `registration-completion-feedback`（削除済み）で行った。
 
 ## 派生 3 Skill の効果と限界（2026-09-20）
 
