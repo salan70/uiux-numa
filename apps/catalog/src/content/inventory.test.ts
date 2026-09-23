@@ -3,16 +3,16 @@ import { assertAdoptedIds, catalog } from "./collect";
 
 describe("catalog inventory", () => {
   it("token、配色、SVG、Experiment を欠落なく集める", () => {
-    expect(catalog.tokens).toHaveLength(51);
-    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(37);
-    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(14);
+    expect(catalog.tokens).toHaveLength(56);
+    expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(40);
+    expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(16);
     expect(catalog.schemes).toHaveLength(10);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(38);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(10);
-    expect(catalog.liveVariants).toHaveLength(30);
+    expect(catalog.experiments).toHaveLength(11);
+    expect(catalog.liveVariants).toHaveLength(33);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -69,6 +69,7 @@ describe("catalog inventory", () => {
       "hako-feature-icons",
     ]);
     expect(slugs("components")).toEqual(["button", "card"]);
+    expect(slugs("motion")).toEqual(["catalog-screen-entrance"]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
     expect(unlisted()).toEqual(["cornix-product-ui", "uiux-numa-logo"]);
@@ -113,6 +114,9 @@ describe("catalog inventory", () => {
     expect(ids("adopted")).toEqual([
       "button/pill-action",
       "card/zoom-cover",
+      "catalog-screen-entrance/blur-focus",
+      "catalog-screen-entrance/char-stagger",
+      "catalog-screen-entrance/line-mask",
       "catalog-theme-icons/tomoe-classic",
       "catalog-ui-icons/round-soft",
       "class-tech-icons/line-round",
@@ -141,6 +145,14 @@ describe("catalog inventory", () => {
     expect(catalog.experiments.find((item) => item.slug === "hako-feature-icons")?.status).not.toBe(
       "decided",
     );
+  });
+
+  it("Variants 表の仮説と変えた軸を variant ごとに読む", () => {
+    // Motion 画面は説明を README から読む。列の読み違いで説明が消えたり入れ替わったりしないことを確かめる。
+    const motion = catalog.experiments.find((item) => item.slug === "catalog-screen-entrance");
+    const blur = motion?.variants.find((variant) => variant.id === "blur-focus");
+    expect(blur?.hypothesis).toBe("語ごとにぼかしから焦点を合わせると、柔らかく上質に見える");
+    expect(blur?.axis).toBe("語ごとにぼかしから焦点が合う。900ms、語の間隔 80ms");
   });
 
   it("adopted に Variants 表にない ID があると失敗する", () => {

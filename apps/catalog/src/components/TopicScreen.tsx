@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { EntranceWords } from "./EntranceWords";
 import { topicById, type TopicId } from "../content/topics";
 
 /**
@@ -12,7 +13,7 @@ export function TopicScreen({ id, children }: { id: TopicId; children: ReactNode
   return (
     <section className="index" aria-labelledby="index-head">
       <h1 className="section-title" id="index-head" tabIndex={-1} data-screen-heading>
-        {topic.label}
+        <EntranceWords text={topic.label} />
       </h1>
       {children}
     </section>

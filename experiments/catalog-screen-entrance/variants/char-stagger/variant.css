@@ -1,0 +1,51 @@
+/* 見出しを 1 文字ずつ、波のように下から立ち上げる。
+   ポートフォリオ系のサイトでよく見る、文字を分けて順に出す見せ方である。
+   値は variant 内の局所値にし、token にするのは採用後にする（tokens/motion の追加規則）。
+   - 600ms: 1 文字は小さく、道のりも 0.5em と短いので、行や語の案より短くても動きが見える。
+   - 30ms: 約 2 コマ。これより広いと 1 文字ずつ打ち込む表示に見え、狭いと波に見えず塊で動く。
+     見出しの 15 文字で最後の字が 420ms 後に動き出し、全体は約 1 秒で止まる。
+   - 曲線: line-mask と同じ expo 系の ease-out。字が早く止まるので、波の後ろ側まで読める。 */
+.entrance-char-stagger {
+  --entrance-duration: 600ms;
+  --entrance-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --entrance-step: 30ms;
+}
+
+.entrance-char-stagger .text-specimen__unit {
+  animation: entrance-char-stagger var(--entrance-duration) var(--entrance-easing) both;
+  animation-delay: calc(var(--i) * var(--entrance-step));
+}
+
+@keyframes entrance-char-stagger {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+/* リードは波が見出しの最後の字に届いてから 300ms 後に出す。和文を 1 字ずつ出すと 24 字で 720ms 待たせるので、分けない。 */
+.entrance-char-stagger .text-specimen__lead {
+  animation: entrance-char-stagger-lead 600ms var(--entrance-easing) both;
+  animation-delay: calc(var(--count) * var(--entrance-step) + 300ms);
+}
+
+@keyframes entrance-char-stagger-lead {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+/* 減らす設定では移動と順番のずれを止め、透明度の変化だけを token の値で残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .entrance-char-stagger .text-specimen__unit,
+  .entrance-char-stagger .text-specimen__lead {
+    animation: entrance-char-stagger-reduced var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+@keyframes entrance-char-stagger-reduced {
+  from {
+    opacity: 0;
+  }
+}

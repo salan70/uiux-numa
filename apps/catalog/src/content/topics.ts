@@ -2,7 +2,7 @@
 // 正本の domain は docs/scope.md にある。ここは topic への割り当てと URL だけを持つ。
 // 判断は docs/decisions/2026-09-20-catalog-topic-first.md に残す。
 
-export type TopicId = "colors" | "typography" | "tokens" | "components" | "icons";
+export type TopicId = "colors" | "typography" | "tokens" | "components" | "icons" | "motion";
 
 export type Topic = {
   id: TopicId;
@@ -49,6 +49,15 @@ export const TOPICS: Topic[] = [
     lead: "画面で使う記号の組。",
     href: "/foundations/icons",
     domains: ["iconography"],
+  },
+  // 利用者が 2026-09-23 に Works へ足した。判断は docs/decisions/2026-09-23-catalog-motion-topic.md に残す。
+  // 値と曲線の正本は Tokens にあるので、ここは動きを実際に見せる成果物だけを載せる。
+  {
+    id: "motion",
+    label: "Motion",
+    lead: "画面と部品の動き。",
+    href: "/foundations/motion",
+    domains: ["animation-motion"],
   },
 ];
 

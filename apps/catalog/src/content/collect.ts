@@ -44,6 +44,10 @@ export function isInProgress(status: ExperimentStatus): boolean {
 export type ExperimentVariant = {
   id: string;
   status: VariantStatus;
+  /** README の Variants 表の「仮説」列。表に行が無い variant は空にする。 */
+  hypothesis: string;
+  /** README の Variants 表の「変えた軸」列。 */
+  axis: string;
 };
 
 export type ExperimentRecord = {
@@ -187,7 +191,8 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
     const repoPath = toExperimentRepoPath(key);
     const frontmatter = parseExperimentFrontmatter(source, repoPath);
     const actual = (byExperiment.get(slug) ?? []).map((item) => item.variant).sort();
-    const listed = parseVariantIds(source);
+    const rows = parseVariantRows(source);
+    const listed = rows.map((row) => row.id);
 
     if (actual.length === 0) throw new Error(`${repoPath}: live variant がない`);
     for (const id of listed) {
@@ -214,10 +219,20 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
       lead: leadSentence(source),
       repoPath,
       variantIds: actual,
-      variants: actual.map((id) => ({
-        id,
-        status: variantStatus(frontmatter, id),
-      })),
+      // 並びは README の Variants 表の順にする。表の順は作者が意図した読み順（例: 落ち着いた案から華やかな案へ）である。
+      // Variants 節には同じ id が複数の表に出る README があるので、重複を除く。
+      variants: [...new Set([...listed.filter((id) => actual.includes(id)), ...actual])].map(
+        (id) => {
+          // 最初の表（id、仮説、変えた軸、実装の表）の行を採る。
+          const row = rows.find((item) => item.id === id);
+          return {
+            id,
+            status: variantStatus(frontmatter, id),
+            hypothesis: row?.hypothesis ?? "",
+            axis: row?.axis ?? "",
+          };
+        },
+      ),
       liveVariants: live,
     });
   }
@@ -250,12 +265,20 @@ function variantStatus(frontmatter: ExperimentFrontmatter, id: string): VariantS
   return frontmatter.adopted.includes(id) ? "adopted" : "rejected";
 }
 
-function parseVariantIds(source: string): string[] {
+/**
+ * README の Variants 表の行。列は docs/experiment-format.md の順（id、仮説、変えた軸、実装）で読む。
+ * 説明の正本を README の 1 か所に保ち、Catalog の画面に同じ文を二重に書かない。
+ */
+function parseVariantRows(source: string): { id: string; hypothesis: string; axis: string }[] {
   const start = source.indexOf("## Variants");
   if (start === -1) throw new Error("README に Variants がない");
   const end = source.indexOf("\n## ", start + 1);
   const section = source.slice(start, end === -1 ? source.length : end);
-  return [...section.matchAll(/^\|\s*`([a-z0-9-]+)`\s*\|/gm)].map((match) => match[1]);
+  return [...section.matchAll(/^\|\s*`([a-z0-9-]+)`\s*\|([^|]*)\|([^|]*)\|/gm)].map((match) => ({
+    id: match[1],
+    hypothesis: match[2].trim(),
+    axis: match[3].trim(),
+  }));
 }
 
 /**

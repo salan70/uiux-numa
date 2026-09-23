@@ -9,6 +9,7 @@ describe("matchRoute", () => {
     expect(matchRoute("/foundations/typography")).toEqual({ name: "typography" });
     expect(matchRoute("/foundations/tokens")).toEqual({ name: "tokens" });
     expect(matchRoute("/foundations/icons")).toEqual({ name: "icons" });
+    expect(matchRoute("/foundations/motion")).toEqual({ name: "motion" });
     expect(matchRoute("/components")).toEqual({ name: "components" });
     expect(matchRoute("/guidelines")).toEqual({ name: "guideline", slug: null });
   });
@@ -22,6 +23,10 @@ describe("matchRoute", () => {
     expect(matchRoute("/foundations/typography/product-ui-typography")).toEqual({
       name: "typographyDetail",
       experiment: "product-ui-typography",
+    });
+    expect(matchRoute("/foundations/motion/catalog-screen-entrance")).toEqual({
+      name: "motionDetail",
+      experiment: "catalog-screen-entrance",
     });
     expect(matchRoute("/components/button")).toEqual({ name: "component", slug: "button" });
     expect(matchRoute("/guidelines/states-and-feedback")).toEqual({

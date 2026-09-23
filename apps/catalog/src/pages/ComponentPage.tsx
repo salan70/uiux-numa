@@ -1,5 +1,6 @@
 import { Link } from "../components/Link";
 import { WipMark } from "../components/WipMark";
+import { EntranceWords } from "../components/EntranceWords";
 import { catalog, isInProgress } from "../content/collect";
 import { catalogComponent } from "../content/components";
 import { topicHref } from "../content/topics";
@@ -23,7 +24,7 @@ export function ComponentPage({ slug }: { slug: string }) {
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
         {isInProgress(work.status) && <WipMark />}
-        {entry.title}
+        <EntranceWords text={entry.title} />
       </h1>
       <div className="component-detail__body">
         <entry.Detail />

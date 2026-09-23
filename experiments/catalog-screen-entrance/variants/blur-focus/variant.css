@@ -1,0 +1,54 @@
+/* 見出しを語ごとに、ぼけた状態から焦点を合わせて出す。
+   製品紹介のサイトでよく見る、ピントが合うように現れる見せ方である。
+   Catalog の見出しに採用したので、時間、間隔、曲線は tokens/motion の entrance 系を参照する。
+   値の根拠は token の正本と、この Experiment の README の表に残す。
+   - blur: crafting-motion の出発点は transform と opacity だが、焦点が合う感じはぼかしでしか出せない。この案の軸そのものなので使う。
+     filter は描画の負荷が transform より大きいとされるが、未計測である。動かすのは見出しの語だけに限る。
+   - 12px: 見出しの字の太さより大きくぼかし、字の形が一度崩れて見える量にする。小さいと単に薄く見える。
+     距離は時間と曲線の token の家族に入らないので、局所値にする。 */
+.entrance-blur-focus {
+  --entrance-duration: var(--duration-entrance);
+  --entrance-easing: var(--easing-entrance);
+  --entrance-step: var(--duration-stagger);
+}
+
+.entrance-blur-focus .text-specimen__unit {
+  animation: entrance-blur-focus var(--entrance-duration) var(--entrance-easing) both;
+  animation-delay: calc(var(--i) * var(--entrance-step));
+}
+
+/* 0.25em の浮上を足す。ぼかしと透明度だけでは、どこから来たかの向きが無く、点滅に近く見える。 */
+@keyframes entrance-blur-focus {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(0.25em);
+  }
+}
+
+.entrance-blur-focus .text-specimen__lead {
+  animation: entrance-blur-focus-lead 700ms var(--entrance-easing) both;
+  animation-delay: calc((var(--count) - 1) * var(--entrance-step) + 450ms);
+}
+
+/* リードは和文の本文なので、ぼかさない。細い字画は小さな字でぼかすと、にじみが残って読みにくい。 */
+@keyframes entrance-blur-focus-lead {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+/* 減らす設定ではぼかしと移動と順番のずれを止め、透明度の変化だけを token の値で残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .entrance-blur-focus .text-specimen__unit,
+  .entrance-blur-focus .text-specimen__lead {
+    animation: entrance-blur-focus-reduced var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+@keyframes entrance-blur-focus-reduced {
+  from {
+    opacity: 0;
+  }
+}

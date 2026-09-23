@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-21
 - 参照: [余白、角丸、線の太さを token の階梯にする](2026-09-21-token-scale-foundation.md)、[部品ごとの詳細ページ](2026-09-21-component-detail-pages.md)、[Components を Button だけにする](2026-09-21-components-button-only.md)
+- 更新: 2026-09-23。motion の家族に見出しの入場の 5 個を足した。判断は [Motion topic の ADR](2026-09-23-catalog-motion-topic.md) に残す。
 - 対象: `tokens/size/`、`tokens/motion/`、`experiments/button/`、`apps/catalog/src/catalog.css`
 
 ## 背景

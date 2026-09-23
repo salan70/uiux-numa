@@ -18,6 +18,7 @@ pages=(
   typography:/foundations/typography
   tokens:/foundations/tokens
   icons:/foundations/icons
+  motion:/foundations/motion
   components:/components
   guidelines:/guidelines/states-and-feedback
 )

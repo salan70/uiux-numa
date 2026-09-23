@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { Fragment, useEffect, type ReactNode } from "react";
 import { Layout } from "./components/Layout";
 import { catalog } from "./content/collect";
 import { ALL_GUIDELINES } from "./content/guidelines";
@@ -10,6 +10,7 @@ import { DetailPage } from "./pages/DetailPage";
 import { GuidelinesPage } from "./pages/GuidelinesPage";
 import { HomePage } from "./pages/HomePage";
 import { IconsPage } from "./pages/IconsPage";
+import { MotionPage } from "./pages/MotionPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { TokensPage } from "./pages/TokensPage";
 import { TypographyPage } from "./pages/TypographyPage";
@@ -49,15 +50,19 @@ export function App() {
     const page = pageForRoute(matchRoute(route.to));
     return (
       <Layout path={route.to} title={page.title}>
-        {page.body}
+        <Fragment key={route.to}>{page.body}</Fragment>
       </Layout>
     );
   }
 
   const page = pageForRoute(route);
+  // 画面ごとに本文を描き直し、見出しの入場の動きを再生させる。
+  // 同じ部品の画面どうし（方針 A から方針 B など）は React が要素を使い回し、描き直さないと動かない。
+  // 単位は先頭へ戻す単位と同じ screenKey にし、配色のダイアログの開閉では再生しない。
+  // ラッパ要素を足すと .app-main > * の余白の規則が変わるので、Fragment に key を付ける。
   return (
     <Layout path={path} title={page.title}>
-      {page.body}
+      <Fragment key={screenKey(route, path)}>{page.body}</Fragment>
     </Layout>
   );
 }
@@ -105,6 +110,13 @@ function pageForRoute(route: Route): {
       body: <IconsPage />,
     };
   }
+  if (route.name === "motion") {
+    return {
+      title: "Motion",
+      updated: topicUpdated("motion"),
+      body: <MotionPage />,
+    };
+  }
   if (route.name === "components") {
     return {
       title: "Components",
@@ -120,7 +132,7 @@ function pageForRoute(route: Route): {
       body: <ComponentPage slug={route.slug} />,
     };
   }
-  if (route.name === "icon" || route.name === "typographyDetail") {
+  if (route.name === "icon" || route.name === "typographyDetail" || route.name === "motionDetail") {
     const experiment = catalog.experiments.find((item) => item.slug === route.experiment);
     return {
       title: experiment?.title ?? "ページが見つかりません",
