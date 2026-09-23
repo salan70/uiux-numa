@@ -4,24 +4,26 @@ import "../../../../tokens/typography/index.css";
 import "../../typography.css";
 import nuArches from "../nu-arches/dist/mark.svg?raw";
 import nuRound from "../nu-round/dist/mark.svg?raw";
-import nuSlant from "../nu-slant/dist/mark.svg?raw";
-import nuContrast from "../nu-contrast/dist/mark.svg?raw";
-import nuPool from "../nu-pool/dist/mark.svg?raw";
-import nuBubble from "../nu-bubble/dist/mark.svg?raw";
-import nuGap from "../nu-gap/dist/mark.svg?raw";
+import meltBulb from "../melt-bulb/dist/mark.svg?raw";
+import meltDrip from "../melt-drip/dist/mark.svg?raw";
+import meltSag from "../melt-sag/dist/mark.svg?raw";
+import meltFlow from "../melt-flow/dist/mark.svg?raw";
+import meltFlowBulb from "../melt-flow-bulb/dist/mark.svg?raw";
+import meltPuddle from "../melt-puddle/dist/mark.svg?raw";
 
-// 7 案を 1 ページで比べる。採否の対象にはしない。
+// 8 案を 1 ページで比べる。採否の対象にはしない。
 export default function Variant() {
   return (
     <Overview
       marks={[
         { id: "nu-arches", label: "基準: 半径 4 と 6 の ∩∪ を 1 本でつないだ nu", svg: nuArches },
-        { id: "nu-round", label: "端点を丸めた nu", svg: nuRound },
-        { id: "nu-slant", label: "両端を 45° で平行に切った nu", svg: nuSlant },
-        { id: "nu-contrast", label: "肩と底を字画の半分に細めた nu", svg: nuContrast },
-        { id: "nu-pool", label: "u の窪みに水をためた nu", svg: nuPool },
-        { id: "nu-bubble", label: "u の窪みに泡を浮かべた nu", svg: nuBubble },
-        { id: "nu-gap", label: "n と u の間に隙間を空けた nu", svg: nuGap },
+        { id: "nu-round", label: "基準: 端点を丸めた nu。melt 系の骨格", svg: nuRound },
+        { id: "melt-bulb", label: "左の脚の端が溶けて玉になる", svg: meltBulb },
+        { id: "melt-drip", label: "u の底から滴が垂れる", svg: meltDrip },
+        { id: "melt-sag", label: "肩が平たく、底が下へ伸びる", svg: meltSag },
+        { id: "melt-flow", label: "直線をなくし、曲線だけでつなぐ", svg: meltFlow },
+        { id: "melt-flow-bulb", label: "曲線だけでつなぎ、端が溶けて玉になる", svg: meltFlowBulb },
+        { id: "melt-puddle", label: "左の脚が底で水たまりに広がる", svg: meltPuddle },
       ]}
     />
   );

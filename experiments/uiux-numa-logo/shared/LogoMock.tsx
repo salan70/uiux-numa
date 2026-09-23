@@ -1,5 +1,5 @@
 // 1 案を利用画面で見るモック。Catalog で実際にロゴが出る面だけを切り出す。
-// 7 案で共通の実装を使う。差分は dist/mark.svg だけである。
+// 8 案で共通の実装を使う。差分は dist/mark.svg だけである。
 // lockup は形式 A（マーク + LINE Seed JP の HTML テキスト）で統一する。形式 B の比較はマークの選定後に行う。
 import { Mark } from "./Mark";
 
