@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>UI/UX NUMA</title>
-  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、字画 4、単色。5 案で共通にする。 -->
-  <!-- 小文字 n と u は互いの 180° 回転である。∩ と ∪ を 1 本の線でつなぎ、NUMA の字の律動にする。 -->
-  <!-- 半径は 4 と 6（2:3）。直径の和 8 + 12 = 20 が、中心線の幅 24 − 4 に一致する。 -->
-  <!-- 半径が違うので点対称にならない。左の脚は底 28 から、右の脚は天 4 まで伸ばす。 -->
-  <path id="part-mark-letter" d="M6 28V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V4" fill="none" stroke="currentColor" stroke-width="4"/>
-</svg>
