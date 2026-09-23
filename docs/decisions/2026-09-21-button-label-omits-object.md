@@ -4,6 +4,7 @@
 - 日付: 2026-09-21
 - 参照: [コアの数値 ADR](2026-09-21-guideline-core-values.md)
 - 対象: `docs/guidelines/ux-writing.md`、`experiments/button/shared/Showcase.tsx`
+- 置き換え先: 「面ごとにどちらかへ揃える」は [UX Writing の組み直し ADR](2026-09-22-ux-writing-redesign.md) が置き換えた。対象を省く決定は同 ADR が継承する。
 
 ## 背景
 

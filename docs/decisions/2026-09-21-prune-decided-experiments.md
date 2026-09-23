@@ -5,6 +5,7 @@
 - 参照: [Experiment lifecycle](../experiment-lifecycle.md)、[Experiment の記録形式](../experiment-format.md)、[topic-first ADR](2026-09-20-catalog-topic-first.md)、[配色の役割 ADR](2026-09-20-catalog-material-color-roles.md)
 - 置き換え: 2026-09-22。「判断済みで Catalog に載せない Experiment は、ディレクトリごと削除する」は、topic に当たらない Experiment について [掲載しない Experiment の ADR](2026-09-22-unlisted-experiments.md) が置き換える。
 - 置き換え: 「却下した variant も学習材料として残す」（lifecycle）、「`experiments/catalog-editorial/shared/*` の写しは残して凍結する」（topic-first ADR）、「`experiments/color-schemes` は削除しない」（配色の役割 ADR）
+- 補足: 本 ADR の後、`form-inline-validation` と `soft-component-kit` も削除し、記録を `docs/records/` へ移した。
 
 ## 背景
 
