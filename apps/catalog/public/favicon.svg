@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- UI/UX NUMA のマーク。形の正本は experiments/uiux-numa-logo/variants/nu-round/dist/mark.svg。 -->
+  <!-- タブには利用画面の CSS が届かないので、currentColor の代わりに明暗の色をここへ書く。 -->
+  <!-- 色は Catalog の本文色 cat-text の既定値 #1f1f1f と、その反転 #e0e0e0 である。 -->
+  <style>path{stroke:#1f1f1f}@media (prefers-color-scheme:dark){path{stroke:#e0e0e0}}</style>
+  <path fill="none" stroke-linecap="round" stroke-width="4" d="M6 26V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V6"/>
+</svg>

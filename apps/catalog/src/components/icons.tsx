@@ -105,3 +105,16 @@ export function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
     </svg>
   );
 }
+
+/**
+ * UI/UX NUMA のマーク。n と u を 1 本の線でつないだ nu。題字と見出しで字の前に置く。
+ * 形の正本は experiments/uiux-numa-logo/variants/nu-round/dist/mark.svg。
+ * 座標の導出は同 Experiment の README にある。字の横に置く飾りなので、名前は隣の文字列が担う。
+ */
+export function LogoMark() {
+  return (
+    <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path d="M6 26V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V6" />
+    </svg>
+  );
+}

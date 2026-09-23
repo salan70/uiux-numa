@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { ALL_GUIDELINES } from "../content/guidelines";
 import { isCurrentPath, TOPICS } from "../content/topics";
 import { Link } from "./Link";
-import { SidebarIcon } from "./icons";
+import { LogoMark, SidebarIcon } from "./icons";
 import { ThemeControl } from "./ThemeControl";
 
 type NavGroup = {
@@ -78,6 +78,7 @@ export function Sidebar({
     <div className="sidebar" id="sidebar">
       <div className="sidebar__head">
         <Link href="/" className="sidebar__name" onNavigate={onNavigate}>
+          <LogoMark />
           UI/UX NUMA
         </Link>
         {toggle}

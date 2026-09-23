@@ -207,8 +207,20 @@ viewBox、live area、格子、字画、色数、丸い端点は melt 系の 6 �
 - 判断日: 2026-09-23
 - 理由: 利用者は理由を示していない。
 
-Catalog への適用（favicon、サイドバー題字、ホーム大見出し）は未着手である。
-適用は別の依頼として扱う。
+2026-09-23 に Catalog へ適用した。
+
+| 面             | 実装                                                  | 大きさ                        |
+| -------------- | ----------------------------------------------------- | ----------------------------- |
+| favicon        | `apps/catalog/public/favicon.svg`                     | 32 の viewBox                 |
+| サイドバー題字 | `LogoMark`（`apps/catalog/src/components/icons.tsx`） | 1.25rem（20px）               |
+| ホーム大見出し | 同上                                                  | 0.78em。LogoMock で確かめた値 |
+
+favicon だけは SVG に色を書く。
+タブには利用画面の CSS が届かず、`currentColor` は黒になり、暗いタブで沈むためである。
+`prefers-color-scheme` で明は `#1f1f1f`（Catalog の本文色の既定値）、暗はその反転 `#e0e0e0` に切り替える。
+却下した案は、黒 1 色の favicon（暗いタブで沈む）と、明暗 2 枚の favicon を `<link media>` で出し分ける案（ファイルが 2 つになり、形の写しが増える）である。
+
+Catalog 本体の印はマークを 1 画面に 2 回置くため、`part-*` の id を持たない inline SVG として写した（`icons.tsx` の既存の印と同じ扱い）。
 
 ## Rejected reasons
 

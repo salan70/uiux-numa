@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-22
 - 参照: [UI/UX 沼の構成と公開先](2026-09-19-uiux-rd-catalog.md)、[画面文言の日本語表記を Japanese Notation として定める](2026-09-22-japanese-notation-guideline.md)、[Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
+- 更新: 2026-09-23。「ロゴと favicon は未着手」は、[UI/UX NUMA のロゴ](../../experiments/uiux-numa-logo/README.md) で `nu-round` を採用し、Catalog へ適用した。
 - 対象: `apps/catalog/src/site.ts`、`apps/catalog/index.html`、`apps/catalog/preview.html`、`apps/catalog/src/components/Sidebar.tsx`、`README.md`、`docs/layers.md`、`docs/catalog-publishing.md`、`docs/guidelines/japanese-notation.md`
 
 ## 背景

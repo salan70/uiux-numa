@@ -7,6 +7,7 @@ import {
   TokensCover,
   TypographyCover,
 } from "../../../../experiments/card/shared/covers";
+import { LogoMark } from "../components/icons";
 import { Link } from "../components/Link";
 import { MarqueeRows } from "../components/MarqueeRows";
 import { catalog, worksInTopic } from "../content/collect";
@@ -32,6 +33,7 @@ export function HomePage() {
     <>
       <section className="home-hero" aria-labelledby="home-title">
         <h1 className="home-hero__title" id="home-title" tabIndex={-1} data-screen-heading>
+          <LogoMark />
           {SITE_TITLE}
         </h1>
         <MarqueeRows tiles={galleryTiles()} />

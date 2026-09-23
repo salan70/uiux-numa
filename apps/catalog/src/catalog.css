@@ -229,10 +229,31 @@ body {
 }
 
 .app-shell .sidebar__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+/* UI/UX NUMA のマーク。題字では 20px、見出しでは字面に合わせる。
+   形と大きさは experiments/uiux-numa-logo の LogoMock で確かめた値である。 */
+.app-shell .logo-mark {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+/* 大文字の高さに対して正方のマークは大きく見えるので 0.78em に落とす。 */
+.app-shell .home-hero__title .logo-mark {
+  inline-size: 0.78em;
+  block-size: 0.78em;
 }
 
 /* 開閉ボタン。開閉で寸法も形も変えず、色だけが状態を示す。 */
@@ -868,6 +889,9 @@ body {
 }
 
 .app-shell .home-hero__title {
+  display: flex;
+  align-items: center;
+  gap: 0.18em;
   margin: 0;
   font-size: var(--cat-display);
   font-weight: 700;
