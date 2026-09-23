@@ -8,6 +8,7 @@ import { topicById, topicHref } from "../content/topics";
 import { NotFoundPage } from "./NotFoundPage";
 import { renderSentences } from "../components/Sentences";
 import { WipMark } from "../components/WipMark";
+import { EntranceWords } from "../components/EntranceWords";
 
 /** 成果物 1 件。live を主役にし、variant の切替と前提を脇に置く。 */
 export function DetailPage({ slug }: { slug: string }) {
@@ -28,7 +29,7 @@ export function DetailPage({ slug }: { slug: string }) {
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
         {isInProgress(work.status) && <WipMark />}
-        {work.title}
+        <EntranceWords text={work.title} />
       </h1>
       <p className="detail__lead">{renderSentences(work.lead)}</p>
       <div className="detail__live">

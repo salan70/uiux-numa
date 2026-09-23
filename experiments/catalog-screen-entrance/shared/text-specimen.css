@@ -1,0 +1,102 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/size/index.css";
+@import "../../../tokens/motion/index.css";
+
+:where(.text-specimen) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:where(.text-specimen) :where(h1, p) {
+  margin: 0;
+}
+
+/* 単体表示の代替配色。Button の見本と同じ sumi の値にする。
+   動きを比べる標本なので、有彩色で目を引かない無彩色の配色がよい。
+   Catalog の中では useCatalogColors が選択中の配色で上書きする。 */
+.text-specimen {
+  --color-background: #f9f8f8;
+  --color-on-surface: #1f1f1f;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #525252;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: var(--space-600);
+  min-height: 100vh;
+  padding: clamp(var(--space-400), 6vw, var(--space-1000));
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  color-scheme: light dark;
+  font-family: var(--typography-ui-font-family);
+}
+
+@media (prefers-color-scheme: dark) {
+  .text-specimen:not([data-theme="light"]) {
+    --color-background: #1b1a1a;
+    --color-on-surface: #f0f0f0;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8b8b;
+    --color-focus: #eb6101;
+  }
+}
+
+.text-specimen :focus-visible {
+  outline: var(--border-width-thick) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.text-specimen__stage {
+  display: grid;
+  gap: var(--space-400);
+}
+
+.text-specimen__eyebrow {
+  color: var(--color-on-surface-variant);
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  letter-spacing: 0.12em;
+  line-height: var(--typography-caption-line-height);
+}
+
+/* 見出しは typography token の title より大きくする。
+   動きの差は字面が大きいほど見分けやすく、見本の目的は動きを見せることにある。
+   Catalog の公開面では使わない大きさなので、token にしない。 */
+.text-specimen__heading {
+  font-family: var(--typography-title-font-family);
+  font-size: clamp(2.5rem, 9vw, 5rem);
+  font-weight: var(--typography-title-font-weight);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.text-specimen__line {
+  display: block;
+}
+
+/* transform は inline 要素に効かないので、動かす単位を inline-block にする。 */
+.text-specimen__unit {
+  display: inline-block;
+}
+
+.text-specimen__lead {
+  max-inline-size: 32em;
+  color: var(--color-on-surface-variant);
+  font-family: var(--typography-body-font-family);
+  font-size: var(--typography-body-font-size);
+  line-height: var(--typography-body-line-height);
+}
+
+.text-specimen__replay {
+  min-block-size: var(--size-target-min);
+  padding-inline: var(--space-400);
+  border: var(--border-width-thin) solid var(--color-outline);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-on-surface);
+  font: inherit;
+  cursor: pointer;
+}

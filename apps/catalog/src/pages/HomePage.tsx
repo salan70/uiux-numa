@@ -7,11 +7,12 @@ import {
   TokensCover,
   TypographyCover,
 } from "../../../../experiments/card/shared/covers";
+import { EntranceWords } from "../components/EntranceWords";
 import { LogoMark } from "../components/icons";
 import { Link } from "../components/Link";
 import { MarqueeRows } from "../components/MarqueeRows";
 import { catalog, worksInTopic } from "../content/collect";
-import { galleryTiles } from "../content/galleryTiles";
+import { galleryTiles, MotionCover } from "../content/galleryTiles";
 import { topicHref, TOPICS, type Topic, type TopicId } from "../content/topics";
 import { SITE_TITLE } from "../site";
 
@@ -22,6 +23,8 @@ const TOPIC_COVERS: Record<TopicId, ComponentType> = {
   tokens: TokensCover,
   components: ComponentsCover,
   icons: IconsCover,
+  // トップの帯で motion token に使っている見本を流用する。挿絵を新しく描かない規則（covers.tsx）に揃える。
+  motion: MotionCover,
 };
 
 /**
@@ -33,8 +36,9 @@ export function HomePage() {
     <>
       <section className="home-hero" aria-labelledby="home-title">
         <h1 className="home-hero__title" id="home-title" tabIndex={-1} data-screen-heading>
+          {/* ロゴは動かさない。語が焦点を合わせる間も、サイトの印が先に据わっていると画面の起点が定まる。 */}
           <LogoMark />
-          {SITE_TITLE}
+          <EntranceWords text={SITE_TITLE} />
         </h1>
         <MarqueeRows tiles={galleryTiles()} />
       </section>

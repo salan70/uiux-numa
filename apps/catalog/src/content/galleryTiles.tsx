@@ -89,7 +89,7 @@ function RadiusCover() {
   );
 }
 
-function MotionCover() {
+export function MotionCover() {
   return (
     <div className="cover-motion">
       <span className="cover-motion__track">

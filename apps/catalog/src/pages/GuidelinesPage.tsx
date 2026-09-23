@@ -1,6 +1,7 @@
 import { ALL_GUIDELINES, renderInline, type Principle, type Rule } from "../content/guidelines";
 import { renderSentences } from "../components/Sentences";
 import { WipMark } from "../components/WipMark";
+import { EntranceWords } from "../components/EntranceWords";
 
 /** 索引から規則へ送る。動きを減らす設定では滑らせず、移動先へ focus も移す。 */
 function goToRule(domId: string) {
@@ -29,7 +30,7 @@ export function GuidelinesPage({ slug }: { slug: string }) {
   return (
     <section className="index" aria-labelledby="index-head">
       <h1 className="section-title" id="index-head" tabIndex={-1} data-screen-heading>
-        {guideline.title}
+        <EntranceWords text={guideline.title} />
         {guideline.status === "draft" && <WipMark />}
       </h1>
       <p className="index__lead">{guideline.summary}</p>

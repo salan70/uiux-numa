@@ -9,6 +9,8 @@ export type Route =
   | { name: "tokens" }
   | { name: "icons" }
   | { name: "icon"; experiment: string }
+  | { name: "motion" }
+  | { name: "motionDetail"; experiment: string }
   | { name: "components" }
   | { name: "component"; slug: string }
   // slug が null のときは先頭の文書へ送る。
@@ -75,6 +77,9 @@ export function matchRoute(path: string): Route {
   if (normalized === "/foundations/icons") return { name: "icons" };
   const icon = normalized.match(/^\/foundations\/icons\/([a-z0-9-]+)$/);
   if (icon) return { name: "icon", experiment: icon[1] };
+  if (normalized === "/foundations/motion") return { name: "motion" };
+  const motion = normalized.match(/^\/foundations\/motion\/([a-z0-9-]+)$/);
+  if (motion) return { name: "motionDetail", experiment: motion[1] };
   if (normalized === "/components") return { name: "components" };
   const component = normalized.match(/^\/components\/([a-z0-9-]+)$/);
   if (component) return { name: "component", slug: component[1] };

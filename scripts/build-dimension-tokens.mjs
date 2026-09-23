@@ -7,7 +7,7 @@ const FAMILIES = [
   { id: "radius", count: 8, types: ["dimension"] },
   { id: "border", count: 2, types: ["dimension"] },
   { id: "size", count: 7, types: ["dimension"] },
-  { id: "motion", count: 6, types: ["duration", "cubicBezier"] },
+  { id: "motion", count: 11, types: ["duration", "cubicBezier"] },
 ];
 const checkOnly = process.argv.includes("--check");
 

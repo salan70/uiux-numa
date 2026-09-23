@@ -181,6 +181,93 @@ body {
   }
 }
 
+/* 画面の入場。experiments/catalog-screen-entrance の blur-focus を採用した。
+   見出しは語ごとにぼかしから焦点を合わせ、本文の区画はその後ろから上から順に立ち上がる。
+   利用者が 2026-09-23 に、見出しだけでなく画面全体に効果を付けることを求めた。
+   サイドバーは止める。画面をまたいで同じ場所に留まることが、どこにいるかの手がかりになる。
+   値の根拠は Experiment の README に残す。 */
+.app-shell .entrance-words__word {
+  display: inline-block;
+  animation: entrance-words var(--duration-entrance) var(--easing-entrance) both;
+  animation-delay: calc(var(--i) * var(--duration-stagger));
+}
+
+/* 12px は字の形が一度崩れて見えるぼかしの量。0.25em の浮上は、ぼかしだけでは向きが無く点滅に近く見えるので足す。 */
+@keyframes entrance-words {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(0.25em);
+  }
+}
+
+/* 減らす設定では、ぼかし、移動、順番のずれを止め、透明度の変化だけを状態変化の token で残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .entrance-words__word {
+    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+@keyframes entrance-words-reduced {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 本文の区画。単位は各画面の根の直下の子とし、画面ごとの部品に手を入れずに全画面へ効かせる。
+   - 見出しは語の動きを持つので除く。
+   - <dialog> は除く。閉じている間は display: none なので、開くたびに入場の animation が最初から走ってしまう。
+   - 区画はぼかさない。見本の blur-focus もリードはぼかしていない。大きな面をぼかすと描画の負荷が増え（未計測）、
+     本文の細い字画ににじみが残る。
+   - 時間と曲線は見出しと同じ token にし、画面全体を 1 つの流れとして見せる。
+   - 間隔も見出しの語と同じ token にする。見本のリードは 450ms 待ってから出したが、画面は数十回開くので、
+     本文が出るまで待たせない。5 つ目以降は 4 つ目と同時に出し、長い画面でも最後の区画を 320ms 以内に動き出させる。
+   - 24px の浮上は space.600。区画は字より大きく、見本のリードの 0.5em（約 8px）では動いたと見えない。
+     移動の距離の token は無いので、長さの階梯に寄せる。 */
+.app-shell .app-main > :not(.sidebar-toggle--floating) > :not([data-screen-heading], dialog) {
+  animation: entrance-block var(--duration-entrance) var(--easing-entrance) both;
+}
+
+.app-shell .app-main > :not(.sidebar-toggle--floating) > :nth-child(2) {
+  animation-delay: var(--duration-stagger);
+}
+
+.app-shell .app-main > :not(.sidebar-toggle--floating) > :nth-child(3) {
+  animation-delay: calc(var(--duration-stagger) * 2);
+}
+
+.app-shell .app-main > :not(.sidebar-toggle--floating) > :nth-child(4) {
+  animation-delay: calc(var(--duration-stagger) * 3);
+}
+
+.app-shell .app-main > :not(.sidebar-toggle--floating) > :nth-child(n + 5) {
+  animation-delay: calc(var(--duration-stagger) * 4);
+}
+
+@keyframes entrance-block {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-600));
+  }
+}
+
+/* 減らす設定では、移動と順番のずれを止め、透明度の変化だけを状態変化の token で残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .app-main > :not(.sidebar-toggle--floating) > :not([data-screen-heading], dialog) {
+    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+/* 見出しの全文を読み上げに渡す。見た目は語ごとの span が受け持つ。 */
+.app-shell .entrance-words__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .app-shell .skip {
   position: absolute;
   inset-inline-start: var(--cat-inline);
@@ -1378,6 +1465,60 @@ body {
   content: "／";
   margin-inline-end: var(--space-300);
   color: var(--cat-line-strong);
+}
+
+/* ---- 動き ---- */
+
+/* 型ごとに、左へ名前と説明、右へ live 標本を置く。Button の見本と同じ並べ方にし、読む順を揃える。
+   標本は見出しが大きく、説明より広い桁を取る。 */
+/* 型どうしの間は、成果物どうしの cat-block より狭くする。同じ成果物の型だと並びで分かるようにする。 */
+.app-shell .motion-patterns {
+  display: grid;
+  gap: var(--space-1000);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .motion-pattern {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
+  align-items: start;
+  gap: var(--cat-gap-lg) var(--space-600);
+}
+
+.app-shell .motion-pattern__spec {
+  display: grid;
+  gap: var(--cat-gap);
+}
+
+.app-shell .motion-pattern__name {
+  margin: 0;
+  /* 型の名前は variant の id なので、variant の切替チップと同じ等幅で組む。 */
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: var(--cat-item);
+  font-weight: 700;
+}
+
+.app-shell .motion-pattern__desc {
+  margin: 0;
+}
+
+.app-shell .motion-pattern__axis {
+  margin: 0;
+  color: var(--cat-muted);
+  font-size: var(--cat-label);
+}
+
+.app-shell .motion-pattern .variants__mark {
+  margin: 0;
+}
+
+/* 狭い幅では説明を標本の上に積む。横に並べると標本の見出しが折り返し、行の単位の動きが崩れる。 */
+@media (width <= 60rem) {
+  .app-shell .motion-pattern {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ---- 配色 ---- */

@@ -48,7 +48,7 @@ Catalog は成果物の visual showcase である。
 仕様書や Asset の正本にはしない。
 表示層は `topic-first` を基にし、トピックごとに成果物を直接見せる。
 背景と主要な面は白黒を基準にし、選択した Colors の accent を限定して使う。
-ナビは Works（Colors / Typography / Tokens / Components / Icons）と Guidelines の 2 群で構成する。
+ナビは Works（Colors / Typography / Tokens / Components / Icons / Motion）と Guidelines の 2 群で構成する。
 `role` と `maturity` は正本 metadata を二次情報として出す。
 配色とライト / ダークのテーマはサイドバー下部で選ぶ。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。

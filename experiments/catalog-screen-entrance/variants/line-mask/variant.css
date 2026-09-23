@@ -1,0 +1,58 @@
+/* 見出しを行ごとに、下の見えない線の向こうからせり上げる。
+   編集系のサイトでよく見る、行の枠を窓にして文字を通す見せ方である。
+   値は variant 内の局所値にし、token にするのは採用後にする（tokens/motion の追加規則）。
+   - 800ms: 文字が窓を通る道のりを目で追える長さ。1 巡目の 120〜200ms は、利用者が「動きの感じが分かりにくい」と判断した。
+     crafting-motion の 300ms 未満は仮説で、この判断を根拠に外す。
+   - 曲線: 立ち上がりが速く、長く減速して止まる expo 系の ease-out。移動の大半を前半 3 割で終えるので、長くても早く読める。
+   - 100ms: 行は大きな単位なので、文字より間隔を広く取らないと 2 行が 1 つの塊に見える。 */
+.entrance-line-mask {
+  --entrance-duration: 800ms;
+  --entrance-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --entrance-step: 100ms;
+}
+
+/* 行を窓にする。行の高さが 1.05 だと g の下が窓で切れるので、下に 0.1em の余白を足して打ち消す。 */
+.entrance-line-mask .text-specimen__line {
+  overflow: hidden;
+  padding-block-end: 0.1em;
+  margin-block-end: -0.1em;
+}
+
+.entrance-line-mask .text-specimen__unit {
+  animation: entrance-line-mask var(--entrance-duration) var(--entrance-easing) both;
+  animation-delay: calc(var(--i) * var(--entrance-step));
+}
+
+/* 105%: 100% ちょうどでは、字の上端が窓の下端に 1px 残ることがある。 */
+@keyframes entrance-line-mask {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+/* リードは最後の行の動きが半分ほど進んだところで出す。見出しが止まるのを待つと間延びする。 */
+.entrance-line-mask .text-specimen__lead {
+  animation: entrance-line-mask-lead 600ms var(--entrance-easing) both;
+  animation-delay: calc((var(--count) - 1) * var(--entrance-step) + 400ms);
+}
+
+@keyframes entrance-line-mask-lead {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+/* 減らす設定では移動と順番のずれを止め、透明度の変化だけを token の値で残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .entrance-line-mask .text-specimen__unit,
+  .entrance-line-mask .text-specimen__lead {
+    animation: entrance-line-mask-reduced var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+@keyframes entrance-line-mask-reduced {
+  from {
+    opacity: 0;
+  }
+}
