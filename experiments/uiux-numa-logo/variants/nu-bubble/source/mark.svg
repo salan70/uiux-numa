@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>UI/UX NUMA</title>
-  <!-- 組の規則: 32 の格子、live area は 4..28（24 角）、字画 4、単色。nu 系の案で共通にする。 -->
-  <!-- 骨格は nu-arches と同じ。肩の半径 4（中心 (10,12)）、底の半径 6（中心 (20,20)）、共有する縦画は x 14 の y 12..20。 -->
-  <path id="part-mark-letter" d="M6 28V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V4" fill="none" stroke="currentColor" stroke-width="4"/>
-  <!-- 足した要素: 泡。u の窪みの中心 x 20 に、半径 2 で置く。内縁の底 24 から隙間 6 上がった y 14 が中心である。 -->
-  <!-- 右の脚の上へ置いた版は i の点に読め、nu が ni になった。 -->
-  <circle id="part-mark-bubble" cx="20" cy="14" r="2" fill="currentColor"/>
-</svg>
