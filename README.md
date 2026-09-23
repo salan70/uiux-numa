@@ -12,11 +12,11 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 ## 3 層構成
 
-| 層        | 役割                                         | 置き場                                  |
-| --------- | -------------------------------------------- | --------------------------------------- |
-| Lab       | 同じ課題に複数案を実装し、比較・改善する     | `experiments/`                          |
-| Knowledge | 実験から得た知見を整理する                   | `docs/`、`patterns/`                    |
-| Assets    | 他プロジェクトで組み合わせて使う成果の置き場 | `skills/`、`tokens/`、`design-systems/` |
+| 層        | 役割                                         | 置き場                                            |
+| --------- | -------------------------------------------- | ------------------------------------------------- |
+| Lab       | 同じ課題に複数案を実装し、比較・改善する     | `experiments/`                                    |
+| Knowledge | 実験から得た知見を整理する                   | `docs/`、`patterns/`（未作成）                    |
+| Assets    | 他プロジェクトで組み合わせて使う成果の置き場 | `skills/`、`tokens/`、`design-systems/`（未作成） |
 
 置き場は探索、整理、再利用の作業場所である。
 完成した Design System への一方向の昇格先ではない。
@@ -71,12 +71,4 @@ AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
 
 ## 文書一覧
 
-- [docs/scope.md](docs/scope.md): 対象領域
-- [docs/layers.md](docs/layers.md): Lab / Knowledge / Assets と置き場
-- [docs/asset-model.md](docs/asset-model.md): `role` と `maturity` の Asset モデル
-- [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md): Experiment の手順と記録項目
-- [docs/evaluation/policy.md](docs/evaluation/policy.md): 評価の方針
-- [docs/principles/](docs/principles/): 原則候補と、採否の判断手順
-- [docs/guidelines/](docs/guidelines/): 主題ごとの方針（UX ライティング、情報設計、視覚構成と造形など）
-- [docs/decisions/](docs/decisions/): 設計判断の記録 (ADR)
-- [docs/catalog-publishing.md](docs/catalog-publishing.md): UI/UX NUMA の Cloudflare Pages 公開手順
+文書の地図は [docs/README.md](docs/README.md) にある。

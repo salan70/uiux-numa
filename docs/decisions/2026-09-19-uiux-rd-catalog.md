@@ -3,6 +3,7 @@
 - 状態: Accepted
 - 日付: 2026-09-19
 - 参照: [初期ディレクトリ構成](2026-09-13-initial-directory-layout.md)、[Web 実行基盤](2026-09-13-web-runner.md)、[Lab / Knowledge / Assets](../layers.md)、[公開手順](../catalog-publishing.md)
+- 置き換え先: 掲載内容は [visual showcase の ADR](2026-09-20-catalog-visual-showcase.md)、表示名は [表示名の ADR](2026-09-22-display-name-uiux-numa.md) が置き換えた。
 
 ## 背景
 

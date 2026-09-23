@@ -31,19 +31,6 @@ Asset の `maturity` を `stable` にしたことではない。
 
 ## Experiment で残す情報
 
-最低限、次の項目を保持できる形式にする。
-
-- problem
-- target
-- scope / domains
-- constraints
-- hypothesis
-- variants
-- evaluation
-- decision
-- rejected reasons
-- learnings
-- related patterns / assets
-
-形式は [experiment-format.md](experiment-format.md) に定める。
+problem から related patterns / assets までの 11 項目を残す。
+項目、形式、status は [experiment-format.md](experiment-format.md) に定める。
 判断の記録先は [判断履歴の ADR](decisions/2026-09-13-decision-records.md) に定める。
