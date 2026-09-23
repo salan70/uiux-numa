@@ -4,7 +4,7 @@ import "../../../../tokens/typography/index.css";
 import "../../typography.css";
 import mark from "./dist/mark.svg?raw";
 
-// マークの形だけが variant で変わる。モックは shared/ の実装を 5 案で共有する。
+// マークの形だけが variant で変わる。モックは shared/ の実装を nu 系の案で共有する。
 export default function Variant() {
   return <LogoMock mark={mark} />;
 }

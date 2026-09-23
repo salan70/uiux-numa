@@ -1,5 +1,5 @@
 /*
- * UI/UX NUMA のロゴのモックのスタイル。1 案の利用画面（LogoMock）と 5 案の一覧（Overview）が共有する。
+ * UI/UX NUMA のロゴのモックのスタイル。1 案の利用画面（LogoMock）と 7 案の一覧（Overview）が共有する。
  * 色は Catalog の中立な shell（白の面に黒い文字）から写す。マークの評価に配色を混ぜない。
  * 寸法と字の指定は apps/catalog/src/catalog.css の実値から写す。
  * マークは currentColor だけを使う。形の評価に色を混ぜない。
@@ -206,7 +206,7 @@
   gap: 1rem;
 }
 
-/* ここから Overview（5 案の一覧）だけが使う */
+/* ここから Overview（7 案の一覧）だけが使う */
 
 .lg-overview {
   gap: 1.5rem;
