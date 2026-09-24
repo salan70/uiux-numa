@@ -12,7 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(12);
-    expect(catalog.liveVariants).toHaveLength(35);
+    expect(catalog.liveVariants).toHaveLength(32);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -131,6 +131,8 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
+      "cornix-product-ui/chromatic-rail",
+      "cornix-product-ui/chromatic-rail-library",
       "cornix-workbench/board-desk",
       "product-ui-typography/line-seed-minimal",
       "uiux-numa-logo/nu-round",
