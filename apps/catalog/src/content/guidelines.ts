@@ -37,33 +37,11 @@ export type Guideline = {
   title: string;
   summary: string;
   status: Status;
-  axes: string[];
   purpose: string;
   // コアは思想、Tips は具体的な場面の規則。
   core: Principle[];
   tips: Rule[];
 };
-
-// docs/evaluation/axes.md の 17 軸。
-const VALID_AXES = [
-  "visual hierarchy",
-  "information density",
-  "discoverability",
-  "information architecture",
-  "interaction clarity",
-  "writing clarity",
-  "motion appropriateness",
-  "feedback quality",
-  "consistency",
-  "accessibility",
-  "platform fit",
-  "delight",
-  "perceived performance",
-  "localization robustness",
-  "implementation cost",
-  "maintainability",
-  "brand fit",
-] as const;
 
 const KNOWN_SECTIONS = ["目的", "コア", "Tips"] as const;
 
@@ -123,18 +101,6 @@ export function parseGuideline(slug: string, raw: string): Guideline {
   }
   const status: Status = statusRaw;
 
-  const axes = Array.isArray(front["axes"])
-    ? front["axes"].map((axis) => String(axis).trim()).filter(Boolean)
-    : [];
-  if (axes.length === 0) {
-    throw new Error(`[guidelines/${slug}] axes must contain at least one evaluation axis`);
-  }
-  for (const axis of axes) {
-    if (!(VALID_AXES as readonly string[]).includes(axis)) {
-      throw new Error(`[guidelines/${slug}] unknown evaluation axis: '${axis}'`);
-    }
-  }
-
   // 本文の抽出（frontmatter 除去）
   const bodyMatch = raw.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n([\s\S]*)$/);
   const body = bodyMatch ? bodyMatch[1] : raw;
@@ -173,7 +139,7 @@ export function parseGuideline(slug: string, raw: string): Guideline {
     throw new Error(`[guidelines/${slug}] '## Tips' must contain at least one rule`);
   }
 
-  return { slug, title, summary, status, axes, purpose, core, tips };
+  return { slug, title, summary, status, purpose, core, tips };
 }
 
 function splitSections(body: string): Record<string, string> {

@@ -8,7 +8,6 @@ const EXPERIMENT_STATUSES = [
   "implementing",
   "evaluating",
   "decided",
-  "extracted",
   "abandoned",
 ] as const;
 
