@@ -1,6 +1,6 @@
 ---
 title: Cornix Bonsai の Web UI を要件から作り直す
-status: implementing
+status: decided
 role: reference
 maturity: experimental
 created: 2026-09-24
@@ -18,7 +18,8 @@ sources:
   - color-schemes-material
   - product-ui-typography
   - button
-adopted: []
+adopted:
+  - board-desk
 ---
 
 ## Problem
@@ -77,7 +78,7 @@ variant で変える軸は情報構造と操作である。
 
 | round | 観察                                                                                 | 変更                                                                           | 参照した知識                         | 終了理由         |
 | ----- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------ | ---------------- |
-| 1     | 右から出る引き出しは幅が約 600px で、全体マップが 1 列になり、Behaviors の表も詰まる | 利用者の提案で、引き出しを画面中央のパネルに替え、全画面へ広げられるようにした | 要件 W-06、W-07。ネイティブの dialog | 利用者の確認待ち |
+| 1     | 右から出る引き出しは幅が約 600px で、全体マップが 1 列になり、Behaviors の表も詰まる | 利用者の提案で、引き出しを画面中央のパネルに替え、全画面へ広げられるようにした | 要件 W-06、W-07。ネイティブの dialog | 利用者が採用した |
 
 ### `board-desk` の設計図
 
@@ -146,7 +147,8 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 
 ## Evaluation
 
-評価は未実施である。
+`docs/evaluation/review.md` の多観点評価は行っていない。
+利用者は round 1 の後の画面を操作して採用を判断した。
 実装者が headless Chrome で次の操作を確かめた（2026-09-24）。
 
 - 盤面の方向キー、Enter で編集パネルへ、Esc で盤面へ。
@@ -162,12 +164,20 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 
 ## Decision
 
-未定
+2026-09-24 に利用者が `board-desk` を採用した。
+判断者は利用者で、多観点の評価を経ていない。
+未評価の軸は visual hierarchy、information density、discoverability、writing clarity、accessibility の第三者確認である。
+実装者の操作確認（Evaluation）はあるが、評価の代わりにはしない。
+
+採用した `board-desk` を Cornix Bonsai の UI 層を作り直す設計図にする。
+本体では、README の部品の境界と hook の分け方に沿って `src/ui` を作り直し、uiux-numa の token と `pop-toy` を取り込む。
+Core、ファイル形式、CLI、Apply の安全手順は変えない。
 
 ## Rejected reasons
 
 次の 3 方向は、2026-09-24 に利用者が静的なモックを見て、実装する前に見送った。
-理由は利用者に確認中で、下の代償は提案時に書いたものである。
+判断者は利用者で、理由は「直感」である。
+言葉にした理由は無く、下の代償は提案時に書いたものである。
 
 - `layer-shelf`: 全 layer の縮小盤面を棚に並べて主のナビゲーションにし、棚が Overview を兼ねる。代償は、棚が面積を使い、layer の少ない Mac では棚の意味が薄いこと。
 - `key-palette`: 検索できる keycode パレットで、キーボードだけで割り当てる。代償は、keycode 名を知らない利用者には物理配列の picker より探しにくいこと。

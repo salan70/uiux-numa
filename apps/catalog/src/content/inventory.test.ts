@@ -131,6 +131,7 @@ describe("catalog inventory", () => {
       "color-schemes-material/ume",
       "color-schemes-material/wasabi",
       "color-schemes-material/yuzu",
+      "cornix-workbench/board-desk",
       "product-ui-typography/line-seed-minimal",
       "uiux-numa-logo/nu-round",
     ]);
