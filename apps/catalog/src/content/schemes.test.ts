@@ -28,7 +28,7 @@ function saturationOf(value: string): number {
 
 describe("schemes", () => {
   it("10 配色を light / dark の 24 role として読む", () => {
-    expect(schemes).toHaveLength(10);
+    expect(schemes).toHaveLength(11);
     for (const scheme of schemes) {
       expect(scheme.light).toHaveLength(24);
       expect(scheme.dark).toHaveLength(24);

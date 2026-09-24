@@ -45,7 +45,7 @@ export function ColorShowcase({ schemeId, overview = false }: Props) {
       <main className="cm-showcase cm-overview">
         <header className="cm-page-head">
           <p className="cm-kicker">COLOR SYSTEM / 2026</p>
-          <h1>10 種の配色を比べる。</h1>
+          <h1>{schemes.length} 種の配色を比べる。</h1>
           <p>主色・副色・第 3 色の組み合わせを比べます。</p>
         </header>
         <div className="cm-overview-grid">
@@ -123,7 +123,9 @@ export function ColorShowcase({ schemeId, overview = false }: Props) {
         <div className="cm-preview-panel" style={{ background: "var(--color-surface-container)" }}>
           <div className="cm-panel-top">
             <span>PALETTE NOTE</span>
-            <span>03 / 10</span>
+            <span>
+              {String(schemes.indexOf(selected) + 1).padStart(2, "0")} / {schemes.length}
+            </span>
           </div>
           <div className="cm-mini-bars" aria-label="Primary、Secondary、Tertiary">
             {familyIds.map((family) => (

@@ -5,6 +5,8 @@ export type Scheme = {
   primary: Seed;
   secondary: Seed;
   tertiary: Seed;
+  // 面と線の色相を primary から取らない配色だけが持つ。彩度は 0.02〜0.055 に収める。
+  neutral?: Seed;
 };
 export type Palette = Record<string, string>;
 export type Mode = "light" | "dark";
@@ -80,6 +82,14 @@ export const schemes: Scheme[] = [
     secondary: { name: "黄金", hex: "#e6b422" },
     tertiary: { name: "萌葱色", hex: "#006e54" },
   },
+  {
+    id: "pop-toy",
+    label: "ポップトイ",
+    primary: { name: "キーキャップの黄", hex: "#fac400" },
+    secondary: { name: "キーキャップの青", hex: "#4078e0" },
+    tertiary: { name: "ノブの赤橙", hex: "#f37252" },
+    neutral: { name: "キーキャップの灰", hex: "#9ea19f" },
+  },
 ];
 
 const families = ["primary", "secondary", "tertiary"] as const;
@@ -89,8 +99,13 @@ const inkLight = "#fffdf9";
 export function makePalette(scheme: Scheme, mode: Mode): Palette {
   const isDark = mode === "dark";
   const primarySeed = rgbToHsl(scheme.primary.hex);
-  const p = primarySeed.s < 0.08 ? 0 : primarySeed.h;
-  const neutralS = primarySeed.s < 0.08 ? 0.025 : 0.055;
+  const neutralSeed = scheme.neutral ? rgbToHsl(scheme.neutral.hex) : undefined;
+  const p = neutralSeed ? neutralSeed.h : primarySeed.s < 0.08 ? 0 : primarySeed.h;
+  const neutralS = neutralSeed
+    ? Math.min(0.055, Math.max(0.02, neutralSeed.s))
+    : primarySeed.s < 0.08
+      ? 0.025
+      : 0.055;
   const neutral = (light: number, sat = neutralS, hue = p) => hslToHex(hue, sat, light);
   const palette: Palette = {
     background: neutral(isDark ? 0.105 : 0.975),

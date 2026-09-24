@@ -4,7 +4,7 @@ status: decided
 role: module
 maturity: candidate
 created: 2026-09-20
-updated: 2026-09-20
+updated: 2026-09-24
 platforms:
   - web
 domains:
@@ -25,6 +25,7 @@ adopted:
   - shinbashi
   - kingyo
   - tsukiyo
+  - pop-toy
 ---
 
 ## Problem
@@ -39,6 +40,7 @@ primary と大きく色相の異なる secondary、tertiary も不足してい�
 ## Scope / Domains
 
 既存の和名 10 種を保ち、役割名とカラーコードを組み直す。
+キーキャップの配色から採った `pop-toy` を 11 種目として加える。
 primary、secondary、tertiary と面・文字・線・状態色の体系を比較する。
 色選定用の見本を作ったうえで、採用後に Catalog へ反映する。
 LP への反映は行わない。
@@ -48,6 +50,7 @@ LP への反映は行わない。
 - React + TypeScript で実装し、追加の npm 依存を入れない。
 - [Material 3 の色の役割](https://github.com/material-components/material-web/blob/main/docs/theming/color.md)から、必要な名前と用途を選ぶ。
 - 基準色には伝統色の HEX を使い、container や面は役割に合わせて明度と彩度を調整する。
+- `pop-toy` だけは伝統色でなく、キーキャップの採取色を基準色にする。
 - ライトとダークで色相の役割を保ち、本文は 4.5:1 以上、線とフォーカスは 3:1 以上を満たす。
 - 見本は 390px と 1280px で確認する。
 - 色、文字、間隔は本 Experiment 内で揃える。
@@ -60,19 +63,20 @@ LP への反映は行わない。
 
 ## Variants
 
-| id          | 仮説                                                | 変えた軸           | 実装                  |
-| ----------- | --------------------------------------------------- | ------------------ | --------------------- |
-| `overview`  | 10 種を同じ面積で並べると、色相の関係を比較しやすい | 10 配色の一覧      | `variants/overview/`  |
-| `wasabi`    | 黄緑・赤紫・藍の組み合わせは清涼で控えめに見える    | 黄緑 / 赤紫 / 藍   | `variants/wasabi/`    |
-| `yuzu`      | 黄・緑・紫を組み合わせると明るさと深さを両立できる  | 黄 / 緑 / 紫       | `variants/yuzu/`      |
-| `azuki`     | 小豆の赤茶・緑・金は温かく落ち着いた印象になる      | 赤茶 / 緑 / 金     | `variants/azuki/`     |
-| `aizome`    | 藍・琥珀・梅紫は落ち着きの中に華やかさを加える      | 藍 / 琥珀 / 梅紫   | `variants/aizome/`    |
-| `sumi`      | 赤みの強い筆の色と金泥を添え、墨を主役にする        | 墨 / 猩々緋 / 黄金 | `variants/sumi/`      |
-| `fuji`      | 藤紫・若葉・橙は柔らかさと鮮明さを組み合わせる      | 藤紫 / 緑 / 橙     | `variants/fuji/`      |
-| `ume`       | 梅紫・深緑・青緑は華やかさを落ち着かせる            | 梅紫 / 緑 / 青緑   | `variants/ume/`       |
-| `shinbashi` | 青緑・珊瑚・菫紫は軽快で色相の幅が広い              | 青緑 / 珊瑚 / 菫紫 | `variants/shinbashi/` |
-| `kingyo`    | 朱・藍・黄緑は対比が強く、賑やかさを生む            | 朱 / 藍 / 黄緑     | `variants/kingyo/`    |
-| `tsukiyo`   | 紺青・金・青緑は夜空を基調にした落ち着きを作る      | 紺青 / 金 / 青緑   | `variants/tsukiyo/`   |
+| id          | 仮説                                                           | 変えた軸             | 実装                  |
+| ----------- | -------------------------------------------------------------- | -------------------- | --------------------- |
+| `overview`  | 11 種を同じ面積で並べると、色相の関係を比較しやすい            | 11 配色の一覧        | `variants/overview/`  |
+| `wasabi`    | 黄緑・赤紫・藍の組み合わせは清涼で控えめに見える               | 黄緑 / 赤紫 / 藍     | `variants/wasabi/`    |
+| `yuzu`      | 黄・緑・紫を組み合わせると明るさと深さを両立できる             | 黄 / 緑 / 紫         | `variants/yuzu/`      |
+| `azuki`     | 小豆の赤茶・緑・金は温かく落ち着いた印象になる                 | 赤茶 / 緑 / 金       | `variants/azuki/`     |
+| `aizome`    | 藍・琥珀・梅紫は落ち着きの中に華やかさを加える                 | 藍 / 琥珀 / 梅紫     | `variants/aizome/`    |
+| `sumi`      | 赤みの強い筆の色と金泥を添え、墨を主役にする                   | 墨 / 猩々緋 / 黄金   | `variants/sumi/`      |
+| `fuji`      | 藤紫・若葉・橙は柔らかさと鮮明さを組み合わせる                 | 藤紫 / 緑 / 橙       | `variants/fuji/`      |
+| `ume`       | 梅紫・深緑・青緑は華やかさを落ち着かせる                       | 梅紫 / 緑 / 青緑     | `variants/ume/`       |
+| `shinbashi` | 青緑・珊瑚・菫紫は軽快で色相の幅が広い                         | 青緑 / 珊瑚 / 菫紫   | `variants/shinbashi/` |
+| `kingyo`    | 朱・藍・黄緑は対比が強く、賑やかさを生む                       | 朱 / 藍 / 黄緑       | `variants/kingyo/`    |
+| `tsukiyo`   | 紺青・金・青緑は夜空を基調にした落ち着きを作る                 | 紺青 / 金 / 青緑     | `variants/tsukiyo/`   |
+| `pop-toy`   | 灰の筐体に黄・青・赤橙のキーを置くと、玩具のような明るさが出る | 黄 / 青 / 赤橙 ＋ 灰 | `variants/pop-toy/`   |
 
 テーマの基準色と HEX は `shared/palettes.ts` に置く。
 基準色はライト・ダークで共通にし、container、面、文字色はモードに合わせて作る。
@@ -133,6 +137,22 @@ Catalog への割り当ては用途で分ける。
 塗り面は `primary` と `on-primary`、面の上の文字と色付き罫線は `primary-text`、focus ring は `focus` にする。
 Catalog 側の判断は [Catalog の配色を 24 役割にする ADR](../../docs/decisions/2026-09-20-catalog-material-color-roles.md) に残す。
 
+2026-09-24 に利用者が `pop-toy` を 11 種目として採用した。
+色は Cornix Bonsai の `src/ui/styles/tokens/color.css` にあるキーキャップの採取色から採った。
+Cornix Bonsai の UI を刷新するための配色で、uiux-numa の配色としても使う。
+役割は次のように当てた。
+
+- primary は最も大きいキーの黄 `#fac400` にする。選択と主操作を示す。
+- secondary は Enter の青 `#4078e0` にする。
+- tertiary はノブの赤橙 `#f37252` にする。
+- 緑のキーは使わず、緑は success に任せる。強調色と良し悪しの色を分けるためである（原則候補「良し悪しの色に画面の強調色を借りない」）。
+- 面と線の色相は灰のキー `#9ea19f` から取る。
+
+面と線を primary の色相で染める規則のままだと、ダークの面が黄に寄って茶色がかる。
+灰の筐体の冷たさを残すため、`Scheme` に任意の `neutral` seed を足した。
+`neutral` を持たない既存 10 種の生成結果は変わらない。
+黄の塗りは白の面に対して 1.61:1 しかないため、塗りだけで状態を示さず、輪郭か文字を添える。
+
 ## Rejected reasons
 
 固定色、逆色、面の細かな段階など、Material 3 の全役割を採る案は見送った。
@@ -148,6 +168,14 @@ harmonize の上限 15° をそのまま使う案も見送った。
 新橋色が墨のモチーフと結び付きにくく、別のテーマのように見えるためである。
 当初の朱色 `#eb6101` は橙味が強く、習字の赤筆には合わないと判断した。
 猩々緋 `#e2041b` は鮮やかすぎたため、secondary を深緋 `#c9171e` に調整した。
+
+`pop-toy` の比較では、次の 2 案を見送った。
+
+- tertiary を緑の Esc キーにする案。Cornix の現行と同じ割り当てだが、緑が success と並ぶと区別しにくい。
+- primary を青の Enter キーにする案。文字と focus は最も読みやすいが、黄が主役になる玩具らしさが弱まる。
+
+ダークでは、暗い配色のキー（暗い黄、橙、ミント）に基準色を替える案も見送った。
+基準色をライトとダークで共通にする、この体系の規則から外れるためである。
 
 ## Learnings
 
