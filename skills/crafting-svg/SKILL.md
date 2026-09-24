@@ -101,11 +101,29 @@ just svg-sheet previews/<id>-final-sheet.png 16,24,48 variants/<id>/dist/*.svg
 - 配布用のシートを読み、原本と見た目が同じことを確かめる。
 - 部分編集は原本に対して行い、配布用を作り直す。`git diff` で対象外が不変であることを確かめる。
 
-### 6. 記録し、報告する
+### 6. 依頼者へ SVG のまま見せる
+
+依頼者に見せるときは、PNG のシートを渡さない。
+SVG をそのまま並べた比較ページを作り、依頼者のブラウザで開く。
+PNG のシートは、自分が形を確かめるためだけに使う。
+
+```bash
+just svg-compare previews/compare.html 16,24,64 variants/<a>/dist variants/<b>/dist --scheme <配色 id>
+open -a "Google Chrome" previews/compare.html
+```
+
+- 比較ページは拡大してもにじまない。PNG は大きく表示すると画質が落ち、依頼者が細部を読めなかった（`cornix-ui-icons`）。
+- サイズには実利用のサイズと、形を確かめる大きさ（64 など）を並べる。ライトとダークは自動で並ぶ。
+- 多色の asset の `part-*-accent` には、指定した配色の色が塗られる。PNG のシートでは多色を確かめられないので、色の比較もこのページで行う。
+- 利用画面での比較は、runner の URL（`http://localhost:5183/#<slug>/<id>`）を渡す。こちらもベクターのまま描かれる。`web-shot` の PNG は自分の確認と README の preview に使う。
+- 比較ページは `previews/compare.html` に置き、Experiment と一緒に commit する。
+
+### 7. 記録し、報告する
 
 - Experiment の README に、Variants の表、反復の記録、造形の理由、確認した内容を書く。形式は `docs/experiment-format.md` に従う。
 - 座標を導出で決めたら、asset ごとに「対象 / 体系 / 理論値 / 採用値 / 誤差 / 理由」の表で残す。誤差が大きい箇所は、代わりに採った根拠を書く。
 - 報告は次の 4 つを分ける。成果物の一覧、造形の理由（パラメータと参照 ID）、確認した内容（検査、シート、利用画面）、未解決と未検証。
+- 報告には、比較ページのパスと runner の URL を添える。
 - 採用と却下の判断は人間が行う。Decision と Rejected reasons を先に書かない。
 - 一般化できる知見は Learnings に書き、原則候補は `docs/principles/README.md` の手順で追加する。
 
