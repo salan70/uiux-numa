@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>全画面で表示</title>
-  <rect id="part-expand-frame-top" x="3.75" y="3.75" width="13.5" height="13.5" rx="3" fill="none" stroke="currentColor"/>
-  <path id="part-expand-frame-shadow" d="M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75" fill="none" stroke="currentColor"/>
-  <polyline id="part-expand-tr-head" points="11.25 6.375 14.625 6.375 14.625 9.75" fill="none" stroke="currentColor"/>
-  <path id="part-expand-tr-shaft" d="M14.625 6.375 11.625 9.375" fill="none" stroke="currentColor"/>
-  <polyline id="part-expand-bl-head" points="9.75 14.625 6.375 14.625 6.375 11.25" fill="none" stroke="currentColor"/>
-  <path id="part-expand-bl-shaft" d="M6.375 14.625 9.375 11.625" fill="none" stroke="currentColor"/>
-</svg>

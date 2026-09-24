@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>情報</title>
-  <rect id="part-info-frame-top" x="3.75" y="3.75" width="13.5" height="13.5" rx="3" fill="none" stroke="currentColor"/>
-  <path id="part-info-frame-shadow" d="M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75" fill="none" stroke="currentColor"/>
-  <path id="part-info-dot" d="M10.5 6.75h0" fill="none" stroke="currentColor"/>
-  <path id="part-info-stem" d="M10.5 9.375 10.5 14.625" fill="none" stroke="currentColor"/>
-</svg>

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>全体マップ</title>
-  <rect id="part-overview-frame-top" x="3.75" y="3.75" width="13.5" height="13.5" rx="3" fill="none" stroke="currentColor"/>
-  <path id="part-overview-frame-shadow" d="M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75" fill="none" stroke="currentColor"/>
-  <polygon id="part-overview-top" points="10.5 6.375 14.625 8.25 10.5 10.125 6.375 8.25" fill="none" stroke="currentColor"/>
-  <polyline id="part-overview-mid" points="6.375 10.5 10.5 12.375 14.625 10.5" fill="none" stroke="currentColor"/>
-  <polyline id="part-overview-low" points="6.375 12.75 10.5 14.625 14.625 12.75" fill="none" stroke="currentColor"/>
-</svg>
