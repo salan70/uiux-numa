@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>右回し</title>
+  <rect id="part-rotate-cw-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
+  <rect id="part-rotate-cw-frame-dish" x="6.75" y="5.25" width="10.5" height="11.25" rx="3" fill="none" stroke="currentColor"/>
+  <path id="part-rotate-cw-arc" d="M14.813 11.5 A2.813 2.813 0 1 1 12 8.688" fill="none" stroke="currentColor"/>
+  <polyline id="part-rotate-cw-head" points="11.063 7.75 12 8.688 11.063 9.625" fill="none" stroke="currentColor"/>
+</svg>

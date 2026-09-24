@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <title>実機と適用</title>
-  <rect id="part-device-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
+  <rect id="part-device-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
   <path id="part-device-up-shaft" d="M9.5 17.5 9.5 6.5" fill="none" stroke="currentColor"/>
   <polyline id="part-device-up-head" points="7 9 9.5 6.5 12 9" fill="none" stroke="currentColor"/>
   <path id="part-device-down-shaft" d="M14.5 6.5 14.5 17.5" fill="none" stroke="currentColor"/>

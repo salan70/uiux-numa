@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <title>右回し</title>
-  <rect id="part-rotate-cw-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
+  <rect id="part-rotate-cw-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
   <path id="part-rotate-cw-arc" d="M16.5 13 A4.5 4.5 0 1 1 12 8.5" fill="none" stroke="currentColor"/>
   <polyline id="part-rotate-cw-head" points="10.5 7 12 8.5 10.5 10" fill="none" stroke="currentColor"/>
 </svg>
