@@ -246,7 +246,7 @@ Catalog 本体の印はマークを 1 画面に 2 回置くため、`part-*` の
 - 名前の文字を核にした形は、図形の比喩より先に選ばれた。ブランドのマークでは、名前と結び付く字形が比喩の説明を代わりに担える。
 - 溶ける気配を足した 6 案ではなく、足す前の骨格が選ばれた。要素を足す前に、既にある形を整える案を並べておくと判断が速い（`crafting-svg` の手順 4）。1 件の観察であり、原則候補には上げない。
 
-## Related patterns / assets
+## Related
 
 - [表示名の ADR](../../docs/decisions/2026-09-22-display-name-uiux-numa.md): 「UI/UX NUMA」と `NUMA` 単体の誤読という残る論点
 - [掲載しない Experiment の ADR](../../docs/decisions/2026-09-22-unlisted-experiments.md): この Experiment を Catalog に載せない根拠

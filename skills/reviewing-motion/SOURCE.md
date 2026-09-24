@@ -11,4 +11,4 @@
 - Block / Approve を Experiment の採用判断にしない。
 - 作者の好みと a11y 要件を分ける。
 - 性能は未計測なら保留にする。
-- 出力を `docs/evaluation/review.md` の観点記録へ接続する。
+- 出力を `docs/evaluation.md` の観点記録へ接続する。

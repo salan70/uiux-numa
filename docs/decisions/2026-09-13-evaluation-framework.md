@@ -2,11 +2,12 @@
 
 - 状態: Accepted
 - 日付: 2026-09-13
-- 参照: [Issue #3](https://github.com/salan70/uiux-numa/issues/3)、[評価の方針](../evaluation/policy.md)
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。評価を任意にし、規約を docs/evaluation.md の 1 文書に畳んだ。
+- 参照: [Issue #3](https://github.com/salan70/uiux-numa/issues/3)、[評価の方針](../evaluation.md)
 
 ## 背景
 
-[評価の方針](../evaluation/policy.md)は、総合点だけで評価しないことを定めた。
+[評価の方針](../evaluation.md)は、総合点だけで評価しないことを定めた。
 軸と重みを Experiment ごとに変え、複数観点でレビューし、最終判断は人間が行う。
 最初の Experiment（#4）で実際に使える手順と記録形式が必要になった。
 レビューは観点ごとに AI agent を並列に動かす運用を前提にする。
@@ -19,7 +20,7 @@
 - 観点は 7 種類を定義し、Experiment ごとに選ぶ。観点ごとに独立したレビュアーが担当する。AI agent なら別の agent にする。
 - 判定には該当箇所を含む観察を必須にする。総合点、順位、おすすめは書かない。
 - 記録は `evaluation.md` を入口とし、観点別の記録を `evaluation/<perspective>.md` に置く。比較表は軸 × variant とし、セルに判定と根拠を書く。
-- 軸の定義は `docs/evaluation/axes.md`、手順は `docs/evaluation/review.md`、テンプレートは `docs/templates/experiment/evaluation.md` に置く。
+- 軸の定義は `docs/evaluation.md`、手順は `docs/evaluation.md`、テンプレートは `docs/evaluation.md` に置く。
 
 ## 却下した案
 

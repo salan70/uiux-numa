@@ -5,56 +5,34 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 ## 目的
 
-単なる UI コンポーネント集ではなく、プロダクト体験全体を扱う。
 見た目、情報設計、操作、文章、動き、フィードバック、アクセシビリティを対象にする。
-実験、比較、評価、知識化、再利用までを一貫して扱う。
-対象領域とプラットフォームは [docs/scope.md](docs/scope.md) に定める。
-
-## 3 層構成
-
-| 層        | 役割                                         | 置き場                                            |
-| --------- | -------------------------------------------- | ------------------------------------------------- |
-| Lab       | 同じ課題に複数案を実装し、比較・改善する     | `experiments/`                                    |
-| Knowledge | 実験から得た知見を整理する                   | `docs/`、`patterns/`（未作成）                    |
-| Assets    | 他プロジェクトで組み合わせて使う成果の置き場 | `skills/`、`tokens/`、`design-systems/`（未作成） |
-
-置き場は探索、整理、再利用の作業場所である。
-完成した Design System への一方向の昇格先ではない。
-各成果は `role`（`foundation` / `module` / `reference`）と `maturity`（`experimental` / `candidate` / `stable` / `deprecated`）を独立に持つ。
-定義は [docs/layers.md](docs/layers.md) と [docs/asset-model.md](docs/asset-model.md) に定める。
-ディレクトリは中身ができた時点で作る。
-構成の決定は [初期ディレクトリ構成の ADR](docs/decisions/2026-09-13-initial-directory-layout.md) に残す。
-
-## Experiment の循環
-
-「作る → 比較する → 評価する → 知識化する → 再利用する → 実プロジェクトで検証する」を繰り返す。
-手順と記録項目は [docs/experiment-lifecycle.md](docs/experiment-lifecycle.md) に定める。
-評価の方針は [docs/evaluation/policy.md](docs/evaluation/policy.md) に定める。
+実験、比較、判断、知識化、再利用までを一貫して扱う。
 最終判断は人間が行い、採用理由と却下理由を記録する。
+対象領域は [docs/scope.md](docs/scope.md) に定める。
+
+## 構成
+
+| 層        | 役割                                       | 置き場               |
+| --------- | ------------------------------------------ | -------------------- |
+| Lab       | 同じ課題に複数案を実装し、比較して判断する | `experiments/`       |
+| Knowledge | 実験から得た知見を整理する                 | `docs/`              |
+| Assets    | 他プロジェクトで組み合わせて使う成果       | `skills/`、`tokens/` |
+
+置き場と `role` / `maturity` は [docs/layers.md](docs/layers.md)、Experiment の進め方は [docs/experiment.md](docs/experiment.md) に定める。
+文書の地図は [docs/README.md](docs/README.md) にある。
 
 ## 他リポジトリとの責務
 
-- `uiux-numa`: UI/UX とプロダクト体験ドメインの source of truth。experiments、knowledge、UI/UX 固有の skills、patterns、tokens、design assets を扱う。
-- `dotfiles`: AI-driven development 全般の基盤と汎用 asset を扱う。`uiux-numa` と同じ UI/UX asset を二重管理しない。
-- product repositories: 成熟した assets と knowledge を利用し、実環境で検証する場所。
-
-他プロジェクトへの同期方法は別途検討する。
+- `uiux-numa`: UI/UX とプロダクト体験ドメインの正本。experiments、knowledge、UI/UX 固有の skills、tokens を扱う。
+- `dotfiles`: AI-driven development 全般の基盤と汎用 asset を扱う。`uiux-numa` と同じ asset を二重管理しない。
+- product repositories: 成果を利用し、実環境で検証する場所。
 
 ## Catalog
 
-公開サイトの表示名は「UI/UX NUMA」である。
-実装は `apps/catalog/` にある。
-Catalog は成果物の visual showcase である。
-仕様書や Asset の正本にはしない。
-表示層は `topic-first` を基にし、トピックごとに成果物を直接見せる。
-背景と主要な面は白黒を基準にし、選択した Colors の accent を限定して使う。
-ナビは Works（Colors / Typography / Tokens / Components / Icons / Motion）と Guidelines の 2 群で構成する。
-`role` と `maturity` は正本 metadata を二次情報として出す。
-配色とライト / ダークのテーマはサイドバー下部で選ぶ。
+公開サイトの表示名は「UI/UX NUMA」で、実装は `apps/catalog/` にある。
+成果物の visual showcase であり、仕様書や正本ではない。
 ローカルでは `just catalog-install` のあと `just catalog-dev` で開く。
-production URL は `https://uiux.oda79.me/` とする。
-Cloudflare Pages への Git 連携は [公開手順](docs/catalog-publishing.md) に従う。
-責務の判断は [visual showcase の ADR](docs/decisions/2026-09-20-catalog-visual-showcase.md)、表示層の判断は [topic-first の ADR](docs/decisions/2026-09-20-catalog-topic-first.md) に残す。
+production URL は `https://uiux.oda79.me/` で、公開手順は [docs/catalog-publishing.md](docs/catalog-publishing.md) にある。
 
 ## 開発環境
 
@@ -68,7 +46,3 @@ just lint      # すべての検証
 ```
 
 AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
-
-## 文書一覧
-
-文書の地図は [docs/README.md](docs/README.md) にある。

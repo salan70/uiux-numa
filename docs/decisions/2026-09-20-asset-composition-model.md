@@ -2,7 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](../asset-model.md)、[Lab / Knowledge / Assets](../layers.md)、[Experiment の記録形式](../experiment-format.md)、[Pattern lifecycle](../pattern-lifecycle.md)
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。`extracted` と `promoted` を廃止し、モデルの説明は docs/layers.md に置いた。
+- 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](../layers.md)、[Lab / Knowledge / Assets](../layers.md)、[Experiment の記録形式](../experiment.md)、[Pattern lifecycle](../experiment.md)
 
 ## 背景
 
@@ -17,7 +18,7 @@ Experiment の `extracted`、Pattern の `promoted`、variant の `adopted` を 
 
 - Asset の性質は `role`（`foundation` / `module` / `reference`）と `maturity`（`experimental` / `candidate` / `stable` / `deprecated`）で表す。
 - 2 軸は独立させる。ディレクトリ名や 3 層の置き場へ固定しない。
-- 運用の正本は [Asset composition model](../asset-model.md) にする。
+- 運用の正本は [Asset composition model](../layers.md) にする。
 - Catalog と再利用判断に使う必須 metadata は `role`、`maturity`、`platforms`、`sources` だけにする。
 - Skill の `SKILL.md` frontmatter は `name` と `description` のままにする。分類は `skills/README.md` に書く。
 - Experiment の `status` と `adopted`、Pattern の `status` は各 lifecycle の語として残す。Asset の `maturity` へ転記しない。

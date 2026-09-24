@@ -76,7 +76,7 @@ variant ではレイアウト、視覚階層、色面、情報密度を変える
 
 2026-09-22 に3案を1280 × 800と1024 × 768で表示し、編集面、現在地、選択中キー、保存状態、Applyへの導線を比較できる状態にした。
 3案は同じ対象、作業、盤面、picker、保存状態、検証、Applyのモック操作を共有し、情報設計とレイアウトを比較軸にしている。
-`docs/evaluation/review.md` の多観点評価は行っていない。
+`docs/evaluation.md` の多観点評価は行っていない。
 
 ## Decision
 
@@ -108,7 +108,7 @@ variant ではレイアウト、視覚階層、色面、情報密度を変える
 本体側も「既存の構成と状態管理を維持する」ことを前提に移植したため、本文の部品、状態の持ち方、token は旧来のまま残った。
 後継の `cornix-workbench` では、要件文書を先に作り、固定データを本体の純関数で書き出し、variant ごとに部品の境界と状態の持ち方の図を README に書いた。
 
-## Related patterns / assets
+## Related
 
 - `tokens/typography/`
 - `tokens/space/`

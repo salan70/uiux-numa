@@ -2,8 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 参照: [役割を絞って組み直す配色](../../experiments/color-schemes-material/README.md)、[Catalog の面を無彩色にし、公開カテゴリを絞る](2026-09-20-catalog-neutral-navigation.md)、[Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
-- 置き換え: [無彩色ナビの ADR](2026-09-20-catalog-neutral-navigation.md) の「背景、surface、本文、通常の罫線は白黒を基準にする」条項
+- 参照: [役割を絞って組み直す配色](../../experiments/color-schemes-material/README.md)、[Catalog の面を無彩色にし、公開カテゴリを絞る](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-neutral-navigation.md)、[Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
+- 置き換え: [無彩色ナビの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-neutral-navigation.md) の「背景、surface、本文、通常の罫線は白黒を基準にする」条項
 - 置き換え: 2026-09-21。Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
 - 追記: 2026-09-21。色付き面上の暗い文字色を黒にし、on-color の明度差を広げる。
 - 追記: 2026-09-21。金魚の primary を明るく鮮やかな朱色へ調整し、黒系文字を読みやすくする。

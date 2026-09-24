@@ -120,7 +120,7 @@ open -a "Google Chrome" previews/compare.html
 
 ### 7. 記録し、報告する
 
-- Experiment の README に、Variants の表、反復の記録、造形の理由、確認した内容を書く。形式は `docs/experiment-format.md` に従う。
+- Experiment の README に、Variants の表、反復の記録、造形の理由、確認した内容を書く。形式は `docs/experiment.md` に従う。
 - 座標を導出で決めたら、asset ごとに「対象 / 体系 / 理論値 / 採用値 / 誤差 / 理由」の表で残す。誤差が大きい箇所は、代わりに採った根拠を書く。
 - 報告は次の 4 つを分ける。成果物の一覧、造形の理由（パラメータと参照 ID）、確認した内容（検査、シート、利用画面）、未解決と未検証。
 - 報告には、比較ページのパスと runner の URL を添える。

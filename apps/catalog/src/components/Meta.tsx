@@ -1,6 +1,6 @@
 import type { ExperimentRecord } from "../content/collect";
 
-/** 再利用の前提。role と maturity の意味は docs/asset-model.md にある。 */
+/** 再利用の前提。role と maturity の意味は docs/layers.md にある。 */
 export function Meta({ work }: { work: ExperimentRecord }) {
   return (
     <p className="meta">

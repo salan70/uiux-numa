@@ -2,16 +2,16 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 置き換え: Components の掲載、Button の詳細 URL と表示方法は [Components と Button の ADR](2026-09-21-components-button-only.md) が置き換える。
+- 置き換え: Components の掲載、Button の詳細 URL と表示方法は [Components と Button の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-components-button-only.md) が置き換える。
 - 置き換え: 2026-09-21。「token にしない」値のうち角丸 `0.375rem` は [階梯の ADR](2026-09-21-token-scale-foundation.md) が置き換える。
-- 置き換え: 2026-09-23。topic 5 種は [Motion topic の ADR](2026-09-23-catalog-motion-topic.md) が 6 種にした。
-- 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)、[無彩のナビ ADR](2026-09-20-catalog-neutral-navigation.md)、[方針の掲載 ADR](2026-09-20-catalog-guidelines.md)、[ホスト ADR](2026-09-19-catalog-host.md)
+- 置き換え: 2026-09-23。topic 5 種は [Motion topic の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-23-catalog-motion-topic.md) が 6 種にした。
+- 参照: [visual showcase ADR](2026-09-20-catalog-visual-showcase.md)、[無彩のナビ ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-neutral-navigation.md)、[方針の掲載 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-guidelines.md)、[ホスト ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md)
 - 置き換え: 2026-09-21。Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
 
 ## 背景
 
 公開 Catalog は 6 種別のナビと、一覧から詳細へ送る 2 段の構成だった。
-[catalog-editorial](../records/catalog-editorial/README.md) で情報設計を作り直し、`topic-first` が A1 から A10 の反復を経て実装が揃った。
+[catalog-editorial](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/README.md) で情報設計を作り直し、`topic-first` が A1 から A10 の反復を経て実装が揃った。
 この案は入口をトピックにし、トピックの画面が中身そのものを出す。
 方針（Guidelines）の画面も持つが、公開面には出ていなかった。
 
@@ -40,7 +40,7 @@ query 設計は実行基盤の hash と同居するための措置であり、�
 配色の詳細をリンクにすると、中クリックと新規タブが効き、深いリンクの存在が画面から読める。
 ダイアログの開閉を URL に寄せることで、pushState、popstate、直リンクが 1 本の経路に乗る。
 
-値を token にしない根拠は [ホスト ADR](2026-09-19-catalog-host.md) の規則 2 である。
+値を token にしない根拠は [ホスト ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) の規則 2 である。
 token 化は「役割名があり、利用面が 2 つある」ことを求める。
 公開面は 1 面であり、`experiments/catalog-editorial` 側は記録として凍結するため利用面に数えない。
 これは Experiment の Learnings が「段階 C で 2 面になる値だけを改めて検討する」と記した分の結論である。

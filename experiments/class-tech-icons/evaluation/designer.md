@@ -2,7 +2,7 @@
 
 - 観点: designer
 - 対象: line-round、line-square、solid、duotone
-- 入力: README、variants/、previews/、docs/evaluation/axes.md
+- 入力: README、variants/、previews/、docs/evaluation.md
 - 担当した軸: consistency、visual hierarchy、brand fit
 - 計測: 外形と濃さは preview 画像の画素から測った。濃さは枠あたりの平均インク量、または 96px の枠に占める着色画素の割合。
 

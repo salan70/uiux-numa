@@ -6,7 +6,7 @@ import { ALL_GUIDELINES } from "./guidelines";
 import type { ColorScheme, SchemeColor } from "./schemes";
 
 // トップの流れる帯に並べるカード。中身は正本から読み、挿絵は新しく描かない。
-// 判断は docs/decisions/2026-09-21-catalog-home-marquee.md に残す。
+// 判断は apps/catalog/README.md に残す。
 
 export type GalleryKind = "color" | "icon" | "type" | "token" | "component" | "guideline";
 

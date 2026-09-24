@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-13
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。`patterns/` と `design-systems/` の予定を廃止した。
 - 参照: [Issue #1](https://github.com/salan70/uiux-numa/issues/1)
 - 補足: `platforms/` の作成時期は [Web 実行基盤の ADR](2026-09-13-web-runner.md) で「最初の Web Experiment」に改めた。
 - 補足: テンプレートは `docs/templates/<kind>/` に置く。[Experiment format の ADR](2026-09-13-experiment-format.md) で決めた。

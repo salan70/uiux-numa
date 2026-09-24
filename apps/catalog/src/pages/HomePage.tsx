@@ -29,7 +29,7 @@ const TOPIC_COVERS: Record<TopicId, ComponentType> = {
 
 /**
  * 成果物のカードを逆向きに流れる 3 段の帯で見せ、その下にトピックの入口を並べる。
- * 判断は docs/decisions/2026-09-21-catalog-home-marquee.md に残す。
+ * 判断は apps/catalog/README.md に残す。
  */
 export function HomePage() {
   return (

@@ -147,7 +147,7 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 
 ## Evaluation
 
-`docs/evaluation/review.md` の多観点評価は行っていない。
+`docs/evaluation.md` の多観点評価は行っていない。
 利用者は round 1 の後の画面を操作して採用を判断した。
 実装者が headless Chrome で次の操作を確かめた（2026-09-24）。
 
@@ -191,6 +191,6 @@ Core、ファイル形式、CLI、Apply の安全手順は変えない。
 
 未定
 
-## Related patterns / assets
+## Related
 
 なし

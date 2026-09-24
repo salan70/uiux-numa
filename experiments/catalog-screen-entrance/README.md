@@ -150,7 +150,7 @@ Catalog への適用:
 目的が緩和なら短さが正しいが、利用者が求めたのは印象だった。
 目的を 1 語で置く段階で、利用者の期待を確かめる必要があった。
 
-## Related patterns / assets
+## Related
 
 - `tokens/motion/`: 時間と曲線の正本。
 - `experiments/button/shared/useCatalogColors.ts`: 単体表示で Catalog の配色を読む処理を共有する。

@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-21
-- 参照: [Typography foundation ADR](2026-09-19-typography-foundation.md)、[規則の構造 ADR](2026-09-21-catalog-guideline-rule-structure.md)、[対比の対 ADR](2026-09-21-catalog-guideline-contrast-pair.md)
+- 参照: [Typography foundation ADR](2026-09-19-typography-foundation.md)、[規則の構造 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-catalog-guideline-rule-structure.md)、[対比の対 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-catalog-guideline-contrast-pair.md)
 - 対象: `tokens/typography/README.md` の使用規則
 
 ## 背景

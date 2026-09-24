@@ -6,7 +6,7 @@ maturity: experimental
 created: <YYYY-MM-DD>
 updated: <YYYY-MM-DD>
 platforms:
-  - <web など>
+  - web
 domains:
   - <対象領域の項目名。例: ux-writing>
 sources: []
@@ -15,7 +15,7 @@ adopted: []
 
 ## Problem
 
-<解決したい課題と現状>
+<解決したい課題と現状。先頭の 1 文は Catalog に出る>
 
 ## Target
 
@@ -55,6 +55,6 @@ adopted: []
 
 未定
 
-## Related patterns / assets
+## Related
 
 なし

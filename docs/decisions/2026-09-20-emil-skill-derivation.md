@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 参照: [Issue #9](https://github.com/salan70/uiux-numa/issues/9)、[Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[UI/UX 固有 Skill の正本](2026-09-18-uiux-skill-source-and-principles.md)、[Web 実行基盤](2026-09-13-web-runner.md)、[評価の実行手順](../evaluation/review.md)
+- 参照: [Issue #9](https://github.com/salan70/uiux-numa/issues/9)、[Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[UI/UX 固有 Skill の正本](2026-09-18-uiux-skill-source-and-principles.md)、[Web 実行基盤](2026-09-13-web-runner.md)、[評価の実行手順](../evaluation.md)
 
 ## 背景
 
@@ -37,7 +37,7 @@ Issue 8 は Asset の `role` / `maturity` と Catalog を扱う。
 | 原則 1 部品へ範囲を絞る                    | Experiment の Brief を優先する                                                                           |
 | 動きの候補を提示せず実装を決める           | 実験では複数案を許容し、各案の根拠を示す                                                                 |
 | キーボード操作や特定の数値を一律に禁止する | 利用頻度と目的に応じて検証する。数値は出発点であり必須要件ではない                                       |
-| 作者の基準で Block / Approve を判定する    | `docs/evaluation/review.md` の 1 観点として記録する。採用判断は人間が行う                                |
+| 作者の基準で Block / Approve を判定する    | `docs/evaluation.md` の 1 観点として記録する。採用判断は人間が行う                                       |
 | 独自の計画ファイル群を作る                 | Issue #9 と既存の実験記録を使う                                                                          |
 | 未導入 Skill を呼び出す                    | 既存手順へ置き換える。依存を満たすためだけの一括導入はしない                                             |
 | 作者の好みと a11y を同じ「必須」にする     | `prefers-reduced-motion`、キーボード、支援技術は要件として扱う。ease の好みや 300ms 上限は仮説として扱う |

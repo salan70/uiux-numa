@@ -4,7 +4,7 @@
 - 評価日: 2026-09-19
 - 対象 variant: line-round、line-square、solid、duotone
 - 観点: designer、UX / product、accessibility、implementation
-- 手順: [docs/evaluation/review.md](../../docs/evaluation/review.md)
+- 手順: [docs/evaluation.md](../../docs/evaluation.md)
 
 ## 評価軸と重み
 

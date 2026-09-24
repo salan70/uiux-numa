@@ -68,4 +68,5 @@ uiux-numa は UI の視覚表現だけを対象にしない。
 
 ## 対象プラットフォーム
 
-Web、Web LT、SwiftUI、Flutter、スライドを想定する。
+実装と検証は Web で行う。
+他のプラットフォームは、最初の Experiment を置くときに `platforms/` と frontmatter の `platforms` に足す。

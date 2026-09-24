@@ -2,7 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-21
-- 参照: [Experiment lifecycle](../experiment-lifecycle.md)、[Experiment の記録形式](../experiment-format.md)、[topic-first ADR](2026-09-20-catalog-topic-first.md)、[配色の役割 ADR](2026-09-20-catalog-material-color-roles.md)
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。`docs/records/` を廃止し、削除した記録は commit permalink で指す。
+- 参照: [Experiment lifecycle](../experiment.md)、[Experiment の記録形式](../experiment.md)、[topic-first ADR](2026-09-20-catalog-topic-first.md)、[配色の役割 ADR](2026-09-20-catalog-material-color-roles.md)
 - 置き換え: 2026-09-22。「判断済みで Catalog に載せない Experiment は、ディレクトリごと削除する」は、topic に当たらない Experiment について [掲載しない Experiment の ADR](2026-09-22-unlisted-experiments.md) が置き換える。
 - 置き換え: 「却下した variant も学習材料として残す」（lifecycle）、「`experiments/catalog-editorial/shared/*` の写しは残して凍結する」（topic-first ADR）、「`experiments/color-schemes` は削除しない」（配色の役割 ADR）
 - 補足: 本 ADR の後、`form-inline-validation` と `soft-component-kit` も削除し、記録を `docs/records/` へ移した。
@@ -64,7 +65,7 @@ Catalog は `topics.ts` の除外リスト 3 つ（`UNCATEGORIZED_SLUGS`、`SUPE
 - runner の一覧から隠すだけにする: 二重管理と除外リストが残る。
 - runner を Catalog の `/preview` へ統合して廃止する: Skill 2 本、justfile、runner の ADR まで波及する。今回の主題は中身の整理なので、別の判断として扱う。
 - Guideline の `- 実験:` 行を削除する: 約 55 件の Tips からリポジトリ内の根拠が消える。
-- 記録文書を移さず git 履歴だけにする: `- 実験:` は Markdown リンクを要求する（[Guideline の書式](../guideline-format.md)）。
+- 記録文書を移さず git 履歴だけにする: `- 実験:` は Markdown リンクを要求する（[Guideline の書式](../guideline.md)）。
 
 ## 影響
 

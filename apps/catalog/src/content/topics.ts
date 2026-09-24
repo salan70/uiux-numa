@@ -50,7 +50,7 @@ export const TOPICS: Topic[] = [
     href: "/foundations/icons",
     domains: ["iconography"],
   },
-  // 利用者が 2026-09-23 に Works へ足した。判断は docs/decisions/2026-09-23-catalog-motion-topic.md に残す。
+  // 利用者が 2026-09-23 に Works へ足した。判断は apps/catalog/README.md に残す。
   // 値と曲線の正本は Tokens にあるので、ここは動きを実際に見せる成果物だけを載せる。
   {
     id: "motion",

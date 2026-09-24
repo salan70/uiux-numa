@@ -2,8 +2,9 @@
 
 - 状態: Accepted
 - 日付: 2026-09-13
-- 参照: [Issue #2](https://github.com/salan70/uiux-numa/issues/2)、[Experiment lifecycle](../experiment-lifecycle.md)
-- 補足: 名前で選ぶ variant、評価の前の却下、評価を経ない判断の記録は [補足の ADR](2026-09-17-named-variants-and-unevaluated-decisions.md) で追加した。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。status `extracted` と節 `Related patterns / assets` を廃止し、記録形式は docs/experiment.md に統合した。
+- 参照: [Issue #2](https://github.com/salan70/uiux-numa/issues/2)、[Experiment lifecycle](../experiment.md)
+- 補足: 名前で選ぶ variant、評価の前の却下、評価を経ない判断の記録は [補足の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-17-named-variants-and-unevaluated-decisions.md) で追加した。
 - 補足: SVG の `source/` と `dist/`、variant 横断の `compare-<state>.png`、反復の記録は [SVG 制作の実行基盤の ADR](2026-09-18-svg-toolchain.md) で追加した。
 - 補足: `role`、`maturity`、`sources` は [Asset composition model の ADR](2026-09-20-asset-composition-model.md) で frontmatter へ追加した。`adopted` は採用 variant の記録であり、Asset の成熟度ではない。
 
@@ -16,7 +17,7 @@ Web の実行基盤は `experiments/*/variants/*/index.tsx` を glob で読む�
 
 ## 決定
 
-詳細は [Experiment の記録形式](../experiment-format.md) に定める。
+詳細は [Experiment の記録形式](../experiment.md) に定める。
 要点は次のとおり。
 
 - 1 Experiment を `experiments/<slug>/` に閉じ、記録の入口を `README.md` にする。
@@ -26,7 +27,7 @@ Web の実行基盤は `experiments/*/variants/*/index.tsx` を glob で読む�
 - 本文は lifecycle の 11 項目を英語見出しで同じ順に置く。未到達の節は `未定` と書く。
 - variants は本文の表で管理し、`variants/<variant-id>/` に Markdown を置かない。
 - status は `draft`、`implementing`、`evaluating`、`decided`、`extracted`、`abandoned` の 6 値にする。
-- テンプレートは `docs/templates/experiment/README.md` に置く。
+- テンプレートは `docs/templates/experiment.md` に置く。
 
 ## 却下した案
 
