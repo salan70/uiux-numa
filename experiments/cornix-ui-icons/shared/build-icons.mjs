@@ -1,11 +1,11 @@
 // 原本（variants/<id>/source/*.svg）を、共通の骨格から書き出す。
 // 骨格は round-soft の値に載せる: 24 viewBox、線幅 1.5、丸い端点、線の中心 3.75..20.25（外形 3..21）、0.75 格子。
 // すべての案で、キーキャップ型の枠の中へ骨格を縮めて置く。案ごとに変えるのは枠の形だけにする。
-//   keycap-tile   : 平らな天面（基準）
-//   keycap-skirt  : 天面の下に手前の側面（スカート）が見える
-//   keycap-dish   : 天面の中央が凹む（皿）
-//   keycap-shadow : 右下へ影が落ちる
-// round 1〜2 の round-line（線画だけ）と pop-duo（色の面）は、利用者がキーキャップ型を選んだので削除した。
+//   keycap-tile     : 角丸の正方形（基準）
+//   keycap-squircle : 超楕円。角丸の正方形と 45° の点を揃え、角の曲率だけをなめらかにする
+//   keycap-taper    : 超楕円の天面を上へ向かって細くする（キーを正面から見た台形）
+//   keycap-lip      : 超楕円の下に、短い縁を 1 本添える（キーの手前の縁）
+// round 1〜2 の round-line と pop-duo、round 3 の skirt・dish・shadow は、利用者の判断で削除した。
 // 実行: node experiments/cornix-ui-icons/shared/build-icons.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -170,11 +170,13 @@ const ASSETS = {
       "stroke-b": line(15, 9, 9, 15),
     },
     // 枠の中は小文字の err。× にすると close と同じ形になるので、文字で区別する（round 3、利用者の案）。
-    // 文字は path で描く（<text> は描画環境で揺れる）。x-height 9（y 7.5..16.5）、幅 e 6 / r 3.75 / r 3.75、字間 1.5 で計 16.5。
-    tile: {
-      e: path("M3.75 12H9.75A3 4.5 0 1 0 9 15.375"),
-      "r-a": path("M11.25 16.5V7.5M11.25 10.5C11.25 8.25 12.75 7.5 15 7.875"),
-      "r-b": path("M16.5 16.5V7.5M16.5 10.5C16.5 8.25 18 7.5 20.25 7.875"),
+    // 文字は縮めると字間が線幅に食われるので、枠の中の座標で直接描く（tileRaw、round 4）。
+    // x-height 7.5（y 8.25..15.75）。縦線は 16px で画素に載る x=11.25、15.75（0.75 + 1.5n）。
+    // e は幅 3.75（中心 x 7.5、半径 1.875 × 3.75）。r の肩は 45° の斜線にして、16px でも r の向きを残す（round 4 の比較）。
+    tileRaw: {
+      e: path("M5.625 12H9.375A1.875 3.75 0 1 0 8.625 14.625"),
+      "r-a": path("M11.25 15.75V8.25M11.25 10.5 13.5 8.25"),
+      "r-b": path("M15.75 15.75V8.25M15.75 10.5 18 8.25"),
     },
   },
   // 診断: warning。三角と !。形でも error、info と区別する。
@@ -411,49 +413,69 @@ const stroke = (asset, role, el) => {
 };
 
 /**
+ * 超楕円 |x/a|^n + |y/b|^n = 1 を折れ線で描く（96 分割）。
+ * taper は天面を細くする割合。上端で幅が (1 - taper) 倍になり、下端で 1 倍になるよう、y に比例して縮める。
+ */
+function superellipse(cx, cy, a, b, n, taper = 0) {
+  const points = [];
+  for (let k = 0; k < 96; k++) {
+    const t = (k / 96) * 2 * Math.PI;
+    const c = Math.cos(t);
+    const sn = Math.sin(t);
+    const x = a * Math.sign(c) * Math.abs(c) ** (2 / n);
+    const y = b * Math.sign(sn) * Math.abs(sn) ** (2 / n);
+    const scale = 1 - taper * ((b - y) / (2 * b));
+    points.push(`${fmt(cx + x * scale)} ${fmt(cy + y)}`);
+  }
+  return path(`M${points.join("L")}Z`);
+}
+
+/**
+ * 超楕円の指数。基準の角丸（半幅 8.25、角丸 3.75）と、45° の点を一致させる。
+ * 角丸の 45° の点は 4.5 + 3.75/√2 = 7.152。超楕円では 8.25 × 2^(-1/n)。
+ * 両者を等しくすると n = ln 2 / ln(8.25 / 7.152) ≈ 4.85。
+ */
+const N = Math.LN2 / Math.log(8.25 / (4.5 + 3.75 / Math.SQRT2));
+/** 天面と底の幅の比 φ^(-1/4) ≈ 0.886。キーの天面が底より細い（正面から見た台形）ことを、わずかに示す。 */
+const PHI = (1 + Math.sqrt(5)) / 2;
+const TAPER = 1 - PHI ** -0.25;
+
+/**
  * キーキャップ型の枠。案ごとに、枠の線と、中の記号を置く場所（中心と縮小率）を持つ。
- * 縮小率は、記号の外形 18 × s に線幅 1.5 を足した大きさが、天面の内側に隙間を残して収まるように決める。
+ * 縮小率は、記号の外形 18 × s に線幅 1.5 を足した大きさが、天面の内側に隙間 1.5 を残して収まるように決める（ICON-08）。
  */
 const FRAMES = {
-  // 平らな天面。外形 3..21、角丸 3.75（線の中心）。記号は 18 → 12、内縁 4.5..19.5 との隙間は 1.5（ICON-08）。
+  // 角丸の正方形。外形 3..21、角丸 3.75（線の中心）。記号は 18 → 12、内縁 4.5..19.5 との隙間は 1.5。
   "keycap-tile": {
     parts: { tile: rect(3.75, 3.75, 16.5, 16.5, 3.75) },
     cx: 12,
     cy: 12,
-    s: 12 / 18,
+    s: 2 / 3,
   },
-  // 天面（y 3.75..15.75）の下に、手前の側面（y 15.75..20.25）が見える。側面は天面より左右に張り出さない。
-  // 記号は天面の中へ置く。天面の内縁 4.5..15 の 10.5 に、外形 9（s=1/2）＋線幅で隙間 0.0〜0.75。
-  "keycap-skirt": {
+  // 超楕円（n ≈ 4.85）。外形と 45° の点は基準と同じで、角の曲率がなめらかにつながる。
+  "keycap-squircle": {
+    parts: { tile: superellipse(12, 12, 8.25, 8.25, N) },
+    cx: 12,
+    cy: 12,
+    s: 2 / 3,
+  },
+  // 超楕円の上端を φ^(-1/4) 倍に細くする。上の角が内へ寄るぶん、記号を 18 → 11.25（s=5/8）にして角の隙間を保つ。
+  "keycap-taper": {
+    parts: { tile: superellipse(12, 12, 8.25, 8.25, N, TAPER) },
+    cx: 12,
+    cy: 12.375,
+    s: 5 / 8,
+  },
+  // 超楕円の天面（高さ 15、y 3.75..18.75）の下に、手前の縁を 1 本添える。
+  // 縁の長さは天面の幅 16.5 ÷ φ = 10.2 → 格子 10.5（x 6.75..17.25）、y=20.25。記号は天面の内側 13.5 に合わせて 18 → 10.5（s=7/12）。
+  "keycap-lip": {
     parts: {
-      top: rect(3.75, 3.75, 16.5, 12, 3.75),
-      skirt: path("M3.75 12V17.25Q3.75 20.25 6.75 20.25H17.25Q20.25 20.25 20.25 17.25V12"),
+      tile: superellipse(12, 11.25, 8.25, 7.5, N),
+      lip: line(6.75, 20.25, 17.25, 20.25),
     },
     cx: 12,
-    cy: 9.75,
-    s: 1 / 2,
-  },
-  // 外形の中に、上へ寄せた皿（天面の凹み）を描く。皿は x 6.75..17.25、y 5.25..16.5、角丸 3。
-  // 記号は皿の中へ置く。皿の内縁 7.5..16.5 の 9 に、外形 7.5（s=5/12）＋線幅で隙間 0。
-  "keycap-dish": {
-    parts: {
-      tile: rect(3.75, 3.75, 16.5, 16.5, 3.75),
-      dish: rect(6.75, 5.25, 10.5, 11.25, 3),
-    },
-    cx: 12,
-    cy: 10.875,
-    s: 5 / 12,
-  },
-  // 天面（x,y 3.75..17.25）の右下へ、2.25 ずらした影の縁が見える。
-  // 記号は天面の中へ置く。天面の内縁 4.5..16.5 の 12 に、外形 9（s=1/2）＋線幅で隙間 0.75。
-  "keycap-shadow": {
-    parts: {
-      top: rect(3.75, 3.75, 13.5, 13.5, 3),
-      shadow: path("M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75"),
-    },
-    cx: 10.5,
-    cy: 10.5,
-    s: 1 / 2,
+    cy: 11.25,
+    s: 7 / 12,
   },
 };
 
@@ -463,8 +485,12 @@ const VARIANTS = Object.fromEntries(
     id,
     (name, a) => [
       ...Object.entries(frame.parts).map(([role, el]) => stroke(name, `frame-${role}`, el)),
-      ...Object.entries(a.tile ?? a.parts).map(([role, el]) =>
-        stroke(name, role, scaled(el, frame.s, frame.cx, frame.cy)),
+      ...Object.entries(a.tile ?? a.parts)
+        .filter(() => !a.tileRaw)
+        .map(([role, el]) => stroke(name, role, scaled(el, frame.s, frame.cx, frame.cy))),
+      // tileRaw は枠の中の座標で描いた形。縮めずに、枠の中心へ移すだけにする。
+      ...Object.entries(a.tileRaw ?? {}).map(([role, el]) =>
+        stroke(name, role, scaled(el, 1, frame.cx, frame.cy)),
       ),
     ],
   ]),

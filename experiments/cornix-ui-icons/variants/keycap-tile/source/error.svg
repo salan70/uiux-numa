@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <title>エラー</title>
   <rect id="part-error-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
-  <path id="part-error-e" d="M6.5 12 H10.5 A2 3 0 1 0 10 14.25" fill="none" stroke="currentColor"/>
-  <path id="part-error-r-a" d="M11.5 15 V9 M11.5 11 C11.5 9.5 12.5 9 14 9.25" fill="none" stroke="currentColor"/>
-  <path id="part-error-r-b" d="M15 15 V9 M15 11 C15 9.5 16 9 17.5 9.25" fill="none" stroke="currentColor"/>
+  <path id="part-error-e" d="M5.625 12 H9.375 A1.875 3.75 0 1 0 8.625 14.625" fill="none" stroke="currentColor"/>
+  <path id="part-error-r-a" d="M11.25 15.75 V8.25 M11.25 10.5 L13.5 8.25" fill="none" stroke="currentColor"/>
+  <path id="part-error-r-b" d="M15.75 15.75 V8.25 M15.75 10.5 L18 8.25" fill="none" stroke="currentColor"/>
 </svg>

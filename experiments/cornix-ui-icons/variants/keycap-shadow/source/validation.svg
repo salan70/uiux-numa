@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>検証</title>
-  <rect id="part-validation-frame-top" x="3.75" y="3.75" width="13.5" height="13.5" rx="3" fill="none" stroke="currentColor"/>
-  <path id="part-validation-frame-shadow" d="M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75" fill="none" stroke="currentColor"/>
-  <polyline id="part-validation-check-a" points="6.375 8.25 7.5 9.375 9.375 7.125" fill="none" stroke="currentColor"/>
-  <path id="part-validation-row-a" d="M11.25 8.25 14.625 8.25" fill="none" stroke="currentColor"/>
-  <polyline id="part-validation-check-b" points="6.375 12.75 7.5 13.875 9.375 11.625" fill="none" stroke="currentColor"/>
-  <path id="part-validation-row-b" d="M11.25 12.75 14.625 12.75" fill="none" stroke="currentColor"/>
-</svg>

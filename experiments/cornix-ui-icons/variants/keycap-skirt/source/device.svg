@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>実機と適用</title>
-  <rect id="part-device-frame-top" x="3.75" y="3.75" width="16.5" height="12" rx="3.75" fill="none" stroke="currentColor"/>
-  <path id="part-device-frame-skirt" d="M3.75 12V17.25Q3.75 20.25 6.75 20.25H17.25Q20.25 20.25 20.25 17.25V12" fill="none" stroke="currentColor"/>
-  <path id="part-device-up-shaft" d="M10.125 13.875 10.125 5.625" fill="none" stroke="currentColor"/>
-  <polyline id="part-device-up-head" points="8.25 7.5 10.125 5.625 12 7.5" fill="none" stroke="currentColor"/>
-  <path id="part-device-down-shaft" d="M13.875 5.625 13.875 13.875" fill="none" stroke="currentColor"/>
-  <polyline id="part-device-down-head" points="12 12 13.875 13.875 15.75 12" fill="none" stroke="currentColor"/>
-</svg>

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>エラー</title>
-  <rect id="part-error-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
-  <rect id="part-error-frame-dish" x="6.75" y="5.25" width="10.5" height="11.25" rx="3" fill="none" stroke="currentColor"/>
-  <path id="part-error-e" d="M8.563 10.875 H11.063 A1.25 1.875 0 1 0 10.75 12.281" fill="none" stroke="currentColor"/>
-  <path id="part-error-r-a" d="M11.688 12.75 V9 M11.688 10.25 C11.688 9.313 12.313 9 13.25 9.156" fill="none" stroke="currentColor"/>
-  <path id="part-error-r-b" d="M13.875 12.75 V9 M13.875 10.25 C13.875 9.313 14.5 9 15.438 9.156" fill="none" stroke="currentColor"/>
-</svg>
