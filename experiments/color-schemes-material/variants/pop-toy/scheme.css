@@ -1,0 +1,69 @@
+/*
+ * variant `pop-toy`（ポップトイ）の配色。
+ * shared/palettes.ts からの生成物。直接編集しない。
+ * 値を変えるときは palettes.ts を直し、just schemes-build を実行する。
+ */
+
+:root:has(.cs-pop-toy) {
+  --color-primary: #fac400; /* キーキャップの黄 */
+  --color-on-primary: #120d09;
+  --color-primary-text: #785f02;
+  --color-primary-container: #faf1d1;
+  --color-on-primary-container: #120d09;
+
+  --color-secondary: #4078e0; /* キーキャップの青 */
+  --color-on-secondary: #120d09;
+  --color-secondary-container: #d4e0f7;
+  --color-on-secondary-container: #120d09;
+
+  --color-tertiary: #f37252; /* ノブの赤橙 */
+  --color-on-tertiary: #120d09;
+  --color-tertiary-container: #fad9d1;
+  --color-on-tertiary-container: #120d09;
+
+  --color-background: #f8f9f9;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-surface-container: #eff0f0;
+  --color-surface-variant: #dee3e0;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #9b7a03;
+
+  --color-success: #2e731d;
+  --color-warning: #795d1c;
+  --color-error: #a23b1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:has(.cs-pop-toy) {
+    --color-primary: #fac400; /* キーキャップの黄 */
+    --color-on-primary: #120d09;
+    --color-primary-text: #fde591;
+    --color-primary-container: #896f10;
+    --color-on-primary-container: #fffdf9;
+
+    --color-secondary: #4078e0; /* キーキャップの青 */
+    --color-on-secondary: #120d09;
+    --color-secondary-container: #183d81;
+    --color-on-secondary-container: #fffdf9;
+
+    --color-tertiary: #f37252; /* ノブの赤橙 */
+    --color-on-tertiary: #120d09;
+    --color-tertiary-container: #892810;
+    --color-on-tertiary-container: #fffdf9;
+
+    --color-background: #1a1b1b;
+    --color-surface: #252726;
+    --color-on-surface: #f0f0f0;
+    --color-surface-container: #323433;
+    --color-surface-variant: #3e4c43;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #8b9c91;
+    --color-focus: #fcdf73;
+
+    --color-success: #5fdb3f;
+    --color-warning: #e5b23d;
+    --color-error: #f7a289;
+  }
+}

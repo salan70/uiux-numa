@@ -6,13 +6,13 @@ describe("catalog inventory", () => {
     expect(catalog.tokens).toHaveLength(56);
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(40);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(16);
-    expect(catalog.schemes).toHaveLength(10);
+    expect(catalog.schemes).toHaveLength(11);
     expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(38);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(11);
-    expect(catalog.liveVariants).toHaveLength(33);
+    expect(catalog.liveVariants).toHaveLength(34);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -124,6 +124,7 @@ describe("catalog inventory", () => {
       "color-schemes-material/azuki",
       "color-schemes-material/fuji",
       "color-schemes-material/kingyo",
+      "color-schemes-material/pop-toy",
       "color-schemes-material/shinbashi",
       "color-schemes-material/sumi",
       "color-schemes-material/tsukiyo",
