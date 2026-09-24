@@ -2,11 +2,6 @@
 title: UX Writing
 summary: 部品と状態の文言を、利用者が次の行動を迷わず取れる形に揃える。
 status: adopted
-axes:
-  - writing clarity
-  - feedback quality
-  - consistency
-  - localization robustness
 created: 2026-09-20
 updated: 2026-09-22
 ---
@@ -63,7 +58,7 @@ updated: 2026-09-22
 - 良い例:「保存」「詳細」、対象を補う「変更を保存」、送り先を示す「次の配色: 柚子」
 - 悪い例:「はい」「OK」「こちらをクリック」「この内容で変更を保存して次へ進む」
 - 例外: 検索や閉じるのアイコンのように、慣習が確立した単一目的のボタンは見えるラベルを省ける。アクセシブルな名前は付ける。一覧で同じ「詳細」が並ぶときは、見える語を含めたまま名前で対象を識別できるようにする。
-- 実験: [ボタンのラベルは文脈で分かる対象を省く ADR](../decisions/2026-09-21-button-label-omits-object.md)
+- 実験: [ボタンのラベルは文脈で分かる対象を省く ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-button-label-omits-object.md)
 - 出典: [Apple Human Interface Guidelines: Writing](https://developer.apple.com/design/human-interface-guidelines/writing)
 
 ### ボタンとラベルは語幹か終止形、文は敬体で書く
@@ -91,7 +86,7 @@ updated: 2026-09-22
 - 良い例: ラベルの下に「8 文字以上の英数字」「例: `user@example.com`」を常に出す。
 - 悪い例: 条件を案内せず、入力枠のプレースホルダーにだけ「`user@example.com`」と置く。
 - 例外: 日付選択のように、入力部品そのものが形式を制限する場合。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 3.3.2](https://www.w3.org/TR/WCAG22/#labels-or-instructions)
 
 ### 入力エラーは項目名で始め、満たすべき条件を肯定形で書く
@@ -106,7 +101,7 @@ updated: 2026-09-22
 - 良い例:「パスワードは英字と数字を含めてください。」「メールアドレスを入力してください。」
 - 悪い例:「パスワードに英字と数字が含まれていません。」「無効な入力です。」
 - 例外: 認証の失敗。ID とパスワードのどちらが誤りかは伏せる。
-- 実験: [form-inline-validation の UX writing レビュー](../records/form-inline-validation/evaluation/ux-writing.md)
+- 実験: [form-inline-validation の UX writing レビュー](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/evaluation/ux-writing.md)
 - 出典: [GOV.UK Design System: Error message](https://design-system.service.gov.uk/components/error-message/)
 
 ### 進行、完了、失敗は同じ動詞で型を揃える
@@ -135,7 +130,7 @@ updated: 2026-09-22
 - 良い例:「まだ記録がありません。右上の追加から作れます。」
 - 悪い例: 理由も行動も無い「データがありません」、経緯を 3 文以上で説明する空状態。
 - 例外: 規約や法令の引用のように、原文を変えられない文。複数の誤りや一部だけの完了は、2 文で要点を伝え、詳細への導線を足す。
-- 実験: [UX Writing 組み直し ADR](../decisions/2026-09-22-ux-writing-redesign.md)
+- 実験: [UX Writing 組み直し ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-22-ux-writing-redesign.md)
 
 ### 確認は結果を問いにし、ボタンは結果の語にする
 

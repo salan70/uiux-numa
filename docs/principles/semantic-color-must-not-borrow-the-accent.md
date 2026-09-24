@@ -40,7 +40,7 @@ updated: 2026-09-21
 良い例は同じ画面の現行実装である。
 `--cat-good: var(--color-success)`、`--cat-bad: var(--color-error)` として受け、語も残した。
 10 配色 × ライト / ダークの 40 通りで、背景に対する比は最小 5.57:1 だった。
-判断は [対比の対 ADR](../../docs/decisions/2026-09-21-catalog-guideline-contrast-pair.md) にある。
+判断は [対比の対 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-catalog-guideline-contrast-pair.md) にある。
 
 ## 例外
 
@@ -56,6 +56,6 @@ updated: 2026-09-21
 - 未検証: 由来は 1 件である。別の Experiment や別プロダクトで試していない。
 - 未検証: 色覚特性のある利用者に見てもらっていない。語を併記しているため
   WCAG 2.2 達成基準 1.4.1 は満たすが、実機の確認はしていない。
-- 未検証: 多観点評価を経ていない。`docs/evaluation/axes.md` で近いのは `accessibility` と `consistency` である。
+- 未検証: 多観点評価を経ていない。`docs/evaluation.md` で近いのは `accessibility` と `consistency` である。
 - 関連: [color の規則](../guidelines/color.md)は「意味色は 4 つまでに絞る」「意味色は配色をまたいで意図を揃える」を定めるが、
   強調色と意味色を混ぜないことは定めていない。この候補はその隙間を埋める。

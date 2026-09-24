@@ -2,10 +2,6 @@
 title: Japanese Notation
 summary: 画面に出る日本語の文字の形を、どの画面でも同じ形に揃える。
 status: adopted
-axes:
-  - consistency
-  - localization robustness
-  - writing clarity
 created: 2026-09-22
 updated: 2026-09-22
 ---

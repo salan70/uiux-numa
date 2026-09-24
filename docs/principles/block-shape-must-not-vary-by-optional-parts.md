@@ -32,17 +32,17 @@ updated: 2026-09-21
 
 ## 作例
 
-悪い例は `docs/records/catalog-editorial` の `topic-first` から公開面へ移した方針画面である。
+悪い例は `catalog-editorial`（削除済み） の `topic-first` から公開面へ移した方針画面である。
 規則 1 件は 題名 / 分類 / 図版 / 根拠 / bad / good / 例外 / 出どころ の 8 項目を持ち、
 このうち図版、例外、出どころが任意だった。
 States & Feedback の 8 件は、段の数が 4 から 7 まで揺れていた。
 利用者の評価は「各情報がぱっとみで何を表しているか、どういう構造かがわからない」である。
 
-良い例は `docs/records/guideline-rule-structure` の [`contrast-pair`](../records/guideline-rule-structure/README.md) である。
+良い例は `guideline-rule-structure`（削除済み） の [`contrast-pair`](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/guideline-rule-structure/README.md) である。
 図版を廃止し、出どころを画面から外し、分類を題名の横へ入れて、
 **題名 + 分類** → **根拠** → **good ｜ bad** → **例外** の 4 段に固定した。
 例外だけは任意のまま残っているが、最後の 1 段なので前の 3 段の位置は動かない。
-判断は [対比の対 ADR](../../docs/decisions/2026-09-21-catalog-guideline-contrast-pair.md) にある。
+判断は [対比の対 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-catalog-guideline-contrast-pair.md) にある。
 
 ## 例外
 
@@ -57,7 +57,7 @@ States & Feedback の 8 件は、段の数が 4 から 7 まで揺れていた�
   段を固定した `contrast-pair` を利用者が選んだ。ただし「どれもいまいち」という評価つきである。
   段の固定そのものが選択の理由として語られたわけではない。
 - 未検証: 由来は 1 件である。別の Experiment や別プロダクトで試していない。
-- 未検証: 多観点評価を経ていない。`docs/evaluation/axes.md` で近いのは `consistency` と `information architecture` だが、
+- 未検証: 多観点評価を経ていない。`docs/evaluation.md` で近いのは `consistency` と `information architecture` だが、
   どちらも「段の数の揺れ」を直接は扱わない。
 - 未検証: 段の数の上限を 5 とした根拠がない。方針画面が 4 段に収まったという 1 例だけである。
 

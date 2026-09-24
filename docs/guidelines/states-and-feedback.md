@@ -2,10 +2,6 @@
 title: States & Feedback
 summary: 操作の受け付けと結果を区別して伝え、操作の途中で押し先を動かさず安定した挙動を保つ。
 status: draft
-axes:
-  - interaction clarity
-  - feedback quality
-  - motion appropriateness
 created: 2026-09-20
 updated: 2026-09-22
 ---
@@ -61,7 +57,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 数字の表示幅を最大値で固定し、エラー文の行を `min-height` で予約する。
 - 悪い例: エラー文の要素ごと取り除き、下の送信ボタンをせり上がらせる。
 - 例外: 予約した高さを超える長文や、文字の拡大で内容が伸びる場合。切り落とさず伸ばし、全文を読めるようにする。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 
 ### 100ms を目安に受け付けを返し、1 秒を超えたら進行を示す
 
@@ -73,7 +69,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 保存ボタンを押した瞬間に「保存しています」へ切り替え、確定後に「保存しました」、失敗したら「保存できませんでした」を出す。
 - 悪い例: 送信を押しても数秒間画面に変化がない。または通信の確定前に「保存しました」を出し、失敗後もそのまま残す。
 - 例外: 利用者が待つ必要のない、裏で進む処理。楽観的に結果を先に見せる場合は、失敗時に元へ戻して失敗を伝える。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 - 出典: [NN/g: Response Times: The 3 Important Limits](https://www.nngroup.com/articles/response-times-3-important-limits/)
 
 ### 処理の状態は排他にし、属性は重ねて表す
@@ -99,7 +95,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 送信時の入力エラーを上部の要約にまとめ、要約へフォーカスを移して各項目へリンクする。
 - 悪い例: 送信ボタンの位置にフォーカスが留まり、画面上部のエラーに気づかない。
 - 例外: 入力中のフィールドの直下でリアルタイムに表示する軽微な警告。通信やサービスの失敗は入力の誤りではないので、要約に混ぜず状態の文言で伝える。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 3.3.1](https://www.w3.org/WAI/WCAG22/quickref/#error-identification)
 
 ### 処理の完了を支援技術へ伝える
@@ -112,7 +108,7 @@ form-inline-validation では、エラー文の消去で送信ボタンが 28px 
 - 良い例: 登録完了画面への切り替えと同時に、完了見出しへフォーカスを移す。
 - 悪い例: フォームが消えてフォーカスが body に落ち、読み上げが途絶える。
 - 例外: 画面を切り替えない副次的な保存。`role="status"` に文言を入れ、フォーカスは動かさない。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 
 ### 削除は確認ではなく取り消しで守る
 
@@ -136,4 +132,4 @@ form-inline-validation の on-blur は、その実装で表示の高さが変わ
 - 良い例: 初回は送信時にまとめて検証し、以後は修正のたびにその項目を再検証する。
 - 悪い例: フィールドから離脱するたび、または 1 文字目の入力で警告を出す。
 - 例外: ユーザー名の重複確認など、即時の確認に明確な価値がある場合。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
