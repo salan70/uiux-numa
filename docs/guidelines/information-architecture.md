@@ -2,10 +2,6 @@
 title: Information Architecture
 summary: 目的の情報へ迷わずたどり着け、いつでも同じ場所で見つけられる構造にする。
 status: adopted
-axes:
-  - information architecture
-  - discoverability
-  - information density
 created: 2026-09-20
 updated: 2026-09-22
 ---
@@ -52,7 +48,7 @@ updated: 2026-09-22
 - 良い例:「配色」「アイコン」のように目的で分類し、はみ出た要素には行き先の分類を足す。
 - 悪い例:「第 1 号」「第 2 号」の制作順で分け、入らない件を「その他」に寄せる。
 - 例外: 利用者自身がフォルダーを作って分類するファイル管理。
-- 実験: [topic-first の決定](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [topic-first の決定](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [NN/g: Card Sorting](https://www.nngroup.com/articles/card-sorting-definition/)
 
 ### 複数に当てはまる件は、置き場の決め方を先に 1 つ決める
@@ -102,7 +98,7 @@ updated: 2026-09-22
 - 良い例: 分類を選ぶと、その中身が画面の先頭から始まる。
 - 悪い例: 分類を選ぶと、下位分類のリンクだけが並ぶ画面を挟む。
 - 例外: 下位の分類ごとに件数が多く、先頭に置く中身を 1 つに選べない場合。
-- 実験: [topic-first の決定](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [topic-first の決定](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 
 ### 検索と絞り込みは、一望できない件数になってから足す
 
@@ -153,7 +149,7 @@ URL が階層を表現していれば現在地を把握でき、上位へも辿�
 - 良い例: 書体の見本に書体名を置き、配色の見本に配色名を添える。
 - 悪い例: 見本だけを並べ、書体名や配色名が画面のどこにもない。
 - 例外: 装飾の地紋のように、固有の名前を持たない見本。
-- 実験: [topic-first の決定](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [topic-first の決定](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 
 ### 形の違う中身は、形に合った組み方で並べる
 
@@ -165,4 +161,4 @@ URL が階層を表現していれば現在地を把握でき、上位へも辿�
 - 良い例: 配色は色面、トークンは仕様表、アイコンは等間隔の格子で組む。
 - 悪い例: 配色、トークン、アイコンをすべて同一寸法のカードに入れる。
 - 例外: 形式の違う中身を横断して並べる検索結果。同じ枠の縮小表示にする。
-- 実験: [topic-first の決定](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [topic-first の決定](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)

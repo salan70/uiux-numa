@@ -78,7 +78,7 @@ body {
 }
 
 /* 公開 Catalog の造形。
-   正本はこのファイルである。出どころは topic-first 案（docs/records/catalog-editorial/）。
+   正本はこのファイルである。出どころは削除済みの catalog-editorial の topic-first 案（commit 5215a3c の docs/records/catalog-editorial/）。
    面は無彩、線はヘアライン、強調は 1 色、部品は角丸と 120ms の色変化。
    判断は docs/decisions/2026-09-20-catalog-topic-first.md に残す。 */
 
@@ -969,7 +969,7 @@ body {
 /* ---- トップの流れる帯 ---- */
 
 /* 題字と帯を縦に積む。帯は版面の左右いっぱいまで広げ、両端を背景へ溶かす。
-   判断は docs/decisions/2026-09-21-catalog-home-marquee.md に残す。 */
+   判断は apps/catalog/README.md に残す。 */
 .app-shell .home-hero {
   display: grid;
   gap: var(--cat-gap-lg);

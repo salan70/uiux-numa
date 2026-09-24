@@ -2,10 +2,6 @@
 title: Color
 summary: 色を役割名で管理し、役割の意味を配色をまたいで保ち、計算と見本で視認性と調和を確かめる。
 status: draft
-axes:
-  - visual hierarchy
-  - accessibility
-  - consistency
 created: 2026-09-20
 updated: 2026-09-22
 ---
@@ -49,7 +45,7 @@ updated: 2026-09-22
 - 良い例: CSS 変数 `--color-accent` や `--ed-surface` で指定する。
 - 悪い例: スタイルシートに `#165e83` などの固定値を直接記述する。
 - 例外: パレットの基礎となる元データを定義する定義体。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [Design Tokens Community Group 仕様](https://design-tokens.github.io/community-group/format/)
 
 ### 余った色をそのまま残さない
@@ -61,7 +57,7 @@ updated: 2026-09-22
 - 良い例: 役割に割り当てられた必要な色のみを定義する。
 - 悪い例: 生成ツールが作った無関係な濃淡スケールを全件保持する。
 - 例外: 画面に出さない参照用の定義体。配色の元にした伝統色の一覧など。
-- 実験: [color-schemes](../records/color-schemes/README.md)
+- 実験: [color-schemes](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/color-schemes/README.md)
 
 ### 意味色は成功、警告、エラー、情報の 4 つを既定にする
 
@@ -84,7 +80,7 @@ updated: 2026-09-22
 - 良い例: 全配色でエラーに赤系、成功に緑系の色を割り当て、accent は主たる操作に割り当てる。
 - 悪い例: ある配色だけ accent を装飾に使い、エラーの色を紫や青に変える。
 - 例外: OS 標準のセマンティックカラーに委ねる場合。
-- 実験: [color-schemes](../records/color-schemes/README.md)
+- 実験: [color-schemes](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/color-schemes/README.md)
 
 ### 地、面、浮いた面は明度の段差で分ける
 
@@ -117,7 +113,7 @@ updated: 2026-09-22
 - 良い例: パレットカードや色帯を並べ、相性と明度差を先に確認する。
 - 悪い例: 完成した画面にいきなり色を当てて全体の可否を議論する。
 - 例外: 微小な文字サイズにおける個別の視認性確認。
-- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/README.md)
 
 ### 無彩色を中心にする作風では、有彩色を操作と状態に限る
 
@@ -130,7 +126,7 @@ updated: 2026-09-22
 - 良い例: 背景を無彩色の白鼠や墨色にし、ボタンのみにアクセント色を使う。
 - 悪い例: カードの面やヘッダー全体を有彩色で塗りつぶす。
 - 例外: ブランドの告知など、強い情緒表現を意図する案内面。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 
 ### 見本帳は固有のブランド色を持たない
 
@@ -141,4 +137,4 @@ updated: 2026-09-22
 - 良い例: カタログの面の色を正本の配色定義から直接導く。
 - 悪い例: カタログ固有のアクセントカラーをヘッダー等に残す。
 - 例外: 成果物の表示と完全に独立したシステム管理バー。
-- 実験: [docs/decisions/2026-09-19-catalog-host.md](../../docs/decisions/2026-09-19-catalog-host.md)
+- 実験: [docs/decisions/2026-09-19-catalog-host.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md)

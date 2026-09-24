@@ -2,10 +2,6 @@
 title: Accessibility
 summary: キーボード操作、視覚多様性、支援技術に対応し、誰でも等しく利用できる品質を担保する。
 status: draft
-axes:
-  - accessibility
-  - interaction clarity
-  - platform fit
 created: 2026-09-20
 updated: 2026-09-22
 ---
@@ -102,7 +98,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 良い例と悪い例を、`good` / `bad` の語と、成功色・エラー色の両方で分ける。
 - 悪い例: 成功とエラーを緑と赤の円だけで示し、文字や形を変えない。
 - 例外: 配色見本の色面のように、色そのものが提示する内容である場合。その場合も選択中はチェックなどで示し、色名か値を取得できるようにする。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 1.4.1](https://www.w3.org/WAI/WCAG22/quickref/#use-of-color)
 
 ### 意味を持つ画像に代替テキストを付け、装飾は読み上げから外す
@@ -125,7 +121,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: ホバーとフォーカスの両方で表示し、Esc で閉じられ、表示へポインターを移しても消えず、利用者が離れるまで出し続ける。必須の注記は常時表示にする。
 - 悪い例: マウスホバー時のみツールチップで必須の注記を出す。または表示へポインターを移すと消える。
 - 例外: ホバーによって得られる純粋な視覚的装飾や演出効果。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 1.4.13](https://www.w3.org/WAI/WCAG22/quickref/#content-on-hover-or-focus)
 
 ### すべての操作をキーボードだけで完結させる
@@ -138,7 +134,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: ボタンはネイティブ要素で組み、タブは Tab で一覧へ入り、矢印キーでタブを移れるようにする。
 - 悪い例: `div` や `span` に `onClick` だけを付け、キーボードで押せないようにする。
 - 例外: 自由描画キャンバスなど、ポインタの連続軌跡が必須の操作。
-- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.1.1](https://www.w3.org/WAI/WCAG22/quickref/#keyboard)
 
 ### フォーカスを可視化し sticky な帯で隠さない
@@ -150,7 +146,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: 2px の鮮明な輪郭線を出し、`scroll-margin` で固定帯との重なりを防ぐ。
 - 悪い例: `outline: none` で枠を消し、固定ヘッダーの背後に要素が潜り込む。
 - 例外: ポインタで押した直後。`:focus-visible` を使い、枠を出すかはブラウザーの判定に任せる。入力欄はポインタで選んでも枠が出る。
-- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.7 / 2.4.11](https://www.w3.org/WAI/WCAG22/quickref/#focus-visible)
 
 ### ポインタのターゲット領域は 24×24 CSS px 以上にする
@@ -188,7 +184,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: `label` の `for` と `aria-describedby` で、名前と説明を入力欄に結ぶ。
 - 悪い例: 入力欄の上に文字を置くだけで、要素として関連付けない。
 - 例外: 入力欄自身の `aria-label` で名前が完結する検索窓など。条件や形式の説明が要る入力欄では、見える説明を省かない。
-- 実験: [form-inline-validation](../records/form-inline-validation/README.md)
+- 実験: [form-inline-validation](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/form-inline-validation/README.md)
 - 出典: [WCAG 2.2 達成基準 1.3.1](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
 ### 操作の名前は「何が起きるか」で付ける
@@ -224,7 +220,7 @@ AAA は個別に選ぶが、動きの抑制のように本リポジトリが必�
 - 良い例: `prefers-reduced-motion` 時に遷移時間や移動距離を 0 に近づける。
 - 悪い例: 端末設定を無視して常に画面全体がスライドや拡大縮小する。
 - 例外: 動画再生など、動きそのものがコンテンツの本質である場合。自動で動き続ける内容を止める手段（2.2.2）と点滅の制限は免除しない。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WCAG 2.2 達成基準 2.3.3（AAA）](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html)
 
 ### 画面遷移後は見出しにフォーカスを移し skip link を置く
@@ -238,7 +234,7 @@ skip link は、繰り返す領域を飛ばす手段として達成基準 2.4.1 
 - 良い例: 画面遷移後に h1 要素へフォーカスを移し、最上部に skip link を置く。
 - 悪い例: 画面が切り替わっても直前のボタンにフォーカスが残留する。
 - 例外: 遷移を伴わない同一画面内の小さな開閉操作。
-- 実験: [catalog-editorial/README.md](../records/catalog-editorial/README.md)
+- 実験: [catalog-editorial/README.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/README.md)
 - 出典: [WCAG 2.2 達成基準 2.4.1](https://www.w3.org/WAI/WCAG22/quickref/#bypass-blocks)
 
 ### モーダル表示にはネイティブの dialog 要素を使う
@@ -251,5 +247,5 @@ skip link は、繰り返す領域を飛ばす手段として達成基準 2.4.1 
 - 良い例: `dialog` を `showModal()` で開き、見出しで名前を付け、最初の操作対象へフォーカスを置き、閉じたら開いた操作へフォーカスを戻す。
 - 悪い例: `div` でモーダルを自作して背後にフォーカスが漏れる。または `dialog` に `open` 属性を付けただけでモーダルとして扱う。
 - 例外: 簡易なポップオーバーなど、非モーダルな浮動表示。
-- 実験: [catalog-editorial/rationale/topic-first.md](../records/catalog-editorial/rationale/topic-first.md)
+- 実験: [catalog-editorial/rationale/topic-first.md](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/records/catalog-editorial/rationale/topic-first.md)
 - 出典: [WAI-ARIA APG: Dialog (Modal) Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)

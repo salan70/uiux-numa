@@ -2,11 +2,6 @@
 title: Design Principles
 summary: UI の可読性と操作性を保ち、情報の所属・重要度・役割を視覚的に伝える。
 status: draft
-axes:
-  - visual hierarchy
-  - consistency
-  - accessibility
-  - localization robustness
 created: 2026-09-20
 updated: 2026-09-22
 ---

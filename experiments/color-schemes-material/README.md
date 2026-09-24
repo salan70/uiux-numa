@@ -13,7 +13,7 @@ domains:
   - design-tokens
   - accessibility
 sources:
-  - docs/records/color-schemes
+  - color-schemes
 adopted:
   - wasabi
   - yuzu
@@ -104,7 +104,7 @@ LP への反映は行わない。
 
 ## Evaluation
 
-`docs/evaluation/review.md` の多観点評価は行っていない。
+`docs/evaluation.md` の多観点評価は行っていない。
 10 テーマをライト・ダークで表示し、一覧と「すみ」の見本を目視した。
 全 20 パレットの本文、補助文字、線、フォーカス、状態色は生成時にコントラストを検査する。
 Catalog への反映後は `just catalog-test` が同じ組み合わせを再検査する。
@@ -112,7 +112,7 @@ Catalog への反映後は `just catalog-test` が同じ組み合わせを再検
 ## Decision
 
 10 テーマすべてを採用し、24 役割の体系を配色の正本にする。
-`docs/records/color-schemes`（削除済みの記録） の 19 役割を置き換える。
+`color-schemes`（削除済み）（削除済みの記録） の 19 役割を置き換える。
 旧 Experiment は判断の経緯として残し、公開 Catalog からは案内しない。
 
 Catalog は `variants/<id>/scheme.css` を読む。
@@ -189,6 +189,6 @@ harmonize の上限 15° をそのまま使う案も見送った。
 `focus` は 3:1 保証なので本文には使えない。
 色相と彩度を `primary` のまま、4 つの面すべてに 4.5:1 を満たす明度へ寄せた `primary-text` を足した。
 
-## Related patterns / assets
+## Related
 
 なし
