@@ -253,7 +253,10 @@
   border-color: var(--color-error);
   color: var(--color-error);
 }
-.cx-save.is-saving .cx-icon {
+/* 回すのは弧だけにする。枠や点まで回すと、枠を持つ案で形が崩れる。 */
+.cx-save.is-saving [id$="-arc"] {
+  transform-box: fill-box;
+  transform-origin: center;
   animation: cx-spin 1s linear infinite;
 }
 @keyframes cx-spin {
@@ -262,7 +265,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cx-save.is-saving .cx-icon {
+  .cx-save.is-saving [id$="-arc"] {
     animation: none;
   }
 }

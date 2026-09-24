@@ -108,6 +108,10 @@ svg-optimize src dist:
 svg-grid out size +dirs:
     scripts/svg-grid.sh "{{out}}" "{{size}}" {{dirs}}
 
+# SVG をそのまま並べた比較ページ（HTML）を作る。依頼者への提示に使う。例: just svg-compare previews/compare.html 16,24,64 a/dist b/dist --scheme pop-toy
+svg-compare out sizes +args:
+    node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/svg-compare.mjs "{{out}}" "{{sizes}}" {{args}}
+
 # Catalog（apps/catalog）の依存を導入する
 catalog-install:
     cd apps/catalog && pnpm install --frozen-lockfile

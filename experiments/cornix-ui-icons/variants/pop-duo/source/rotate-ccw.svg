@@ -2,5 +2,5 @@
   <title>左回し</title>
   <circle id="part-rotate-ccw-accent" cx="12" cy="13.5" r="6.75" fill="currentColor" fill-opacity="0.22" stroke="none"/>
   <path id="part-rotate-ccw-arc" d="M5.25 13.5A6.75 6.75 0 1 0 12 6.75" fill="none" stroke="currentColor"/>
-  <polyline id="part-rotate-ccw-head" points="15 3.75 12 6.75 15 9.75" fill="none" stroke="currentColor"/>
+  <polyline id="part-rotate-ccw-head" points="14.25 4.5 12 6.75 14.25 9" fill="none" stroke="currentColor"/>
 </svg>
