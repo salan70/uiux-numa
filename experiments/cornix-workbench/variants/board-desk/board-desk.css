@@ -915,28 +915,44 @@
 
 /* ---------- 引き出し ---------- */
 
-.bd-drawer {
-  position: absolute;
-  z-index: 5;
-  inset: var(--space-400) var(--space-400) var(--space-400) auto;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  width: min(38rem, calc(100% - 12rem));
+.bd-sheet {
+  width: min(68rem, calc(100vw - 4rem));
+  height: min(46rem, calc(100vh - 4rem));
+  max-width: none;
+  max-height: none;
+  padding: 0;
   overflow: hidden;
   border: var(--border-width-thick) solid var(--color-on-surface);
   border-radius: var(--bd-radius-card);
   background: var(--color-surface);
-  box-shadow: -16px 0 40px color-mix(in srgb, var(--color-on-surface) 18%, transparent);
-  animation: bd-drawer-in var(--duration-160) var(--easing-out);
+  color: var(--color-on-surface);
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--font-line-height-ui);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--color-on-surface) 30%, transparent);
 }
-@keyframes bd-drawer-in {
+.bd-sheet[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  animation: bd-sheet-in var(--duration-160) var(--easing-out);
+}
+.bd-sheet.is-full {
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+  border-radius: 0;
+}
+.bd-sheet::backdrop {
+  background: color-mix(in srgb, var(--color-on-surface) 40%, transparent);
+}
+@keyframes bd-sheet-in {
   from {
-    transform: translateX(24px);
+    transform: scale(0.97);
     opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bd-drawer {
+  .bd-sheet[open] {
     animation: none;
   }
   .bd-save.is-saving .bd-save-icon {
@@ -947,45 +963,58 @@
     transition: none;
   }
 }
-.bd-drawer-head {
+.bd-sheet-head {
   display: flex;
-  gap: var(--space-300);
+  gap: var(--space-200);
   align-items: center;
-  justify-content: space-between;
   padding: var(--space-300) var(--space-400);
   background: var(--tone);
   color: var(--on-tone);
 }
-.bd-drawer-head h2 {
+.bd-sheet-head h2 {
   display: flex;
   gap: var(--space-200);
   align-items: baseline;
   font-size: var(--typography-heading-font-size);
 }
-.bd-drawer-head small {
+.bd-sheet-head small {
   font-size: var(--typography-caption-font-size);
   font-weight: var(--font-weight-regular);
 }
-.bd-close {
+.bd-sheet-btn {
   min-height: 2rem;
   padding: 0 var(--space-300);
   border: var(--border-width-thick) solid currentColor;
   border-radius: var(--radius-pill);
   background: none;
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
-.bd-close kbd {
+.bd-sheet-btn[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--on-tone) 14%, transparent);
+}
+.bd-sheet-btn kbd {
   margin-inline-start: var(--space-100);
   opacity: 0.8;
 }
-.bd-drawer-body {
+.bd-sheet-body {
   display: grid;
   align-content: start;
   gap: var(--space-400);
-  padding: var(--space-400);
+  padding: var(--space-500);
   overflow-y: auto;
 }
-.bd-drawer-tools {
+/* 広い面では、全体マップの layer を横にも並べる。 */
+.bd-sheet .bd-ov-grid {
+  grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+}
+.bd-sheet .bd-behaviors {
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+.bd-sheet .bd-steps {
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+.bd-sheet-tools {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-200);
