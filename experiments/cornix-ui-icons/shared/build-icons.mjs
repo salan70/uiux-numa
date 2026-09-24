@@ -1,11 +1,11 @@
 // 原本（variants/<id>/source/*.svg）を、共通の骨格から書き出す。
 // 骨格は round-soft の値に載せる: 24 viewBox、線幅 1.5、丸い端点、線の中心 3.75..20.25（外形 3..21）、0.75 格子。
 // すべての案で、超楕円のキーキャップ型の枠の中へ骨格を縮めて置く。案ごとに変えるのは天面の凹みの見せ方だけにする。
-//   keycap-squircle  : 凹みなし（基準）
+//   keycap-squircle  : 凹みなし
 //   keycap-dish-fill : 皿をごく淡い面で塗る
-//   keycap-dish-rim  : 皿の縁を淡い線で描く
-//   keycap-dish-top  : 皿の上側の縁だけを淡い線で描く
-// round 1〜2 の round-line と pop-duo、round 3 の skirt・dish・shadow、round 4 の tile・taper・lip は、利用者の判断で削除した。
+// 2 案とも採用した。どちらを使うかは、Cornix Bonsai の利用者が設定で選ぶ。
+// round 1〜2 の round-line と pop-duo、round 3 の skirt・dish・shadow、round 4 の tile・taper・lip、
+// round 5 の dish-rim・dish-top は、利用者の判断で削除した。
 // 実行: node experiments/cornix-ui-icons/shared/build-icons.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -472,28 +472,6 @@ const FRAMES = {
     cx: 12,
     cy: 12,
     s: 2 / 3,
-  },
-  // 皿の縁を淡い線で描く（不透明度 0.35）。皿は d=1.875（半幅 6.375、線の内縁 5.625）。
-  // 記号は皿の内縁に収まる 18 → 9.75（s=13/24、外形の半分 4.875 ＋ 線幅の半分 0.75 = 5.625）。
-  "keycap-dish-rim": {
-    parts: {
-      tile: superellipse(12, 12, 8.25, 8.25, N),
-      dish: withOpacity(superellipse(12, 12, 6.375, 6.375, N), "strokeOpacity", 0.35),
-    },
-    cx: 12,
-    cy: 12,
-    s: 13 / 24,
-  },
-  // 皿の上側の縁だけを淡い線で描く（凹みの上にできる陰）。媒介変数 t = 1.15π..1.85π の弧。
-  // 皿は d=2.25（上端 y=6、線の下縁 6.75）。記号は 18 → 10.5（s=7/12）で中心を 0.75 下げ、上端を 6.75 に揃える。
-  "keycap-dish-top": {
-    parts: {
-      tile: superellipse(12, 12, 8.25, 8.25, N),
-      dish: withOpacity(superellipse(12, 12, 6, 6, N, 0, [1.15, 1.85]), "strokeOpacity", 0.35),
-    },
-    cx: 12,
-    cy: 12.75,
-    s: 7 / 12,
   },
 };
 

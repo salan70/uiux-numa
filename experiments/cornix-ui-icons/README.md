@@ -1,6 +1,6 @@
 ---
 title: Cornix Bonsai の機能アイコン
-status: implementing
+status: decided
 role: module
 maturity: experimental
 created: 2026-09-24
@@ -15,7 +15,9 @@ sources:
   - catalog-ui-icons
   - cornix-workbench
   - color-schemes-material
-adopted: []
+adopted:
+  - keycap-squircle
+  - keycap-dish-fill
 ---
 
 ## Problem
@@ -82,12 +84,10 @@ Pop Toy の色の面や、キーキャップの枠を足すと、道具として
 4 案は同じ骨格（`shared/build-icons.mjs` の `ASSETS`）を、キーキャップ型の枠の中へ縮めて置く。
 案の違いは枠の形だけにする。
 
-| id                 | 仮説                                                                               | 変えた軸           | 実装                         |
-| ------------------ | ---------------------------------------------------------------------------------- | ------------------ | ---------------------------- |
-| `keycap-squircle`  | 基準: 超楕円の枠だけで、角の曲率がなめらかにつながり、柔らかく整って見える         | —                  | `variants/keycap-squircle/`  |
-| `keycap-dish-fill` | 天面の皿をごく淡い面で塗ると、線を増やさず記号も縮めずに、中央が凹んだキーに見える | 凹み（淡い面）     | `variants/keycap-dish-fill/` |
-| `keycap-dish-rim`  | 皿の縁を淡い線で描くと、写真のキーキャップのやわらかい縁に近づく                   | 凹み（淡い線の縁） | `variants/keycap-dish-rim/`  |
-| `keycap-dish-top`  | 皿の上側の縁だけを淡い線で描くと、凹みの上にできる陰になり、記号をほぼ保てる       | 凹み（上の縁の陰） | `variants/keycap-dish-top/`  |
+| id                 | 仮説                                                                               | 変えた軸       | 実装                         |
+| ------------------ | ---------------------------------------------------------------------------------- | -------------- | ---------------------------- |
+| `keycap-squircle`  | 基準: 超楕円の枠だけで、角の曲率がなめらかにつながり、柔らかく整って見える         | —              | `variants/keycap-squircle/`  |
+| `keycap-dish-fill` | 天面の皿をごく淡い面で塗ると、線を増やさず記号も縮めずに、中央が凹んだキーに見える | 凹み（淡い面） | `variants/keycap-dish-fill/` |
 
 ### 削除した variant
 
@@ -101,7 +101,10 @@ Pop Toy の色の面や、キーキャップの枠を足すと、道具として
 - `keycap-taper`: 超楕円の天面を上へ向かって φ^(−1/4) 倍に細くすると、線を足さずにキーを正面から見た形になる。軸は枠の輪郭（台形）。
 - `keycap-lip`: 超楕円の下に、天面の幅 ÷ φ の縁を 1 本添えると、キーの手前の縁が見える。軸は枠の要素（縁 1 本）。
 
-`round-line` と `pop-duo` の削除前の状態は commit `20e9f04`、`keycap-skirt`・`keycap-dish`・`keycap-shadow` は commit `87c802b`、`keycap-tile`・`keycap-taper`・`keycap-lip` は commit `c4dd51c` にある。
+- `keycap-dish-rim`: 皿の縁を不透明度 0.35 の線で描くと、写真のキーキャップのやわらかい縁に近づく。軸は凹み（淡い線の縁）。
+- `keycap-dish-top`: 皿の上側の縁だけを淡い線で描くと、凹みの上にできる陰になり、記号をほぼ保てる。軸は凹み（上の縁の陰）。
+
+`round-line` と `pop-duo` の削除前の状態は commit `20e9f04`、`keycap-skirt`・`keycap-dish`・`keycap-shadow` は commit `87c802b`、`keycap-tile`・`keycap-taper`・`keycap-lip` は commit `c4dd51c`、`keycap-dish-rim`・`keycap-dish-top` は commit `bd17d87` にある。
 
 ### 造形のパラメータ
 
@@ -134,12 +137,10 @@ round 5 では、利用者が超楕円の形を選び、参考の写真（中央
 round 3 の皿は枠と同じ濃さの線で描いたため重かった。
 round 5 では、凹みを淡い面（fill-opacity）か淡い線（stroke-opacity）で描き、色は currentColor の 1 色のまま濃さだけを変える。
 
-| 枠                 | 凹みの描き方                                               | 皿の半幅（d）  | 記号の中心  | 縮小率 | 記号の外形 |
-| ------------------ | ---------------------------------------------------------- | -------------- | ----------- | ------ | ---------- |
-| `keycap-squircle`  | なし                                                       | —              | (12, 12)    | 2/3    | 12         |
-| `keycap-dish-fill` | 皿を不透明度 0.1 の面で塗る                                | 6（2.25）      | (12, 12)    | 2/3    | 12         |
-| `keycap-dish-rim`  | 皿の縁を不透明度 0.35 の線で描く                           | 6.375（1.875） | (12, 12)    | 13/24  | 9.75       |
-| `keycap-dish-top`  | 皿の上側の縁（t = 1.15π..1.85π）を不透明度 0.35 の線で描く | 6（2.25）      | (12, 12.75) | 7/12   | 10.5       |
+| 枠                 | 凹みの描き方                | 皿の半幅（d） | 記号の中心 | 縮小率 | 記号の外形 |
+| ------------------ | --------------------------- | ------------- | ---------- | ------ | ---------- |
+| `keycap-squircle`  | なし                        | —             | (12, 12)   | 2/3    | 12         |
+| `keycap-dish-fill` | 皿を不透明度 0.1 の面で塗る | 6（2.25）     | (12, 12)   | 2/3    | 12         |
 
 `keycap-dish-rim` の記号は、皿の線の内縁 5.625 に外形の半分と線幅の半分（4.875 + 0.75）を合わせた。
 `keycap-dish-top` の記号は、上端を皿の線の下縁 6.75 に揃えた。
@@ -211,8 +212,6 @@ round 5 では、凹みを淡い面（fill-opacity）か淡い線（stroke-opaci
 
 - `keycap-tile` は、Cornix の入口がすでに色のタイルの中にあるので、枠が二重になる。
 - error の err は、24px 以上では読めるが、16px では字の形がつぶれる。16px で使う箇所（status bar、保存状態）では、err を読めることより、形の違いで見分ける手がかりとして働く。
-- `keycap-dish-rim` は 16px で皿の縁と記号が混ざる。
-- `keycap-dish-top` の上の縁は、凹みの陰ではなく光沢やふたに見えるおそれがある。
 - 淡い面と淡い線は、ダークでは明るい色を薄く重ねるので、凹みより盛り上がりに見えるおそれがある。
 - `rotate-cw` と `rotate-ccw` は、弧が頭の先で終わるため、16px では頭が鉤に見えることがある。
 
@@ -222,17 +221,27 @@ round 5 では、凹みを淡い面（fill-opacity）か淡い線（stroke-opaci
 
 ## Decision
 
-未定
+2026-09-24 に利用者が `keycap-squircle` と `keycap-dish-fill` の 2 案を採用した。
+どちらを使うかは、Cornix Bonsai の利用者が設定で選ぶ（利用者の指示）。
+2 案は同じ骨格、同じ外形（超楕円、n ≈ 4.85）、同じ記号の大きさ（2/3）で、違いは天面の凹みの淡い面の有無だけである。
+判断者は利用者で、多観点の評価を経ていない。
+未評価の軸は visual hierarchy、consistency、accessibility の第三者確認である。
+
+採用案は Cornix Bonsai の Web UI の機能アイコンとして取り込む。
+error の err は 16px では字の形まで読めない。語と一緒に置き、形の違いで見分ける手がかりとして使う。
 
 ## Rejected reasons
 
 - `round-line`、`pop-duo`: 2026-09-24 に利用者が、キーキャップ型の枠（`keycap-tile`）がブランドの観点でもよいと述べ、すべての asset をキーキャップ型にすると決めた。
 - `keycap-skirt`、`keycap-dish`、`keycap-shadow`: 2026-09-24 に利用者が、どれも崩れに近いと述べた。枠に線を足すたびに中の記号が 1/2〜5/12 に縮み、線が二重になって重くなっていた。
 - `keycap-tile`、`keycap-taper`、`keycap-lip`: 2026-09-24 に利用者が、形は超楕円（`keycap-squircle`）がよいと述べた。
+- `keycap-dish-rim`、`keycap-dish-top`: 2026-09-24 に利用者が、`keycap-dish-fill` と `keycap-squircle` を採用した。rim は 16px で縁と記号が混ざり、記号も小さくなる。top は凹みの陰より光沢やふたに見えるおそれがあった。
 
 ## Learnings
 
-未定
+- 枠に要素を足すと、記号を縮めることになり崩れて見えた（round 3）。枠の輪郭を数式で導き（超楕円）、要素は濃さを落として重ねると、記号の大きさを保ったまま印象を変えられた（round 4〜5）。
+- 記号を縮めても線幅は縮めないので、字や細い形は字間や隙間が線に食われる。文字は縮めずに、置き場所の座標で直接描く（err）。
+- 依頼者への提示を PNG から SVG のまま描いた HTML に替えると、拡大した判断ができ、往復が速くなった（`docs/decisions/2026-09-24-present-svg-as-html.md`）。
 
 ## Related patterns / assets
 
