@@ -173,6 +173,10 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 本体では、README の部品の境界と hook の分け方に沿って `src/ui` を作り直し、uiux-numa の token と `pop-toy` を取り込む。
 Core、ファイル形式、CLI、Apply の安全手順は変えない。
 
+2026-09-24 に Cornix Bonsai `17fd920`（ADR 0031）で本体の UI 層を作り直し、main へ取り込んだ。
+実画面は、fixture の workspace を headless Chrome の OPFS に置いて操作し、保存がファイルに届くことと外部変更との競合を確かめた。
+実機での接続、読込、Apply は利用者が確かめた。
+
 ## Rejected reasons
 
 次の 3 方向は、2026-09-24 に利用者が静的なモックを見て、実装する前に見送った。
