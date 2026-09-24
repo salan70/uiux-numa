@@ -6,8 +6,6 @@ const FRONT = [
   "title: Test",
   "summary: 検証用の文書。",
   "status: draft",
-  "axes:",
-  "  - accessibility",
   "created: 2026-09-20",
   "updated: 2026-09-20",
   "---",
@@ -56,13 +54,8 @@ describe("parseGuideline", () => {
 
   it("frontmatter が欠けていれば落とす", () => {
     expect(() => parseGuideline("test", doc(BODY, "---\nsummary: x\n---\n"))).toThrow(/title/);
-    const noAxes = ["---", "title: Test", "summary: x", "status: draft", "---", ""].join("\n");
-    expect(() => parseGuideline("test", doc(BODY, noAxes))).toThrow(/axes/);
-  });
-
-  it("未知の評価軸で落とす", () => {
-    const front = FRONT.replace("  - accessibility", "  - not-an-axis");
-    expect(() => parseGuideline("test", doc(BODY, front))).toThrow(/unknown evaluation axis/);
+    const noStatus = ["---", "title: Test", "summary: x", "---", ""].join("\n");
+    expect(() => parseGuideline("test", doc(BODY, noStatus))).toThrow(/status/);
   });
 
   it("未知の節で落とす", () => {
@@ -116,8 +109,8 @@ describe("resolveHref", () => {
     expect(resolveHref("../../docs/principles/x.md")).toBe(
       "https://github.com/salan70/uiux-numa/blob/main/docs/principles/x.md",
     );
-    expect(resolveHref("../records/form-inline-validation/README.md")).toBe(
-      "https://github.com/salan70/uiux-numa/blob/main/docs/records/form-inline-validation/README.md",
+    expect(resolveHref("../../experiments/x/README.md")).toBe(
+      "https://github.com/salan70/uiux-numa/blob/main/experiments/x/README.md",
     );
   });
 });
