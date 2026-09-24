@@ -1,11 +1,11 @@
 // 原本（variants/<id>/source/*.svg）を、共通の骨格から書き出す。
 // 骨格は round-soft の値に載せる: 24 viewBox、線幅 1.5、丸い端点、線の中心 3.75..20.25（外形 3..21）、0.75 格子。
-// すべての案で、キーキャップ型の枠の中へ骨格を縮めて置く。案ごとに変えるのは枠の形だけにする。
-//   keycap-tile     : 角丸の正方形（基準）
-//   keycap-squircle : 超楕円。角丸の正方形と 45° の点を揃え、角の曲率だけをなめらかにする
-//   keycap-taper    : 超楕円の天面を上へ向かって細くする（キーを正面から見た台形）
-//   keycap-lip      : 超楕円の下に、短い縁を 1 本添える（キーの手前の縁）
-// round 1〜2 の round-line と pop-duo、round 3 の skirt・dish・shadow は、利用者の判断で削除した。
+// すべての案で、超楕円のキーキャップ型の枠の中へ骨格を縮めて置く。案ごとに変えるのは天面の凹みの見せ方だけにする。
+//   keycap-squircle  : 凹みなし（基準）
+//   keycap-dish-fill : 皿をごく淡い面で塗る
+//   keycap-dish-rim  : 皿の縁を淡い線で描く
+//   keycap-dish-top  : 皿の上側の縁だけを淡い線で描く
+// round 1〜2 の round-line と pop-duo、round 3 の skirt・dish・shadow、round 4 の tile・taper・lip は、利用者の判断で削除した。
 // 実行: node experiments/cornix-ui-icons/shared/build-icons.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -407,19 +407,30 @@ function attrs(el) {
   }
 }
 
+/**
+ * 1 つの part を書く。既定は currentColor の線。
+ * fillOpacity を持つ要素は、線を持たない currentColor の淡い面にする（凹みの陰）。
+ * strokeOpacity を持つ要素は、淡い線にする（凹みの縁）。色は 1 色のままで、濃さだけを変える。
+ */
 const stroke = (asset, role, el) => {
   const [tag, a] = attrs(el);
-  return `  <${tag} id="part-${asset}-${role}" ${a} fill="none" stroke="currentColor"/>`;
+  if (el.fillOpacity !== undefined)
+    return `  <${tag} id="part-${asset}-${role}" ${a} fill="currentColor" fill-opacity="${el.fillOpacity}" stroke="none"/>`;
+  const opacity = el.strokeOpacity === undefined ? "" : ` stroke-opacity="${el.strokeOpacity}"`;
+  return `  <${tag} id="part-${asset}-${role}" ${a} fill="none" stroke="currentColor"${opacity}/>`;
 };
 
 /**
  * 超楕円 |x/a|^n + |y/b|^n = 1 を折れ線で描く（96 分割）。
  * taper は天面を細くする割合。上端で幅が (1 - taper) 倍になり、下端で 1 倍になるよう、y に比例して縮める。
  */
-function superellipse(cx, cy, a, b, n, taper = 0) {
+function superellipse(cx, cy, a, b, n, taper = 0, arc = undefined) {
   const points = [];
-  for (let k = 0; k < 96; k++) {
-    const t = (k / 96) * 2 * Math.PI;
+  // arc = [始点, 終点]（媒介変数 t を π 単位で）を渡すと、閉じずにその範囲だけを描く。
+  const [from, to] = arc ?? [0, 2];
+  const steps = arc ? 48 : 96;
+  for (let k = 0; k < (arc ? steps + 1 : steps); k++) {
+    const t = (from + ((to - from) * k) / steps) * Math.PI;
     const c = Math.cos(t);
     const sn = Math.sin(t);
     const x = a * Math.sign(c) * Math.abs(c) ** (2 / n);
@@ -427,7 +438,7 @@ function superellipse(cx, cy, a, b, n, taper = 0) {
     const scale = 1 - taper * ((b - y) / (2 * b));
     points.push(`${fmt(cx + x * scale)} ${fmt(cy + y)}`);
   }
-  return path(`M${points.join("L")}Z`);
+  return path(`M${points.join("L")}${arc ? "" : "Z"}`);
 }
 
 /**
@@ -436,45 +447,52 @@ function superellipse(cx, cy, a, b, n, taper = 0) {
  * 両者を等しくすると n = ln 2 / ln(8.25 / 7.152) ≈ 4.85。
  */
 const N = Math.LN2 / Math.log(8.25 / (4.5 + 3.75 / Math.SQRT2));
-/** 天面と底の幅の比 φ^(-1/4) ≈ 0.886。キーの天面が底より細い（正面から見た台形）ことを、わずかに示す。 */
-const PHI = (1 + Math.sqrt(5)) / 2;
-const TAPER = 1 - PHI ** -0.25;
 
 /**
- * キーキャップ型の枠。案ごとに、枠の線と、中の記号を置く場所（中心と縮小率）を持つ。
- * 縮小率は、記号の外形 18 × s に線幅 1.5 を足した大きさが、天面の内側に隙間 1.5 を残して収まるように決める（ICON-08）。
+ * キーキャップ型の枠。すべて超楕円（n ≈ 4.85）の外形に、天面の凹み（皿）の見せ方を 1 つ足す（round 5）。
+ * 凹みは枠と同じ濃さの線にしない。淡い面か淡い線で描き、記号の大きさをできるだけ保つ。
+ * 皿は外形と同じ n の超楕円で、外形から d だけ内へ入れる。
  */
+const withOpacity = (el, key, value) => ({ ...el, [key]: value });
 const FRAMES = {
-  // 角丸の正方形。外形 3..21、角丸 3.75（線の中心）。記号は 18 → 12、内縁 4.5..19.5 との隙間は 1.5。
-  "keycap-tile": {
-    parts: { tile: rect(3.75, 3.75, 16.5, 16.5, 3.75) },
-    cx: 12,
-    cy: 12,
-    s: 2 / 3,
-  },
-  // 超楕円（n ≈ 4.85）。外形と 45° の点は基準と同じで、角の曲率がなめらかにつながる。
+  // 基準: 超楕円の外形だけ。記号は 18 → 12、内縁との隙間は 1.5 以上。
   "keycap-squircle": {
     parts: { tile: superellipse(12, 12, 8.25, 8.25, N) },
     cx: 12,
     cy: 12,
     s: 2 / 3,
   },
-  // 超楕円の上端を φ^(-1/4) 倍に細くする。上の角が内へ寄るぶん、記号を 18 → 11.25（s=5/8）にして角の隙間を保つ。
-  "keycap-taper": {
-    parts: { tile: superellipse(12, 12, 8.25, 8.25, N, TAPER) },
-    cx: 12,
-    cy: 12.375,
-    s: 5 / 8,
-  },
-  // 超楕円の天面（高さ 15、y 3.75..18.75）の下に、手前の縁を 1 本添える。
-  // 縁の長さは天面の幅 16.5 ÷ φ = 10.2 → 格子 10.5（x 6.75..17.25）、y=20.25。記号は天面の内側 13.5 に合わせて 18 → 10.5（s=7/12）。
-  "keycap-lip": {
+  // 皿をごく淡い面で塗る（不透明度 0.1）。線を増やさず、記号も 2/3 のまま重ねる。
+  // 皿は d=2.25（半幅 6）。外形の内縁 7.5 と皿の縁 6 の間に 1.5 の平らな縁が残る。
+  "keycap-dish-fill": {
     parts: {
-      tile: superellipse(12, 11.25, 8.25, 7.5, N),
-      lip: line(6.75, 20.25, 17.25, 20.25),
+      dish: withOpacity(superellipse(12, 12, 6, 6, N), "fillOpacity", 0.1),
+      tile: superellipse(12, 12, 8.25, 8.25, N),
     },
     cx: 12,
-    cy: 11.25,
+    cy: 12,
+    s: 2 / 3,
+  },
+  // 皿の縁を淡い線で描く（不透明度 0.35）。皿は d=1.875（半幅 6.375、線の内縁 5.625）。
+  // 記号は皿の内縁に収まる 18 → 9.75（s=13/24、外形の半分 4.875 ＋ 線幅の半分 0.75 = 5.625）。
+  "keycap-dish-rim": {
+    parts: {
+      tile: superellipse(12, 12, 8.25, 8.25, N),
+      dish: withOpacity(superellipse(12, 12, 6.375, 6.375, N), "strokeOpacity", 0.35),
+    },
+    cx: 12,
+    cy: 12,
+    s: 13 / 24,
+  },
+  // 皿の上側の縁だけを淡い線で描く（凹みの上にできる陰）。媒介変数 t = 1.15π..1.85π の弧。
+  // 皿は d=2.25（上端 y=6、線の下縁 6.75）。記号は 18 → 10.5（s=7/12）で中心を 0.75 下げ、上端を 6.75 に揃える。
+  "keycap-dish-top": {
+    parts: {
+      tile: superellipse(12, 12, 8.25, 8.25, N),
+      dish: withOpacity(superellipse(12, 12, 6, 6, N, 0, [1.15, 1.85]), "strokeOpacity", 0.35),
+    },
+    cx: 12,
+    cy: 12.75,
     s: 7 / 12,
   },
 };
