@@ -2,7 +2,7 @@
 
 - 観点: UX / product
 - 対象: line-round、line-square、solid、duotone
-- 入力: README、variants/、previews/、docs/evaluation/axes.md
+- 入力: README、variants/、previews/、docs/evaluation.md
 - 担当した軸: discoverability、information density
 
 ## 判定

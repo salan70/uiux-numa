@@ -243,7 +243,7 @@ error の err は 16px では字の形まで読めない。語と一緒に置き
 - 記号を縮めても線幅は縮めないので、字や細い形は字間や隙間が線に食われる。文字は縮めずに、置き場所の座標で直接描く（err）。
 - 依頼者への提示を PNG から SVG のまま描いた HTML に替えると、拡大した判断ができ、往復が速くなった（`docs/decisions/2026-09-24-present-svg-as-html.md`）。
 
-## Related patterns / assets
+## Related
 
 - `experiments/catalog-ui-icons/`（`round-soft` の造形のパラメータ）
 - `experiments/cornix-workbench/`（置き場所）

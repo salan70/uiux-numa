@@ -1,55 +1,34 @@
 # 文書の地図
 
-`docs/` の文書を区分ごとに案内する。
 各行の文書が、その内容の正本である。
 
-## 構成と思想
-
-- [scope.md](scope.md): 対象領域
-- [layers.md](layers.md): Lab / Knowledge / Assets と置き場
-- [asset-model.md](asset-model.md): `role` と `maturity` の Asset モデル
-
-## Experiment と Pattern
-
-- [experiment-lifecycle.md](experiment-lifecycle.md): Experiment の流れ
-- [experiment-format.md](experiment-format.md): Experiment の記録形式と status
-- [pattern-lifecycle.md](pattern-lifecycle.md): Pattern の抽出と Asset への昇格
-
-## 評価
-
-- [evaluation/policy.md](evaluation/policy.md): 評価の方針
-- [evaluation/axes.md](evaluation/axes.md): 17 の評価軸と判定の目安
-- [evaluation/review.md](evaluation/review.md): 評価の実行手順と記録形式
-
-## Guideline と原則候補
-
-- [guidelines/](guidelines/README.md): 主題ごとの指針。読み手向けの入口
-- [guideline-format.md](guideline-format.md): Guideline の書式と機械検査
-- [principles/](principles/README.md): 原則候補と採否の判断手順
-
-## Catalog
-
-- [catalog-publishing.md](catalog-publishing.md): UI/UX NUMA の Cloudflare Pages 公開手順
-
-## 記録と雛形
-
+- [scope.md](scope.md): 対象領域と、frontmatter の `domains` に使う語彙
+- [layers.md](layers.md): 置き場、`role` と `maturity`、Catalog の責務
+- [experiment.md](experiment.md): Experiment の進め方と記録形式
+- [evaluation.md](evaluation.md): 多観点評価の手順（任意）
+- [guideline.md](guideline.md): Guideline の書式と機械検査
+- [guidelines/](guidelines/README.md): 主題ごとの指針
+- [principles/](principles/README.md): 検証中の原則候補
 - [decisions/](decisions/): リポジトリの設計判断（ADR）
-- [records/](records/): 削除した Experiment の記録
-- [templates/](templates/): Experiment、Pattern、Guideline の雛形
-- [../skills/README.md](../skills/README.md): UI/UX 固有 Skill の成熟度と改善手順
+- [templates/](templates/): Experiment と Guideline の雛形
+- [catalog-publishing.md](catalog-publishing.md): Catalog の公開手順
+- [../apps/catalog/README.md](../apps/catalog/README.md): Catalog の画面の設計判断
+- [../skills/README.md](../skills/README.md): UI/UX 固有 Skill の一覧と読み込み経路
 
-### ADR の見出し
+## ADR
 
-ADR の見出しには `状態`、`日付`、`参照` を置く。
-判断の一部が後の ADR に置き換えられたら、古い ADR に `置き換え先:` を足し、新しい ADR に `置き換え元:` を書く。
-全体が置き換えられたら、古い ADR の `状態` を `Superseded` にする。
-ADR の本文は書き換えない。
-既存 ADR には `置き換え:` と `更新:` の表記も残っている。
-向きは本文で確かめる。
+ADR は次のどれかを変える判断だけに書く。
 
-### records
+- ディレクトリ構成と置き場
+- ツールチェーン、外部依存、公開基盤
+- 記録形式（Experiment、Guideline、ADR、token）
+- token の階梯と値
 
-`docs/records/<slug>/` は、削除した Experiment の記録文書の置き場である。
-他の文書が Markdown リンクで出どころにしている記録だけを移す。
-コード、variant、preview は移さず、各記録の冒頭に書いた commit から Git 履歴で辿る。
-削除の規則は [削除の ADR](decisions/2026-09-21-prune-decided-experiments.md) と [掲載しない Experiment の ADR](decisions/2026-09-22-unlisted-experiments.md) に従う。
+それ以外の判断は、対象の記録に書く。
+Experiment の判断は README の Decision と Rejected reasons、Guideline の改稿は commit message、Catalog の画面は `apps/catalog/README.md`、Skill の手順は `SKILL.md` に書く。
+どこでも却下した案と理由を残す。
+
+ファイル名は `YYYY-MM-DD-<slug>.md` にし、見出しに `状態`、`日付`、`参照` を置き、本文は背景、決定、却下した案、影響の 4 節にする。
+判断を変えるときは新しい ADR を書き、古い ADR の見出しに `置き換え先:` を足す。
+決定の過半が置き換わったら古い ADR の `状態` を `Superseded` にする。
+リンク切れの修正と `置き換え先:` の追記は本文の書き換えに当たらない。

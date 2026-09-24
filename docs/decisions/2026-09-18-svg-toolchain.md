@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-18
-- 参照: [Issue #7](https://github.com/salan70/uiux-numa/issues/7)、[Web 実行基盤の ADR](2026-09-13-web-runner.md)、[Experiment の記録形式](../experiment-format.md)
+- 参照: [Issue #7](https://github.com/salan70/uiux-numa/issues/7)、[Web 実行基盤の ADR](2026-09-13-web-runner.md)、[Experiment の記録形式](../experiment.md)
 
 ## 背景
 
@@ -46,4 +46,4 @@ Issue は resvg と SVGO を第一候補にし、薄いスクリプトや just r
 - Chrome 152 の headless は `--screenshot` の後に終了しないことがある。`web-shot` はファイルの出現を待ってから Chrome を止める。
 - resvg の描画はブラウザと異なることがある。最終的な見え方は利用画面の撮影で確かめる。
 - Vite の開発サーバーは、起動後に追加した Experiment のディレクトリを glob に反映しないことがある。variant を追加したら `just web-dev` を再起動する。
-- SVG を扱う Experiment の記録は、[Experiment の記録形式](../experiment-format.md)の追記に従う。
+- SVG を扱う Experiment の記録は、[Experiment の記録形式](../experiment.md)の追記に従う。

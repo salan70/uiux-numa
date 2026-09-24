@@ -7,13 +7,13 @@ description: 動きのコードと実操作を、目的、頻度、中断、a11y
 
 動きと状態遷移だけを見る。
 機能追加や、動き以外のバグ修正はしない。
-一般のコードレビューを求められたら断り、`docs/evaluation/review.md` の担当観点へ向ける。
+一般のコードレビューを求められたら断り、`docs/evaluation.md` の担当観点へ向ける。
 
 ## 参照
 
 - `skills/reviewing-motion/references/standards.md`
-- `docs/evaluation/review.md`
-- `docs/evaluation/axes.md` の motion appropriateness、feedback quality、interaction clarity、accessibility
+- `docs/evaluation.md`
+- `docs/evaluation.md` の motion appropriateness、feedback quality、interaction clarity、accessibility
 - 対象 Experiment の README と `evaluation.md` の重み
 
 パスはリポジトリのルートからのものである。
@@ -65,10 +65,10 @@ Experiment の Decision ではない。
 ## 出力
 
 生成セッションで点検表が出なくても、実装を止めない。
-評価は別 agent が `docs/evaluation/review.md` の interaction / motion 観点で行う。
+評価は別 agent が `docs/evaluation.md` の interaction / motion 観点で行う。
 この Skill の出力は、その観点の入力であり、代替ではない。
 
-観点別ファイルへ書くときは `docs/evaluation/review.md` の形式を使う。
+観点別ファイルへ書くときは `docs/evaluation.md` の形式を使う。
 動きだけの点検メモが必要なときは、次の 2 部にする。
 
 ### 1. 指摘表

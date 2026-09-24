@@ -17,7 +17,7 @@ description: UI の動きを、動かすべきか、目的、手段、属性、�
 - `tokens/` と Brief が指定した配色
 - 分岐が必要なら `skills/exploring-ui-variants/SKILL.md`
 - 点検が必要なら `skills/reviewing-motion/SKILL.md`
-- 評価の軸: `docs/evaluation/axes.md` の motion appropriateness、feedback quality
+- 評価の軸: `docs/evaluation.md` の motion appropriateness、feedback quality
 
 パスはリポジトリのルートからのものである。
 `pick-ui-library`、`animate-expo`、`improve-animations`、`find-animation-opportunities`、`emil-design-eng` は呼び出さない。

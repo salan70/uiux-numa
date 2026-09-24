@@ -229,6 +229,6 @@ round 0 で却下した `detail` の比喩 2 案の理由を残す。
 - 零長の線に丸い端点を打つと、塗り要素を足さずに点を描ける。SVGO は `h0` を `z` に書き換える。閉じた零長の subpath の扱いは描画系で揺れうるが、resvg と Chrome の両方で同じ点として描かれることを確かめた。
 - 揺れるのは描画系だけではない。最適化系も揺れる。svgo 4.0.1 の `convertPathData` は零長の subpath を「無用」と見なして `path` ごと消し、4.1.0 は `z` に畳んで残す。`h0`、`z`、`v0`、`h0z` のどの書き方でも 4.0.1 は消す。造形の手段が最適化の既定に依存していたということで、`convertPathData: { removeUseless: false }` で明示的に守る形に直した（[ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)）。`svg-optimize` の `part-*` ID の一致検査がこれを検知した。検査が造形の前提を守った例である。
 
-## Related patterns / assets
+## Related
 
 なし

@@ -2,9 +2,9 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 置き換え: Components の Button 表示と個別コンポーネントの掲載方針は [Components と Button の ADR](2026-09-21-components-button-only.md) が置き換える。
-- 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](2026-09-20-asset-composition-model.md)、[UI/UX 沼の構成と公開先](2026-09-19-uiux-rd-catalog.md)、[Catalog のホスト](2026-09-19-catalog-host.md)、[公開手順](../catalog-publishing.md)
-- 置き換え: [公開デザインシステムサイト](2026-09-19-catalog-design-system-site.md) の全体。[見本帳へ絞る ADR](2026-09-19-catalog-artifacts-only.md) の掲載対象（採用成果に限る点）。[ホスト ADR](2026-09-19-catalog-host.md) の「Catalog 全体を 3 案 Experiment にしない」条項。
+- 置き換え: Components の Button 表示と個別コンポーネントの掲載方針は [Components と Button の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-components-button-only.md) が置き換える。
+- 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](2026-09-20-asset-composition-model.md)、[UI/UX 沼の構成と公開先](2026-09-19-uiux-rd-catalog.md)、[Catalog のホスト](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md)、[公開手順](../catalog-publishing.md)
+- 置き換え: [公開デザインシステムサイト](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-design-system-site.md) の全体。[見本帳へ絞る ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-artifacts-only.md) の掲載対象（採用成果に限る点）。[ホスト ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) の「Catalog 全体を 3 案 Experiment にしない」条項。
 - 更新: 公開殻と情報設計の決定は [topic-first ADR](2026-09-20-catalog-topic-first.md) が置き換えた。
 
 ## 背景
@@ -30,10 +30,10 @@ Catalog は公開 Design System サイト、または採用成果だけの見本
 - live variant は専用 route と同一 origin の iframe へ隔離する。
 - 技術基盤は Vite + React を継続する。
 - 公開名「UI/UX 沼」、ホスト `apps/catalog/`、Cloudflare Pages、production URL は維持する。
-- ホストが固有のブランド色を持たない判断は [ホスト ADR](2026-09-19-catalog-host.md) を維持する。`playful-chroma` から借りる色はホスト専用パレットにせず、scheme の `--color-*` へ混ぜる。
+- ホストが固有のブランド色を持たない判断は [ホスト ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) を維持する。`playful-chroma` から借りる色はホスト専用パレットにせず、scheme の `--color-*` へ混ぜる。
 - token の取り込み規則と余白 token もホスト ADR を維持する。
 - Catalog 全体の見た目は、公開面を止めて 3 案にしない。比較は `experiments/catalog-redesign/` で行った。
-- 公開殻は [soft-component-kit](2026-09-19-soft-component-kit.md) の `hairline-float` とする。既存 Catalog chrome を続ける。
+- 公開殻は [soft-component-kit](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-soft-component-kit.md) の `hairline-float` とする。既存 Catalog chrome を続ける。
 - 情報設計は `quiet-hierarchy` の役割だけを借りる。静かな殻、1 度に 1 つの主役、説明より specimen を先にする。
 - 色面は `playful-chroma` から借りる。グラデの紙、温かい面と冷たい面、カードの色の出方である。
 - `playful-chroma` の表層レイアウトと遊び copy は公開面に入れない。

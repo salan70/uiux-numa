@@ -2,8 +2,9 @@
 
 - 状態: Accepted
 - 日付: 2026-09-22
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。対象は 1 件に限らず、topic に当たらない Experiment 全般とした。
 - 置き換え: [削除の ADR](2026-09-21-prune-decided-experiments.md) の「判断済みで Catalog に載せない Experiment は、ディレクトリごと削除する」を、topic に当たらない Experiment について置き換える。
-- 参照: [topic-first ADR](2026-09-20-catalog-topic-first.md)、[visual showcase の ADR](2026-09-20-catalog-visual-showcase.md)、[Experiment lifecycle](../experiment-lifecycle.md)、[対象領域](../scope.md)
+- 参照: [topic-first ADR](2026-09-20-catalog-topic-first.md)、[visual showcase の ADR](2026-09-20-catalog-visual-showcase.md)、[Experiment lifecycle](../experiment.md)、[対象領域](../scope.md)
 - 対象: `apps/catalog/src/content/inventory.test.ts`、`docs/layers.md`
 
 ## 背景

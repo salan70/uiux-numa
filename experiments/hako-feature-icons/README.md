@@ -230,6 +230,6 @@ preview は `previews/principle-applied-final-sheet.png`、`previews/compare-pri
 
 未定
 
-## Related patterns / assets
+## Related
 
 なし

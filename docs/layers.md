@@ -1,136 +1,47 @@
-# Lab / Knowledge / Assets
+# 置き場
 
 リポジトリは Lab、Knowledge、Assets の 3 層で構成する。
-層は作業の置き場である。
-完成した Design System へ一方向に昇格する段階ではない。
-各成果の使い方は [Asset composition model](asset-model.md) の `role` と `maturity` で表す。
+層は作業の置き場であり、昇格の段階ではない。
+ディレクトリは中身ができた時点で作る。
 
-## Lab
+| 層        | 役割                                       | 置き場               |
+| --------- | ------------------------------------------ | -------------------- |
+| Lab       | 同じ課題に複数案を実装し、比較して判断する | `experiments/`       |
+| Knowledge | 実験から得た知見を整理する                 | `docs/`              |
+| Assets    | 他プロジェクトで組み合わせて使う成果       | `skills/`、`tokens/` |
 
-UI/UX とプロダクト体験の実験を行う層。
-同じ課題に対して UI、interaction、copy、motion などの複数案を実装し、比較・改善する。
-却下した案は判断までコードを残し、判断後は却下理由だけを README に残す（[削除の ADR](decisions/2026-09-21-prune-decided-experiments.md)）。
-置き場は `experiments/` とする。
-手順は [experiment-lifecycle.md](experiment-lifecycle.md) に定める。
+- Experiment の進め方と記録形式は [experiment.md](experiment.md) に定める。
+- Knowledge は [guidelines/](guidelines/README.md)（主題ごとの規則）、[principles/](principles/README.md)（検証中の仮説）、[decisions/](decisions/)（リポジトリの設計判断）で持つ。
+- token の正本は `tokens/` の DTCG JSON で、`just tokens-build` で CSS を生成する。
+- UI/UX 固有の Skill の正本は `skills/` で、読み込み経路は [skills/README.md](../skills/README.md) にある。
 
-## Knowledge
+## role と maturity
 
-実験から得た知見を整理する層。
-次を蓄積する。
+Experiment、token、Skill は `role` と `maturity` を独立に持つ。
+置き場や status とは別の軸である。
+Experiment は README の frontmatter、token は DTCG JSON の `$extensions.uiux-numa`、Skill は `skills/README.md` の表に書く。
+Catalog がこれを読み、値が表に無ければ build が落ちる。
 
-- principles
-- patterns
-- anti-patterns
-- evaluation criteria
-- platform-specific learnings
-- design decisions
-- writing decisions
-- interaction / motion learnings
+| role         | 意味                                             |
+| ------------ | ------------------------------------------------ |
+| `foundation` | 複数のプロダクトに共通で適用する土台             |
+| `module`     | 用途に応じて明示的に選んで使う                   |
+| `reference`  | コピーや依存を前提とせず、参考、着想、比較に使う |
 
-置き場は `docs/` と `patterns/` とする。
-`patterns/` は未作成で、最初の Pattern を抽出した時点で作る。
-原則は `docs/principles/`、評価基準は `docs/evaluation/`、設計判断は `docs/decisions/` に置く。
-Pattern と anti-pattern は `patterns/` に置く。
+| maturity       | 意味                         |
+| -------------- | ---------------------------- |
+| `experimental` | R&D 中で、利用前提を置かない |
+| `candidate`    | 実利用で検証中               |
+| `stable`       | 十分に検証され、再利用できる |
+| `deprecated`   | 新規利用を推奨しない         |
 
-## Assets
-
-他プロジェクトで組み合わせて使う成果を置く層。
-`stable` だけを置く場所ではない。
-`experimental` な Skill や `candidate` な token もここに置いてよい。
-対象例は次のとおり。
-
-- skills
-- design tokens
-- design systems
-- templates
-- reusable UI / UX patterns
-- writing patterns
-- motion / interaction patterns
-
-置き場は `skills/`、`tokens/`、`design-systems/` とする。
-`design-systems/` は未作成で、中身ができた時点で作る。
-
-## Pattern first
-
-初期段階では、完成された Design System を先に設計しない。
-まず実験から再利用可能な Pattern を蓄積する。
-Pattern は visual component に限定しない。
-
-Pattern の例:
-
-- floating action dock
-- editorial hero
-- dense settings
-- numeric background
-- bottom action area
-- empty state
-- confirmation copy
-- inline validation
-- success feedback
-- navigation transition
-- loading transition
-- haptic feedback
-
-各 Pattern には、将来的に次を記録できるようにする。
-
-- when to use
-- when not to use
-- good examples
-- bad examples
-- platform considerations
-- accessibility considerations
-- implementation examples
-
-## Asset への昇格
-
-Pattern を他プロジェクトで再利用できる形に変える手順は [pattern-lifecycle.md](pattern-lifecycle.md) に定める。
-昇格は置き場を Assets へ移すことであり、Asset の `maturity` を `stable` にすることではない。
-Experiment の `extracted` は抽出の完了であり、再利用前提ではない。
-
-## Asset モデル
-
-`role` と `maturity` は置き場と独立させる。
-Lab の Experiment が `reference` でもよい。
-Assets の Skill が `experimental` でもよい。
-必須 metadata、他プロジェクトでの利用、実例は [asset-model.md](asset-model.md) に定める。
+`stable` は人間が判断して付ける。
+Experiment の `status` や `adopted` から自動では進めない。
 判断は [Asset composition model の ADR](decisions/2026-09-20-asset-composition-model.md) に残す。
-ディレクトリ再編は、分類の実例で必要になるまで行わない。
-
-## Design Tokens
-
-Design System より早い段階から導入を検討する。
-Web、SwiftUI、Flutter などへ展開できる canonical token source を持つ。
-visual token だけでなく、必要性が確認できれば motion などの token 化も検討する。
-正本は `tokens/` の DTCG JSON で、`just tokens-build` で変換する。
-判断は [階梯の ADR](decisions/2026-09-21-token-scale-foundation.md) に残す。
 
 ## Catalog
 
-Catalog は成果物の visual showcase であり、仕様書や Asset の正本にはしない。
-責務と構成は [README](../README.md#catalog) と [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) に置く。
-
-## AI Agent と Skill
-
-最終的な目的は、プロダクト体験の探索プロセス自体を再現可能にすることである。
-UI を生成する単発の Skill は目的ではない。
-
-候補（未実装の構想）:
-
-- ui-explore
-- ui-critique
-- ui-refine
-- ui-compare
-- ux-writing-review
-- information-architecture-review
-- interaction-review
-- motion-review
-- ui-a11y-review
-- ui-platform-review
-- ui-state-review
-- ui-extract-pattern
-- ui-promote-pattern
-
-実装済みの Skill は [skills/README.md](../skills/README.md) にある。
-
-prompt、skill、reference、過去の decision の違いによる生成結果の差も研究対象に含める。
-AI から良い UI/UX を安定して引き出す方法そのものを成果物とする。
+Catalog（`apps/catalog/`）は成果物の visual showcase であり、仕様書や正本ではない。
+`experiments/`、`tokens/`、`docs/guidelines/` を glob で読み、Catalog 固有の説明を正本に足さない。
+topic に当たらない Experiment は載せない。
+責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md)、表示層は [topic-first の ADR](decisions/2026-09-20-catalog-topic-first.md)、画面の個別判断は [apps/catalog/README.md](../apps/catalog/README.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) にある。

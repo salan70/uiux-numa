@@ -217,6 +217,6 @@ Mock の展開時だけセル固有の接頭辞を加え、配布用は `id="par
 
 領域の隙間を空けても、各領域が自分の輪郭を引くため平行 2 本になり、線の量は減らない。
 
-## Related patterns / assets
+## Related
 
 原則候補 [テーマ色の塗りに意味を担わせない](../../docs/principles/theme-color-fill-carries-no-meaning.md) をこの Experiment の Learnings から立てた。

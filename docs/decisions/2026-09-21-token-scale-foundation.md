@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-21
-- 参照: [Catalog ホスト](2026-09-19-catalog-host.md)、[Catalog をデザインシステムサイトにする](2026-09-19-catalog-design-system-site.md)、[topic-first](2026-09-20-catalog-topic-first.md)、[soft-component-kit](2026-09-19-soft-component-kit.md)、[Typography foundation](2026-09-19-typography-foundation.md)
+- 参照: [Catalog ホスト](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md)、[Catalog をデザインシステムサイトにする](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-design-system-site.md)、[topic-first](2026-09-20-catalog-topic-first.md)、[soft-component-kit](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-soft-component-kit.md)、[Typography foundation](2026-09-19-typography-foundation.md)
 - 対象: `tokens/space/`、`tokens/radius/`、`tokens/border/`、`apps/catalog/src/catalog.css`
 - 置き換え: 却下した案のうち size の家族は、[寸法と動きを token にする](2026-09-21-size-and-motion-tokens.md) が置き換えた。
 
@@ -12,7 +12,7 @@
 余白、角丸、線の太さは `apps/catalog/src/catalog.css` の `--cat-*` と直書きに散っていた。
 gap の直書きは 43 件、`1px solid` は 27 件あった。
 
-[Catalog ホストの ADR](2026-09-19-catalog-host.md) は「役割名があり、利用面が 2 つあるなら追加する」と定めた。
+[Catalog ホストの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) は「役割名があり、利用面が 2 つあるなら追加する」と定めた。
 この規則で radius と spacing の token 化を 4 回却下している。
 公開 Catalog は 1 面と数えるため、値が揃っていても正本へ上がらなかった。
 
@@ -24,7 +24,7 @@ gap の直書きは 43 件、`1px solid` は 27 件あった。
 
 ### 取り込み規則を改める
 
-[Catalog ホストの ADR](2026-09-19-catalog-host.md) の「token の取り込み規則」を次へ置き換える。
+[Catalog ホストの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) の「token の取り込み規則」を次へ置き換える。
 
 1. 既存 token で表せるなら、それを使う。
 2. primitive の階梯は、公開 Catalog に実利用がある値だけを追加する。
@@ -131,10 +131,10 @@ CSS 仕様も border の内側半径を同じ減算で求め、負の値を 0 �
 
 ## 影響
 
-- [Catalog ホストの ADR](2026-09-19-catalog-host.md) の「token の取り込み規則」と「Catalog に残す値」の角丸を置き換える。
-- [デザインシステムサイトの ADR](2026-09-19-catalog-design-system-site.md) の「Spacing、Radius、Elevation の token は新設しない」のうち、Spacing と Radius を置き換える。Elevation は据え置く。
+- [Catalog ホストの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) の「token の取り込み規則」と「Catalog に残す値」の角丸を置き換える。
+- [デザインシステムサイトの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-design-system-site.md) の「Spacing、Radius、Elevation の token は新設しない」のうち、Spacing と Radius を置き換える。Elevation は据え置く。
 - [topic-first の ADR](2026-09-20-catalog-topic-first.md) の「token にしない」値のうち、角丸 `0.375rem` を置き換える。ほかの値は据え置く。
-- [soft-component-kit の ADR](2026-09-19-soft-component-kit.md) は変えない。variant の角丸は variant の局所変数のままである。
+- [soft-component-kit の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-soft-component-kit.md) は変えない。variant の角丸は variant の局所変数のままである。
 - `scripts/build-space-tokens.mjs` を `scripts/build-dimension-tokens.mjs` へ改め、3 家族を 1 本で生成する。
 - Catalog の Tokens 画面は、参照を持つ token を semantic と表示する。
 

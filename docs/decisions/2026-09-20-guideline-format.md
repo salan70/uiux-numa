@@ -2,8 +2,9 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 参照: [Catalog に方針を載せる ADR](2026-09-20-catalog-guidelines.md)、[asset-model](../asset-model.md)
-- 更新: コアに主題全体へ効く数値を書けるようにした。[コアの数値 ADR](2026-09-21-guideline-core-values.md) を参照する。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。frontmatter の `axes` を廃止し、書式は docs/guideline.md に置いた。
+- 参照: [Catalog に方針を載せる ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-guidelines.md)、[asset-model](../layers.md)
+- 更新: コアに主題全体へ効く数値を書けるようにした。[コアの数値 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-guideline-core-values.md) を参照する。
 
 ## 背景
 
@@ -23,7 +24,7 @@ Tips は 1 文書あたり 6〜15 件、合計 59 件あり、読む量が多い
 - まず States & Feedback だけを新書式へ移す。残り 5 文書は内容を確かめてから移す。
 - 移行が終わるまで、解析器は未移行の文書だけ旧書式で読む。
 
-[Catalog に方針を載せる ADR](2026-09-20-catalog-guidelines.md) のうち、「2 層を同じ書式で書く」ことと「規則の必須項目」はこの決定で置き換える。
+[Catalog に方針を載せる ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-guidelines.md) のうち、「2 層を同じ書式で書く」ことと「規則の必須項目」はこの決定で置き換える。
 
 ## 理由
 

@@ -104,6 +104,6 @@ token の少なさだけでは一貫性を作れない。
 書体を替えるときは、既存のウェイト値をそのまま移してはいけない。
 配布する実ファイルと semantic role を同時に決める必要がある。
 
-## Related patterns / assets
+## Related
 
 - `tokens/typography/`

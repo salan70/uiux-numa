@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-18
-- 参照: [Issue #7](https://github.com/salan70/uiux-numa/issues/7)、[初期ディレクトリ構成](2026-09-13-initial-directory-layout.md)、[Pattern lifecycle](../pattern-lifecycle.md)、[Lab / Knowledge / Assets](../layers.md)
+- 参照: [Issue #7](https://github.com/salan70/uiux-numa/issues/7)、[初期ディレクトリ構成](2026-09-13-initial-directory-layout.md)、[Pattern lifecycle](../experiment.md)、[Lab / Knowledge / Assets](../layers.md)
 
 ## 背景
 

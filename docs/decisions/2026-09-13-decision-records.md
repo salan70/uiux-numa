@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-13
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。Pattern の行を廃止し、ADR の対象を絞った。
 - 参照: [Issue #1](https://github.com/salan70/uiux-numa/issues/1)
 
 ## 背景

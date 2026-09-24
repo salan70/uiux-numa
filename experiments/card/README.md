@@ -112,7 +112,7 @@ hover は `transform: scale(1.007)` を 160ms の ease-out で行い、色は変
 Catalog 自身の一覧で使うため、題名のリンクを差し替える `linkAs` を足した。素の `<a>` では SPA の画面で全体を再読み込みする。
 置かれた画面の見出しと段落の余白が入ると、高さを固定した文字の箱から題名が押し出されて消える。Card 自身が `h3` と `p` の余白を 0 にする。
 
-## Related patterns / assets
+## Related
 
 - `experiments/button/`: 押下の縮みと hover の浮き上がりを `press-settle` で参照する。
 - `experiments/button/shared/useCatalogColors.ts`: 単体表示で Catalog の配色を読む処理を共有する。

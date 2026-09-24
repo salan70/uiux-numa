@@ -43,7 +43,7 @@ just format     # Markdown / JSON / YAML の整形
 - Skill で定義済みの手順をこのファイルへ転記しない。Skill 名で参照する。
 - 依頼スコープ外の「ついでに改善」を禁止する。
 - 将来の仮想要件に備えたコードを禁止する。
-- 採用理由だけでなく却下理由も記録する。リポジトリの設計判断は `docs/decisions/` の ADR に残す。Experiment と Pattern の判断は各記録に残す。
+- 採用理由だけでなく却下理由も記録する。リポジトリの設計判断は `docs/decisions/` の ADR に残す。Experiment の判断は README に、Catalog の画面の判断は `apps/catalog/README.md` に残す。ADR を書く基準は `docs/README.md` にある。
 
 ## Git 運用
 

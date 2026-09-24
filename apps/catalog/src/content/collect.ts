@@ -32,7 +32,7 @@ export type LiveVariant = {
 export type VariantStatus = "adopted" | "rejected" | "exploring";
 
 /**
- * 判断を終えていない status。docs/experiment-format.md の status 表の手順 1〜4 に当たる。
+ * 判断を終えていない status。docs/experiment.md の status 表の手順 1〜4 に当たる。
  * abandoned は進行中ではないので含めない。
  */
 const IN_PROGRESS_STATUSES: ExperimentStatus[] = ["draft", "implementing", "evaluating"];
@@ -266,7 +266,7 @@ function variantStatus(frontmatter: ExperimentFrontmatter, id: string): VariantS
 }
 
 /**
- * README の Variants 表の行。列は docs/experiment-format.md の順（id、仮説、変えた軸、実装）で読む。
+ * README の Variants 表の行。列は docs/experiment.md の順（id、仮説、変えた軸、実装）で読む。
  * 説明の正本を README の 1 か所に保ち、Catalog の画面に同じ文を二重に書かない。
  */
 function parseVariantRows(source: string): { id: string; hypothesis: string; axis: string }[] {

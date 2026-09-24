@@ -13,8 +13,8 @@ description: 方向の異なる UI 案を named variant として実装し、pla
 必要なものだけ読む。
 
 - 対象 Experiment の README（Brief、Constraints、評価軸）
-- `docs/experiment-format.md`
-- `docs/evaluation/review.md`
+- `docs/experiment.md`
+- `docs/evaluation.md`
 - `platforms/web`（hash `#<slug>/<id>`、`just web-dev`）
 - 動きが課題なら `skills/crafting-motion/SKILL.md`
 - 動きの点検が必要なら `skills/reviewing-motion/SKILL.md`

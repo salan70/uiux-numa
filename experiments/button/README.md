@@ -105,6 +105,6 @@ Card はカバーの中身、Button は全体と、拡大する範囲は部品�
 高さ、最小幅、動きは `tokens/size` と `tokens/motion` を参照し、見本には数値ではなく token 名を出す。
 Quiet は面と余白を持たないが、`size.target-min` で当たり領域を 24px 以上に保つ。
 
-## Related patterns / assets
+## Related
 
 なし
