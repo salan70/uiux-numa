@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>エラー</title>
+  <rect id="part-error-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
+  <circle id="part-error-ring" cx="12" cy="12" r="5.5" fill="none" stroke="currentColor"/>
+  <path id="part-error-stroke-a" d="M10 10 14 14" fill="none" stroke="currentColor"/>
+  <path id="part-error-stroke-b" d="M14 10 10 14" fill="none" stroke="currentColor"/>
+</svg>
