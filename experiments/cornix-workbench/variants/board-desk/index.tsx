@@ -21,16 +21,18 @@ import {
   type ThemeChoice,
 } from "./Chrome";
 import {
-  BehaviorsDrawer,
-  DeviceDrawer,
-  FilesDrawer,
-  OverviewDrawer,
-  ValidationDrawer,
-} from "./Drawers";
+  BehaviorsPanel,
+  DevicePanel,
+  FilesPanel,
+  OverviewPanel,
+  PanelDialog,
+  ValidationPanel,
+  type PanelSize,
+} from "./Panels";
 import { Inspector } from "./Inspector";
 import { Picker } from "./Picker";
 import {
-  DRAWERS,
+  PANELS,
   SAVE_PRIORITY,
   useApply,
   useCursor,
@@ -39,7 +41,7 @@ import {
   useDocuments,
   useMockState,
   useSaveQueue,
-  type DrawerId,
+  type PanelId,
   type SaveFile,
 } from "./state";
 import "./board-desk.css";
@@ -77,11 +79,10 @@ export default function BoardDesk() {
   const saves = useSaveQueue(mock.nextSave);
   const device = useDevice();
   const apply = useApply();
-  const [drawer, setDrawer] = useState<DrawerId | null>(null);
+  const [panel, setPanel] = useState<PanelId | null>(null);
   const [message, setMessage] = useState("");
   const inspectorHeading = useRef<HTMLHeadingElement>(null);
-  const drawerHeading = useRef<HTMLHeadingElement>(null);
-  const railReturn = useRef<DrawerId | null>(null);
+  const panelReturn = useRef<PanelId | null>(null);
 
   const { target, layer, selection } = cursor;
   const isCornix = target === "cornix";
@@ -132,31 +133,26 @@ export default function BoardDesk() {
     window.setTimeout(() => setMessage(text), 0);
   }, []);
 
-  const openDrawer = (d: DrawerId | null) => {
-    railReturn.current = d ?? drawer;
-    setDrawer(d);
+  const openPanel = (d: PanelId | null) => {
+    panelReturn.current = d ?? panel;
+    setPanel(d);
   };
-  // 引き出しを開いたら、描画後に見出しへ focus を移す。
+  // modal を開いている間は背後が inert で focus できない。閉じた描画の後で focus を移す。
+  const afterClose = useRef<(() => void) | null>(null);
   useEffect(() => {
-    if (drawer) drawerHeading.current?.focus();
-  }, [drawer]);
-  const closeDrawer = () => {
-    const back = railReturn.current;
-    setDrawer(null);
-    if (back) document.querySelector<HTMLElement>(`[data-drawer="${back}"]`)?.focus();
+    if (panel || !afterClose.current) return;
+    afterClose.current();
+    afterClose.current = null;
+  }, [panel]);
+  const closePanel = (then?: () => void) => {
+    const back = panelReturn.current;
+    afterClose.current =
+      then ??
+      (() => back && document.querySelector<HTMLElement>(`[data-panel="${back}"]`)?.focus());
+    setPanel(null);
   };
-  // focus が引き出しの外（入力欄から外れた後など）にあっても、Esc で閉じられるようにする。Apply 中は Apply が優先する。
-  useEffect(() => {
-    if (!drawer) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== "Escape" || document.querySelector("dialog[open]")) return;
-      const back = railReturn.current;
-      setDrawer(null);
-      if (back) document.querySelector<HTMLElement>(`[data-drawer="${back}"]`)?.focus();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [drawer]);
+  /** パネルごとの大きさ。全画面にしたパネルは、次に開いたときも全画面で開く。 */
+  const [panelSize, setPanelSize] = useState<Partial<Record<PanelId, PanelSize>>>({});
 
   const focusBoard = () => {
     const selected = document.querySelector<HTMLElement>(
@@ -178,14 +174,8 @@ export default function BoardDesk() {
     edit(next);
   };
 
-  const changeTarget = (next: TargetId) => {
-    cursor.changeTarget(next);
-    const def = DRAWERS.find((d) => d.id === drawer);
-    if (def?.cornixOnly && next !== "cornix") {
-      setDrawer(null);
-      say(`${targetOf(next).label} には${def.label}が無いため、割り当てに戻した。`);
-    }
-  };
+  // パネルは modal なので、開いたまま編集対象は切り替わらない。
+  const changeTarget = (next: TargetId) => cursor.changeTarget(next);
 
   const jumpToDiagnostic = (d: Diagnostic) => {
     const s = d.subject;
@@ -198,8 +188,7 @@ export default function BoardDesk() {
         index: s.index as number,
         direction: s.direction as "ccw" | "cw",
       });
-    setDrawer(null);
-    focusBoard();
+    closePanel(focusBoard);
   };
 
   if (mock.workspace !== "open") {
@@ -211,7 +200,7 @@ export default function BoardDesk() {
     );
   }
 
-  const drawerDef = DRAWERS.find((d) => d.id === drawer);
+  const panelDef = PANELS.find((d) => d.id === panel);
   const recoveryKind = isCornix
     ? cornixReady
       ? null
@@ -242,8 +231,8 @@ export default function BoardDesk() {
       />
       <Rail
         target={target}
-        drawer={drawer}
-        onDrawer={openDrawer}
+        panel={panel}
+        onPanel={openPanel}
         counts={{
           validation:
             counts.error + counts.warning > 0 ? String(counts.error + counts.warning) : undefined,
@@ -336,96 +325,91 @@ export default function BoardDesk() {
             say("ディスクから再読込した。未保存だった編集は取り込まれていない。");
           }}
         />
-        {drawer && drawerDef ? (
-          <aside className={`bd-drawer tone-${drawer}`} aria-labelledby="bd-drawer-title">
-            <header className="bd-drawer-head">
-              <h2 id="bd-drawer-title" ref={drawerHeading} tabIndex={-1}>
-                {drawerDef.label}
-                <small>{targetOf(target).label}</small>
-              </h2>
-              <button type="button" className="bd-close" onClick={closeDrawer}>
-                × 閉じる <kbd>Esc</kbd>
-              </button>
-            </header>
-            <div className="bd-drawer-body">
-              {drawer === "overview" ? (
-                <OverviewDrawer
-                  doc={docs.cornixDoc}
-                  names={docs.names}
-                  layerNames={docs.layerNames}
-                  currentLayer={layer}
-                  onRenameLayer={(l, name) => {
-                    if ((docs.layerNames[l] ?? "") === name) return;
-                    docs.setLayerNames((n) => ({ ...n, [l]: name }));
-                    saves.save("cornix/labels.yaml");
-                  }}
-                  onOpenLayer={(l) => {
-                    cursor.setLayer(l);
-                    setDrawer(null);
-                  }}
-                  onExport={(kind) =>
-                    say(
-                      `cornix/generated/keymap-layer-${layer}.${kind.toLowerCase()} に書き出した。`,
-                    )
-                  }
-                />
-              ) : null}
-              {drawer === "behaviors" ? (
-                <BehaviorsDrawer onSaved={() => saves.save("keymap.yaml")} />
-              ) : null}
-              {drawer === "validation" ? (
-                <ValidationDrawer
-                  target={target}
-                  diagnostics={diagnostics}
-                  onJump={jumpToDiagnostic}
-                />
-              ) : null}
-              {drawer === "device" ? (
-                <DeviceDrawer
-                  target={target}
-                  phase={device.phase}
-                  roundTrips={device.roundTrips}
-                  total={device.total}
-                  readAt={device.readAt}
-                  diff={diff}
-                  applyBlockedReason={applyBlockedReason}
-                  onConnect={device.connect}
-                  onDisconnect={device.disconnect}
-                  onRead={() => device.read()}
-                  onApply={() => apply.open(device.total)}
-                  onRestore={() => {
-                    docs.setCornixDoc(deviceCornixDoc());
-                    saves.save("keymap.yaml");
-                    say(
-                      "cornix/backups/latest.vil を目標状態に読み込んだ。実機はまだ書き換えていない。",
-                    );
-                  }}
-                  onExportKarabiner={() =>
-                    say("cornix/generated/karabiner-complex-modifications.json に書き出した。")
-                  }
-                />
-              ) : null}
-              {drawer === "files" ? (
-                <FilesDrawer
-                  cornixReady={cornixReady}
-                  onVilImport={() =>
-                    say(".vil を読み込み、keymap.yaml に保存した（モックでは内容を変えない）。")
-                  }
-                  onVilExport={() => say("cornix/generated/keymap.vil に書き出した。")}
-                  onReload={() => {
-                    saves.reload();
-                    say("ディスクから再読込した。");
-                  }}
-                />
-              ) : null}
-            </div>
-          </aside>
+        {panel && panelDef ? (
+          <PanelDialog
+            key={panel}
+            tone={`tone-${panel}`}
+            title={panelDef.label}
+            subtitle={targetOf(target).label}
+            size={panelSize[panel] ?? "window"}
+            onSize={(size) => setPanelSize((m) => ({ ...m, [panel]: size }))}
+            onClose={() => closePanel()}
+          >
+            {panel === "overview" ? (
+              <OverviewPanel
+                doc={docs.cornixDoc}
+                names={docs.names}
+                layerNames={docs.layerNames}
+                currentLayer={layer}
+                onRenameLayer={(l, name) => {
+                  if ((docs.layerNames[l] ?? "") === name) return;
+                  docs.setLayerNames((n) => ({ ...n, [l]: name }));
+                  saves.save("cornix/labels.yaml");
+                }}
+                onOpenLayer={(l) => {
+                  cursor.setLayer(l);
+                  closePanel(focusBoard);
+                }}
+                onExport={(kind) =>
+                  say(`cornix/generated/keymap-layer-${layer}.${kind.toLowerCase()} に書き出した。`)
+                }
+              />
+            ) : null}
+            {panel === "behaviors" ? (
+              <BehaviorsPanel onSaved={() => saves.save("keymap.yaml")} />
+            ) : null}
+            {panel === "validation" ? (
+              <ValidationPanel
+                target={target}
+                diagnostics={diagnostics}
+                onJump={jumpToDiagnostic}
+              />
+            ) : null}
+            {panel === "device" ? (
+              <DevicePanel
+                target={target}
+                phase={device.phase}
+                roundTrips={device.roundTrips}
+                total={device.total}
+                readAt={device.readAt}
+                diff={diff}
+                applyBlockedReason={applyBlockedReason}
+                onConnect={device.connect}
+                onDisconnect={device.disconnect}
+                onRead={() => device.read()}
+                onApply={() => apply.open(device.total)}
+                onRestore={() => {
+                  docs.setCornixDoc(deviceCornixDoc());
+                  saves.save("keymap.yaml");
+                  say(
+                    "cornix/backups/latest.vil を目標状態に読み込んだ。実機はまだ書き換えていない。",
+                  );
+                }}
+                onExportKarabiner={() =>
+                  say("cornix/generated/karabiner-complex-modifications.json に書き出した。")
+                }
+              />
+            ) : null}
+            {panel === "files" ? (
+              <FilesPanel
+                cornixReady={cornixReady}
+                onVilImport={() =>
+                  say(".vil を読み込み、keymap.yaml に保存した（モックでは内容を変えない）。")
+                }
+                onVilExport={() => say("cornix/generated/keymap.vil に書き出した。")}
+                onReload={() => {
+                  saves.reload();
+                  say("ディスクから再読込した。");
+                }}
+              />
+            ) : null}
+          </PanelDialog>
         ) : null}
       </main>
       <StatusBar
         target={target}
         counts={counts}
-        onDiagnostics={() => openDrawer("validation")}
+        onDiagnostics={() => openPanel("validation")}
         save={aggregateEntry}
         saveFile={aggregate ?? saveFile}
         message={message}

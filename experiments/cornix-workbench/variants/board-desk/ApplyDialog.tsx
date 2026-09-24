@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "../../../button/shared/Button";
 import type { Diagnostic, DiffRow } from "../../shared/fixture";
 import { subjectLabel } from "../../shared/model";
-import { SEVERITY } from "./Drawers";
+import { SEVERITY } from "./Panels";
 import { APPLY_STEPS, type ApplyPhase } from "./state";
 
 type Props = {

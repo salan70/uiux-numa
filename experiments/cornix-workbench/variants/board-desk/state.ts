@@ -312,8 +312,8 @@ export function useApply() {
 
 /* ---------- 引き出し ---------- */
 
-export type DrawerId = "overview" | "behaviors" | "validation" | "device" | "files";
-export const DRAWERS: { id: DrawerId; label: string; short: string; cornixOnly: boolean }[] = [
+export type PanelId = "overview" | "behaviors" | "validation" | "device" | "files";
+export const PANELS: { id: PanelId; label: string; short: string; cornixOnly: boolean }[] = [
   { id: "overview", label: "全体マップ", short: "全体", cornixOnly: true },
   { id: "behaviors", label: "動作定義", short: "動作", cornixOnly: true },
   { id: "validation", label: "検証", short: "検証", cornixOnly: false },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "../../../button/shared/Button";
 import { cornix, fixture, keyId, type Diagnostic, type DiffRow } from "../../shared/fixture";
 import {
@@ -16,12 +16,83 @@ export const SEVERITY = {
   information: { icon: "ⓘ", label: "情報" },
 } as const;
 
+export type PanelSize = "window" | "full";
+
+/**
+ * 左端の入口から開く作業パネル。画面中央の modal で開き、全画面へ広げられる。
+ * Esc と × でいつでも閉じられる。途中で閉じられない Apply とはここで区別する。
+ */
+export function PanelDialog({
+  tone,
+  title,
+  subtitle,
+  size,
+  onSize,
+  onClose,
+  children,
+}: {
+  /** 見出しの帯の色。tone-* の class 名。 */
+  tone: string;
+  title: string;
+  subtitle: string;
+  size: PanelSize;
+  onSize: (size: PanelSize) => void;
+  onClose: () => void;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    const dialog = ref.current;
+    if (dialog && !dialog.open) dialog.showModal();
+    heading.current?.focus();
+    return () => dialog?.close();
+  }, []);
+  const full = size === "full";
+  return (
+    <dialog
+      ref={ref}
+      className={`bd-sheet is-${size} ${tone}`}
+      aria-labelledby="bd-sheet-title"
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onClick={(e) => {
+        // 背景（dialog 自身）を押したら閉じる。中身の余白では閉じない。
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <header className="bd-sheet-head">
+        <h2 id="bd-sheet-title" ref={heading} tabIndex={-1}>
+          {title}
+          <small>{subtitle}</small>
+        </h2>
+        <span className="bd-spacer" />
+        <button
+          type="button"
+          className="bd-sheet-btn"
+          aria-pressed={full}
+          onClick={() => onSize(full ? "window" : "full")}
+        >
+          <span aria-hidden="true">{full ? "⤡" : "⤢"}</span>{" "}
+          {full ? "元の大きさに戻す" : "全画面で表示"}
+        </button>
+        <button type="button" className="bd-sheet-btn" onClick={onClose}>
+          × 閉じる <kbd>Esc</kbd>
+        </button>
+      </header>
+      <div className="bd-sheet-body">{children}</div>
+    </dialog>
+  );
+}
+
 export const layerTone = (layer: number) =>
   (["primary", "secondary", "tertiary"] as const)[layer % 3];
 
 /* ---------- 全体マップ ---------- */
 
-export function OverviewDrawer({
+export function OverviewPanel({
   doc,
   names,
   layerNames,
@@ -47,7 +118,7 @@ export function OverviewDrawer({
   const { width, height } = cornix.board.metrics;
   return (
     <>
-      <div className="bd-drawer-tools">
+      <div className="bd-sheet-tools">
         <label className="bd-check">
           <input
             type="checkbox"
@@ -166,7 +237,7 @@ export function OverviewDrawer({
 
 /* ---------- 動作定義 ---------- */
 
-export function BehaviorsDrawer({ onSaved }: { onSaved: () => void }) {
+export function BehaviorsPanel({ onSaved }: { onSaved: () => void }) {
   const [tab, setTab] = useState<"td" | "combo" | "settings">("td");
   const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -289,7 +360,7 @@ export function BehaviorsDrawer({ onSaved }: { onSaved: () => void }) {
 
 /* ---------- 検証 ---------- */
 
-export function ValidationDrawer({
+export function ValidationPanel({
   target,
   diagnostics,
   onJump,
@@ -414,7 +485,7 @@ export function ValidationDrawer({
 
 /* ---------- 実機と適用 ---------- */
 
-export function DeviceDrawer({
+export function DevicePanel({
   target,
   phase,
   roundTrips,
@@ -567,12 +638,12 @@ export function DeviceDrawer({
           <Button
             disabled={Boolean(applyBlockedReason)}
             onClick={onApply}
-            aria-describedby={applyBlockedReason ? "bd-apply-reason-drawer" : undefined}
+            aria-describedby={applyBlockedReason ? "bd-apply-reason-panel" : undefined}
           >
             実機へ Apply…
           </Button>
           {applyBlockedReason ? (
-            <p id="bd-apply-reason-drawer" className="bd-hint">
+            <p id="bd-apply-reason-panel" className="bd-hint">
               {applyBlockedReason}
             </p>
           ) : null}
@@ -597,7 +668,7 @@ export function DeviceDrawer({
 
 /* ---------- ファイル ---------- */
 
-export function FilesDrawer({
+export function FilesPanel({
   cornixReady,
   onVilImport,
   onVilExport,

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Button } from "../../../button/shared/Button";
 import { cornix, fixture } from "../../shared/fixture";
 import { macLayoutOf, TARGETS, type TargetId } from "../../shared/model";
-import { layerTone, SEVERITY } from "./Drawers";
+import { layerTone, SEVERITY } from "./Panels";
 import {
-  DRAWERS,
+  PANELS,
   type CornixLoad,
   type DevicePhase,
-  type DrawerId,
+  type PanelId,
   type MockState,
   type SaveEntry,
 } from "./state";
@@ -97,16 +97,16 @@ export function Header({
 
 export function Rail({
   target,
-  drawer,
-  onDrawer,
+  panel,
+  onPanel,
   counts,
 }: {
   target: TargetId;
-  drawer: DrawerId | null;
-  onDrawer: (d: DrawerId | null) => void;
-  counts: Partial<Record<DrawerId, string>>;
+  panel: PanelId | null;
+  onPanel: (d: PanelId | null) => void;
+  counts: Partial<Record<PanelId, string>>;
 }) {
-  const icon: Record<DrawerId, string> = {
+  const icon: Record<PanelId, string> = {
     overview: "▦",
     behaviors: "⚙",
     validation: "✓",
@@ -117,27 +117,27 @@ export function Rail({
     <nav className="bd-rail" aria-label="作業">
       <button
         type="button"
-        className={`bd-rail-btn tone-primary${drawer === null ? " is-on" : ""}`}
-        aria-pressed={drawer === null}
-        onClick={() => onDrawer(null)}
+        className={`bd-rail-btn tone-primary${panel === null ? " is-on" : ""}`}
+        aria-pressed={panel === null}
+        onClick={() => onPanel(null)}
       >
         <span aria-hidden="true" className="bd-rail-icon">
           ⌨
         </span>
         割り当て
       </button>
-      {DRAWERS.map((d, i) => {
+      {PANELS.map((d, i) => {
         const disabled = d.cornixOnly && target !== "cornix";
         return (
           <button
             key={d.id}
             type="button"
-            data-drawer={d.id}
-            className={`bd-rail-btn tone-${["secondary", "tertiary", "primary", "secondary", "tertiary"][i]}${drawer === d.id ? " is-on" : ""}`}
-            aria-pressed={drawer === d.id}
+            data-panel={d.id}
+            className={`bd-rail-btn tone-${["secondary", "tertiary", "primary", "secondary", "tertiary"][i]}${panel === d.id ? " is-on" : ""}`}
+            aria-pressed={panel === d.id}
             aria-disabled={disabled}
             aria-describedby={disabled ? `bd-rail-why-${d.id}` : undefined}
-            onClick={() => !disabled && onDrawer(drawer === d.id ? null : d.id)}
+            onClick={() => !disabled && onPanel(panel === d.id ? null : d.id)}
           >
             <span aria-hidden="true" className="bd-rail-icon">
               {icon[d.id]}
