@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <title>キー割り当て</title>
-  <rect id="part-keymap-frame-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
-  <polyline id="part-keymap-legend" points="8 17.5 12 6.5 16 17.5" fill="none" stroke="currentColor"/>
-  <path id="part-keymap-bar" d="M9.5 13.5 14.5 13.5" fill="none" stroke="currentColor"/>
-</svg>
