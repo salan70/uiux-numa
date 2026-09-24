@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>ファイル</title>
+  <rect id="part-files-frame-top" x="3.75" y="3.75" width="13.5" height="13.5" rx="3" fill="none" stroke="currentColor"/>
+  <path id="part-files-frame-shadow" d="M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75" fill="none" stroke="currentColor"/>
+  <polyline id="part-files-tray" points="6.375 11.625 6.375 14.625 14.625 14.625 14.625 11.625" fill="none" stroke="currentColor"/>
+  <path id="part-files-shaft" d="M10.5 6.375 10.5 12" fill="none" stroke="currentColor"/>
+  <polyline id="part-files-head" points="8.25 9.75 10.5 12 12.75 9.75" fill="none" stroke="currentColor"/>
+</svg>

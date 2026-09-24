@@ -1,9 +1,11 @@
-// 3 案の原本（variants/<id>/source/*.svg）を、共通の骨格から書き出す。
+// 原本（variants/<id>/source/*.svg）を、共通の骨格から書き出す。
 // 骨格は round-soft の値に載せる: 24 viewBox、線幅 1.5、丸い端点、線の中心 3.75..20.25（外形 3..21）、0.75 格子。
-// 案ごとに変えるのは 1 軸だけにする。
-//   round-line  : 骨格だけ（基準）
-//   pop-duo     : 骨格の下に色の面を 1 つ敷く（part-<asset>-accent）。意味は輪郭が担う
-//   keycap-tile : キーキャップ型の枠の中へ、骨格を縮めて置く
+// すべての案で、キーキャップ型の枠の中へ骨格を縮めて置く。案ごとに変えるのは枠の形だけにする。
+//   keycap-tile   : 平らな天面（基準）
+//   keycap-skirt  : 天面の下に手前の側面（スカート）が見える
+//   keycap-dish   : 天面の中央が凹む（皿）
+//   keycap-shadow : 右下へ影が落ちる
+// round 1〜2 の round-line（線画だけ）と pop-duo（色の面）は、利用者がキーキャップ型を選んだので削除した。
 // 実行: node experiments/cornix-ui-icons/shared/build-icons.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -25,19 +27,15 @@ const dot = (x, y) => ({ t: "dot", p: [[x, y]] });
 const arc = (cx, cy, r, from, to) => ({ t: "arc", c: [cx, cy], r, from, to });
 const path = (d) => ({ t: "path", d });
 
-/** 面のない asset に敷く色の面。外形いっぱいの円（round-soft の輪と同じ r=8.25）。 */
-const DISC = circle(12, 12, 8.25);
-
 /**
- * asset の定義。title は読み上げの名前。parts は線画、accent は pop-duo で色を敷く閉じた面。
- * 面を持つ asset は、その面をそのまま accent にする（新しい形を足さない）。
+ * asset の定義。title は読み上げの名前。parts は骨格の線画。
+ * tile は、枠の中に置く形。骨格が囲い（輪、三角、盾、紙、キー）を持つ asset だけが持ち、囲いを外した記号にする。
  */
 const ASSETS = {
   // 入口: キー割り当て。キーキャップを上から見た形。上へ寄せた皿で「押す面」を示す。
   keymap: {
     title: "キー割り当て",
     parts: { cap: rect(3.75, 3.75, 16.5, 16.5, 3.75), dish: rect(7.5, 6.75, 9, 7.5, 1.5) },
-    accent: rect(7.5, 6.75, 9, 7.5, 1.5),
     // 枠がすでにキーキャップなので、中は刻印の A にする。
     // 横棒は y=14.25。脚の x は 6 + 6 × 6/16.5 = 8.18 → 格子 8.25（右は 15.75）。
     tile: {
@@ -73,15 +71,6 @@ const ASSETS = {
         [20.25, 16.5],
       ]),
     },
-    accent: poly(
-      [
-        [12, 3.75],
-        [20.25, 7.5],
-        [12, 11.25],
-        [3.75, 7.5],
-      ],
-      true,
-    ),
   },
   // 入口: 動作定義。2 本のスライダー（Tap Dance、Combo、Settings の値を調整する）。
   behaviors: {
@@ -94,9 +83,6 @@ const ASSETS = {
       "low-knob": circle(15, 16.5, 2.25),
       "low-b": line(17.25, 16.5, 20.25, 16.5),
     },
-    accent: path(
-      "M9 5.25a2.25 2.25 0 1 0 0 4.5a2.25 2.25 0 1 0 0-4.5zM15 14.25a2.25 2.25 0 1 0 0 4.5a2.25 2.25 0 1 0 0-4.5z",
-    ),
   },
   // 入口: 検証。盾と確認の印。
   validation: {
@@ -111,9 +97,6 @@ const ASSETS = {
         [15.75, 9.75],
       ]),
     },
-    accent: path(
-      "M12 3.75 19.5 6.75V11.25C19.5 15.75 16.5 18.75 12 20.25 7.5 18.75 4.5 15.75 4.5 11.25V6.75Z",
-    ),
     // 枠の中では盾が囲いになるので、確認の印が付いた 2 行の一覧にする。
     // check（保存済み）と区別するため、行の線を添える。
     tile: {
@@ -148,7 +131,6 @@ const ASSETS = {
         [19.5, 16.5],
       ]),
     },
-    accent: DISC,
   },
   // 入口: ファイル。角を折った紙と 2 本の行。
   files: {
@@ -163,7 +145,6 @@ const ASSETS = {
       "row-a": line(8.25, 12.75, 15.75, 12.75),
       "row-b": line(8.25, 16.5, 13.5, 16.5),
     },
-    accent: path("M6 3.75H13.5L18 8.25V20.25H6Z"),
     // 枠の中では紙が囲いになるので、上の開いた受け皿へ入る矢印にする（.vil の読込と書出）。
     tile: {
       tray: poly([
@@ -188,11 +169,12 @@ const ASSETS = {
       "stroke-a": line(9, 9, 15, 15),
       "stroke-b": line(15, 9, 9, 15),
     },
-    accent: circle(12, 12, 8.25),
-    // 枠が輪の代わりになる。中は外形いっぱいに近い ×。
+    // 枠の中は小文字の err。× にすると close と同じ形になるので、文字で区別する（round 3、利用者の案）。
+    // 文字は path で描く（<text> は描画環境で揺れる）。x-height 9（y 7.5..16.5）、幅 e 6 / r 3.75 / r 3.75、字間 1.5 で計 16.5。
     tile: {
-      "stroke-a": line(5.25, 5.25, 18.75, 18.75),
-      "stroke-b": line(18.75, 5.25, 5.25, 18.75),
+      e: path("M3.75 12H9.75A3 4.5 0 1 0 9 15.375"),
+      "r-a": path("M11.25 16.5V7.5M11.25 10.5C11.25 8.25 12.75 7.5 15 7.875"),
+      "r-b": path("M16.5 16.5V7.5M16.5 10.5C16.5 8.25 18 7.5 20.25 7.875"),
     },
   },
   // 診断: warning。三角と !。形でも error、info と区別する。
@@ -203,7 +185,6 @@ const ASSETS = {
       stem: line(12, 9.75, 12, 13.5),
       dot: dot(12, 16.5),
     },
-    accent: path("M12 3.75 20.25 19.5H3.75Z"),
     // 枠の中は ! だけ。棒と点の隙間は 5.25（縮めた後に 3.5 で、線幅 1.5 以上）。
     tile: { stem: line(12, 3.75, 12, 14.25), dot: dot(12, 19.5) },
   },
@@ -211,7 +192,6 @@ const ASSETS = {
   info: {
     title: "情報",
     parts: { ring: circle(12, 12, 8.25), dot: dot(12, 7.5), stem: line(12, 11.25, 12, 16.5) },
-    accent: circle(12, 12, 8.25),
     // 枠の中は i だけ。warning の ! を上下に反転した配置にして、2 つを対にする。
     tile: { dot: dot(12, 4.5), stem: line(12, 9.75, 12, 20.25) },
   },
@@ -219,7 +199,6 @@ const ASSETS = {
   saving: {
     title: "保存中",
     parts: { arc: arc(12, 12, 8.25, -90, 180) },
-    accent: DISC,
     // 枠の中では輪が囲いになり、回すと枠ごと回る。止まった 3 つの点（進行中の印）にする。
     tile: { "dot-a": dot(5.25, 12), "dot-b": dot(12, 12), "dot-c": dot(18.75, 12) },
   },
@@ -233,13 +212,11 @@ const ASSETS = {
         [19.5, 6.75],
       ]),
     },
-    accent: DISC,
   },
   // パネルを閉じる。×。
   close: {
     title: "閉じる",
     parts: { "stroke-a": line(6, 6, 18, 18), "stroke-b": line(18, 6, 6, 18) },
-    accent: DISC,
   },
   // パネルを全画面にする。外へ向かう 2 つの角の矢印。
   expand: {
@@ -258,7 +235,6 @@ const ASSETS = {
       ]),
       "bl-shaft": line(3.75, 20.25, 9.75, 14.25),
     },
-    accent: DISC,
   },
   // パネルを元の大きさに戻す。内へ向かう 2 つの角の矢印（expand の対）。
   collapse: {
@@ -277,7 +253,6 @@ const ASSETS = {
       ]),
       "bl-shaft": line(9.75, 14.25, 3.75, 20.25),
     },
-    accent: DISC,
   },
   // encoder の右回し。4 分の 3 の弧と、上で右を向く頭。
   "rotate-cw": {
@@ -291,7 +266,6 @@ const ASSETS = {
         [9.75, 9],
       ]),
     },
-    accent: circle(12, 13.5, 6.75),
   },
   // encoder の左回し。rotate-cw を x=12 で鏡映した対。
   "rotate-ccw": {
@@ -304,7 +278,6 @@ const ASSETS = {
         [14.25, 9],
       ]),
     },
-    accent: circle(12, 13.5, 6.75),
   },
   // 移動（layer を開く、参照元へ移る）。
   // round-soft の arrow-next は画素に揃えるため軸を y=11.25 へ下げたが、語の隣と枠の中では上に浮いて見えた。
@@ -319,7 +292,6 @@ const ASSETS = {
         [15, 17.25],
       ]),
     },
-    accent: DISC,
   },
 };
 
@@ -327,10 +299,9 @@ const ASSETS = {
 
 const fmt = (n) => String(Math.round(n * 1000) / 1000);
 
-/** 中心 (12,12) の周りに s 倍する。keycap-tile だけが使う。 */
-function scaled(el, s) {
-  if (s === 1) return el;
-  const f = ([x, y]) => [12 + (x - 12) * s, 12 + (y - 12) * s];
+/** (12,12) を中心とした骨格を、s 倍して中心 (cx,cy) へ移す。 */
+function scaled(el, s, cx, cy) {
+  const f = ([x, y]) => [cx + (x - 12) * s, cy + (y - 12) * s];
   switch (el.t) {
     case "line":
     case "poly":
@@ -344,19 +315,20 @@ function scaled(el, s) {
       return { ...el, x, y, w: el.w * s, h: el.h * s, rx: el.rx * s };
     }
     case "path":
-      // path の座標を一括で縮める。数値の組を (x,y) として扱い、弧の半径・旗は ARC の書式で扱う。
-      return { ...el, d: scalePath(el.d, s) };
+      return { ...el, d: scalePath(el.d, s, cx, cy) };
   }
   return el;
 }
 
-function scalePath(d, s) {
+/** path の座標を縮めて移す。弧の半径は s 倍し、旗はそのまま残す。 */
+function scalePath(d, s, cx, cy) {
   const tokens = d.match(/[a-zA-Z]|-?\d*\.?\d+/g);
   let out = "";
   let cmd = "";
   let i = 0;
   const num = () => Number(tokens[i++]);
-  const P = (x, y, rel) => (rel ? [x * s, y * s] : [12 + (x - 12) * s, 12 + (y - 12) * s]);
+  const X = (x, rel) => (rel ? x * s : cx + (x - 12) * s);
+  const Y = (y, rel) => (rel ? y * s : cy + (y - 12) * s);
   while (i < tokens.length) {
     if (/[a-zA-Z]/.test(tokens[i])) cmd = tokens[i++];
     // M の後に続く座標の組は、暗黙の L（m なら l）として扱う（SVG の path の文法）。
@@ -369,24 +341,24 @@ function scalePath(d, s) {
       continue;
     }
     if (C === "H") {
-      const x = num();
-      out += `${cmd}${fmt(rel ? x * s : 12 + (x - 12) * s)} `;
+      out += `${cmd}${fmt(X(num(), rel))} `;
     } else if (C === "V") {
-      const y = num();
-      out += `${cmd}${fmt(rel ? y * s : 12 + (y - 12) * s)} `;
+      out += `${cmd}${fmt(Y(num(), rel))} `;
     } else if (C === "A") {
-      const rx = num() * s,
-        ry = num() * s,
-        rot = num(),
-        large = num(),
-        sweep = num();
-      const [x, y] = P(num(), num(), rel);
+      const rx = num() * s;
+      const ry = num() * s;
+      const rot = num();
+      const large = num();
+      const sweep = num();
+      const x = X(num(), rel);
+      const y = Y(num(), rel);
       out += `${cmd}${fmt(rx)} ${fmt(ry)} ${rot} ${large} ${sweep} ${fmt(x)} ${fmt(y)} `;
     } else {
       const pairs = C === "C" ? 3 : C === "S" || C === "Q" ? 2 : 1;
       out += cmd;
       for (let k = 0; k < pairs; k++) {
-        const [x, y] = P(num(), num(), rel);
+        const x = X(num(), rel);
+        const y = Y(num(), rel);
         out += `${fmt(x)} ${fmt(y)} `;
       }
     }
@@ -438,32 +410,65 @@ const stroke = (asset, role, el) => {
   return `  <${tag} id="part-${asset}-${role}" ${a} fill="none" stroke="currentColor"/>`;
 };
 
-/** キーキャップ型の枠。外形 3..21、角丸は 18 の 1/4（4.5 → 線の中心で 3.75）。 */
-const TILE = rect(3.75, 3.75, 16.5, 16.5, 3.75);
 /**
- * 枠の内側（線の内縁 4.5..19.5 の 15）へ収めるための縮小率。骨格の外形 18 → 12。
- * 内側の隙間は上下左右 1.5 で、線幅と同じ最小値（ICON-08）。10.5 にした round 1 は 16px で記号が潰れた。
+ * キーキャップ型の枠。案ごとに、枠の線と、中の記号を置く場所（中心と縮小率）を持つ。
+ * 縮小率は、記号の外形 18 × s に線幅 1.5 を足した大きさが、天面の内側に隙間を残して収まるように決める。
  */
-const TILE_SCALE = 12 / 18;
-
-const VARIANTS = {
-  "round-line": (name, a) => Object.entries(a.parts).map(([role, el]) => stroke(name, role, el)),
-  "pop-duo": (name, a) => {
-    const [tag, at] = attrs(a.accent);
-    // 色は利用画面の CSS が #part-*-accent へ与える。原本では currentColor の薄い面にして、シートで形を確かめられるようにする。
-    return [
-      `  <${tag} id="part-${name}-accent" ${at} fill="currentColor" fill-opacity="0.22" stroke="none"/>`,
-      ...Object.entries(a.parts).map(([role, el]) => stroke(name, role, el)),
-    ];
+const FRAMES = {
+  // 平らな天面。外形 3..21、角丸 3.75（線の中心）。記号は 18 → 12、内縁 4.5..19.5 との隙間は 1.5（ICON-08）。
+  "keycap-tile": {
+    parts: { tile: rect(3.75, 3.75, 16.5, 16.5, 3.75) },
+    cx: 12,
+    cy: 12,
+    s: 12 / 18,
   },
-  // 枠の中に囲いを重ねない。囲いを持つ asset は、囲いを外した tile の形を使う（round 2）。
-  "keycap-tile": (name, a) => [
-    stroke(name, "tile", TILE),
-    ...Object.entries(a.tile ?? a.parts).map(([role, el]) =>
-      stroke(name, role, scaled(el, TILE_SCALE)),
-    ),
-  ],
+  // 天面（y 3.75..15.75）の下に、手前の側面（y 15.75..20.25）が見える。側面は天面より左右に張り出さない。
+  // 記号は天面の中へ置く。天面の内縁 4.5..15 の 10.5 に、外形 9（s=1/2）＋線幅で隙間 0.0〜0.75。
+  "keycap-skirt": {
+    parts: {
+      top: rect(3.75, 3.75, 16.5, 12, 3.75),
+      skirt: path("M3.75 12V17.25Q3.75 20.25 6.75 20.25H17.25Q20.25 20.25 20.25 17.25V12"),
+    },
+    cx: 12,
+    cy: 9.75,
+    s: 1 / 2,
+  },
+  // 外形の中に、上へ寄せた皿（天面の凹み）を描く。皿は x 6.75..17.25、y 5.25..16.5、角丸 3。
+  // 記号は皿の中へ置く。皿の内縁 7.5..16.5 の 9 に、外形 7.5（s=5/12）＋線幅で隙間 0。
+  "keycap-dish": {
+    parts: {
+      tile: rect(3.75, 3.75, 16.5, 16.5, 3.75),
+      dish: rect(6.75, 5.25, 10.5, 11.25, 3),
+    },
+    cx: 12,
+    cy: 10.875,
+    s: 5 / 12,
+  },
+  // 天面（x,y 3.75..17.25）の右下へ、2.25 ずらした影の縁が見える。
+  // 記号は天面の中へ置く。天面の内縁 4.5..16.5 の 12 に、外形 9（s=1/2）＋線幅で隙間 0.75。
+  "keycap-shadow": {
+    parts: {
+      top: rect(3.75, 3.75, 13.5, 13.5, 3),
+      shadow: path("M6.75 20.25H17.25Q20.25 20.25 20.25 17.25V6.75"),
+    },
+    cx: 10.5,
+    cy: 10.5,
+    s: 1 / 2,
+  },
 };
+
+// 枠の中に囲いを重ねない。囲いを持つ asset は、囲いを外した tile の形を使う（round 2）。
+const VARIANTS = Object.fromEntries(
+  Object.entries(FRAMES).map(([id, frame]) => [
+    id,
+    (name, a) => [
+      ...Object.entries(frame.parts).map(([role, el]) => stroke(name, `frame-${role}`, el)),
+      ...Object.entries(a.tile ?? a.parts).map(([role, el]) =>
+        stroke(name, role, scaled(el, frame.s, frame.cx, frame.cy)),
+      ),
+    ],
+  ]),
+);
 
 for (const [variant, render] of Object.entries(VARIANTS)) {
   const dir = `${here}variants/${variant}/source/`;

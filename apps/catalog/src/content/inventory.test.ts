@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(40);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(16);
     expect(catalog.schemes).toHaveLength(11);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(89);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(106);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(13);
-    expect(catalog.liveVariants).toHaveLength(35);
+    expect(catalog.liveVariants).toHaveLength(36);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
