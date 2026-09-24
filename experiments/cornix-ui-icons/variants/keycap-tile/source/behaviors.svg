@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>動作定義</title>
+  <rect id="part-behaviors-tile" x="3.75" y="3.75" width="16.5" height="16.5" rx="3.75" fill="none" stroke="currentColor"/>
+  <path id="part-behaviors-top-a" d="M6.5 9 8.5 9" fill="none" stroke="currentColor"/>
+  <circle id="part-behaviors-top-knob" cx="10" cy="9" r="1.5" fill="none" stroke="currentColor"/>
+  <path id="part-behaviors-top-b" d="M11.5 9 17.5 9" fill="none" stroke="currentColor"/>
+  <path id="part-behaviors-low-a" d="M6.5 15 12.5 15" fill="none" stroke="currentColor"/>
+  <circle id="part-behaviors-low-knob" cx="14" cy="15" r="1.5" fill="none" stroke="currentColor"/>
+  <path id="part-behaviors-low-b" d="M15.5 15 17.5 15" fill="none" stroke="currentColor"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>右回し</title>
+  <circle id="part-rotate-cw-accent" cx="12" cy="13.5" r="6.75" fill="currentColor" fill-opacity="0.22" stroke="none"/>
+  <path id="part-rotate-cw-arc" d="M18.75 13.5A6.75 6.75 0 1 1 12 6.75" fill="none" stroke="currentColor"/>
+  <polyline id="part-rotate-cw-head" points="9 3.75 12 6.75 9 9.75" fill="none" stroke="currentColor"/>
+</svg>

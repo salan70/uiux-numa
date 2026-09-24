@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <title>移動する</title>
+  <circle id="part-arrow-right-accent" cx="12" cy="12" r="8.25" fill="currentColor" fill-opacity="0.22" stroke="none"/>
+  <path id="part-arrow-right-shaft" d="M3.75 11.25 20.25 11.25" fill="none" stroke="currentColor"/>
+  <polyline id="part-arrow-right-head" points="14.25 5.25 20.25 11.25 14.25 17.25" fill="none" stroke="currentColor"/>
+</svg>

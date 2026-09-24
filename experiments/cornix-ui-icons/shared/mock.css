@@ -1,0 +1,418 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/size/index.css";
+
+@font-face {
+  font-family: "LINE Seed JP";
+  src: url("../../../tokens/typography/fonts/LINESeedJP-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "LINE Seed JP";
+  src: url("../../../tokens/typography/fonts/LINESeedJP-Bold.woff2") format("woff2");
+  font-weight: 700;
+}
+
+.cx,
+.cx * {
+  box-sizing: border-box;
+}
+.cx {
+  display: grid;
+  grid-template-areas: "rail main" "status status";
+  grid-template-columns: 5.25rem minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 52rem;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-family-sans);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--font-line-height-ui);
+}
+.cx :where(h2, p, ul, ol) {
+  margin: 0;
+}
+.cx :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+.cx :where(button) {
+  font: inherit;
+  color: inherit;
+}
+.cx code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8125rem;
+}
+.cx-spacer {
+  flex: 1;
+}
+.cx-muted {
+  color: var(--color-on-surface-variant);
+}
+
+/* アイコンの大きさ。Cornix の文字 14px に合わせた 3 段 */
+.cx-icon {
+  display: inline-block;
+  flex: none;
+  vertical-align: -0.2em;
+}
+.cx-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cx-icon--sm {
+  width: 1rem;
+  height: 1rem;
+}
+.cx-icon--md {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.cx-icon--lg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* 役割色の組 */
+.tone-primary {
+  --tone: var(--color-primary);
+  --on-tone: var(--color-on-primary);
+  --tone-soft: var(--color-primary-container);
+  --on-tone-soft: var(--color-on-primary-container);
+}
+.tone-secondary {
+  --tone: var(--color-secondary);
+  --on-tone: var(--color-on-secondary);
+  --tone-soft: var(--color-secondary-container);
+  --on-tone-soft: var(--color-on-secondary-container);
+}
+.tone-tertiary {
+  --tone: var(--color-tertiary);
+  --on-tone: var(--color-on-tertiary);
+  --tone-soft: var(--color-tertiary-container);
+  --on-tone-soft: var(--color-on-tertiary-container);
+}
+
+/* pop-duo の色の面。置き場所の面の色から 1 段ずらした色を敷く。意味は輪郭が担う。 */
+.cx [id$="-accent"] {
+  fill: var(--accent-fill, var(--color-surface-variant));
+  fill-opacity: 1;
+}
+.cx-rail-tile {
+  --accent-fill: var(--tone-soft);
+}
+.cx-sheet-head {
+  --accent-fill: color-mix(in srgb, var(--on-tone) 18%, transparent);
+}
+.is-error,
+.cx-save.is-error {
+  --accent-fill: color-mix(in srgb, var(--color-error) 16%, transparent);
+}
+.is-warning,
+.cx-save.is-conflict {
+  --accent-fill: color-mix(in srgb, var(--color-warning) 18%, transparent);
+}
+.cx-save.is-saved,
+.cx-steps .is-done {
+  --accent-fill: color-mix(in srgb, var(--color-success) 18%, transparent);
+}
+.cx-save.is-saving {
+  --accent-fill: var(--color-secondary-container);
+}
+.cx-slot {
+  --accent-fill: var(--color-tertiary-container);
+}
+
+/* 左端の入口 */
+.cx-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+  padding: var(--space-400) var(--space-200);
+}
+.cx-rail-btn {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: var(--space-200) var(--space-100);
+  border: var(--border-width-thick) solid transparent;
+  border-radius: 1rem;
+  background: var(--tone-soft);
+  color: var(--on-tone-soft);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.cx-rail-btn.is-on {
+  border-color: var(--color-on-surface);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+.cx-rail-tile {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.6rem;
+  background: var(--tone);
+  color: var(--on-tone);
+}
+.cx-count {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  min-width: 1.25rem;
+  padding: 0 4px;
+  border: 2px solid var(--color-background);
+  border-radius: 999px;
+  background: var(--color-on-surface);
+  color: var(--color-surface);
+  font-size: 0.6875rem;
+  line-height: 1.1rem;
+}
+
+/* 中央 */
+.cx-main {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--space-400);
+  padding: var(--space-400);
+}
+.cx-card {
+  display: grid;
+  gap: var(--space-300);
+  padding: var(--space-400);
+  border: var(--border-width-thick) solid var(--color-surface-variant);
+  border-radius: 1.25rem;
+  background: var(--color-surface);
+}
+.cx-card h2 {
+  color: var(--color-on-surface-variant);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+.cx-sheet-head {
+  display: flex;
+  gap: var(--space-200);
+  align-items: center;
+  padding: var(--space-300) var(--space-400);
+  border-radius: 0.9rem;
+  background: var(--tone);
+  color: var(--on-tone);
+}
+.cx-sheet-head strong {
+  font-size: 1.125rem;
+}
+.cx-sheet-btn {
+  display: inline-flex;
+  gap: var(--space-150);
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 var(--space-300);
+  border: var(--border-width-thick) solid currentColor;
+  border-radius: 999px;
+  background: none;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cx-sheet-btn kbd {
+  opacity: 0.8;
+  font-size: 0.75rem;
+}
+.cx-saves {
+  display: grid;
+  gap: var(--space-200);
+}
+.cx-save {
+  display: flex;
+  gap: var(--space-200);
+  align-items: center;
+  padding: var(--space-200) var(--space-300);
+  border: var(--border-width-thick) solid var(--color-surface-variant);
+  border-radius: 0.9rem;
+}
+.cx-save-icon {
+  display: grid;
+  width: 1.4rem;
+  height: 1.4rem;
+  place-items: center;
+}
+.cx-save.is-saved {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+.cx-save.is-error,
+.cx-save.is-conflict {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+.cx-save.is-saving .cx-icon {
+  animation: cx-spin 1s linear infinite;
+}
+@keyframes cx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cx-save.is-saving .cx-icon {
+    animation: none;
+  }
+}
+.cx-link {
+  display: inline-flex;
+  gap: var(--space-150);
+  align-items: center;
+  color: var(--color-primary-text);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.cx-encoders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-300);
+  padding: var(--space-300);
+  border-radius: 1rem;
+  background: var(--color-surface-container);
+}
+.cx-encoder {
+  display: flex;
+  gap: var(--space-150);
+  align-items: center;
+  padding: var(--space-100) var(--space-150) var(--space-100) var(--space-300);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+.cx-encoder-name {
+  font-weight: 700;
+}
+.cx-slot {
+  display: grid;
+  min-width: 5rem;
+  padding: 0 var(--space-200);
+  border: var(--border-width-thick) solid color-mix(in srgb, var(--color-on-surface) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--color-surface-container);
+  text-align: start;
+}
+.cx-slot-dir {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.75rem;
+}
+.cx-diags {
+  display: grid;
+  gap: var(--space-100);
+}
+.cx-diags li {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: var(--space-300);
+  align-items: center;
+  padding: var(--space-200) var(--space-300);
+  border: var(--border-width-thick) solid var(--color-surface-variant);
+  border-inline-start-width: 6px;
+  border-radius: 0.75rem;
+}
+.cx-diags .is-error {
+  border-inline-start-color: var(--color-error);
+}
+.cx-diags .is-warning {
+  border-inline-start-color: var(--color-warning);
+}
+.cx-diags .is-information {
+  border-inline-start-color: var(--color-outline);
+}
+.cx-sev {
+  display: inline-flex;
+  gap: var(--space-150);
+  align-items: center;
+  font-weight: 700;
+}
+.cx-diags .is-error .cx-sev,
+.cx-sev-btn.is-error {
+  color: var(--color-error);
+}
+.cx-diags .is-warning .cx-sev,
+.cx-sev-btn.is-warning {
+  color: var(--color-warning);
+}
+.cx-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-200);
+  padding: var(--space-300);
+  border-radius: 1rem;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+.cx-steps li {
+  display: inline-flex;
+  gap: var(--space-150);
+  align-items: center;
+  padding: 2px var(--space-300) 2px 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-surface) 35%, transparent);
+  font-weight: 700;
+}
+.cx-steps li.is-current {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+.cx-step-no {
+  display: inline-grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-on-surface);
+  color: var(--color-surface);
+  font-size: 0.8125rem;
+}
+.cx-steps .is-done .cx-step-no {
+  background: var(--color-success);
+}
+
+/* status bar */
+.cx-status {
+  grid-area: status;
+  display: flex;
+  gap: var(--space-400);
+  align-items: center;
+  min-height: 3.25rem;
+  padding: var(--space-150) var(--space-500);
+  border-top: var(--border-width-thick) solid var(--color-surface-variant);
+  background: var(--color-surface);
+}
+.cx-sev-btn {
+  display: inline-flex;
+  gap: var(--space-150);
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 var(--space-300);
+  border: var(--border-width-thin) solid var(--color-surface-variant);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-weight: 700;
+}
+.cx-status-save {
+  color: var(--color-success);
+  font-weight: 700;
+}
+.cx-apply {
+  min-height: 2rem;
+  padding: 0 var(--space-400);
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 700;
+}
