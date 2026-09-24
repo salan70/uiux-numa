@@ -3,7 +3,8 @@
 # .claude/ と .agents/ 配下は正本（dotfiles）からコピーした vendor 資産のため
 # lint / format の対象外にする。整形すると正本との差分が生まれ、再同期のたびに衝突する。
 # flake.lock と pnpm-lock.yaml は生成物のため整形しない。
-exclude: '^(\.(claude|agents)/|flake\.lock$)|(^|/)pnpm-lock\.yaml$'
+# cornix-workbench の fixture.json は export-fixture.mts の出力で、整形すると再書き出しの差分になる。
+exclude: '^(\.(claude|agents)/|flake\.lock$)|(^|/)pnpm-lock\.yaml$|^experiments/cornix-workbench/shared/fixture\.json$'
 
 repos:
   # oxfmt — JSON / YAML / Markdown / TypeScript の整形

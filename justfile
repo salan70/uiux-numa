@@ -42,7 +42,7 @@ lint-md:
 # Markdown / JSON / YAML を整形する
 # .claude / .agents は正本からコピーした vendor 資産のため整形しない。
 # 整形すると正本との差分が生まれ、再同期のたびに衝突する。
-# token と scheme の CSS は scripts/ が生成する。整形すると tokens-check と
+# token と scheme の CSS は scripts/ が生成する。cornix-workbench の fixture.json は export-fixture.mts が生成する。整形すると tokens-check と
 # schemes-check が生成元と一致しなくなる。flake.lock と同じく生成物は整形しない。
 # 除外するのは生成物だけ。同じ階層の index.css と fonts.css は手書きなので整形する。
 # tokens/<id>/<id>.css の一覧は scripts/build-dimension-tokens.mjs の FAMILIES と
@@ -51,7 +51,8 @@ format:
     oxfmt --write . '!.claude/**' '!.agents/**' '!flake.lock' \
       '!tokens/space/space.css' '!tokens/radius/radius.css' '!tokens/border/border.css' \
       '!tokens/size/size.css' '!tokens/motion/motion.css' '!tokens/typography/typography.css' \
-      '!experiments/color-schemes-material/variants/*/scheme.css'
+      '!experiments/color-schemes-material/variants/*/scheme.css' \
+      '!experiments/cornix-workbench/shared/fixture.json'
 
 # canonical token から Web 用 CSS を生成する
 tokens-build:
