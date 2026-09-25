@@ -262,7 +262,8 @@ body {
 }
 
 /* 見出しの全文を読み上げに渡す。見た目は語ごとの span が受け持つ。 */
-.app-shell .entrance-words__label {
+.app-shell .entrance-words__label,
+.app-shell .logo-label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -446,10 +447,69 @@ body {
   }
 }
 
-/* 大文字の高さに対して正方のマークは大きく見えるので 0.78em に落とす。 */
+/* UI/UX NUMA の wordmark。マークと同じ高さ 32 の座標で描いてあり、同じ高さを与えると baseline が揃う。
+   題字ではマークと同じ 1.25rem にする。 */
+.app-shell .wordmark {
+  flex: none;
+  inline-size: auto;
+  block-size: 1.25rem;
+  overflow: visible;
+}
+
+.app-shell .wordmark__letter {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.app-shell .wordmark__dot {
+  fill: var(--cat-mark-dot);
+}
+
+/* ホーム大見出しの lockup。マークと wordmark に同じ高さを与える。
+   幅は高さの 8.2 倍（マーク 1、間隔 0.3、wordmark 221/32）なので、版面の幅の 1/8.3 を上限にし、狭い画面で溢れさせない。 */
+.app-shell .home-hero__title .logo-mark,
+.app-shell .home-hero__title .wordmark {
+  inline-size: auto;
+  block-size: var(--lockup-h);
+}
+
 .app-shell .home-hero__title .logo-mark {
-  inline-size: 0.78em;
-  block-size: 0.78em;
+  inline-size: var(--lockup-h);
+}
+
+/* wordmark の入場。experiments/uiux-numa-wordmark の caps-period と同じ値にする。
+   字はマークの 150ms 後から 1 字 60ms ずつ 500ms で引き、句点は最後の A を引き終える 230ms 前（900ms）に落とす。
+   破線の始点を長さ 1 ちょうどにすると、長さ 0 の線に round cap が付いて引く前に点が残るので、1.02 から始める。 */
+.app-shell .wordmark--enter .wordmark__letter {
+  stroke-dasharray: 1 2;
+  animation: wordmark-draw 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc(150ms + var(--i) * 60ms);
+}
+
+.app-shell .wordmark--enter .wordmark__dot {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: logo-mark-drop 380ms 900ms linear both;
+}
+
+@keyframes wordmark-draw {
+  from {
+    stroke-dashoffset: 1.02;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .wordmark--enter .wordmark__letter,
+  .app-shell .wordmark--enter .wordmark__dot {
+    stroke-dasharray: none;
+    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
+  }
 }
 
 /* 開閉ボタン。開閉で寸法も形も変えず、色だけが状態を示す。 */
@@ -1080,14 +1140,16 @@ body {
 /* 題字と帯を縦に積む。帯は版面の左右いっぱいまで広げ、両端を背景へ溶かす。
    判断は apps/catalog/README.md に残す。 */
 .app-shell .home-hero {
+  container-type: inline-size;
   display: grid;
   gap: var(--cat-gap-lg);
 }
 
 .app-shell .home-hero__title {
+  --lockup-h: min(var(--cat-display), calc(100cqi / 8.3));
   display: flex;
-  align-items: center;
-  gap: 0.18em;
+  align-items: flex-start;
+  gap: calc(var(--lockup-h) * 0.3);
   margin: 0;
   font-size: var(--cat-display);
   font-weight: 700;
