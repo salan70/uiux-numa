@@ -156,7 +156,8 @@ const WORDMARK_LETTERS = [
 /**
  * UI/UX NUMA の wordmark。マークと同じ高さ 32 で描き、baseline（y 28）が揃う。句点は赤い点。
  * 座標の導出は experiments/uiux-numa-wordmark の README にある。名前は隣の見えない文字列が担う。
- * animated を付けると、字を 1 字ずつ引き、最後に句点を落とす（マークの入場と同じ曲線と落とし方）。
+ * animated を付けると、字を 1 字ずつ引き、最後に句点を落として波紋を広げる（マークの入場と同じ曲線と落とし方）。
+ * 波紋の輪は動きのためだけにあるので、animated のときだけ描く。
  */
 export function Wordmark({ animated = false }: { animated?: boolean }) {
   return (
@@ -175,6 +176,12 @@ export function Wordmark({ animated = false }: { animated?: boolean }) {
           style={{ "--i": index } as CSSProperties}
         />
       ))}
+      {animated && (
+        <>
+          <circle className="wordmark__ring" cx="216.5" cy="27.5" r="2.5" />
+          <circle className="wordmark__ring wordmark__ring--late" cx="216.5" cy="27.5" r="2.5" />
+        </>
+      )}
       <circle className="wordmark__dot" cx="216.5" cy="27.5" r="2.5" />
     </svg>
   );

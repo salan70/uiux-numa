@@ -348,7 +348,8 @@ body {
   fill: var(--cat-mark-dot);
 }
 
-.app-shell .logo-mark__ring {
+.app-shell .logo-mark__ring,
+.app-shell .wordmark__ring {
   fill: none;
   stroke: var(--cat-mark-dot);
   stroke-width: 0.6;
@@ -357,12 +358,13 @@ body {
 
 /* ホーム大見出しの入場。experiments/catalog-showreel の IDENTITY 場面と同じ順と時間で、
    字の線を引き、点を上から落として潰し、波紋を 2 つ広げる。
-   ホームは 1 回の閲覧で数回しか開かないので、見出しの語（900ms）より長い 1.7 秒を使う。
-   語の入場は待たせず同時に始め、読む内容を遅らせない。
+   ホームは 1 回の閲覧で数回しか開かないので、約 2 秒を使う。
+   隣の wordmark の句点と同じ時刻に点を落とし、2 つの波紋を揃える（下の wordmark の入場）。
    - 線: 800ms、cubic-bezier(0.65, 0, 0.35, 1)。画面上で線を引く動きなので ease-in-out にする。token には無いので局所値にする。
-   - 点: 570ms 待って 380ms で落ちる。線が引き終わる 230ms 前に落ち始め、着地と線の終わりを重ねる。
+   - 点: 900ms 待って 380ms で落ちる。句点は最後の A を引き終える前に落とすので、句点の時刻にマークの点を合わせる。
+     マークの線は 800ms で引き終わり、点は 100ms の間を置いて落ちる。
      落下は等加速度（inQuad）、着地で縦 1.5 倍から横 1.45 倍へ潰し、体積が保たれて見える比で戻す。
-   - 波紋: 着地の 830ms と 930ms に始め、800ms で 6 倍へ広げて消す。曲線は entrance の token にする。
+   - 波紋: 着地の 1160ms と 1260ms に始め、800ms で 6 倍へ広げて消す。曲線は entrance の token にする。
    点が viewBox の外から落ち、輪が外へ広がるので、この面だけ SVG のはみ出しを見せる。 */
 .app-shell .logo-mark--enter {
   overflow: visible;
@@ -376,18 +378,18 @@ body {
 .app-shell .logo-mark--enter .logo-mark__dot {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: logo-mark-drop 380ms 570ms linear both;
+  animation: logo-mark-drop 380ms 900ms linear both;
 }
 
 .app-shell .logo-mark--enter .logo-mark__ring {
   transform-box: fill-box;
   transform-origin: 50% 50%;
   /* 待つ間は from の輪を見せない。forwards にし、始まるまでは既定の opacity: 0 のままにする。 */
-  animation: logo-mark-ring 800ms 830ms var(--easing-entrance) forwards;
+  animation: logo-mark-ring 800ms 1160ms var(--easing-entrance) forwards;
 }
 
 .app-shell .logo-mark--enter .logo-mark__ring--late {
-  animation-delay: 930ms;
+  animation-delay: 1260ms;
 }
 
 @keyframes logo-mark-draw {
@@ -495,6 +497,19 @@ body {
   animation: logo-mark-drop 380ms 900ms linear both;
 }
 
+/* 句点の着地の波紋。マークと同じ輪を 2 つ、0.1 秒ずらして広げる。マークの点と同じ時刻に着地し、2 つの波紋が揃う。
+   着地は落下の 68%（logo-mark-drop）なので、900ms + 380ms × 0.68 ≈ 1160ms に始める。
+   待つ間は from の輪を見せないよう forwards にする（マークの輪と同じ）。 */
+.app-shell .wordmark--enter .wordmark__ring {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: logo-mark-ring 800ms 1160ms var(--easing-entrance) forwards;
+}
+
+.app-shell .wordmark--enter .wordmark__ring--late {
+  animation-delay: 1260ms;
+}
+
 @keyframes wordmark-draw {
   from {
     stroke-dashoffset: 1.02;
@@ -509,6 +524,10 @@ body {
   .app-shell .wordmark--enter .wordmark__dot {
     stroke-dasharray: none;
     animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
+  }
+
+  .app-shell .wordmark--enter .wordmark__ring {
+    display: none;
   }
 }
 
