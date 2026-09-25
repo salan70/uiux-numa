@@ -1,5 +1,5 @@
 /*
- * KeySync のロゴのモックのスタイル。LogoMock（1 案）と Overview（全案）が使う。
+ * KeySync のロゴのモックのスタイル。採用した 1 案の利用画面（LogoMock）が使う。
  * 色は Pop Toy 配色（color-schemes-material の pop-toy、makePalette の出力）から写す。
  * 寸法は KeySync の実値から写す（--size-logo 2.25rem、--size-logo-large 4rem、.logo の箱）。
  * マークは currentColor だけを持つ。多色版は part の class の末尾で塗り分ける。
@@ -230,75 +230,4 @@
   border-radius: 0.75rem;
   background: var(--ks-dark-surface);
   color: var(--ks-dark-ink);
-}
-
-/* 一覧面 */
-.ks-overview {
-  gap: 0.75rem;
-}
-
-.ks-overview__lead {
-  color: var(--ks-muted);
-  font-size: 0.875rem;
-}
-
-.ks-overview__head,
-.ks-overview__row {
-  display: grid;
-  grid-template-columns: 12rem 7rem 10rem 10rem 10rem 5rem;
-  align-items: center;
-  gap: 1rem;
-}
-
-.ks-overview__head {
-  color: var(--ks-muted);
-  font-size: 0.75rem;
-}
-
-.ks-overview__family {
-  margin-block: 1rem 0.25rem;
-  font-size: 1rem;
-}
-
-.ks-overview__row {
-  padding: 0.75rem;
-  border-radius: 1rem;
-  background: var(--ks-surface);
-  border: 1px solid var(--ks-line);
-}
-
-.ks-overview__name strong {
-  display: block;
-  font-size: 0.875rem;
-}
-
-.ks-overview__name small {
-  display: block;
-  color: var(--ks-muted);
-  font-size: 0.75rem;
-  line-height: 1.4;
-}
-
-.ks-overview__sizes {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ks-overview .ks-header {
-  padding: 0.5rem 0.75rem;
-}
-
-.ks-overview__cell {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  background: var(--ks-surface);
-  border: 1px solid var(--ks-line);
-}
-
-.ks-overview__cell.ks-dark {
-  border-color: transparent;
 }
