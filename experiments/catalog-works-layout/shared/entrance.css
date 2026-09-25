@@ -1,0 +1,22 @@
+/* 本文に直接描く見本。字の大きさは置き場ごとに --es-size で決める。
+   見出しの組みは catalog-screen-entrance の標本（.text-specimen__heading）と同じにする。 */
+.es {
+  display: grid;
+  gap: var(--space-300);
+  color: var(--color-on-surface);
+}
+
+.es__heading {
+  margin: 0;
+  font-family: var(--typography-title-font-family);
+  font-size: var(--es-size, 2.5rem);
+  font-weight: var(--typography-title-font-weight);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.es__lead {
+  margin: 0;
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}

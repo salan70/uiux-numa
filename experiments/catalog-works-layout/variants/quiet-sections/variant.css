@@ -1,0 +1,91 @@
+/* ---- Icons ---- */
+
+/* セルは罫を持たず、Card の枠と同じ面の色と角丸で置く。 */
+.qs-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: var(--space-200);
+}
+
+.qs-icon {
+  display: grid;
+  gap: var(--space-200);
+  justify-items: center;
+  align-content: center;
+  padding: var(--space-500) var(--space-300) var(--space-400);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+}
+
+.qs-icon__art {
+  display: grid;
+  place-items: center;
+}
+
+.qs-icon__art svg {
+  inline-size: 3rem;
+  block-size: 3rem;
+}
+
+/* 名前は SVG のファイル名だが、本文の書体で組む。等幅は Tokens の値だけに残す。 */
+.qs-icon__name {
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Motion ---- */
+
+/* 型は Card と同じく見本を上、文字を下に置き、横に並べて見比べる。 */
+.qs-patterns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: var(--space-600);
+}
+
+.qs-pattern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+}
+
+/* 見本の舞台。Icons のセルと同じ面と角丸にする。高さは型によらず揃え、再生で周りを動かさない。 */
+.qs-pattern__stage {
+  order: -1;
+  display: grid;
+  align-content: space-between;
+  justify-items: start;
+  gap: var(--space-400);
+  min-block-size: 15rem;
+  padding: var(--space-500);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-container);
+  --es-size: 2.25rem;
+}
+
+.qs-pattern__text {
+  display: grid;
+  gap: var(--space-100);
+}
+
+.qs-pattern__name {
+  font-size: var(--typography-body-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+}
+
+.qs-pattern__mark {
+  color: var(--color-primary-text);
+  font-size: var(--typography-caption-font-size);
+  font-weight: var(--font-weight-bold);
+}
+
+.qs-pattern__desc,
+.qs-pattern__axis {
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
