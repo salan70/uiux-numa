@@ -1,0 +1,186 @@
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/motion/index.css";
+
+/*
+ * wordmark のモック。色は Catalog の中立な shell（白の面に黒い文字）から写す。
+ * 字は currentColor、点（マークと wordmark の part-*-dot）だけ既定配色の secondary（深緋）にする。
+ * 動きはマークの Catalog 実装（apps/catalog/src/catalog.css の logo-mark--enter）と同じ曲線と時間を使う。
+ */
+.wm-mock {
+  --wm-bg: #f9f8f8;
+  --wm-text: #1f1f1f;
+  --wm-line: #e3dede;
+  --wm-dark: #1b1a1a;
+  --wm-dark-text: #f0f0f0;
+  --wm-dot: #c9171e;
+
+  display: grid;
+  gap: 2.5rem;
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--wm-bg);
+  color: var(--wm-text);
+  font-family: var(--typography-ui-font-family);
+}
+
+:where(.wm-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+.wm-mock .part-mark-dot,
+.wm-mock .part-wordmark-dot {
+  fill: var(--wm-dot);
+}
+
+/* マークと wordmark は同じ 32 の高さで描いてあり、baseline（y 28）が揃う。高さを 1 つ与えれば並ぶ。 */
+.wm-lockup {
+  --h: 1.25rem;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: calc(var(--h) * 0.3);
+}
+
+.wm-mark,
+.wm-wordmark {
+  display: block;
+  block-size: var(--h);
+}
+
+.wm-mark > svg,
+.wm-wordmark > svg {
+  display: block;
+  block-size: 100%;
+  inline-size: auto;
+  overflow: visible;
+}
+
+.wm-mark {
+  inline-size: var(--h);
+}
+
+/* サイドバー題字。幅 15rem、マークは 20px（catalog.css の .logo-mark）。 */
+.wm-sidebar {
+  inline-size: 15rem;
+  padding: 1rem;
+  border: 1px solid var(--wm-line);
+}
+
+/* ホーム大見出し。Catalog の display の大きさ clamp(2.625rem, 7vw, 6rem) を字の高さに使う。 */
+.wm-hero {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+
+.wm-hero .wm-lockup {
+  --h: clamp(2.625rem, 7vw, 6rem);
+}
+
+.wm-replay {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--wm-line);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.wm-sizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.wm-size .wm-wordmark {
+  block-size: var(--h);
+}
+
+.wm-dark {
+  padding: 2rem;
+  background: var(--wm-dark);
+  color: var(--wm-dark-text);
+}
+
+.wm-dark .wm-lockup {
+  --h: 3rem;
+}
+
+/* 入場。マークは Catalog と同じく 800ms で線を引き、wordmark は 150ms 後から 1 字 60ms ずつ 500ms で引く。
+   点は、点を持つ字（--dot-after）を引き終える 230ms 前に落とし始める。マークの点と線の重ね方と同じ。 */
+.wm-lockup--enter .wm-mark path,
+.wm-lockup--enter .wm-wordmark path {
+  stroke-dasharray: var(--len) calc(var(--len) * 2);
+  animation: wm-draw 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: calc(150ms + (var(--i) - 1) * 60ms);
+}
+
+.wm-lockup--enter .wm-mark path {
+  animation-duration: 800ms;
+  animation-delay: 0ms;
+}
+
+/* 始点を破線の境目にすると、長さ 0 の線に round cap が付いて点が残る。--start は長さに 0.5 を足した値で、空白の側から始める。
+   calc() で足すと Chrome が補間できず、字が途中で一度に現れた。JS で数値にして渡す。 */
+@keyframes wm-draw {
+  from {
+    stroke-dashoffset: var(--start);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.wm-lockup--enter .part-mark-dot,
+.wm-lockup--enter .part-wordmark-dot {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: wm-drop 380ms linear both;
+}
+
+.wm-lockup--enter .part-mark-dot {
+  animation-delay: 570ms;
+}
+
+.wm-lockup--enter .part-wordmark-dot {
+  animation-delay: calc(150ms + var(--dot-after) * 60ms + 270ms);
+}
+
+@keyframes wm-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.9, 1.15);
+    animation-timing-function: cubic-bezier(0.11, 0, 0.5, 0);
+  }
+  15% {
+    opacity: 1;
+  }
+  68% {
+    transform: translateY(0) scale(0.82, 1.5);
+    animation-timing-function: ease-out;
+  }
+  84% {
+    transform: scale(1.45, 0.65);
+    animation-timing-function: ease-in-out;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wm-lockup--enter .wm-mark path,
+  .wm-lockup--enter .wm-wordmark path,
+  .wm-lockup--enter .part-mark-dot,
+  .wm-lockup--enter .part-wordmark-dot {
+    stroke-dasharray: none;
+    animation: wm-fade var(--duration-state) var(--easing-standard) both;
+  }
+}
+
+@keyframes wm-fade {
+  from {
+    opacity: 0;
+  }
+}

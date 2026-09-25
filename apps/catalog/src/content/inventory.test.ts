@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(40);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(16);
     expect(catalog.schemes).toHaveLength(11);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(73);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(74);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(16);
-    expect(catalog.liveVariants).toHaveLength(38);
+    expect(catalog.experiments).toHaveLength(17);
+    expect(catalog.liveVariants).toHaveLength(39);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -79,6 +79,7 @@ describe("catalog inventory", () => {
       "cornix-workbench",
       "keysync-logo",
       "uiux-numa-logo",
+      "uiux-numa-wordmark",
     ]);
   });
 
@@ -148,6 +149,7 @@ describe("catalog inventory", () => {
       "keysync-logo/tilt-confetti",
       "product-ui-typography/line-seed-minimal",
       "uiux-numa-logo/nu-dot",
+      "uiux-numa-wordmark/caps-period",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
     expect(ids("exploring").every((id) => exploringSlugs().includes(id.split("/")[0]))).toBe(true);
