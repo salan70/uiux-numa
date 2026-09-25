@@ -1428,6 +1428,73 @@ body {
   gap: var(--cat-gap-lg);
 }
 
+/* 成果物の見出し。罫で切らず、題名と ⓘ の 1 行にする。Colors のカードの下の 1 行（名前と ⓘ）と同じ組み方。
+   日付、role、maturity は出さない（catalog-works-layout の quiet-sections）。
+   方針の画面は .work-head を使い続けるので、名前を分ける。 */
+.app-shell .topic-work-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-300);
+}
+
+.app-shell .topic-work-head__title {
+  min-inline-size: 0;
+  margin: 0;
+  font-size: var(--cat-item);
+  font-weight: 700;
+  line-height: var(--font-line-height-tight);
+}
+
+/* variant の切替。Button の secondary と同じ丸い輪郭にし、選択は文字色の塗りで示す。
+   primary で塗ると、sumi の暗い面では地と見分けられない。太さや幅を変えると、切り替えるたびに並びが動く。 */
+.app-shell .pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell .pill {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  min-block-size: var(--size-control-height-sm);
+  padding-inline: var(--space-400);
+  border: var(--border-width-thin) solid var(--cat-line-strong);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--cat-text);
+  font: inherit;
+  font-size: var(--typography-caption-font-size);
+  cursor: pointer;
+  transition:
+    color var(--cat-duration) var(--easing-standard),
+    background-color var(--cat-duration) var(--easing-standard),
+    border-color var(--cat-duration) var(--easing-standard);
+}
+
+.app-shell .pill[aria-pressed="true"] {
+  border-color: var(--cat-text);
+  background: var(--cat-text);
+  color: var(--cat-bg);
+}
+
+.app-shell .pill__mark {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-shell .pill:not([aria-pressed="true"]):hover {
+    background: var(--cat-surface);
+  }
+}
+
 .app-shell .work-head {
   display: flex;
   flex-wrap: wrap;
@@ -1465,60 +1532,6 @@ body {
   content: "／";
   margin-inline-end: var(--space-300);
   color: var(--cat-line-strong);
-}
-
-/* ---- 動き ---- */
-
-/* 型ごとに、左へ名前と説明、右へ live 標本を置く。Button の見本と同じ並べ方にし、読む順を揃える。
-   標本は見出しが大きく、説明より広い桁を取る。 */
-/* 型どうしの間は、成果物どうしの cat-block より狭くする。同じ成果物の型だと並びで分かるようにする。 */
-.app-shell .motion-patterns {
-  display: grid;
-  gap: var(--space-1000);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.app-shell .motion-pattern {
-  display: grid;
-  grid-template-columns: minmax(14rem, 1fr) minmax(0, 2fr);
-  align-items: start;
-  gap: var(--cat-gap-lg) var(--space-600);
-}
-
-.app-shell .motion-pattern__spec {
-  display: grid;
-  gap: var(--cat-gap);
-}
-
-.app-shell .motion-pattern__name {
-  margin: 0;
-  /* 型の名前は variant の id なので、variant の切替チップと同じ等幅で組む。 */
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: var(--cat-item);
-  font-weight: 700;
-}
-
-.app-shell .motion-pattern__desc {
-  margin: 0;
-}
-
-.app-shell .motion-pattern__axis {
-  margin: 0;
-  color: var(--cat-muted);
-  font-size: var(--cat-label);
-}
-
-.app-shell .motion-pattern .variants__mark {
-  margin: 0;
-}
-
-/* 狭い幅では説明を標本の上に積む。横に並べると標本の見出しが折り返し、行の単位の動きが崩れる。 */
-@media (width <= 60rem) {
-  .app-shell .motion-pattern {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 /* ---- 配色 ---- */
@@ -1726,30 +1739,30 @@ body {
 
 /* ---- SVG の格子 ---- */
 
-/* 罫は格子ではなく各セルに持たせる。
-   格子の側に罫を引くと、件数が列数に満たないときに空いたところまで線が伸びる。 */
+/* 面は格子ではなく各セルに持たせる。
+   格子の側に面を敷くと、件数が列数に満たないときに空いたところまで面が伸びる。 */
 .app-shell .svg-grid {
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
-  gap: var(--space-300);
+  gap: var(--space-200);
 }
 
 .app-shell .svg-grid--large {
   grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
 }
 
+/* セルは罫を持たず、Card の枠と同じ面の色と角丸で置く（catalog-works-layout の quiet-sections）。 */
 .app-shell .svg-cell {
   display: grid;
   gap: var(--space-200);
   justify-items: center;
   align-content: center;
-  padding: var(--space-500) var(--space-300);
-  border: var(--border-width-thin) solid var(--cat-line);
-  border-radius: var(--cat-radius);
-  background: var(--cat-bg);
+  padding: var(--space-500) var(--space-300) var(--space-400);
+  border-radius: var(--radius-surface);
+  background: var(--cat-surface);
   /* SVG は currentColor を使う。土台の文字色を渡す。 */
   color: var(--cat-text);
 }
@@ -1770,9 +1783,10 @@ body {
   max-block-size: 10rem;
 }
 
+/* 名前は SVG のファイル名だが、本文の書体で組む。等幅は Tokens の値だけに残す。 */
 .app-shell .svg-cell__name {
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-  font-size: 0.6875rem;
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
   color: var(--cat-muted);
   text-align: center;
   overflow-wrap: anywhere;
@@ -1999,7 +2013,8 @@ body {
     opacity: 1;
   }
 
-  .app-shell .palette__more:hover {
+  .app-shell .palette__more:hover,
+  .app-shell .work-more:hover {
     color: var(--cat-accent-text);
     border-color: var(--cat-accent-text);
   }
@@ -2054,8 +2069,10 @@ body {
   font-weight: 700;
 }
 
-/* 詳細は語ではなく印にする。カードの下の 1 行を色と名前だけに保つ。 */
-.app-shell .palette__more {
+/* 詳細は語ではなく印にする。カードの下の 1 行を色と名前だけに保つ。
+   Icons と Motion の成果物の見出し（.work-more）も同じ印にする。 */
+.app-shell .palette__more,
+.app-shell .work-more {
   appearance: none;
   display: inline-grid;
   place-items: center;

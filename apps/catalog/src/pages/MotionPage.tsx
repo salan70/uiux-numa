@@ -1,13 +1,12 @@
-import { ENTRANCE_VARIANT } from "../components/EntranceWords";
-import { LiveFrame } from "../components/LiveFrame";
+import { MotionTiles } from "../../../../experiments/catalog-works-layout/shared/MotionTiles";
 import { TopicScreen } from "../components/TopicScreen";
 import { WorkHead } from "../components/WorkHead";
 import { worksInTopic, type ExperimentRecord } from "../content/collect";
 
 /**
- * 動きの成果物。静止画では動きを判断できないので、一覧を挟まず live 標本を直接置く。
- * 1 つの成果物が型を複数持つので、切り替えずに縦に並べ、型ごとに説明を添える。
- * 切り替えにすると、見比べるたびに押し直して再生を待つことになる。
+ * 動きの成果物。Icons と同じ「面のセルに名前を添えた格子」で型を並べる（catalog-works-layout の motion-tiles）。
+ * 見本は iframe に入れず本文に直接描き、セルが画面に入ったら 1 回再生し、押すと再生し直す。
+ * iframe は読み込みの時点で再生が終わり、下にある見本はスクロールして届く前に止まっていた。
  */
 export function MotionPage() {
   const list = worksInTopic("motion");
@@ -32,23 +31,7 @@ function MotionWork({ work }: { work: ExperimentRecord }) {
   return (
     <div className="work">
       <WorkHead work={work} />
-      <ol className="motion-patterns">
-        {variants.map((variant) => (
-          <li className="motion-pattern" key={variant.id}>
-            <div className="motion-pattern__spec">
-              <h3 className="motion-pattern__name">{variant.id}</h3>
-              {/* 説明は README の Variants 表から読む。画面に同じ文を二重に書かない。 */}
-              <p className="motion-pattern__desc">{variant.hypothesis}</p>
-              <p className="motion-pattern__axis">{variant.axis}</p>
-              {ENTRANCE_VARIANT.experiment === work.slug &&
-                ENTRANCE_VARIANT.variant === variant.id && (
-                  <p className="variants__mark">Catalog の見出しで使用</p>
-                )}
-            </div>
-            <LiveFrame work={work} variant={variant.id} tall />
-          </li>
-        ))}
-      </ol>
+      <MotionTiles patterns={variants.map((variant) => variant.id)} />
     </div>
   );
 }

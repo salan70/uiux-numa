@@ -1,8 +1,5 @@
 import type { CSSProperties } from "react";
 
-/** Catalog の見出しに使う型。Motion 画面は、この値で「Catalog の見出し」の印を付ける。 */
-export const ENTRANCE_VARIANT = { experiment: "catalog-screen-entrance", variant: "blur-focus" };
-
 /**
  * 画面の見出しの文字。語ごとに span へ分け、catalog.css の entrance 系の動きで順に焦点を合わせて出す。
  * 採用した型は experiments/catalog-screen-entrance の blur-focus である。
