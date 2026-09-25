@@ -9,8 +9,8 @@ export function Overview({ candidates }: { candidates: Candidate[] }) {
   return (
     <div className="ks-mock ks-overview">
       <p className="ks-overview__lead">
-        KeySync のロゴ 第 2 世代。board-pop を基準に 1 軸ずつ変えた 7 案。左から 16 / 24 / 32px
-        の単色、ヘッダー（黄の箱）、多色の明暗、入口の大きさ。
+        KeySync のロゴ 第 3 世代。pop-tilt と pop-confetti を合わせた基準と、K と S を読ませる 3
+        案。左から 16 / 24 / 32px の単色、ヘッダー（黄の箱）、多色の明暗、入口の大きさ。
       </p>
       <div className="ks-overview__head" aria-hidden="true">
         <span>案</span>
