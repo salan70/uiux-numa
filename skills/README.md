@@ -2,7 +2,7 @@
 
 このディレクトリは UI/UX 固有 Skill の正本である。
 dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、ここと混ぜない。
-置き場の判断は [ADR](../docs/decisions/2026-09-18-uiux-skill-source-and-principles.md)、派生元との衝突の扱いは [Emil Skill 派生の ADR](../docs/decisions/2026-09-20-emil-skill-derivation.md) に残す。
+置き場の判断は [ADR](../docs/decisions/2026-09-18-uiux-skill-source-and-principles.md)、派生元との衝突の扱いは [Emil Skill 派生の ADR](../docs/decisions/2026-09-20-emil-skill-derivation.md) にある。
 
 | Skill                   | role     | maturity       | 用途                                                                |
 | ----------------------- | -------- | -------------- | ------------------------------------------------------------------- |
@@ -16,8 +16,7 @@ dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、ここと混
 
 ## 読み込み経路
 
-Claude Code は `.claude/skills/<name>` だけを読む。
-正本を動かさずに読ませるため、`.claude/skills/<name> -> ../../skills/<name>` の相対 symlink を git で管理する。
+Claude Code は `.claude/skills/<name>` だけを読むので、`.claude/skills/<name> -> ../../skills/<name>` の相対 symlink を git で管理する。
 Codex と Cursor は `.agents/skills -> ../.claude/skills` を経由して同じ Skill を読む。
 `syncing-ai-assets` は正本にない local Skill を変更しないため、symlink は同期で消えない。
 Skill から他の文書へは、リポジトリのルートからのパスを文字列で書く。symlink 経由では相対リンクの解決先がずれる。
@@ -29,5 +28,3 @@ Skill から他の文書へは、リポジトリのルートからのパスを�
 3. 上の表に行を足す。
 4. Experiment で使い、README に反復の記録と未解決の点を残す。落とし穴は `SKILL.md` に足す。
 5. 派生 Skill を上流に追従させるときは、記録済み commit との差分だけを読み、衝突表に反する手順は取り込まない。`SOURCE.md` の commit を更新する。
-
-Skill の有無による効果の比較は Experiment に記録する（`experiments/hako-feature-icons/`）。

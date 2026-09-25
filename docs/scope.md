@@ -1,8 +1,7 @@
 # 対象領域
 
-uiux-numa は UI の視覚表現だけを対象にしない。
-ユーザーがプロダクトを利用するときの体験を構成する要素を広く研究対象とする。
-この分類は固定的な区分ではなく、Experiment や知見を整理するための基準として使う。
+UI の視覚表現に限らず、プロダクトを利用するときの体験を構成する要素を対象にする。
+項目名を kebab-case にしたものが Experiment の frontmatter `domains` の語彙である。
 
 ## UI / Visual
 
@@ -57,8 +56,6 @@ uiux-numa は UI の視覚表現だけを対象にしない。
 - maintainability
 
 ## 中核領域
-
-次の 5 領域を中核として扱う。
 
 - UX Writing / Content Design
 - Information Architecture

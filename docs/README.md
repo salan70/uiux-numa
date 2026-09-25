@@ -24,11 +24,10 @@ ADR は次のどれかを変える判断だけに書く。
 - 記録形式（Experiment、Guideline、ADR、token）
 - token の階梯と値
 
-それ以外の判断は、対象の記録に書く。
-Experiment の判断は README の Decision と Rejected reasons、Guideline の改稿は commit message、Catalog の画面は `apps/catalog/README.md`、Skill の手順は `SKILL.md` に書く。
+それ以外は対象の記録に書く。
+Experiment は README の Decision と Rejected reasons、Guideline の改稿は commit message、Catalog の画面は `apps/catalog/README.md`、Skill の手順は `SKILL.md` に書く。
 どこでも却下した案と理由を残す。
 
 ファイル名は `YYYY-MM-DD-<slug>.md` にし、見出しに `状態`、`日付`、`参照` を置き、本文は背景、決定、却下した案、影響の 4 節にする。
 判断を変えるときは新しい ADR を書き、古い ADR の見出しに `置き換え先:` を足す。
 決定の過半が置き換わったら古い ADR の `状態` を `Superseded` にする。
-リンク切れの修正と `置き換え先:` の追記は本文の書き換えに当たらない。

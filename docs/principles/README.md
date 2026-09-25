@@ -33,8 +33,7 @@ updated: YYYY-MM-DD
 | `adopted`   | 人間が採用した。2 件以上の Experiment または別プロダクトで確認した |
 | `rejected`  | 人間が棄却した。理由を判断に書く                                   |
 
-Skill は `candidate` を「候補（未検証）」、`adopted` を採用済みとして参照する。
-`rejected` になったら Skill の参照を外す。
+Skill は `candidate` を未検証の仮説、`adopted` を採用済みとして参照し、`rejected` になったら参照を外す。
 
 ## 一覧
 

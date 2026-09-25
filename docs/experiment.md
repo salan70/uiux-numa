@@ -7,15 +7,15 @@
 ## 流れ
 
 1. Problem を書く。
-2. variant を実装する。見た目だけでなく、copy、情報構造、操作、motion、feedback も独立した variant にしてよい。
-3. 必要なら評価する。手順は [evaluation.md](evaluation.md) にある。評価せずに判断してもよい。
-4. 人間が判断し、Decision と Rejected reasons を書く。
-5. 判断後は却下 variant のコードと専用の preview を削除する。理由は README に残る。コードは Git 履歴で辿る。
+2. variant を実装する。copy、情報構造、操作、motion、feedback も独立した variant にしてよい。
+3. 必要なら [evaluation.md](evaluation.md) の手順で評価する。評価せずに判断してもよい。
+4. 人間が判断し、Decision と Rejected reasons を書く。エージェントは先に書かない。
+5. 判断後は却下 variant のコードと専用の preview を削除する。理由は README に残り、コードは Git 履歴で辿る。
 6. 一般化できる知見は Learnings に書き、仮説として育てるなら [原則候補](principles/README.md) に立てる。
 
 判断済みで後続の無い Experiment はディレクトリごと削除してよい。
-削除した Experiment を他の文書が出どころにしている場合は、削除前の commit への permalink で指す。
-Catalog の topic に当たらない Experiment は削除せず、載せないまま置く（[ADR](decisions/2026-09-22-unlisted-experiments.md)）。
+削除した Experiment を出どころにするリンクは、削除前の commit への permalink にする。
+Catalog の topic に当たらない Experiment は削除せず、載せないまま置く。
 
 ## ディレクトリ構成
 
@@ -35,11 +35,10 @@ experiments/<slug>/
     └── compare-<state>.png      # variant を横断する比較画像（任意）
 ```
 
-- `README.md` と `variants/` は必須にする。
 - `variants/<variant-id>/` に Markdown を置かない。説明と判断は README に集める。
-- Web の実行基盤（`platforms/web`）と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。README の Variants 表にある id には `index.tsx` が要る。
-- SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。`index.tsx` は `dist/` を利用画面のモックに埋め込む。多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。道具は [SVG toolchain の ADR](decisions/2026-09-18-svg-toolchain.md) に従う。
-- preview は README が根拠にするものだけを commit する。ファイル名は `<variant-id>-<state>.png` にし、`state` は variant 間で揃える。
+- `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。README の Variants 表にある id には `index.tsx` が要る。
+- SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。`index.tsx` は `dist/` を利用画面のモックに埋め込む。多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。
+- preview は README が根拠にするものだけを commit する。`state` は variant 間で揃える。
 
 ## slug と variant-id
 
@@ -48,7 +47,6 @@ experiments/<slug>/
 
 ## frontmatter
 
-一覧と絞り込みに使う項目だけを持つ。
 Catalog が読み、不正なら build が落ちる。
 
 ```yaml

@@ -2,7 +2,7 @@
 
 個人開発のプロダクト群に共通する UI/UX の指針を、主題ごとに `docs/guidelines/<slug>.md` に書く。
 Catalog が build 時に読み、書式が崩れていれば build が落ちる。
-雛形は [templates/guideline.md](templates/guideline.md)、見本は [states-and-feedback.md](guidelines/states-and-feedback.md) である。
+雛形は [templates/guideline.md](templates/guideline.md) にある。
 
 ## frontmatter
 
@@ -32,11 +32,10 @@ updated: YYYY-MM-DD
 
 ### コア
 
-`###` の見出しと本文 1〜3 文で書く。
-見出しは短い名詞句か短文にする。Tips がこの見出しで引く。
+`###` の見出しと本文 1〜3 文で書く。見出しは短い名詞句か短文にし、Tips がこの見出しで引く。
 本文は目指す状態を 1 文で書き、実際に衝突する判断があるときだけ「A より B を優先する」を 1 文足す。
 主題のすべての場面に当てはまる数値は本文に書いてよい。
-箇条書き、具体例、出典は書かない。書きたくなったら Tips へ送る。
+箇条書き、具体例、出典は Tips へ送る。
 
 ### Tips
 
@@ -74,7 +73,7 @@ updated: YYYY-MM-DD
 ## 機械検査
 
 解析器は `apps/catalog/src/content/guidelines.ts` にある。
-`nix develop -c just catalog-test` で解析器の単体テスト、`just catalog-build` で全文書の検証を行う。
+`just catalog-test` で解析器の単体テスト、`just catalog-build` で全文書の検証を行う。
 落ちる条件は、frontmatter の欠落、3 節以外の H2、コアか Tips が 0 件、Tips の必須項目の欠落、表に無い項目、`コア` の不一致、`実験` と `出典` がリンクでないこと、である。
 
 ## 文書を足す手順
