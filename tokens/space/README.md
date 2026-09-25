@@ -6,8 +6,7 @@
 
 ## 採用範囲
 
-primitive は 4px グリッドの階梯で、10 個である。
-名前は数値 index で、`space.100` が 4px を表す。
+primitive は 4px グリッドの階梯で、`space.100` が 4px を表す。
 
 | token        | 値       | px  |
 | ------------ | -------- | --- |
@@ -22,19 +21,13 @@ primitive は 4px グリッドの階梯で、10 個である。
 | `space.1000` | 2.5rem   | 40  |
 | `space.2000` | 5rem     | 80  |
 
-semantic は次の 2 個である。
-
-- `space.page-inline` はページ左右の余白である。`space.600` を参照する。
-- `space.section` は主要セクションの開始までの縦の間隔である。`space.1000` を参照する。
-
-合計は 12 個である。
+- `space.page-inline`: ページ左右の余白。`space.600` を参照する。
+- `space.section`: 主要セクションの開始までの縦の間隔。`space.1000` を参照する。
 
 ## 追加の規則
 
-- primitive は、公開 Catalog に実利用がある値だけを追加する。
-- 追加する値は 4px グリッドに乗せる。2px と 6px は細部の補正用である。
-- semantic は、役割名があるときだけ追加する。
-- 将来用の段は作らない。
+- primitive は公開 Catalog に実利用がある値だけを 4px グリッド上に追加する。2px と 6px は細部の補正用である。
+- semantic は役割名があるときだけ追加する。
 - padding は独立の token にせず、この階梯を参照する。
 
 判断は [階梯の ADR](../../docs/decisions/2026-09-21-token-scale-foundation.md) に残す。

@@ -13,8 +13,7 @@
 | `radius.md`   | 0.625rem | 10   | `radius.surface` | 操作部品を内包する面       |
 | `radius.full` | 9999px   | 9999 | `radius.pill`    | 端を半円にするボタン、chip |
 
-合計は 8 個である。
-CSS では semantic を使う。primitive は semantic の参照元である。
+CSS では semantic を使う。
 
 ## 使用規則
 
@@ -31,25 +30,18 @@ CSS では semantic を使う。primitive は semantic の参照元である。
 border-radius: max(0px, calc(var(--radius-surface) - var(--border-width-thin) - var(--space-100)));
 ```
 
-段の差は 4px で、`space.100` と一致する。
-padding が `space.100` なら、減算の結果は 1 段下の token と同じ値になる。
-
 ## `radius.full`
 
-`radius.full` は階梯の外の特別値である。
-寸法ではなく「端を半円にする」という形の指定として使う。
+`radius.full` は「端を半円にする」形の指定であり、階梯の外にある。
 
-- ブラウザは半径を短辺の半分で頭打ちにする。`9999px` は頭打ちを確実に起こすための値である。
-- 正方形に当てると円になる。横長に当てると両端が半円になる。
-- `50%` は使わない。横長の要素で楕円になる。
+- `50%` は使わない。
 - 減算式の対象にしない。内側の子にも `radius.pill` をそのまま当てる。
-- 段の差を space token に合わせる規則の対象にしない。
-- ボタンの既定は `radius.control` のままである。`radius.pill` は部品が明示して選ぶ。
+- ボタンの既定は `radius.control` で、`radius.pill` は部品が明示して選ぶ。
 
 ## 追加の規則
 
-- 追加する段は、隣の段との差が space token になる値に限る。`radius.full` は例外である。
-- 公開 Catalog に実利用がある値だけを追加する。`radius.full` は利用者の判断で先に追加した。
+- 追加する段は、隣の段との差が space token になる値に限る。
+- 公開 Catalog に実利用がある値だけを追加する。
 - 半径を高さの比率や黄金比で決めない。
 
 判断と根拠は [階梯の ADR](../../docs/decisions/2026-09-21-token-scale-foundation.md) に残す。

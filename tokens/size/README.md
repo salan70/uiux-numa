@@ -16,14 +16,13 @@
 | `size.control-min-width.lg` | 7.5rem | 120 | 操作部品の最小幅。大         |
 | `size.target-min`           | 1.5rem | 24  | ポインタで押す対象の最小の辺 |
 
-合計は 7 個である。
-値が役割と 1 対 1 なので、primitive と semantic を分けない。
+primitive と semantic を分けない。
 
 ## 使用規則
 
 - 高さは `min-height` に当てる。上下の padding で高さを作らない。
 - 左右の余白は space token から引く。size には padding を持たせない。
-- 面と余白を持たない操作部品(文字だけのボタンなど)にも `size.target-min` を当て、当たり領域を 24px 以上にする。
+- 文字だけのボタンなど面を持たない操作部品にも `size.target-min` を当てる。
 - Catalog の `--cat-tap` は `size.control-height.md` を参照する。
 
 ## 追加の規則
