@@ -1,4 +1,4 @@
-// 第 1 世代の全案を 1 ページに並べる一覧面。系統を選ぶための面で、採用後に削除する。
+// 候補を 1 ページに並べる一覧面。比べる候補がなくなったら削除する。
 // 1 行 = 1 案。単色の縮小列、黄の箱に入れたヘッダー、多色の明暗、入口の大きさを同じ条件で並べる。
 import { Mark } from "./Mark";
 
@@ -9,7 +9,7 @@ export function Overview({ candidates }: { candidates: Candidate[] }) {
   return (
     <div className="ks-mock ks-overview">
       <p className="ks-overview__lead">
-        KeySync のロゴ 第 1 世代。系統ごとに 2〜3 案。左から 16 / 24 / 32px
+        KeySync のロゴ 第 2 世代。board-pop を基準に 1 軸ずつ変えた 7 案。左から 16 / 24 / 32px
         の単色、ヘッダー（黄の箱）、多色の明暗、入口の大きさ。
       </p>
       <div className="ks-overview__head" aria-hidden="true">

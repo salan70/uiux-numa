@@ -4,7 +4,7 @@ import "../../shared/mock.css";
 import "../../../../tokens/typography/index.css";
 import "../../typography.css";
 
-// 第 1 世代の 10 案を同じ条件で並べる一覧面。系統を選んだ後に削除する。
+// 候補を同じ条件で並べる一覧面。採用後に削除する。
 export default function Variant() {
   return <Overview candidates={candidates} />;
 }

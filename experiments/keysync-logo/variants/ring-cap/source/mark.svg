@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-  <title>KeySync</title>
-  <path id="part-mark-cap-accent" fill="currentColor" fill-rule="evenodd" d="M14 11 H18 A3 3 0 0 1 21 14 V18 A3 3 0 0 1 18 21 H14 A3 3 0 0 1 11 18 V14 A3 3 0 0 1 14 11 Z"/>
-  <path id="part-mark-top-accent-2" fill="none" stroke="currentColor" d="M5.66 14.18 A10.5 10.5 0 0 1 23.8 8.97"/>
-  <path id="part-mark-top-head-accent-2" fill="currentColor" fill-rule="evenodd" d="M25.81 11.2 L26.03 6.97 L21.57 10.98 Z"/>
-  <path id="part-mark-bottom-accent-3" fill="none" stroke="currentColor" d="M26.34 17.82 A10.5 10.5 0 0 1 8.2 23.03"/>
-  <path id="part-mark-bottom-head-accent-3" fill="currentColor" fill-rule="evenodd" d="M6.19 20.8 L5.97 25.03 L10.43 21.02 Z"/>
-</svg>
