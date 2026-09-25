@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(15);
-    expect(catalog.liveVariants).toHaveLength(37);
+    expect(catalog.experiments).toHaveLength(16);
+    expect(catalog.liveVariants).toHaveLength(38);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -70,7 +70,7 @@ describe("catalog inventory", () => {
       "hako-feature-icons",
     ]);
     expect(slugs("components")).toEqual(["button", "card"]);
-    expect(slugs("motion")).toEqual(["catalog-screen-entrance"]);
+    expect(slugs("motion")).toEqual(["catalog-screen-entrance", "catalog-showreel"]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
     expect(unlisted()).toEqual([

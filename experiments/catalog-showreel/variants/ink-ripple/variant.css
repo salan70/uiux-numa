@@ -1,0 +1,106 @@
+@import "../../../../tokens/space/index.css";
+@import "../../../../tokens/radius/index.css";
+@import "../../../../tokens/border/index.css";
+@import "../../../../tokens/typography/index.css";
+@import "../../../../tokens/size/index.css";
+@import "../../../../tokens/motion/index.css";
+
+:where(.reel) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+/* 単体表示の代替配色。Catalog の中では useCatalogColors が選択中の配色で上書きする。
+   映像の中の色は reel.ts が固定で持ち、ここでは映像の外側（余白と操作）だけを配色に合わせる。 */
+.reel {
+  --color-background: #f9f8f8;
+  --color-on-surface: #1f1f1f;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #525252;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-300);
+  min-height: 100vh;
+  padding: var(--space-400);
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  color-scheme: light dark;
+  font-family: var(--typography-ui-font-family);
+}
+
+@media (prefers-color-scheme: dark) {
+  .reel:not([data-theme="light"]) {
+    --color-background: #1b1a1a;
+    --color-on-surface: #f0f0f0;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8b8b;
+    --color-focus: #eb6101;
+  }
+}
+
+.reel :focus-visible {
+  outline: var(--border-width-thick) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 16:9 を保ち、幅と高さのどちらにも収める。上下の余白、間隔、操作の行の合計（約 8rem）と実行基盤の余白を高さから差し引く。 */
+.reel__screen {
+  position: relative;
+  inline-size: min(100%, calc((100vh - 9rem) * 16 / 9));
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-surface);
+  background: #0f0e0d;
+}
+
+/* canvas は枠へ絶対配置する。流し込むと、画素数から決まる固有の大きさが枠の高さを押し広げ、
+   その高さから画素数を決め直す循環になる。 */
+.reel__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.reel__controls {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-300);
+  inline-size: min(100%, calc((100vh - 9rem) * 16 / 9));
+}
+
+.reel__button {
+  min-inline-size: 6.5rem;
+  min-block-size: var(--size-control-height-md);
+  padding-inline: var(--space-400);
+  border: var(--border-width-thin) solid var(--color-outline);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--duration-state) var(--easing-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .reel__button:hover {
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+}
+
+.reel__seek {
+  flex: 1;
+  min-inline-size: 0;
+  accent-color: var(--color-on-surface);
+}
+
+.reel__time {
+  color: var(--color-on-surface-variant);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
