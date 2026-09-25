@@ -10,7 +10,6 @@
 | Knowledge | 実験から得た知見を整理する                 | `docs/`              |
 | Assets    | 他プロジェクトで組み合わせて使う成果       | `skills/`、`tokens/` |
 
-- Experiment の進め方と記録形式は [experiment.md](experiment.md) に定める。
 - Knowledge は [guidelines/](guidelines/README.md)（主題ごとの規則）、[principles/](principles/README.md)（検証中の仮説）、[decisions/](decisions/)（リポジトリの設計判断）で持つ。
 - token の正本は `tokens/` の DTCG JSON で、`just tokens-build` で CSS を生成する。
 - UI/UX 固有の Skill の正本は `skills/` で、読み込み経路は [skills/README.md](../skills/README.md) にある。
@@ -18,9 +17,8 @@
 ## role と maturity
 
 Experiment、token、Skill は `role` と `maturity` を独立に持つ。
-置き場や status とは別の軸である。
 Experiment は README の frontmatter、token は DTCG JSON の `$extensions.uiux-numa`、Skill は `skills/README.md` の表に書く。
-Catalog がこれを読み、値が表に無ければ build が落ちる。
+Catalog が読み、値が表に無ければ build が落ちる。
 
 | role         | 意味                                             |
 | ------------ | ------------------------------------------------ |
@@ -35,13 +33,11 @@ Catalog がこれを読み、値が表に無ければ build が落ちる。
 | `stable`       | 十分に検証され、再利用できる |
 | `deprecated`   | 新規利用を推奨しない         |
 
-`stable` は人間が判断して付ける。
-Experiment の `status` や `adopted` から自動では進めない。
-判断は [Asset composition model の ADR](decisions/2026-09-20-asset-composition-model.md) に残す。
+`stable` は人間が判断して付ける。Experiment の `status` や `adopted` から自動では進めない。
 
 ## Catalog
 
 Catalog（`apps/catalog/`）は成果物の visual showcase であり、仕様書や正本ではない。
 `experiments/`、`tokens/`、`docs/guidelines/` を glob で読み、Catalog 固有の説明を正本に足さない。
 topic に当たらない Experiment は載せない。
-責務の判断は [visual showcase の ADR](decisions/2026-09-20-catalog-visual-showcase.md)、表示層は [topic-first の ADR](decisions/2026-09-20-catalog-topic-first.md)、画面の個別判断は [apps/catalog/README.md](../apps/catalog/README.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) にある。
+画面の個別判断は [apps/catalog/README.md](../apps/catalog/README.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) にある。
