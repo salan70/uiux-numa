@@ -147,7 +147,7 @@ describe("catalog inventory", () => {
       "cornix-workbench/board-desk",
       "keysync-logo/tilt-confetti",
       "product-ui-typography/line-seed-minimal",
-      "uiux-numa-logo/nu-round",
+      "uiux-numa-logo/nu-dot",
     ]);
     // status が decided 以外の Experiment の variant はすべて exploring になる。
     expect(ids("exploring").every((id) => exploringSlugs().includes(id.split("/")[0]))).toBe(true);

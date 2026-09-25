@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- UI/UX NUMA のマーク。形の正本は experiments/uiux-numa-logo/variants/nu-round/dist/mark.svg。 -->
+  <!-- UI/UX NUMA のマーク。形の正本は experiments/uiux-numa-logo/variants/nu-dot/dist/mark.svg。 -->
   <!-- タブには利用画面の CSS が届かないので、currentColor の代わりに明暗の色をここへ書く。 -->
-  <!-- 色は Catalog の本文色 cat-text の既定値 #1f1f1f と、その反転 #e0e0e0 である。 -->
+  <!-- 字の色は Catalog の本文色 cat-text の既定値 #1f1f1f と、その反転 #e0e0e0 である。 -->
+  <!-- 点は既定配色の secondary #c9171e で、明暗で変えない。16px では色の差が点と脚を分ける。 -->
   <style>path{stroke:#1f1f1f}@media (prefers-color-scheme:dark){path{stroke:#e0e0e0}}</style>
-  <path fill="none" stroke-linecap="round" stroke-width="4" d="M6 26V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V6"/>
+  <path fill="none" stroke-linecap="round" stroke-width="4" d="M6 28V14a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V8"/>
+  <circle cx="26" cy="2.5" r="2.5" fill="#c9171e"/>
 </svg>
