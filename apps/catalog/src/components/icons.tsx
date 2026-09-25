@@ -107,14 +107,33 @@ export function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
 }
 
 /**
- * UI/UX NUMA のマーク。n と u を 1 本の線でつないだ nu。題字と見出しで字の前に置く。
- * 形の正本は experiments/uiux-numa-logo/variants/nu-round/dist/mark.svg。
+ * UI/UX NUMA のマーク。n と u を 1 本の線でつないだ nu と、右の脚の上の点。題字と見出しで字の前に置く。
+ * 形の正本は experiments/uiux-numa-logo/variants/nu-dot/dist/mark.svg。
  * 座標の導出は同 Experiment の README にある。字の横に置く飾りなので、名前は隣の文字列が担う。
+ * animated を付けると、線を引いてから点を落とす（experiments/catalog-showreel の IDENTITY 場面と同じ順）。
+ * 波紋の輪は動きのためだけにあるので、animated のときだけ描く。
  */
-export function LogoMark() {
+export function LogoMark({ animated = false }: { animated?: boolean }) {
   return (
-    <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <path d="M6 26V12a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V6" />
+    <svg
+      className={animated ? "logo-mark logo-mark--enter" : "logo-mark"}
+      viewBox="0 0 32 32"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {/* pathLength を 1 にし、線を引く動きの破線を線の長さに依らず 0..1 で書く。 */}
+      <path
+        className="logo-mark__letter"
+        pathLength={1}
+        d="M6 28V14a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V8"
+      />
+      {animated && (
+        <>
+          <circle className="logo-mark__ring" cx="26" cy="2.5" r="2.5" />
+          <circle className="logo-mark__ring logo-mark__ring--late" cx="26" cy="2.5" r="2.5" />
+        </>
+      )}
+      <circle className="logo-mark__dot" cx="26" cy="2.5" r="2.5" />
     </svg>
   );
 }

@@ -119,6 +119,9 @@ body {
      「その配色の色」と「良し悪し」が同じ色で出て読み分けられない。 */
   --cat-good: var(--color-success, #0b6f3a);
   --cat-bad: var(--color-error, #9d1d0c);
+  /* マークの点。配色の secondary にし、配色を切り替えると点も変わる。
+     字と同じ色だと 16〜20px で点が脚とつながり、脚が伸びたように見える（experiments/uiux-numa-logo の round 8）。 */
+  --cat-mark-dot: var(--color-secondary, #c9171e);
 
   /* 文字。役割の token をそのまま使い、画面ごとの寸法を持たない。
      number と display だけは token にない大きさなので、
@@ -331,10 +334,116 @@ body {
   flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
+}
+
+.app-shell .logo-mark__letter {
   fill: none;
   stroke: currentColor;
   stroke-width: 4;
   stroke-linecap: round;
+}
+
+.app-shell .logo-mark__dot {
+  fill: var(--cat-mark-dot);
+}
+
+.app-shell .logo-mark__ring {
+  fill: none;
+  stroke: var(--cat-mark-dot);
+  stroke-width: 0.6;
+  opacity: 0;
+}
+
+/* ホーム大見出しの入場。experiments/catalog-showreel の IDENTITY 場面と同じ順と時間で、
+   字の線を引き、点を上から落として潰し、波紋を 2 つ広げる。
+   ホームは 1 回の閲覧で数回しか開かないので、見出しの語（900ms）より長い 1.7 秒を使う。
+   語の入場は待たせず同時に始め、読む内容を遅らせない。
+   - 線: 800ms、cubic-bezier(0.65, 0, 0.35, 1)。画面上で線を引く動きなので ease-in-out にする。token には無いので局所値にする。
+   - 点: 570ms 待って 380ms で落ちる。線が引き終わる 230ms 前に落ち始め、着地と線の終わりを重ねる。
+     落下は等加速度（inQuad）、着地で縦 1.5 倍から横 1.45 倍へ潰し、体積が保たれて見える比で戻す。
+   - 波紋: 着地の 830ms と 930ms に始め、800ms で 6 倍へ広げて消す。曲線は entrance の token にする。
+   点が viewBox の外から落ち、輪が外へ広がるので、この面だけ SVG のはみ出しを見せる。 */
+.app-shell .logo-mark--enter {
+  overflow: visible;
+}
+
+.app-shell .logo-mark--enter .logo-mark__letter {
+  stroke-dasharray: 1 2;
+  animation: logo-mark-draw 800ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.app-shell .logo-mark--enter .logo-mark__dot {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: logo-mark-drop 380ms 570ms linear both;
+}
+
+.app-shell .logo-mark--enter .logo-mark__ring {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  /* 待つ間は from の輪を見せない。forwards にし、始まるまでは既定の opacity: 0 のままにする。 */
+  animation: logo-mark-ring 800ms 830ms var(--easing-entrance) forwards;
+}
+
+.app-shell .logo-mark--enter .logo-mark__ring--late {
+  animation-delay: 930ms;
+}
+
+@keyframes logo-mark-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 68% までが落下、そこから潰れて戻る。区間ごとに曲線を変え、落下だけ加速させる。 */
+@keyframes logo-mark-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.9, 1.15);
+    animation-timing-function: cubic-bezier(0.11, 0, 0.5, 0);
+  }
+  15% {
+    opacity: 1;
+  }
+  68% {
+    transform: translateY(0) scale(0.82, 1.5);
+    animation-timing-function: ease-out;
+  }
+  84% {
+    transform: scale(1.45, 0.65);
+    animation-timing-function: ease-in-out;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes logo-mark-ring {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(6);
+  }
+}
+
+/* 減らす設定では線を引かず、点を落とさず、輪を出さない。語と同じく透明度の変化だけを残す。 */
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .logo-mark--enter .logo-mark__letter,
+  .app-shell .logo-mark--enter .logo-mark__dot {
+    stroke-dasharray: none;
+    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
+  }
+
+  .app-shell .logo-mark--enter .logo-mark__ring {
+    display: none;
+  }
 }
 
 /* 大文字の高さに対して正方のマークは大きく見えるので 0.78em に落とす。 */

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- nu-round の字をそのまま下へ 2 平行移動し、右の脚の上に点を置く。形の由来は experiments/catalog-showreel の IDENTITY 場面である。 -->
+  <!-- 字の骨格、半径、字画 4、round cap は nu-round と同じ。平行移動なので偶数の格子も保つ。 -->
+  <!-- 点の半径 2.5 は字画の半分 2 の 1.25 倍。リールの 1.3 倍を、32 角に収まる値へ丸めた。字画より少し太く、切れ端ではなく点に読める。 -->
+  <!-- 点と脚の端の隙間 1 はリールと同じ。脚の端（cap の外縁）は y 6 なので、点の中心は 6 − 1 − 2.5 = 2.5、上端は 0 になる。 -->
+  <!-- 色は利用画面の CSS が part-mark-dot に与える。単体表示では currentColor で字と同じ色になる。 -->
+  <path id="part-mark-letter" d="M6 28V14a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <circle id="part-mark-dot" cx="26" cy="2.5" r="2.5" fill="currentColor"/>
+</svg>

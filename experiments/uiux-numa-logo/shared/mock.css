@@ -2,7 +2,8 @@
  * UI/UX NUMA のロゴのモックのスタイル。採用した 1 案の利用画面（LogoMock）が使う。
  * 色は Catalog の中立な shell（白の面に黒い文字）から写す。マークの評価に配色を混ぜない。
  * 寸法と字の指定は apps/catalog/src/catalog.css の実値から写す。
- * マークは currentColor だけを使う。形の評価に色を混ぜない。
+ * 字は currentColor、点（part-mark-dot）だけ Catalog の既定配色の secondary（深緋）にする。
+ * 16px では単色の点が脚とつながって見え、色の差で点を分ける（README の round 8）。
  */
 
 .lg-mock {
@@ -13,6 +14,7 @@
   --lg-line: #e3dede;
   --lg-ink-dark: #1b1a1a;
   --lg-ink-light: #fffdf9;
+  --lg-dot: #c9171e;
 
   min-height: 100vh;
   padding: 2rem;
@@ -43,6 +45,10 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
+}
+
+.lg-mock .part-mark-dot {
+  fill: var(--lg-dot);
 }
 
 .lg-mock .lg-mark--16 {

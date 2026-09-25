@@ -36,8 +36,8 @@ export function HomePage() {
     <>
       <section className="home-hero" aria-labelledby="home-title">
         <h1 className="home-hero__title" id="home-title" tabIndex={-1} data-screen-heading>
-          {/* ロゴは動かさない。語が焦点を合わせる間も、サイトの印が先に据わっていると画面の起点が定まる。 */}
-          <LogoMark />
+          {/* マークは線を引いて点を落とす。語の入場と同時に始め、語を待たせない。判断は apps/catalog/README.md にある。 */}
+          <LogoMark animated />
           <EntranceWords text={SITE_TITLE} />
         </h1>
         <MarqueeRows tiles={galleryTiles()} />
