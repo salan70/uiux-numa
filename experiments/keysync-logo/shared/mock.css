@@ -1,0 +1,304 @@
+/*
+ * KeySync のロゴのモックのスタイル。LogoMock（1 案）と Overview（全案）が使う。
+ * 色は Pop Toy 配色（color-schemes-material の pop-toy、makePalette の出力）から写す。
+ * 寸法は KeySync の実値から写す（--size-logo 2.25rem、--size-logo-large 4rem、.logo の箱）。
+ * マークは currentColor だけを持つ。多色版は part の class の末尾で塗り分ける。
+ *   -accent: 黄（primary）、-accent-2: 青（secondary）、-accent-3: 赤橙（tertiary）
+ */
+
+.ks-mock {
+  --ks-surface: #fefefe;
+  --ks-bg: #f6f6f5;
+  --ks-ink: #1f1f1f;
+  --ks-muted: #555;
+  --ks-line: #e3e3e1;
+  --ks-dark-surface: #252726;
+  --ks-dark-ink: #f0f0f0;
+  --ks-yellow: #fac400;
+  --ks-on-yellow: #120d09;
+  --ks-blue: #4078e0;
+  --ks-coral: #f37252;
+  --ks-key-shadow: rgb(18 13 9 / 0.28);
+
+  min-height: 100vh;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  align-content: start;
+  background: var(--ks-bg);
+  color: var(--ks-ink);
+  font-feature-settings: "palt";
+}
+
+:where(.ks-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.ks-mock) :where(p, h1, h2) {
+  margin: 0;
+}
+
+/* マークの寸法は利用画面が持つ。SVG 側は形だけを持つ。 */
+.ks-mock .ks-mark {
+  display: inline-flex;
+  flex: none;
+  color: currentColor;
+}
+
+.ks-mock .ks-mark > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.ks-mock .ks-mark--16 {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.ks-mock .ks-mark--24 {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.ks-mock .ks-mark--28 {
+  inline-size: 28px;
+  block-size: 28px;
+}
+
+.ks-mock .ks-mark--32 {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+.ks-mock .ks-mark--48 {
+  inline-size: 48px;
+  block-size: 48px;
+}
+
+.ks-mock .ks-mark--64 {
+  inline-size: 64px;
+  block-size: 64px;
+}
+
+/* 多色版。塗りの part は fill、線の part は stroke を塗る。 */
+.ks-mock .ks-multi [class$="-accent"]:not([fill="none"]) {
+  fill: var(--ks-yellow);
+}
+
+.ks-mock .ks-multi [class$="-accent"][fill="none"] {
+  stroke: var(--ks-yellow);
+}
+
+.ks-mock .ks-multi [class$="-accent-2"]:not([fill="none"]) {
+  fill: var(--ks-blue);
+}
+
+.ks-mock .ks-multi [class$="-accent-2"][fill="none"] {
+  stroke: var(--ks-blue);
+}
+
+.ks-mock .ks-multi [class$="-accent-3"]:not([fill="none"]) {
+  fill: var(--ks-coral);
+}
+
+.ks-mock .ks-multi [class$="-accent-3"][fill="none"] {
+  stroke: var(--ks-coral);
+}
+
+.ks-mock .ks-dark {
+  background: var(--ks-dark-surface);
+  color: var(--ks-dark-ink);
+}
+
+/* KeySync の .logo と同じ箱。黄の面に下辺の影でキーキャップに見せる。マークは箱の 2/3 に置く。 */
+.ks-mock .ks-logo {
+  display: grid;
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  place-items: center;
+  border-radius: 0.5rem;
+  background: var(--ks-yellow);
+  box-shadow: inset 0 -3px 0 var(--ks-key-shadow);
+  color: var(--ks-on-yellow);
+}
+
+.ks-mock .ks-logo > .ks-mark {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.ks-mock .ks-logo--large {
+  inline-size: 4rem;
+  block-size: 4rem;
+  border-radius: 1rem;
+}
+
+.ks-mock .ks-logo--large > .ks-mark {
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+}
+
+/* 1. タブ */
+.ks-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 15rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-line);
+  border-block-end: 0;
+  font-size: 0.75rem;
+}
+
+.ks-tab__close {
+  margin-inline-start: auto;
+  color: var(--ks-muted);
+}
+
+/* 2. ヘッダー */
+.ks-headers,
+.ks-gates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ks-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-line);
+}
+
+.ks-header strong {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.ks-header small {
+  display: block;
+  color: var(--ks-muted);
+  font-size: 0.75rem;
+}
+
+/* 3. 入口 */
+.ks-gate {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  inline-size: 16rem;
+  padding: 2rem 1.5rem;
+  border-radius: 1.75rem;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-line);
+}
+
+.ks-gate h1 {
+  font-size: 1.25rem;
+}
+
+.ks-gate.ks-dark {
+  border-color: transparent;
+}
+
+/* 4. 縮小列 */
+.ks-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ks-sizes__label {
+  color: var(--ks-muted);
+  font-size: 0.75rem;
+}
+
+.ks-sizes__dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--ks-dark-surface);
+  color: var(--ks-dark-ink);
+}
+
+/* 一覧面 */
+.ks-overview {
+  gap: 0.75rem;
+}
+
+.ks-overview__lead {
+  color: var(--ks-muted);
+  font-size: 0.875rem;
+}
+
+.ks-overview__head,
+.ks-overview__row {
+  display: grid;
+  grid-template-columns: 12rem 7rem 10rem 10rem 10rem 5rem;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ks-overview__head {
+  color: var(--ks-muted);
+  font-size: 0.75rem;
+}
+
+.ks-overview__family {
+  margin-block: 1rem 0.25rem;
+  font-size: 1rem;
+}
+
+.ks-overview__row {
+  padding: 0.75rem;
+  border-radius: 1rem;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-line);
+}
+
+.ks-overview__name strong {
+  display: block;
+  font-size: 0.875rem;
+}
+
+.ks-overview__name small {
+  display: block;
+  color: var(--ks-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.ks-overview__sizes {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ks-overview .ks-header {
+  padding: 0.5rem 0.75rem;
+}
+
+.ks-overview__cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  background: var(--ks-surface);
+  border: 1px solid var(--ks-line);
+}
+
+.ks-overview__cell.ks-dark {
+  border-color: transparent;
+}
