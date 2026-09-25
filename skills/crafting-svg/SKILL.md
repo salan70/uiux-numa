@@ -5,81 +5,68 @@ description: SVG のアイコン、ロゴ、イラストを要求文から制作
 
 # SVG の制作
 
-要求文から、編集用の原本、配布用の SVG、preview を作り、単体と利用画面内で確認する。
-機械検査は構文、対応範囲、明示された制約だけを扱う。造形の良し悪しは描画した画像を読んで判断し、採用は人間が決める。
-コマンドはすべて `just` の recipe で、direnv 済みシェルか `nix develop -c just <recipe>` で実行する。
+編集用の原本、配布用の SVG、preview を作り、単体と利用画面内で確認する。
+造形の良し悪しは描画した画像を読んで判断し、採用は人間が決める。
+コマンドは `just` の recipe で、direnv 済みシェルか `nix develop -c just <recipe>` で実行する。
 
 ## 参照資料
 
-必要な資料だけを読む。改善の記録とレビューでは、根拠にした項目を ID（例: `ICON-06`）で引用する。
+パスはリポジトリのルートからのものである。
+記録とレビューでは、根拠にした項目を ID（例: `ICON-06`）で引用する。
 
-- `skills/crafting-svg/references/foundations.md`: 共通の造形（視覚的な中心、見かけの重さ、簡略化、曲線）
-- `skills/crafting-svg/references/icon.md`: アイコン（比喩、グリッド、線幅、端点、隙間、サイズ別の版）
-- `skills/crafting-svg/references/logo.md`: ロゴ（独自性、lockup、単色と縮小、safe zone）
-- `skills/crafting-svg/references/illustration.md`: イラスト（文言との役割分担、焦点、明暗、統一）
-- `skills/crafting-svg/references/ui-fit.md`: UI への適合とアクセシビリティ（名前、コントラスト、主従、currentColor）
-- `skills/crafting-svg/references/svg-authoring.md`: 記述規約（対応範囲、part-* の id、座標、SVGO と resvg の落とし穴）
+- `skills/crafting-svg/references/foundations.md`: 共通の造形の ID と、このリポジトリで採った値
+- `skills/crafting-svg/references/icon.md`: アイコンの ID と採った値
+- `skills/crafting-svg/references/logo.md`: ロゴの ID
+- `skills/crafting-svg/references/illustration.md`: イラストの ID
+- `skills/crafting-svg/references/ui-fit.md`: 利用画面と支援技術への適合の ID
+- `skills/crafting-svg/references/svg-authoring.md`: 記述規約、SVGO と resvg の制約、埋め込み方
 - `skills/crafting-svg/references/self-review.md`: 自己確認の項目、記録の形式、終了条件
-- `docs/principles/`: 独自の原則候補。status が `candidate` のものは未検証の仮説として扱い、`adopted` だけを採用済みとして参照する
-
-パスはすべてリポジトリのルートからのものである。
+- `docs/principles/`: 原則候補。`candidate` は未検証の仮説、`adopted` だけを採用済みとして参照する
 
 ## 手順
 
 ### 1. 要求を整理する
 
-要求文と、任意の参照画像や既存 SVG を入力にする。次の項目を埋め、不足があって判断が変わる場合だけ確認する。
+- 成果物の種類と個数、利用画面での役割、実利用サイズと最小サイズ、制約（viewBox、単色か多色か、既存の組）、目指す印象を確定する。
+- 不足があって判断が変わる場合だけ依頼者に確認する。
+- プロダクト固有の制約は Experiment の README の Constraints に置く。Skill には書かない。
+- ロゴ、挿絵、キーヴィジュアルなどブランドを表す成果物では、比喩と目指す印象を制作前に依頼者と決める。テーマだけから比喩を自分で選ぶと外れる（削除済み Experiment `class-doc-logo`、`class-chapter-illustration`）。参照を受け取るか、比喩の候補を軽い下書きで見せて選んでもらう。
+- 印象が定まっていなければ、方向の異なる案を作って選んでもらう。
 
-- 成果物の種類: アイコン、ロゴ、イラストのどれか。個数と組の関係
-- 利用画面での役割: どの画面のどこに置くか。周囲の文字、面、余白
-- 表示サイズ: 実利用のサイズと、最小サイズ
-- 制約: viewBox、単色か多色か、配色の役割、既存の組との整合、プロダクト固有の制約
-- 目指す印象: 要求文の言葉。定まっていなければ、方向の異なる案を作って選んでもらう
+### 2. 方針を選ぶ
 
-プロダクト固有の制約は要求文と Experiment の README の Constraints に置く。Skill には書かない。
+- 線幅、端点と角、塗りか線か、比喩、グリッドをパラメータとして書き出し、参照 ID と選定理由を付ける。
+- 複数案では変える軸を 1〜2 つに絞る。基準の variant を複製してから変え、比喩も座標も違うものを「1 か所だけ変えた」と扱わない。
+- 既製のアイコン集の形をなぞらない。
+- 既知の対応が弱い概念（API、テスト、AI、抽象的な行為）は、比喩の候補を 2〜3 個下書きし、最小サイズで比べてから描き方を選ぶ。意味は描き方では改善しない（`docs/principles/metaphor-decides-before-style.md`）。
+- 既存の asset があれば同じシートに基準として並べる。
 
-ロゴ、挿絵、キーヴィジュアルなど、ブランドを表す成果物では、比喩と目指す印象を制作の前に依頼者と決める。
-テーマだけを受け取って比喩を自分で選ぶと、機能アイコンでは成立しても、これらでは外れる（削除した Experiment `class-doc-logo` と `class-chapter-illustration` の Learnings）。
-参照（好きな意匠、作風、既存の例）を受け取るか、比喩の候補だけを軽い下書きで見せて選んでもらう。
-
-### 2. 方針を選び、比較する違いを明確にする
-
-- 参照資料と原則候補から方針を選ぶ。線幅、端点と角、塗りか線か、比喩、グリッドをパラメータとして書き出し、それぞれに選定理由と参照 ID を付ける。
-- 複数の案を作るときは、変える軸を 1〜2 つに絞り、他は共通にする。
-- 既製のアイコン集の形をなぞらない。参照色や参照例から選んだ理由を残す。
-- 既知の対応が弱い概念（API、テスト、AI、抽象的な行為）では、比喩の候補を 2〜3 個、下書きで描いて実利用の最小サイズで比べる。描き方を選ぶのはその後にする。意味は描き方では改善しない（`docs/principles/metaphor-decides-before-style.md`）。
-- 既存の asset がある場合は、同じシートに基準として並べる。
-
-座標の決め方は、比率の名前ではなく導出の有無で選ぶ。
-目分量で置かず、「体系から理論値を出す → 組の格子へ丸める → 誤差を残す」の 3 段で決めると、後から動かしてよい値が分かる。
-
-体系が衝突したときは次の順で優先する。
-2 件の Experiment で同じ結論になった経験則であり、規則ではない。
+座標は目分量で置かず、「体系から理論値を出す → 組の格子へ丸める → 誤差を残す」の 3 段で決める。
+体系が衝突したときの優先順位は次のとおり（2 件の Experiment で一致した経験則）。
 
 1. 最小表示サイズでの可読性（内側の隙間、ピクセル整列、線の濃さ）
-2. 作図の決定性（解が一意に定まるか。対称性、keyline、名前のある作図法）
+2. 作図の決定性（対称性、keyline、名前のある作図法）
 3. 比例の美学（黄金比、√2、単純整数比）
 
-黄金比は粗い格子の上では載る場所が限られる。
-`catalog-ui-icons` は試した 5 箇所のうち 2 箇所、`catalog-theme-icons` は 0 箇所しか採れなかった。
-最初から φ を目標に置くより、作図で形を決めてから比例で説明できる箇所だけを記録するほうが当たる。
+黄金比は粗い格子に載る場所が少ない（`catalog-ui-icons` は 5 箇所中 2、`catalog-theme-icons` は 0）。
+作図で形を決めてから、比例で説明できる箇所だけを記録する。
 
 ### 3. 作り、検査し、複数サイズで描画する
 
-- 編集用の原本を `experiments/<slug>/variants/<id>/source/<asset>.svg` に書く。規約は `svg-authoring.md` に従う（`role="img"` と `<title>`、`part-<asset>-<role>` の id、`currentColor`、格子上の座標、基本図形から始める）。
-- 検査する。エラーが消えるまで直す。
+原本は `experiments/<slug>/variants/<id>/source/<asset>.svg` に、`svg-authoring.md` の規約で書く。
 
 ```bash
-just svg-check <file> --viewbox "0 0 24 24" --mono   # オプションは制約に応じて
+just svg-check <file> --viewbox "0 0 24 24" --mono   # ファイルが先、オプションが後
 just svg-sheet <out.png> 16,24,48 <svg>...           # 実利用サイズを含める
 ```
 
-- シートは `previews/<id>-first-sheet.png` に残す。組を横断する比較は `previews/compare-first-sheet.png` にする。
+シートは `previews/<id>-first-sheet.png`、組を横断する比較は `previews/compare-first-sheet.png` に残す。
 
-### 4. 画像を読み、単体と利用画面内で比較して改善する
+### 4. 単体と利用画面内で比較して改善する
 
-- シートを Read で開き、`self-review.md` の項目で観察する。見た目と UX の観察を分ける。
+- シートを `self-review.md` の項目で観察し、見た目と UX の観察を分ける。
 - 利用画面のモックを `variants/<id>/index.tsx` に作り、配布用を inline に展開する。モックは variant 間で同一にし、`diff` で確かめる。
+- モックではアイコンと語の対応を正しくする。対応を崩すと意味の妥当性の評価と混ざる。
 
 ```bash
 just web-dev                                   # 別のシェルで起動。variant を追加したら再起動する
@@ -88,9 +75,9 @@ just web-shot <slug>/<id> previews/<id>-final-in-context.png 1280 900
 
 - 反復は 1 variant あたり 3 回まで。round ごとに観察、変更、参照 ID、終了理由を記録する。
 - 要素を足す前に、既にある形を減らして整えられないかを問う。
-- 画像を読めない、または上限に達した場合は、未検証と未解決の項目を報告して止める。
+- 画像を読めない、または上限に達したら、未検証と未解決の項目を報告して止める。
 
-### 5. 原本を保持し、配布用を最適化して確認する
+### 5. 配布用を最適化して確認する
 
 ```bash
 just svg-optimize variants/<id>/source/<asset>.svg variants/<id>/dist/<asset>.svg
@@ -98,50 +85,43 @@ just svg-sheet previews/<id>-final-sheet.png 16,24,48 variants/<id>/dist/*.svg
 ```
 
 - `svg-optimize` は最適化、配布用の検査、`part-*` の id の一致を順に行う。失敗したら原本を直す。
-- 配布用のシートを読み、原本と見た目が同じことを確かめる。
-- 部分編集は原本に対して行い、配布用を作り直す。`git diff` で対象外が不変であることを確かめる。
+- 部分編集は原本に対して行い、配布用を作り直す。
 
 ### 6. 依頼者へ SVG のまま見せる
 
-依頼者に見せるときは、PNG のシートを渡さない。
+PNG のシートは自分が形を確かめるためだけに使い、依頼者には渡さない。
 SVG をそのまま並べた比較ページを作り、依頼者のブラウザで開く。
-PNG のシートは、自分が形を確かめるためだけに使う。
 
 ```bash
 just svg-compare previews/compare.html 16,24,64 variants/<a>/dist variants/<b>/dist --scheme <配色 id>
 open -a "Google Chrome" previews/compare.html
 ```
 
-- 比較ページは拡大してもにじまない。PNG は大きく表示すると画質が落ち、依頼者が細部を読めなかった（`cornix-ui-icons`）。
 - サイズには実利用のサイズと、形を確かめる大きさ（64 など）を並べる。ライトとダークは自動で並ぶ。
-- 多色の asset の `part-*-accent` には、指定した配色の色が塗られる。PNG のシートでは多色を確かめられないので、色の比較もこのページで行う。
-- 利用画面での比較は、runner の URL（`http://localhost:5183/#<slug>/<id>`）を渡す。こちらもベクターのまま描かれる。`web-shot` の PNG は自分の確認と README の preview に使う。
+- 多色の `part-*-accent` には指定した配色の色が塗られる。色の比較はこのページで行う。
+- 利用画面での比較は runner の URL（`http://localhost:5183/#<slug>/<id>`）を渡す。
 - 比較ページは `previews/compare.html` に置き、Experiment と一緒に commit する。
 
 ### 7. 記録し、報告する
 
-- Experiment の README に、Variants の表、反復の記録、造形の理由、確認した内容を書く。形式は `docs/experiment.md` に従う。
-- 座標を導出で決めたら、asset ごとに「対象 / 体系 / 理論値 / 採用値 / 誤差 / 理由」の表で残す。誤差が大きい箇所は、代わりに採った根拠を書く。
-- 報告は次の 4 つを分ける。成果物の一覧、造形の理由（パラメータと参照 ID）、確認した内容（検査、シート、利用画面）、未解決と未検証。
-- 報告には、比較ページのパスと runner の URL を添える。
-- 採用と却下の判断は人間が行う。Decision と Rejected reasons を先に書かない。
-- 一般化できる知見は Learnings に書き、原則候補は `docs/principles/README.md` の手順で追加する。
+- Experiment の README に、Variants の表、反復の記録、造形の理由、確認した内容を `docs/experiment.md` の形式で書く。
+- 座標を導出で決めたら、asset ごとに「対象 / 体系 / 理論値 / 採用値 / 誤差 / 理由」の表で残す。
+- 報告は、成果物の一覧、造形の理由（パラメータと参照 ID）、確認した内容、未解決と未検証の 4 つに分け、比較ページのパスと runner の URL を添える。
+- Decision と Rejected reasons は人間が判断してから書く。
+- 一般化できる知見は Learnings に書き、原則候補は `docs/principles/README.md` の手順で足す。
 
 ## 落とし穴
 
 - SVG 内で CSS の `var()` を使わない。resvg が描画できない。色の差し替えは利用画面の CSS で `#part-*` を上書きする。
-- `<text>` を使わない。文字は path で描くか、利用画面の HTML テキストで組む。
+- `<text>` を使わない。resvg の文字描画はマシンのフォントに依存する。文字は path で描くか、利用画面の HTML テキストで組む。
 - `aria-labelledby` を使わない。最適化で `<title>` の id が消える。`role="img"` と最初の子 `<title>` で名前が付く。
 - `<g id="part-x">` の子が 1 つなら、最適化で id は子へ移り `<g>` は消える。塗りは part 要素自身に置く。
-- inline に展開した SVG は root に `width` と `height` がないため、CSS で大きさを与える。
+- inline に展開した SVG は root に `width` と `height` がないため、CSS で大きさを与える。指定しないと 300×150 になる。
 - `just svg-sheet` は resvg の警告を失敗として扱う。警告の原因（未対応の要素、外部参照）を直す。
-- `just web-dev` は 5183 番で起動する。起動後に追加した Experiment は glob に反映されないことがあるので、再起動する。
-- `just svg-check` はファイルを最初の引数にし、オプションを後に置く。
-- 比較シートに asset の id を印字すると、意味の読み取りの確認に使えない。ラベルなしで意味を確かめるときは、名前を伏せた別の描画を用意する。
-- 利用画面のモックでは、アイコンと語の対応を正しくする。複数のアイコンを 1 画面で見せる目的で対応を崩すと、意味の妥当性の評価と混ざる。
-- 同じアイコンを 1 文書に 2 回 inline 展開すると、`part-*` の id が重複する。最適化は短縮 id の衝突を防ぐが、`part-*` 自身の重複は防がない。
-- 基準の variant と 1 か所だけ変えた比較をするなら、基準を複製してから変える。比喩も座標も違うものを「1 か所だけ変えた」と扱わない。
-- 多色の asset は `just svg-sheet` で色を確認できない。resvg には利用画面の CSS を渡せないため、シートは単色の線画として出る。色の確認は利用画面の preview でしか行えない。シートは形の確認に使い、2 つを分ける。
-- `just svg-check --mono` は `fill="currentColor"` を許す。禁じているのは hex と `var()` である。塗りが要る比喩（半分だけ塗った円、明暗の対）で `fill="none"` に固定すると、案そのものが成立しない。
-- 領域の間に隙間を空けても、線の量は減らない。接している間は共有辺に線が重なって 1 本に見えるが、離すと各領域が自分の輪郭を引いて平行 2 本になる。線を軽くしたいなら、隙間ではなく輪郭の色か有無を変える。
-- SVGO は既定値と同じ属性（`stroke-linecap="butt"`、`stroke-linejoin="miter"`、`stroke="none"`）を配布用から落とす。今日の描画には影響しないが、外側から stroke を継承する利用先では塗りの SVG が変わりうる。
+- `just web-dev` は 5183 番で起動する。起動後に追加した Experiment は glob に反映されないので、再起動する。
+- 比較シートに asset の id を印字すると、意味の読み取りの確認に使えない。`svg-sheet` と `svg-grid` はファイル名を印字するので、名前を伏せた別の描画を用意する。
+- 同じアイコンを 1 文書に 2 回 inline 展開すると `part-*` の id が重複する。最適化は `part-*` の重複を防がない。
+- 多色の asset は `just svg-sheet` で色を確認できない。resvg に利用画面の CSS を渡せず、単色の線画として出る。色は利用画面の preview か比較ページで確かめる。
+- `just svg-check --mono` は `fill="currentColor"` を許す。禁じているのは hex と `var()` である。塗りが要る比喩で `fill="none"` に固定すると案が成立しない。
+- 領域の間に隙間を空けても線の量は減らない。接している間は共有辺が 1 本に見えるが、離すと平行 2 本になる。線を軽くしたいなら輪郭の色か有無を変える。
+- SVGO は既定値と同じ属性（`stroke-linecap="butt"`、`stroke-linejoin="miter"`、`stroke="none"`）を配布用から落とす。外側から stroke を継承する利用先では塗りの SVG が変わりうる。
