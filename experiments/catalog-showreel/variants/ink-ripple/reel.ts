@@ -1091,7 +1091,8 @@ function drawTile(ctx: Ctx, kind: number) {
       break;
     }
     case 2: {
-      ctx.fillStyle = RED;
+      // マークは点まで含めて描く。赤い地では点が沈むので、地を墨にし、Catalog の暗い面と同じ色で置く。
+      ctx.fillStyle = GREY;
       ctx.fillRect(-w / 2, -h / 2, w, h);
       ctx.save();
       ctx.translate(-144, -144);
@@ -1101,6 +1102,8 @@ function drawTile(ctx: Ctx, kind: number) {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.stroke(logoPath());
+      ctx.fillStyle = RED;
+      circle(ctx, 26, 2.5, 2.5);
       ctx.restore();
       break;
     }
