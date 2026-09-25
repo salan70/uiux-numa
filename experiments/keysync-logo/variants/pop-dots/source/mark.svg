@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>KeySync</title>
+  <path id="part-mark-keys" fill="currentColor" fill-rule="evenodd" d="M6 12 H6 A2 2 0 0 1 8 14 V14 A2 2 0 0 1 6 16 H6 A2 2 0 0 1 4 14 V14 A2 2 0 0 1 6 12 Z M12 12 H12 A2 2 0 0 1 14 14 V14 A2 2 0 0 1 12 16 H12 A2 2 0 0 1 10 14 V14 A2 2 0 0 1 12 12 Z M24 12 H24 A2 2 0 0 1 26 14 V14 A2 2 0 0 1 24 16 H24 A2 2 0 0 1 22 14 V14 A2 2 0 0 1 24 12 Z M6 18 H6 A2 2 0 0 1 8 20 V20 A2 2 0 0 1 6 22 H6 A2 2 0 0 1 4 20 V20 A2 2 0 0 1 6 18 Z M12 18 H12 A2 2 0 0 1 14 20 V20 A2 2 0 0 1 12 22 H12 A2 2 0 0 1 10 20 V20 A2 2 0 0 1 12 18 Z M18 18 H18 A2 2 0 0 1 20 20 V20 A2 2 0 0 1 18 22 H18 A2 2 0 0 1 16 20 V20 A2 2 0 0 1 18 18 Z M24 18 H24 A2 2 0 0 1 26 20 V20 A2 2 0 0 1 24 22 H24 A2 2 0 0 1 22 20 V20 A2 2 0 0 1 24 18 Z M6 24 H6 A2 2 0 0 1 8 26 V26 A2 2 0 0 1 6 28 H6 A2 2 0 0 1 4 26 V26 A2 2 0 0 1 6 24 Z M24 24 H24 A2 2 0 0 1 26 26 V26 A2 2 0 0 1 24 28 H24 A2 2 0 0 1 22 26 V26 A2 2 0 0 1 24 24 Z"/>
+  <path id="part-mark-space-accent-2" fill="currentColor" fill-rule="evenodd" d="M12 24 H18 A2 2 0 0 1 20 26 V26 A2 2 0 0 1 18 28 H12 A2 2 0 0 1 10 26 V26 A2 2 0 0 1 12 24 Z"/>
+  <path id="part-mark-pop-accent" fill="currentColor" fill-rule="evenodd" d="M18 4 H18 A2 2 0 0 1 20 6 V6 A2 2 0 0 1 18 8 H18 A2 2 0 0 1 16 6 V6 A2 2 0 0 1 18 4 Z"/>
+</svg>
