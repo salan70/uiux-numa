@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LiveFrame } from "../components/LiveFrame";
 import { Link } from "../components/Link";
 import { Meta } from "../components/Meta";
-import { defaultVariant, dot } from "../components/work";
+import { defaultVariant } from "../components/work";
 import { catalog, isInProgress } from "../content/collect";
 import { topicById, topicHref } from "../content/topics";
 import { NotFoundPage } from "./NotFoundPage";
@@ -23,9 +23,8 @@ export function DetailPage({ slug }: { slug: string }) {
   return (
     <article className="detail">
       <p className="detail__crumb">
+        {/* 日付は出さない。利用者が 2026-09-25 に、詳細ページからも外すことを求めた。 */}
         {topic && <Link href={topicHref(topic.id)}>{topic.label}</Link>}
-        <span aria-hidden="true">／</span>
-        <span>{dot(work.updated)}</span>
       </p>
       <h1 className="detail__title" tabIndex={-1} data-screen-heading>
         {isInProgress(work.status) && <WipMark />}
