@@ -1,7 +1,8 @@
 // 原本（variants/<id>/source/mark.svg）を書き出す。
 // 骨格は uiux-numa-logo と同じ: viewBox 0 0 32 32、live area 4..28、丸い端点。
-// 第 2 世代は、利用者が第 1 世代から選んだ board-pop（盤面から 1 個のキーだけが浮く）を骨格に、1 軸ずつ変えた派生を作る。
-// 第 1 世代のほかの 9 案は削除した。仮説と軸は README の「削除した variant」にある。
+// 第 2 世代は、利用者が第 1 世代から選んだ board-pop（盤面から 1 個のキーだけが浮く）を骨格に、1 軸ずつ変えた派生を作った。
+// 第 3 世代は、利用者が第 2 世代から選んだ pop-tilt と pop-confetti を合わせ、K と S を読ませる 3 案を足す。
+// 削除した案の仮説と軸は README の「削除した variant」にある。
 // 色は currentColor だけを使う。多色版の役割は part の id の末尾で示し、利用画面の CSS が塗る。
 //   -accent   : 黄（Pop Toy の primary）。塗りの part だけに付ける
 //   -accent-2 : 青（secondary）
@@ -56,96 +57,96 @@ const baseKeys = [
 ];
 const space = key(10, ROW[2], 10, K);
 
-const MARKS = {
-  // 基準。第 1 世代の board-pop を live area に収めた版。
-  "board-pop": {
-    keys: fill(baseKeys.join(" ")),
-    "space-accent-2": fill(space),
-    "pop-accent": fill(key(POP.x, POP.y)),
-  },
+// 浮いたキーの姿勢。-15° 傾ける（第 2 世代の pop-tilt）。
+// 傾けた 4 角の外接は ±2.73。中心を (18, 6.75) に下げ、上端を 4.02 に収める。
+const TILT = ' transform="rotate(-15 18 6.75)"';
+const tiltedPop = fill(key(16, 4.75), TILT);
 
-  // 軸: 浮いたキーの姿勢。-15° 傾け、跳ねた途中に見せる。
-  // 傾けた 4 角の外接は ±2.73。中心を (18, 6.75) に下げ、上端を 4.02 に収める。
+// 盤面のキーを 3 色と墨に散らす配り方（第 2 世代の pop-confetti）。
+const confetti = {
+  keys: fill([key(COL[1], ROW[0]), key(COL[0], ROW[1]), key(COL[3], ROW[1]), space].join(" ")),
+  "blue-accent-2": fill([key(COL[0], ROW[0]), key(COL[2], ROW[1]), key(COL[3], ROW[2])].join(" ")),
+  "coral-accent-3": fill([key(COL[3], ROW[0]), key(COL[1], ROW[1]), key(COL[0], ROW[2])].join(" ")),
+};
+
+/** 文字 K の輪郭。第 1 世代の k-cap と同じ作図（縦画 4、斜画 45°、14 角）を、左上 (x, y)、一辺 size へ縮める。 */
+function letterK(x, y, size) {
+  const s = size / 14;
+  const pts = [
+    [0, 0],
+    [4, 0],
+    [4, 5],
+    [9, 0],
+    [14, 0],
+    [7, 7],
+    [14, 14],
+    [9, 14],
+    [4, 9],
+    [4, 14],
+    [0, 14],
+  ];
+  return `M${pts.map(([px, py]) => `${r2(x + px * s)} ${r2(y + py * s)}`).join(" L")} Z`;
+}
+
+const MARKS = {
+  // 第 2 世代から残した 2 案。利用者が「いい感じ」とした（2026-09-25）。
   "pop-tilt": {
     keys: fill(baseKeys.join(" ")),
     "space-accent-2": fill(space),
-    "pop-accent": fill(key(16, 4.75), ' transform="rotate(-15 18 6.75)"'),
+    "pop-accent": tiltedPop,
   },
-
-  // 軸: 粒度。キーを 6 角、2 段に減らし、16px で 1 個ずつが 3px になるようにする。
-  // 列は x = 4, 12, 20（外縁 4..26）。1 段目は y = 14、2 段目は幅 22 のスペースバー。浮いたキーは y = 4。
-  "pop-bold": {
-    keys: fill([rr(4, 14, 6, 6, 2), rr(20, 14, 6, 6, 2)].join(" ")),
-    "space-accent-2": fill(rr(4, 22, 22, 6, 2)),
-    "pop-accent": fill(rr(12, 4, 6, 6, 2)),
-  },
-
-  // 軸: 元の位置の示し方。空いた位置に、太さ 1.25 の輪郭を残す。
-  "pop-ghost": {
-    keys: fill(baseKeys.join(" ")),
-    slot: fill(`${key(COL[2], ROW[0])} ${rr(17.25, 13.25, 1.5, 1.5, 0.5)}`),
-    "space-accent-2": fill(space),
+  "pop-confetti": {
+    ...confetti,
     "pop-accent": fill(key(POP.x, POP.y)),
   },
 
-  // 軸: 段のずれ。2 段目を右へ 2 ずらし、実際のキーボードの千鳥に近づける。右端は 24..28 で live area に収まる。
-  "pop-stagger": {
+  // 第 3 世代の基準。pop-tilt の姿勢と pop-confetti の色を合わせる。
+  "tilt-confetti": {
+    ...confetti,
+    "pop-accent": tiltedPop,
+  },
+
+  // 軸: 色を置く位置。2 段目をホーム段とみなし、4 列を左手の薬指と中指、右手の中指と薬指に当てる。
+  // QWERTY で S は左手の薬指、K は右手の中指なので、1 列目を S、3 列目を K として色を変える。ほかは墨。
+  "ks-home": {
     keys: fill(
       [
         key(COL[0], ROW[0]),
         key(COL[1], ROW[0]),
         key(COL[3], ROW[0]),
-        key(6, ROW[1]),
-        key(12, ROW[1]),
-        key(18, ROW[1]),
-        key(24, ROW[1]),
+        key(COL[1], ROW[1]),
+        key(COL[3], ROW[1]),
         key(COL[0], ROW[2]),
+        space,
         key(COL[3], ROW[2]),
       ].join(" "),
     ),
-    "space-accent-2": fill(space),
-    "pop-accent": fill(key(POP.x, POP.y)),
+    "s-accent-2": fill(key(COL[0], ROW[1])),
+    "k-accent-3": fill(key(COL[2], ROW[1])),
+    "pop-accent": tiltedPop,
   },
 
-  // 軸: キーの形。角丸を一辺の半分にして丸い粒にする（ペグボードのおもちゃ）。
-  "pop-dots": {
-    keys: fill(
-      [
-        [COL[0], ROW[0]],
-        [COL[1], ROW[0]],
-        [COL[3], ROW[0]],
-        [COL[0], ROW[1]],
-        [COL[1], ROW[1]],
-        [COL[2], ROW[1]],
-        [COL[3], ROW[1]],
-        [COL[0], ROW[2]],
-        [COL[3], ROW[2]],
-      ]
-        .map(([x, y]) => rr(x, y, K, K, K / 2))
-        .join(" "),
-    ),
-    "space-accent-2": fill(rr(10, ROW[2], 10, K, K / 2)),
-    "pop-accent": fill(rr(POP.x, POP.y, K, K, K / 2)),
+  // 軸: 盤面の並び。キーを 3×3 に置き、6 個で K の字を組む。上の腕のキーだけが傾いて浮く。
+  // キーは 6 角、角丸 2、ピッチ 8。列 x = 4, 12, 20、段 y = 6, 14, 22（外縁 4..26 × 6..28）。
+  // 浮いたキーの外接は ±3.67（3 × (cos15° + sin15°)）。中心 (24, 7.75) で上端 4.08、右端 27.67。
+  "k-grid": {
+    keys: fill([rr(4, 6, 6, 6, 2), rr(4, 14, 6, 6, 2), rr(4, 22, 6, 6, 2)].join(" ")),
+    "mid-accent-2": fill(rr(12, 14, 6, 6, 2)),
+    "leg-accent-3": fill(rr(20, 22, 6, 6, 2)),
+    "pop-accent": fill(rr(21, 4.75, 6, 6, 2), ' transform="rotate(-15 24 7.75)"'),
   },
 
-  // 軸: 動きの示し方。浮いたキーの左右に、幅 2 の短い線を隙間 2 で 1 本ずつ添える。
-  "pop-motion": {
-    keys: fill(baseKeys.join(" ")),
-    "space-accent-2": fill(space),
-    "pop-accent": fill(key(POP.x, POP.y)),
-    "spark-accent-3": fill([rr(12, 4.5, 2, 3, 1), rr(22, 4.5, 2, 3, 1)].join(" ")),
-  },
-
-  // 軸: 色の配り方。形は基準と同じにし、盤面のキーを 3 色と墨に散らす（多色版だけで差が出る）。
-  "pop-confetti": {
-    keys: fill([key(COL[1], ROW[0]), key(COL[0], ROW[1]), key(COL[3], ROW[1]), space].join(" ")),
-    "blue-accent-2": fill(
-      [key(COL[0], ROW[0]), key(COL[2], ROW[1]), key(COL[3], ROW[2])].join(" "),
+  // 軸: 浮いたキーの刻印。浮いたキーを 8 角に大きくし、K を抜く。盤面は 2 段に減らして場所を空ける。
+  // 盤面の段は y = 18, 24（外縁 18..28）。浮いたキーは中心 (18, 9)、外接 ±4.9（4 × (cos15° + sin15°)）で 4.1..13.9。
+  // K は一辺 4.5（字画 1.29、64px で 2.6px）。16px では刻印が潰れる。
+  "k-legend": {
+    keys: fill([key(COL[1], 18), key(COL[3], 18), key(10, 24, 10, K)].join(" ")),
+    "blue-accent-2": fill([key(COL[0], 18), key(COL[3], 24)].join(" ")),
+    "coral-accent-3": fill(key(COL[0], 24)),
+    "pop-accent": fill(
+      `${rr(14, 5, 8, 8, 2.5)} ${letterK(15.75, 6.75, 4.5)}`,
+      ' transform="rotate(-15 18 9)"',
     ),
-    "coral-accent-3": fill(
-      [key(COL[3], ROW[0]), key(COL[1], ROW[1]), key(COL[0], ROW[2])].join(" "),
-    ),
-    "pop-accent": fill(key(POP.x, POP.y)),
   },
 };
 

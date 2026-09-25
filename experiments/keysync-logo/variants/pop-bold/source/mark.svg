@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>KeySync</title>
-  <path id="part-mark-keys" fill="currentColor" fill-rule="evenodd" d="M6 14 H8 A2 2 0 0 1 10 16 V18 A2 2 0 0 1 8 20 H6 A2 2 0 0 1 4 18 V16 A2 2 0 0 1 6 14 Z M22 14 H24 A2 2 0 0 1 26 16 V18 A2 2 0 0 1 24 20 H22 A2 2 0 0 1 20 18 V16 A2 2 0 0 1 22 14 Z"/>
-  <path id="part-mark-space-accent-2" fill="currentColor" fill-rule="evenodd" d="M6 22 H24 A2 2 0 0 1 26 24 V26 A2 2 0 0 1 24 28 H6 A2 2 0 0 1 4 26 V24 A2 2 0 0 1 6 22 Z"/>
-  <path id="part-mark-pop-accent" fill="currentColor" fill-rule="evenodd" d="M14 4 H16 A2 2 0 0 1 18 6 V8 A2 2 0 0 1 16 10 H14 A2 2 0 0 1 12 8 V6 A2 2 0 0 1 14 4 Z"/>
-</svg>
