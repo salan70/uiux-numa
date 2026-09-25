@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { ThemeChoice } from "../theme";
 
 /**
@@ -134,6 +135,47 @@ export function LogoMark({ animated = false }: { animated?: boolean }) {
         </>
       )}
       <circle className="logo-mark__dot" cx="26" cy="2.5" r="2.5" />
+    </svg>
+  );
+}
+
+// wordmark の字。形の正本は experiments/uiux-numa-wordmark/variants/caps-period/dist/wordmark.svg。
+// 字ごとに 1 本の path にし、入場で左から順に線を引く。
+const WORDMARK_LETTERS = [
+  "M4 4v16a8 8 0 0 0 16 0V4",
+  "M29 4v24",
+  "m36.5 30 12-28",
+  "M56 4v16a8 8 0 0 0 16 0V4",
+  "m80 4 16 24m0-24L80 28",
+  "M113.5 28V5.5a1.5 1.5 0 0 1 2.862-.629l10.276 22.258a1.5 1.5 0 0 0 2.862-.629V4",
+  "M138.5 4v16a8 8 0 0 0 16 0V4",
+  "M163.5 28V5.5a1.5 1.5 0 0 1 2.912-.507l4.676 13.014a1.5 1.5 0 0 0 2.824 0l4.676-13.014a1.5 1.5 0 0 1 2.912.507V28",
+  "m189.5 28 8.595-23.025a1.5 1.5 0 0 1 2.81 0L209.5 28m-16.64-9h13.28",
+];
+
+/**
+ * UI/UX NUMA の wordmark。マークと同じ高さ 32 で描き、baseline（y 28）が揃う。句点は赤い点。
+ * 座標の導出は experiments/uiux-numa-wordmark の README にある。名前は隣の見えない文字列が担う。
+ * animated を付けると、字を 1 字ずつ引き、最後に句点を落とす（マークの入場と同じ曲線と落とし方）。
+ */
+export function Wordmark({ animated = false }: { animated?: boolean }) {
+  return (
+    <svg
+      className={animated ? "wordmark wordmark--enter" : "wordmark"}
+      viewBox="0 0 221 32"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {WORDMARK_LETTERS.map((d, index) => (
+        <path
+          key={d}
+          className="wordmark__letter"
+          pathLength={1}
+          d={d}
+          style={{ "--i": index } as CSSProperties}
+        />
+      ))}
+      <circle className="wordmark__dot" cx="216.5" cy="27.5" r="2.5" />
     </svg>
   );
 }

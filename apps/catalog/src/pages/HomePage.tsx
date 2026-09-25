@@ -7,8 +7,7 @@ import {
   TokensCover,
   TypographyCover,
 } from "../../../../experiments/card/shared/covers";
-import { EntranceWords } from "../components/EntranceWords";
-import { LogoMark } from "../components/icons";
+import { LogoMark, Wordmark } from "../components/icons";
 import { Link } from "../components/Link";
 import { MarqueeRows } from "../components/MarqueeRows";
 import { catalog, worksInTopic } from "../content/collect";
@@ -36,9 +35,10 @@ export function HomePage() {
     <>
       <section className="home-hero" aria-labelledby="home-title">
         <h1 className="home-hero__title" id="home-title" tabIndex={-1} data-screen-heading>
-          {/* マークは線を引いて点を落とす。語の入場と同時に始め、語を待たせない。判断は apps/catalog/README.md にある。 */}
+          {/* マークと wordmark は線を引いて点を落とす。動きの無い版はサイドバーの題字にある。判断は apps/catalog/README.md にある。 */}
           <LogoMark animated />
-          <EntranceWords text={SITE_TITLE} />
+          <Wordmark animated />
+          <span className="logo-label">{SITE_TITLE}</span>
         </h1>
         <MarqueeRows tiles={galleryTiles()} />
       </section>
