@@ -6,28 +6,12 @@
 
 ## 採用範囲
 
-書体は LINE Seed JP v20260828 の Regular と Bold を使う。
-本文、UI、見出しに必要な 400 と 700 だけを配布する。
-Thin と ExtraBold は、2 つ以上の共通用途がないため含めない。
+書体は LINE Seed JP v20260828 の Regular (400) と Bold (700) だけを配布する。
+semantic token は `title`、`heading`、`body`、`ui`、`control`、`caption` の 6 個である。
 
-family は 1 個、size は 4 個とする。
-weight は 2 個、line-height は 3 個とする。
-合計は 10 個である。
-semantic token は次の 6 個とする。
-
-- title
-- heading
-- body
-- ui
-- control
-- caption
-
-合計は 6 個である。
-
-新しい primitive は、複数の semantic token が参照するときだけ追加する。
-新しい semantic token は、既存 token で表せない場合だけ検討する。
-追加には 2 個以上の利用例を必要とする。
-特定コンポーネントだけの値は token にしない。
+- 新しい primitive は複数の semantic token が参照するときだけ追加する。
+- 新しい semantic token は既存 token で表せず、利用例が 2 個以上あるときだけ追加する。
+- 特定コンポーネントだけの値は token にしない。
 
 ## 使用規則
 
@@ -38,12 +22,9 @@ semantic token は次の 6 個とする。
 - `control` はボタン、項目名、選択状態に使う。
 - `caption` は日時や補足などの二次情報に限る。
 - 複数行の本文は `40rem` を fallback とし、対応環境では `40ic` を上限にする。
-  ただし、節の見出しや罫が桁いっぱいに引かれている面では、本文も桁の幅に従わせ、重ねて上限を置かない。
-  本文だけ内側で折り返すと、同じ節の中で右端が 2 本になり、版面が崩れて見える。
-  この例外を使う面では、1 行の字数を実測して記録する。桁が広いほど、また本文が小さいほど行長は伸びる。
-  判断は [行長の上限の ADR](../../docs/decisions/2026-09-21-measure-cap-follows-the-column.md) に残す。
+  節の見出しや罫が桁いっぱいに引かれている面では、本文も桁の幅に従わせ、上限を重ねない。1 行の字数を実測して記録する（[ADR](../../docs/decisions/2026-09-21-measure-cap-follows-the-column.md)）。
 - 文字を固定高の箱へ閉じ込めない。
-- 省略が必要な場合は、完全な内容へ到達できる手段を用意する。
+- 省略する場合は完全な内容へ到達できる手段を用意する。
 
 ## 生成
 
@@ -51,9 +32,6 @@ semantic token は次の 6 個とする。
 just tokens-build
 just tokens-check
 ```
-
-`tokens-build` は canonical JSON から CSS 変数を生成する。
-`tokens-check` は token の構造、参照、生成差分を検査する。
 
 ## Font
 
@@ -69,5 +47,3 @@ just tokens-check
 | `LINESeedJP-Bold.woff2`    | `d9e9a3c01a7f818e398e9ec8bb57f8525c4be8e18b51ec2e341b4a733adeae20` |
 
 font file は実行時 CDN から取得しない。
-利用側は Regular と Bold を preload してよい。
-実行基盤では、必要な variant の読込時に取得する。
