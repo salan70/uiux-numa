@@ -1,0 +1,77 @@
+/* 採用した motion-tiles の見た目。Catalog も読むので、色は --color-* の役割だけを使う。 */
+.mt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-400);
+}
+
+:where(.mt) :where(p, ul) {
+  margin: 0;
+}
+
+:where(.mt) :where(ul) {
+  padding: 0;
+  list-style: none;
+}
+
+.mt-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Icons のセルの格子と同じ組み方で、セルだけを大きくする。見出しの動きは小さいと見分けられない。 */
+.mt-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-500) var(--space-200);
+}
+
+.mt-tile {
+  display: grid;
+  gap: var(--space-100);
+  align-content: start;
+}
+
+/* セルそのものを再生のボタンにする。面は Icons のセルと同じ色と角丸。 */
+.mt-tile__hit {
+  appearance: none;
+  display: grid;
+  align-items: center;
+  aspect-ratio: 4 / 3;
+  margin-block-end: var(--space-200);
+  padding: var(--space-500);
+  border: 0;
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-container);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+  --es-size: 2.25rem;
+}
+
+/* 名前と値は Icons のセルの名前と同じく、本文の書体で小さく添える。 */
+.mt-tile__name {
+  font-weight: var(--font-weight-bold);
+}
+
+/* 値は記号で区切らず、間隔で区切る。 */
+.mt-tile__spec {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-300);
+  color: var(--color-on-surface-variant);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+/* 押して何が起きるかを読み上げに渡す。見本の文字は飾りとして隠している。 */
+.mt-tile__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

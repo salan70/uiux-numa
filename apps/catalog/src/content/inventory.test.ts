@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(13);
-    expect(catalog.liveVariants).toHaveLength(34);
+    expect(catalog.experiments).toHaveLength(14);
+    expect(catalog.liveVariants).toHaveLength(36);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -73,7 +73,12 @@ describe("catalog inventory", () => {
     expect(slugs("motion")).toEqual(["catalog-screen-entrance"]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
-    expect(unlisted()).toEqual(["cornix-product-ui", "cornix-workbench", "uiux-numa-logo"]);
+    expect(unlisted()).toEqual([
+      "catalog-works-layout",
+      "cornix-product-ui",
+      "cornix-workbench",
+      "uiux-numa-logo",
+    ]);
   });
 
   it("token を正本のファイル単位で束ねる", () => {
@@ -120,6 +125,8 @@ describe("catalog inventory", () => {
       "catalog-screen-entrance/line-mask",
       "catalog-theme-icons/tomoe-classic",
       "catalog-ui-icons/round-soft",
+      "catalog-works-layout/motion-tiles",
+      "catalog-works-layout/quiet-sections",
       "class-tech-icons/line-round",
       "color-schemes-material/aizome",
       "color-schemes-material/azuki",
