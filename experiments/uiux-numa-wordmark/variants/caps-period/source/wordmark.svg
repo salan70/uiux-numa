@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 221 32" role="img">
+  <title>UI/UX NUMA</title>
+  <!-- 組の規則は nu-dot のマークと同じ。字画 4、round cap と round join。中心線の cap-line は y 4、baseline は y 28（cap height 24）。 -->
+  <!-- 角: N、M、A の角は、マークと同じく縦画や斜画を円弧の接線でつなぐ。円弧の端が cap-line と baseline に接する。 -->
+  <!-- 円弧の半径（中心線）は 1.5。円弧を置くと斜画が元の直線から横へずれ、うねって見える。ずれが字画の半分 2 以内（元の斜画の太さの内側）に収まる最大の 0.5 刻みの値にした（ずれ 1.9）。 -->
+  <!-- 字幅: 基準幅 w（U、N、X）は cap height の 2/3 = 16（マークの半径の比 4:6）。U の底は半径 8 の半円。A は w × √φ = 20.4 → 20。 -->
+  <!-- M は 18。N と同じ黒の密度になる幅 17.8 と、V の内側の白が字画 4 以上になる最小の幅 16 の大きいほうを偶数へ丸めた。 -->
+  <!-- A の横画と M の谷は、baseline から cap height / φ² の y 19。/ は A の脚の直線と同じ傾き 10:24。 -->
+  <!-- 字間: 隣り合う 2 字の間の白の面積を、縦画 2 本の間（6）と同じにする。外縁から 8 より奥は数えず、最も狭い行も字画 4 を下回らせない。 -->
+  <!-- 語間は字間の白の φ² 倍。句点は赤い点で、半径 2.5、下端を外縁 y 30 に揃え、A の右足から字間の白の 1/φ² = 2.3 → 2.5 空ける。 -->
+  <!-- 字の位置と接点の座標は計算で出した。値と誤差は README の座標の導出にある。 -->
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path id="part-wordmark-u" d="M4 4V20A8 8 0 0 0 20 20V4"/>
+    <path id="part-wordmark-i" d="M29 4L29 28"/>
+    <path id="part-wordmark-slash" d="M36.5 30L48.5 2"/>
+    <path id="part-wordmark-u2" d="M56 4V20A8 8 0 0 0 72 20V4"/>
+    <path id="part-wordmark-x" d="M80 4L96 28M96 4L80 28"/>
+    <path id="part-wordmark-n" d="M113.5 28L113.5 5.5A1.5 1.5 0 0 1 116.362 4.871L126.638 27.129A1.5 1.5 0 0 0 129.5 26.5L129.5 4"/>
+    <path id="part-wordmark-u3" d="M138.5 4V20A8 8 0 0 0 154.5 20V4"/>
+    <path id="part-wordmark-m" d="M163.5 28L163.5 5.5A1.5 1.5 0 0 1 166.412 4.993L171.088 18.007A1.5 1.5 0 0 0 173.912 18.007L178.588 4.993A1.5 1.5 0 0 1 181.5 5.5L181.5 28"/>
+    <path id="part-wordmark-a" d="M189.5 28L198.095 4.975A1.5 1.5 0 0 1 200.905 4.975L209.5 28M192.86 19L206.14 19"/>
+  </g>
+  <circle id="part-wordmark-dot" cx="216.5" cy="27.5" r="2.5" fill="currentColor"/>
+</svg>
