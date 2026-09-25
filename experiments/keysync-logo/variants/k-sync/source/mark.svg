@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <title>KeySync</title>
+  <path id="part-mark-stem" fill="none" stroke="currentColor" d="M9 6 V26"/>
+  <path id="part-mark-out-accent-2" fill="none" stroke="currentColor" d="M12 15 L22 5"/>
+  <path id="part-mark-out-head-accent-2" fill="none" stroke="currentColor" d="M16 5 H22 V11"/>
+  <path id="part-mark-in-accent-3" fill="none" stroke="currentColor" d="M25 26 L15 16"/>
+  <path id="part-mark-in-head-accent-3" fill="none" stroke="currentColor" d="M15 22 V16 H21"/>
+</svg>
