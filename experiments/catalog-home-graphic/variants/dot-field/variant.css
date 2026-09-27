@@ -1,0 +1,354 @@
+/*
+ * dot-field。図を網点で作る。
+ * マークの字画は墨、点と波紋と指の近くは点の赤にする。地の点は罫の色で、面の上で読める強さに留める。
+ * 配色の tile だけは、採用済み配色の primary を並べた帯を網点の色にする。
+ */
+
+@property --df-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.df {
+  --df-step: 10px;
+  --df-draw: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ---------- hero ---------- */
+
+.df .df-hero {
+  position: relative;
+  display: grid;
+  align-content: end;
+  min-block-size: 100svh;
+  padding: var(--space-2000) var(--hg-inline) clamp(2.5rem, 8vh, 5rem);
+  overflow: clip;
+  isolation: isolate;
+}
+
+.df .df-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.df .df-field canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.df .df-copy {
+  display: grid;
+  gap: var(--space-600);
+  max-inline-size: min(100%, 40rem);
+  pointer-events: none;
+}
+
+.df .df-eyebrow {
+  display: flex;
+  gap: var(--space-300);
+  color: var(--hg-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.df .df-eyebrow > span {
+  animation: df-rise 700ms var(--easing-entrance) backwards;
+  animation-delay: calc(1100ms + var(--n, 0) * 80ms);
+}
+
+.df .df-eyebrow > span:nth-child(2) {
+  --n: 1;
+}
+
+.df .df-eyebrow > span:nth-child(3) {
+  --n: 2;
+}
+
+.df .df-eyebrow > span + span::before {
+  display: inline-block;
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  margin-inline-end: var(--space-300);
+  border-radius: var(--radius-full);
+  background: var(--hg-dot);
+  vertical-align: 0.15em;
+  content: "";
+}
+
+.df .df-title {
+  margin: 0;
+  line-height: 0;
+}
+
+.df .df-lockup {
+  display: block;
+  inline-size: min(100%, 36rem);
+  block-size: auto;
+  overflow: visible;
+}
+
+.df .lk-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  animation: df-draw 520ms var(--df-draw) backwards;
+  animation-delay: calc(1250ms + var(--i) * 55ms);
+}
+
+@keyframes df-draw {
+  from {
+    stroke-dashoffset: 1.02;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.df .lk-dot {
+  fill: var(--hg-dot);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: df-pop 600ms var(--easing-entrance) backwards;
+}
+
+.df .lk-dot--mark {
+  animation-delay: 1500ms;
+}
+
+.df .lk-dot--period {
+  animation-delay: 1950ms;
+}
+
+@keyframes df-pop {
+  from {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.5);
+  }
+}
+
+.df .df-tagline {
+  color: var(--hg-muted);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.6;
+  animation: df-focus 900ms 2000ms var(--easing-entrance) backwards;
+}
+
+@keyframes df-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.6em;
+  }
+}
+
+@keyframes df-focus {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    translate: 0 0.25em;
+  }
+}
+
+.df .df-pause {
+  position: absolute;
+  inset-block-end: var(--space-600);
+  inset-inline-end: var(--hg-inline);
+}
+
+/* ---------- WORKS ---------- */
+
+.df .df-works {
+  padding: var(--space-2000) var(--hg-inline) calc(var(--space-2000) * 1.5);
+}
+
+.df .df-works__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+  margin-block-end: var(--space-1000);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.df .df-works__rule {
+  flex: 1;
+  block-size: 6px;
+  background: radial-gradient(circle, var(--hg-line-strong) 1.2px, transparent 1.8px) 0 50% / 8px 6px repeat-x;
+}
+
+.df .df-grid {
+  display: grid;
+  gap: var(--space-400);
+}
+
+@media (width >= 40rem) {
+  .df .df-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 64rem) {
+  .df .df-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.df .df-tile {
+  animation: none;
+  opacity: 0;
+  translate: 0 2rem;
+  transition:
+    opacity 700ms var(--easing-entrance),
+    translate 1000ms var(--easing-entrance);
+  transition-delay: calc(var(--i) * 80ms);
+}
+
+.df .df-tile[data-seen] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.df .df-tile__link {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-400);
+  min-block-size: 19rem;
+  padding: var(--space-600);
+  overflow: hidden;
+  border-radius: var(--radius-surface);
+  background: var(--hg-surface);
+  isolation: isolate;
+  transition: transform 400ms var(--easing-entrance);
+}
+
+/* 右上の角の網点。字の載る左下には掛けない。入場で点が 0 から膨らむ。 */
+.df .df-tile__link::before {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: var(--df-ink, var(--hg-ink));
+  opacity: 0.8;
+  mask-image:
+    radial-gradient(circle, #000 var(--df-r), transparent calc(var(--df-r) + 0.7px)),
+    radial-gradient(ellipse 75% 85% at 100% 0%, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 100%);
+  mask-size:
+    var(--df-step) var(--df-step),
+    100% 100%;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: intersect;
+  transition: --df-r 1200ms var(--easing-entrance);
+  transition-delay: calc(var(--i) * 80ms + 200ms);
+  content: "";
+}
+
+.df .df-tile[data-seen] .df-tile__link::before {
+  --df-r: 2.6px;
+}
+
+/* 指の周りの網点。選んだ tile だけに出し、点は角の網点より大きい。 */
+.df .df-tile__screen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--df-ink, var(--hg-dot));
+  mask-image:
+    radial-gradient(circle, #000 var(--df-r), transparent calc(var(--df-r) + 0.7px)),
+    radial-gradient(
+      circle 13rem at var(--mx, 80%) var(--my, 20%),
+      #000 0%,
+      rgb(0 0 0 / 0.6) 45%,
+      transparent 100%
+    );
+  mask-size:
+    var(--df-step) var(--df-step),
+    100% 100%;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: intersect;
+  transition: --df-r 500ms var(--easing-entrance);
+}
+
+.df .df-tile--colors .df-tile__screen {
+  background: var(--df-ink);
+}
+
+.df .df-tile__num {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.df .df-tile__body {
+  display: grid;
+  align-content: end;
+  gap: var(--space-200);
+}
+
+.df .df-tile__label {
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.df .df-tile__lead {
+  color: var(--hg-muted);
+}
+
+.df .df-tile__count {
+  justify-self: start;
+  padding: var(--space-100) var(--space-300);
+  border-radius: var(--radius-full);
+  background: var(--hg-bg);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .df .df-tile__link:hover .df-tile__screen {
+    --df-r: 4.4px;
+  }
+
+  .df .df-tile__link:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.df .df-tile__link:focus-visible .df-tile__screen {
+  --df-r: 4.4px;
+}
+
+/* ---------- 動きを減らす ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .df *,
+  .df *::before {
+    animation: none !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .df .lk-stroke {
+    stroke-dasharray: none;
+  }
+
+  .df .df-tile {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .df .df-tile__link::before {
+    --df-r: 2.6px;
+  }
+}

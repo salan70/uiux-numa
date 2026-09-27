@@ -1,0 +1,148 @@
+@import "../../../tokens/space/index.css";
+@import "../../../tokens/radius/index.css";
+@import "../../../tokens/border/index.css";
+@import "../../../tokens/typography/index.css";
+@import "../../../tokens/size/index.css";
+@import "../../../tokens/motion/index.css";
+
+/*
+ * 案が共有する版面の土台。色の役割の対応、字、止める操作だけを持つ。
+ * 色の値は持たず、Catalog の --color-* を読む。単体表示の代替は Catalog の既定 sumi の値にする。
+ */
+
+:where(.hg) :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:where(.hg) :where(h1, h2, h3, p, ul, ol, figure) {
+  margin: 0;
+}
+
+:where(.hg) :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.hg {
+  --color-primary: #2b2b2b;
+  --color-on-primary: #fffdf9;
+  --color-secondary: #c9171e;
+  --color-on-secondary: #fffdf9;
+  --color-tertiary: #e6b422;
+  --color-on-tertiary: #120d09;
+  --color-background: #f9f8f8;
+  --color-surface: #fefefe;
+  --color-on-surface: #1f1f1f;
+  --color-surface-container: #f0efef;
+  --color-surface-variant: #e3dede;
+  --color-on-surface-variant: #4d4d4d;
+  --color-outline: #757575;
+  --color-focus: #525252;
+
+  /* 役割の対応。Catalog の --cat-* と同じ当て方にする。
+     点はマークの点と同じ secondary、脇の光は tertiary。どちらも配色を切り替えると追従する。 */
+  --hg-bg: var(--color-background);
+  --hg-surface: var(--color-surface-container);
+  --hg-ink: var(--color-on-surface);
+  --hg-muted: var(--color-on-surface-variant);
+  --hg-line: var(--color-surface-variant);
+  --hg-line-strong: var(--color-outline);
+  --hg-dot: var(--color-secondary);
+  --hg-on-dot: var(--color-on-secondary);
+  --hg-glint: var(--color-tertiary);
+  --hg-focus: var(--color-focus);
+  --hg-inline: var(--space-page-inline, 1.5rem);
+
+  position: relative;
+  min-block-size: 100vh;
+  overflow-x: clip;
+  background: var(--hg-bg);
+  color: var(--hg-ink);
+  color-scheme: light dark;
+  font-family: var(--typography-ui-font-family);
+  font-size: var(--typography-ui-font-size);
+  line-height: var(--typography-ui-line-height);
+  font-feature-settings: "palt";
+}
+
+@media (prefers-color-scheme: dark) {
+  .hg:not([data-theme="light"]) {
+    --color-secondary-container: #861318;
+    --color-background: #1b1a1a;
+    --color-surface: #272525;
+    --color-on-surface: #f0f0f0;
+    --color-surface-container: #343232;
+    --color-surface-variant: #4c3e3e;
+    --color-on-surface-variant: #c9c9c9;
+    --color-outline: #9c8b8b;
+    --color-focus: #b8b8b8;
+  }
+}
+
+@media (width >= 48rem) {
+  .hg {
+    --hg-inline: var(--space-1000);
+  }
+}
+
+.hg a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hg :focus-visible {
+  outline: var(--border-width-thick) solid var(--hg-focus);
+  outline-offset: 3px;
+}
+
+/* 読み上げだけに出す文字。 */
+.hg .hg-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 止める操作。Catalog の Button の icon 版と同じ寸法（押し先 48px）にし、状態で寸法を変えない。 */
+.hg .hg-pause {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--size-control-height-lg);
+  block-size: var(--size-control-height-lg);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--hg-surface) 82%, transparent);
+  color: var(--hg-ink);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background-color var(--duration-state) var(--easing-standard);
+}
+
+.hg .hg-pause svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hg .hg-pause[aria-pressed="true"] svg {
+  fill: currentColor;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hg .hg-pause:hover {
+    background: var(--hg-line);
+  }
+}
+
+/* 流れる動きを止めたときは、CSS の繰り返しも同じ位置で止める。 */
+.hg[data-paused="true"] *,
+.hg [data-paused="true"] * {
+  animation-play-state: paused !important;
+}
