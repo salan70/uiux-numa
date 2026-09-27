@@ -11,8 +11,8 @@ describe("catalog inventory", () => {
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(17);
-    expect(catalog.liveVariants).toHaveLength(39);
+    expect(catalog.experiments).toHaveLength(18);
+    expect(catalog.liveVariants).toHaveLength(42);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -74,6 +74,7 @@ describe("catalog inventory", () => {
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
     expect(unlisted()).toEqual([
+      "catalog-home-graphic",
       "catalog-works-layout",
       "cornix-product-ui",
       "cornix-workbench",
