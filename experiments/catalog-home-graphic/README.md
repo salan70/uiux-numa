@@ -113,7 +113,8 @@ crafting-motion の手順に沿った判断は次のとおり。
 | 3     | 利用者が `dot-field` の題の上の語を区切る赤い点、題の下の一文、tile の説明文と件数を要らないとした                  | 語は余白だけで分け、一文と説明文と件数を外し、tile を名前と番号だけにした                                                                                        | 利用者の 2026-09-28 のフィードバック | 1440 幅の撮影で確認                |
 | 4     | 利用者が `dot-field` の tile を、topic ごとに点で想起させる図柄にすることを求めた。角の網点はどの tile も同じだった | tile を hero と同じ被覆率の網点の canvas に替え、配色の帯、あA、角丸の段、Button とスイッチ、アイコン、easing.entrance の曲線を描いた                            | 利用者の 2026-09-28 のフィードバック | 1440 幅と 390 幅ダークの撮影で確認 |
 | 4     | Icons の図柄で 4 つ並べると字画が点の列に崩れ、circle を含む branch は字画が欠けた                                  | path だけでできた code と ai の 2 つに絞り、大きく描いた                                                                                                         | なし                                 | 撮影で確認                         |
-| 5     | 利用者が Tokens の図柄に別の案を求めた                                                                              | 角丸の段（radius）に加え、波括弧（braces）、余白の段（ladder）、物差し（ruler）、入れ子の枠（nested）を作り、runner の `?tokens=<id>` で差し替えられるようにした | 利用者の 2026-09-28 のフィードバック | 利用者の選択待ち                   |
+| 5     | 利用者が Tokens の図柄に別の案を求めた                                                                              | 角丸の段（radius）に加え、波括弧（braces）、余白の段（ladder）、物差し（ruler）、入れ子の枠（nested）を作り、runner の `?tokens=<id>` で差し替えられるようにした | 利用者の 2026-09-28 のフィードバック | 利用者が選んだ                     |
+| 6     | 利用者が 2026-09-28 に Tokens の図柄を `ladder` に決めた                                                            | `ladder` に固定し、ほかの候補と `?tokens=` の切り替えを消した。利用者は選んだ理由と却下の理由を述べていない                                                      | 利用者の 2026-09-28 の判断           | 1440 幅の撮影で確認                |
 
 ## Evaluation
 
@@ -125,7 +126,7 @@ DevTools Protocol で headless Chrome を操作し、1440 × 900 と 390 × 844�
 
 - `previews/kinetic-type-hero.png`、`previews/kinetic-type-works.png`: 入場の後の hero と、Tokens を選んだ索引
 - `previews/dot-field-hero.png`、`previews/dot-field-works.png`: 網点のマークと、topic ごとの網点の図柄（round 4 の後）
-- `previews/dot-field-tokens-motifs.png`: Tokens の図柄の候補 5 つ（round 5）
+- `previews/dot-field-tokens-motifs.png`: Tokens の図柄の候補 5 つ（round 5）。利用者は `ladder` を選んだ
 - `previews/live-bento-hero.png`、`previews/live-bento-works.png`: 格子の上半分と下半分
 
 ## Decision
