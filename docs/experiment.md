@@ -36,7 +36,9 @@ experiments/<slug>/
 ```
 
 - `variants/<variant-id>/` に Markdown を置かない。説明と判断は README に集める。
-- `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。README の Variants 表にある id には `index.tsx` が要る。
+- `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。`platforms` に `web` を含む Experiment では、README の Variants 表にある id に `index.tsx` が要る。
+- iOS の variant は `index.tsx` の代わりに `<Pascal(slug)><Pascal(id)>.swift` を置き、同じ名前の SwiftUI の `View` を引数なしで作れるようにする（例: `yodoku-app` の `tabs` は `YodokuAppTabs`）。全 Experiment の Swift は 1 つの module に入るので、ほかのファイル名と型名もこの名前で始める。`shared/*.swift` も読まれる。
+- Catalog は `platforms` に `web` を含まない Experiment を載せない。frontmatter の検査だけは通す。
 - SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。`index.tsx` は `dist/` を利用画面のモックに埋め込む。多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。
 - preview は README が根拠にするものだけを commit する。`state` は variant 間で揃える。
 
@@ -75,7 +77,7 @@ adopted: []
 | `maturity`  | [maturity](layers.md#role-と-maturity)。`experimental` / `candidate` / `stable` / `deprecated` |
 | `created`   | 作成日（`YYYY-MM-DD`）                                                                         |
 | `updated`   | 最終更新日。status を変えたら更新する                                                          |
-| `platforms` | 対象プラットフォーム。`platforms/` のディレクトリ名（現在は `web` だけ）                       |
+| `platforms` | 対象プラットフォーム。`platforms/` のディレクトリ名（`web`、`ios`）                            |
 | `domains`   | [対象領域](scope.md)の項目名を kebab-case にしたもの。Catalog の topic はここから決まる        |
 | `sources`   | 由来の slug やパス。自身が起点なら空配列                                                       |
 | `adopted`   | 採用した variant-id。`decided` 以外では空。`decided` で空なら全案却下                          |

@@ -35,7 +35,10 @@
             unstable.resvg
             unstable.svgo
             pkgs.libxml2.bin
-          ];
+          ]
+          # iOS 実行基盤（platforms/ios）の Xcode プロジェクト生成。Xcode 本体は Nix の外にある。
+          # 理由は docs/decisions/2026-09-28-ios-runner.md にある。
+          ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ unstable.xcodegen ];
 
           shellHook = ''
             echo "🧪 uiux-numa"

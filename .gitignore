@@ -45,3 +45,8 @@ apps/catalog/public/tokens/
 
 # 作業メモ（リポジトリの記録は docs/ と experiments/ に残す）
 /untitled.md
+
+# iOS 実行基盤（platforms/ios）の生成物。just ios-gen が作る
+platforms/ios/NumaRunner.xcodeproj/
+platforms/ios/Runner/Registry.generated.swift
+platforms/ios/build/

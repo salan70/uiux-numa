@@ -39,5 +39,5 @@ Catalog が読み、値が表に無ければ build が落ちる。
 
 Catalog（`apps/catalog/`）は成果物の visual showcase であり、仕様書や正本ではない。
 `experiments/`、`tokens/`、`docs/guidelines/` を glob で読み、Catalog 固有の説明を正本に足さない。
-topic に当たらない Experiment は載せない。
+topic に当たらない Experiment と、Web 以外の Experiment は載せない。
 画面の個別判断は [apps/catalog/README.md](../apps/catalog/README.md)、公開手順は [catalog-publishing.md](catalog-publishing.md) にある。
