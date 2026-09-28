@@ -10,7 +10,7 @@ export function Frame({ variantClass, children }: { variantClass: string; childr
   const [root, setRoot] = useState<HTMLElement | null>(null);
   useCatalogColors(root);
   return (
-    <div ref={(node) => setRoot(node)} className={`hg ${variantClass}`}>
+    <div ref={(node) => setRoot(node)} className={`hg hg-standalone ${variantClass}`}>
       {children}
     </div>
   );

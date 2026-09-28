@@ -227,7 +227,7 @@ body {
      本文が出るまで待たせない。5 つ目以降は 4 つ目と同時に出し、長い画面でも最後の区画を 320ms 以内に動き出させる。
    - 24px の浮上は space.600。区画は字より大きく、見本のリードの 0.5em（約 8px）では動いたと見えない。
      移動の距離の token は無いので、長さの階梯に寄せる。 */
-.app-shell .app-main > :not(.sidebar-toggle--floating) > :not([data-screen-heading], dialog) {
+.app-shell .app-main > :not(.sidebar-toggle--floating, [data-own-entrance]) > :not([data-screen-heading], dialog) {
   animation: entrance-block var(--duration-entrance) var(--easing-entrance) both;
 }
 
@@ -256,7 +256,7 @@ body {
 
 /* 減らす設定では、移動と順番のずれを止め、透明度の変化だけを状態変化の token で残す。 */
 @media (prefers-reduced-motion: reduce) {
-  .app-shell .app-main > :not(.sidebar-toggle--floating) > :not([data-screen-heading], dialog) {
+  .app-shell .app-main > :not(.sidebar-toggle--floating, [data-own-entrance]) > :not([data-screen-heading], dialog) {
     animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
   }
 }
@@ -348,107 +348,6 @@ body {
   fill: var(--cat-mark-dot);
 }
 
-.app-shell .logo-mark__ring,
-.app-shell .wordmark__ring {
-  fill: none;
-  stroke: var(--cat-mark-dot);
-  stroke-width: 0.6;
-  opacity: 0;
-}
-
-/* ホーム大見出しの入場。experiments/catalog-showreel の IDENTITY 場面と同じ順と時間で、
-   字の線を引き、点を上から落として潰し、波紋を 2 つ広げる。
-   ホームは 1 回の閲覧で数回しか開かないので、約 2 秒を使う。
-   隣の wordmark の句点と同じ時刻に点を落とし、2 つの波紋を揃える（下の wordmark の入場）。
-   - 線: 800ms、cubic-bezier(0.65, 0, 0.35, 1)。画面上で線を引く動きなので ease-in-out にする。token には無いので局所値にする。
-   - 点: 900ms 待って 380ms で落ちる。句点は最後の A を引き終える前に落とすので、句点の時刻にマークの点を合わせる。
-     マークの線は 800ms で引き終わり、点は 100ms の間を置いて落ちる。
-     落下は等加速度（inQuad）、着地で縦 1.5 倍から横 1.45 倍へ潰し、体積が保たれて見える比で戻す。
-   - 波紋: 着地の 1160ms と 1260ms に始め、800ms で 6 倍へ広げて消す。曲線は entrance の token にする。
-   点が viewBox の外から落ち、輪が外へ広がるので、この面だけ SVG のはみ出しを見せる。 */
-.app-shell .logo-mark--enter {
-  overflow: visible;
-}
-
-.app-shell .logo-mark--enter .logo-mark__letter {
-  stroke-dasharray: 1 2;
-  animation: logo-mark-draw 800ms cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-
-.app-shell .logo-mark--enter .logo-mark__dot {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  animation: logo-mark-drop 380ms 900ms linear both;
-}
-
-.app-shell .logo-mark--enter .logo-mark__ring {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  /* 待つ間は from の輪を見せない。forwards にし、始まるまでは既定の opacity: 0 のままにする。 */
-  animation: logo-mark-ring 800ms 1160ms var(--easing-entrance) forwards;
-}
-
-.app-shell .logo-mark--enter .logo-mark__ring--late {
-  animation-delay: 1260ms;
-}
-
-@keyframes logo-mark-draw {
-  from {
-    stroke-dashoffset: 1;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* 68% までが落下、そこから潰れて戻る。区間ごとに曲線を変え、落下だけ加速させる。 */
-@keyframes logo-mark-drop {
-  0% {
-    opacity: 0;
-    transform: translateY(-24px) scale(0.9, 1.15);
-    animation-timing-function: cubic-bezier(0.11, 0, 0.5, 0);
-  }
-  15% {
-    opacity: 1;
-  }
-  68% {
-    transform: translateY(0) scale(0.82, 1.5);
-    animation-timing-function: ease-out;
-  }
-  84% {
-    transform: scale(1.45, 0.65);
-    animation-timing-function: ease-in-out;
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes logo-mark-ring {
-  from {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(6);
-  }
-}
-
-/* 減らす設定では線を引かず、点を落とさず、輪を出さない。語と同じく透明度の変化だけを残す。 */
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .logo-mark--enter .logo-mark__letter,
-  .app-shell .logo-mark--enter .logo-mark__dot {
-    stroke-dasharray: none;
-    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
-  }
-
-  .app-shell .logo-mark--enter .logo-mark__ring {
-    display: none;
-  }
-}
-
 /* UI/UX NUMA の wordmark。マークと同じ高さ 32 の座標で描いてあり、同じ高さを与えると baseline が揃う。
    題字ではマークと同じ 1.25rem にする。 */
 .app-shell .wordmark {
@@ -468,67 +367,6 @@ body {
 
 .app-shell .wordmark__dot {
   fill: var(--cat-mark-dot);
-}
-
-/* ホーム大見出しの lockup。マークと wordmark に同じ高さを与える。
-   幅は高さの 8.2 倍（マーク 1、間隔 0.3、wordmark 221/32）なので、版面の幅の 1/8.3 を上限にし、狭い画面で溢れさせない。 */
-.app-shell .home-hero__title .logo-mark,
-.app-shell .home-hero__title .wordmark {
-  inline-size: auto;
-  block-size: var(--lockup-h);
-}
-
-.app-shell .home-hero__title .logo-mark {
-  inline-size: var(--lockup-h);
-}
-
-/* wordmark の入場。experiments/uiux-numa-wordmark の caps-period と同じ値にする。
-   字はマークの 150ms 後から 1 字 60ms ずつ 500ms で引き、句点は最後の A を引き終える 230ms 前（900ms）に落とす。
-   破線の始点を長さ 1 ちょうどにすると、長さ 0 の線に round cap が付いて引く前に点が残るので、1.02 から始める。 */
-.app-shell .wordmark--enter .wordmark__letter {
-  stroke-dasharray: 1 2;
-  animation: wordmark-draw 500ms cubic-bezier(0.65, 0, 0.35, 1) both;
-  animation-delay: calc(150ms + var(--i) * 60ms);
-}
-
-.app-shell .wordmark--enter .wordmark__dot {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  animation: logo-mark-drop 380ms 900ms linear both;
-}
-
-/* 句点の着地の波紋。マークと同じ輪を 2 つ、0.1 秒ずらして広げる。マークの点と同じ時刻に着地し、2 つの波紋が揃う。
-   着地は落下の 68%（logo-mark-drop）なので、900ms + 380ms × 0.68 ≈ 1160ms に始める。
-   待つ間は from の輪を見せないよう forwards にする（マークの輪と同じ）。 */
-.app-shell .wordmark--enter .wordmark__ring {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  animation: logo-mark-ring 800ms 1160ms var(--easing-entrance) forwards;
-}
-
-.app-shell .wordmark--enter .wordmark__ring--late {
-  animation-delay: 1260ms;
-}
-
-@keyframes wordmark-draw {
-  from {
-    stroke-dashoffset: 1.02;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .wordmark--enter .wordmark__letter,
-  .app-shell .wordmark--enter .wordmark__dot {
-    stroke-dasharray: none;
-    animation: entrance-words-reduced var(--duration-state) var(--easing-standard) both;
-  }
-
-  .app-shell .wordmark--enter .wordmark__ring {
-    display: none;
-  }
 }
 
 /* 開閉ボタン。開閉で寸法も形も変えず、色だけが状態を示す。 */
@@ -1030,8 +868,7 @@ body {
 
 /* Card は 1 行に収まらない文字を … で切る。grid の項目が既定の min-width: auto のままだと、
    切る前の文字幅まで項目が広がり、狭い画面で横にはみ出す。 */
-.app-shell .component-cards > li,
-.app-shell .topic-list > li {
+.app-shell .component-cards > li {
   min-inline-size: 0;
 }
 
@@ -1154,269 +991,40 @@ body {
   }
 }
 
-/* ---- トップの流れる帯 ---- */
-
-/* 題字と帯を縦に積む。帯は版面の左右いっぱいまで広げ、両端を背景へ溶かす。
+/* ---- トップ ----
+   部品と造形は experiments/catalog-home-graphic/shared の dot-field.css にあり、ここでは版面へ収める寸法だけを決める。
+   版面は左右に --cat-inline の余白を持つので、網点の場の内側の余白は 0 にする。
+   hero は版面の上下の余白を差し引いた高さにし、開いた時点で WORKS の見出しが画面の下端に覗かないようにする。
    判断は apps/catalog/README.md に残す。 */
-.app-shell .home-hero {
-  container-type: inline-size;
-  display: grid;
-  gap: var(--cat-gap-lg);
+.app-shell .home-graphic {
+  --hg-inline: 0px;
 }
 
-.app-shell .home-hero__title {
-  --lockup-h: min(var(--cat-display), calc(100cqi / 8.3));
-  display: flex;
-  align-items: flex-start;
-  gap: calc(var(--lockup-h) * 0.3);
-  margin: 0;
-  font-size: var(--cat-display);
-  font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: -0.03em;
+.app-shell .home-graphic .df-hero {
+  min-block-size: calc(100svh - var(--cat-block) * 2);
+  padding-block: 0 var(--space-600);
 }
 
-.app-shell .marquee {
-  --marquee-gap: var(--space-400);
-  display: grid;
-  gap: var(--marquee-gap);
-  margin-block-start: var(--cat-gap-lg);
-}
-
-/* 帯は横スクロールの容器にし、スクロールバーは隠す。両端は背景へ溶かす。 */
-/* scroll-padding は両端の溶かしと同じ幅にし、フォーカスで見える位置へ出したカードを溶かしの外に置く。 */
-.app-shell .marquee__row {
-  overflow-x: auto;
-  scroll-padding-inline: var(--space-1000);
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 var(--space-1000),
-    #000 calc(100% - var(--space-1000)),
-    transparent
-  );
-}
-
-.app-shell .marquee__row::-webkit-scrollbar {
-  display: none;
-}
-
-/* focus の枠が帯の上下で切れないよう、枠の分だけ内側に余白を持つ。
-   左右にも溶かしと同じ幅を持たせ、先頭と末尾のカードが溶かしの下に隠れないようにする。 */
-.app-shell .marquee__track {
-  display: flex;
-  inline-size: max-content;
-  padding: var(--space-200) var(--space-1000);
-}
-
-/* 1 周の長さは群の幅になる。末尾にも間隔を持たせ、複製との継ぎ目を他の間隔と揃える。 */
-.app-shell .marquee__group {
-  display: flex;
-  gap: var(--marquee-gap);
-  margin: 0;
-  padding: 0 var(--marquee-gap) 0 0;
-  list-style: none;
-}
-
-/* Card は幅で高さが決まるので、段ごとに幅を揃え、段どうしで幅を変える。 */
-.app-shell .marquee__group > li {
-  display: flex;
-  inline-size: var(--marquee-card);
-}
-
-.app-shell .marquee__group > li > .card {
-  flex: 1;
-}
-
-.app-shell .marquee__row:nth-of-type(1) {
-  --marquee-card: clamp(14rem, 24vw, 20rem);
-}
-
-.app-shell .marquee__row:nth-of-type(2) {
-  --marquee-card: clamp(10rem, 15vw, 13rem);
-}
-
-.app-shell .marquee__row:nth-of-type(3) {
-  --marquee-card: clamp(12rem, 19vw, 16rem);
-}
-
-/* 動きを減らす設定では流さない。複製を外し、指とトラックパッドで送る横スクロールにする。 */
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .marquee__group--clone {
-    display: none;
-  }
-
-  .app-shell .marquee__row {
-    scrollbar-width: thin;
-    mask-image: none;
-  }
-}
-
-/* ---- 帯のカードのカバー ---- */
-
-/* 配色は面いっぱいに色を敷く。値はカードごとの変数で渡し、明暗で切り替える。 */
-.app-shell .cover-scheme {
-  --primary: var(--light-primary);
-  --on-primary: var(--light-on-primary);
-  --secondary: var(--light-secondary);
-  --tertiary: var(--light-tertiary);
-  --container: var(--light-primary-container);
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr 0.5fr;
-  align-self: stretch;
-  justify-self: stretch;
-}
-
-:root[data-theme="dark"] .app-shell .cover-scheme {
-  --primary: var(--dark-primary);
-  --on-primary: var(--dark-on-primary);
-  --secondary: var(--dark-secondary);
-  --tertiary: var(--dark-tertiary);
-  --container: var(--dark-primary-container);
-}
-
-.app-shell .cover-scheme__primary {
-  display: flex;
-  grid-row: 1 / 3;
-  align-items: end;
-  padding: var(--space-300);
-  background: var(--primary);
-  color: var(--on-primary);
-  font-size: var(--cat-label);
-  font-weight: 700;
-}
-
-.app-shell .cover-scheme__secondary {
-  background: var(--secondary);
-}
-
-.app-shell .cover-scheme__tertiary {
-  background: var(--tertiary);
-}
-
-.app-shell .cover-scheme__container {
-  grid-column: 1 / 3;
-  background: var(--container);
-}
-
-.app-shell .cover-icon svg {
-  display: block;
-  inline-size: 3rem;
-  block-size: 3rem;
-}
-
-.app-shell .cover-scale {
-  display: grid;
-  align-content: center;
-  align-self: stretch;
-  justify-self: stretch;
-  gap: var(--space-100);
-  padding-inline: var(--space-500);
-  overflow: hidden;
-}
-
-.app-shell .cover-scale > span {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.app-shell .cover-scale__title {
-  font-size: var(--typography-title-font-size);
-  font-weight: 700;
-  line-height: var(--font-line-height-tight);
-}
-
-.app-shell .cover-scale__heading {
-  font-size: var(--typography-heading-font-size);
-  font-weight: 700;
-}
-
-.app-shell .cover-scale__body {
-  font-size: var(--typography-body-font-size);
-}
-
-.app-shell .cover-radius {
-  display: grid;
-  grid-template-columns: repeat(2, 2.5rem);
-  gap: var(--space-300);
-}
-
-.app-shell .cover-radius > span {
-  aspect-ratio: 1;
-  border: var(--border-width-thick) solid var(--cat-text);
-}
-
-.app-shell .cover-motion {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-300);
-  inline-size: 70%;
-}
-
-.app-shell .cover-motion__track {
-  position: relative;
-  inline-size: 100%;
-  block-size: 1rem;
-  border-block-end: var(--border-width-thin) solid var(--cat-line-strong);
-}
-
-/* 曲線の見本なので、token の easing-out で往復させる。1 往復の長さは見本のための値で token にしない。
-   5 秒を超えて動かし続けないよう、往復は 3 回で止め、hover と focus でやり直す。 */
-.app-shell .cover-motion__dot {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-radius: var(--radius-full);
-  background: var(--cat-text);
-  animation: cover-motion-slide 1.4s var(--easing-out) 3 alternate both;
-}
-
-/* animation-name を替えないと再生が始まらないので、同じ中身の keyframes を別名で持つ。 */
-.app-shell .card:hover .cover-motion__dot,
-.app-shell .card:focus-within .cover-motion__dot {
-  animation-name: cover-motion-replay;
-}
-
-@keyframes cover-motion-slide {
-  to {
-    inset-inline-start: calc(100% - 1rem);
-  }
-}
-
-@keyframes cover-motion-replay {
-  to {
-    inset-inline-start: calc(100% - 1rem);
-  }
-}
-
-.app-shell .cover-motion__label {
-  color: var(--cat-muted);
-  font-size: var(--cat-label);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-shell .cover-motion__dot,
-  .app-shell .card:hover .cover-motion__dot,
-  .app-shell .card:focus-within .cover-motion__dot {
-    animation: none;
-    inset-inline-start: calc(100% - 1rem);
-  }
-}
-
-/* ---- トピック一覧。入口は 7 つとも同じ重さにする ---- */
-
-.app-shell .topic-list {
-  margin: var(--cat-section) 0 0;
+.app-shell .home-graphic .df-works {
   padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--cat-section) var(--space-600);
+}
+
+.app-shell .home-graphic .df-works__head {
+  margin-block: var(--cat-block) var(--space-1000);
+}
+
+@media (width <= 60rem) {
+  .app-shell .home-graphic .df-hero {
+    min-block-size: calc(100svh - var(--cat-section) * 2);
+  }
+}
+
+/* 狭い幅ではナビが上の帯になり、画面の高さいっぱいの hero では題字が最初の画面から外れる。
+   マーク（幅の 70%）と題字が 1 画面に収まる高さにする。 */
+@media (width <= 40rem) {
+  .app-shell .home-graphic .df-hero {
+    min-block-size: 34rem;
+  }
 }
 
 /* ---- トピックの画面 ---- */
@@ -1552,18 +1160,6 @@ body {
 .app-shell .token-table__desc {
   min-inline-size: 16rem;
   color: var(--cat-muted);
-}
-
-@media (width <= 60rem) {
-  .app-shell .topic-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (width <= 40rem) {
-  .app-shell .topic-list {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* 余白の token は文字ではなく長さの帯で見せる。字面では大きさが分からない。 */

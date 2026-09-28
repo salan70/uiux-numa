@@ -1,4 +1,4 @@
-import { MARK_DOT, MARK_LETTER } from "../../shared/Lockup";
+import { MARK_DOT, MARK_LETTER } from "./Lockup";
 
 /**
  * 網点の場。マークを格子の点の大きさで描き、線を引く順に点を立て、赤い点を落として波紋を広げる。

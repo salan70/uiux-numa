@@ -39,7 +39,7 @@ updated: 2026-09-25
 - 良い例:「削除してください」「保存できません」「まだ記録がありません」「保存または削除」
 - 悪い例:「削除して下さい」「保存出来ません」「記録が無い」「保存又は削除」
 - 例外: 実質の動作や対象を表すとき（「賞状を頂く」「所持する物」）と固有名詞
-- 実験: [一覧タイルの説明](../../apps/catalog/src/content/galleryTiles.tsx)
+- 実験: [一覧タイルの説明](https://github.com/salan70/uiux-numa/blob/afc413f7f337c98c1330ca7b3718ad3d9a4dd516/apps/catalog/src/content/galleryTiles.tsx)
 - 出典: [公用文作成の考え方 Ⅰ-1](https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf)
 
 ### 数えられる数は半角の算用数字、置き換えられない数は漢数字で書く
@@ -74,7 +74,7 @@ updated: 2026-09-25
 - コア: プロダクト全体で 1 つの形に揃える
 - 良い例: 文「保存しました。」、名詞句「役割ごとに決めた色の組」、見出し「ページが見つかりません」
 - 悪い例: 同じ一覧で「。」の有無が混在、ボタン「保存。」
-- 実験: [一覧タイルの説明](../../apps/catalog/src/content/galleryTiles.tsx)
+- 実験: [一覧タイルの説明](https://github.com/salan70/uiux-numa/blob/afc413f7f337c98c1330ca7b3718ad3d9a4dd516/apps/catalog/src/content/galleryTiles.tsx)
 - 出典: [SmartHR Design System: 記号の表記](https://smarthr.design/products/contents/idiomatic-usage/symbol/)
 
 ### 疑問符と感嘆符は全角で書き、直前に空白を入れない

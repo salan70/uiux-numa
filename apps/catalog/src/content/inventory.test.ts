@@ -12,7 +12,7 @@ describe("catalog inventory", () => {
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
     expect(catalog.experiments).toHaveLength(18);
-    expect(catalog.liveVariants).toHaveLength(42);
+    expect(catalog.liveVariants).toHaveLength(40);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -123,6 +123,7 @@ describe("catalog inventory", () => {
     expect(ids("adopted")).toEqual([
       "button/pill-action",
       "card/zoom-cover",
+      "catalog-home-graphic/dot-field",
       "catalog-screen-entrance/blur-focus",
       "catalog-screen-entrance/char-stagger",
       "catalog-screen-entrance/line-mask",

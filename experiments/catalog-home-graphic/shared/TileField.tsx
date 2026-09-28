@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { ICON_SVGS, SCHEME_SWATCHES, type HomeTopic } from "../../shared/home";
-import { useReducedMotion } from "../../shared/playback";
+import { ICON_SVGS, SCHEME_PRIMARIES, type TopicId } from "./home";
+import { useReducedMotion } from "./playback";
 
 /**
  * tile の網点。topic ごとの図柄を網点の大きさで描く。hero の場（field.ts）と同じく、
@@ -27,12 +27,12 @@ function roundRect(
 
 /** 採用済み配色の primary を縦の帯に並べ、下へ向かって点を小さくする。濃淡の網点そのもの。 */
 const paintColors: Painter = (ctx, box) => {
-  const band = box.w / SCHEME_SWATCHES.length;
+  const band = box.w / SCHEME_PRIMARIES.length;
   const gradient = ctx.createLinearGradient(0, box.y, 0, box.y + box.h);
   gradient.addColorStop(0, "#000");
   gradient.addColorStop(1, "rgb(0 0 0 / 0)");
   ctx.fillStyle = gradient;
-  SCHEME_SWATCHES.forEach((_, index) => {
+  SCHEME_PRIMARIES.forEach((_, index) => {
     ctx.fillRect(box.x + index * band + band * 0.12, box.y, band * 0.76, box.h);
   });
 };
@@ -141,7 +141,7 @@ const paintMotion: Painter = (ctx, box) => {
   ctx.fill();
 };
 
-const PAINTERS: Record<HomeTopic["id"], Painter> = {
+const PAINTERS: Record<TopicId, Painter> = {
   colors: paintColors,
   typography: paintTypography,
   tokens: paintTokens,
@@ -160,7 +160,7 @@ type Layout = {
   grid: { x: number; y: number }[];
 };
 
-function buildLayout(topic: HomeTopic["id"], width: number, height: number): Layout {
+function buildLayout(topic: TopicId, width: number, height: number): Layout {
   const step = 9;
   const cols = Math.ceil(width / step);
   const rows = Math.ceil(height / step);
@@ -187,8 +187,8 @@ function buildLayout(topic: HomeTopic["id"], width: number, height: number): Lay
       if (cover < 0.05) continue;
       let color: string | null = null;
       if (topic === "colors") {
-        const band = Math.floor(((x - box.x) / box.w) * SCHEME_SWATCHES.length);
-        color = SCHEME_SWATCHES[Math.min(SCHEME_SWATCHES.length - 1, Math.max(0, band))].primary;
+        const band = Math.floor(((x - box.x) / box.w) * SCHEME_PRIMARIES.length);
+        color = SCHEME_PRIMARIES[Math.min(SCHEME_PRIMARIES.length - 1, Math.max(0, band))];
       }
       // 右上の角から順に立てる。hero の点が落ちた位置と同じ向きから広がる。
       const delay = (Math.hypot(x - origin.x, y - origin.y) / reach) * 0.55;
@@ -287,7 +287,7 @@ export function TileField({
   seen,
   host,
 }: {
-  topic: HomeTopic["id"];
+  topic: TopicId;
   seen: boolean;
   host: HTMLElement | null;
 }) {
