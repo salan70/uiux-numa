@@ -46,9 +46,10 @@
   pointer-events: none;
 }
 
+/* 語は字間と余白だけで分け、記号で区切らない（利用者の 2026-09-28 の指示）。 */
 .df .df-eyebrow {
   display: flex;
-  gap: var(--space-300);
+  gap: var(--space-600);
   color: var(--hg-muted);
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -66,17 +67,6 @@
 
 .df .df-eyebrow > span:nth-child(3) {
   --n: 2;
-}
-
-.df .df-eyebrow > span + span::before {
-  display: inline-block;
-  inline-size: 0.4em;
-  block-size: 0.4em;
-  margin-inline-end: var(--space-300);
-  border-radius: var(--radius-full);
-  background: var(--hg-dot);
-  vertical-align: 0.15em;
-  content: "";
 }
 
 .df .df-title {
@@ -135,14 +125,6 @@
   }
 }
 
-.df .df-tagline {
-  color: var(--hg-muted);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 700;
-  line-height: 1.6;
-  animation: df-focus 900ms 2000ms var(--easing-entrance) backwards;
-}
-
 @keyframes df-rise {
   from {
     opacity: 0;
@@ -183,7 +165,8 @@
 .df .df-works__rule {
   flex: 1;
   block-size: 6px;
-  background: radial-gradient(circle, var(--hg-line-strong) 1.2px, transparent 1.8px) 0 50% / 8px 6px repeat-x;
+  background: radial-gradient(circle, var(--hg-line-strong) 1.2px, transparent 1.8px) 0 50% / 8px
+    6px repeat-x;
 }
 
 .df .df-grid {
@@ -221,9 +204,9 @@
 .df .df-tile__link {
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   gap: var(--space-400);
-  min-block-size: 19rem;
+  min-block-size: 17rem;
   padding: var(--space-600);
   overflow: hidden;
   border-radius: var(--radius-surface);
@@ -289,30 +272,12 @@
   letter-spacing: 0.08em;
 }
 
-.df .df-tile__body {
-  display: grid;
-  align-content: end;
-  gap: var(--space-200);
-}
-
 .df .df-tile__label {
+  align-self: end;
   font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
-}
-
-.df .df-tile__lead {
-  color: var(--hg-muted);
-}
-
-.df .df-tile__count {
-  justify-self: start;
-  padding: var(--space-100) var(--space-300);
-  border-radius: var(--radius-full);
-  background: var(--hg-bg);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
 }
 
 @media (hover: hover) and (pointer: fine) {

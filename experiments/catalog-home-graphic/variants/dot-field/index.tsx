@@ -169,11 +169,7 @@ function Tile({ topic, index }: { topic: HomeTopic; index: number }) {
         <span className="df-tile__num" aria-hidden="true">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <span className="df-tile__body">
-          <span className="df-tile__label">{topic.label}</span>
-          <span className="df-tile__lead">{topic.lead}</span>
-        </span>
-        <span className="df-tile__count">{topic.count}</span>
+        <span className="df-tile__label">{topic.label}</span>
       </a>
     </li>
   );
@@ -201,7 +197,6 @@ export default function Variant() {
             <Lockup className="df-lockup" />
             <span className="hg-label">UI/UX NUMA</span>
           </h1>
-          <p className="df-tagline">UI/UX とプロダクト体験を、AI エージェントと探索する。</p>
         </div>
         {!reduce && (
           <PauseButton
