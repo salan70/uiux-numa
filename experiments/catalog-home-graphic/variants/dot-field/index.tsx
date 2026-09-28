@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { Frame } from "../../shared/Frame";
-import { HOME_TOPICS, SCHEME_SWATCHES, type HomeTopic } from "../../shared/home";
+import { HOME_TOPICS, type HomeTopic } from "../../shared/home";
 import { Lockup } from "../../shared/Lockup";
 import { PauseButton, useOnScreen, useReducedMotion } from "../../shared/playback";
 import { buildLayout, drawField, repaintBackground, TIMING, type FieldColors } from "./field";
+import { TileField } from "./TileField";
 import "./variant.css";
 
 function readColors(element: HTMLElement): FieldColors {
@@ -141,31 +142,18 @@ function useSeen<T extends Element>() {
   return [setElement, seen] as const;
 }
 
-/** 配色の tile だけは、採用済み配色の primary を網点の色にする。成果物そのものの色である。 */
-const SPECTRUM = `linear-gradient(115deg, ${SCHEME_SWATCHES.map((scheme) => scheme.primary).join(", ")})`;
-
 function Tile({ topic, index }: { topic: HomeTopic; index: number }) {
   const [ref, seen] = useSeen<HTMLLIElement>();
-  // 指の位置は tile の要素へ直接書く。
-  const onPointerMove = (event: PointerEvent<HTMLAnchorElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-    event.currentTarget.style.setProperty("--my", `${event.clientY - rect.top}px`);
-  };
+  const [link, setLink] = useState<HTMLAnchorElement | null>(null);
   return (
     <li
       ref={ref}
       className={`df-tile df-tile--${topic.id}`}
       data-seen={seen || undefined}
-      style={
-        {
-          "--i": index,
-          ...(topic.id === "colors" ? { "--df-ink": SPECTRUM } : {}),
-        } as CSSProperties
-      }
+      style={{ "--i": index } as CSSProperties}
     >
-      <a className="df-tile__link" href={topic.href} onPointerMove={onPointerMove}>
-        <span className="df-tile__screen" aria-hidden="true" />
+      <a className="df-tile__link" href={topic.href} ref={setLink}>
+        <TileField topic={topic.id} seen={seen} host={link} />
         <span className="df-tile__num" aria-hidden="true">
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -177,7 +165,7 @@ function Tile({ topic, index }: { topic: HomeTopic; index: number }) {
 
 /**
  * マークを網点の大きさで描く場を hero にする。線を引く順に点が立ち、赤い点が落ちて波紋が場を渡る。
- * 指を近づけると点が膨らんで避ける。WORKS の tile も同じ網点で作り、指の位置から網点が濃くなる。
+ * 指を近づけると点が膨らんで避ける。WORKS の tile も同じ網点で作り、topic ごとの図柄を点の大きさで描く。
  */
 export default function Variant() {
   const reduce = useReducedMotion();
