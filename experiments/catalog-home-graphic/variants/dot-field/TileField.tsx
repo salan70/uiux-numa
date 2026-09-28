@@ -62,6 +62,93 @@ const paintTokens: Painter = (ctx, box) => {
   });
 };
 
+/** 波括弧。token の正本が JSON の値であることを、括弧に挟まれた点で見せる。 */
+const paintTokensBraces: Painter = (ctx, box) => {
+  const size = box.h * 1.15;
+  ctx.fillStyle = "#000";
+  ctx.font = `700 ${size}px "LINE Seed JP", "Hiragino Sans", sans-serif`;
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  const cy = box.y + box.h * 0.46;
+  const cx = box.x + box.w * 0.55;
+  const spread = box.w * 0.34;
+  ctx.fillText("{", cx - spread, cy);
+  ctx.fillText("}", cx + spread, cy);
+  ctx.beginPath();
+  ctx.arc(cx, cy + box.h * 0.04, box.h * 0.2, 0, Math.PI * 2);
+  ctx.fill();
+};
+
+/** 余白の段。space の値（100、200、400、600、1000、2000）の長さの棒を下から積む。 */
+const SPACE_STEPS = [0.25, 0.5, 1, 1.5, 2.5, 5];
+const paintTokensLadder: Painter = (ctx, box) => {
+  const rows = SPACE_STEPS.length;
+  const pitch = box.h / rows;
+  const bar = pitch * 0.8;
+  ctx.fillStyle = "#000";
+  SPACE_STEPS.forEach((value, index) => {
+    // 長さは値の平方根にし、小さい段も点として残す。
+    const length = box.w * Math.sqrt(value / 5);
+    const y = box.y + (rows - 1 - index) * pitch;
+    roundRect(ctx, box.x + box.w - length, y, length, bar, bar / 2);
+    ctx.fill();
+  });
+};
+
+/** 物差し。等間隔の目盛りに、4 本ごとの長い目盛りを付ける。値が格子で決まることを見せる。 */
+const paintTokensRuler: Painter = (ctx, box) => {
+  const ticks = 9;
+  const pitch = box.w / (ticks - 1);
+  ctx.strokeStyle = "#000";
+  ctx.lineCap = "round";
+  ctx.lineWidth = Math.max(12, pitch * 0.5);
+  const base = box.y + box.h * 0.95;
+  ctx.beginPath();
+  ctx.moveTo(box.x, base);
+  ctx.lineTo(box.x + box.w, base);
+  for (let i = 0; i < ticks; i++) {
+    const x = box.x + i * pitch;
+    const height = i % 4 === 0 ? box.h * 0.9 : i % 2 === 0 ? box.h * 0.55 : box.h * 0.32;
+    ctx.moveTo(x, base);
+    ctx.lineTo(x, base - height);
+  }
+  ctx.stroke();
+};
+
+/** 入れ子の枠。余白の token で内側へ詰めていく箱を重ね、中心に点を置く。 */
+const paintTokensNested: Painter = (ctx, box) => {
+  const side = Math.min(box.h * 1.05, box.w);
+  const x0 = box.x + box.w - side;
+  const y0 = box.y + (box.h - side) / 2;
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = Math.max(7, side * 0.06);
+  const insets = [0, 0.16, 0.3];
+  insets.forEach((inset, index) => {
+    const d = side * inset + ctx.lineWidth / 2;
+    const w = side - d * 2;
+    roundRect(ctx, x0 + d, y0 + d, w, w, w * (0.12 + index * 0.08));
+    ctx.stroke();
+  });
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(x0 + side / 2, y0 + side / 2, side * 0.1, 0, Math.PI * 2);
+  ctx.fill();
+};
+
+// 比較用の候補。runner の URL に ?tokens=<id> を付けると差し替わる。利用者が選んだら残りを消す。
+const TOKEN_PAINTERS: Record<string, Painter> = {
+  radius: paintTokens,
+  braces: paintTokensBraces,
+  ladder: paintTokensLadder,
+  ruler: paintTokensRuler,
+  nested: paintTokensNested,
+};
+
+function tokensPainter(): Painter {
+  const id = new URLSearchParams(window.location.search).get("tokens") ?? "radius";
+  return TOKEN_PAINTERS[id] ?? paintTokens;
+}
+
 /** 部品。塗りの pill の Button と、つまみの付いたスイッチ。 */
 const paintComponents: Painter = (ctx, box) => {
   const pillH = box.h * 0.34;
@@ -143,7 +230,7 @@ const paintMotion: Painter = (ctx, box) => {
 const PAINTERS: Record<HomeTopic["id"], Painter> = {
   colors: paintColors,
   typography: paintTypography,
-  tokens: paintTokens,
+  tokens: (ctx, box) => tokensPainter()(ctx, box),
   components: paintComponents,
   icons: paintIcons,
   motion: paintMotion,
