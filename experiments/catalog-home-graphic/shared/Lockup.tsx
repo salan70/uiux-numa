@@ -23,7 +23,7 @@ export const WORDMARK_DOT = { cx: 216.5, cy: 27.5, r: 2.5 };
  * 字画は pathLength 1 にし、線を引く動きを長さに依らず 0..1 で書けるようにする。動きは各 variant の CSS が決める。
  * 名前は見えない文字列が担うので、SVG は読み上げに出さない。
  */
-export function Lockup({ className, rings = false }: { className?: string; rings?: boolean }) {
+export function Lockup({ className }: { className?: string }) {
   const offset = 32 + 9.6;
   return (
     <svg
@@ -39,7 +39,6 @@ export function Lockup({ className, rings = false }: { className?: string; rings
           d={MARK_LETTER}
           style={{ "--i": 0 } as CSSProperties}
         />
-        {rings && <circle className="lk-ring" {...MARK_DOT} />}
         <circle className="lk-dot lk-dot--mark" {...MARK_DOT} />
       </g>
       <g className="lk-word" transform={`translate(${offset} 0)`}>
@@ -52,7 +51,6 @@ export function Lockup({ className, rings = false }: { className?: string; rings
             style={{ "--i": index + 1 } as CSSProperties}
           />
         ))}
-        {rings && <circle className="lk-ring" {...WORDMARK_DOT} />}
         <circle className="lk-dot lk-dot--period" {...WORDMARK_DOT} />
       </g>
     </svg>

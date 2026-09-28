@@ -180,7 +180,7 @@
   background: var(--lg-bg);
 }
 
-/* catalog.css の .home-hero__title と同じ値 */
+/* 2026-09-28 まで Catalog のトップにあった .home-hero__title（catalog.css）と同じ値 */
 .lg-mock .lg-home__title {
   display: flex;
   align-items: center;

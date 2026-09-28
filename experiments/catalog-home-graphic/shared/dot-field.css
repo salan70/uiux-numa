@@ -20,10 +20,15 @@
   isolation: isolate;
 }
 
+/* 場の四辺を地へ溶かす。Catalog では版面の幅で場が切れ、細かい点の地が四角い枠に見えた。 */
 .df .df-field {
   position: absolute;
   inset: 0;
   z-index: -1;
+  mask-image:
+    linear-gradient(to right, transparent, #000 6%, #000 94%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-composite: intersect;
 }
 
 .df .df-field canvas {
@@ -139,6 +144,13 @@
   inset-inline-end: var(--hg-inline);
 }
 
+/* 狭い幅では題字が右端まで届くので、止める操作を右上へ移して句点に重ねない。 */
+@media (width < 40rem) {
+  .df .df-pause {
+    inset-block: 0 auto;
+  }
+}
+
 /* ---------- WORKS ---------- */
 
 .df .df-works {
@@ -195,6 +207,7 @@
 }
 
 .df .df-tile__link {
+  container-type: inline-size;
   position: relative;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -225,9 +238,10 @@
   letter-spacing: 0.08em;
 }
 
+/* 字の大きさは tile の幅から決める。画面の幅から決めると、サイドバーのある Catalog で Components が tile からはみ出した。 */
 .df .df-tile__label {
   align-self: end;
-  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-size: clamp(1.75rem, 12cqi, 2.75rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;

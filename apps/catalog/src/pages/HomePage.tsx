@@ -1,75 +1,20 @@
-import type { ComponentType } from "react";
-import { Card } from "../../../../experiments/card/shared/Card";
-import {
-  ColorsCover,
-  ComponentsCover,
-  IconsCover,
-  TokensCover,
-  TypographyCover,
-} from "../../../../experiments/card/shared/covers";
-import { LogoMark, Wordmark } from "../components/icons";
+import { DotFieldHome } from "../../../../experiments/catalog-home-graphic/shared/DotFieldHome";
 import { Link } from "../components/Link";
-import { MarqueeRows } from "../components/MarqueeRows";
-import { catalog, worksInTopic } from "../content/collect";
-import { galleryTiles, MotionCover } from "../content/galleryTiles";
-import { topicHref, TOPICS, type Topic, type TopicId } from "../content/topics";
-import { SITE_TITLE } from "../site";
-
-/** トピックの入口に置くカバー。成果物の iframe ではなく、リポジトリの実物を縮小して置く。 */
-const TOPIC_COVERS: Record<TopicId, ComponentType> = {
-  colors: ColorsCover,
-  typography: TypographyCover,
-  tokens: TokensCover,
-  components: ComponentsCover,
-  icons: IconsCover,
-  // トップの帯で motion token に使っている見本を流用する。挿絵を新しく描かない規則（covers.tsx）に揃える。
-  motion: MotionCover,
-};
+import { TOPICS } from "../content/topics";
 
 /**
- * 成果物のカードを逆向きに流れる 3 段の帯で見せ、その下にトピックの入口を並べる。
+ * トップ。マークを網点で描く hero と、topic ごとの図柄を網点で描く WORKS の入口を置く。
+ * 採用した型は experiments/catalog-home-graphic の dot-field で、部品は同 Experiment の shared にある。
  * 判断は apps/catalog/README.md に残す。
  */
 export function HomePage() {
   return (
-    <>
-      <section className="home-hero" aria-labelledby="home-title">
-        <h1 className="home-hero__title" id="home-title" tabIndex={-1} data-screen-heading>
-          {/* マークと wordmark は線を引いて点を落とす。動きの無い版はサイドバーの題字にある。判断は apps/catalog/README.md にある。 */}
-          <LogoMark animated />
-          <Wordmark animated />
-          <span className="logo-label">{SITE_TITLE}</span>
-        </h1>
-        <MarqueeRows tiles={galleryTiles()} />
-      </section>
-
-      <section className="topics" aria-labelledby="topics-head">
-        <h2 className="section-title" id="topics-head">
-          WORKS
-        </h2>
-        <ul className="topic-list">
-          {TOPICS.map((topic) => {
-            const Cover = TOPIC_COVERS[topic.id];
-            return (
-              <li key={topic.id}>
-                <Card
-                  href={topicHref(topic.id)}
-                  title={topic.label}
-                  meta={countOf(topic)}
-                  description={topic.lead}
-                  cover={<Cover />}
-                  linkAs={Link}
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-    </>
+    // 自前の入場を持つので、版面の区画の入場（catalog.css の entrance-block）を当てない。
+    <div className="hg df home-graphic" data-own-entrance>
+      <DotFieldHome
+        topics={TOPICS.map(({ id, label, href }) => ({ id, label, href }))}
+        linkAs={Link}
+      />
+    </div>
   );
-}
-
-function countOf(topic: Topic): string {
-  if (topic.id === "tokens") return `${catalog.tokens.length} token`;
-  return `${worksInTopic(topic.id).length} 件`;
 }

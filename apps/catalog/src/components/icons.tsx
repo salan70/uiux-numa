@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import type { ThemeChoice } from "../theme";
 
 /**
@@ -108,39 +107,21 @@ export function ArrowIcon({ direction }: { direction: "prev" | "next" }) {
 }
 
 /**
- * UI/UX NUMA のマーク。n と u を 1 本の線でつないだ nu と、右の脚の上の点。題字と見出しで字の前に置く。
+ * UI/UX NUMA のマーク。n と u を 1 本の線でつないだ nu と、右の脚の上の点。題字で字の前に置く。
  * 形の正本は experiments/uiux-numa-logo/variants/nu-dot/dist/mark.svg。
  * 座標の導出は同 Experiment の README にある。字の横に置く飾りなので、名前は隣の文字列が担う。
- * animated を付けると、線を引いてから点を落とす（experiments/catalog-showreel の IDENTITY 場面と同じ順）。
- * 波紋の輪は動きのためだけにあるので、animated のときだけ描く。
  */
-export function LogoMark({ animated = false }: { animated?: boolean }) {
+export function LogoMark() {
   return (
-    <svg
-      className={animated ? "logo-mark logo-mark--enter" : "logo-mark"}
-      viewBox="0 0 32 32"
-      aria-hidden="true"
-      focusable="false"
-    >
-      {/* pathLength を 1 にし、線を引く動きの破線を線の長さに依らず 0..1 で書く。 */}
-      <path
-        className="logo-mark__letter"
-        pathLength={1}
-        d="M6 28V14a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V8"
-      />
-      {animated && (
-        <>
-          <circle className="logo-mark__ring" cx="26" cy="2.5" r="2.5" />
-          <circle className="logo-mark__ring logo-mark__ring--late" cx="26" cy="2.5" r="2.5" />
-        </>
-      )}
+    <svg className="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path className="logo-mark__letter" d="M6 28V14a4 4 0 0 1 8 0v8a6 6 0 0 0 12 0V8" />
       <circle className="logo-mark__dot" cx="26" cy="2.5" r="2.5" />
     </svg>
   );
 }
 
 // wordmark の字。形の正本は experiments/uiux-numa-wordmark/variants/caps-period/dist/wordmark.svg。
-// 字ごとに 1 本の path にし、入場で左から順に線を引く。
+// 字ごとに 1 本の path にする。
 const WORDMARK_LETTERS = [
   "M4 4v16a8 8 0 0 0 16 0V4",
   "M29 4v24",
@@ -156,32 +137,13 @@ const WORDMARK_LETTERS = [
 /**
  * UI/UX NUMA の wordmark。マークと同じ高さ 32 で描き、baseline（y 28）が揃う。句点は赤い点。
  * 座標の導出は experiments/uiux-numa-wordmark の README にある。名前は隣の見えない文字列が担う。
- * animated を付けると、字を 1 字ずつ引き、最後に句点を落として波紋を広げる（マークの入場と同じ曲線と落とし方）。
- * 波紋の輪は動きのためだけにあるので、animated のときだけ描く。
  */
-export function Wordmark({ animated = false }: { animated?: boolean }) {
+export function Wordmark() {
   return (
-    <svg
-      className={animated ? "wordmark wordmark--enter" : "wordmark"}
-      viewBox="0 0 221 32"
-      aria-hidden="true"
-      focusable="false"
-    >
-      {WORDMARK_LETTERS.map((d, index) => (
-        <path
-          key={d}
-          className="wordmark__letter"
-          pathLength={1}
-          d={d}
-          style={{ "--i": index } as CSSProperties}
-        />
+    <svg className="wordmark" viewBox="0 0 221 32" aria-hidden="true" focusable="false">
+      {WORDMARK_LETTERS.map((d) => (
+        <path key={d} className="wordmark__letter" d={d} />
       ))}
-      {animated && (
-        <>
-          <circle className="wordmark__ring" cx="216.5" cy="27.5" r="2.5" />
-          <circle className="wordmark__ring wordmark__ring--late" cx="216.5" cy="27.5" r="2.5" />
-        </>
-      )}
       <circle className="wordmark__dot" cx="216.5" cy="27.5" r="2.5" />
     </svg>
   );

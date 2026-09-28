@@ -6,8 +6,8 @@
 @import "../../../tokens/motion/index.css";
 
 /*
- * 案が共有する版面の土台。色の役割の対応、字、止める操作だけを持つ。
- * 色の値は持たず、Catalog の --color-* を読む。単体表示の代替は Catalog の既定 sumi の値にする。
+ * dot-field の版面の土台。色の役割の対応、字、止める操作だけを持つ。
+ * 色の値は持たず、Catalog の --color-* を読む。
  */
 
 :where(.hg) :where(*, *::before, *::after) {
@@ -23,13 +23,14 @@
   list-style: none;
 }
 
-.hg {
+/* runner で単体表示するときの代替配色。Catalog の既定 sumi の値にする。
+   Catalog の中では :root の --color-* を読むので、この値を .hg に置くと利用者の配色を上書きしてしまう。
+   そのため runner の枠（Frame が付ける .hg-standalone）だけに置く。 */
+.hg-standalone {
   --color-primary: #2b2b2b;
   --color-on-primary: #fffdf9;
   --color-secondary: #c9171e;
   --color-on-secondary: #fffdf9;
-  --color-tertiary: #e6b422;
-  --color-on-tertiary: #120d09;
   --color-background: #f9f8f8;
   --color-surface: #fefefe;
   --color-on-surface: #1f1f1f;
@@ -39,8 +40,12 @@
   --color-outline: #757575;
   --color-focus: #525252;
 
+  min-block-size: 100vh;
+}
+
+.hg {
   /* 役割の対応。Catalog の --cat-* と同じ当て方にする。
-     点はマークの点と同じ secondary、脇の光は tertiary。どちらも配色を切り替えると追従する。 */
+     点はマークの点と同じ secondary で、配色を切り替えると追従する。 */
   --hg-bg: var(--color-background);
   --hg-surface: var(--color-surface-container);
   --hg-ink: var(--color-on-surface);
@@ -48,13 +53,10 @@
   --hg-line: var(--color-surface-variant);
   --hg-line-strong: var(--color-outline);
   --hg-dot: var(--color-secondary);
-  --hg-on-dot: var(--color-on-secondary);
-  --hg-glint: var(--color-tertiary);
   --hg-focus: var(--color-focus);
   --hg-inline: var(--space-page-inline, 1.5rem);
 
   position: relative;
-  min-block-size: 100vh;
   overflow-x: clip;
   background: var(--hg-bg);
   color: var(--hg-ink);
@@ -66,7 +68,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .hg:not([data-theme="light"]) {
+  .hg-standalone:not([data-theme="light"]) {
     --color-secondary-container: #861318;
     --color-background: #1b1a1a;
     --color-surface: #272525;
