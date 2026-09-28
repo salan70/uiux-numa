@@ -1,17 +1,10 @@
 /*
  * dot-field。図を網点で作る。
  * マークの字画は墨、点と波紋と指の近くは点の赤にする。地の点は罫の色で、面の上で読める強さに留める。
- * 配色の tile だけは、採用済み配色の primary を並べた帯を網点の色にする。
+ * tile は topic ごとの図柄を網点で描く。配色の tile だけは、採用済み配色の primary を点の色にする。
  */
 
-@property --df-r {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
 .df {
-  --df-step: 10px;
   --df-draw: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
@@ -215,54 +208,14 @@
   transition: transform 400ms var(--easing-entrance);
 }
 
-/* 右上の角の網点。字の載る左下には掛けない。入場で点が 0 から膨らむ。 */
-.df .df-tile__link::before {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background: var(--df-ink, var(--hg-ink));
-  opacity: 0.8;
-  mask-image:
-    radial-gradient(circle, #000 var(--df-r), transparent calc(var(--df-r) + 0.7px)),
-    radial-gradient(ellipse 75% 85% at 100% 0%, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 100%);
-  mask-size:
-    var(--df-step) var(--df-step),
-    100% 100%;
-  mask-repeat: repeat, no-repeat;
-  mask-composite: intersect;
-  transition: --df-r 1200ms var(--easing-entrance);
-  transition-delay: calc(var(--i) * 80ms + 200ms);
-  content: "";
-}
-
-.df .df-tile[data-seen] .df-tile__link::before {
-  --df-r: 2.6px;
-}
-
-/* 指の周りの網点。選んだ tile だけに出し、点は角の網点より大きい。 */
-.df .df-tile__screen {
+/* topic ごとの図柄の網点（TileField.tsx）。字の下に敷く。 */
+.df .df-tile__field {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--df-ink, var(--hg-dot));
-  mask-image:
-    radial-gradient(circle, #000 var(--df-r), transparent calc(var(--df-r) + 0.7px)),
-    radial-gradient(
-      circle 13rem at var(--mx, 80%) var(--my, 20%),
-      #000 0%,
-      rgb(0 0 0 / 0.6) 45%,
-      transparent 100%
-    );
-  mask-size:
-    var(--df-step) var(--df-step),
-    100% 100%;
-  mask-repeat: repeat, no-repeat;
-  mask-composite: intersect;
-  transition: --df-r 500ms var(--easing-entrance);
-}
-
-.df .df-tile--colors .df-tile__screen {
-  background: var(--df-ink);
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .df .df-tile__num {
@@ -281,17 +234,9 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .df .df-tile__link:hover .df-tile__screen {
-    --df-r: 4.4px;
-  }
-
   .df .df-tile__link:hover {
     transform: translateY(-4px);
   }
-}
-
-.df .df-tile__link:focus-visible .df-tile__screen {
-  --df-r: 4.4px;
 }
 
 /* ---------- 動きを減らす ---------- */
@@ -311,9 +256,5 @@
   .df .df-tile {
     opacity: 1;
     translate: 0 0;
-  }
-
-  .df .df-tile__link::before {
-    --df-r: 2.6px;
   }
 }
