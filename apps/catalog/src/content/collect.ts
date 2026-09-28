@@ -190,6 +190,9 @@ function collectExperiments(liveVariants: LiveVariant[]): ExperimentRecord[] {
     const slug = match[1];
     const repoPath = toExperimentRepoPath(key);
     const frontmatter = parseExperimentFrontmatter(source, repoPath);
+    // Catalog は Web の variant だけを描く。Web 以外の Experiment は frontmatter の検査だけを通し、載せない。
+    // 判断は docs/decisions/2026-09-28-ios-runner.md にある。
+    if (!frontmatter.platforms.includes("web")) continue;
     const actual = (byExperiment.get(slug) ?? []).map((item) => item.variant).sort();
     const rows = parseVariantRows(source);
     const listed = rows.map((row) => row.id);

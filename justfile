@@ -9,6 +9,9 @@ web_port := "5183"
 # Catalog のポート。catalog-dev と catalog-shot で同じ値を使う。
 catalog_port := "5184"
 
+# iOS 実行基盤のシミュレータ。ios-build、ios-run、ios-shot で同じ値を使う。
+ios_device := "iPhone 17"
+
 # 引数なしで一覧を表示する
 default:
     @just --list
@@ -88,6 +91,41 @@ web-check:
 # 実行基盤で描画した variant を撮影する（例: just web-shot hako-feature-icons/soft-outline out.png）
 web-shot target out width="1280" height="800":
     scripts/web-shot.sh "http://localhost:{{web_port}}/?bare#{{target}}" "{{out}}" "{{width}}" "{{height}}"
+
+# iOS 実行基盤（platforms/ios）の variant 一覧と Xcode プロジェクトを生成する
+ios-gen:
+    node scripts/build-ios-registry.mjs
+    cd platforms/ios && xcodegen generate --quiet
+
+# Xcode 本体は Nix の外にある。Nix の devShell は SDK とリンカーの環境変数を差し込むので、空の環境から呼ぶ。
+# iOS 実行基盤と experiments の Swift をシミュレータ向けにビルドする
+ios-build: ios-gen
+    env -i HOME="$HOME" PATH=/usr/bin:/bin:/usr/sbin:/sbin /usr/bin/xcrun xcodebuild -quiet \
+      -project platforms/ios/NumaRunner.xcodeproj -scheme NumaRunner \
+      -destination "platform=iOS Simulator,name={{ios_device}}" \
+      -derivedDataPath platforms/ios/build build
+
+# シミュレータで variant を開く。例: just ios-run yodoku-app/tabs -fixture idle
+[positional-arguments]
+ios-run target *args: ios-build
+    #!/usr/bin/env bash
+    set -euo pipefail
+    shift
+    simctl() { env -i HOME="$HOME" PATH=/usr/bin:/bin:/usr/sbin:/sbin /usr/bin/xcrun simctl "$@"; }
+    simctl boot "{{ios_device}}" 2>/dev/null || true
+    open -a Simulator
+    simctl install "{{ios_device}}" platforms/ios/build/Build/Products/Debug-iphonesimulator/NumaRunner.app
+    simctl launch --terminate-running-process "{{ios_device}}" dev.salan70.uiuxnuma.runner -variant "{{target}}" "$@"
+
+# 先に just ios-build を実行しておく。明暗と文字サイズを指定して variant を撮影する。
+# appearance は light か dark、content_size は simctl ui の値（large が既定の大きさ）。
+# 例: just ios-shot yodoku-app/tabs out.png dark accessibility-extra-extra-extra-large -fixture idle
+[positional-arguments]
+ios-shot target out appearance content_size *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    shift 4
+    scripts/ios-shot.sh "{{target}}" "{{out}}" "{{ios_device}}" "{{appearance}}" "{{content_size}}" "$@"
 
 # SVG の機械検査（構文、対応範囲、明示された制約）。例: just svg-check icon.svg --mono --viewbox "0 0 24 24"
 [positional-arguments]

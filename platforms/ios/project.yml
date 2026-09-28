@@ -1,0 +1,42 @@
+# iOS 実行基盤。`just ios-gen` が Registry.generated.swift と NumaRunner.xcodeproj を生成する。
+# xcodeproj は生成物なので Git で追跡しない。
+name: NumaRunner
+options:
+  bundleIdPrefix: dev.salan70.uiuxnuma
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: 1
+    # シミュレータでだけ動かす。署名は要らない。
+    CODE_SIGNING_ALLOWED: "NO"
+
+targets:
+  NumaRunner:
+    type: application
+    platform: iOS
+    scheme: {}
+    sources:
+      - path: Runner
+      # variant と、Experiment 内で variant が共有するコード。Web の variant（.tsx）は拾わない。
+      - path: ../../experiments
+        includes:
+          - "*/variants/*/*.swift"
+          - "*/shared/*.swift"
+      - path: ../../tokens/typography/fonts
+        includes:
+          - "*.woff2"
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.salan70.uiuxnuma.runner
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_CFBundleDisplayName: NUMA
+        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1"

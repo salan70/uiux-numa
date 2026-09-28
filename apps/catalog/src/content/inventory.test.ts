@@ -73,6 +73,8 @@ describe("catalog inventory", () => {
     expect(slugs("motion")).toEqual(["catalog-screen-entrance", "catalog-showreel"]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
+    // Web 以外の Experiment は unlisted にも数えず、Catalog から外す。
+    expect(catalog.experiments.some((experiment) => experiment.slug === "yodoku-app")).toBe(false);
     expect(unlisted()).toEqual([
       "catalog-home-graphic",
       "catalog-works-layout",
