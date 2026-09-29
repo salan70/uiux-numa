@@ -7,6 +7,7 @@
 # ブラウザは Nix で固定できない（nixpkgs の chromium は Linux 限定）。
 # 既定は macOS の Google Chrome。CHROME_BIN で差し替える。
 # 描画倍率は 2 に固定する。小さなアイコンの細部を preview で確認するため。
+# 画面遷移を待つ撮影（Flutter の起動直後の遷移など）は VIRTUAL_TIME_BUDGET（ミリ秒）で待ち時間を延ばす。
 set -euo pipefail
 
 [ $# -ge 2 ] || { echo "usage: web-shot.sh <url> <out.png> [width] [height]" >&2; exit 2; }
@@ -31,7 +32,7 @@ log="$profile/chrome.log"
 "$chrome" --headless --no-first-run --disable-gpu \
   --user-data-dir="$profile" \
   --hide-scrollbars --force-device-scale-factor=2 \
-  --virtual-time-budget=1000 \
+  --virtual-time-budget="${VIRTUAL_TIME_BUDGET:-1000}" \
   --window-size="$width,$height" \
   --screenshot="$out" "$url" >"$log" 2>&1 &
 pid=$!

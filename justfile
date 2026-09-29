@@ -9,6 +9,9 @@ web_port := "5183"
 # Catalog のポート。catalog-dev と catalog-shot で同じ値を使う。
 catalog_port := "5184"
 
+# Flutter 実行基盤のポート。flutter-dev と flutter-shot で同じ値を使う。
+flutter_port := "5185"
+
 # iOS 実行基盤のシミュレータ。ios-build、ios-run、ios-shot で同じ値を使う。
 ios_device := "iPhone 17"
 
@@ -51,7 +54,7 @@ lint-md:
 # tokens/<id>/<id>.css の一覧は scripts/build-dimension-tokens.mjs の FAMILIES と
 # scripts/build-typography-tokens.mjs に対応する。家族を足したらここも足す。
 format:
-    oxfmt --write . '!.claude/**' '!.agents/**' '!flake.lock' \
+    oxfmt --write . '!.claude/**' '!.agents/**' '!flake.lock' '!platforms/flutter/pubspec.lock' \
       '!tokens/space/space.css' '!tokens/radius/radius.css' '!tokens/border/border.css' \
       '!tokens/size/size.css' '!tokens/motion/motion.css' '!tokens/typography/typography.css' \
       '!experiments/color-schemes-material/variants/*/scheme.css' \
@@ -126,6 +129,31 @@ ios-shot target out appearance content_size *args:
     set -euo pipefail
     shift 4
     scripts/ios-shot.sh "{{target}}" "{{out}}" "{{ios_device}}" "{{appearance}}" "{{content_size}}" "$@"
+
+# Flutter 実行基盤（platforms/flutter）の variant 一覧を生成し、依存を導入する
+flutter-gen:
+    node scripts/build-flutter-registry.mjs
+    cd platforms/flutter && flutter pub get --enforce-lockfile
+
+# Flutter 実行基盤と experiments の Dart を静的解析する
+flutter-check: flutter-gen
+    cd platforms/flutter && flutter analyze --no-pub lib
+
+# CanvasKit を CDN から取らず、build/web に同梱する。
+# Flutter 実行基盤と experiments の Dart を Web 向けにビルドする
+flutter-build: flutter-gen
+    cd platforms/flutter && flutter build web --release --no-pub --no-web-resources-cdn
+
+# release の成果物を配信する。hot reload は使わない。撮影を実機に近い速さで再現するため。
+# Flutter 実行基盤の開発サーバーを起動する。例: http://localhost:5185/?variant=<slug>/<id>
+flutter-dev: flutter-gen
+    cd platforms/flutter && flutter run -d web-server --release --no-pub --no-web-resources-cdn \
+      --web-hostname localhost --web-port {{flutter_port}}
+
+# 先に just flutter-dev を起動しておく。端末の大きさ（402x874）で variant を撮影する。
+# query には実行基盤と variant の条件を & でつなげて渡す。例: just flutter-shot baseball-journey-app/clubhouse out.png "theme=dark&fixture=midseason"
+flutter-shot target out query="":
+    VIRTUAL_TIME_BUDGET=3000 scripts/web-shot.sh "http://localhost:{{flutter_port}}/?bare=1&variant={{target}}&{{query}}" "{{out}}" 402 874
 
 # SVG の機械検査（構文、対応範囲、明示された制約）。例: just svg-check icon.svg --mono --viewbox "0 0 24 24"
 [positional-arguments]

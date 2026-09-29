@@ -50,3 +50,9 @@ apps/catalog/public/tokens/
 platforms/ios/NumaRunner.xcodeproj/
 platforms/ios/Runner/Registry.generated.swift
 platforms/ios/build/
+
+# Flutter 実行基盤（platforms/flutter）の生成物。just flutter-gen と flutter のビルドが作る
+platforms/flutter/lib/registry.g.dart
+platforms/flutter/.dart_tool/
+platforms/flutter/build/
+platforms/flutter/.flutter-plugins-dependencies

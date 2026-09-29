@@ -1,0 +1,420 @@
+import 'package:flutter/material.dart';
+
+import '../../shared/app.dart';
+import '../../shared/directory.dart';
+import '../../shared/format.dart';
+import '../../shared/game_input.dart';
+import '../../shared/model.dart';
+import '../../shared/nav.dart';
+import '../../shared/store.dart';
+import '../../shared/theme.dart';
+import '../../shared/widgets.dart';
+
+// matchday: タイトル画面から入り、1 試合を 1 画面にする。出場の選択と入力面をホームに常設する。
+// 仮説: 画面の主役を「今日の試合」だけにし、試合後に伸びを見せると、短い時間でも 1 試合ごとに手応えがある。
+// 名鑑、記録、設定は右上のメニューに下げる。入力の途中でメニューへ行っても、入力は画面に残る。
+
+Widget buildVariant() => JourneyApp(home: (_) => const _Title());
+
+/// タイトル画面（title.md）。懐かしさの入口として残し、続きからの選手名を先に見せる。
+class _Title extends StatefulWidget {
+  const _Title();
+
+  @override
+  State<_Title> createState() => _TitleState();
+}
+
+class _TitleState extends State<_Title> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final store = StoreScope.read(context);
+      final route = store.options.route;
+      if (route == null || route == 'title') return;
+      if (route == 'directory') {
+        _openDirectory(context);
+        return;
+      }
+      if (openSharedRoute(context, store)) return;
+      if (store.current != null) {
+        _openMatchday(context);
+        if (route == 'score') showScoreSheet(context);
+        if (route == 'afterGame') await store.saveGame(5, 2);
+        if (route == 'menu' && mounted) _openMenu(context);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    final player = store.current;
+    return Scaffold(
+      body: SafeArea(
+        // 文字を拡大して収まらないときはスクロールさせる。収まるときは余白を上下に分ける。
+        child: LayoutBuilder(
+          builder: (context, c) => SingleChildScrollView(
+            padding: const EdgeInsets.all(Space.s600),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: c.maxHeight - Space.s600 * 2),
+              child: IntrinsicHeight(child: _titleColumn(context, store, p, player)),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _titleColumn(BuildContext context, AppStore store, Palette p, Player? player) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Spacer(),
+        Semantics(header: true, label: 'Baseball Player Journey', excludeSemantics: true, child: _Logo()),
+        const Spacer(),
+        if (player != null) ...[
+          PressButton(label: 'つづきから', kind: PressKind.primary, onPressed: () => _openMatchday(context)),
+          Padding(
+            padding: const EdgeInsets.only(top: Space.s100, bottom: Space.s300),
+            child: Text(
+              '${player.name}・${year(player.current.year)} 第 ${player.current.playedCount + 1} 戦から',
+              textAlign: TextAlign.center,
+              style: Txt.caption.copyWith(color: p.onSurfaceVariant),
+            ),
+          ),
+        ],
+        PressButton(
+          label: '選手を作る',
+          kind: player == null ? PressKind.primary : PressKind.secondary,
+          onPressed: store.canCreatePlayer ? () => openCreation(context) : null,
+        ),
+        const SizedBox(height: Space.s300),
+        Row(
+          children: [
+            Expanded(
+              child: PressButton(label: '名鑑', onPressed: store.players.isEmpty ? null : () => _openDirectory(context)),
+            ),
+            const SizedBox(width: Space.s300),
+            Expanded(
+              child: PressButton(label: '設定', onPressed: () => openSettings(context)),
+            ),
+          ],
+        ),
+        if (player == null) ...[
+          const SizedBox(height: Space.s400),
+          Text(
+            'まだ選手がいません。選手を作ると、1 試合ずつ記録できます。',
+            textAlign: TextAlign.center,
+            style: Txt.ui.copyWith(color: p.onSurfaceVariant),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// 題字。ボールの印と 2 段の文字で組む。
+class _Logo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    return Column(
+      children: [
+        Container(
+          width: 88,
+          height: 88,
+          decoration: BoxDecoration(
+            color: p.primary,
+            shape: BoxShape.circle,
+            border: Border.all(color: p.ink, width: 3),
+            boxShadow: [BoxShadow(color: p.shadow, offset: const Offset(4, 4))],
+          ),
+          child: Icon(Icons.sports_baseball, size: 56, color: p.onPrimary),
+        ),
+        const SizedBox(height: Space.s400),
+        Text('BASEBALL PLAYER', style: Txt.heading.copyWith(letterSpacing: 2)),
+        Text('JOURNEY', style: Txt.figure.copyWith(fontSize: 44, letterSpacing: 4)),
+      ],
+    );
+  }
+}
+
+void _openDirectory(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => Scaffold(
+        appBar: AppBar(title: const Text('名鑑')),
+        body: DirectoryBody(
+          onOpen: (p) => openDetail(
+            context,
+            p,
+            onPlay: p.isActive
+                ? () {
+                    StoreScope.read(context).select(p);
+                    Navigator.of(context).popUntil((r) => r.isFirst);
+                    _openMatchday(context);
+                  }
+                : null,
+          ),
+          onCreate: () => openCreation(context),
+        ),
+      ),
+    ),
+  );
+}
+
+void _openMatchday(BuildContext context) {
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const _Matchday()));
+}
+
+Future<void> _openMenu(BuildContext context) {
+  final store = StoreScope.read(context);
+  final player = store.current!;
+  final navigator = Navigator.of(context);
+  Widget item(IconData icon, String label, VoidCallback onTap) => ListTile(
+    minTileHeight: Sizes.target + Space.s200,
+    leading: Icon(icon),
+    title: Text(label, style: Txt.control),
+    onTap: () {
+      navigator.pop();
+      onTap();
+    },
+  );
+  return showModalBottomSheet<void>(
+    context: context,
+    sheetAnimationStyle: sheetAnimation(context),
+    builder: (_) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          item(Icons.bar_chart, '記録', () => openDetail(context, player)),
+          item(Icons.list_alt, '${year(player.current.year)}の試合', () => openHistory(context, player)),
+          item(Icons.people_alt_outlined, '名鑑', () => _openDirectory(context)),
+          item(Icons.settings_outlined, '設定', () => openSettings(context)),
+          item(Icons.home_outlined, 'タイトルへ', () => navigator.popUntil((r) => r.isFirst)),
+        ],
+      ),
+    ),
+  );
+}
+
+class _Matchday extends StatelessWidget {
+  const _Matchday();
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final player = store.current;
+    if (player == null) return const Scaffold();
+    final season = player.current;
+    final draft = store.draft;
+    final summary = store.lastSummary;
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
+        titleSpacing: Space.page,
+        title: Text(player.name),
+        actions: [IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context))],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s600),
+        children: [
+          _Scoreboard(player: player, draft: draft),
+          const SizedBox(height: Space.s400),
+          if (summary != null)
+            _AfterGame(summary: summary)
+          else if (draft != null) ...[
+            const AtBatStrip(),
+            const AtBatEditor(),
+          ] else if (season.isComplete) ...[
+            Text('${year(season.year)}の全 ${season.totalGames} 試合を終えました。', style: Txt.body),
+            const SizedBox(height: Space.s300),
+            PressButton(
+              label: 'シーズンを終える',
+              kind: PressKind.primary,
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                final retired = await openSeasonEnd(context, player);
+                if (!retired) navigator.push(MaterialPageRoute<void>(builder: (_) => const _Matchday()));
+              },
+            ),
+          ] else ...[
+            Semantics(header: true, child: const Text('今日の出場', style: Txt.heading)),
+            const SizedBox(height: Space.s300),
+            ParticipationForm(player: player, onDecided: (c) => applyChoice(store, c)),
+          ],
+        ],
+      ),
+      bottomNavigationBar: draft == null
+          ? null
+          : InputDock(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ResultPad(onPick: store.addResult),
+                  const SizedBox(height: Space.s300),
+                  GameActionBar(onFinish: () => showScoreSheet(context)),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+/// 電光掲示板。試合の番号、進み、今日の成績を 1 枚にする。明暗どちらでも暗い面にする。
+class _Scoreboard extends StatelessWidget {
+  const _Scoreboard({required this.player, required this.draft});
+
+  final Player player;
+  final GameDraft? draft;
+
+  static const _board = Color(0xFF1E3A2B);
+  static const _boardInk = Color(0xFFF4F1E6);
+  static const _boardLamp = Color(0xFFFAC400);
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    final s = player.current;
+    final line = s.line;
+    final number = s.isComplete ? s.totalGames : s.playedCount + 1;
+    return Container(
+      padding: const EdgeInsets.all(Space.s400),
+      decoration: BoxDecoration(
+        color: _board,
+        borderRadius: BorderRadius.circular(Radii.surface),
+        border: Border.all(color: p.ink, width: Borders.thick),
+      ),
+      child: DefaultTextStyle.merge(
+        style: const TextStyle(color: _boardInk),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Wrap(
+                    spacing: Space.s200,
+                    crossAxisAlignment: WrapCrossAlignment.end,
+                    children: [
+                      Text('第 $number 戦', style: Txt.figure.copyWith(color: _boardLamp)),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: Space.s100),
+                        child: Text('/ ${s.totalGames}', style: Txt.ui.merge(Txt.tabular).copyWith(color: _boardInk)),
+                      ),
+                    ],
+                  ),
+                ),
+                JerseyBadge(s.uniformNumber, size: 44),
+              ],
+            ),
+            Text(
+              '${year(s.year)}・${s.team.name}・${player.mainPosition.label}',
+              style: Txt.caption.copyWith(color: _boardInk),
+            ),
+            const SizedBox(height: Space.s300),
+            Semantics(
+              liveRegion: draft != null,
+              child: Text(
+                draft == null
+                    ? '今季 ${rate(line.average)}  ${line.homeRuns} 本  ${line.rbi} 打点  ${line.steals} 盗塁'
+                    : '今日 ${draft!.participation.label}  ${draft!.line}',
+                style: Txt.control.merge(Txt.tabular).copyWith(color: _boardInk),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 試合後の 1 枚。勝敗、節目、今季の成績の差を順に出す。動きの抑制では一度に出す。
+class _AfterGame extends StatelessWidget {
+  const _AfterGame({required this.summary});
+
+  final GameSummary summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    final g = summary.game;
+    final o = g.outcome!;
+    final season = store.current!.current;
+    final parts = <Widget>[
+      Semantics(
+        liveRegion: true,
+        child: Text(
+          '${g.myScore} 対 ${g.opponentScore} で${o.label}',
+          style: Txt.title.copyWith(color: o == GameOutcome.win ? p.success : p.onSurface),
+        ),
+      ),
+      GameLine(game: g, dense: true),
+      for (final m in summary.milestones) MilestoneBanner(text: m),
+      Text('今季の成績', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+      SeasonStatGrid(line: summary.seasonAfter, before: summary.seasonBefore),
+      PressButton(
+        label: season.isComplete ? 'シーズンの終わりへ' : '第 ${season.playedCount + 1} 戦へ',
+        kind: PressKind.primary,
+        onPressed: store.dismissSummary,
+      ),
+    ];
+    final reduced = Motion.reduced(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < parts.length; i++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.s300),
+            child: reduced ? parts[i] : _Rise(delay: Motion.stagger * i, child: parts[i]),
+          ),
+      ],
+    );
+  }
+}
+
+/// 下から少し浮き上がって現れる。押し先の位置は、出そろった後で変わらない。
+class _Rise extends StatefulWidget {
+  const _Rise({required this.delay, required this.child});
+
+  final Duration delay;
+  final Widget child;
+
+  @override
+  State<_Rise> createState() => _RiseState();
+}
+
+class _RiseState extends State<_Rise> with SingleTickerProviderStateMixin {
+  late final _c = AnimationController(vsync: this, duration: Motion.entrance);
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(widget.delay, () {
+      if (mounted) _c.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = CurvedAnimation(parent: _c, curve: Motion.entranceCurve);
+    return FadeTransition(
+      opacity: t,
+      child: SlideTransition(
+        position: Tween(begin: const Offset(0, 0.15), end: Offset.zero).animate(t),
+        child: widget.child,
+      ),
+    );
+  }
+}

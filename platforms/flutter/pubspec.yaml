@@ -1,0 +1,30 @@
+# Flutter 実行基盤。experiments の Flutter variant を列挙して Web で描く。
+# 理由は docs/decisions/2026-09-28-flutter-runner.md にある。
+name: numa_runner
+description: uiux-numa の Flutter 実行基盤
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # variant が日本語の Material 部品（日付の選択など）を使うため。SDK に同梱され、取得先を増やさない。
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  # fonts は tokens/typography/fonts への symlink。woff2 をそのまま使い、ttf の複製を持たない。
+  fonts:
+    - family: LINE Seed JP
+      fonts:
+        - asset: fonts/LINESeedJP-Regular.woff2
+          weight: 400
+        - asset: fonts/LINESeedJP-Bold.woff2
+          weight: 700
