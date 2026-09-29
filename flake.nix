@@ -35,6 +35,9 @@
             unstable.resvg
             unstable.svgo
             pkgs.libxml2.bin
+            # Flutter 実行基盤（platforms/flutter）。Web 向けにだけビルドする。
+            # 理由は docs/decisions/2026-09-28-flutter-runner.md にある。
+            unstable.flutter
           ]
           # iOS 実行基盤（platforms/ios）の Xcode プロジェクト生成。Xcode 本体は Nix の外にある。
           # 理由は docs/decisions/2026-09-28-ios-runner.md にある。

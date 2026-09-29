@@ -75,6 +75,9 @@ describe("catalog inventory", () => {
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
     // Web 以外の Experiment は unlisted にも数えず、Catalog から外す。
     expect(catalog.experiments.some((experiment) => experiment.slug === "yodoku-app")).toBe(false);
+    expect(
+      catalog.experiments.some((experiment) => experiment.slug === "baseball-journey-app"),
+    ).toBe(false);
     expect(unlisted()).toEqual([
       "catalog-home-graphic",
       "catalog-works-layout",
