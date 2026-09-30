@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>DocBridge</title>
-  <!-- b-over に丸みを付ける。外形は 2 つの bowl の弧が x = 16 で交わる 1 本の輪郭にし、桁の端と開口の角を半径 2 で丸める。弧の交点の谷は半径 1.5 の fillet で丸める（接点 14.97,8.28 と 17.03,8.28）。 -->
-  <path id="part-mark-letter" fill="currentColor" fill-rule="evenodd" d="M4 24V13A6.5 6.5 0 0 1 14.97 8.28A1.5 1.5 0 0 0 17.03 8.28A6.5 6.5 0 0 1 28 13V24A2 2 0 0 1 26 26H6A2 2 0 0 1 4 24ZM7 20V13A3.5 3.5 0 0 1 14 13V20A2 2 0 0 1 12 22H9A2 2 0 0 1 7 20ZM18 20V13A3.5 3.5 0 0 1 25 13V20A2 2 0 0 1 23 22H20A2 2 0 0 1 18 20Z"/>
-</svg>

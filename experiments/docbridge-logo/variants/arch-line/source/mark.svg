@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
-  <title>DocBridge</title>
-  <!-- arch-solid と同じ骨格を線で描く。線幅 2 は 16px で 1px。桁の中心線 y=7（縁 6..8 が 16px で整数に載る）、アーチは中心 (16,20) 半径 11 で、上縁 8 が桁の下縁に接する。脚は 26 まで。 -->
-  <path id="part-mark-deck" d="M4 7H28"/>
-  <path id="part-mark-arch" d="M5 26V20A11 11 0 0 1 27 20V26"/>
-</svg>

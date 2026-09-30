@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>DocBridge</title>
-  <!-- d-over-span に丸みを付ける。張り出しが 2 しかないので、桁の端の角と脚の付け根の fillet は半径 1。開口の角は半径 2。 -->
-  <path id="part-mark-letter" fill="currentColor" fill-rule="evenodd" d="M6 18A10 10 0 0 1 26 18V21A1 1 0 0 0 27 22A1 1 0 0 1 28 23V25A1 1 0 0 1 27 26H5A1 1 0 0 1 4 25V23A1 1 0 0 1 5 22A1 1 0 0 0 6 21ZM10 20V18A6 6 0 0 1 22 18V20A2 2 0 0 1 20 22H12A2 2 0 0 1 10 20Z"/>
-</svg>

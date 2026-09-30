@@ -21,8 +21,9 @@ export function LogoMock({ mark }: { mark: string }) {
       <div className="db-readmes">
         {surfaces.map((surface) => (
           <article key={surface} className={`db-readme db-${surface}`}>
+            {/* 桁の下端を wordmark の baseline に、図形の高さ（箱の 1/2）を cap height に合わせる。 */}
             <header className="db-lockup">
-              <Mark svg={mark} className="db-mark db-mark--40" />
+              <Mark svg={mark} className="db-mark db-mark--lockup" />
               <span className="db-wordmark">DocBridge</span>
             </header>
             <p>

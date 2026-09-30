@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>DocBridge</title>
-  <!-- d-over の桁を bowl より 2 ずつ外へ張り出す。桁 4..28、bowl は外径 10、内径 6（中心 16,18）。張り出しが橋台に見え、橋の読みを補う。 -->
-  <path id="part-mark-letter" fill="currentColor" d="M4 22H28V26H4ZM6 26V18A10 10 0 0 1 26 18V26ZM10 22H22V18A6 6 0 0 0 10 18Z"/>
-</svg>
