@@ -70,7 +70,11 @@ describe("catalog inventory", () => {
       "hako-feature-icons",
     ]);
     expect(slugs("components")).toEqual(["button", "card"]);
-    expect(slugs("motion")).toEqual(["catalog-screen-entrance", "catalog-showreel"]);
+    expect(slugs("motion")).toEqual([
+      "baseball-journey-reel",
+      "catalog-screen-entrance",
+      "catalog-showreel",
+    ]);
     // topic に当たらない Experiment は Catalog に載せず、削除もしない。
     // 掲載しないものを明示し、新しい Experiment が黙って消えることを防ぐ。
     // Web 以外の Experiment は unlisted にも数えず、Catalog から外す。
