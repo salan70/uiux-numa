@@ -61,6 +61,10 @@ bool openSharedRoute(BuildContext context, AppStore store) {
       openCreation(context);
     case 'seasonEnd' when player != null:
       openSeasonEnd(context, player);
+    case 'nextSeason' when player != null:
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => NextSeasonScreen(player: player, onClose: () {})));
+    case 'farewell' when player != null:
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => RetiredScreen(player: player, onClose: () {})));
     case 'settings':
       openSettings(context);
     case 'history' when player != null:
