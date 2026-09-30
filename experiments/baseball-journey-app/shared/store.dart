@@ -397,7 +397,7 @@ class SeasonEndInput {
 
   final Map<StatItem, int> ranks;
   final List<String> titles;
-  final int uniformNumber;
+  final String uniformNumber;
   final int salary;
   final List<Ability> abilities;
   final List<Position> positions;
@@ -426,7 +426,7 @@ class PlayerDraft {
   JoiningRoute route = JoiningRoute.draft;
   int draftRound = 1;
   int joiningYear = 2029;
-  int uniformNumber = 10;
+  String uniformNumber = '10';
   int salary = 1500;
   String memo = '';
 }

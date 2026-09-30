@@ -265,11 +265,12 @@ Player _build(_Spec spec) {
     final season = Season(
       year: year,
       team: team,
-      uniformNumber: i < 2
-          ? 36 + spec.talent.order
-          : spec.talent.order == 1
-          ? 1
-          : 7 + spec.talent.order,
+      uniformNumber:
+          '${i < 2
+              ? 36 + spec.talent.order
+              : spec.talent.order == 1
+              ? 1
+              : 7 + spec.talent.order}',
       salary: _salary(i, spec.talent),
       abilities: abilities,
       games: games,

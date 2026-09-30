@@ -335,7 +335,8 @@ class Season {
 
   final int year;
   final Team team;
-  final int uniformNumber;
+  /// 文字で持つ。支配下の 0 と 00、育成の 012 のような 0 始まりを区別する。
+  final String uniformNumber;
 
   /// 万円。
   final int salary;
