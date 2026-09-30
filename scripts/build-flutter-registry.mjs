@@ -1,22 +1,35 @@
 // Flutter 実行基盤（platforms/flutter）の variant 一覧を生成する。
-// experiments/<slug>/variants/<id>/index.dart を持つ variant を列挙し、その buildVariant を並べた registry.g.dart を書く。
+// experiments/<slug>/variants/<id>/index.dart を持つ variant を README の Variants 表の順に列挙し、その buildVariant を並べた registry.g.dart を書く。
 // Dart には import.meta.glob に当たる仕組みが無いため、Web の runner と同じ責務をこの生成で補う。
 // Dart はファイルごとに名前空間が分かれるので、iOS と違い名前に slug と id を含めなくてよい。
-import { existsSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname;
 const experiments = join(root, "experiments");
 const out = join(root, "platforms/flutter/lib/registry.g.dart");
 
+// README の Variants 表の順に並べる。比較表示（compare）の並びを、記録と同じにするため。表に無い id は後ろに辞書順で置く。
+const tableOrder = (slug) => {
+  const readme = join(experiments, slug, "README.md");
+  if (!existsSync(readme)) return [];
+  const section =
+    readFileSync(readme, "utf8")
+      .split(/^## Variants$/m)[1]
+      ?.split(/^## /m)[0] ?? "";
+  return [...section.matchAll(/^\| `([a-z0-9-]+)` \|/gm)].map((m) => m[1]);
+};
+
 const entries = [];
 for (const slug of readdirSync(experiments).sort()) {
   const variants = join(experiments, slug, "variants");
   if (!existsSync(variants)) continue;
-  for (const id of readdirSync(variants).sort()) {
-    if (!existsSync(join(variants, id, "index.dart"))) continue;
-    entries.push({ slug, id });
-  }
+  const order = tableOrder(slug);
+  const rank = (id) => (order.includes(id) ? order.indexOf(id) : order.length);
+  const ids = readdirSync(variants)
+    .filter((id) => existsSync(join(variants, id, "index.dart")))
+    .sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+  for (const id of ids) entries.push({ slug, id });
 }
 
 const imports = entries.map(
