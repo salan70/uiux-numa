@@ -2035,6 +2035,16 @@ function phaseAt(t: number) {
 
 function drawHud(ctx: Ctx, t: number) {
   const color = hudColor(t);
+  // 名鑑の札が画面を埋める間は、HUD の下に夜の地の帯を敷き、注記を札の上で読めるようにする。
+  const band = 0.9 * prog(t, 12.75, 13.0) * (1 - prog(t, 14.55, 14.85));
+  if (band > 0) {
+    ctx.save();
+    ctx.globalAlpha = band;
+    ctx.fillStyle = FIELD;
+    ctx.fillRect(0, 0, WIDTH, 92);
+    ctx.fillRect(0, 1732, WIDTH, HEIGHT - 1732);
+    ctx.restore();
+  }
   const M = 36;
   const K = 24;
   ctx.save();
