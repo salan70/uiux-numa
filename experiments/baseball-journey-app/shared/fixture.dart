@@ -21,10 +21,10 @@ enum Fixture {
   static Fixture parse(String? value) => Fixture.values.where((f) => f.name == value).firstOrNull ?? Fixture.midseason;
 }
 
-const _hokuto = Team(name: '北斗ライナーズ', abbreviation: '北斗', league: '東リーグ', country: '日本');
-const _wangan = Team(name: '湾岸ドルフィンズ', abbreviation: '湾岸', league: '西リーグ', country: '日本');
-const _aoba = Team(name: '青葉スターズ', abbreviation: '青葉', league: '東リーグ', country: '日本');
-const _sunset = Team(name: 'サンセット・ウェーブス', abbreviation: 'SSW', league: 'パシフィック・カンファレンス', country: 'アメリカ');
+const _hokuto = Team(name: '北斗ライナーズ', abbreviation: '北斗', league: '東リーグ', country: '日本', teamCount: 6);
+const _wangan = Team(name: '湾岸ドルフィンズ', abbreviation: '湾岸', league: '西リーグ', country: '日本', teamCount: 6);
+const _aoba = Team(name: '青葉スターズ', abbreviation: '青葉', league: '東リーグ', country: '日本', teamCount: 6);
+const _sunset = Team(name: 'サンセット・ウェーブス', abbreviation: 'SSW', league: 'パシフィック・カンファレンス', country: 'アメリカ', teamCount: 15);
 
 const fixtureTeams = [_hokuto, _wangan, _aoba, _sunset];
 
@@ -249,7 +249,19 @@ Player _build(_Spec spec) {
     final last = i == spec.seasonCount - 1;
     final count = last ? spec.lastSeasonGames : 143;
     final team = spec.teams(i);
-    final games = [for (var n = 1; n <= count; n++) _game(random, n, abilities, spec)];
+    // 順位はその時点の勝率から決める。勝率 .500 なら中位、勝ち越すほど上になり、成績と順位が食い違わない。
+    var wins = 0;
+    var losses = 0;
+    final games = [
+      for (var n = 1; n <= count; n++)
+        () {
+          final game = _game(random, n, abilities, spec);
+          if (game.outcome == GameOutcome.win) wins++;
+          if (game.outcome == GameOutcome.loss) losses++;
+          final pct = wins + losses == 0 ? 1.0 : wins / (wins + losses);
+          return game.withTeamRank(1 + ((1 - pct) * (team.teamCount - 1)).round());
+        }(),
+    ];
     final season = Season(
       year: year,
       team: team,

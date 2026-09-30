@@ -169,6 +169,7 @@ class AppStore extends ChangeNotifier {
         runner: d.runner,
         myScore: myScore,
         opponentScore: opponentScore,
+        teamRank: season.teamRank,
       ),
     );
     lastSummary = GameSummary(
@@ -189,12 +190,28 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setTeamRank(int value) {
+    final summary = lastSummary;
+    if (summary == null) return;
+    final season = current!.current;
+    final game = summary.game.withTeamRank(value.clamp(1, season.team.teamCount));
+    season.games[season.games.length - 1] = game;
+    lastSummary = GameSummary(
+      game: game,
+      seasonBefore: summary.seasonBefore,
+      seasonAfter: summary.seasonAfter,
+      careerBefore: summary.careerBefore,
+      careerAfter: summary.careerAfter,
+    );
+    notifyListeners();
+  }
+
   /// 出場せずに日程を進める（skip_games_dialog.md）。
   void skipGames(int count) {
     final season = current!.current;
     for (var i = 0; i < count && !season.isComplete; i++) {
       season.games.add(
-        GameRecord(number: season.playedCount + 1, participation: const Participation(ParticipationKind.none)),
+        GameRecord(number: season.playedCount + 1, participation: const Participation(ParticipationKind.none), teamRank: season.teamRank),
       );
     }
     lastSummary = null;
@@ -276,6 +293,7 @@ class AppStore extends ChangeNotifier {
             abbreviation: input.teamName.characters.take(2).toString(),
             league: input.league,
             country: input.country,
+            teamCount: input.teamCount,
           ),
           uniformNumber: input.uniformNumber,
           salary: input.salary,
@@ -401,6 +419,8 @@ class PlayerDraft {
   int weight = 85;
   List<Ability> abilities = [for (final n in defaultAbilityNames) Ability(n, 50)];
   String country = '日本';
+  /// 日本のプロ野球は 1 リーグ 6 球団なので、それを初期値にする。
+  int teamCount = 6;
   String league = '';
   String teamName = '';
   JoiningRoute route = JoiningRoute.draft;

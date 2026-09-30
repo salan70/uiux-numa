@@ -42,6 +42,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   _Choice _choice = _Choice.stay;
   late int _uniform = _season.uniformNumber;
   late int _salary = _season.salary;
+  late int _teamCount = _season.team.teamCount;
   final _team = TextEditingController();
   final _league = TextEditingController();
   final _country = TextEditingController();
@@ -90,6 +91,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
             abbreviation: _team.text.trim().characters.take(3).toString(),
             league: _league.text.trim(),
             country: _country.text.trim(),
+            teamCount: _teamCount,
           )
         : null,
     careerRanks: _careerRanks,
@@ -190,18 +192,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     final line = _season.line;
     return [
       SectionTitle('今季の成績', trailing: Text(_season.team.abbreviation, style: Txt.caption)),
-      Panel(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SeasonGrid(season: _season),
-            const SizedBox(height: Space.s200),
-            SeasonGridLegend(season: _season),
-            const SizedBox(height: Space.s400),
-            SeasonStatGrid(line: line, large: false),
-          ],
-        ),
-      ),
+      SeasonStatGrid(line: line, large: false),
       SectionTitle(
         'リーグの順位',
         trailing: Text('任意', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
@@ -296,6 +287,15 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
             ),
             onChanged: (_) => setState(() {}),
           ),
+          // MLB の全球団数を上限にする。
+          NumberStepper(
+            label: 'リーグの球団数',
+            value: _teamCount,
+            min: 2,
+            max: 30,
+            unit: ' 球団',
+            onChanged: (v) => setState(() => _teamCount = v),
+          ),
         ],
         FieldLabel('来季の契約', note: '今季: 背番号 ${_season.uniformNumber}・${salary(_season.salary)}'),
         NumberStepper(label: '背番号', value: _uniform, min: 0, max: 99, onChanged: (v) => setState(() => _uniform = v)),
@@ -353,7 +353,12 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
         FactRow('タイトル', _titles.isEmpty ? 'なし' : _titles.join('、')),
       ]),
       section('来季', 1, [
-        FactRow('進退', _choice == _Choice.transfer ? '移籍: ${_team.text.trim()}' : '残留: ${_season.team.name}'),
+        FactRow(
+          '進退',
+          _choice == _Choice.transfer
+              ? '移籍: ${_team.text.trim()}（${_country.text.trim()}・$_teamCount 球団）'
+              : '残留: ${_season.team.name}',
+        ),
         FactRow('背番号', '$_uniform'),
         FactRow('年俸', salary(_salary)),
       ]),

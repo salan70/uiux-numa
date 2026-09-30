@@ -324,20 +324,18 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
                 padding: const EdgeInsets.only(bottom: Space.s200),
                 child: MilestoneBanner(text: m),
               ),
-            GameLine(game: summary.game),
+            GameLine(game: summary.game, rankFrom: season.rankBefore(summary.game.number - 1)),
           ],
           SectionTitle(
-            year(season.year),
+            '${year(season.year)}の成績',
             trailing: Text(
               '${season.playedCount} / ${season.totalGames} 試合',
               style: Txt.control.merge(Txt.tabular),
             ),
           ),
-          SeasonGrid(season: season),
-          const SizedBox(height: Space.s200),
-          SeasonGridLegend(season: season),
-          SectionTitle('${year(season.year)}の成績'),
           SeasonStatGrid(line: season.line, before: summary?.seasonBefore),
+          const SectionTitle('チーム'),
+          TeamRecord(season: season),
           SectionTitle(
             '最近の試合',
             trailing: TextButton(onPressed: () => openHistory(context, player), child: const Text('すべて')),
@@ -345,7 +343,8 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
           if (season.games.isEmpty)
             Text('まだ試合がありません。下の「第 1 戦へ」から始めます。', style: Txt.ui.copyWith(color: p.onSurfaceVariant))
           else
-            for (final g in season.games.reversed.take(5)) GameLine(game: g),
+            for (final g in season.games.reversed.take(5))
+              GameLine(game: g, rankFrom: season.rankBefore(g.number - 1)),
         ],
       ),
       bottomNavigationBar: _TopActions(player: player),
@@ -439,7 +438,7 @@ class _BottomBar extends StatelessWidget {
   }
 }
 
-/// 試合後の下端。1 季に 143 回押す「次の試合へ」を、143 の升の下までスクロールせずに押せるようにする。
+/// 試合後の下端。1 季に 143 回押す「次の試合へ」を、チーム順位の下までスクロールせずに押せるようにする。
 class _AfterGameActions extends StatelessWidget {
   const _AfterGameActions({required this.season});
 
@@ -1293,7 +1292,7 @@ class _AfterGame extends StatelessWidget {
                 ],
               ),
             ),
-            GameLine(game: g, dense: true),
+            GameLine(game: g, rankFrom: season.rankBefore(g.number - 1), dense: true),
             for (final m in summary.milestones)
               Padding(
                 padding: const EdgeInsets.only(top: Space.s200),
@@ -1364,9 +1363,18 @@ class _AfterGame extends StatelessWidget {
               ],
             ),
             const SizedBox(height: Space.s150),
-            SeasonGrid(season: season, popLast: true),
+            TeamRecord(season: season),
             const SizedBox(height: Space.s200),
-            SeasonGridLegend(season: season),
+            NumberStepper(
+              label: 'チーム順位',
+              value: season.teamRank,
+              min: 1,
+              max: season.team.teamCount,
+              unit: ' 位',
+              limitNote: '最下位です',
+              floorNote: '首位です',
+              onChanged: store.setTeamRank,
+            ),
           ],
         ),
         if (summary.milestones.isNotEmpty) const Positioned.fill(child: PixelBurst(delay: Duration(milliseconds: 200))),

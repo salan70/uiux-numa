@@ -264,6 +264,7 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
           _team.text = t.name;
           _league.text = t.league;
           _country.text = t.country;
+          _draft.teamCount = t.teamCount;
         }),
       ),
       const SizedBox(height: Space.s300),
@@ -279,6 +280,15 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         controller: _country,
         decoration: deco('国名', _country, '国名を入力してください。'),
         onChanged: (_) => setState(() {}),
+      ),
+      // MLB の全球団数を上限にする。
+      NumberStepper(
+        label: 'リーグの球団数',
+        value: _draft.teamCount,
+        min: 2,
+        max: 30,
+        unit: ' 球団',
+        onChanged: (v) => setState(() => _draft.teamCount = v),
       ),
       const FieldLabel('入団の経路'),
       ChoiceWrap<JoiningRoute>(
@@ -345,7 +355,7 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
       ]),
       section('能力', 1, [for (final a in d.abilities) AbilityBar(ability: a)]),
       section('入団', 2, [
-        FactRow('球団', '${_team.text.trim()}（${_league.text.trim()}・${_country.text.trim()}）'),
+        FactRow('球団', '${_team.text.trim()}（${_league.text.trim()}・${_country.text.trim()}・${_draft.teamCount} 球団）'),
         FactRow('経路', d.route == JoiningRoute.draft ? 'ドラフト ${d.draftRound} 位' : d.route.label),
         FactRow('入団年', year(d.joiningYear)),
         FactRow('背番号', '${d.uniformNumber}'),
