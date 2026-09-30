@@ -18,22 +18,6 @@ Future<void> openDetail(BuildContext context, Player player, {VoidCallback? onPl
   );
 }
 
-/// 名鑑から選手を開く。現役なら「この選手で続ける」を出し、押したら最初の画面へ戻る。
-Future<void> openFromDirectory(BuildContext context, Player player) {
-  final store = StoreScope.read(context);
-  final navigator = Navigator.of(context);
-  return openDetail(
-    context,
-    player,
-    onPlay: player.isActive && player.id != store.currentId
-        ? () {
-            store.select(player);
-            navigator.popUntil((r) => r.isFirst);
-          }
-        : null,
-  );
-}
-
 Future<void> openCreation(BuildContext context) {
   final navigator = Navigator.of(context);
   return navigator.push(
