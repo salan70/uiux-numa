@@ -66,12 +66,9 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   }
 
   List<String> _errors() => switch ((_step, _choice)) {
-    (1, _Choice.stay) => [
-      ?UniformRule.either.check(_uniform),
-      if (_salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。'],
+    (1, _Choice.stay) => [?UniformRule.either.check(_uniform)],
     (1, _Choice.transfer) => [
       ?UniformRule.either.check(_uniform),
-      if (_salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。',
       if (_team.text.trim().isEmpty) '移籍先の球団名を入力してください。',
       if (_league.text.trim().isEmpty) '移籍先のリーグ名を入力してください。',
       if (_country.text.trim().isEmpty) '移籍先の国名を入力してください。',
