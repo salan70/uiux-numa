@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'format.dart';
 import 'model.dart';
+import 'parts.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -72,43 +73,6 @@ class ShareAction extends StatelessWidget {
   }
 }
 
-/// 共有と名鑑の見本に使う 1 枚。野球カードの表面に当たる。
-class PlayerCard extends StatelessWidget {
-  const PlayerCard({super.key, required this.player});
-
-  final Player player;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Palette.of(context);
-    final c = player.career;
-    final first = player.seasons.first.year;
-    final last = player.current.year;
-    return Panel(
-      color: p.primaryContainer,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PlayerHeader(player: player),
-          const SizedBox(height: Space.s300),
-          Text('$first〜$last 年・${player.proYears} 年', style: Txt.caption.copyWith(color: p.onSurface)),
-          const SizedBox(height: Space.s200),
-          Wrap(
-            spacing: Space.s500,
-            runSpacing: Space.s200,
-            children: [
-              StatTile(label: '通算打率', value: rate(c.average), large: false),
-              StatTile(label: '通算安打', value: grouped(c.hits), large: false),
-              StatTile(label: '通算本塁打', value: '${c.homeRuns}', large: false),
-              StatTile(label: 'タイトル', value: '${player.allTitles.length}', large: false),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class PlayerDetailBody extends StatelessWidget {
   const PlayerDetailBody({super.key, required this.player, this.showHeader = true});
 
@@ -163,12 +127,12 @@ class _Overview extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s1000),
       children: [
         SectionTitle('通算', trailing: Text('${player.proYears} 年', style: Txt.caption)),
-        SeasonStatGrid(line: career),
+        Panel(child: SeasonStatGrid(line: career)),
         const SectionTitle('タイトル'),
         if (player.allTitles.isEmpty)
           Text('まだタイトルはありません。シーズンを終えるときに選べます。', style: Txt.ui.copyWith(color: p.onSurfaceVariant))
         else
-          for (final s in player.seasons.where((s) => s.titles.isNotEmpty)) FactRow(year(s.year), s.titles.join('、')),
+          for (final s in player.seasons.where((s) => s.titles.isNotEmpty)) _TitleYear(year: year(s.year), titles: s.titles),
         const SectionTitle('球団'),
         for (final stint in teamStints(player)) FactRow(stint.$1, stint.$2),
         const SectionTitle('入団'),
@@ -182,6 +146,57 @@ class _Overview extends StatelessWidget {
         FactRow('投打', player.handedness),
         FactRow('守備', player.positions.map((e) => e.label).join('、')),
       ],
+    );
+  }
+}
+
+/// 1 年のタイトル。タイトルは稀な達成なので、黄の札にして事実の行より強く見せる。
+class _TitleYear extends StatelessWidget {
+  const _TitleYear({required this.year, required this.titles});
+
+  final String year;
+  final List<String> titles;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    return Semantics(
+      label: '$year、${titles.join('、')}',
+      excludeSemantics: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: Space.s150),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 84,
+              child: Padding(
+                padding: const EdgeInsets.only(top: Space.s50),
+                child: Text(year, style: Txt.ui.merge(Txt.tabular).copyWith(color: p.onSurfaceVariant)),
+              ),
+            ),
+            Expanded(
+              child: Wrap(
+                spacing: Space.s150,
+                runSpacing: Space.s150,
+                children: [
+                  for (final t in titles)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: Space.s200, vertical: Space.s50),
+                      decoration: BoxDecoration(
+                        color: p.primary,
+                        borderRadius: BorderRadius.circular(Radii.control),
+                        border: Border.all(color: p.ink, width: Borders.thick),
+                        boxShadow: [BoxShadow(color: p.shadow, offset: const Offset(2, 2))],
+                      ),
+                      child: Text(t, style: Txt.control.copyWith(color: p.onPrimary)),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -249,12 +264,12 @@ class YearlyTable extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              cell('年', width: firstWidth, align: TextAlign.left),
+              cell('年', width: firstWidth, align: TextAlign.left, bold: true),
               for (final r in rows)
                 DecoratedBox(
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: r.$3 ? p.ink : p.surfaceVariant, width: r.$3 ? 2 : 1),
+                      top: BorderSide(color: r.$3 ? p.ink : p.surfaceVariant, width: r.$3 ? Bold.border : 1),
                     ),
                   ),
                   child: cell(r.$1, width: firstWidth, bold: r.$3, align: TextAlign.left),
@@ -267,12 +282,12 @@ class YearlyTable extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [for (final c in _columns) cell(c, width: colWidth)]),
+                  Row(children: [for (final c in _columns) cell(c, width: colWidth, bold: true)]),
                   for (final r in rows)
                     DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border(
-                          top: BorderSide(color: r.$3 ? p.ink : p.surfaceVariant, width: r.$3 ? 2 : 1),
+                          top: BorderSide(color: r.$3 ? p.ink : p.surfaceVariant, width: r.$3 ? Bold.border : 1),
                         ),
                       ),
                       child: Row(
@@ -356,39 +371,37 @@ class AbilityBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: Space.s150),
         child: Row(
           children: [
-            SizedBox(width: 84, child: Text(ability.name, style: Txt.ui)),
-            Container(
-              width: 40,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: Space.s50),
-              decoration: BoxDecoration(
-                color: _rankColor(p, ability.value),
-                borderRadius: BorderRadius.circular(Radii.control),
-                border: Border.all(color: p.ink, width: Borders.thick),
-              ),
-              child: Text(
-                ability.rank,
-                style: Txt.control.copyWith(color: ability.value >= 60 ? p.onPrimary : p.onSurface),
-              ),
-            ),
-            const SizedBox(width: Space.s200),
-            SizedBox(
-              width: 32,
-              child: Text('${ability.value}', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
-            ),
-            const SizedBox(width: Space.s200),
+            SizedBox(width: 84, child: Text(ability.name, style: Txt.control)),
             Expanded(
               child: Container(
-                height: 10,
-                decoration: BoxDecoration(color: p.surfaceContainer, borderRadius: BorderRadius.circular(Radii.pill)),
+                height: 18,
+                decoration: BoxDecoration(
+                  color: p.surface,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: p.ink, width: Borders.thick),
+                ),
                 child: FractionallySizedBox(
                   alignment: Alignment.centerLeft,
                   widthFactor: ability.value / 99,
-                  child: Container(
-                    decoration: BoxDecoration(color: p.secondary, borderRadius: BorderRadius.circular(Radii.pill)),
-                  ),
+                  child: Container(color: p.secondary),
                 ),
               ),
+            ),
+            SizedBox(
+              width: 40,
+              child: Text('${ability.value}', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
+            ),
+            const SizedBox(width: Space.s150),
+            Container(
+              constraints: const BoxConstraints(minWidth: 30),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: Space.s100),
+              decoration: BoxDecoration(
+                color: _rankColor(p, ability.value),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: p.ink, width: Borders.thick),
+              ),
+              child: Text(ability.rank, style: Txt.control.copyWith(color: inkOn(_rankColor(p, ability.value)))),
             ),
             SizedBox(
               width: 40,
@@ -404,11 +417,11 @@ class AbilityBar extends StatelessWidget {
     );
   }
 
-  /// ランクの札。C 以上は黄（primary）、A 以上は赤橙（tertiary）の面に on-primary の字、D 以下は面の変化に本文の字を置く。
+  /// ランクの札。C 以上は黄（primary）、A 以上は赤橙（tertiary）、D 以下は面の色にし、字は面の明るさで墨か紙を選ぶ。
   /// 色は段の目安で、ランクの字が意味を担う。
   static Color _rankColor(Palette p, int v) => v >= 80
       ? p.tertiary
       : v >= 60
       ? p.primary
-      : p.surfaceVariant;
+      : p.surface;
 }

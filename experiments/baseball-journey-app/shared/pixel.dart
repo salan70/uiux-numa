@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/model.dart';
+import 'model.dart';
 
 // ドット絵の選手と、電光掲示板の 5×7 のドット文字。
 // 製品の UI/UX 方針（ui_ux_concepts の P-001）の「ピクセル風・ドット風の要素」を、画像を使わずに矩形で描く。

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'creation.dart';
 import 'format.dart';
 import 'model.dart';
+import 'parts.dart';
+import 'pixel.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -188,7 +190,18 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     final line = _season.line;
     return [
       SectionTitle('今季の成績', trailing: Text(_season.team.abbreviation, style: Txt.caption)),
-      SeasonStatGrid(line: line, large: false),
+      Panel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SeasonGrid(season: _season),
+            const SizedBox(height: Space.s200),
+            SeasonGridLegend(season: _season),
+            const SizedBox(height: Space.s400),
+            SeasonStatGrid(line: line, large: false),
+          ],
+        ),
+      ),
       SectionTitle(
         'リーグの順位',
         trailing: Text('任意', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
@@ -210,27 +223,28 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
           }),
         ),
       const SectionTitle('タイトル'),
-      Wrap(
-        spacing: Space.s200,
-        runSpacing: Space.s200,
-        children: [
-          for (final t in [...defaultTitles, ...store.customTitles])
-            FilterChip(
-              label: Text(t),
-              selected: _titles.contains(t),
-              onSelected: (v) => setState(() => v ? _titles.add(t) : _titles.remove(t)),
-            ),
-          ActionChip(
-            avatar: const Icon(Icons.add, size: 18),
-            label: const Text('タイトルを足す'),
-            onPressed: () async {
-              final name = await _askTitle(context);
-              if (name == null || name.isEmpty) return;
-              store.addCustomTitle(name);
-              setState(() => _titles.add(name));
-            },
-          ),
-        ],
+      ChoiceWrap<String>(
+        semanticsLabel: 'タイトル',
+        values: [...defaultTitles, ...store.customTitles],
+        label: (t) => t,
+        isSelected: _titles.contains,
+        onSelected: (t) => setState(() => _titles.contains(t) ? _titles.remove(t) : _titles.add(t)),
+      ),
+      const SizedBox(height: Space.s200),
+      Align(
+        alignment: Alignment.centerLeft,
+        child: PressButton(
+          label: 'タイトルを足す',
+          icon: Icons.add,
+          expand: false,
+          dense: true,
+          onPressed: () async {
+            final name = await _askTitle(context);
+            if (name == null || name.isEmpty) return;
+            store.addCustomTitle(name);
+            setState(() => _titles.add(name));
+          },
+        ),
       ),
       const SizedBox(height: Space.s200),
       Text('足したタイトルは、ほかの選手でも選べます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
@@ -355,9 +369,9 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     final career = widget.player.career;
     return [
       const SectionTitle('最終季の成績'),
-      SeasonStatGrid(line: _season.line, large: false),
+      Panel(child: SeasonStatGrid(line: _season.line, large: false)),
       SectionTitle('通算の成績', trailing: Text('${widget.player.proYears} 年', style: Txt.caption)),
-      SeasonStatGrid(line: career, large: false),
+      Panel(child: SeasonStatGrid(line: career, large: false)),
       SectionTitle(
         '通算の順位',
         trailing: Text('任意', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
@@ -466,14 +480,21 @@ Future<String?> _askTitle(BuildContext context) {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('キャンセル')),
-        TextButton(onPressed: () => Navigator.pop(context, name.text.trim()), child: const Text('足す')),
+        PressButton(label: 'キャンセル', expand: false, dense: true, onPressed: () => Navigator.pop(context)),
+        PressButton(
+          label: '足す',
+          kind: PressKind.primary,
+          expand: false,
+          dense: true,
+          onPressed: () => Navigator.pop(context, name.text.trim()),
+        ),
       ],
     ),
   );
 }
 
 /// 次の季へ進んだ直後。完了の段（step 7）を、来季の始まりの画面にした。
+/// タイトル画面と同じ夜の球場に、掲示板の年を灯して開幕を告げる。
 class _NextSeasonScreen extends StatelessWidget {
   const _NextSeasonScreen({required this.player, required this.onClose});
 
@@ -485,28 +506,48 @@ class _NextSeasonScreen extends StatelessWidget {
     final p = Palette.of(context);
     final s = player.current;
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(Space.s600),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              Icon(Icons.sports_baseball, size: 64, color: p.primaryText),
-              const SizedBox(height: Space.s400),
-              Semantics(
-                header: true,
-                child: Text('${year(s.year)}シーズンへ', textAlign: TextAlign.center, style: Txt.title),
-              ),
-              const SizedBox(height: Space.s200),
-              Text(
-                '${s.team.name}・背番号 ${s.uniformNumber}・${salary(s.salary)}',
-                textAlign: TextAlign.center,
-                style: Txt.ui.copyWith(color: p.onSurfaceVariant),
-              ),
-              const Spacer(),
-              PressButton(label: '開幕へ', kind: PressKind.primary, onPressed: onClose),
-            ],
+      backgroundColor: Night.field,
+      body: CustomPaint(
+        painter: const NightFieldPainter(),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(Space.s600),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Spacer(),
+                BoldBox(
+                  color: Night.board,
+                  padding: const EdgeInsets.symmetric(vertical: Space.s600, horizontal: Space.s400),
+                  child: Column(
+                    children: [
+                      DotText(['${s.year}'], pitch: 9, offColor: Night.ledOff, label: year(s.year)),
+                      const SizedBox(height: Space.s300),
+                      Semantics(
+                        header: true,
+                        child: Text('シーズンへ', textAlign: TextAlign.center, style: Txt.title.copyWith(color: Night.ink)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: Space.s400),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PixelAvatar(player: player, size: 40),
+                    const SizedBox(width: Space.s200),
+                    Flexible(
+                      child: Text(
+                        '${s.team.name}・背番号 ${s.uniformNumber}・${salary(s.salary)}',
+                        style: Txt.ui.copyWith(color: Night.ink),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                KeyButton(label: '開幕へ', fill: p.primary, onPressed: onClose),
+              ],
+            ),
           ),
         ),
       ),
@@ -514,7 +555,8 @@ class _NextSeasonScreen extends StatelessWidget {
   }
 }
 
-/// 引退の直後。通算の成績と経歴を 1 枚にまとめ、名鑑へ送る。
+/// 引退の直後。選手の札と通算の成績を 1 枚にまとめ、名鑑へ送る。
+/// 引退は選手に 1 度だけの節目なので、記録達成と同じドットの紙吹雪を 1 回だけ散らす。
 class RetiredScreen extends StatelessWidget {
   const RetiredScreen({super.key, required this.player, required this.onClose});
 
@@ -525,27 +567,33 @@ class RetiredScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(Space.s600),
-          children: [
-            const SizedBox(height: Space.s1000),
-            Semantics(
-              header: true,
-              child: Text('おつかれさまでした', textAlign: TextAlign.center, style: Txt.title),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(Space.page, Space.s600, Space.page, Space.s600),
+              children: [
+                Semantics(
+                  header: true,
+                  child: Text('おつかれさまでした', textAlign: TextAlign.center, style: Txt.title),
+                ),
+                const SizedBox(height: Space.s200),
+                Text(
+                  '${player.name}は ${player.proYears} 年のプロ生活を終えました。記録は名鑑に残ります。',
+                  textAlign: TextAlign.center,
+                  style: Txt.body.copyWith(color: p.onSurfaceVariant),
+                ),
+                const SizedBox(height: Space.s500),
+                PlayerHeader(player: player),
+                const SectionTitle('通算の成績'),
+                Panel(child: SeasonStatGrid(line: player.career, large: false)),
+                const SizedBox(height: Space.s600),
+                KeyButton(label: '名鑑で見る', fill: p.primary, onPressed: onClose),
+              ],
             ),
-            const SizedBox(height: Space.s200),
-            Text(
-              '${player.name}は ${player.proYears} 年のプロ生活を終えました。記録は名鑑に残ります。',
-              textAlign: TextAlign.center,
-              style: Txt.body.copyWith(color: p.onSurfaceVariant),
-            ),
-            const SizedBox(height: Space.s600),
-            Panel(child: SeasonStatGrid(line: player.career, large: false)),
-            const SizedBox(height: Space.s600),
-            PressButton(label: '名鑑で見る', kind: PressKind.primary, onPressed: onClose),
-          ],
-        ),
+          ),
+          const Positioned.fill(child: PixelBurst(delay: Duration(milliseconds: 300))),
+        ],
       ),
     );
   }

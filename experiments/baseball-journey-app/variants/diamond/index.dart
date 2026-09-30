@@ -12,8 +12,8 @@ import '../../shared/nav.dart';
 import '../../shared/store.dart';
 import '../../shared/theme.dart';
 import '../../shared/widgets.dart';
-import 'parts.dart';
-import 'pixel.dart';
+import '../../shared/parts.dart';
+import '../../shared/pixel.dart';
 
 // diamond: baseball-journey-reel のリールで描いた UI を、操作できる形にした。
 // 情報構造は round 2〜3 の matchday（削除済み、README に記録）を引き継ぎ、タイトル → 選手トップ → 試合 → 試合後の 1 本にする。

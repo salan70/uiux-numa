@@ -3,20 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
-import '../../shared/format.dart';
-import '../../shared/model.dart';
-import '../../shared/theme.dart';
+import 'format.dart';
+import 'model.dart';
+import 'theme.dart';
 import 'pixel.dart';
 
 // diamond の部品。baseball-journey-reel のリールで描いた UI を、操作できる部品に写す。
+// 採用案が diamond だけになったので shared に置き、作成や詳細などの画面もこの造形で描く。
 // 動きの値の根拠は README の「diamond の動きと値」の表にある。
-
-/// 太い輪郭とずらした影。製品の造形の幅（輪郭 2〜4px、影 4〜8px）の中で、リールに合わせて shared より 1 段強くする。
-abstract final class Bold {
-  static const border = 3.0;
-  static const shadow = 5.0;
-  static const radius = 12.0;
-}
 
 /// ばね。減衰比と 1 秒あたりの振動数で決める（質量 1）。
 SpringDescription springOf(double zeta, double hz) =>
@@ -68,6 +62,9 @@ class KeyButton extends StatefulWidget {
     this.textStyle,
     this.dashed = false,
     this.oneLine = false,
+    this.foreground,
+    this.busy = false,
+    this.expand = true,
   });
 
   final String label;
@@ -84,6 +81,15 @@ class KeyButton extends StatefulWidget {
 
   /// 名前を折り返さず、幅に収まらなければ縮める。「ホームラ/ン」のように語の途中で割れると読めない短い名前に使う。
   final bool oneLine;
+
+  /// 字と印の色。省くと面の明るさから墨か紙を選ぶ。消す操作の赤字に使う。
+  final Color? foreground;
+
+  /// 処理中。二重に押せないようにし（disableWhileLoading）、面と文言を変えず回転する印だけを足す。
+  final bool busy;
+
+  /// 幅いっぱいに広げる。ダイアログの操作のように横に並べるときは false にする。
+  final bool expand;
 
   @override
   State<KeyButton> createState() => _KeyButtonState();
@@ -124,9 +130,10 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    final enabled = widget.onPressed != null;
-    final fill = enabled ? (widget.fill ?? p.surface) : p.surfaceContainer;
-    final fg = enabled ? inkOn(fill) : p.onSurfaceVariant;
+    final enabled = widget.onPressed != null && !widget.busy;
+    final live = enabled || widget.busy;
+    final fill = live ? (widget.fill ?? p.surface) : p.surfaceContainer;
+    final fg = live ? (widget.foreground ?? inkOn(fill)) : p.onSurfaceVariant;
     final reduced = Motion.reduced(context);
     final label = widget.dashed && widget.icon != null
         ? Column(
@@ -138,10 +145,14 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
             ],
           )
         : Row(
+      mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (widget.icon != null) Icon(widget.icon, size: 22, color: fg),
-        if (widget.icon != null && widget.label.isNotEmpty) const SizedBox(width: Space.s150),
+        if (widget.busy)
+          SizedBox.square(dimension: 18, child: CircularProgressIndicator(strokeWidth: 2.5, color: fg))
+        else if (widget.icon != null)
+          Icon(widget.icon, size: 22, color: fg),
+        if ((widget.busy || widget.icon != null) && widget.label.isNotEmpty) const SizedBox(width: Space.s150),
         if (widget.label.isNotEmpty)
           Flexible(
             child: widget.oneLine
@@ -168,13 +179,13 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
       label: widget.semanticsLabel ?? widget.label,
       hint: widget.semanticsHint,
       excludeSemantics: true,
-      onTap: widget.onPressed,
+      onTap: enabled ? widget.onPressed : null,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: enabled ? (_) => _down() : null,
         onTapUp: enabled ? (_) => _up() : null,
         onTapCancel: enabled ? _up : null,
-        onTap: widget.onPressed,
+        onTap: enabled ? widget.onPressed : null,
         child: Padding(
           padding: const EdgeInsets.only(right: Bold.shadow, bottom: Bold.shadow),
           child: AnimatedBuilder(
@@ -195,7 +206,7 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
                       borderRadius: BorderRadius.circular(Bold.radius),
                       border: widget.dashed
                           ? null
-                          : Border.all(color: enabled ? p.ink : p.outline, width: Bold.border),
+                          : Border.all(color: live ? p.ink : p.outline, width: Bold.border),
                       boxShadow: widget.dashed || shadow <= 0
                           ? null
                           : [BoxShadow(color: p.shadow, offset: Offset(shadow, shadow))],
@@ -251,6 +262,7 @@ class RubberStepper extends StatefulWidget {
     this.limitNote,
     this.floorNote,
     this.stacked = false,
+    this.unit = '',
   });
 
   final String label;
@@ -263,6 +275,9 @@ class RubberStepper extends StatefulWidget {
 
   /// 名前を上に置き、− 数 + を左に寄せる。2 つを横に並べて入力面の上の高さを空けるときに使う。
   final bool stacked;
+
+  /// 読み上げで数に添える単位（「 歳」「 年」）。
+  final String unit;
 
   @override
   State<RubberStepper> createState() => _RubberStepperState();
@@ -327,6 +342,9 @@ class _RubberStepperState extends State<RubberStepper> with TickerProviderStateM
     final note = atMax ? widget.limitNote : (atMin ? widget.floorNote : null);
     final textStyle = Txt.figure.copyWith(color: p.onSurface);
     final height = MediaQuery.textScalerOf(context).scale(textStyle.fontSize!) * 1.3;
+    // 入団年のような 4 桁でも数が切れないよう、上限の桁数で幅を決める。
+    final digits = math.max(widget.max.abs().toString().length, widget.min.abs().toString().length);
+    final width = math.max(64.0, MediaQuery.textScalerOf(context).scale(textStyle.fontSize!) * 0.62 * digits + Space.s200);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -347,10 +365,10 @@ class _RubberStepperState extends State<RubberStepper> with TickerProviderStateM
             ),
             Semantics(
               liveRegion: true,
-              label: '${widget.label} ${widget.value}',
+              label: '${widget.label} ${widget.value}${widget.unit}',
               excludeSemantics: true,
               child: SizedBox(
-                width: 64,
+                width: width,
                 height: height,
                 child: ClipRect(
                   child: AnimatedBuilder(
@@ -846,6 +864,34 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(_GridPainter old) => true;
 }
 
+/// 1 試合の升の見本。凡例と試合の一覧で、升と同じ形で勝敗を示す。outcome が null なら欠場の網にする。
+class OutcomeSwatch extends StatelessWidget {
+  const OutcomeSwatch(this.outcome, {super.key});
+
+  final GameOutcome? outcome;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    Widget box(Color? fill, {Color? border}) => Container(
+      width: 14,
+      height: 10,
+      decoration: BoxDecoration(
+        color: fill,
+        border: border == null ? null : Border.all(color: border, width: 1.5),
+      ),
+    );
+    return ExcludeSemantics(
+      child: switch (outcome) {
+        GameOutcome.win => box(p.primary, border: p.ink),
+        GameOutcome.loss => box(p.onSurface),
+        GameOutcome.draw => box(null, border: p.onSurface),
+        null => CustomPaint(size: const Size(14, 10), painter: _SkippedSwatchPainter(p.onSurfaceVariant)),
+      },
+    );
+  }
+}
+
 /// 升の凡例。色だけで区別せず、数を添えて今季の勝敗の記録としても読めるようにする。
 class SeasonGridLegend extends StatelessWidget {
   const SeasonGridLegend({super.key, required this.season});
@@ -887,10 +933,10 @@ class SeasonGridLegend extends StatelessWidget {
         spacing: Space.s300,
         runSpacing: Space.s100,
         children: [
-          item(box(p.primary, border: p.ink), '勝ち', wins),
-          item(box(p.onSurface), '負け', losses),
-          item(box(null, border: p.onSurface), '引き分け', draws),
-          item(CustomPaint(size: const Size(14, 10), painter: _SkippedSwatchPainter(p.onSurfaceVariant)), '欠場', skipped),
+          item(const OutcomeSwatch(GameOutcome.win), '勝ち', wins),
+          item(const OutcomeSwatch(GameOutcome.loss), '負け', losses),
+          item(const OutcomeSwatch(GameOutcome.draw), '引き分け', draws),
+          item(const OutcomeSwatch(null), '欠場', skipped),
           if (!season.isComplete) item(box(null, border: p.onSurface, width: 3), '次の試合'),
         ],
       ),

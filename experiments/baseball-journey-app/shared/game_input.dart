@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'model.dart';
+import 'parts.dart';
+import 'pixel.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -460,6 +462,8 @@ class _ScoreSheetState extends State<_ScoreSheet> {
             Semantics(header: true, child: const Text('スコア', style: Txt.heading)),
             Text(d.line, style: Txt.ui.copyWith(color: p.onSurfaceVariant)),
             const SizedBox(height: Space.s300),
+            _ScoreBoard(my: _my, opponent: _opponent, outcome: outcome),
+            const SizedBox(height: Space.s300),
             NumberStepper(
               label: '自チーム',
               value: _my,
@@ -477,12 +481,7 @@ class _ScoreSheetState extends State<_ScoreSheet> {
               unit: ' 点',
               onChanged: (v) => setState(() => _opponent = v),
             ),
-            const SizedBox(height: Space.s200),
-            Semantics(
-              liveRegion: true,
-              child: Text('$_my 対 $_opponent で${outcome.label}', style: Txt.control, textAlign: TextAlign.center),
-            ),
-            const SizedBox(height: Space.s200),
+
             // 失敗の文言の行は常に確保し、出ても保存ボタンを動かさない。
             SizedBox(
               height: 48,
@@ -512,6 +511,56 @@ class _ScoreSheetState extends State<_ScoreSheet> {
                 ),
               ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// スコアの掲示板。選手トップと試合の掲示板と同じ暗い面にドット文字で得点を灯し、勝敗を札で添える。
+class _ScoreBoard extends StatelessWidget {
+  const _ScoreBoard({required this.my, required this.opponent, required this.outcome});
+
+  final int my;
+  final int opponent;
+  final GameOutcome outcome;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    final label = Txt.caption.copyWith(color: Night.ink);
+    Widget side(String name, int score) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(name, style: label),
+        const SizedBox(height: Space.s100),
+        DotText(['$score'], pitch: 4, offColor: Night.ledOff),
+      ],
+    );
+    return Semantics(
+      liveRegion: true,
+      label: '$my 対 $opponent で${outcome.label}',
+      excludeSemantics: true,
+      child: BoldBox(
+        color: Night.board,
+        padding: const EdgeInsets.symmetric(horizontal: Space.s400, vertical: Space.s200),
+        child: Row(
+          children: [
+            Expanded(child: side('自チーム', my)),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: Space.s300, vertical: Space.s50),
+              decoration: BoxDecoration(
+                color: outcome == GameOutcome.win ? p.primary : Night.board,
+                borderRadius: BorderRadius.circular(Radii.control),
+                border: Border.all(color: outcome == GameOutcome.win ? p.ink : Night.ink, width: Borders.thick),
+              ),
+              child: Text(
+                outcome.label,
+                style: Txt.control.copyWith(color: outcome == GameOutcome.win ? p.onPrimary : Night.ink),
+              ),
+            ),
+            Expanded(child: side('相手', opponent)),
           ],
         ),
       ),

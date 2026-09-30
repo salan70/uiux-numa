@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'fixture.dart';
 import 'format.dart';
 import 'model.dart';
+import 'parts.dart';
 import 'player_detail.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -254,20 +255,16 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         InputDecoration(hintText: hint, errorText: err && c.text.trim().isEmpty ? message : null);
     return [
       const FieldLabel('入団した球団'),
-      Wrap(
-        spacing: Space.s200,
-        runSpacing: Space.s200,
-        children: [
-          for (final t in fixtureTeams)
-            ActionChip(
-              label: Text(t.name),
-              onPressed: () => setState(() {
-                _team.text = t.name;
-                _league.text = t.league;
-                _country.text = t.country;
-              }),
-            ),
-        ],
+      ChoiceWrap<Team>(
+        semanticsLabel: '球団の候補',
+        values: fixtureTeams,
+        label: (t) => t.name,
+        isSelected: (t) => t.name == _team.text.trim(),
+        onSelected: (t) => setState(() {
+          _team.text = t.name;
+          _league.text = t.league;
+          _country.text = t.country;
+        }),
       ),
       const SizedBox(height: Space.s300),
       TextField(controller: _team, decoration: deco('球団名', _team, '球団名を入力してください。'), onChanged: (_) => setState(() {})),
@@ -422,10 +419,14 @@ class SalaryField extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Text(label, style: Txt.control)),
-          IconButton.outlined(
-            tooltip: '$label を下げる',
-            onPressed: value > 300 ? () => onChanged(max(300, value - _step(value - 1))) : null,
-            icon: const Icon(Icons.remove),
+          SizedBox(
+            width: Sizes.target + Bold.shadow,
+            child: KeyButton(
+              label: '',
+              icon: Icons.remove,
+              semanticsLabel: '$label を下げる',
+              onPressed: value > 300 ? () => onChanged(max(300, value - _step(value - 1))) : null,
+            ),
           ),
           Semantics(
             liveRegion: true,
@@ -434,14 +435,18 @@ class SalaryField extends StatelessWidget {
               child: Text(
                 salary(value),
                 textAlign: TextAlign.center,
-                style: Txt.control.merge(Txt.tabular).copyWith(color: p.onSurface),
+                style: Txt.figureSm.copyWith(color: p.onSurface),
               ),
             ),
           ),
-          IconButton.outlined(
-            tooltip: '$label を上げる',
-            onPressed: value < 100000 ? () => onChanged(value + _step(value)) : null,
-            icon: const Icon(Icons.add),
+          SizedBox(
+            width: Sizes.target + Bold.shadow,
+            child: KeyButton(
+              label: '',
+              icon: Icons.add,
+              semanticsLabel: '$label を上げる',
+              onPressed: value < 100000 ? () => onChanged(value + _step(value)) : null,
+            ),
           ),
         ],
       ),
@@ -506,8 +511,14 @@ class AbilityEditor extends StatelessWidget {
           title: const Text('能力の名前'),
           content: TextField(controller: c, autofocus: true, maxLength: 8),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('キャンセル')),
-            TextButton(onPressed: () => Navigator.pop(context, c.text.trim()), child: const Text('決定')),
+            PressButton(label: 'キャンセル', expand: false, dense: true, onPressed: () => Navigator.pop(context)),
+            PressButton(
+              label: '決定',
+              kind: PressKind.primary,
+              expand: false,
+              dense: true,
+              onPressed: () => Navigator.pop(context, c.text.trim()),
+            ),
           ],
         ),
       );
@@ -638,11 +649,12 @@ class StepHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 済んだ段と今の段を黄の升で埋め、今の段は名前を太字にする。升の塗りと字の太さの 2 つで示す。
                     Container(
-                      height: 6,
+                      height: 12,
                       decoration: BoxDecoration(
-                        color: i <= current ? p.secondary : p.surfaceVariant,
-                        borderRadius: BorderRadius.circular(Radii.pill),
+                        color: i <= current ? p.primary : p.surface,
+                        border: Border.all(color: p.ink, width: Borders.thick),
                       ),
                     ),
                     const SizedBox(height: Space.s100),
@@ -650,7 +662,7 @@ class StepHeader extends StatelessWidget {
                       steps[i],
                       style: Txt.caption.copyWith(
                         color: i == current ? p.onSurface : p.onSurfaceVariant,
-                        decoration: i == current ? TextDecoration.underline : null,
+                        fontWeight: i == current ? FontWeight.w700 : FontWeight.w400,
                       ),
                     ),
                   ],
@@ -680,7 +692,7 @@ class InputErrorSummary extends StatelessWidget {
         padding: const EdgeInsets.all(Space.s300),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Radii.control),
-          border: Border.all(color: p.error, width: Borders.thick),
+          border: Border.all(color: p.error, width: Bold.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -712,11 +724,11 @@ class WizardBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: p.background,
-        border: Border(top: BorderSide(color: p.surfaceVariant)),
+        border: Border(top: BorderSide(color: p.ink, width: Borders.thick)),
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(Space.page, Space.s300, Space.page, Space.s300),
+          padding: const EdgeInsets.fromLTRB(Space.page, Space.s300, Space.page, Space.s200),
           child: Row(
             children: [
               Expanded(

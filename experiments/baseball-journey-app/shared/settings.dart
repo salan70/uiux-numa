@@ -120,8 +120,9 @@ class HowToPlay extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: p.primary,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(Radii.control),
                     border: Border.all(color: p.ink, width: Borders.thick),
+                    boxShadow: [BoxShadow(color: p.shadow, offset: const Offset(2, 2))],
                   ),
                   child: Text('${i + 1}', style: Txt.control.copyWith(color: p.onPrimary)),
                 ),
