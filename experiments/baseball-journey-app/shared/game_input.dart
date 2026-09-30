@@ -3,6 +3,7 @@ import 'dart:math' show max, min;
 import 'package:flutter/material.dart';
 
 import 'model.dart';
+import 'number_inputs.dart';
 import 'parts.dart';
 import 'pixel.dart';
 import 'store.dart';
@@ -467,23 +468,15 @@ class _ScoreSheetState extends State<_ScoreSheet> {
             const SizedBox(height: Space.s300),
             _ScoreBoard(my: _my, opponent: _opponent, outcome: outcome),
             const SizedBox(height: Space.s300),
-            NumberStepper(
+            _ScorePicker(
               label: '自チーム',
               value: _my,
               min: d.rbi,
-              max: 99,
-              unit: ' 点',
               onChanged: (v) => setState(() => _my = v),
-              floorNote: d.rbi > 0 ? '自チームの得点は、打点の合計の ${d.rbi} 点以上です。' : null,
+              note: d.rbi > 0 ? '自チームの得点は、打点の合計の ${d.rbi} 点以上です。' : null,
             ),
-            NumberStepper(
-              label: '相手',
-              value: _opponent,
-              min: 0,
-              max: 99,
-              unit: ' 点',
-              onChanged: (v) => setState(() => _opponent = v),
-            ),
+            const SizedBox(height: Space.s300),
+            _ScorePicker(label: '相手', value: _opponent, min: 0, onChanged: (v) => setState(() => _opponent = v)),
 
             // 失敗の文言の行は常に確保し、出ても保存ボタンを動かさない。
             SizedBox(
@@ -517,6 +510,75 @@ class _ScoreSheetState extends State<_ScoreSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// スコアの札。0〜10 を 6 列 2 段に常に並べ、1 回押して決める。1 季に 143 回入れる入力なので、増減で数えさせない。
+/// プロ野球の 1 試合の得点はほとんど 10 点以下に収まるので、11 点以上だけを「11+」から数字パッドで入れる。
+/// 下限（自チームは打点の合計）より小さい札は押せず、理由の行は常に確保して札を動かさない。
+class _ScorePicker extends StatelessWidget {
+  const _ScorePicker({required this.label, required this.value, required this.min, required this.onChanged, this.note});
+
+  final String label;
+  final int value;
+  final int min;
+  final ValueChanged<int> onChanged;
+  final String? note;
+
+  static const _many = 11;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    Widget key(String text, {required bool selected, VoidCallback? onPressed, String? semantics}) => Expanded(
+      child: KeyButton(
+        label: text,
+        oneLine: true,
+        textStyle: Txt.figureSm,
+        fill: selected ? p.primary : null,
+        semanticsLabel: semantics ?? '$label $text 点',
+        semanticsHint: selected ? '選択中' : null,
+        onPressed: onPressed,
+      ),
+    );
+    Widget row(List<Widget> keys) => Row(
+      children: [
+        for (var i = 0; i < keys.length; i++) ...[if (i > 0) const SizedBox(width: Space.s150), keys[i]],
+      ],
+    );
+    Widget n(int v) => key('$v', selected: v == value, onPressed: v < min ? null : () => onChanged(v));
+    final many = value >= _many;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(label, style: Txt.control),
+        const SizedBox(height: Space.s100),
+        row([for (var v = 0; v <= 5; v++) n(v)]),
+        const SizedBox(height: Space.s150),
+        row([
+          for (var v = 6; v <= 10; v++) n(v),
+          key(
+            many ? '$value' : '$_many+',
+            selected: many,
+            semantics: many ? '$label $value 点、変える' : '$label $_many 点以上を入れる',
+            onPressed: () async {
+              final t = await showNumberPadSheet(
+                context,
+                title: '$labelの得点',
+                initial: many ? '$value' : '',
+                maxLength: 2,
+                maxValue: 99,
+                hint: '$_many〜99 点を打ちます。',
+                validate: (t) => (int.tryParse(t) ?? 0) < _many ? '$_many 点以上を打ちます。10 点以下は札から選びます。' : null,
+                preview: (t) => Text('${t.isEmpty ? '−' : t} 点', style: Txt.figure.copyWith(color: p.onSurface)),
+              );
+              if (t != null) onChanged(int.parse(t));
+            },
+          ),
+        ]),
+        if (note != null) Text(note!, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+      ],
     );
   }
 }

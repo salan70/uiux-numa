@@ -539,6 +539,40 @@ class _DelayedState extends State<_Delayed> {
   Widget build(BuildContext context) => widget.builder(_started);
 }
 
+/// 欄の入場。透明度と下からの 8px の浮き上がりで、index の順に 40ms ずつ遅らせて入れる（空間の連続）。
+/// 時間は token の duration.press（160ms）と easing.out。遅れは 8 番目で止め、名鑑と同じ 320ms を上限にして待たせない。
+/// たまに開く画面（履歴、設定、作成とシーズンの終了の段）に使い、1 季に 143 回開く選手トップには使わない。動きの抑制では動かさない。
+class StaggerIn extends StatelessWidget {
+  const StaggerIn({super.key, this.index = 0, this.from = const Offset(0, 8), required this.child});
+
+  final int index;
+
+  /// 入る前の位置。段を進めるときは進む向きから入れる。
+  final Offset from;
+  final Widget child;
+
+  static const _step = Duration(milliseconds: 40);
+  static const _maxIndex = 8;
+
+  @override
+  Widget build(BuildContext context) {
+    if (Motion.reduced(context)) return child;
+    return _Delayed(
+      delay: _step * math.min(index, _maxIndex),
+      builder: (started) => TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: started ? 1 : 0),
+        duration: Motion.press,
+        curve: Motion.out,
+        builder: (context, t, child) => Opacity(
+          opacity: t,
+          child: Transform.translate(offset: from * (1 - t), child: child),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
 /// 直前との差の札。遅れてばねで跳ね、行き過ぎを 1 回だけ見せる。
 class DeltaChip extends StatefulWidget {
   const DeltaChip({super.key, required this.text, this.delay = Duration.zero, this.up = true});
@@ -756,12 +790,16 @@ class NightFieldPainter extends CustomPainter {
 
 /// 今季の勝敗と順位。個人成績を主にするため、チームの成績はこの 1 行に留める。
 class TeamRecord extends StatelessWidget {
-  const TeamRecord({super.key, required this.season, this.showRank = true});
+  const TeamRecord({super.key, required this.season, this.showRank = true, this.rollLast = false});
 
   final Season season;
 
   /// 順位を右に出す。試合後は順位の増減が真下にあるので出さない。
   final bool showRank;
+
+  /// 最後の試合で増えた勝敗の数を、1 つ前の数から桁送りで転がす（状態の明示）。試合後にだけ使う。
+  /// 転がりは試合後の成績と同じ 700ms の Odometer で、動いている間も次の試合へ進める。
+  final bool rollLast;
 
   @override
   Widget build(BuildContext context) {
@@ -776,16 +814,25 @@ class TeamRecord extends StatelessWidget {
       excludeSemantics: true,
       child: Row(
         children: [
-          Text.rich(TextSpan(children: [
-            TextSpan(text: '${season.wins}', style: countStyle),
-            const TextSpan(text: ' 勝 '),
-            TextSpan(text: '${season.losses}', style: countStyle),
-            const TextSpan(text: ' 敗 '),
-            TextSpan(text: '${season.draws}', style: countStyle),
-            const TextSpan(text: ' 分'),
-            if (unrecorded > 0)
-              TextSpan(text: '  未記録 $unrecorded', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
-          ])),
+          for (final (count, unit, outcome) in [
+            (season.wins, ' 勝 ', GameOutcome.win),
+            (season.losses, ' 敗 ', GameOutcome.loss),
+            (season.draws, ' 分', GameOutcome.draw),
+          ]) ...[
+            if (rollLast)
+              Odometer(
+                value: count,
+                from: season.games.lastOrNull?.outcome == outcome ? count - 1 : count,
+                digits: '$count'.length,
+                style: countStyle.copyWith(color: p.onSurface),
+                delay: const Duration(milliseconds: 150),
+              )
+            else
+              Text('$count', style: countStyle),
+            Text(unit, style: Txt.control.copyWith(fontWeight: FontWeight.w400)),
+          ],
+          if (unrecorded > 0)
+            Text('  未記録 $unrecorded', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           const Spacer(),
           if (showRank)
             Text.rich(TextSpan(children: [

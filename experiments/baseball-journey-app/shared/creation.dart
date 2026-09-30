@@ -36,6 +36,15 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
   final _country = TextEditingController(text: '日本');
   final _memo = TextEditingController();
   int _step = 0;
+
+  /// 段を進めたら右から、戻ったら左から入れるための、前に描いた段。
+  int _shownStep = 0;
+
+  double _direction() {
+    final d = _step >= _shownStep ? 1.0 : -1.0;
+    _shownStep = _step;
+    return d;
+  }
   bool _ageTouched = false;
   final _tried = <int>{};
 
@@ -127,12 +136,21 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
                 padding: const EdgeInsets.fromLTRB(Space.page, Space.s200, Space.page, Space.s1000),
                 children: [
                   if (errors.isNotEmpty) InputErrorSummary(errors: errors),
-                  ...switch (_step) {
-                    0 => _basic(p),
-                    1 => _abilities(p),
-                    2 => _joining(p),
-                    _ => _confirm(p),
-                  },
+                  // 段を替えたら、段の中身を 1 つの塊として、進む向き（進めば右、戻れば左）から入れる（空間の連続）。
+                  // 欄ごとに遅らせると、選んで欄が増えたときに並びのずれた欄まで入り直すので、塊で動かす。
+                  StaggerIn(
+                    key: ValueKey(_step),
+                    from: Offset(16.0 * _direction(), 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: switch (_step) {
+                        0 => _basic(p),
+                        1 => _abilities(p),
+                        2 => _joining(p),
+                        _ => _confirm(p),
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -467,7 +485,8 @@ class AbilityEditor extends StatelessWidget {
                         child: Text(a.name, style: Txt.control.copyWith(color: p.onSurface)),
                       ),
                     ),
-                    SizedBox(width: 32, child: Text(a.rank, style: Txt.control)),
+                    // 作成では消す鍵に幅を取るので、ランクは値の隣へまとめてスライダーの幅を残す。
+                    if (was != null) SizedBox(width: 32, child: Text(a.rank, style: Txt.control)),
                     if (was != null) ...[
                       Expanded(
                         child: RubberStepper(
@@ -500,18 +519,25 @@ class AbilityEditor extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 60,
-                      child: Text('${a.value}', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
+                      width: 64,
+                      child: Text('${a.value} ${a.rank}', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
                     ),
                     ],
-                    if (before == null)
-                      IconButton(
-                        tooltip: '${a.name} を消す',
-                        onPressed: abilities.length > minAbilities
-                            ? () => onChanged(List.of(abilities)..removeAt(i))
-                            : null,
-                        icon: const Icon(Icons.remove_circle_outline),
+                    // 消す操作もほかの押せる面と同じ輪郭と影の鍵にし、細い線のアイコンだけを浮かせない。
+                    if (before == null) ...[
+                      const SizedBox(width: Space.s200),
+                      SizedBox(
+                        width: Sizes.target + Bold.shadow,
+                        child: KeyButton(
+                          label: '',
+                          icon: Icons.close,
+                          semanticsLabel: '${a.name} を消す',
+                          onPressed: abilities.length > minAbilities
+                              ? () => onChanged(List.of(abilities)..removeAt(i))
+                              : null,
+                        ),
                       ),
+                    ],
                   ],
                 ),
               );
