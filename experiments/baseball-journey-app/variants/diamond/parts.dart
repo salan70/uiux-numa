@@ -67,6 +67,7 @@ class KeyButton extends StatefulWidget {
     this.semanticsHint,
     this.textStyle,
     this.dashed = false,
+    this.oneLine = false,
   });
 
   final String label;
@@ -80,6 +81,9 @@ class KeyButton extends StatefulWidget {
 
   /// 空の枠。まだ無いものを作る入口に使う。
   final bool dashed;
+
+  /// 名前を折り返さず、幅に収まらなければ縮める。「ホームラ/ン」のように語の途中で割れると読めない短い名前に使う。
+  final bool oneLine;
 
   @override
   State<KeyButton> createState() => _KeyButtonState();
@@ -140,11 +144,21 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
         if (widget.icon != null && widget.label.isNotEmpty) const SizedBox(width: Space.s150),
         if (widget.label.isNotEmpty)
           Flexible(
-            child: Text(
-              widget.label,
-              textAlign: TextAlign.center,
-              style: (widget.textStyle ?? Txt.control).copyWith(color: fg),
-            ),
+            child: widget.oneLine
+                ? FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      widget.label,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: (widget.textStyle ?? Txt.control).copyWith(color: fg),
+                    ),
+                  )
+                : Text(
+                    widget.label,
+                    textAlign: TextAlign.center,
+                    style: (widget.textStyle ?? Txt.control).copyWith(color: fg),
+                  ),
           ),
       ],
     );
@@ -236,6 +250,7 @@ class RubberStepper extends StatefulWidget {
     required this.onChanged,
     this.limitNote,
     this.floorNote,
+    this.stacked = false,
   });
 
   final String label;
@@ -245,6 +260,9 @@ class RubberStepper extends StatefulWidget {
   final ValueChanged<int> onChanged;
   final String? limitNote;
   final String? floorNote;
+
+  /// 名前を上に置き、− 数 + を左に寄せる。2 つを横に並べて入力面の上の高さを空けるときに使う。
+  final bool stacked;
 
   @override
   State<RubberStepper> createState() => _RubberStepperState();
@@ -313,9 +331,10 @@ class _RubberStepperState extends State<RubberStepper> with TickerProviderStateM
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (widget.stacked) Text(widget.label, style: Txt.control),
         Row(
           children: [
-            Expanded(child: Text(widget.label, style: Txt.control)),
+            if (!widget.stacked) Expanded(child: Text(widget.label, style: Txt.control)),
             SizedBox(
               width: Sizes.target + Bold.shadow,
               child: KeyButton(
@@ -379,7 +398,7 @@ class _RubberStepperState extends State<RubberStepper> with TickerProviderStateM
             liveRegion: _hit,
             child: Text(
               note ?? '',
-              textAlign: TextAlign.right,
+              textAlign: widget.stacked ? TextAlign.left : TextAlign.right,
               style: Txt.caption.copyWith(
                 color: _hit ? p.error : p.onSurfaceVariant,
                 fontWeight: _hit ? FontWeight.w700 : FontWeight.w400,
