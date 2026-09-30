@@ -7,12 +7,12 @@ describe("catalog inventory", () => {
     expect(catalog.tokens.filter((token) => token.kind === "primitive")).toHaveLength(40);
     expect(catalog.tokens.filter((token) => token.kind === "semantic")).toHaveLength(16);
     expect(catalog.schemes).toHaveLength(11);
-    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(74);
+    expect(catalog.svgs.flatMap((group) => group.assets)).toHaveLength(75);
     expect(
       catalog.svgs.flatMap((group) => group.assets).every((asset) => asset.source.includes("<svg")),
     ).toBe(true);
-    expect(catalog.experiments).toHaveLength(18);
-    expect(catalog.liveVariants).toHaveLength(40);
+    expect(catalog.experiments).toHaveLength(20);
+    expect(catalog.liveVariants).toHaveLength(42);
     expect(catalog.tokenAssets).toEqual([
       {
         sourcePath: "tokens/border/border.tokens.json",
@@ -87,6 +87,7 @@ describe("catalog inventory", () => {
       "catalog-works-layout",
       "cornix-product-ui",
       "cornix-workbench",
+      "docbridge-logo",
       "keysync-logo",
       "uiux-numa-logo",
       "uiux-numa-wordmark",
@@ -157,6 +158,7 @@ describe("catalog inventory", () => {
       "cornix-ui-icons/keycap-dish-fill",
       "cornix-ui-icons/keycap-squircle",
       "cornix-workbench/board-desk",
+      "docbridge-logo/d-rings",
       "keysync-logo/tilt-confetti",
       "product-ui-typography/line-seed-minimal",
       "uiux-numa-logo/nu-dot",
