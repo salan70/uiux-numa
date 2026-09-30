@@ -288,6 +288,29 @@ class _Scoreboard extends StatelessWidget {
     final s = player.current;
     final line = s.line;
     final number = s.isComplete ? s.totalGames : s.playedCount + 1;
+    // 入力中は 1 行に縮め、打席の列と打点の編集に高さを譲る。試合の番号と今日の成績だけを残す。
+    if (draft != null) {
+      return Semantics(
+        liveRegion: true,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: Space.s400, vertical: Space.s200),
+          decoration: BoxDecoration(
+            color: _board,
+            borderRadius: BorderRadius.circular(Radii.surface),
+            border: Border.all(color: p.ink, width: Borders.thick),
+          ),
+          child: Wrap(
+            spacing: Space.s300,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text('第 $number 戦', style: Txt.figureSm.copyWith(color: _boardLamp)),
+              Text(draft!.participation.label, style: Txt.control.copyWith(color: _boardInk)),
+              Text(draft!.line, style: Txt.control.merge(Txt.tabular).copyWith(color: _boardInk)),
+            ],
+          ),
+        ),
+      );
+    }
     return Container(
       padding: const EdgeInsets.all(Space.s400),
       decoration: BoxDecoration(
@@ -324,14 +347,9 @@ class _Scoreboard extends StatelessWidget {
               style: Txt.caption.copyWith(color: _boardInk),
             ),
             const SizedBox(height: Space.s300),
-            Semantics(
-              liveRegion: draft != null,
-              child: Text(
-                draft == null
-                    ? '今季 ${rate(line.average)}  ${line.homeRuns} 本  ${line.rbi} 打点  ${line.steals} 盗塁'
-                    : '今日 ${draft!.participation.label}  ${draft!.line}',
-                style: Txt.control.merge(Txt.tabular).copyWith(color: _boardInk),
-              ),
+            Text(
+              '今季 ${rate(line.average)}  ${line.homeRuns} 本  ${line.rbi} 打点  ${line.steals} 盗塁',
+              style: Txt.control.merge(Txt.tabular).copyWith(color: _boardInk),
             ),
           ],
         ),
