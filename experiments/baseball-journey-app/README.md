@@ -293,6 +293,7 @@ round 2 で選手トップを `matchday` に取り込み、この方向でブラ
 
 - [Flutter 実行基盤の ADR](../../docs/decisions/2026-09-28-flutter-runner.md)
 - [原則候補: 高頻度の入力は選択肢と取り消しを入力面に置く](../../docs/principles/frequent-input-keeps-choices-on-surface.md)
+- `experiments/baseball-journey-reel/`（同じ要件から描いた縦型の 15 秒のショーリール）
 - `experiments/yodoku-app/`（要件から作り直す進め方の前例）
 - `experiments/color-schemes-material/`（`pop-toy`）
 - `tokens/typography/`、`tokens/space/`、`tokens/radius/`、`tokens/size/`、`tokens/border/`、`tokens/motion/`
