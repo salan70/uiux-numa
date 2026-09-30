@@ -124,9 +124,7 @@ class _Compare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final view = MediaQueryData.fromView(View.of(context));
-    final device = options
-        .apply(view)
-        .copyWith(size: _deviceSize, padding: _deviceInsets, viewPadding: _deviceInsets);
+    final device = options.apply(view).copyWith(size: _deviceSize, padding: _deviceInsets, viewPadding: _deviceInsets);
     return Directionality(
       textDirection: TextDirection.ltr,
       child: ColoredBox(
