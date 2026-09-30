@@ -14,6 +14,7 @@ import '../../shared/theme.dart';
 import '../../shared/widgets.dart';
 import '../../shared/parts.dart';
 import '../../shared/pixel.dart';
+import '../../shared/screen_jump.dart';
 
 // diamond: baseball-journey-reel のリールで描いた UI を、操作できる形にした。
 // 情報構造は round 2〜3 の matchday（削除済み、README に記録）を引き継ぎ、タイトル → 選手トップ → 試合 → 試合後の 1 本にする。
@@ -22,6 +23,9 @@ import '../../shared/pixel.dart';
 // 選手の作成、シーズンの終了と引退、選手の詳細、設定、試合の履歴、スコアは shared の画面を使う。
 
 Widget buildVariant() => JourneyApp(home: (_) => const _Title());
+
+/// 実行基盤が端末の枠の外に置く操作盤。
+Widget buildPanel() => const ScreenJumpPanel();
 
 /// 起動ごとに 1 回だけ札を組み上げる。1 季に 143 回開く選手トップで、毎回は組み上げない。
 final _revealedPlayers = <String>{};

@@ -39,6 +39,7 @@ experiments/<slug>/
 - `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。`platforms` に `web` を含む Experiment では、README の Variants 表にある id に `index.tsx` が要る。
 - iOS の variant は `index.tsx` の代わりに `<Pascal(slug)><Pascal(id)>.swift` を置き、同じ名前の SwiftUI の `View` を引数なしで作れるようにする（例: `yodoku-app` の `tabs` は `YodokuAppTabs`）。全 Experiment の Swift は 1 つの module に入るので、ほかのファイル名と型名もこの名前で始める。`shared/*.swift` も読まれる。
 - Flutter の variant は `index.tsx` の代わりに `index.dart` を置き、引数なしの top-level 関数 `Widget buildVariant()` を持たせる。Dart はファイルごとに名前空間が分かれるので、iOS と違い名前に slug を含めなくてよい。`shared/*.dart` は相対 import で読む。
+- 確かめるための操作（画面の移動など）を端末の中に重ねたくないときは、`index.dart` に `Widget buildPanel()` も置く。実行基盤は窓に余裕があるとき、端末の枠の右に操作盤として描く。
 - Catalog は `platforms` に `web` を含まない Experiment を載せない。frontmatter の検査だけは通す。
 - SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。`index.tsx` は `dist/` を利用画面のモックに埋め込む。多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。
 - preview は README が根拠にするものだけを commit する。`state` は variant 間で揃える。
