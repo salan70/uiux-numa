@@ -192,11 +192,12 @@ const maxAbilities = 10;
 const defaultAbilityNames = ['ミート', 'パワー', '選球眼', 'メンタル', 'スピード', '肩', '守備'];
 
 class Team {
-  const Team({required this.name, required this.abbreviation, required this.league, required this.country});
+  const Team({required this.name, required this.abbreviation, required this.league, required this.country, required this.teamCount});
   final String name;
   final String abbreviation;
   final String league;
   final String country;
+  final int teamCount;
 }
 
 class PlayerOrigin {
@@ -254,6 +255,7 @@ class GameRecord {
     this.runner,
     this.myScore,
     this.opponentScore,
+    this.teamRank,
   });
 
   final int number;
@@ -264,6 +266,17 @@ class GameRecord {
   /// 欠場で進めた試合はスコアを持たない（skip_games_dialog.md）。
   final int? myScore;
   final int? opponentScore;
+  final int? teamRank;
+
+  GameRecord withTeamRank(int value) => GameRecord(
+    number: number,
+    participation: participation,
+    atBats: atBats,
+    runner: runner,
+    myScore: myScore,
+    opponentScore: opponentScore,
+    teamRank: value,
+  );
 
   bool get played => participation.kind != ParticipationKind.none;
   int get rbi => atBats.fold(0, (s, a) => s + a.rbi);
@@ -336,6 +349,12 @@ class Season {
   final bool transferred;
 
   int get playedCount => games.length;
+  /// 開幕は全球団が 0 勝 0 敗で並ぶので 1 位から始める。
+  int get teamRank => games.isEmpty ? 1 : games.last.teamRank ?? 1;
+  int rankBefore(int index) => index == 0 ? 1 : games[index - 1].teamRank ?? 1;
+  int get wins => games.where((g) => g.outcome == GameOutcome.win).length;
+  int get losses => games.where((g) => g.outcome == GameOutcome.loss).length;
+  int get draws => games.where((g) => g.outcome == GameOutcome.draw).length;
   bool get isComplete => games.length >= totalGames;
   BattingLine get line => BattingLine.of(games);
 }

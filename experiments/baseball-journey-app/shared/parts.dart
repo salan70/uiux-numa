@@ -747,124 +747,41 @@ class NightFieldPainter extends CustomPainter {
   bool shouldRepaint(NightFieldPainter old) => false;
 }
 
-/// 今季の 143 試合の升。勝ちを黄、負けを墨、引き分けを枠、欠場を網で並べる。
-/// 次の試合の升は太い枠で示し、試合後は増えた升が一度大きくなって収まる。
-class SeasonGrid extends StatelessWidget {
-  const SeasonGrid({super.key, required this.season, this.popLast = false});
+/// 今季の勝敗と順位。個人成績を主にするため、チームの成績はこの 1 行に留める。
+class TeamRecord extends StatelessWidget {
+  const TeamRecord({super.key, required this.season});
 
   final Season season;
-  final bool popLast;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    final games = season.games;
-    final wins = games.where((g) => g.outcome == GameOutcome.win).length;
-    final losses = games.where((g) => g.outcome == GameOutcome.loss).length;
-    final draws = games.where((g) => g.outcome == GameOutcome.draw).length;
-    final skipped = games.where((g) => !g.played).length;
-    final label =
-        '${season.totalGames} 試合のうち ${season.playedCount} 試合を終えました。$wins 勝 $losses 敗 $draws 分、欠場 $skipped';
-    final reduced = Motion.reduced(context);
+    final countStyle = Txt.control.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700);
     return Semantics(
-      label: label,
+      label: 'チーム ${season.wins} 勝 ${season.losses} 敗 ${season.draws} 分、${season.teamRank} 位、${season.team.teamCount} 球団中',
       excludeSemantics: true,
-      child: LayoutBuilder(
-        builder: (context, c) {
-          final pitch = c.maxWidth / 13;
-          return TweenAnimationBuilder<double>(
-            tween: Tween(begin: popLast && !reduced ? 0 : 1, end: 1),
-            duration: const Duration(milliseconds: 420),
-            builder: (context, t, _) => CustomPaint(
-              size: Size(c.maxWidth, pitch * 0.42 * 11),
-              painter: _GridPainter(season, p, popLast ? t : 1),
-            ),
-          );
-        },
+      child: Row(
+        children: [
+          Text.rich(TextSpan(children: [
+            TextSpan(text: '${season.wins}', style: countStyle),
+            const TextSpan(text: ' 勝 '),
+            TextSpan(text: '${season.losses}', style: countStyle),
+            const TextSpan(text: ' 敗 '),
+            TextSpan(text: '${season.draws}', style: countStyle),
+            const TextSpan(text: ' 分'),
+          ])),
+          const Spacer(),
+          Text.rich(TextSpan(children: [
+            TextSpan(text: '${season.teamRank} 位', style: Txt.control.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700)),
+            TextSpan(text: ' / ${season.team.teamCount} 球団', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          ])),
+        ],
       ),
     );
   }
 }
 
-/// 欠場の升。塗りでなく網にして、引き分けやこれからの升と形で分ける。
-void paintSkippedCell(Canvas canvas, Rect rect, Color color) {
-  final stroke = Paint()
-    ..color = color
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1.5;
-  canvas.drawRect(rect.deflate(0.75), stroke);
-  canvas.save();
-  canvas.clipRect(rect);
-  stroke.strokeWidth = 1.2;
-  final span = rect.width + rect.height;
-  for (var x = rect.left - rect.height; x < rect.right; x += 4) {
-    canvas.drawLine(Offset(x, rect.bottom), Offset(x + span, rect.bottom - span), stroke);
-  }
-  canvas.restore();
-}
-
-class _GridPainter extends CustomPainter {
-  _GridPainter(this.season, this.p, this.pop);
-
-  final Season season;
-  final Palette p;
-  final double pop;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final pw = size.width / 13;
-    final ph = size.height / 11;
-    final w = pw - 4;
-    final h = ph - 4;
-    final games = season.games;
-    final fill = Paint();
-    final stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    for (var i = 0; i < season.totalGames; i++) {
-      final col = i % 13;
-      final row = i ~/ 13;
-      var rect = Rect.fromLTWH(col * pw + 2, row * ph + 2, w, h);
-      if (i < games.length) {
-        final g = games[i];
-        if (i == games.length - 1 && pop < 1) {
-          // 増えた升。1.8 倍から 420ms で収まる。
-          final s = 1 + 0.8 * (1 - Curves.easeOutBack.transform(pop));
-          rect = Rect.fromCenter(center: rect.center, width: w * s, height: h * s);
-        }
-        switch (g.outcome) {
-          case GameOutcome.win:
-            fill.color = p.primary;
-            canvas.drawRect(rect, fill);
-            stroke.color = p.ink;
-            canvas.drawRect(rect.deflate(0.75), stroke);
-          case GameOutcome.loss:
-            fill.color = p.onSurface;
-            canvas.drawRect(rect, fill);
-          case GameOutcome.draw:
-            stroke.color = p.onSurface;
-            canvas.drawRect(rect.deflate(0.75), stroke);
-          case null:
-            paintSkippedCell(canvas, rect, p.onSurfaceVariant);
-        }
-      } else if (i == games.length) {
-        stroke
-          ..color = p.onSurface
-          ..strokeWidth = 3;
-        canvas.drawRect(rect.deflate(1.5), stroke);
-        stroke.strokeWidth = 1.5;
-      } else {
-        stroke.color = p.outline.withValues(alpha: 0.45);
-        canvas.drawRect(rect.deflate(0.75), stroke);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_GridPainter old) => true;
-}
-
-/// 1 試合の升の見本。凡例と試合の一覧で、升と同じ形で勝敗を示す。outcome が null なら欠場の網にする。
+/// 1 試合の勝敗の見本。試合の一覧で勝敗を記号と一緒に示す。
 class OutcomeSwatch extends StatelessWidget {
   const OutcomeSwatch(this.outcome, {super.key});
 
@@ -886,74 +803,10 @@ class OutcomeSwatch extends StatelessWidget {
         GameOutcome.win => box(p.primary, border: p.ink),
         GameOutcome.loss => box(p.onSurface),
         GameOutcome.draw => box(null, border: p.onSurface),
-        null => CustomPaint(size: const Size(14, 10), painter: _SkippedSwatchPainter(p.onSurfaceVariant)),
+        null => const SizedBox(width: 14, height: 10),
       },
     );
   }
-}
-
-/// 升の凡例。色だけで区別せず、数を添えて今季の勝敗の記録としても読めるようにする。
-class SeasonGridLegend extends StatelessWidget {
-  const SeasonGridLegend({super.key, required this.season});
-
-  final Season season;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Palette.of(context);
-    final games = season.games;
-    final wins = games.where((g) => g.outcome == GameOutcome.win).length;
-    final losses = games.where((g) => g.outcome == GameOutcome.loss).length;
-    final draws = games.where((g) => g.outcome == GameOutcome.draw).length;
-    final skipped = games.where((g) => !g.played).length;
-    Widget item(Widget swatch, String label, [int? count]) => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        swatch,
-        const SizedBox(width: Space.s100),
-        Text.rich(TextSpan(children: [
-          TextSpan(text: label, style: Txt.caption),
-          if (count != null) ...[
-            const TextSpan(text: ' '),
-            TextSpan(text: '$count', style: Txt.caption.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700)),
-          ],
-        ])),
-      ],
-    );
-    Widget box(Color? fill, {Color? border, double width = 1.5}) => Container(
-      width: 14,
-      height: 10,
-      decoration: BoxDecoration(
-        color: fill,
-        border: border == null ? null : Border.all(color: border, width: width),
-      ),
-    );
-    return ExcludeSemantics(
-      child: Wrap(
-        spacing: Space.s300,
-        runSpacing: Space.s100,
-        children: [
-          item(const OutcomeSwatch(GameOutcome.win), '勝ち', wins),
-          item(const OutcomeSwatch(GameOutcome.loss), '負け', losses),
-          item(const OutcomeSwatch(GameOutcome.draw), '引き分け', draws),
-          item(const OutcomeSwatch(null), '欠場', skipped),
-          if (!season.isComplete) item(box(null, border: p.onSurface, width: 3), '次の試合'),
-        ],
-      ),
-    );
-  }
-}
-
-class _SkippedSwatchPainter extends CustomPainter {
-  const _SkippedSwatchPainter(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) => paintSkippedCell(canvas, Offset.zero & size, color);
-
-  @override
-  bool shouldRepaint(_SkippedSwatchPainter old) => old.color != color;
 }
 
 /// 選手の札。リールの CREATE で組み上げた札を、選手トップの顔にする。

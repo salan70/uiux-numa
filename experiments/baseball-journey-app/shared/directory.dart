@@ -200,7 +200,7 @@ class _Tag extends StatelessWidget {
   }
 }
 
-/// 今季の試合の一覧（season_game_history.md）。選手トップと同じ 143 の升を上に置き、新しい試合を上から並べる。
+/// 今季の試合の一覧（season_game_history.md）。新しい試合を上から並べる。
 class GameHistoryScreen extends StatelessWidget {
   const GameHistoryScreen({super.key, required this.player});
 
@@ -214,26 +214,15 @@ class GameHistoryScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.page, Space.s200, Space.page, Space.s1000),
         children: [
-          Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: Text(year(s.year), style: Txt.heading)),
-                    Text('${s.playedCount} / ${s.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
-                  ],
-                ),
-                const SizedBox(height: Space.s200),
-                SeasonGrid(season: s),
-                const SizedBox(height: Space.s200),
-                SeasonGridLegend(season: s),
-              ],
-            ),
+          Row(
+            children: [
+              Expanded(child: Text(year(s.year), style: Txt.heading)),
+              Text('${s.playedCount} / ${s.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
+            ],
           ),
           const SizedBox(height: Space.s400),
           if (s.games.isEmpty) const Text('まだ試合がありません。'),
-          for (final g in s.games.reversed) GameLine(game: g),
+          for (final g in s.games.reversed) GameLine(game: g, rankFrom: s.rankBefore(g.number - 1)),
         ],
       ),
     );
@@ -242,9 +231,10 @@ class GameHistoryScreen extends StatelessWidget {
 
 /// 1 試合の 1 行。スコアブックの記号で打席を並べる。
 class GameLine extends StatelessWidget {
-  const GameLine({super.key, required this.game, this.dense = false});
+  const GameLine({super.key, required this.game, this.rankFrom, this.dense = false});
 
   final GameRecord game;
+  final int? rankFrom;
   final bool dense;
 
   @override
@@ -261,8 +251,10 @@ class GameLine extends StatelessWidget {
             if (line.steals > 0) '${line.steals} 盗塁',
             if (line.plateAppearances == 0) '走塁のみ',
           ].join(' ');
+    final rankChanged = rankFrom != null && game.teamRank != null && game.teamRank != rankFrom;
+    final rankLabel = rankChanged ? '、チーム順位 $rankFrom 位から ${game.teamRank} 位' : '';
     return Semantics(
-      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、${game.myScore} 対 ${game.opponentScore}、'}$summary',
+      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、${game.myScore} 対 ${game.opponentScore}、'}$summary$rankLabel',
       excludeSemantics: true,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: dense ? Space.s150 : Space.s200),
@@ -293,8 +285,23 @@ class GameLine extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (game.atBats.isNotEmpty) Text(game.atBats.map((a) => a.result.mark).join(' '), style: Txt.control),
-                  Text(summary, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+                  // 順位の上下は 1 行目の右端に出す。動いた試合にだけ出し、成績の行の幅は削らない。
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: game.atBats.isNotEmpty
+                            ? Text(game.atBats.map((a) => a.result.mark).join(' '), style: Txt.control)
+                            : Text(summary, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+                      ),
+                      if (rankChanged)
+                        Text(
+                          '${game.teamRank! < rankFrom! ? '▲' : '▼'} ${game.teamRank} 位',
+                          style: Txt.caption.merge(Txt.tabular),
+                        ),
+                    ],
+                  ),
+                  if (game.atBats.isNotEmpty) Text(summary, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
                 ],
               ),
             ),
