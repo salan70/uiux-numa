@@ -240,7 +240,7 @@ class SeasonStatGrid extends StatelessWidget {
 class JerseyBadge extends StatelessWidget {
   const JerseyBadge(this.number, {super.key, this.size = 56});
 
-  final int number;
+  final String number;
   final double size;
 
   @override
@@ -259,7 +259,7 @@ class JerseyBadge extends StatelessWidget {
           border: Border.all(color: p.ink, width: Borders.thick),
         ),
         child: Text(
-          '$number',
+          number,
           style: Txt.figure.copyWith(fontSize: size * 0.46, color: p.onPrimary),
         ),
       ),

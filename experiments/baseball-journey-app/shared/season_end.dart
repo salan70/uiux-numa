@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'creation.dart';
 import 'format.dart';
 import 'model.dart';
+import 'number_inputs.dart';
 import 'parts.dart';
 import 'pixel.dart';
 import 'store.dart';
@@ -40,7 +41,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   late final _ranks = <StatItem, int>{..._season.ranks};
   late final _titles = <String>{..._season.titles};
   _Choice _choice = _Choice.stay;
-  late int _uniform = _season.uniformNumber;
+  late String _uniform = _season.uniformNumber;
   late int _salary = _season.salary;
   late int _teamCount = _season.team.teamCount;
   final _team = TextEditingController();
@@ -65,7 +66,12 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   }
 
   List<String> _errors() => switch ((_step, _choice)) {
+    (1, _Choice.stay) => [
+      ?UniformRule.either.check(_uniform),
+      if (_salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。'],
     (1, _Choice.transfer) => [
+      ?UniformRule.either.check(_uniform),
+      if (_salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。',
       if (_team.text.trim().isEmpty) '移籍先の球団名を入力してください。',
       if (_league.text.trim().isEmpty) '移籍先のリーグ名を入力してください。',
       if (_country.text.trim().isEmpty) '移籍先の国名を入力してください。',
@@ -298,13 +304,8 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
           ),
         ],
         FieldLabel('来季の契約', note: '今季: 背番号 ${_season.uniformNumber}・${salary(_season.salary)}'),
-        NumberStepper(label: '背番号', value: _uniform, min: 0, max: 99, onChanged: (v) => setState(() => _uniform = v)),
-        SalaryField(value: _salary, onChanged: (v) => setState(() => _salary = v)),
-        if (_salary != _season.salary)
-          Text(
-            '今季から ${_salary > _season.salary ? '+' : '−'}${salary((_salary - _season.salary).abs())}',
-            style: Txt.caption.copyWith(color: p.onSurfaceVariant),
-          ),
+        UniformNumberField(value: _uniform, rule: UniformRule.either, onChanged: (v) => setState(() => _uniform = v)),
+        SalaryField(value: _salary, base: _season.salary, onChanged: (v) => setState(() => _salary = v)),
       ],
     ];
   }
@@ -359,7 +360,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
               ? '移籍: ${_team.text.trim()}（${_country.text.trim()}・$_teamCount 球団）'
               : '残留: ${_season.team.name}',
         ),
-        FactRow('背番号', '$_uniform'),
+        FactRow('背番号', _uniform),
         FactRow('年俸', salary(_salary)),
       ]),
       section('能力', 2, [

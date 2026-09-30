@@ -262,6 +262,7 @@ class RubberStepper extends StatefulWidget {
     this.limitNote,
     this.floorNote,
     this.stacked = false,
+    this.hideLabel = false,
     this.unit = '',
   });
 
@@ -275,6 +276,9 @@ class RubberStepper extends StatefulWidget {
 
   /// 名前を上に置き、− 数 + を左に寄せる。2 つを横に並べて入力面の上の高さを空けるときに使う。
   final bool stacked;
+
+  /// 名前を画面に出さず、読み上げだけに使う。名前を行の左に別に置く一覧で使う。
+  final bool hideLabel;
 
   /// 読み上げで数に添える単位（「 歳」「 年」）。
   final String unit;
@@ -349,10 +353,13 @@ class _RubberStepperState extends State<RubberStepper> with TickerProviderStateM
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.stacked) Text(widget.label, style: Txt.control),
+        if (widget.stacked && !widget.hideLabel) Text(widget.label, style: Txt.control),
         Row(
           children: [
-            if (!widget.stacked) Expanded(child: Text(widget.label, style: Txt.control)),
+            if (widget.hideLabel)
+              const Spacer()
+            else if (!widget.stacked)
+              Expanded(child: Text(widget.label, style: Txt.control)),
             SizedBox(
               width: Sizes.target + Bold.shadow,
               child: KeyButton(

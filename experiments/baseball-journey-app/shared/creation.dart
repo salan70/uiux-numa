@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'fixture.dart';
 import 'format.dart';
 import 'model.dart';
+import 'number_inputs.dart';
 import 'parts.dart';
 import 'player_detail.dart';
 import 'store.dart';
@@ -64,9 +65,14 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
       if (_country.text.trim().isEmpty) '国名を入力してください。',
       if (_league.text.trim().isEmpty) 'リーグ名を入力してください。',
       if (_team.text.trim().isEmpty) '球団名を入力してください。',
+      ?_uniformRule.check(_draft.uniformNumber),
+      if (_draft.salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。',
     ],
     _ => [],
   };
+
+  UniformRule get _uniformRule =>
+      _draft.route == JoiningRoute.developmentDraft ? UniformRule.development : UniformRule.roster;
 
   void _next() {
     setState(() => _tried.add(_step));
@@ -222,7 +228,7 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         error: err && _draft.positions.isEmpty,
       ),
       const FieldLabel('からだ'),
-      _SliderRow(
+      RulerField(
         label: '身長',
         value: _draft.height,
         min: 140,
@@ -230,7 +236,7 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         unit: 'cm',
         onChanged: (v) => setState(() => _draft.height = v),
       ),
-      _SliderRow(
+      RulerField(
         label: '体重',
         value: _draft.weight,
         min: 40,
@@ -308,19 +314,19 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
           unit: ' 位',
           onChanged: (v) => setState(() => _draft.draftRound = v),
         ),
-      NumberStepper(
+      const SizedBox(height: Space.s300),
+      RulerField(
         label: '入団年',
         value: _draft.joiningYear,
         min: 1900,
         max: 2100,
-        unit: ' 年',
+        unit: '年',
         onChanged: (v) => setState(() => _draft.joiningYear = v),
       ),
-      NumberStepper(
-        label: '背番号',
+      const FieldLabel('契約'),
+      UniformNumberField(
         value: _draft.uniformNumber,
-        min: 0,
-        max: 99,
+        rule: _uniformRule,
         onChanged: (v) => setState(() => _draft.uniformNumber = v),
       ),
       SalaryField(value: _draft.salary, onChanged: (v) => setState(() => _draft.salary = v)),
@@ -358,109 +364,11 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         FactRow('球団', '${_team.text.trim()}（${_league.text.trim()}・${_country.text.trim()}・${_draft.teamCount} 球団）'),
         FactRow('経路', d.route == JoiningRoute.draft ? 'ドラフト ${d.draftRound} 位' : d.route.label),
         FactRow('入団年', year(d.joiningYear)),
-        FactRow('背番号', '${d.uniformNumber}'),
+        FactRow('背番号', d.uniformNumber),
         FactRow('年俸', salary(d.salary)),
         if (_memo.text.trim().isNotEmpty) FactRow('メモ', _memo.text.trim()),
       ]),
     ];
-  }
-}
-
-class _SliderRow extends StatelessWidget {
-  const _SliderRow({
-    required this.label,
-    required this.value,
-    required this.min,
-    required this.max,
-    required this.unit,
-    required this.onChanged,
-  });
-
-  final String label;
-  final int value;
-  final int min;
-  final int max;
-  final String unit;
-  final ValueChanged<int> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 56, child: Text(label, style: Txt.ui)),
-        Expanded(
-          child: Slider(
-            value: value.toDouble(),
-            min: min.toDouble(),
-            max: max.toDouble(),
-            divisions: max - min,
-            semanticFormatterCallback: (v) => '${v.round()} $unit',
-            onChanged: (v) => onChanged(v.round()),
-          ),
-        ),
-        SizedBox(
-          width: 72,
-          child: Text('$value $unit', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
-        ),
-      ],
-    );
-  }
-}
-
-/// 年俸。300 万円から 10 億円まで、額に応じた刻みで動かす。
-class SalaryField extends StatelessWidget {
-  const SalaryField({super.key, required this.value, required this.onChanged, this.label = '年俸'});
-
-  final int value;
-  final ValueChanged<int> onChanged;
-  final String label;
-
-  static int _step(int v) => v < 3000
-      ? 100
-      : v < 10000
-      ? 500
-      : 1000;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = Palette.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Space.s200),
-      child: Row(
-        children: [
-          Expanded(child: Text(label, style: Txt.control)),
-          SizedBox(
-            width: Sizes.target + Bold.shadow,
-            child: KeyButton(
-              label: '',
-              icon: Icons.remove,
-              semanticsLabel: '$label を下げる',
-              onPressed: value > 300 ? () => onChanged(max(300, value - _step(value - 1))) : null,
-            ),
-          ),
-          Semantics(
-            liveRegion: true,
-            child: SizedBox(
-              width: 136,
-              child: Text(
-                salary(value),
-                textAlign: TextAlign.center,
-                style: Txt.figureSm.copyWith(color: p.onSurface),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: Sizes.target + Bold.shadow,
-            child: KeyButton(
-              label: '',
-              icon: Icons.add,
-              semanticsLabel: '$label を上げる',
-              onPressed: value < 100000 ? () => onChanged(value + _step(value)) : null,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -499,7 +407,8 @@ class PositionPicker extends StatelessWidget {
   }
 }
 
-/// 能力の一覧。値はスライダー、名前は押して変え、3〜10 個の間で足し引きする。
+/// 能力の一覧。名前は押して変え、3〜10 個の間で足し引きする。
+/// 作成では値を大まかに決めるのでスライダーにし、シーズンの終了では +3 のような小さな差を狙うので − 数 + にする。
 class AbilityEditor extends StatelessWidget {
   const AbilityEditor({super.key, required this.abilities, required this.onChanged, this.before});
 
@@ -560,6 +469,27 @@ class AbilityEditor extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 32, child: Text(a.rank, style: Txt.control)),
+                    if (was != null) ...[
+                      Expanded(
+                        child: RubberStepper(
+                          label: a.name,
+                          hideLabel: true,
+                          value: a.value,
+                          min: 1,
+                          max: 99,
+                          onChanged: (v) => onChanged(List.of(abilities)..[i] = a.copyWith(value: v)),
+                        ),
+                      ),
+                      // 差の欄は常に確保し、差が出ても数と ＋− を動かさない。
+                      SizedBox(
+                        width: 44,
+                        child: Text(
+                          a.value == was ? '' : '${a.value > was ? '+' : '−'}${(a.value - was).abs()}',
+                          textAlign: TextAlign.right,
+                          style: Txt.control.merge(Txt.tabular).copyWith(color: p.onSurfaceVariant),
+                        ),
+                      ),
+                    ] else ...[
                     Expanded(
                       child: Slider(
                         value: a.value.toDouble(),
@@ -572,14 +502,9 @@ class AbilityEditor extends StatelessWidget {
                     ),
                     SizedBox(
                       width: 60,
-                      child: Text(
-                        was == null || was == a.value
-                            ? '${a.value}'
-                            : '${a.value} ${a.value > was ? '+' : '−'}${(a.value - was).abs()}',
-                        textAlign: TextAlign.right,
-                        style: Txt.control.merge(Txt.tabular),
-                      ),
+                      child: Text('${a.value}', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
                     ),
+                    ],
                     if (before == null)
                       IconButton(
                         tooltip: '${a.name} を消す',
