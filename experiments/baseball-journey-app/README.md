@@ -17,7 +17,7 @@ domains:
   - accessibility
 sources: []
 adopted:
-  - matchday
+  - diamond
 ---
 
 ## Problem
@@ -118,15 +118,16 @@ round 4 の `diamond` だけは、情報構造を `matchday` に揃え、見た�
 
 round 1 の 3 案は `shared/` の状態（`store.dart`）、入力の部品（`game_input.dart`）、画面を共有した。
 variant が持つのは、ルート、ホーム、試合の入力の置き方、保存した後の見せ方だけである。
-判断後に残した `matchday` は次の構成である。
+判断後に残した `diamond` は次の構成である（round 2 の `matchday` から引き継いだ）。
 
 ```text
 buildVariant（入口）                    ← JourneyApp が状態を作り、URL の query を読む
 └─ タイトル                             ← つづきから、選手を作る、名鑑、設定
    └─ 選手トップ                        ← 今季の進み、成績、能力、最近の試合。下端に次の試合と欠場
-      └─ 試合                           ← 電光掲示板、出場の選択（ParticipationForm）、試合の入力（ResultPad ほか）、試合後
+      └─ 試合                           ← 電光掲示板、出場の選択（ParticipationForm）、試合の入力（結果の面、打席の列、打点と走塁）、試合後
          └─ スコア（showScoreSheet）    ← shared
-選手の詳細、名鑑、試合の履歴、選手の作成、シーズンの終了と引退、設定  ← shared。右上のメニューから開く
+名鑑                                    ← diamond。タイトルとメニューから開く
+選手の詳細、試合の履歴、選手の作成、シーズンの終了と引退、設定  ← shared。右上のメニューから開く
 ```
 
 ## Constraints
@@ -178,19 +179,18 @@ buildVariant（入口）                    ← JourneyApp が状態を作り、
 
 ## Variants
 
-| id         | 仮説                                                                                                                                                  | 変えた軸                                       | 実装                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------------------- |
-| `matchday` | タイトル画面から入り、今日の試合だけを 1 画面にして試合後に伸びを見せると、短い時間でも 1 試合ごとに手応えがある                                      | 情報構造（1 試合ずつ）、入力（試合画面に常設） | `variants/matchday/` |
-| `diamond`  | `matchday` の構造のまま、リールの見た目と動き（掲示板、ドット絵の札、飛ぶ打席、ばねで返す上限、転がる桁）にすると、記録そのものがゲームの手応えになる | 見た目と動き（情報構造は `matchday` と同じ）   | `variants/diamond/`  |
+| id        | 仮説                                                                                                                                                  | 変えた軸                                     | 実装                |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ------------------- |
+| `diamond` | `matchday` の構造のまま、リールの見た目と動き（掲示板、ドット絵の札、飛ぶ打席、ばねで返す上限、転がる桁）にすると、記録そのものがゲームの手応えになる | 見た目と動き（情報構造は `matchday` と同じ） | `variants/diamond/` |
 
 削除した variant:
 
 - `clubhouse`（基準）: 試合、記録、名鑑を下端のタブに並べると、どの機能にも 1 回で届き、学ぶことが無い。変えた軸は情報構造（タブ）と入力（全画面）。試合前の画面は `matchday` の選手トップに取り込んだ。
 - `scorebook`: 選手の経歴と試合を 1 本の帳面にし、最下段に次の試合の行を常設すると、記録が物語を書き足すことになり、振り返りに画面の移動が要らない。変えた軸は情報構造（帳面）と入力（帳面の最後の行と下端）。
 
-`diamond` は round 4 で足した案で、判断はまだない。
+- `matchday`（round 1〜3 の採用案）: タイトル画面から入り、今日の試合だけを 1 画面にして試合後に伸びを見せると、短い時間でも 1 試合ごとに手応えがある。変えた軸は情報構造（1 試合ずつ）と入力（試合画面に常設）。情報構造は `diamond` が引き継いだ。
 
-削除した 2 案のコードは [判断前の commit](https://github.com/salan70/uiux-numa/tree/356283d/experiments/baseball-journey-app/variants) で辿る。
+`clubhouse` と `scorebook` のコードは [round 1 の判断前の commit](https://github.com/salan70/uiux-numa/tree/356283d/experiments/baseball-journey-app/variants)、`matchday` のコードと画像は [round 4 の判断前の commit](https://github.com/salan70/uiux-numa/tree/69a1cc1/experiments/baseball-journey-app) で辿る。
 
 ### 反復の記録
 
@@ -198,7 +198,7 @@ buildVariant（入口）                    ← JourneyApp が状態を作り、
 | ----- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------- |
 | 1     | 3 案を 1 ページに並べて比べた（`compare`）                                                             | `clubhouse`、`scorebook`、`matchday` を作った                                                                                                                                                                  | Information Architecture、States & Feedback、高頻度の入力の調査   | 利用者が `matchday` の方向を選んだ |
 | 2     | 利用者の所見: 全体は `matchday` が良い。`clubhouse` のような試合前の選手トップがほしい                 | タイトルと試合の間に選手トップを置いた。下端に「次の試合へ」と「欠場で進める」を固定し、入力の途中なら「入力に戻る」に替える。試合後は次の試合と選手トップを選べるようにし、選手トップに前の試合と差の札を出す | Information Architecture の入口は中身が始まる場所、親指の届く下端 | 利用者の次の所見を待つ             |
-| 4     | 利用者が `baseball-journey-reel` のリールの UI を操作できる形で見たいと求めた（2026-09-30）            | `diamond` を足した。情報構造は `matchday` を引き継ぎ、タイトル、選手トップ、試合、試合後、名鑑をリールの見た目と動きで作り直した。作成、シーズンの終了、詳細、設定、履歴、スコアは shared を使う               | リールの値、crafting-motion の頻度の判断                          | 利用者の所見を待つ                 |
+| 4     | 利用者が `baseball-journey-reel` のリールの UI を操作できる形で見たいと求めた（2026-09-30）            | `diamond` を足した。情報構造は `matchday` を引き継ぎ、タイトル、選手トップ、試合、試合後、名鑑をリールの見た目と動きで作り直した。作成、シーズンの終了、詳細、設定、履歴、スコアは shared を使う               | リールの値、crafting-motion の頻度の判断                          | 利用者が `diamond` を採用した      |
 | 3     | 入力中は電光掲示板が画面の上部を占め、打点の下の盗塁と得点が入力面に隠れた。読み上げの点検が未了だった | 入力中の掲示板を、試合の番号、出場、今日の成績の 1 行に縮めた。Flutter のアクセシビリティ検査（ラベル、押せる領域 48dp、文字のコントラスト）を主要な 10 画面に当てた                                           | States & Feedback の領域の確保、Accessibility                     | 利用者の次の所見を待つ             |
 
 ### diamond の動きと値
@@ -230,7 +230,7 @@ buildVariant（入口）                    ← JourneyApp が状態を作り、
 
 ### 要件の置き場所
 
-| 要件                      | `matchday`（round 2）                                                  |
+| 要件                      | `diamond`（round 2 の `matchday` から引き継いだ）                      |
 | ------------------------- | ---------------------------------------------------------------------- |
 | W-01 選手を作る           | タイトル、名鑑                                                         |
 | W-02 選手を選ぶ           | タイトルの「つづきから」、名鑑の「この選手で続ける」                   |
@@ -256,7 +256,7 @@ buildVariant（入口）                    ← JourneyApp が状態を作り、
 
 ```sh
 just flutter-dev
-# http://localhost:5185/?variant=baseball-journey-app/matchday
+# http://localhost:5185/?variant=baseball-journey-app/diamond
 ```
 
 | query            | 状態                                                                                                                                                                                    |
@@ -269,9 +269,9 @@ just flutter-dev
 
 round 4 の画像（`diamond`）: [タイトル、選手トップ、入力、試合後、名鑑](previews/diamond-flow.png)、[ダーク](previews/diamond-dark.png)、[文字 2 倍](previews/diamond-xl.png)。
 
-round 3 の画像: [入力中（ライト、文字 2 倍、ダーク）](previews/r3-input.png)。
+round 3 の画像: [入力中（ライト、文字 2 倍、ダーク）](https://github.com/salan70/uiux-numa/blob/69a1cc1/experiments/baseball-journey-app/previews/r3-input.png)。
 
-round 2 の画像: [タイトル、選手トップ、試合](previews/r2-flow.png)、[入力、試合後、選手トップへ戻った後](previews/r2-game.png)、[新人、全試合の後、ダーク](previews/r2-states.png)、[文字 2 倍の選手トップ、ダークの入力](previews/r2-a11y.png)。
+round 2 の画像: [タイトル、選手トップ、試合](https://github.com/salan70/uiux-numa/blob/69a1cc1/experiments/baseball-journey-app/previews/r2-flow.png)、[入力、試合後、選手トップへ戻った後](https://github.com/salan70/uiux-numa/blob/69a1cc1/experiments/baseball-journey-app/previews/r2-game.png)、[新人、全試合の後、ダーク](https://github.com/salan70/uiux-numa/blob/69a1cc1/experiments/baseball-journey-app/previews/r2-states.png)、[文字 2 倍の選手トップ、ダークの入力](https://github.com/salan70/uiux-numa/blob/69a1cc1/experiments/baseball-journey-app/previews/r2-a11y.png)。
 
 round 1 の比較画像（左から `clubhouse`、`scorebook`、`matchday`）:
 [ホーム](previews/compare-idle.png)、[入力](previews/compare-input.png)、[保存した後](previews/compare-after.png)、[全試合の後](previews/compare-seasonend.png)、[ダーク](previews/compare-idle-dark.png)、[文字 2 倍の入力](previews/compare-input-xl.png)。
@@ -318,15 +318,19 @@ round 4 では、実装者が次を確かめた（2026-09-30）。
 
 ## Decision
 
-`matchday` を採用した。
+`diamond` を採用した。
 判断者は利用者（salan70）、判断日は 2026-09-30 である。
-利用者の所見は「全体的に `matchday` が良い」で、そのうえで `clubhouse` のような試合前の選手トップを求めた。
-round 2 で選手トップを `matchday` に取り込み、この方向でブラッシュアップを続ける。
+利用者の所見は「`diamond` がものすごく良い感じ」である。
+情報構造は round 1〜3 で選んだ `matchday` のもの（タイトル、選手トップ、試合、試合後）を引き継いでおり、この判断で変わったのは見た目と動きである。
+この方向でブラッシュアップを続ける。
 製品へ移植するかは別に決める。
+
+round 1 の判断: 利用者は全体の方向に `matchday` を選び、`clubhouse` のような試合前の選手トップを求めた（2026-09-30）。
 
 ## Rejected reasons
 
 - `clubhouse`: 利用者は全体の方向に `matchday` を選び、`clubhouse` からは試合前の画面だけを取り込むとした。下端のタブの構成を選ばなかった理由は述べていない。判断者は利用者、判断日は 2026-09-30。
+- `matchday`: 利用者は `diamond` を採用して `matchday` を片付けるとした。情報構造は `diamond` に残り、退けたのは shared の部品に沿った控えめな見た目と動きである。`matchday` を選ばなかった理由は、`diamond` を「ものすごく良い感じ」と評したこと以外に述べていない。判断者は利用者、判断日は 2026-09-30。
 - `scorebook`: 利用者は `matchday` を選び、`scorebook` から取り込むものを挙げなかった。理由は述べていない。判断者は利用者、判断日は 2026-09-30。
 
 ## Learnings
