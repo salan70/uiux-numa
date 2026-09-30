@@ -14,6 +14,7 @@ Issue は SwiftUI で案を並べるとしていたが、利用者は製品を F
 
 - `platforms/flutter/` を Flutter の実行基盤にする。`pubspec.yaml` と、variant を列挙して描く殻（`lib/main.dart`）だけを置く。
 - 実行基盤の責務は Web と iOS と同じく、variant を列挙し、選んだ variant を描くことだけにする。URL の query `variant=<slug>/<id>` で 1 つを開き、variant 固有の query は variant が `Uri.base` から読む。
+- `compare=<slug>` は、その Experiment の全 variant を端末の枠に入れて横に並べ、1 ページで同時に操作して比べられるようにする。variant はそれぞれ状態を持ち、同じ query の条件で描く。窓が狭ければ全体を縮める。並びは variant-id の辞書順で、`just flutter-compare-shot` で 1 枚に撮る。
 - 端末の明暗、文字の拡大、動きの抑制は、殻が query（`theme`、`textScale`、`reduceMotion`）で `MediaQuery` を上書きして再現する。iOS の `ios-shot` の appearance と content_size に当たる。
 - 端末は iPhone 17 の論理解像度（402 × 874）と安全領域（上 62、下 34）で描く。Web には安全領域が無いので、殻が `MediaQuery.padding` に入れる。
 - variant の入口は `experiments/<slug>/variants/<id>/index.dart` の top-level 関数 `Widget buildVariant()` とする。Dart に `import.meta.glob` が無いので、`scripts/build-flutter-registry.mjs` が入口を探して `lib/registry.g.dart` を書く。
