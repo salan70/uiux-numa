@@ -384,6 +384,7 @@ class _TopActions extends StatelessWidget {
             child: KeyButton(
               label: '欠場で進める',
               semanticsHint: '出場しない試合の数を選びます',
+              oneLine: true,
               onPressed: () async {
                 final choice = await showParticipationSheet(context, player, initialKind: ParticipationKind.none);
                 if (choice != null) applyChoice(store, choice);
@@ -396,6 +397,7 @@ class _TopActions extends StatelessWidget {
               label: '第 ${season.playedCount + 1} 戦へ',
               fill: p.primary,
               semanticsHint: '出場のしかたを選んで、試合を記録します',
+              oneLine: true,
               onPressed: () {
                 store.dismissSummary();
                 _openMatchday(context);
@@ -405,6 +407,19 @@ class _TopActions extends StatelessWidget {
         ],
       );
     }
+    return _BottomBar(child: content);
+  }
+}
+
+/// 画面の下端に固定する操作の帯。選手トップと試合後で、次の試合へ進む操作を同じ場所に置く。
+class _BottomBar extends StatelessWidget {
+  const _BottomBar({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
     return Container(
       decoration: BoxDecoration(
         color: p.background,
@@ -413,8 +428,46 @@ class _TopActions extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(Space.page, Space.s300, Space.page, Space.s200),
-          child: content,
+          child: child,
         ),
+      ),
+    );
+  }
+}
+
+/// 試合後の下端。1 季に 143 回押す「次の試合へ」を、143 の升の下までスクロールせずに押せるようにする。
+class _AfterGameActions extends StatelessWidget {
+  const _AfterGameActions({required this.season});
+
+  final Season season;
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    // 2 つを並べる幅では、文字 2 倍で「選手トッ/プへ」と割れるので 1 行に保つ。
+    final toTop = KeyButton(
+      label: '選手トップへ',
+      fill: season.isComplete ? p.primary : null,
+      oneLine: true,
+      onPressed: () => Navigator.of(context).pop(),
+    );
+    if (season.isComplete) return _BottomBar(child: toTop);
+    return _BottomBar(
+      child: Row(
+        children: [
+          Expanded(child: toTop),
+          const SizedBox(width: Space.s300),
+          Expanded(
+            child: KeyButton(
+              label: '第 ${season.playedCount + 1} 戦へ',
+              fill: p.primary,
+              semanticsHint: '出場のしかたを選んで、試合を記録します',
+              oneLine: true,
+              onPressed: store.dismissSummary,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -568,7 +621,9 @@ class _MatchdayState extends State<_Matchday> {
           ],
         ],
       ),
-      bottomNavigationBar: draft == null
+      bottomNavigationBar: summary != null
+          ? _AfterGameActions(season: season)
+          : draft == null
           ? null
           : InputDock(
               child: Column(
@@ -1183,7 +1238,7 @@ class _OtherResults extends StatelessWidget {
 /* -------------------------------------------------------------------- 試合後 */
 
 /// 試合後。勝敗を先に置き、打率と成績の桁を転がして差の札を跳ねさせる。
-/// 操作（次の試合、選手トップ）は最初から押せ、動きを待たせない。記録達成のときだけ紙吹雪を舞わせる。
+/// 操作（次の試合、選手トップ）は下端の帯に置き、最初から押せて動きを待たせない。記録達成のときだけ紙吹雪を舞わせる。
 class _AfterGame extends StatelessWidget {
   const _AfterGame({super.key, required this.summary});
 
@@ -1306,20 +1361,6 @@ class _AfterGame extends StatelessWidget {
             ),
             const SizedBox(height: Space.s150),
             SeasonGrid(season: season, popLast: true),
-            const SizedBox(height: Space.s500),
-            if (!season.isComplete) ...[
-              KeyButton(
-                label: '第 ${season.playedCount + 1} 戦へ',
-                fill: p.primary,
-                onPressed: store.dismissSummary,
-              ),
-              const SizedBox(height: Space.s200),
-            ],
-            KeyButton(
-              label: '選手トップへ',
-              fill: season.isComplete ? p.primary : null,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
           ],
         ),
         if (summary.milestones.isNotEmpty) const Positioned.fill(child: PixelBurst(delay: Duration(milliseconds: 200))),
