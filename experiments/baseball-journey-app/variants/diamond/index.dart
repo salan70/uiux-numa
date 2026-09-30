@@ -331,7 +331,7 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
           ),
           SeasonGrid(season: season),
           const SizedBox(height: Space.s200),
-          const SeasonGridLegend(),
+          SeasonGridLegend(season: season),
           SectionTitle('${year(season.year)}の成績'),
           SeasonStatGrid(line: season.line, before: summary?.seasonBefore),
           SectionTitle(
@@ -1361,6 +1361,8 @@ class _AfterGame extends StatelessWidget {
             ),
             const SizedBox(height: Space.s150),
             SeasonGrid(season: season, popLast: true),
+            const SizedBox(height: Space.s200),
+            SeasonGridLegend(season: season),
           ],
         ),
         if (summary.milestones.isNotEmpty) const Positioned.fill(child: PixelBurst(delay: Duration(milliseconds: 200))),
