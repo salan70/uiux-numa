@@ -768,6 +768,23 @@ class SeasonGrid extends StatelessWidget {
   }
 }
 
+/// 欠場の升。塗りでなく網にして、引き分けやこれからの升と形で分ける。
+void paintSkippedCell(Canvas canvas, Rect rect, Color color) {
+  final stroke = Paint()
+    ..color = color
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.5;
+  canvas.drawRect(rect.deflate(0.75), stroke);
+  canvas.save();
+  canvas.clipRect(rect);
+  stroke.strokeWidth = 1.2;
+  final span = rect.width + rect.height;
+  for (var x = rect.left - rect.height; x < rect.right; x += 4) {
+    canvas.drawLine(Offset(x, rect.bottom), Offset(x + span, rect.bottom - span), stroke);
+  }
+  canvas.restore();
+}
+
 class _GridPainter extends CustomPainter {
   _GridPainter(this.season, this.p, this.pop);
 
@@ -810,8 +827,7 @@ class _GridPainter extends CustomPainter {
             stroke.color = p.onSurface;
             canvas.drawRect(rect.deflate(0.75), stroke);
           case null:
-            fill.color = p.surfaceVariant;
-            canvas.drawRect(rect, fill);
+            paintSkippedCell(canvas, rect, p.onSurfaceVariant);
         }
       } else if (i == games.length) {
         stroke
@@ -830,16 +846,33 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(_GridPainter old) => true;
 }
 
-/// 升の凡例。色だけで区別しない。
+/// 升の凡例。色だけで区別せず、数を添えて今季の勝敗の記録としても読めるようにする。
 class SeasonGridLegend extends StatelessWidget {
-  const SeasonGridLegend({super.key});
+  const SeasonGridLegend({super.key, required this.season});
+
+  final Season season;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    Widget item(Widget swatch, String label) => Row(
+    final games = season.games;
+    final wins = games.where((g) => g.outcome == GameOutcome.win).length;
+    final losses = games.where((g) => g.outcome == GameOutcome.loss).length;
+    final draws = games.where((g) => g.outcome == GameOutcome.draw).length;
+    final skipped = games.where((g) => !g.played).length;
+    Widget item(Widget swatch, String label, [int? count]) => Row(
       mainAxisSize: MainAxisSize.min,
-      children: [swatch, const SizedBox(width: Space.s100), Text(label, style: Txt.caption)],
+      children: [
+        swatch,
+        const SizedBox(width: Space.s100),
+        Text.rich(TextSpan(children: [
+          TextSpan(text: label, style: Txt.caption),
+          if (count != null) ...[
+            const TextSpan(text: ' '),
+            TextSpan(text: '$count', style: Txt.caption.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700)),
+          ],
+        ])),
+      ],
     );
     Widget box(Color? fill, {Color? border, double width = 1.5}) => Container(
       width: 14,
@@ -849,18 +882,32 @@ class SeasonGridLegend extends StatelessWidget {
         border: border == null ? null : Border.all(color: border, width: width),
       ),
     );
-    return Wrap(
-      spacing: Space.s300,
-      runSpacing: Space.s100,
-      children: [
-        item(box(p.primary, border: p.ink), '勝ち'),
-        item(box(p.onSurface), '負け'),
-        item(box(null, border: p.onSurface), '引き分け'),
-        item(box(p.surfaceVariant), '欠場'),
-        item(box(null, border: p.onSurface, width: 3), '次の試合'),
-      ],
+    return ExcludeSemantics(
+      child: Wrap(
+        spacing: Space.s300,
+        runSpacing: Space.s100,
+        children: [
+          item(box(p.primary, border: p.ink), '勝ち', wins),
+          item(box(p.onSurface), '負け', losses),
+          item(box(null, border: p.onSurface), '引き分け', draws),
+          item(CustomPaint(size: const Size(14, 10), painter: _SkippedSwatchPainter(p.onSurfaceVariant)), '欠場', skipped),
+          if (!season.isComplete) item(box(null, border: p.onSurface, width: 3), '次の試合'),
+        ],
+      ),
     );
   }
+}
+
+class _SkippedSwatchPainter extends CustomPainter {
+  const _SkippedSwatchPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) => paintSkippedCell(canvas, Offset.zero & size, color);
+
+  @override
+  bool shouldRepaint(_SkippedSwatchPainter old) => old.color != color;
 }
 
 /// 選手の札。リールの CREATE で組み上げた札を、選手トップの顔にする。
