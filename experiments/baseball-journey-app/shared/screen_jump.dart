@@ -27,6 +27,7 @@ abstract final class ScreenJump {
 const _groups = <(String, List<(String, String?)>)>[
   ('入口', [('タイトル', null), ('選手トップ', 'play'), ('メニュー', 'menu'), ('名鑑', 'directory')]),
   ('試合', [('出場を選ぶ', 'game'), ('入力中', 'input'), ('スコア', 'score'), ('試合後', 'afterGame'), ('試合後のトップ', 'topAfterGame'), ('欠場で進める', 'skip'), ('試合を直す', 'edit')]),
+  ('移籍', [('シーズン途中の移籍', 'transfer')]),
   ('節目', [('シーズンの終了', 'seasonEnd'), ('来季の始まり', 'nextSeason'), ('引退の直後', 'farewell')]),
   ('そのほか', [('選手を作る', 'create'), ('試合の履歴', 'history'), ('引退した選手の詳細', 'retired'), ('設定', 'settings')]),
 ];
@@ -36,6 +37,7 @@ const _fixtureLabels = {
   Fixture.rookie: '新人',
   Fixture.seasonEnd: '全試合の後',
   Fixture.empty: '選手なし',
+  Fixture.transferred: '途中で移籍した後',
 };
 
 /// 実行基盤の操作盤。実行基盤の暗い地に合わせ、ダークの配色で描く。

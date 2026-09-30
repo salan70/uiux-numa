@@ -11,6 +11,7 @@ import '../../shared/model.dart';
 import '../../shared/nav.dart';
 import '../../shared/store.dart';
 import '../../shared/theme.dart';
+import '../../shared/transfer.dart';
 import '../../shared/widgets.dart';
 import '../../shared/parts.dart';
 import '../../shared/pixel.dart';
@@ -80,6 +81,8 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
           await store.saveGame(5, 2);
         case 'menu':
           _openMenu(context);
+        case 'transfer':
+          _openTransfer(context, store.current!);
         case 'skip':
           final choice = await showParticipationSheet(context, store.current!, initialKind: ParticipationKind.none);
           if (choice != null) applyChoice(store, choice);
@@ -243,6 +246,10 @@ Future<void> _openHistory(BuildContext context, Player player) {
   );
 }
 
+Future<void> _openTransfer(BuildContext context, Player player) => Navigator.of(
+  context,
+).push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => TransferScreen(player: player)));
+
 Future<void> _openMenu(BuildContext context) {
   final store = StoreScope.read(context);
   final player = store.current!;
@@ -265,6 +272,12 @@ Future<void> _openMenu(BuildContext context) {
         children: [
           item(Icons.bar_chart, '記録', () => openDetail(context, player)),
           item(Icons.list_alt, '${year(player.current.year)}の試合', () => _openHistory(context, player)),
+          if (store.canTransfer)
+            item(Icons.swap_horiz, 'シーズン途中の移籍', () => _openTransfer(context, player)),
+          if (store.canUndoTransfer) ...[
+            item(Icons.edit_outlined, '移籍先を直す', () => _openTransfer(context, player)),
+            item(Icons.undo, '途中の移籍を取り消す', () => confirmUndoTransfer(context)),
+          ],
           item(Icons.people_alt_outlined, '名鑑', () => _openDirectory(context)),
           item(Icons.settings_outlined, '設定', () => openSettings(context)),
           item(Icons.home_outlined, 'タイトルへ', () => navigator.popUntil((r) => r.isFirst)),

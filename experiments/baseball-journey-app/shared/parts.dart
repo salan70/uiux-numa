@@ -806,7 +806,7 @@ class TeamRecord extends StatelessWidget {
     final p = Palette.of(context);
     final countStyle = Txt.control.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700);
     // 勝敗を入れずに欠場で進めた試合は、勝敗の合計が試合数と合わない理由として数を添える。
-    final unrecorded = season.games.where((g) => g.outcome == null).length;
+    final unrecorded = season.stintGames.where((g) => g.outcome == null).length;
     return Semantics(
       label:
           'チーム ${season.wins} 勝 ${season.losses} 敗 ${season.draws} 分${unrecorded > 0 ? '、未記録 $unrecorded 試合' : ''}'
