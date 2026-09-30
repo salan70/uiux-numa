@@ -267,6 +267,8 @@ just flutter-dev
 
 実行基盤の `theme`、`textScale`、`reduceMotion` と組み合わせる。
 
+round 4 の画像（`diamond`）: [タイトル、選手トップ、入力、試合後、名鑑](previews/diamond-flow.png)、[ダーク](previews/diamond-dark.png)、[文字 2 倍](previews/diamond-xl.png)。
+
 round 3 の画像: [入力中（ライト、文字 2 倍、ダーク）](previews/r3-input.png)。
 
 round 2 の画像: [タイトル、選手トップ、試合](previews/r2-flow.png)、[入力、試合後、選手トップへ戻った後](previews/r2-game.png)、[新人、全試合の後、ダーク](previews/r2-states.png)、[文字 2 倍の選手トップ、ダークの入力](previews/r2-a11y.png)。
@@ -304,9 +306,15 @@ round 3 では、実装者が次を確かめた（2026-09-30）。
 
 実機の読み上げ（VoiceOver、TalkBack）、実機の片手操作、キーボード操作は確かめていない。
 
-round 4 では、実装者が `flutter analyze` を通した（2026-09-30）。
-実装した環境の sandbox では pub のキャッシュを読めず、`diamond` を Web でビルドして画面を確かめていない。
-画面の撮影と、入力中の飛行と押し返しの実操作は未確認である。
+round 4 では、実装者が次を確かめた（2026-09-30）。
+
+- `flutter analyze` を通した。
+- `diamond` のタイトル、選手トップ、入力、試合後、名鑑を、ライト、ダーク、文字 2 倍で撮った。
+- 撮影で見つけた崩れを直した。下端のボタンが縦に伸びていた、文字 2 倍で能力の名前と数が 1 字ずつ折り返していた、名鑑の札で「本」と「る」が 1 字だけ折り返していた。
+- 入力でホームランを押すと、打席が足され、掲示板の今日の成績が変わることを実操作で確かめた。
+
+札の飛行、上限の押し返し、試合後の桁の転がりは、コマ送りで見ていない。
+文字 2 倍の入力中は、`matchday` の round 3 と同じく掲示板が 3 行になり、打点の編集が入力面の上で狭いスクロールになる。
 
 ## Decision
 

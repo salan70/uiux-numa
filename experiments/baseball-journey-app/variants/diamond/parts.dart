@@ -124,7 +124,16 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
     final fill = enabled ? (widget.fill ?? p.surface) : p.surfaceContainer;
     final fg = enabled ? inkOn(fill) : p.onSurfaceVariant;
     final reduced = Motion.reduced(context);
-    final label = Row(
+    final label = widget.dashed && widget.icon != null
+        ? Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(widget.icon, size: 32, color: p.onSurface),
+              const SizedBox(height: Space.s100),
+              Text(widget.label, textAlign: TextAlign.center, style: Txt.control.copyWith(color: p.onSurface)),
+            ],
+          )
+        : Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (widget.icon != null) Icon(widget.icon, size: 22, color: fg),
@@ -987,30 +996,24 @@ class _AbilityRow extends StatelessWidget {
       excludeSemantics: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: Space.s200),
-        child: Row(
-          children: [
-            SizedBox(width: 84, child: Text(ability.name, style: Txt.control)),
-            Expanded(
-              child: Container(
-                height: 18,
-                decoration: BoxDecoration(
-                  color: p.surface,
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: p.ink, width: Borders.thick),
-                ),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: (ability.value / 99 * grow).clamp(0.0, 1.0),
-                  child: Container(color: color),
-                ),
+        child: LayoutBuilder(
+          builder: (context, c) {
+            final name = Text(ability.name, style: Txt.control);
+            final bar = Container(
+              height: 18,
+              decoration: BoxDecoration(
+                color: p.surface,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: p.ink, width: Borders.thick),
               ),
-            ),
-            SizedBox(
-              width: 40,
-              child: Text('$shown', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular)),
-            ),
-            const SizedBox(width: Space.s150),
-            Opacity(
+              child: FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: (ability.value / 99 * grow).clamp(0.0, 1.0),
+                child: Container(color: color),
+              ),
+            );
+            final value = Text('$shown', textAlign: TextAlign.right, style: Txt.control.merge(Txt.tabular));
+            final rankBadge = Opacity(
               opacity: grow >= 0.98 ? 1 : 0,
               child: Container(
                 constraints: const BoxConstraints(minWidth: 30),
@@ -1023,8 +1026,36 @@ class _AbilityRow extends StatelessWidget {
                 ),
                 child: Text(rank, style: Txt.control.copyWith(color: inkOn(badge))),
               ),
-            ),
-          ],
+            );
+            // 文字を拡大して 1 行に収まらないときは、名前と数を上の行に、棒を下の行に分ける。名前と数を折り返さない。
+            final scale = MediaQuery.textScalerOf(context).scale(1);
+            if (c.maxWidth / scale < 280) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: name),
+                      value,
+                      const SizedBox(width: Space.s150),
+                      rankBadge,
+                    ],
+                  ),
+                  const SizedBox(height: Space.s100),
+                  bar,
+                ],
+              );
+            }
+            return Row(
+              children: [
+                SizedBox(width: 84, child: name),
+                Expanded(child: bar),
+                SizedBox(width: 40, child: value),
+                const SizedBox(width: Space.s150),
+                rankBadge,
+              ],
+            );
+          },
         ),
       ),
     );

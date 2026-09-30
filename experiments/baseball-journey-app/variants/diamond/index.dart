@@ -1358,7 +1358,7 @@ class _DirectoryState extends State<_Directory> with SingleTickerProviderStateMi
               final cards = [
                 for (final pl in players) _MiniCard(player: pl, onTap: () => _open(context, pl)),
                 if (store.canCreatePlayer && _filter != _Filter.retired)
-                  KeyButton(label: '＋ 選手を作る', dashed: true, height: 180, onPressed: () => openCreation(context)),
+                  KeyButton(label: '選手を作る', icon: Icons.add, dashed: true, height: 200, onPressed: () => openCreation(context)),
               ];
               return AnimatedBuilder(
                 animation: _enter,
@@ -1458,7 +1458,8 @@ class _MiniCard extends StatelessWidget {
                   player.isActive ? '現役・${player.proYears} 年目' : '引退',
                   style: Txt.caption.copyWith(color: p.onSurfaceVariant),
                 ),
-                Text('${c.hits} 安打 ${c.homeRuns} 本', style: Txt.caption.merge(Txt.tabular)),
+                Text('${c.hits} 安打', style: Txt.caption.merge(Txt.tabular)),
+                Text('${c.homeRuns} 本塁打', style: Txt.caption.merge(Txt.tabular)),
               ],
             ),
           ),
