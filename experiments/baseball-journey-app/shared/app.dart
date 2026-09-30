@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -41,6 +42,8 @@ class _JourneyAppState extends State<JourneyApp> {
           locale: const Locale('ja'),
           supportedLocales: const [Locale('ja')],
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          // 端末の試作なので、Web で見るときもマウスのドラッグで指と同じようにスクロールさせる。
+          scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: PointerDeviceKind.values.toSet()),
           home: widget.home(_store),
         ),
       ),
