@@ -10,9 +10,10 @@ import '../../shared/store.dart';
 import '../../shared/theme.dart';
 import '../../shared/widgets.dart';
 
-// matchday: タイトル画面から入り、1 試合を 1 画面にする。出場の選択と入力面をホームに常設する。
+// matchday: タイトル画面から入り、選手トップで今季を見てから、1 試合を 1 画面で記録する。
 // 仮説: 画面の主役を「今日の試合」だけにし、試合後に伸びを見せると、短い時間でも 1 試合ごとに手応えがある。
-// 名鑑、記録、設定は右上のメニューに下げる。入力の途中でメニューへ行っても、入力は画面に残る。
+// round 2 で、clubhouse の試合前の画面を選手トップとして取り込んだ（README の反復の記録）。
+// 名鑑、記録、設定は右上のメニューに下げる。入力の途中で選手トップやメニューへ行っても、入力は残る。
 
 Widget buildVariant() => JourneyApp(home: (_) => const _Title());
 
@@ -37,11 +38,21 @@ class _TitleState extends State<_Title> {
         return;
       }
       if (openSharedRoute(context, store)) return;
-      if (store.current != null) {
-        _openMatchday(context);
-        if (route == 'score') showScoreSheet(context);
-        if (route == 'afterGame') await store.saveGame(5, 2);
-        if (route == 'menu' && mounted) _openMenu(context);
+      if (store.current == null) return;
+      _openTop(context);
+      switch (route) {
+        case 'game' || 'input':
+          _openMatchday(context);
+        case 'score':
+          _openMatchday(context);
+          showScoreSheet(context);
+        case 'afterGame':
+          _openMatchday(context);
+          await store.saveGame(5, 2);
+        case 'topAfterGame':
+          await store.saveGame(5, 2);
+        case 'menu':
+          _openMenu(context);
       }
     });
   }
@@ -75,7 +86,7 @@ class _TitleState extends State<_Title> {
         Semantics(header: true, label: 'Baseball Player Journey', excludeSemantics: true, child: _Logo()),
         const Spacer(),
         if (player != null) ...[
-          PressButton(label: 'つづきから', kind: PressKind.primary, onPressed: () => _openMatchday(context)),
+          PressButton(label: 'つづきから', kind: PressKind.primary, onPressed: () => _openTop(context)),
           Padding(
             padding: const EdgeInsets.only(top: Space.s100, bottom: Space.s300),
             child: Text(
@@ -154,7 +165,7 @@ void _openDirectory(BuildContext context) {
                 ? () {
                     StoreScope.read(context).select(p);
                     Navigator.of(context).popUntil((r) => r.isFirst);
-                    _openMatchday(context);
+                    _openTop(context);
                   }
                 : null,
           ),
@@ -163,6 +174,10 @@ void _openDirectory(BuildContext context) {
       ),
     ),
   );
+}
+
+void _openTop(BuildContext context) {
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const _PlayerTop()));
 }
 
 void _openMatchday(BuildContext context) {
@@ -213,9 +228,9 @@ class _Matchday extends StatelessWidget {
     final summary = store.lastSummary;
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: BackButton(onPressed: () => Navigator.of(context).maybePop()),
         centerTitle: false,
-        titleSpacing: Space.page,
+        titleSpacing: 0,
         title: Text(player.name),
         actions: [IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context))],
       ),
@@ -232,15 +247,7 @@ class _Matchday extends StatelessWidget {
           ] else if (season.isComplete) ...[
             Text('${year(season.year)}の全 ${season.totalGames} 試合を終えました。', style: Txt.body),
             const SizedBox(height: Space.s300),
-            PressButton(
-              label: 'シーズンを終える',
-              kind: PressKind.primary,
-              onPressed: () async {
-                final navigator = Navigator.of(context);
-                final retired = await openSeasonEnd(context, player);
-                if (!retired) navigator.push(MaterialPageRoute<void>(builder: (_) => const _Matchday()));
-              },
-            ),
+            PressButton(label: '選手トップへ', kind: PressKind.primary, onPressed: () => Navigator.of(context).pop()),
           ] else ...[
             Semantics(header: true, child: const Text('今日の出場', style: Txt.heading)),
             const SizedBox(height: Space.s300),
@@ -358,10 +365,13 @@ class _AfterGame extends StatelessWidget {
       for (final m in summary.milestones) MilestoneBanner(text: m),
       Text('今季の成績', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
       SeasonStatGrid(line: summary.seasonAfter, before: summary.seasonBefore),
+      // 続けて遊ぶなら次の試合、区切るなら選手トップ。全試合の後はシーズンの終了がある選手トップだけにする。
+      if (!season.isComplete)
+        PressButton(label: '第 ${season.playedCount + 1} 戦へ', kind: PressKind.primary, onPressed: store.dismissSummary),
       PressButton(
-        label: season.isComplete ? 'シーズンの終わりへ' : '第 ${season.playedCount + 1} 戦へ',
-        kind: PressKind.primary,
-        onPressed: store.dismissSummary,
+        label: '選手トップへ',
+        kind: season.isComplete ? PressKind.primary : PressKind.secondary,
+        onPressed: () => Navigator.of(context).pop(),
       ),
     ];
     final reduced = Motion.reduced(context);
@@ -415,6 +425,276 @@ class _RiseState extends State<_Rise> with SingleTickerProviderStateMixin {
         position: Tween(begin: const Offset(0, 0.15), end: Offset.zero).animate(t),
         child: widget.child,
       ),
+    );
+  }
+}
+
+/// 選手トップ（play_top.md）。試合の前に今季の進み、成績、能力、最近の試合を見て、次の試合へ進む。
+/// 主な操作は親指の届く下端に置き、試合の数ほど押す「次の試合へ」を毎回同じ位置にする。
+class _PlayerTop extends StatelessWidget {
+  const _PlayerTop();
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    final player = store.current;
+    if (player == null) return const Scaffold();
+    final season = player.current;
+    final draft = store.draft;
+    final summary = store.lastSummary;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        titleSpacing: 0,
+        title: const Text('選手トップ'),
+        actions: [IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context))],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s1000),
+        children: [
+          _PlayerBoard(player: player),
+          if (draft != null) ...[
+            const SizedBox(height: Space.s400),
+            Panel(
+              color: p.secondaryContainer,
+              child: Text(
+                '第 ${season.playedCount + 1} 戦を入力しています。${draft.line}。',
+                style: Txt.control.copyWith(color: p.onSecondaryContainer),
+              ),
+            ),
+          ] else if (summary != null) ...[
+            SectionTitle(
+              '前の試合',
+              trailing: IconButton(tooltip: '閉じる', icon: const Icon(Icons.close), onPressed: store.dismissSummary),
+            ),
+            for (final m in summary.milestones)
+              Padding(
+                padding: const EdgeInsets.only(bottom: Space.s200),
+                child: MilestoneBanner(text: m),
+              ),
+            GameLine(game: summary.game),
+          ],
+          SectionTitle('${year(season.year)}の成績'),
+          SeasonStatGrid(line: season.line, before: summary?.seasonBefore),
+          SectionTitle(
+            '能力',
+            trailing: TextButton(onPressed: () => openDetail(context, player), child: const Text('記録')),
+          ),
+          _AbilityStrip(abilities: season.abilities),
+          SectionTitle(
+            '最近の試合',
+            trailing: TextButton(onPressed: () => openHistory(context, player), child: const Text('すべて')),
+          ),
+          if (season.games.isEmpty)
+            Text('まだ試合がありません。下の「第 1 戦へ」から始めます。', style: Txt.ui.copyWith(color: p.onSurfaceVariant))
+          else
+            for (final g in season.games.reversed.take(5)) GameLine(game: g),
+        ],
+      ),
+      bottomNavigationBar: _TopActions(player: player),
+    );
+  }
+}
+
+/// 選手トップの下端。入力中なら戻る、全試合の後ならシーズンの終了、それ以外は次の試合と欠場。
+class _TopActions extends StatelessWidget {
+  const _TopActions({required this.player});
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    final season = player.current;
+    final Widget content;
+    if (store.draft != null) {
+      content = PressButton(
+        label: '第 ${season.playedCount + 1} 戦の入力に戻る',
+        kind: PressKind.primary,
+        onPressed: () => _openMatchday(context),
+      );
+    } else if (season.isComplete) {
+      content = PressButton(
+        label: 'シーズンを終える',
+        kind: PressKind.primary,
+        onPressed: () async {
+          // 終えた後はタイトルまで戻るので、次の季へ進んだら選手トップを開き直す。引退したらタイトルに留まる。
+          final navigator = Navigator.of(context);
+          final retired = await openSeasonEnd(context, player);
+          if (!retired) navigator.push(MaterialPageRoute<void>(builder: (_) => const _PlayerTop()));
+        },
+      );
+    } else {
+      content = Row(
+        children: [
+          Expanded(
+            child: PressButton(
+              label: '欠場で進める',
+              semanticsHint: '出場しない試合の数を選びます',
+              onPressed: () async {
+                final choice = await showParticipationSheet(context, player, initialKind: ParticipationKind.none);
+                if (choice != null) applyChoice(store, choice);
+              },
+            ),
+          ),
+          const SizedBox(width: Space.s300),
+          Expanded(
+            child: PressButton(
+              label: '第 ${season.playedCount + 1} 戦へ',
+              kind: PressKind.primary,
+              semanticsHint: '出場のしかたを選んで、試合を記録します',
+              onPressed: () {
+                store.dismissSummary();
+                _openMatchday(context);
+              },
+            ),
+          ),
+        ],
+      );
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: p.background,
+        border: Border(top: BorderSide(color: p.surfaceVariant)),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(Space.page, Space.s300, Space.page, Space.s300),
+          child: content,
+        ),
+      ),
+    );
+  }
+}
+
+/// 選手の札。試合画面の電光掲示板と同じ面で、背番号、名前、今季の進みを 1 枚にする。
+class _PlayerBoard extends StatelessWidget {
+  const _PlayerBoard({required this.player});
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    final s = player.current;
+    const ink = _Scoreboard._boardInk;
+    return Semantics(
+      container: true,
+      child: Container(
+        padding: const EdgeInsets.all(Space.s400),
+        decoration: BoxDecoration(
+          color: _Scoreboard._board,
+          borderRadius: BorderRadius.circular(Radii.surface),
+          border: Border.all(color: p.ink, width: Borders.thick),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                JerseyBadge(s.uniformNumber),
+                const SizedBox(width: Space.s300),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Semantics(
+                        header: true,
+                        child: Text(player.name, style: Txt.title.copyWith(color: ink)),
+                      ),
+                      Text(
+                        '${s.team.name}・${player.mainPosition.label}・${player.handedness}',
+                        style: Txt.caption.copyWith(color: ink),
+                      ),
+                      Text('${player.age} 歳・プロ ${player.proYears} 年目', style: Txt.caption.copyWith(color: ink)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: Space.s400),
+            Semantics(
+              label: '${year(s.year)}、${s.totalGames} 試合のうち ${s.playedCount} 試合を終えました',
+              excludeSemantics: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    children: [
+                      Text(year(s.year), style: Txt.control.copyWith(color: ink)),
+                      Text(
+                        '${s.playedCount} / ${s.totalGames} 試合',
+                        style: Txt.control.merge(Txt.tabular).copyWith(color: _Scoreboard._boardLamp),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: Space.s150),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(Radii.pill),
+                    child: LinearProgressIndicator(
+                      value: s.playedCount / s.totalGames,
+                      minHeight: 8,
+                      color: _Scoreboard._boardLamp,
+                      backgroundColor: ink.withValues(alpha: 0.2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 能力の札の並び。名前、ランク、数を 1 枚に入れ、横に折り返す（play_top.md の能力 3〜10 項目）。
+class _AbilityStrip extends StatelessWidget {
+  const _AbilityStrip({required this.abilities});
+
+  final List<Ability> abilities;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    return Wrap(
+      spacing: Space.s200,
+      runSpacing: Space.s200,
+      children: [
+        for (final a in abilities)
+          Semantics(
+            label: '${a.name} ${a.rank} ${a.value}',
+            excludeSemantics: true,
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 84),
+              padding: const EdgeInsets.symmetric(horizontal: Space.s300, vertical: Space.s200),
+              decoration: BoxDecoration(
+                color: p.surface,
+                borderRadius: BorderRadius.circular(Radii.control),
+                border: Border.all(color: p.outline, width: Borders.thick),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(a.name, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(a.rank, style: Txt.figureSm),
+                      const SizedBox(width: Space.s150),
+                      Text('${a.value}', style: Txt.caption.merge(Txt.tabular)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

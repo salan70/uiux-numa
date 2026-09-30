@@ -30,7 +30,7 @@ class AppStore extends ChangeNotifier {
     final active = players.where((p) => p.isActive).toList()
       ..sort((a, b) => b.lastPlayedOrder.compareTo(a.lastPlayedOrder));
     currentId = active.firstOrNull?.id;
-    if (options.route == 'input' || options.route == 'score' || options.route == 'afterGame') {
+    if (const ['input', 'score', 'afterGame', 'topAfterGame'].contains(options.route)) {
       startGame(const Participation(ParticipationKind.starter, battingOrder: 1, position: Position.shortstop));
       addResult(AtBatResult.double_);
       setRbi(1);

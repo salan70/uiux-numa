@@ -155,9 +155,7 @@ Future<AtBatResult?> pickResult(BuildContext context, {required String title, Li
 
 /// 入力した打席の列。押した打席が打点と走塁の編集先になる。
 class AtBatStrip extends StatelessWidget {
-  const AtBatStrip({super.key, this.axis = Axis.horizontal});
-
-  final Axis axis;
+  const AtBatStrip({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -186,9 +184,6 @@ class AtBatStrip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: Space.s300),
         child: Text('下の結果を押すと、打席が並びます。', style: Txt.ui.copyWith(color: p.onSurfaceVariant)),
       );
-    }
-    if (axis == Axis.vertical) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: items);
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -524,22 +519,6 @@ class _ScoreSheetState extends State<_ScoreSheet> {
   }
 }
 
-/// 入力の途中で離れるときの確認。製品は途中の保存と再開を持たない（game_result_input.md の assumptions）ので、
-/// 取り消しでは守れない。消える範囲を具体的に書く。
-Future<bool> confirmDiscard(BuildContext context) {
-  final d = StoreScope.read(context).draft;
-  if (d == null || d.isEmpty) return Future.value(true);
-  final count = d.atBats.length;
-  return confirmDialog(
-    context,
-    title: '入力を破棄しますか？',
-    message: count > 0 ? '入力した $count 打席は保存されません。' : '入力した走塁は保存されません。',
-    confirm: '破棄',
-    cancel: '入力を続ける',
-    destructive: true,
-  );
-}
-
 /// 次の試合の出場を選ぶ。欠場なら進める試合数を選ぶ（skip_games_dialog.md を統合した）。
 class NextGameChoice {
   const NextGameChoice.play(Participation this.participation) : skip = 0;
@@ -550,18 +529,27 @@ class NextGameChoice {
 }
 
 class ParticipationForm extends StatefulWidget {
-  const ParticipationForm({super.key, required this.player, required this.onDecided, this.dense = false});
+  const ParticipationForm({
+    super.key,
+    required this.player,
+    required this.onDecided,
+    this.dense = false,
+    this.initialKind = ParticipationKind.starter,
+  });
 
   final Player player;
   final ValueChanged<NextGameChoice> onDecided;
   final bool dense;
+
+  /// 最初に選んでおく出場のしかた。「欠場で進める」から開くときは欠場にする。
+  final ParticipationKind initialKind;
 
   @override
   State<ParticipationForm> createState() => _ParticipationFormState();
 }
 
 class _ParticipationFormState extends State<ParticipationForm> {
-  late ParticipationKind _kind = ParticipationKind.starter;
+  late ParticipationKind _kind = widget.initialKind;
   late int _order =
       widget.player.current.games.reversed.map((g) => g.participation.battingOrder).whereType<int>().firstOrNull ?? 1;
   late Position _position = widget.player.mainPosition;
@@ -641,7 +629,11 @@ class _ParticipationFormState extends State<ParticipationForm> {
   }
 }
 
-Future<NextGameChoice?> showParticipationSheet(BuildContext context, Player player) {
+Future<NextGameChoice?> showParticipationSheet(
+  BuildContext context,
+  Player player, {
+  ParticipationKind initialKind = ParticipationKind.starter,
+}) {
   return showModalBottomSheet<NextGameChoice>(
     context: context,
     sheetAnimationStyle: sheetAnimation(context),
@@ -654,7 +646,7 @@ Future<NextGameChoice?> showParticipationSheet(BuildContext context, Player play
           children: [
             Semantics(header: true, child: Text('第 ${player.current.playedCount + 1} 戦', style: Txt.heading)),
             const SizedBox(height: Space.s300),
-            ParticipationForm(player: player, onDecided: (c) => Navigator.pop(context, c)),
+            ParticipationForm(player: player, initialKind: initialKind, onDecided: (c) => Navigator.pop(context, c)),
           ],
         ),
       ),
