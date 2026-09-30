@@ -20,7 +20,8 @@ for (const slug of readdirSync(experiments).sort()) {
 }
 
 const imports = entries.map(
-  (e, i) => `import 'package:numa_runner/experiments/${e.slug}/variants/${e.id}/index.dart' as v${i};`,
+  (e, i) =>
+    `import 'package:numa_runner/experiments/${e.slug}/variants/${e.id}/index.dart' as v${i};`,
 );
 const lines = entries.map((e, i) => `  VariantEntry('${e.slug}', '${e.id}', v${i}.buildVariant),`);
 
