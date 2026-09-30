@@ -66,7 +66,6 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
       if (_league.text.trim().isEmpty) 'リーグ名を入力してください。',
       if (_team.text.trim().isEmpty) '球団名を入力してください。',
       ?_uniformRule.check(_draft.uniformNumber),
-      if (_draft.salary < SalaryField.min) '年俸は ${salary(SalaryField.min)}以上にしてください。',
     ],
     _ => [],
   };

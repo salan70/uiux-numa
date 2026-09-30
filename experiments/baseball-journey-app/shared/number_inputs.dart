@@ -300,8 +300,7 @@ class SalaryField extends StatelessWidget {
   final String label;
   final int? base;
 
-  /// 製品の範囲（300 万円〜10 億円）。
-  static const min = 300;
+  /// 上限は製品の 10 億円。下限は置かない。架空の選手の物語なので、0 円の契約も許す（製品の 300 万円から外した）。
   static const max = 100000;
 
   /// 今季からの変え幅。契約更改は前年からの増減で考えるため。据え置きを中央に、下げ幅は小さく、上げ幅は大きく取る。
@@ -316,28 +315,19 @@ class SalaryField extends StatelessWidget {
     _ => '${rate > 0 ? '+' : '−'}${(rate.abs() * 100).round()}%',
   };
 
-  static String? _check(String t) {
-    final v = int.tryParse(t) ?? 0;
-    return v < min ? '${salary(min)}以上にしてください。' : null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     final b = base;
     final diff = b == null ? 0 : value - b;
-    final error = _check('$value');
     return _PadField(
       label: label,
       display: salary(value),
-      error: error != null,
-      note:
-          error ??
-          (b == null
-              ? ''
-              : diff == 0
-              ? '今季と同じ'
-              : '今季から ${diff > 0 ? '+' : '−'}${salary(diff.abs())}'),
+      note: b == null
+          ? ''
+          : diff == 0
+          ? '今季と同じ'
+          : '今季から ${diff > 0 ? '+' : '−'}${salary(diff.abs())}',
       onPressed: () async {
         final v = await _showPadSheet(
           context,
@@ -347,7 +337,7 @@ class SalaryField extends StatelessWidget {
           maxValue: max,
           extra: '000',
           hint: '万円の数を打ちます。',
-          validate: _check,
+          validate: (_) => null,
           preview: (t) => Text(salary(int.tryParse(t) ?? 0), style: Txt.figure.copyWith(color: p.onSurface)),
           above: b == null
               ? null
@@ -355,7 +345,7 @@ class SalaryField extends StatelessWidget {
                   semanticsLabel: '今季からの変え幅',
                   values: [
                     for (final r in _rates)
-                      if (_applied(b, r) >= min && _applied(b, r) <= max) r,
+                      if (_applied(b, r) <= max) r,
                   ],
                   label: _rateLabel,
                   isSelected: (r) => '${_applied(b, r)}' == t,
