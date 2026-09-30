@@ -934,7 +934,22 @@ function drawCreateCursor(ctx: Ctx, t: number) {
   const pos = cursorInCreate(t);
   const appear = spring(t - 3.35, 0.5, 3);
   const squash = t >= CREATE_TAP ? 1 - spring(t - CREATE_TAP, 0.4, 4) : 0;
+  tapRing(ctx, t, CREATE_TAP, pos.x, pos.y + 20, INK);
   drawBall(ctx, pos.x, pos.y, 40 * appear, t * 10, 1 + 0.35 * squash, 1 - 0.35 * squash);
+}
+
+/** 押した点から広がる輪。押した位置を 250ms だけ残し、どこを押したかを因果で追えるようにする。 */
+function tapRing(ctx: Ctx, t: number, at: number, x: number, y: number, color: string) {
+  const p = prog(t, at, at + 0.25);
+  if (p <= 0 || p >= 1) return;
+  ctx.save();
+  ctx.globalAlpha = 1 - p;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lerp(10, 2, p);
+  ctx.beginPath();
+  ctx.arc(x, y, lerp(36, 110, outCubic(p)), 0, TAU);
+  ctx.stroke();
+  ctx.restore();
 }
 
 /* ----------------------------------------------------------- 03 MATCHDAY 4.20–8.00 */
@@ -1058,6 +1073,10 @@ function drawMatchday(ctx: Ctx, t: number) {
   drawFlyingCard(ctx, t);
   if (t < 7.75) {
     const pos = cursorInMatch(t);
+    for (const tap of TAPS) {
+      const r = targetRect(tap.target);
+      tapRing(ctx, t, tap.at, r.x + r.w / 2, r.y + r.h / 2, tap.at === REJECT ? CORAL : YELLOW);
+    }
     const tap = lastOf(TAPS, (x) => t >= x.at);
     const squash = tap && t - tap.at < 0.5 ? 1 - spring(t - tap.at, 0.4, 4.5) : 0;
     const lift = pos.lift;
