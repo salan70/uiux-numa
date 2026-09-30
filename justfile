@@ -155,6 +155,11 @@ flutter-dev: flutter-gen
 flutter-shot target out query="":
     VIRTUAL_TIME_BUDGET=3000 scripts/web-shot.sh "http://localhost:{{flutter_port}}/?bare=1&variant={{target}}&{{query}}" "{{out}}" 402 874
 
+# 先に just flutter-dev を起動しておく。Experiment の全 variant を横に並べた 1 枚を撮影する。
+# 例: just flutter-compare-shot baseball-journey-app out.png "theme=dark&fixture=seasonEnd"
+flutter-compare-shot slug out query="":
+    VIRTUAL_TIME_BUDGET=3000 scripts/web-shot.sh "http://localhost:{{flutter_port}}/?compare={{slug}}&{{query}}" "{{out}}" 1334 946
+
 # SVG の機械検査（構文、対応範囲、明示された制約）。例: just svg-check icon.svg --mono --viewbox "0 0 24 24"
 [positional-arguments]
 svg-check file *args:
