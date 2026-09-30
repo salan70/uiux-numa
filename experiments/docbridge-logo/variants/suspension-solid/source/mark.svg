@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter">
-  <title>DocBridge</title>
-  <!-- 吊橋。2 本の塔（幅 4、6..26）、桁（4..28 × 18..22）、塔の頂から垂れて桁に触れる主索と、桁の両端へ落ちる側索。索は線幅 2。 -->
-  <path id="part-mark-towers" fill="currentColor" d="M8 6H12V26H8ZM20 6H24V26H20Z"/>
-  <path id="part-mark-deck" fill="currentColor" d="M4 18H28V22H4Z"/>
-  <path id="part-mark-cables" fill="none" stroke="currentColor" d="M10 7Q16 30 22 7M10 7L4 19M22 7L28 19"/>
-</svg>

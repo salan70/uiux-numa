@@ -78,9 +78,16 @@
   block-size: 32px;
 }
 
-.db-mock .db-mark--40 {
-  inline-size: 40px;
-  block-size: 40px;
+/*
+ * lockup の mark。図形は viewBox の 8..24（箱の 1/2）にあり、桁の下端は 24（箱の 3/4）。
+ * 箱を cap height（およそ 0.7em）の 2 倍にして図形を cap height に揃え、
+ * flex の baseline 合わせは border box の下端を使うので、下の余白（箱の 1/4）ぶん transform で下げて桁の下端を baseline に載せる。
+ */
+.db-mock .db-mark--lockup {
+  display: inline-block;
+  inline-size: 1.4em;
+  block-size: 1.4em;
+  transform: translateY(0.35em);
 }
 
 .db-mock .db-mark--48 {
@@ -137,12 +144,12 @@
 
 .db-lockup {
   display: flex;
-  align-items: center;
-  gap: 0.625rem;
+  align-items: baseline;
+  gap: 0.5em;
+  font-size: 1.75rem;
 }
 
 .db-wordmark {
-  font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1;

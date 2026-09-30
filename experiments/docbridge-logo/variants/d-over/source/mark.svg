@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
-  <title>DocBridge</title>
-  <!-- D を反時計回りに 90° 倒す。stem（4..28 × 22..26）が桁、bowl（外径 12、内径 8、中心 16,18）が桁の上に立つアーチ。上路でなく下路のアーチ橋の輪郭。 -->
-  <path id="part-mark-letter" fill="currentColor" d="M4 26V18A12 12 0 0 1 28 18V26ZM8 22H24V18A8 8 0 0 0 8 18Z"/>
-</svg>
