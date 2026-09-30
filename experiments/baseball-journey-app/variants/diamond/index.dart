@@ -526,6 +526,7 @@ class _MatchdayState extends State<_Matchday> {
     final season = player.current;
     final draft = store.draft;
     final summary = store.lastSummary;
+    final large = MediaQuery.textScalerOf(context).scale(1) >= 1.5;
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => Navigator.of(context).maybePop()),
@@ -574,18 +575,30 @@ class _MatchdayState extends State<_Matchday> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _Pad(keys: _padKeys, onPick: _pick),
+                  // 文字 2 倍では 3 つを 1 行に収められないので、ほかの結果を 1 段上に戻す。
+                  if (large) ...[
+                    const SizedBox(height: Space.s100),
+                    _OtherResults(onPick: _pick),
+                  ],
                   const SizedBox(height: Space.s200),
+                  // 取り消すは形の知られた矢印だけにし、ほかの結果と同じ行に入れて入力面を 1 段低くする。
                   Row(
                     children: [
-                      Expanded(
+                      SizedBox(
+                        width: Sizes.target + Bold.shadow,
                         child: KeyButton(
-                          label: '取り消す',
+                          label: '',
                           icon: Icons.undo,
+                          semanticsLabel: '取り消す',
                           semanticsHint: '最後の入力を消します',
                           onPressed: draft.isEmpty ? null : store.undo,
                         ),
                       ),
-                      const SizedBox(width: Space.s300),
+                      if (!large) ...[
+                        const SizedBox(width: Space.s200),
+                        Expanded(child: _OtherResults(onPick: _pick)),
+                      ],
+                      const SizedBox(width: Space.s200),
                       Expanded(
                         child: KeyButton(
                           label: '試合を終える',
@@ -746,11 +759,14 @@ class _ScoreboardState extends State<_Scoreboard> with SingleTickerProviderState
                         child: Opacity(opacity: on ? 1 : 0.35, child: const DotText(['HOME RUN!'], pitch: 3)),
                       );
                     }
+                    // 文字 2 倍では出場まで出すと 3 行になり、打席の列を押し下げる。
+                    // 出場は試合の初めに選んだもので入力中は変わらないので、今日の成績だけを残す（読み上げには残る）。
+                    final large = MediaQuery.textScalerOf(context).scale(1) >= 1.5;
                     return Wrap(
                       spacing: Space.s200,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        Text(draft.participation.label, style: Txt.control.copyWith(color: Night.ink)),
+                        if (!large) Text(draft.participation.label, style: Txt.control.copyWith(color: Night.ink)),
                         Text(draft.line, style: Txt.control.merge(Txt.tabular).copyWith(color: Night.ink)),
                       ],
                     );
@@ -999,6 +1015,31 @@ class _AtBatEditor extends StatelessWidget {
     if (i == null || i >= draft.atBats.length) return const SizedBox.shrink();
     final a = draft.atBats[i];
     final r = a.result;
+    final steppers = [
+      if (r.maxRbi > 0)
+        RubberStepper(
+          key: ValueKey('rbi-$i'),
+          label: '打点',
+          value: a.rbi,
+          min: r.minRbi,
+          max: r.maxRbi,
+          onChanged: store.setRbi,
+          limitNote: '${r.maxRbi} 打点までです',
+          floorNote: r.minRbi > 0 ? '${r.minRbi} 打点以上です' : null,
+          stacked: true,
+        ),
+      if (r.maxSteals > 0)
+        RubberStepper(
+          key: ValueKey('steal-$i'),
+          label: '盗塁',
+          value: a.steals,
+          min: 0,
+          max: r.maxSteals,
+          onChanged: store.setSteals,
+          limitNote: '${r.maxSteals} 盗塁までです',
+          stacked: true,
+        ),
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -1020,26 +1061,16 @@ class _AtBatEditor extends StatelessWidget {
             ),
           ],
         ),
-        if (r.maxRbi > 0)
-          RubberStepper(
-            key: ValueKey('rbi-$i'),
-            label: '打点',
-            value: a.rbi,
-            min: r.minRbi,
-            max: r.maxRbi,
-            onChanged: store.setRbi,
-            limitNote: '${r.label}の打点は ${r.maxRbi} までです。',
-            floorNote: r.minRbi > 0 ? '${r.label}は ${r.minRbi} 打点以上です。' : null,
-          ),
-        if (r.maxSteals > 0)
-          RubberStepper(
-            key: ValueKey('steal-$i'),
-            label: '盗塁',
-            value: a.steals,
-            min: 0,
-            max: r.maxSteals,
-            onChanged: store.setSteals,
-            limitNote: '${r.label}の後の盗塁は ${r.maxSteals} までです。',
+        // 打点と盗塁は横に並べ、下端の入力面に隠れないよう高さを 1 段に抑える。片方だけなら左に寄せる。
+        // 理由の行は半分の幅に収まるよう数だけを書く。何の上限かは上の「第 N 打席 結果」の行が示す。
+        if (steppers.isNotEmpty)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: steppers.first),
+              const SizedBox(width: Space.s300),
+              Expanded(child: steppers.length > 1 ? steppers.last : const SizedBox.shrink()),
+            ],
           ),
         if (r.maxRuns > 0 || r.allowsCaughtStealing)
           Wrap(
@@ -1102,6 +1133,7 @@ class _Pad extends StatelessWidget {
                               ? p.primaryContainer
                               : p.surface,
                           semanticsHint: '打席を足します',
+                          oneLine: true,
                           onPressed: () => onPick(r),
                         ),
                       ),
@@ -1121,24 +1153,31 @@ class _Pad extends StatelessWidget {
         group(ResultGroup.onBase),
         const SizedBox(height: Space.s100),
         group(ResultGroup.out),
-        const SizedBox(height: Space.s100),
-        KeyButton(
-          label: 'ほかの結果',
-          icon: Icons.more_horiz,
-          height: Sizes.controlMd,
-          semanticsHint: '犠打や敬遠などを選べます',
-          onPressed: () async {
-            final picked = await pickResult(
-              context,
-              title: 'ほかの結果',
-              results: AtBatResult.values.where((r) => !_mainResults.contains(r)).toList(),
-            );
-            if (picked != null) onPick(picked);
-          },
-        ),
       ],
     );
   }
+}
+
+/// 犠打や敬遠など、面に並べない結果を選ぶ。
+class _OtherResults extends StatelessWidget {
+  const _OtherResults({required this.onPick});
+
+  final ValueChanged<AtBatResult> onPick;
+
+  @override
+  Widget build(BuildContext context) => KeyButton(
+    label: 'ほかの結果',
+    icon: Icons.more_horiz,
+    semanticsHint: '犠打や敬遠などを選べます',
+    onPressed: () async {
+      final picked = await pickResult(
+        context,
+        title: 'ほかの結果',
+        results: AtBatResult.values.where((r) => !_mainResults.contains(r)).toList(),
+      );
+      if (picked != null) onPick(picked);
+    },
+  );
 }
 
 /* -------------------------------------------------------------------- 試合後 */
