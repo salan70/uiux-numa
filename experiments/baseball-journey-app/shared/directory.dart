@@ -201,13 +201,35 @@ class _Tag extends StatelessWidget {
 }
 
 /// 今季の試合の一覧（season_game_history.md）。新しい試合を上から並べる。
+/// 行を押すと直せる。出場した試合は入力画面で開き直し（openEditor）、欠場の試合はチームの勝敗をシートで直す。
 class GameHistoryScreen extends StatelessWidget {
-  const GameHistoryScreen({super.key, required this.player});
+  const GameHistoryScreen({super.key, required this.player, this.openEditor});
 
   final Player player;
 
+  /// 開き直した試合の入力画面を開く。案ごとに入力画面が違うので、開く処理を受け取る。無ければ行を押せない。
+  final VoidCallback? openEditor;
+
+  void _open(BuildContext context, AppStore store, GameRecord g) {
+    final index = g.number - 1;
+    if (!g.played) {
+      showSkippedGameSheet(context, store, index);
+      return;
+    }
+    if (!store.editGame(index)) {
+      final next = player.current.playedCount + 1;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('入力中の第 $next 戦を保存するか消すと、前の試合を直せます。')),
+      );
+      return;
+    }
+    openEditor!();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
     final s = player.current;
     return Scaffold(
       appBar: AppBar(title: Text('${year(s.year)}の試合')),
@@ -220,9 +242,16 @@ class GameHistoryScreen extends StatelessWidget {
               Text('${s.playedCount} / ${s.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
             ],
           ),
+          if (openEditor != null)
+            Text('試合を押すと、直したり消したりできます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           const SizedBox(height: Space.s400),
           if (s.games.isEmpty) const Text('まだ試合がありません。'),
-          for (final g in s.games.reversed) GameLine(game: g, rankFrom: s.rankBefore(g.number - 1)),
+          for (final g in s.games.reversed)
+            GameLine(
+              game: g,
+              rankFrom: s.rankBefore(g.number - 1),
+              onTap: openEditor == null ? null : () => _open(context, store, g),
+            ),
         ],
       ),
     );
@@ -231,11 +260,14 @@ class GameHistoryScreen extends StatelessWidget {
 
 /// 1 試合の 1 行。スコアブックの記号で打席を並べる。
 class GameLine extends StatelessWidget {
-  const GameLine({super.key, required this.game, this.rankFrom, this.dense = false});
+  const GameLine({super.key, required this.game, this.rankFrom, this.dense = false, this.onTap});
 
   final GameRecord game;
   final int? rankFrom;
   final bool dense;
+
+  /// 押して直す。無ければ押せない行にする。
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -253,8 +285,11 @@ class GameLine extends StatelessWidget {
           ].join(' ');
     final rankChanged = rankFrom != null && game.teamRank != null && game.teamRank != rankFrom;
     final rankLabel = rankChanged ? '、チーム順位 $rankFrom 位から ${game.teamRank} 位' : '';
-    return Semantics(
-      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、${game.myScore} 対 ${game.opponentScore}、'}$summary$rankLabel',
+    final score = game.myScore == null ? '' : '${game.myScore} 対 ${game.opponentScore}、';
+    final row = Semantics(
+      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、$score'}$summary$rankLabel',
+      button: onTap != null,
+      hint: onTap == null ? null : '直す',
       excludeSemantics: true,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: dense ? Space.s150 : Space.s200),
@@ -277,7 +312,7 @@ class GameLine extends StatelessWidget {
                     padding: const EdgeInsets.only(right: Space.s150),
                     child: OutcomeSwatch(o),
                   ),
-                  if (o != null) Text('${game.myScore}-${game.opponentScore}', style: Txt.control.merge(Txt.tabular)),
+                  if (game.myScore != null) Text('${game.myScore}-${game.opponentScore}', style: Txt.control.merge(Txt.tabular)),
                 ],
               ),
             ),
@@ -304,6 +339,82 @@ class GameLine extends StatelessWidget {
                   if (game.atBats.isNotEmpty) Text(summary, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+    return onTap == null ? row : InkWell(onTap: onTap, child: row);
+  }
+}
+
+/// 欠場の試合を直すシート。チームの勝敗を選び直し、試合を消せる。選ぶとすぐ記録に入る。
+Future<void> showSkippedGameSheet(BuildContext context, AppStore store, int index) {
+  return showModalBottomSheet<void>(
+    context: context,
+    sheetAnimationStyle: sheetAnimation(context),
+    isScrollControlled: true,
+    builder: (_) => StoreScope(store: store, child: _SkippedGameSheet(index: index)),
+  );
+}
+
+class _SkippedGameSheet extends StatelessWidget {
+  const _SkippedGameSheet({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreScope.of(context);
+    final p = Palette.of(context);
+    final games = store.current!.current.games;
+    if (index >= games.length) return const SizedBox.shrink();
+    final g = games[index];
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s400),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Semantics(header: true, child: Text('第 ${g.number} 戦（欠場）', style: Txt.heading)),
+            const SizedBox(height: Space.s300),
+            Text('チームの勝敗', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+            const SizedBox(height: Space.s100),
+            ChoiceWrap<GameOutcome?>(
+              semanticsLabel: 'チームの勝敗',
+              values: const [null, GameOutcome.win, GameOutcome.loss, GameOutcome.draw],
+              label: (o) => o?.label ?? '未記録',
+              isSelected: (o) => o == g.teamOutcome,
+              onSelected: (o) => store.setSkippedOutcome(index, o),
+            ),
+            const SizedBox(height: Space.s600),
+            Row(
+              children: [
+                Expanded(
+                  child: PressButton(
+                    label: 'この試合を消す',
+                    kind: PressKind.destructive,
+                    onPressed: () async {
+                      final navigator = Navigator.of(context);
+                      final ok = await confirmDialog(
+                        context,
+                        title: '第 ${g.number} 戦を消しますか？',
+                        message: '後ろの試合の番号が 1 つずつ詰まります。',
+                        confirm: '消す',
+                        destructive: true,
+                      );
+                      if (!ok) return;
+                      store.deleteGame(index);
+                      navigator.pop();
+                    },
+                  ),
+                ),
+                const SizedBox(width: Space.s300),
+                Expanded(
+                  child: PressButton(label: '閉じる', kind: PressKind.primary, onPressed: () => Navigator.pop(context)),
+                ),
+              ],
             ),
           ],
         ),

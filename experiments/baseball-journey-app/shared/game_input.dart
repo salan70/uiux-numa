@@ -1,3 +1,5 @@
+import 'dart:math' show max, min;
+
 import 'package:flutter/material.dart';
 
 import 'model.dart';
@@ -436,8 +438,9 @@ class _ScoreSheetState extends State<_ScoreSheet> {
   @override
   void initState() {
     super.initState();
-    final rbi = StoreScope.read(context).draft!.rbi;
-    _my = rbi;
+    final d = StoreScope.read(context).draft!;
+    _my = d.initialScores == null ? d.rbi : max(d.rbi, d.initialScores!.$1);
+    _opponent = d.initialScores?.$2 ?? 0;
   }
 
   @override
@@ -570,11 +573,19 @@ class _ScoreBoard extends StatelessWidget {
 
 /// 次の試合の出場を選ぶ。欠場なら進める試合数を選ぶ（skip_games_dialog.md を統合した）。
 class NextGameChoice {
-  const NextGameChoice.play(Participation this.participation) : skip = 0;
-  const NextGameChoice.skip(this.skip) : participation = null;
+  const NextGameChoice.play(Participation this.participation) : skip = 0, wins = 0, losses = 0, draws = 0, rank = null;
+  const NextGameChoice.skip(this.skip, {this.wins = 0, this.losses = 0, this.draws = 0, this.rank}) : participation = null;
 
   final Participation? participation;
   final int skip;
+
+  /// 欠場で進める試合のチームの勝敗の数。入れなかった分は未記録になる。
+  final int wins;
+  final int losses;
+  final int draws;
+
+  /// 進めた後のチーム順位。
+  final int? rank;
 }
 
 class ParticipationForm extends StatefulWidget {
@@ -603,6 +614,23 @@ class _ParticipationFormState extends State<ParticipationForm> {
       widget.player.current.games.reversed.map((g) => g.participation.battingOrder).whereType<int>().firstOrNull ?? 1;
   late Position _position = widget.player.mainPosition;
   int _skip = 1;
+  int _wins = 0;
+  int _losses = 0;
+  int _draws = 0;
+  late int _rank = widget.player.current.teamRank;
+
+  /// 進める試合を減らしたら、勝敗の数を収まるように削る。後から足した引き分け、負け、勝ちの順に削る。
+  void _setSkip(int v) {
+    _skip = v;
+    var over = max(0, _wins + _losses + _draws - v);
+    final cutDraws = min(over, _draws);
+    _draws -= cutDraws;
+    over -= cutDraws;
+    final cutLosses = min(over, _losses);
+    _losses -= cutLosses;
+    over -= cutLosses;
+    _wins -= over;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -652,10 +680,57 @@ class _ParticipationFormState extends State<ParticipationForm> {
             min: 1,
             max: remaining,
             unit: ' 試合',
-            onChanged: (v) => setState(() => _skip = v),
+            onChanged: (v) => setState(() => _setSkip(v)),
             limitNote: '残りは $remaining 試合です。',
           ),
           Text('第 ${season.playedCount + _skip} 戦まで進みます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          const SizedBox(height: Space.s300),
+          // 欠場の間もチームの勝敗と順位は動くので、任意で入れる。入れなければ未記録として残す。
+          Text('チームの結果（任意）', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          const SizedBox(height: Space.s100),
+          if (_skip == 1)
+            // 1 試合なら、どれか 1 つを選ぶ札にする。数の増減より 1 回で決まる。
+            ChoiceWrap<GameOutcome?>(
+              semanticsLabel: 'チームの勝敗',
+              values: const [null, GameOutcome.win, GameOutcome.loss, GameOutcome.draw],
+              label: (o) => o?.label ?? '未記録',
+              isSelected: (o) => o == (_wins > 0 ? GameOutcome.win : _losses > 0 ? GameOutcome.loss : _draws > 0 ? GameOutcome.draw : null),
+              onSelected: (o) => setState(() {
+                _wins = o == GameOutcome.win ? 1 : 0;
+                _losses = o == GameOutcome.loss ? 1 : 0;
+                _draws = o == GameOutcome.draw ? 1 : 0;
+              }),
+            )
+          else ...[
+            for (final (label, value, set) in [
+              ('勝ち', _wins, (int v) => _wins = v),
+              ('負け', _losses, (int v) => _losses = v),
+              ('引き分け', _draws, (int v) => _draws = v),
+            ])
+              NumberStepper(
+                label: label,
+                value: value,
+                min: 0,
+                max: _skip - (_wins + _losses + _draws - value),
+                unit: ' 試合',
+                onChanged: (v) => setState(() => set(v)),
+              ),
+            Text(
+              '未記録 ${_skip - _wins - _losses - _draws} 試合',
+              style: Txt.caption.copyWith(color: p.onSurfaceVariant),
+            ),
+          ],
+          const SizedBox(height: Space.s200),
+          NumberStepper(
+            label: 'チーム順位',
+            value: _rank,
+            min: 1,
+            max: season.team.teamCount,
+            unit: ' 位',
+            limitNote: '最下位です',
+            floorNote: '首位です',
+            onChanged: (v) => setState(() => _rank = v),
+          ),
           const SizedBox(height: Space.s300),
         ],
         PressButton(
@@ -663,7 +738,7 @@ class _ParticipationFormState extends State<ParticipationForm> {
           kind: PressKind.primary,
           onPressed: () => widget.onDecided(
             _kind == ParticipationKind.none
-                ? NextGameChoice.skip(_skip)
+                ? NextGameChoice.skip(_skip, wins: _wins, losses: _losses, draws: _draws, rank: _rank)
                 : NextGameChoice.play(
                     Participation(
                       _kind,
@@ -706,7 +781,7 @@ Future<NextGameChoice?> showParticipationSheet(
 /// 出場を決めた後の共通処理。欠場なら進め、出場なら入力を始める。入力を始めたら true。
 bool applyChoice(AppStore store, NextGameChoice choice) {
   if (choice.participation == null) {
-    store.skipGames(choice.skip);
+    store.skipGames(choice.skip, wins: choice.wins, losses: choice.losses, draws: choice.draws, rank: choice.rank);
     return false;
   }
   store.startGame(choice.participation!);

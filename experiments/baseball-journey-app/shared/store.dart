@@ -77,6 +77,39 @@ class AppStore extends ChangeNotifier {
   SaveState saveState = SaveState.idle;
   GameSummary? lastSummary;
 
+  /// 記録済みの試合を入力画面で開き直す。新しい試合を入力している間は開かず、false を返す。
+  bool editGame(int index) {
+    final d = draft;
+    if (d != null && d.editIndex == null) return false;
+    final g = current!.current.games[index];
+    draft = GameDraft(g.participation, editIndex: index, initialScores: (g.myScore ?? 0, g.opponentScore ?? 0))
+      ..atBats.addAll(g.atBats)
+      ..runner = g.runner
+      ..selected = g.atBats.isEmpty ? null : g.atBats.length - 1;
+    saveState = SaveState.idle;
+    lastSummary = null;
+    notifyListeners();
+    return true;
+  }
+
+  /// 試合を消し、後ろの試合の番号を詰める。
+  void deleteGame(int index) {
+    final games = current!.current.games;
+    games.removeAt(index);
+    for (var i = index; i < games.length; i++) {
+      games[i] = games[i].copyWith(number: i + 1);
+    }
+    lastSummary = null;
+    notifyListeners();
+  }
+
+  /// 欠場の試合のチームの勝敗を直す。
+  void setSkippedOutcome(int index, GameOutcome? outcome) {
+    final games = current!.current.games;
+    games[index] = games[index].copyWith(teamOutcome: () => outcome);
+    notifyListeners();
+  }
+
   void startGame(Participation participation) {
     draft = GameDraft(participation);
     saveState = SaveState.idle;
@@ -159,6 +192,22 @@ class AppStore extends ChangeNotifier {
       return false;
     }
     final season = player.current;
+    if (d.editIndex case final i?) {
+      final was = season.games[i];
+      season.games[i] = GameRecord(
+        number: was.number,
+        participation: d.participation,
+        atBats: List.of(d.atBats),
+        runner: d.runner,
+        myScore: myScore,
+        opponentScore: opponentScore,
+        teamRank: was.teamRank,
+      );
+      draft = null;
+      saveState = SaveState.idle;
+      notifyListeners();
+      return true;
+    }
     final seasonBefore = season.line;
     final careerBefore = player.career;
     season.games.add(
@@ -207,11 +256,24 @@ class AppStore extends ChangeNotifier {
   }
 
   /// 出場せずに日程を進める（skip_games_dialog.md）。
-  void skipGames(int count) {
+  /// チームの勝敗は任意で数だけ受け、勝ち、負け、引き分けの順に割り当てる。連続した欠場の中の勝敗の順は持たない。
+  /// 順位は進めた最後の試合の後の順位として記録する。
+  void skipGames(int count, {int wins = 0, int losses = 0, int draws = 0, int? rank}) {
     final season = current!.current;
+    final outcomes = [
+      for (var i = 0; i < wins; i++) GameOutcome.win,
+      for (var i = 0; i < losses; i++) GameOutcome.loss,
+      for (var i = 0; i < draws; i++) GameOutcome.draw,
+    ];
     for (var i = 0; i < count && !season.isComplete; i++) {
+      final last = i == count - 1;
       season.games.add(
-        GameRecord(number: season.playedCount + 1, participation: const Participation(ParticipationKind.none), teamRank: season.teamRank),
+        GameRecord(
+          number: season.playedCount + 1,
+          participation: const Participation(ParticipationKind.none),
+          teamRank: last ? (rank ?? season.teamRank) : season.teamRank,
+          teamOutcome: i < outcomes.length ? outcomes[i] : null,
+        ),
       );
     }
     lastSummary = null;
@@ -318,10 +380,16 @@ class AppStore extends ChangeNotifier {
 }
 
 class GameDraft {
-  GameDraft(this.participation)
+  GameDraft(this.participation, {this.editIndex, this.initialScores})
     : runner = participation.kind == ParticipationKind.pinchRunner ? const RunnerLine() : null;
 
   final Participation participation;
+
+  /// 記録済みの試合を直しているときの位置。新しい試合なら null。
+  final int? editIndex;
+
+  /// 直す試合のスコア（自チーム、相手）。スコアの入力の初期値にする。
+  final (int, int)? initialScores;
   final List<AtBat> atBats = [];
 
   /// 代走の走塁。代走のときだけ持つ（AC-003）。

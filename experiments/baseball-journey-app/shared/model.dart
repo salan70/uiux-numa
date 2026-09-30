@@ -256,6 +256,7 @@ class GameRecord {
     this.myScore,
     this.opponentScore,
     this.teamRank,
+    this.teamOutcome,
   });
 
   final int number;
@@ -268,21 +269,27 @@ class GameRecord {
   final int? opponentScore;
   final int? teamRank;
 
-  GameRecord withTeamRank(int value) => GameRecord(
-    number: number,
+  /// 欠場の試合のチームの勝敗。スコアを持たないので、勝敗だけを任意で入れる。
+  final GameOutcome? teamOutcome;
+
+  GameRecord withTeamRank(int value) => copyWith(teamRank: value);
+
+  GameRecord copyWith({int? number, int? teamRank, GameOutcome? Function()? teamOutcome}) => GameRecord(
+    number: number ?? this.number,
     participation: participation,
     atBats: atBats,
     runner: runner,
     myScore: myScore,
     opponentScore: opponentScore,
-    teamRank: value,
+    teamRank: teamRank ?? this.teamRank,
+    teamOutcome: teamOutcome == null ? this.teamOutcome : teamOutcome(),
   );
 
   bool get played => participation.kind != ParticipationKind.none;
   int get rbi => atBats.fold(0, (s, a) => s + a.rbi);
 
   GameOutcome? get outcome {
-    if (myScore == null || opponentScore == null) return null;
+    if (myScore == null || opponentScore == null) return teamOutcome;
     if (myScore! > opponentScore!) return GameOutcome.win;
     if (myScore! < opponentScore!) return GameOutcome.loss;
     return GameOutcome.draw;

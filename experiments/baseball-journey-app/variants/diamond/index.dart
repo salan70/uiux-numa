@@ -58,6 +58,12 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
         _openDirectory(context);
         return;
       }
+      // 試合の履歴は、行を押して直す試合画面がこの案にあるので、共通の行き先より先に開く。
+      if (route == 'history' && store.current != null) {
+        _openTop(context);
+        _openHistory(context, store.current!);
+        return;
+      }
       if (openSharedRoute(context, store)) return;
       if (store.current == null) return;
       _openTop(context);
@@ -74,6 +80,14 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
           await store.saveGame(5, 2);
         case 'menu':
           _openMenu(context);
+        case 'skip':
+          final choice = await showParticipationSheet(context, store.current!, initialKind: ParticipationKind.none);
+          if (choice != null) applyChoice(store, choice);
+        case 'edit':
+          // 最後に出場した試合を直す。
+          final games = store.current!.current.games;
+          final index = games.lastIndexWhere((g) => g.played);
+          if (index >= 0 && store.editGame(index)) _openMatchday(context);
       }
     });
   }
@@ -217,6 +231,16 @@ void _openMatchday(BuildContext context) {
   Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const _Matchday()));
 }
 
+/// 試合の一覧。行を押して開き直した試合を、同じ試合画面で直す。
+Future<void> _openHistory(BuildContext context, Player player) {
+  final navigator = Navigator.of(context);
+  return openHistory(
+    context,
+    player,
+    openEditor: () => navigator.push(MaterialPageRoute<void>(builder: (_) => const _Matchday())),
+  );
+}
+
 Future<void> _openMenu(BuildContext context) {
   final store = StoreScope.read(context);
   final player = store.current!;
@@ -238,7 +262,7 @@ Future<void> _openMenu(BuildContext context) {
         mainAxisSize: MainAxisSize.min,
         children: [
           item(Icons.bar_chart, '記録', () => openDetail(context, player)),
-          item(Icons.list_alt, '${year(player.current.year)}の試合', () => openHistory(context, player)),
+          item(Icons.list_alt, '${year(player.current.year)}の試合', () => _openHistory(context, player)),
           item(Icons.people_alt_outlined, '名鑑', () => _openDirectory(context)),
           item(Icons.settings_outlined, '設定', () => openSettings(context)),
           item(Icons.home_outlined, 'タイトルへ', () => navigator.popUntil((r) => r.isFirst)),
@@ -300,11 +324,11 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
         children: [
           AnimatedBuilder(
             animation: _reveal,
-            builder: (context, _) => PlayerCard(player: player, reveal: _reveal.value),
+            builder: (context, _) => PlayerCard(player: player, reveal: _reveal.value, showAbilities: false),
           ),
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton(onPressed: () => openDetail(context, player), child: const Text('記録を見る')),
+            child: TextButton(onPressed: () => openDetail(context, player), child: const Text('能力と記録を見る')),
           ),
           if (draft != null)
             Panel(
@@ -338,7 +362,7 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
           TeamRecord(season: season),
           SectionTitle(
             '最近の試合',
-            trailing: TextButton(onPressed: () => openHistory(context, player), child: const Text('すべて')),
+            trailing: TextButton(onPressed: () => _openHistory(context, player), child: const Text('すべて')),
           ),
           if (season.games.isEmpty)
             Text('まだ試合がありません。下の「第 1 戦へ」から始めます。', style: Txt.ui.copyWith(color: p.onSurfaceVariant))
@@ -514,6 +538,9 @@ class _MatchdayState extends State<_Matchday> {
 
   GlobalKey _chipKey(int i) => _chipKeys.putIfAbsent(i, GlobalKey.new);
 
+  /// 記録済みの試合を直すために開いた。保存して閉じるまでの 1 フレームに、出場の選び直しを見せない。
+  bool _editing = false;
+
   @override
   void dispose() {
     _stripScroll.dispose();
@@ -583,93 +610,129 @@ class _MatchdayState extends State<_Matchday> {
     final draft = store.draft;
     final summary = store.lastSummary;
     final large = MediaQuery.textScalerOf(context).scale(1) >= 1.5;
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(onPressed: () => Navigator.of(context).maybePop()),
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Text(player.name),
-        actions: [IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context))],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s600),
-        children: [
-          _Scoreboard(player: player, draft: draft),
-          const SizedBox(height: Space.s400),
-          if (summary != null)
-            _AfterGame(key: ValueKey(summary), summary: summary)
-          else if (draft != null) ...[
-            _AtBatRow(
-              draft: draft,
-              keyOf: _chipKey,
-              hidden: _inFlight,
-              landed: _landed,
-              landToken: _landToken,
-              controller: _stripScroll,
-            ),
-            const SizedBox(height: Space.s200),
-            _AtBatEditor(draft: draft),
-          ] else if (season.isComplete) ...[
-            Text('${year(season.year)}の全 ${season.totalGames} 試合を終えました。', style: Txt.body),
-            const SizedBox(height: Space.s300),
-            KeyButton(
-              label: '選手トップへ',
-              fill: Palette.of(context).primary,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ] else ...[
-            Semantics(header: true, child: const Text('今日の出場', style: Txt.heading)),
-            const SizedBox(height: Space.s300),
-            ParticipationForm(player: player, onDecided: (c) => applyChoice(store, c)),
+    final editIndex = draft?.editIndex;
+    if (editIndex != null) _editing = true;
+    return PopScope(
+      // 直している途中で離れたら、直した内容を捨てる。新しい試合の入力は残し、選手トップから戻れるようにする。
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop && store.draft?.editIndex != null) store.discardGame();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(onPressed: () => Navigator.of(context).maybePop()),
+          centerTitle: false,
+          titleSpacing: 0,
+          title: Text(player.name),
+          actions: [
+            if (editIndex != null)
+              IconButton(
+                tooltip: '第 ${editIndex + 1} 戦を消す',
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () async {
+                  final navigator = Navigator.of(context);
+                  final ok = await confirmDialog(
+                    context,
+                    title: '第 ${editIndex + 1} 戦を消しますか？',
+                    message: '打席とスコアが消え、後ろの試合の番号が 1 つずつ詰まります。',
+                    confirm: '消す',
+                    destructive: true,
+                  );
+                  if (!ok) return;
+                  store.discardGame();
+                  store.deleteGame(editIndex);
+                  navigator.pop();
+                },
+              )
+            else
+              IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context)),
           ],
-        ],
-      ),
-      bottomNavigationBar: summary != null
-          ? _AfterGameActions(season: season)
-          : draft == null
-          ? null
-          : InputDock(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _Pad(keys: _padKeys, onPick: _pick),
-                  // 文字 2 倍では 3 つを 1 行に収められないので、ほかの結果を 1 段上に戻す。
-                  if (large) ...[
-                    const SizedBox(height: Space.s100),
-                    _OtherResults(onPick: _pick),
-                  ],
-                  const SizedBox(height: Space.s200),
-                  // 取り消すは形の知られた矢印だけにし、ほかの結果と同じ行に入れて入力面を 1 段低くする。
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: Sizes.target + Bold.shadow,
-                        child: KeyButton(
-                          label: '',
-                          icon: Icons.undo,
-                          semanticsLabel: '取り消す',
-                          semanticsHint: '最後の入力を消します',
-                          onPressed: draft.isEmpty ? null : store.undo,
-                        ),
-                      ),
-                      if (!large) ...[
-                        const SizedBox(width: Space.s200),
-                        Expanded(child: _OtherResults(onPick: _pick)),
-                      ],
-                      const SizedBox(width: Space.s200),
-                      Expanded(
-                        child: KeyButton(
-                          label: '試合を終える',
-                          fill: Palette.of(context).primary,
-                          semanticsHint: 'スコアを入れて保存します',
-                          onPressed: draft.canSave ? () => showScoreSheet(context) : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s600),
+          children: [
+            _Scoreboard(player: player, draft: draft),
+            const SizedBox(height: Space.s400),
+            if (summary != null)
+              _AfterGame(key: ValueKey(summary), summary: summary)
+            else if (draft != null) ...[
+              _AtBatRow(
+                draft: draft,
+                keyOf: _chipKey,
+                hidden: _inFlight,
+                landed: _landed,
+                landToken: _landToken,
+                controller: _stripScroll,
               ),
-            ),
+              const SizedBox(height: Space.s200),
+              _AtBatEditor(draft: draft),
+            ] else if (_editing) ...[
+              const SizedBox.shrink(),
+            ] else if (season.isComplete) ...[
+              Text('${year(season.year)}の全 ${season.totalGames} 試合を終えました。', style: Txt.body),
+              const SizedBox(height: Space.s300),
+              KeyButton(
+                label: '選手トップへ',
+                fill: Palette.of(context).primary,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ] else ...[
+              Semantics(header: true, child: const Text('今日の出場', style: Txt.heading)),
+              const SizedBox(height: Space.s300),
+              ParticipationForm(player: player, onDecided: (c) => applyChoice(store, c)),
+            ],
+          ],
+        ),
+        bottomNavigationBar: summary != null
+            ? _AfterGameActions(season: season)
+            : draft == null
+            ? null
+            : InputDock(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _Pad(keys: _padKeys, onPick: _pick),
+                    // 文字 2 倍では 3 つを 1 行に収められないので、ほかの結果を 1 段上に戻す。
+                    if (large) ...[const SizedBox(height: Space.s100), _OtherResults(onPick: _pick)],
+                    const SizedBox(height: Space.s200),
+                    // 取り消すは形の知られた矢印だけにし、ほかの結果と同じ行に入れて入力面を 1 段低くする。
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: Sizes.target + Bold.shadow,
+                          child: KeyButton(
+                            label: '',
+                            icon: Icons.undo,
+                            semanticsLabel: '取り消す',
+                            semanticsHint: '最後の入力を消します',
+                            onPressed: draft.isEmpty ? null : store.undo,
+                          ),
+                        ),
+                        if (!large) ...[
+                          const SizedBox(width: Space.s200),
+                          Expanded(child: _OtherResults(onPick: _pick)),
+                        ],
+                        const SizedBox(width: Space.s200),
+                        Expanded(
+                          child: KeyButton(
+                            label: editIndex == null ? '試合を終える' : '直して保存へ',
+                            fill: Palette.of(context).primary,
+                            semanticsHint: 'スコアを入れて保存します',
+                            onPressed: draft.canSave
+                                ? () async {
+                                    final editing = draft.editIndex != null;
+                                    final saved = await showScoreSheet(context);
+                                    // 直した試合は保存したら一覧へ戻る。試合後のまとめは新しい試合にだけ出す。
+                                    if (saved && editing && context.mounted) Navigator.of(context).pop();
+                                  }
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 }
@@ -787,7 +850,11 @@ class _ScoreboardState extends State<_Scoreboard> with SingleTickerProviderState
     final draft = widget.draft;
     final s = player.current;
     final line = s.line;
-    final number = s.isComplete ? s.totalGames : s.playedCount + 1;
+    final number = switch (draft?.editIndex) {
+      final i? => i + 1,
+      null when s.isComplete => s.totalGames,
+      null => s.playedCount + 1,
+    };
     final board = BoxDecoration(
       color: Night.board,
       borderRadius: BorderRadius.circular(Bold.radius),
@@ -1298,6 +1365,20 @@ class _AfterGame extends StatelessWidget {
                 padding: const EdgeInsets.only(top: Space.s200),
                 child: MilestoneBanner(text: m),
               ),
+            // チームの勝敗と順位は、打率より上に置く。順位の増減は試合後にしか無いので、スクロールせずに見える所で入れ忘れを防ぐ。
+            // 試合数は上の掲示板にあるので、ここでは勝敗だけを出し、順位は増減の数で示す。
+            const SizedBox(height: Space.s300),
+            TeamRecord(season: season, showRank: false),
+            NumberStepper(
+              label: 'チーム順位（${season.team.teamCount} 球団）',
+              value: season.teamRank,
+              min: 1,
+              max: season.team.teamCount,
+              unit: ' 位',
+              limitNote: '最下位です',
+              floorNote: '首位です',
+              onChanged: store.setTeamRank,
+            ),
             const SizedBox(height: Space.s400),
             Text('打率', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
             Wrap(
@@ -1354,26 +1435,6 @@ class _AfterGame extends StatelessWidget {
                   ],
                 );
               },
-            ),
-            const SizedBox(height: Space.s400),
-            Row(
-              children: [
-                Expanded(child: Text(year(season.year), style: Txt.control)),
-                Text('${season.playedCount} / ${season.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
-              ],
-            ),
-            const SizedBox(height: Space.s150),
-            TeamRecord(season: season),
-            const SizedBox(height: Space.s200),
-            NumberStepper(
-              label: 'チーム順位',
-              value: season.teamRank,
-              min: 1,
-              max: season.team.teamCount,
-              unit: ' 位',
-              limitNote: '最下位です',
-              floorNote: '首位です',
-              onChanged: store.setTeamRank,
             ),
           ],
         ),

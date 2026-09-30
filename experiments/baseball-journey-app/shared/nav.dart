@@ -50,8 +50,10 @@ Future<bool> openSeasonEnd(BuildContext context, Player player) async {
 Future<void> openSettings(BuildContext context) =>
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SettingsScreen()));
 
-Future<void> openHistory(BuildContext context, Player player) =>
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GameHistoryScreen(player: player)));
+/// 試合の一覧。openEditor を渡すと、行を押して試合を直せる。
+Future<void> openHistory(BuildContext context, Player player, {VoidCallback? openEditor}) => Navigator.of(
+  context,
+).push(MaterialPageRoute<void>(builder: (_) => GameHistoryScreen(player: player, openEditor: openEditor)));
 
 /// 起動引数の route のうち、3 案で同じ行き先のもの。行き先を開いたら true。
 bool openSharedRoute(BuildContext context, AppStore store) {

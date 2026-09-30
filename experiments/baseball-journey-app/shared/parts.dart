@@ -756,16 +756,23 @@ class NightFieldPainter extends CustomPainter {
 
 /// 今季の勝敗と順位。個人成績を主にするため、チームの成績はこの 1 行に留める。
 class TeamRecord extends StatelessWidget {
-  const TeamRecord({super.key, required this.season});
+  const TeamRecord({super.key, required this.season, this.showRank = true});
 
   final Season season;
+
+  /// 順位を右に出す。試合後は順位の増減が真下にあるので出さない。
+  final bool showRank;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     final countStyle = Txt.control.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700);
+    // 勝敗を入れずに欠場で進めた試合は、勝敗の合計が試合数と合わない理由として数を添える。
+    final unrecorded = season.games.where((g) => g.outcome == null).length;
     return Semantics(
-      label: 'チーム ${season.wins} 勝 ${season.losses} 敗 ${season.draws} 分、${season.teamRank} 位、${season.team.teamCount} 球団中',
+      label:
+          'チーム ${season.wins} 勝 ${season.losses} 敗 ${season.draws} 分${unrecorded > 0 ? '、未記録 $unrecorded 試合' : ''}'
+          '${showRank ? '、${season.teamRank} 位、${season.team.teamCount} 球団中' : ''}',
       excludeSemantics: true,
       child: Row(
         children: [
@@ -776,9 +783,12 @@ class TeamRecord extends StatelessWidget {
             const TextSpan(text: ' 敗 '),
             TextSpan(text: '${season.draws}', style: countStyle),
             const TextSpan(text: ' 分'),
+            if (unrecorded > 0)
+              TextSpan(text: '  未記録 $unrecorded', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           ])),
           const Spacer(),
-          Text.rich(TextSpan(children: [
+          if (showRank)
+            Text.rich(TextSpan(children: [
             TextSpan(text: '${season.teamRank} 位', style: Txt.control.merge(Txt.tabular).copyWith(fontWeight: FontWeight.w700)),
             TextSpan(text: ' / ${season.team.teamCount} 球団', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           ])),
@@ -819,10 +829,13 @@ class OutcomeSwatch extends StatelessWidget {
 /// 選手の札。リールの CREATE で組み上げた札を、選手トップの顔にする。
 /// reveal が 1 未満の間は、画素が降り、名前が入り、能力の棒が伸びる。
 class PlayerCard extends StatelessWidget {
-  const PlayerCard({super.key, required this.player, this.reveal = 1});
+  const PlayerCard({super.key, required this.player, this.reveal = 1, this.showAbilities = true});
 
   final Player player;
   final double reveal;
+
+  /// 能力の棒を札に並べる。選手トップでは今季の成績を先に見せるため出さず、能力は選手の詳細で見る。
+  final bool showAbilities;
 
   static const _barColors = [Color(0xFFF37252), Color(0xFF4078E0), Color(0xFFFAC400)];
 
@@ -900,8 +913,9 @@ class PlayerCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: Space.s300),
-                  for (var i = 0; i < s.abilities.length; i++)
+                  if (showAbilities) const SizedBox(height: Space.s300),
+                  if (showAbilities)
+                    for (var i = 0; i < s.abilities.length; i++)
                     _AbilityRow(
                       ability: s.abilities[i],
                       color: _barColors[i % _barColors.length],
