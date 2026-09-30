@@ -137,7 +137,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     if (_done) {
       return _choice == _Choice.retire
           ? RetiredScreen(player: widget.player, onClose: () => widget.onFinished(true))
-          : _NextSeasonScreen(player: widget.player, onClose: () => widget.onFinished(false));
+          : NextSeasonScreen(player: widget.player, onClose: () => widget.onFinished(false));
     }
     final p = Palette.of(context);
     final errors = _tried.contains(_step) ? _errors() : const <String>[];
@@ -495,8 +495,8 @@ Future<String?> _askTitle(BuildContext context) {
 
 /// 次の季へ進んだ直後。完了の段（step 7）を、来季の始まりの画面にした。
 /// タイトル画面と同じ夜の球場に、掲示板の年を灯して開幕を告げる。
-class _NextSeasonScreen extends StatelessWidget {
-  const _NextSeasonScreen({required this.player, required this.onClose});
+class NextSeasonScreen extends StatelessWidget {
+  const NextSeasonScreen({super.key, required this.player, required this.onClose});
 
   final Player player;
   final VoidCallback onClose;
