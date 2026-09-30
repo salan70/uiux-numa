@@ -1482,12 +1482,92 @@ class _AfterGame extends StatelessWidget {
                 );
               },
             ),
+            // メモは最後に置く。任意で、次の試合へ進む操作を妨げない（D-19、U-7）。
+            _MemoField(summary: summary),
           ],
         ),
         if (summary.milestones.isNotEmpty) const Positioned.fill(child: PixelBurst(delay: Duration(milliseconds: 200))),
       ],
     );
     return result;
+  }
+}
+
+/// 試合後のメモ。1 行の欄と候補の札。打つたびに試合の記録へ書く（保存の操作は無い）。
+class _MemoField extends StatefulWidget {
+  const _MemoField({required this.summary});
+
+  final GameSummary summary;
+
+  @override
+  State<_MemoField> createState() => _MemoFieldState();
+}
+
+class _MemoFieldState extends State<_MemoField> {
+  late final _text = TextEditingController(text: widget.summary.game.memo ?? '');
+
+  @override
+  void dispose() {
+    _text.dispose();
+    super.dispose();
+  }
+
+  /// 候補は、その試合で起きたこと（節目、サヨナラになり得る 1 点差の勝ち、猛打賞）を先に、定番を後に置く。
+  List<String> _suggestions() {
+    final g = widget.summary.game;
+    final hits = g.atBats.where((a) => a.result.isHit).length;
+    final close = g.outcome == GameOutcome.win && (g.myScore ?? 0) - (g.opponentScore ?? 0) == 1;
+    return {
+      ...widget.summary.milestones.where((m) => m.startsWith('プロ初')),
+      if (close && g.rbi > 0) 'サヨナラ打',
+      if (hits >= 3) '猛打賞',
+      if (g.atBats.any((a) => a.result == AtBatResult.homeRun)) '会心の一発',
+      '復帰戦',
+      '悔しい敗戦',
+    }.take(5).toList();
+  }
+
+  void _set(String v) {
+    _text.text = v;
+    StoreScope.read(context).setMemo(v);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: Space.s400),
+        Row(
+          children: [
+            Text('メモ', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+            const SizedBox(width: Space.s200),
+            Text('任意・その年の 1 ページに残ります', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          ],
+        ),
+        const SizedBox(height: Space.s150),
+        TextField(
+          controller: _text,
+          maxLength: 40,
+          textInputAction: TextInputAction.done,
+          decoration: const InputDecoration(hintText: '今日のひとこと', counterText: ''),
+          onChanged: StoreScope.read(context).setMemo,
+        ),
+        const SizedBox(height: Space.s200),
+        Wrap(
+          spacing: Space.s200,
+          runSpacing: Space.s200,
+          children: [
+            for (final s in _suggestions())
+              ActionChip(
+                label: Text(s),
+                onPressed: () => _set(s),
+              ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

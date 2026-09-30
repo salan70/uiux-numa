@@ -6,6 +6,7 @@ import 'parts.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
+import 'year_page.dart';
 
 // 選手の詳細（screen_design/player_detail.md）。3 つのタブ（概要、年度別、能力）と共有を持つ。
 // 製品の「プロフィール」タブは、経歴と通算の数を合わせて「概要」にした。判断に要る通算の数を先に置くため。
@@ -244,13 +245,13 @@ class YearlyTable extends StatelessWidget {
       // 季の途中で移籍した年は、所属期間ごとの行の下に年の合計の行を置く（D-23）。
       for (final s in player.seasons.reversed)
         if (!s.hasTransfer)
-          (year(s.year), cells(s.team.abbreviation, s.line), false)
+          (year(s.year), cells(s.team.abbreviation, s.line), false, s)
         else ...[
           for (final st in s.stints)
-            (year(s.year), cells(st.team.abbreviation, BattingLine.of(s.games.where((g) => g.stint == st.id))), false),
-          ('${s.year} 計', cells('', s.line), true),
+            (year(s.year), cells(st.team.abbreviation, BattingLine.of(s.games.where((g) => g.stint == st.id))), false, s),
+          ('${s.year} 計', cells('', s.line), true, s),
         ],
-      ('通算', cells('', player.career), true),
+      ('通算', cells('', player.career), true, null),
     ];
     final textStyle = Txt.ui.merge(Txt.tabular);
     Widget cell(String text, {bool bold = false, double width = 64, TextAlign align = TextAlign.right}) => Container(
@@ -281,7 +282,25 @@ class YearlyTable extends StatelessWidget {
                       top: BorderSide(color: r.$3 ? p.ink : p.surfaceVariant, width: r.$3 ? Bold.border : 1),
                     ),
                   ),
-                  child: cell(r.$1, width: firstWidth, bold: r.$3, align: TextAlign.left),
+                  // 年を押すと、その年の 1 ページを開く（D-19）。
+                  child: r.$4 == null
+                      ? cell(r.$1, width: firstWidth, bold: r.$3, align: TextAlign.left)
+                      : Semantics(
+                          button: true,
+                          hint: 'その年の 1 ページを開く',
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(builder: (_) => YearPageScreen(player: player, season: r.$4!)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                cell(r.$1, width: firstWidth - 20 * scale, bold: r.$3, align: TextAlign.left),
+                                Icon(Icons.chevron_right, size: 20 * scale, color: p.onSurfaceVariant),
+                              ],
+                            ),
+                          ),
+                        ),
                 ),
             ],
           ),

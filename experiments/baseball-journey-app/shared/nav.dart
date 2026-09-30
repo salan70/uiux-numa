@@ -7,6 +7,7 @@ import 'player_detail.dart';
 import 'season_end.dart';
 import 'settings.dart';
 import 'store.dart';
+import 'year_page.dart';
 
 // 3 案が同じ行き先へ移る処理。どこから開いても、閉じると元の画面へ戻る。
 
@@ -69,6 +70,11 @@ bool openSharedRoute(BuildContext context, AppStore store) {
       Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => RetiredScreen(player: player, onClose: () {})));
     case 'settings':
       openSettings(context);
+    case 'year' when player != null:
+      // 前の年（新人なら今年）の 1 ページ。
+      final seasons = player.seasons;
+      final season = seasons.length > 1 ? seasons[seasons.length - 2] : seasons.last;
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => YearPageScreen(player: player, season: season)));
     case 'history' when player != null:
       openHistory(context, player);
     case 'retired':

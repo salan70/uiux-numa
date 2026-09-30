@@ -9,6 +9,7 @@ import 'pixel.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
+import 'year_page.dart';
 
 // シーズン終了（season_end_wizard.md）と引退（retirement_wizard.md）。
 // 製品の 7 段（成績と順位、タイトル、進退、移籍か契約、来季の能力、確認、完了）を、
@@ -212,8 +213,8 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     final store = StoreScope.of(context);
     final line = _season.line;
     return [
-      SectionTitle('今季の成績', trailing: Text(_season.team.name, style: Txt.caption.copyWith(color: p.onSurfaceVariant))),
-      SeasonStatGrid(line: line, large: false),
+      // その年の 1 ページを最初に見せ、1 年の手応えを返してから順位とタイトルを選ぶ（D-19、U-8）。
+      Panel(child: YearPage(player: widget.player, season: _season, showTitles: false)),
       SectionTitle(
         'リーグの順位',
         trailing: Text('任意', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),

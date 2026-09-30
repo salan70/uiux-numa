@@ -335,12 +335,21 @@ GameRecord _game(Random r, int number, List<Ability> abilities, _Spec spec) {
   ];
   final rbi = atBats.fold(0, (s, a) => s + a.rbi);
   final my = max(rbi, r.nextInt(9));
+  final homeRuns = atBats.where((a) => a.result == AtBatResult.homeRun).length;
+  final hits = atBats.where((a) => a.result.isHit).length;
   return GameRecord(
     number: number,
     participation: participation,
     atBats: atBats,
     myScore: my,
     opponentScore: r.nextInt(9),
+    memo: homeRuns >= 2
+        ? '1 試合 2 本。どちらも初球を振った'
+        : homeRuns == 1 && rbi >= 3
+        ? '逆転の $rbi 点。スタンドが揺れた'
+        : hits >= 4
+        ? '猛打賞のうえにもう 1 本'
+        : null,
   );
 }
 

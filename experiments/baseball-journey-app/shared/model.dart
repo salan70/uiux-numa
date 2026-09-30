@@ -258,12 +258,16 @@ class GameRecord {
     this.teamRank,
     this.teamOutcome,
     this.stint = 0,
+    this.memo,
   });
 
   final int number;
 
   /// 所属期間（Stint.id）。季の途中で移籍したら、移籍の後の試合は新しい所属期間に入る（D-23）。
   final int stint;
+
+  /// 試合後の短いメモ（D-19、U-7）。その年の 1 ページに出す。
+  final String? memo;
   final Participation participation;
   final List<AtBat> atBats;
   final RunnerLine? runner;
@@ -278,7 +282,7 @@ class GameRecord {
 
   GameRecord withTeamRank(int value) => copyWith(teamRank: value);
 
-  GameRecord copyWith({int? number, int? teamRank, GameOutcome? Function()? teamOutcome, int? stint}) => GameRecord(
+  GameRecord copyWith({int? number, int? teamRank, GameOutcome? Function()? teamOutcome, int? stint, String? Function()? memo}) => GameRecord(
     number: number ?? this.number,
     participation: participation,
     atBats: atBats,
@@ -288,6 +292,7 @@ class GameRecord {
     teamRank: teamRank ?? this.teamRank,
     teamOutcome: teamOutcome == null ? this.teamOutcome : teamOutcome(),
     stint: stint ?? this.stint,
+    memo: memo == null ? this.memo : memo(),
   );
 
   bool get played => participation.kind != ParticipationKind.none;
@@ -309,6 +314,24 @@ enum GameOutcome {
   const GameOutcome(this.label, this.mark);
   final String label;
   final String mark;
+}
+
+/// 通算の節目（domain_rules.md R-4、D-28）。before から after までに越えた節目を、越えた順に返す。
+List<String> milestonesBetween(BattingLine before, BattingLine after) {
+  final out = <String>[];
+  String grouped(int v) => v >= 1000 ? '${v ~/ 1000},${(v % 1000).toString().padLeft(3, '0')}' : '$v';
+  void check(String first, int b, int a, List<int> marks, String unit) {
+    for (final m in marks) {
+      if (b < m && a >= m) out.add(m == 1 ? 'プロ初$first' : '通算 ${grouped(m)} $unit');
+    }
+  }
+
+  check('出場', before.games, after.games, [1, 100, 500, 1000, 2000], '試合出場');
+  check('安打', before.hits, after.hits, [1, 100, 500, 1000, 1500, 2000], '安打');
+  check('ホームラン', before.homeRuns, after.homeRuns, [1, 50, 100, 200, 300, 400, 500], '本塁打');
+  check('打点', before.rbi, after.rbi, [1, 100, 500, 1000, 1500], '打点');
+  check('盗塁', before.steals, after.steals, [1, 100, 200, 300], '盗塁');
+  return out;
 }
 
 /// リーグ内順位を入れる成績の項目（StatItemName）。
