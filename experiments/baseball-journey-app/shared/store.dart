@@ -205,6 +205,7 @@ class AppStore extends ChangeNotifier {
         opponentScore: opponentScore,
         teamRank: was.teamRank,
         stint: was.stint,
+        memo: was.memo,
       );
       draft = null;
       saveState = SaveState.idle;
@@ -248,6 +249,24 @@ class AppStore extends ChangeNotifier {
     if (summary == null) return;
     final season = current!.current;
     final game = summary.game.withTeamRank(value.clamp(1, season.team.teamCount));
+    season.games[season.games.length - 1] = game;
+    lastSummary = GameSummary(
+      game: game,
+      seasonBefore: summary.seasonBefore,
+      seasonAfter: summary.seasonAfter,
+      careerBefore: summary.careerBefore,
+      careerAfter: summary.careerAfter,
+    );
+    notifyListeners();
+  }
+
+  /// 試合後のメモ（D-19、U-7）。新しく保存した試合に付ける。空なら外す。
+  void setMemo(String text) {
+    final summary = lastSummary;
+    if (summary == null) return;
+    final season = current!.current;
+    final trimmed = text.trim();
+    final game = summary.game.copyWith(memo: () => trimmed.isEmpty ? null : trimmed);
     season.games[season.games.length - 1] = game;
     lastSummary = GameSummary(
       game: game,
@@ -490,21 +509,7 @@ class GameSummary {
   final BattingLine careerAfter;
 
   /// 通算の節目。base_concepts.md の「記録達成モーメント」を、入力の結果から導く。
-  List<String> get milestones {
-    final out = <String>[];
-    void check(String label, int before, int after, List<int> marks, String unit) {
-      for (final m in marks) {
-        if (before < m && after >= m) out.add(m == 1 ? 'プロ初$label' : '通算 ${_grouped(m)} $unit');
-      }
-    }
-
-    check('安打', careerBefore.hits, careerAfter.hits, [1, 100, 500, 1000, 1500, 2000], '安打');
-    check('ホームラン', careerBefore.homeRuns, careerAfter.homeRuns, [1, 50, 100, 200, 300, 400, 500], '本塁打');
-    check('盗塁', careerBefore.steals, careerAfter.steals, [1, 100, 200, 300], '盗塁');
-    return out;
-  }
-
-  static String _grouped(int v) => v >= 1000 ? '${v ~/ 1000},${(v % 1000).toString().padLeft(3, '0')}' : '$v';
+  List<String> get milestones => milestonesBetween(careerBefore, careerAfter);
 }
 
 class SeasonEndInput {

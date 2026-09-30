@@ -28,7 +28,7 @@ const _groups = <(String, List<(String, String?)>)>[
   ('入口', [('タイトル', null), ('選手トップ', 'play'), ('メニュー', 'menu'), ('名鑑', 'directory')]),
   ('試合', [('出場を選ぶ', 'game'), ('入力中', 'input'), ('スコア', 'score'), ('試合後', 'afterGame'), ('試合後のトップ', 'topAfterGame'), ('欠場で進める', 'skip'), ('試合を直す', 'edit')]),
   ('移籍', [('シーズン途中の移籍', 'transfer')]),
-  ('節目', [('シーズンの終了', 'seasonEnd'), ('来季の始まり', 'nextSeason'), ('引退の直後', 'farewell')]),
+  ('節目', [('シーズンの終了', 'seasonEnd'), ('前の年の 1 ページ', 'year'), ('来季の始まり', 'nextSeason'), ('引退の直後', 'farewell')]),
   ('そのほか', [('選手を作る', 'create'), ('試合の履歴', 'history'), ('引退した選手の詳細', 'retired'), ('設定', 'settings')]),
 ];
 

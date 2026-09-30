@@ -332,7 +332,7 @@ class GameLine extends StatelessWidget {
     final rankLabel = rankChanged ? '、チーム順位 $rankFrom 位から ${game.teamRank} 位' : '';
     final score = game.myScore == null ? '' : '${game.myScore} 対 ${game.opponentScore}、';
     final row = Semantics(
-      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、$score'}$summary$rankLabel',
+      label: '第 ${game.number} 戦、${o == null ? '' : '${o.label}、$score'}$summary$rankLabel${game.memo == null ? '' : '、メモ ${game.memo}'}',
       button: onTap != null,
       hint: onTap == null ? null : '直す',
       excludeSemantics: true,
@@ -382,6 +382,13 @@ class GameLine extends StatelessWidget {
                     ],
                   ),
                   if (game.atBats.isNotEmpty) Text(summary, style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+                  if (game.memo != null)
+                    Text(
+                      game.memo!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Txt.caption.copyWith(color: p.onSurface),
+                    ),
                 ],
               ),
             ),
