@@ -9,7 +9,7 @@ import 'variant_entry.dart';
 //
 //   variant=<slug>/<id>   その variant だけを描く。無ければ一覧を出す
 //   compare=<slug>        その Experiment の全 variant を横に並べ、1 ページで同時に操作して比べる
-//   bare=1                端末の枠を描かず、窓いっぱいに描く。preview の撮影に使う
+//   bare=1                端末の枠を描かず、窓いっぱいに描く。preview の撮影に使う。操作盤も描かない
 //   theme=light|dark      端末の明暗を上書きする
 //   textScale=<倍率>      端末の文字の拡大を上書きする（例: 2）
 //   reduceMotion=1        端末の動きの抑制を上書きする
@@ -33,7 +33,7 @@ void main() {
         ? _Compare(options: options, entries: compared)
         : selected == null
         ? _VariantList(options: options)
-        : _Device(options: options, bare: query['bare'] == '1', child: selected.build()),
+        : _Device(options: options, bare: query['bare'] == '1', panel: selected.panel?.call(), child: selected.build()),
   );
 }
 
@@ -64,11 +64,17 @@ class RunnerOptions {
 /// variant を端末の大きさで描く。bare では枠を描かず左上に置く。
 /// headless Chrome は窓の最小幅が端末より広く、窓の大きさに合わせると撮影の範囲と描画の幅がずれる。
 class _Device extends StatelessWidget {
-  const _Device({required this.options, required this.bare, required this.child});
+  const _Device({required this.options, required this.bare, required this.child, this.panel});
 
   final RunnerOptions options;
   final bool bare;
   final Widget child;
+
+  /// variant の操作盤。窓に端末と並べる幅があるときだけ、枠の右に置く。
+  final Widget? panel;
+
+  static const _panelWidth = 320.0;
+  static const _panelGap = 32.0;
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +92,21 @@ class _Device extends StatelessWidget {
       );
     }
     if (!framed) return device;
+    final withPanel = panel != null && view.size.width > _deviceSize.width + _panelGap + _panelWidth + 80;
     return ColoredBox(
       color: _backdrop,
-      child: Center(child: _Frame(child: device)),
+      child: Center(
+        child: withPanel
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _Frame(child: device),
+                  const SizedBox(width: _panelGap),
+                  SizedBox(width: _panelWidth, height: _deviceSize.height, child: panel),
+                ],
+              )
+            : _Frame(child: device),
+      ),
     );
   }
 }
@@ -206,7 +224,7 @@ class _VariantList extends StatelessWidget {
                       subtitle: Text('?variant=${entry.id}'),
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (_) => _Device(options: options, bare: false, child: entry.build()),
+                          builder: (_) => _Device(options: options, bare: false, panel: entry.panel?.call(), child: entry.build()),
                         ),
                       ),
                     ),

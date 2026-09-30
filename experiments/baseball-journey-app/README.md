@@ -276,9 +276,9 @@ just flutter-dev
 | `route=<name>`   | 起動直後に開く画面（撮影用）。`play`（選手トップ）、`game`、`input`、`score`、`afterGame`、`topAfterGame`、`menu`、`directory`、`create`、`seasonEnd`、`nextSeason`（来季の始まり）、`farewell`（引退の直後）、`settings`、`history`、`retired` |
 
 実行基盤の `theme`、`textScale`、`reduceMotion` と組み合わせる。
-Web で開くと、端末の状態バーの位置に「画面」の札が出る。
-押すと、データと行き先を選んで、固定データから開き直せる。
-行き先は `route` と同じで、撮影の `bare=1` では札を出さない。
+窓の幅が 850 を超えると、端末の枠の右に操作盤が出る（`buildPanel`）。
+配色を切り替え、データと行き先を選んで固定データから開き直せる。
+行き先は `route` と同じで、撮影の `bare=1` では操作盤を出さない。
 
 round 8 の画像: [作成、シーズンの終了、詳細、履歴、スコア、設定](previews/diamond-shared.png)、[ダーク](previews/diamond-shared-dark.png)。
 
