@@ -246,16 +246,33 @@ class GameHistoryScreen extends StatelessWidget {
             Text('試合を押すと、直したり消したりできます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           const SizedBox(height: Space.s400),
           if (s.games.isEmpty) const Text('まだ試合がありません。'),
-          for (final g in s.games.reversed)
-            GameLine(
-              game: g,
-              rankFrom: s.rankBefore(g.number - 1),
-              onTap: openEditor == null ? null : () => _open(context, store, g),
+          for (final (i, g) in s.games.reversed.indexed)
+            StaggerIn(
+              key: ValueKey(g.number),
+              index: i,
+              child: GameLine(
+                game: g,
+                rankFrom: s.rankBefore(g.number - 1),
+                onTap: openEditor == null ? null : () => _open(context, store, g),
+              ),
             ),
         ],
       ),
     );
   }
+}
+
+/// 1 試合の成績の 1 行（「3 打数 2 安打 1 打点」）。欠場なら「欠場」。
+String gameSummary(GameRecord game) {
+  if (!game.played) return '欠場';
+  final line = BattingLine.of([game]);
+  return [
+    if (line.plateAppearances > 0) '${line.atBats} 打数 ${line.hits} 安打',
+    if (line.homeRuns > 0) '${line.homeRuns} 本',
+    if (line.rbi > 0) '${line.rbi} 打点',
+    if (line.steals > 0) '${line.steals} 盗塁',
+    if (line.plateAppearances == 0) '走塁のみ',
+  ].join(' ');
 }
 
 /// 1 試合の 1 行。スコアブックの記号で打席を並べる。
@@ -273,16 +290,7 @@ class GameLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     final o = game.outcome;
-    final line = BattingLine.of([game]);
-    final summary = !game.played
-        ? '欠場'
-        : [
-            if (line.plateAppearances > 0) '${line.atBats} 打数 ${line.hits} 安打',
-            if (line.homeRuns > 0) '${line.homeRuns} 本',
-            if (line.rbi > 0) '${line.rbi} 打点',
-            if (line.steals > 0) '${line.steals} 盗塁',
-            if (line.plateAppearances == 0) '走塁のみ',
-          ].join(' ');
+    final summary = gameSummary(game);
     final rankChanged = rankFrom != null && game.teamRank != null && game.teamRank != rankFrom;
     final rankLabel = rankChanged ? '、チーム順位 $rankFrom 位から ${game.teamRank} 位' : '';
     final score = game.myScore == null ? '' : '${game.myScore} 対 ${game.opponentScore}、';

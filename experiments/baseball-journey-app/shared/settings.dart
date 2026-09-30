@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'parts.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -18,7 +19,9 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('設定')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.s1000),
+        // 開くたびに節を上から順に入れる。たまに開く画面なので、待たせない短い入場に留める。
         children: [
+          for (final (i, w) in <Widget>[
           const SectionTitle('表示'),
           ChoiceWrap<ThemeMode>(
             semanticsLabel: '配色',
@@ -86,6 +89,7 @@ class SettingsScreen extends StatelessWidget {
           const SectionTitle('このアプリについて'),
           const FactRow('版', '0.1.0（UI の試作）'),
           const FactRow('書体', 'LINE Seed JP（SIL Open Font License 1.1）'),
+        ].indexed) StaggerIn(index: i, child: w),
         ],
       ),
     );

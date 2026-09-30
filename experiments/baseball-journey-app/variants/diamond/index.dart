@@ -189,6 +189,16 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
             ),
           ),
         ],
+        // 選手がいないときは、何が起きているかと次の行動を先に読ませ、その下に行動のボタンを置く。
+        if (player == null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: Space.s400),
+            child: Text(
+              'まだ選手がいません。選手を作ると、1 試合ずつ記録できます。',
+              textAlign: TextAlign.center,
+              style: Txt.ui.copyWith(color: Night.ink),
+            ),
+          ),
         KeyButton(
           label: '選手を作る',
           fill: player == null ? Palette.of(context).primary : null,
@@ -206,14 +216,6 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
             ),
           ],
         ),
-        if (player == null) ...[
-          const SizedBox(height: Space.s400),
-          Text(
-            'まだ選手がいません。選手を作ると、1 試合ずつ記録できます。',
-            textAlign: TextAlign.center,
-            style: Txt.ui.copyWith(color: Night.ink),
-          ),
-        ],
       ],
     );
   }
@@ -330,26 +332,43 @@ class _PlayerTopState extends State<_PlayerTop> with SingleTickerProviderStateMi
             alignment: Alignment.centerRight,
             child: TextButton(onPressed: () => openDetail(context, player), child: const Text('能力と記録を見る')),
           ),
-          if (draft != null)
-            Panel(
-              color: p.secondaryContainer,
-              child: Text(
-                '第 ${season.playedCount + 1} 戦を入力しています。${draft.line}。',
-                style: Txt.control.copyWith(color: p.onSecondaryContainer),
-              ),
-            )
-          else if (summary != null) ...[
-            SectionTitle(
-              '前の試合',
-              trailing: IconButton(tooltip: '閉じる', icon: const Icon(Icons.close), onPressed: store.dismissSummary),
+          // 入力中の知らせと前の試合は、閉じたり消えたりしたら高さを縮めて詰める。下の成績が一度に跳ばないようにする。
+          AnimatedSize(
+            duration: Motion.reduced(context) ? Duration.zero : const Duration(milliseconds: 220),
+            curve: Motion.standard,
+            alignment: Alignment.topCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (draft != null)
+                  Panel(
+                    color: p.secondaryContainer,
+                    child: Text(
+                      '第 ${season.playedCount + 1} 戦を入力しています。${draft.line}。',
+                      style: Txt.control.copyWith(color: p.onSecondaryContainer),
+                    ),
+                  )
+                else if (summary != null) ...[
+                  SectionTitle(
+                    '前の試合',
+                    // 印の右端をページの右の線に揃える。押せる領域は 48 のまま。
+                    trailing: IconButton(
+                      tooltip: '閉じる',
+                      icon: const Icon(Icons.close),
+                      style: IconButton.styleFrom(alignment: Alignment.centerRight, padding: EdgeInsets.zero),
+                      onPressed: store.dismissSummary,
+                    ),
+                  ),
+                  for (final m in summary.milestones)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: Space.s200),
+                      child: MilestoneBanner(text: m),
+                    ),
+                  GameLine(game: summary.game, rankFrom: season.rankBefore(summary.game.number - 1)),
+                ],
+              ],
             ),
-            for (final m in summary.milestones)
-              Padding(
-                padding: const EdgeInsets.only(bottom: Space.s200),
-                child: MilestoneBanner(text: m),
-              ),
-            GameLine(game: summary.game, rankFrom: season.rankBefore(summary.game.number - 1)),
-          ],
+          ),
           SectionTitle(
             '${year(season.year)}の成績',
             trailing: Text(
@@ -1011,12 +1030,18 @@ class _AtBatRow extends StatelessWidget {
           ),
         ),
     ];
-    return SingleChildScrollView(
-      controller: controller,
-      scrollDirection: Axis.horizontal,
-      reverse: true,
-      clipBehavior: Clip.none,
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: chips),
+    // 新しい打席を右端に足して見せるため逆向きに流す。札が少ないときも右に寄せず、ページの左の線から並べる。
+    return LayoutBuilder(
+      builder: (context, c) => SingleChildScrollView(
+        controller: controller,
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        clipBehavior: Clip.none,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: c.maxWidth),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: chips),
+        ),
+      ),
     );
   }
 
@@ -1359,7 +1384,15 @@ class _AfterGame extends StatelessWidget {
                 ],
               ),
             ),
-            GameLine(game: g, rankFrom: season.rankBefore(g.number - 1), dense: true),
+            // スコアと勝敗は真上の見出しにあるので、試合の行は出さず、打席の記号とその日の成績だけを添える。
+            Wrap(
+              spacing: Space.s300,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                if (g.atBats.isNotEmpty) Text(g.atBats.map((a) => a.result.mark).join(' '), style: Txt.control),
+                Text(gameSummary(g), style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+              ],
+            ),
             for (final m in summary.milestones)
               Padding(
                 padding: const EdgeInsets.only(top: Space.s200),
@@ -1368,7 +1401,7 @@ class _AfterGame extends StatelessWidget {
             // チームの勝敗と順位は、打率より上に置く。順位の増減は試合後にしか無いので、スクロールせずに見える所で入れ忘れを防ぐ。
             // 試合数は上の掲示板にあるので、ここでは勝敗だけを出し、順位は増減の数で示す。
             const SizedBox(height: Space.s300),
-            TeamRecord(season: season, showRank: false),
+            TeamRecord(season: season, showRank: false, rollLast: true),
             NumberStepper(
               label: 'チーム順位（${season.team.teamCount} 球団）',
               value: season.teamRank,
@@ -1491,7 +1524,15 @@ class _DirectoryState extends State<_Directory> with SingleTickerProviderStateMi
         _Filter.active => pl.isActive,
         _Filter.retired => !pl.isActive,
       };
-    }).toList()..sort((a, b) => b.lastPlayedOrder.compareTo(a.lastPlayedOrder));
+    }).toList()
+      // 現役を先に、最後に遊んだ順で並べる。引退した選手は後ろに、最後の季が新しい順で並べる。
+      ..sort(
+        (a, b) => a.isActive != b.isActive
+            ? (a.isActive ? -1 : 1)
+            : a.isActive
+            ? b.lastPlayedOrder.compareTo(a.lastPlayedOrder)
+            : b.current.year.compareTo(a.current.year),
+      );
     return Scaffold(
       appBar: AppBar(title: const Text('名鑑')),
       body: ListView(

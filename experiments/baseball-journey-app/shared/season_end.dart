@@ -52,6 +52,15 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   late Hand _bats = widget.player.bats;
   final _careerRanks = <StatItem, int>{};
   int _step = 0;
+
+  /// 段を進めたら右から、戻ったら左から入れるための、前に描いた段。
+  int _shownStep = 0;
+
+  double _direction() {
+    final d = _step >= _shownStep ? 1.0 : -1.0;
+    _shownStep = _step;
+    return d;
+  }
   final _tried = <int>{};
   bool _done = false;
 
@@ -164,13 +173,22 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
                 padding: const EdgeInsets.fromLTRB(Space.page, Space.s200, Space.page, Space.s1000),
                 children: [
                   if (errors.isNotEmpty) InputErrorSummary(errors: errors),
-                  ...switch (_step) {
-                    0 => _thisSeason(p),
-                    1 => _nextSeason(p),
-                    2 when _choice == _Choice.retire => _retire(p),
-                    2 => _ability(p),
-                    _ => _confirm(p),
-                  },
+                  // 段を替えたら、段の中身を 1 つの塊として、進む向き（進めば右、戻れば左）から入れる（空間の連続）。
+                  // 欄ごとに遅らせると、選んで欄が増えたときに並びのずれた欄まで入り直すので、塊で動かす。
+                  StaggerIn(
+                    key: ValueKey(_step),
+                    from: Offset(16.0 * _direction(), 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: switch (_step) {
+                        0 => _thisSeason(p),
+                        1 => _nextSeason(p),
+                        2 when _choice == _Choice.retire => _retire(p),
+                        2 => _ability(p),
+                        _ => _confirm(p),
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -194,7 +212,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
     final store = StoreScope.of(context);
     final line = _season.line;
     return [
-      SectionTitle('今季の成績', trailing: Text(_season.team.abbreviation, style: Txt.caption)),
+      SectionTitle('今季の成績', trailing: Text(_season.team.name, style: Txt.caption.copyWith(color: p.onSurfaceVariant))),
       SeasonStatGrid(line: line, large: false),
       SectionTitle(
         'リーグの順位',
@@ -439,7 +457,8 @@ class RankRow extends StatelessWidget {
             ChoiceWrap<int?>(
               semanticsLabel: '${item.label}の順位',
               values: const [null, 1, 2, 3],
-              label: (r) => r == null ? 'なし' : '$r 位',
+              // 「位」は見出し（リーグの順位）が示すので札には書かず、項目と札を 1 行に収める。
+              label: (r) => r == null ? 'なし' : '$r',
               isSelected: (r) => r == rank,
               onSelected: onChanged,
             )

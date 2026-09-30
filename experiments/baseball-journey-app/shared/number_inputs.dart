@@ -96,9 +96,9 @@ void _tick(BuildContext context) {
   if (StoreScope.read(context).haptics) HapticFeedback.selectionClick();
 }
 
-/// 数字パッドのシート。値の欄を押すと下から出し、決定で閉じる。閉じれば入力の前の値のまま。
+/// 数字パッドのシート。値の欄を押すと下から出し、決定で閉じる。決定せずに閉じたら null を返し、値は変えない。
 /// 画面にはパッドを常に置かず、欄は 1 行に留める。年に 1 度しか入れない数に、画面の半分を割かない。
-Future<String?> _showPadSheet(
+Future<String?> showNumberPadSheet(
   BuildContext context, {
   required String title,
   required String initial,
@@ -273,7 +273,7 @@ class UniformNumberField extends StatelessWidget {
       note: error ?? rule.hint,
       error: error != null,
       onPressed: () async {
-        final v = await _showPadSheet(
+        final v = await showNumberPadSheet(
           context,
           title: '背番号',
           initial: value,
@@ -329,7 +329,7 @@ class SalaryField extends StatelessWidget {
           ? '今季と同じ'
           : '今季から ${diff > 0 ? '+' : '−'}${salary(diff.abs())}',
       onPressed: () async {
-        final v = await _showPadSheet(
+        final v = await showNumberPadSheet(
           context,
           title: label,
           initial: '$value',

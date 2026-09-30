@@ -329,8 +329,14 @@ ThemeData buildTheme(Brightness brightness) {
       trackOutlineWidth: const WidgetStatePropertyAll(Borders.thick),
     ),
     // 文字だけのボタンは primary の黄を字に使うとライトで 4.5:1 を割る。面の上の字の役割 primary-text を使う。
+    // 横の余白を 0 にし、字の端をページの左右の線に揃える。押せる領域は最小の大きさで 48 を保つ。
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: p.primaryText, textStyle: Txt.control),
+      style: TextButton.styleFrom(
+        foregroundColor: p.primaryText,
+        textStyle: Txt.control,
+        padding: EdgeInsets.zero,
+        minimumSize: const Size(Sizes.target, Sizes.target),
+      ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: p.surface,
