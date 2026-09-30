@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'format.dart';
 import 'model.dart';
+import 'parts.dart';
+import 'pixel.dart';
 import 'theme.dart';
 
 enum PressKind { primary, secondary, destructive }
 
-/// 押せる面。輪郭と右下の影を持ち、押すと影の分だけ沈む（ui_ux_concepts.md 8.2 の押し込み）。
-/// 動きの抑制では沈まず、影だけが消える。押し先の位置は変わらない（States & Feedback）。
-class PressButton extends StatefulWidget {
+/// 押せる面。KeyButton に種類ごとの面の色を渡す。押し込みと処理中の扱いは KeyButton にある。
+class PressButton extends StatelessWidget {
   const PressButton({
     super.key,
     required this.label,
@@ -26,90 +27,28 @@ class PressButton extends StatefulWidget {
   final PressKind kind;
   final IconData? icon;
   final bool expand;
-
-  /// 処理中。二重に押せないようにし（disableWhileLoading）、文言を変えず回転する印だけを足す。
   final bool busy;
   final String? semanticsHint;
   final bool dense;
 
   @override
-  State<PressButton> createState() => _PressButtonState();
-}
-
-class _PressButtonState extends State<PressButton> {
-  bool _down = false;
-
-  @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    final enabled = widget.onPressed != null && !widget.busy;
-    final reduced = Motion.reduced(context);
-    final (fill, fg) = switch (widget.kind) {
-      PressKind.primary => (p.primary, p.onPrimary),
-      PressKind.secondary => (p.surface, p.onSurface),
-      PressKind.destructive => (p.surface, p.error),
-    };
-    final offset = enabled && !_down ? Borders.shadowOffset : 0.0;
-    final shift = enabled && _down && !reduced ? Borders.shadowOffset : 0.0;
-    final content = Row(
-      mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (widget.busy)
-          Padding(
-            padding: const EdgeInsets.only(right: Space.s200),
-            child: SizedBox.square(dimension: 16, child: CircularProgressIndicator(strokeWidth: 2, color: fg)),
-          )
-        else if (widget.icon != null)
-          Padding(
-            padding: const EdgeInsets.only(right: Space.s200),
-            child: Icon(widget.icon, size: 20, color: enabled ? fg : p.onSurfaceVariant),
-          ),
-        Flexible(
-          child: Text(
-            widget.label,
-            textAlign: TextAlign.center,
-            style: Txt.control.copyWith(color: enabled || widget.busy ? fg : p.onSurfaceVariant),
-          ),
-        ),
-      ],
-    );
-    return Semantics(
-      button: true,
-      enabled: enabled,
-      hint: widget.semanticsHint,
-      excludeSemantics: true,
-      label: widget.label,
-      onTap: enabled ? widget.onPressed : null,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTapDown: enabled ? (_) => setState(() => _down = true) : null,
-        onTapCancel: () => setState(() => _down = false),
-        onTapUp: enabled ? (_) => setState(() => _down = false) : null,
-        onTap: enabled ? widget.onPressed : null,
-        child: Padding(
-          padding: const EdgeInsets.only(right: Borders.shadowOffset, bottom: Borders.shadowOffset),
-          child: AnimatedContainer(
-            duration: reduced ? Duration.zero : Motion.press,
-            curve: Motion.out,
-            transform: Matrix4.translationValues(shift, shift, 0),
-            constraints: BoxConstraints(minHeight: widget.dense ? Sizes.controlMd : Sizes.controlLg),
-            padding: EdgeInsets.symmetric(horizontal: widget.dense ? Space.s300 : Space.s400, vertical: Space.s200),
-            decoration: BoxDecoration(
-              color: enabled || widget.busy ? fill : p.surfaceContainer,
-              borderRadius: BorderRadius.circular(Radii.control),
-              border: Border.all(color: enabled ? p.ink : p.outline, width: Borders.thick),
-              boxShadow: [BoxShadow(color: p.shadow, offset: Offset(offset, offset))],
-            ),
-            child: content,
-          ),
-        ),
-      ),
+    return KeyButton(
+      label: label,
+      onPressed: onPressed,
+      fill: kind == PressKind.primary ? p.primary : p.surface,
+      foreground: kind == PressKind.destructive ? p.error : null,
+      icon: icon,
+      busy: busy,
+      expand: expand,
+      semanticsHint: semanticsHint,
+      height: dense ? Sizes.controlMd : Sizes.target,
     );
   }
 }
 
-/// 情報の面。押せないので影を持たない。
+/// 情報の面。BoldBox を幅いっぱいに広げる。
 class Panel extends StatelessWidget {
   const Panel({super.key, required this.child, this.padding = const EdgeInsets.all(Space.s400), this.color});
 
@@ -119,16 +58,9 @@ class Panel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = Palette.of(context);
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: color ?? p.surface,
-        borderRadius: BorderRadius.circular(Radii.surface),
-        border: Border.all(color: p.ink, width: Borders.thick),
-      ),
-      child: child,
+      child: BoldBox(color: color, padding: padding, child: child),
     );
   }
 }
@@ -154,8 +86,8 @@ class _PressCardState extends State<PressCard> {
     final p = Palette.of(context);
     final reduced = Motion.reduced(context);
     final enabled = widget.onTap != null;
-    final offset = enabled && !_down ? Borders.shadowOffset : 0.0;
-    final shift = _down && !reduced ? Borders.shadowOffset : 0.0;
+    final offset = enabled && !_down ? Bold.shadow : 0.0;
+    final shift = _down && !reduced ? Bold.shadow : 0.0;
     return Semantics(
       button: enabled,
       selected: widget.selected,
@@ -167,15 +99,15 @@ class _PressCardState extends State<PressCard> {
         onTapUp: enabled ? (_) => setState(() => _down = false) : null,
         onTap: widget.onTap,
         child: Padding(
-          padding: const EdgeInsets.only(right: Borders.shadowOffset, bottom: Borders.shadowOffset),
+          padding: const EdgeInsets.only(right: Bold.shadow, bottom: Bold.shadow),
           child: AnimatedContainer(
             duration: reduced ? Duration.zero : Motion.press,
             curve: Motion.out,
             transform: Matrix4.translationValues(shift, shift, 0),
             decoration: BoxDecoration(
               color: widget.selected ? p.secondaryContainer : p.surface,
-              borderRadius: BorderRadius.circular(Radii.surface),
-              border: Border.all(color: p.ink, width: Borders.thick),
+              borderRadius: BorderRadius.circular(Bold.radius),
+              border: Border.all(color: p.ink, width: Bold.border),
               boxShadow: [BoxShadow(color: p.shadow, offset: Offset(offset, offset))],
             ),
             child: widget.child,
@@ -186,6 +118,7 @@ class _PressCardState extends State<PressCard> {
   }
 }
 
+/// 節の見出し。升と同じ黄の小さな角を頭に置き、diamond の升と札の造形に揃える。
 class SectionTitle extends StatelessWidget {
   const SectionTitle(this.text, {super.key, this.trailing});
 
@@ -194,11 +127,18 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = Palette.of(context);
     return Padding(
-      padding: const EdgeInsets.only(top: Space.s600, bottom: Space.s200),
+      padding: const EdgeInsets.only(top: Space.s600, bottom: Space.s300),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Container(
+            width: 12,
+            height: 12,
+            margin: const EdgeInsets.only(right: Space.s200),
+            decoration: BoxDecoration(color: p.primary, border: Border.all(color: p.ink, width: Borders.thick)),
+          ),
           Expanded(
             child: Semantics(header: true, child: Text(text, style: Txt.heading)),
           ),
@@ -241,6 +181,7 @@ class StatTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: _up ? p.tertiaryContainer : p.surfaceContainer,
                 borderRadius: BorderRadius.circular(Radii.control),
+                border: Border.all(color: p.ink, width: Borders.thick),
               ),
               child: Text(
                 delta!,
@@ -374,7 +315,7 @@ class SeasonProgress extends StatelessWidget {
   }
 }
 
-/// − 数 + の増減。上限に着いたら + を押せなくし、理由の行は常に確保して下の要素を動かさない。
+/// − 数 + の増減。RubberStepper に写し、上限と下限では押し返しと理由の行で伝える。
 class NumberStepper extends StatelessWidget {
   const NumberStepper({
     super.key,
@@ -403,60 +344,24 @@ class NumberStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = Palette.of(context);
-    Widget button(IconData icon, String action, int next, bool enabled) => Semantics(
-      button: true,
-      enabled: enabled,
-      label: '$label を$action',
-      excludeSemantics: true,
-      child: SizedBox.square(
-        dimension: Sizes.target,
-        child: IconButton.outlined(
-          onPressed: enabled ? () => onChanged(next) : null,
-          icon: Icon(icon),
-          style: IconButton.styleFrom(
-            side: BorderSide(color: enabled ? p.ink : p.surfaceVariant, width: Borders.thick),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Radii.control)),
-            foregroundColor: p.onSurface,
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: Space.s100),
+      child: RubberStepper(
+        label: label,
+        value: value,
+        min: min,
+        max: max,
+        unit: unit,
+        onChanged: onChanged,
+        limitNote: limitNote,
+        floorNote: floorNote,
       ),
-    );
-    final atMax = value >= max && max > min;
-    final atMin = value <= min && max > min;
-    final note = atMax ? limitNote : (atMin ? floorNote : null);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            Expanded(child: Text(label, style: Txt.control)),
-            button(Icons.remove, '1 減らす', value - 1, value > min),
-            Semantics(
-              liveRegion: true,
-              label: '$label $value$unit',
-              excludeSemantics: true,
-              child: SizedBox(
-                width: 56,
-                child: Text(
-                  '$value',
-                  textAlign: TextAlign.center,
-                  style: Txt.figureSm.copyWith(color: p.onSurface),
-                ),
-              ),
-            ),
-            button(Icons.add, '1 増やす', value + 1, value < max),
-          ],
-        ),
-        if (limitNote != null || floorNote != null)
-          Text(note ?? '', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
-      ],
     );
   }
 }
 
-/// 1 つを選ぶ札の並び。選んだ札は面の色と印で示し、色だけに頼らない。
+/// 選ぶ札の並び。選んだ札は押し込んだ鍵のように沈め、面の色と角の印を添える。色だけに頼らない。
+/// 複数を選べる並びにも使う（isSelected が複数に true を返す）。
 class ChoiceWrap<T> extends StatelessWidget {
   const ChoiceWrap({
     super.key,
@@ -473,15 +378,18 @@ class ChoiceWrap<T> extends StatelessWidget {
   final ValueChanged<T> onSelected;
   final String? semanticsLabel;
 
+  static const _depth = 3.0;
+
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
+    final reduced = Motion.reduced(context);
     return Semantics(
       label: semanticsLabel,
       container: semanticsLabel != null,
       child: Wrap(
-        spacing: Space.s200,
-        runSpacing: Space.s200,
+        spacing: Space.s200 - _depth,
+        runSpacing: Space.s200 - _depth,
         children: [
           for (final v in values)
             Semantics(
@@ -490,44 +398,56 @@ class ChoiceWrap<T> extends StatelessWidget {
               child: InkWell(
                 onTap: () => onSelected(v),
                 borderRadius: BorderRadius.circular(Radii.control),
-                // 選んだ印は札の角に重ね、選んでも札の幅と字の位置を変えない。
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    AnimatedContainer(
-                      duration: Motion.reduced(context) ? Duration.zero : Motion.state,
-                      constraints: const BoxConstraints(minHeight: Sizes.target, minWidth: Sizes.target),
-                      padding: const EdgeInsets.symmetric(horizontal: Space.s300),
-                      decoration: BoxDecoration(
-                        color: isSelected(v) ? p.secondaryContainer : p.surface,
-                        borderRadius: BorderRadius.circular(Radii.control),
-                        border: Border.all(color: isSelected(v) ? p.ink : p.outline, width: Borders.thick),
-                      ),
-                      // 短い字でも最小幅の中央に置く。Align の factor 1 で札を中身の幅に保つ。
-                      child: Align(
-                        widthFactor: 1,
-                        heightFactor: 1,
-                        child: Text(
-                          label(v),
-                          style: Txt.control.copyWith(color: isSelected(v) ? p.onSecondaryContainer : p.onSurface),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: _depth, bottom: _depth),
+                  // 選んだ印は札の角に重ね、選んでも札の幅と字の位置を変えない。
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      AnimatedContainer(
+                        duration: reduced ? Duration.zero : Motion.state,
+                        curve: Motion.out,
+                        transform: Matrix4.translationValues(
+                          isSelected(v) && !reduced ? _depth : 0,
+                          isSelected(v) && !reduced ? _depth : 0,
+                          0,
                         ),
-                      ),
-                    ),
-                    if (isSelected(v))
-                      Positioned(
-                        top: -Space.s150,
-                        right: -Space.s150,
-                        child: Container(
-                          padding: const EdgeInsets.all(Space.s50),
-                          decoration: BoxDecoration(
-                            color: p.secondary,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: p.ink, width: Borders.thick),
+                        constraints: const BoxConstraints(minHeight: Sizes.target, minWidth: Sizes.target),
+                        padding: const EdgeInsets.symmetric(horizontal: Space.s300),
+                        decoration: BoxDecoration(
+                          color: isSelected(v) ? p.secondaryContainer : p.surface,
+                          borderRadius: BorderRadius.circular(Radii.control),
+                          border: Border.all(color: p.ink, width: Borders.thick),
+                          boxShadow: isSelected(v)
+                              ? null
+                              : [BoxShadow(color: p.shadow, offset: const Offset(_depth, _depth))],
+                        ),
+                        // 短い字でも最小幅の中央に置く。Align の factor 1 で札を中身の幅に保つ。
+                        child: Align(
+                          widthFactor: 1,
+                          heightFactor: 1,
+                          child: Text(
+                            label(v),
+                            style: Txt.control.copyWith(color: isSelected(v) ? p.onSecondaryContainer : p.onSurface),
                           ),
-                          child: Icon(Icons.check, size: 12, color: p.onPrimary),
                         ),
                       ),
-                  ],
+                      if (isSelected(v))
+                        Positioned(
+                          top: -Space.s150 + _depth,
+                          right: -Space.s150 - _depth,
+                          child: Container(
+                            padding: const EdgeInsets.all(Space.s50),
+                            decoration: BoxDecoration(
+                              color: p.secondary,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: p.ink, width: Borders.thick),
+                            ),
+                            child: Icon(Icons.check, size: 12, color: p.onPrimary),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -589,19 +509,20 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// 選手の見出し。名前、背番号、球団、守備位置、投打、年齢、年数。
+/// 選手の見出し。PlayerCard の球団の帯とドット絵を、名前と経歴の 1 枚に縮めた。
+/// 引退した選手は帯を灰にする。
 class PlayerHeader extends StatelessWidget {
-  const PlayerHeader({super.key, required this.player, this.compact = false});
+  const PlayerHeader({super.key, required this.player});
 
   final Player player;
-  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     final s = player.current;
+    final band = player.isActive ? teamColor(s.team) : p.outline;
+    final bandInk = inkOn(band);
     final facts = [
-      s.team.abbreviation,
       player.mainPosition.label,
       player.handedness,
       if (player.isActive) ...[
@@ -610,20 +531,56 @@ class PlayerHeader extends StatelessWidget {
       ] else
         '${player.seasons.first.year}〜${s.year} 年・引退',
     ];
-    return Row(
-      children: [
-        JerseyBadge(s.uniformNumber, size: compact ? 44 : 56),
-        const SizedBox(width: Space.s300),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Semantics(header: true, child: Text(player.name, style: compact ? Txt.heading : Txt.title)),
-              Text(facts.join('・'), style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
-            ],
-          ),
+    return BoldBox(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(Bold.radius - Bold.border),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              color: band,
+              padding: const EdgeInsets.symmetric(horizontal: Space.s300, vertical: Space.s100),
+              child: Row(
+                children: [
+                  Expanded(child: Text(s.team.name, style: Txt.control.copyWith(color: bandInk))),
+                  Semantics(
+                    label: '背番号 ${s.uniformNumber}',
+                    excludeSemantics: true,
+                    child: Text('#${s.uniformNumber}', style: Txt.control.merge(Txt.tabular).copyWith(color: bandInk)),
+                  ),
+                ],
+              ),
+            ),
+            Container(height: Bold.border, color: p.ink),
+            Padding(
+              padding: const EdgeInsets.all(Space.s300),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: p.secondaryContainer,
+                      borderRadius: BorderRadius.circular(Radii.control),
+                      border: Border.all(color: p.ink, width: Borders.thick),
+                    ),
+                    padding: const EdgeInsets.all(Space.s100),
+                    child: PixelAvatar(player: player, size: 56),
+                  ),
+                  const SizedBox(width: Space.s300),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Semantics(header: true, child: Text(player.name, style: Txt.title)),
+                        Text(facts.join('・'), style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -675,7 +632,8 @@ class MilestoneBanner extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.tertiary,
           borderRadius: BorderRadius.circular(Radii.control),
-          border: Border.all(color: p.ink, width: Borders.thick),
+          border: Border.all(color: p.ink, width: Bold.border),
+          boxShadow: [BoxShadow(color: p.shadow, offset: const Offset(Bold.shadow, Bold.shadow))],
         ),
         child: Row(
           children: [

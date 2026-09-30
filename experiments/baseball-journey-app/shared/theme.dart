@@ -37,6 +37,14 @@ abstract final class Borders {
   static const shadowOffset = 3.0;
 }
 
+/// diamond の造形。太い輪郭とずらした影を、製品の造形の幅（輪郭 2〜4px、影 4〜8px）の中で、リールに合わせて 1 段強くする。
+/// 情報の面と押せる面の両方に使う。
+abstract final class Bold {
+  static const border = 3.0;
+  static const shadow = 5.0;
+  static const radius = 12.0;
+}
+
 /// tokens/size。押せる領域の最小は target-min（24px）でなく、製品の 48dp にする。
 abstract final class Sizes {
   static const controlSm = 32.0;
@@ -238,7 +246,7 @@ ThemeData buildTheme(Brightness brightness) {
     labelLarge: Txt.control,
     labelMedium: Txt.caption,
   ).apply(bodyColor: p.onSurface, displayColor: p.onSurface);
-  final inkBorder = BorderSide(color: p.ink, width: Borders.thick);
+  final inkBorder = BorderSide(color: p.ink, width: Bold.border);
   return ThemeData(
     brightness: brightness,
     colorScheme: scheme,
@@ -260,7 +268,9 @@ ThemeData buildTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 0,
-      centerTitle: true,
+      // 題を戻るの隣に置き、画面の名前を左上から読ませる（diamond の選手トップと試合に揃える）。
+      centerTitle: false,
+      titleSpacing: 0,
       titleTextStyle: Txt.heading.copyWith(color: p.onSurface),
     ),
     navigationBarTheme: NavigationBarThemeData(
@@ -276,13 +286,13 @@ ThemeData buildTheme(Brightness brightness) {
       dragHandleColor: p.outline,
       shape: RoundedRectangleBorder(
         side: inkBorder,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(Radii.surface)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(Bold.radius)),
       ),
     ),
     dialogTheme: DialogThemeData(
       backgroundColor: p.surface,
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(side: inkBorder, borderRadius: BorderRadius.circular(Radii.surface)),
+      shape: RoundedRectangleBorder(side: inkBorder, borderRadius: BorderRadius.circular(Bold.radius)),
       titleTextStyle: Txt.heading.copyWith(color: p.onSurface),
       contentTextStyle: Txt.body.copyWith(color: p.onSurface),
     ),
@@ -292,20 +302,31 @@ ThemeData buildTheme(Brightness brightness) {
       border: OutlineInputBorder(borderSide: inkBorder, borderRadius: BorderRadius.circular(Radii.control)),
       enabledBorder: OutlineInputBorder(borderSide: inkBorder, borderRadius: BorderRadius.circular(Radii.control)),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: p.secondary, width: 3),
+        borderSide: BorderSide(color: p.secondary, width: 4),
         borderRadius: BorderRadius.circular(Radii.control),
       ),
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: p.error, width: Borders.thick),
+        borderSide: BorderSide(color: p.error, width: Bold.border),
         borderRadius: BorderRadius.circular(Radii.control),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: Space.s300, vertical: Space.s300),
     ),
+    // 溝は輪郭つきの角の立った棒、つまみは押せる面と同じ黄の札にする。
     sliderTheme: SliderThemeData(
+      trackHeight: 12,
       activeTrackColor: p.secondary,
-      inactiveTrackColor: p.surfaceVariant,
-      thumbColor: p.secondary,
+      inactiveTrackColor: p.surface,
+      thumbColor: p.primary,
       overlayColor: p.secondary.withValues(alpha: 0.12),
+      trackShape: _InkTrackShape(p.ink),
+      thumbShape: _KeyThumbShape(p.ink, p.shadow),
+      showValueIndicator: ShowValueIndicator.never,
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? p.ink : p.outline),
+      trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? p.primary : p.surface),
+      trackOutlineColor: WidgetStatePropertyAll(p.ink),
+      trackOutlineWidth: const WidgetStatePropertyAll(Borders.thick),
     ),
     // 文字だけのボタンは primary の黄を字に使うとライトで 4.5:1 を割る。面の上の字の役割 primary-text を使う。
     textButtonTheme: TextButtonThemeData(
@@ -316,7 +337,7 @@ ThemeData buildTheme(Brightness brightness) {
       selectedColor: p.secondaryContainer,
       checkmarkColor: p.onSecondaryContainer,
       labelStyle: Txt.control.copyWith(color: p.onSurface),
-      side: BorderSide(color: p.outline, width: Borders.thick),
+      side: BorderSide(color: p.ink, width: Borders.thick),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Radii.control)),
     ),
     dividerTheme: DividerThemeData(color: p.surfaceVariant, thickness: Borders.thin, space: 1),
@@ -325,7 +346,7 @@ ThemeData buildTheme(Brightness brightness) {
       unselectedLabelStyle: Txt.control,
       labelColor: p.onSurface,
       unselectedLabelColor: p.onSurfaceVariant,
-      indicatorColor: p.secondary,
+      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: p.ink, width: 4)),
       indicatorSize: TabBarIndicatorSize.tab,
       dividerColor: p.surfaceVariant,
     ),
@@ -354,3 +375,83 @@ class _ReducedTransitions extends PageTransitionsBuilder {
 /// シートとダイアログの動き。動きの抑制では出し入れを動かさない。
 AnimationStyle? sheetAnimation(BuildContext context) =>
     MediaQuery.disableAnimationsOf(context) ? AnimationStyle.noAnimation : null;
+
+/// スライダーの溝。輪郭つきの棒にし、左の塗りで値を示す。
+class _InkTrackShape extends SliderTrackShape with BaseSliderTrackShape {
+  const _InkTrackShape(this.ink);
+
+  final Color ink;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+  }) {
+    final rect = getPreferredRect(parentBox: parentBox, offset: offset, sliderTheme: sliderTheme);
+    final canvas = context.canvas;
+    final r = RRect.fromRectAndRadius(rect, const Radius.circular(4));
+    canvas.drawRRect(r, Paint()..color = sliderTheme.inactiveTrackColor!);
+    canvas.save();
+    canvas.clipRRect(r);
+    canvas.drawRect(
+      Rect.fromLTRB(rect.left, rect.top, thumbCenter.dx, rect.bottom),
+      Paint()..color = sliderTheme.activeTrackColor!,
+    );
+    canvas.restore();
+    canvas.drawRRect(
+      r,
+      Paint()
+        ..color = ink
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = Borders.thick,
+    );
+  }
+}
+
+/// スライダーのつまみ。黄の札に輪郭と影を付け、押せる面と同じ形にする。
+class _KeyThumbShape extends SliderComponentShape {
+  const _KeyThumbShape(this.ink, this.shadow);
+
+  final Color ink;
+  final Color shadow;
+  static const _size = Size(20, 28);
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => _size;
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final canvas = context.canvas;
+    final r = RRect.fromRectAndRadius(Rect.fromCenter(center: center, width: _size.width, height: _size.height), const Radius.circular(4));
+    canvas.drawRRect(r.shift(const Offset(3, 3)), Paint()..color = shadow);
+    canvas.drawRRect(r, Paint()..color = sliderTheme.thumbColor!);
+    canvas.drawRRect(
+      r.deflate(Bold.border / 2),
+      Paint()
+        ..color = ink
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = Bold.border,
+    );
+  }
+}

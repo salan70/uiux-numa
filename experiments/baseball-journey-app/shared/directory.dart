@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'format.dart';
 import 'model.dart';
+import 'parts.dart';
 import 'store.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -199,7 +200,7 @@ class _Tag extends StatelessWidget {
   }
 }
 
-/// 今季の試合の一覧（season_game_history.md）。新しい試合を上に置く。
+/// 今季の試合の一覧（season_game_history.md）。選手トップと同じ 143 の升を上に置き、新しい試合を上から並べる。
 class GameHistoryScreen extends StatelessWidget {
   const GameHistoryScreen({super.key, required this.player});
 
@@ -213,7 +214,23 @@ class GameHistoryScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.page, Space.s200, Space.page, Space.s1000),
         children: [
-          SeasonProgress(season: s),
+          Panel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(year(s.year), style: Txt.heading)),
+                    Text('${s.playedCount} / ${s.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
+                  ],
+                ),
+                const SizedBox(height: Space.s200),
+                SeasonGrid(season: s),
+                const SizedBox(height: Space.s200),
+                SeasonGridLegend(season: s),
+              ],
+            ),
+          ),
           const SizedBox(height: Space.s400),
           if (s.games.isEmpty) const Text('まだ試合がありません。'),
           for (final g in s.games.reversed) GameLine(game: g),
@@ -259,11 +276,17 @@ class GameLine extends StatelessWidget {
               width: 56,
               child: Text('${game.number}', style: Txt.control.merge(Txt.tabular).copyWith(color: p.onSurfaceVariant)),
             ),
+            // 勝敗は升と同じ見本で示す。升の一覧と行を同じ形で結ぶ。
             SizedBox(
-              width: 72,
-              child: Text(
-                o == null ? '—' : '${o.mark} ${game.myScore}-${game.opponentScore}',
-                style: Txt.ui.merge(Txt.tabular),
+              width: 80,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: Space.s150),
+                    child: OutcomeSwatch(o),
+                  ),
+                  if (o != null) Text('${game.myScore}-${game.opponentScore}', style: Txt.control.merge(Txt.tabular)),
+                ],
               ),
             ),
             Expanded(
