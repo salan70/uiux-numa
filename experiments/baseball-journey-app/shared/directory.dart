@@ -246,7 +246,16 @@ class GameHistoryScreen extends StatelessWidget {
             Text('試合を押すと、直したり消したりできます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
           const SizedBox(height: Space.s400),
           if (s.games.isEmpty) const Text('まだ試合がありません。'),
-          for (final (i, g) in s.games.reversed.indexed)
+          // 季の途中で移籍したら、所属期間ごとに「第 N 戦から {球団名}」の区切りを置く（D-23）。
+          // 新しい試合を上に並べるので、区切りは所属期間の塊の上に置く。
+          if (s.hasTransfer && s.stintGames.isEmpty)
+            _StintDivider(from: s.playedCount + 1, team: s.team.name, empty: true),
+          for (final (i, g) in s.games.reversed.indexed) ...[
+            if (s.hasTransfer && (i == 0 || s.games.reversed.elementAt(i - 1).stint != g.stint))
+              _StintDivider(
+                from: s.games.firstWhere((x) => x.stint == g.stint).number,
+                team: s.stintOf(g.stint).team.name,
+              ),
             StaggerIn(
               key: ValueKey(g.number),
               index: i,
@@ -256,7 +265,35 @@ class GameHistoryScreen extends StatelessWidget {
                 onTap: openEditor == null ? null : () => _open(context, store, g),
               ),
             ),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+class _StintDivider extends StatelessWidget {
+  const _StintDivider({required this.from, required this.team, this.empty = false});
+
+  final int from;
+  final String team;
+  final bool empty;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: Space.s300, bottom: Space.s150),
+      child: Semantics(
+        header: true,
+        child: Row(
+          children: [
+            Text('第 $from 戦から $team', style: Txt.control.copyWith(fontWeight: FontWeight.w700)),
+            if (empty) Text('  まだ試合がありません', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+            const SizedBox(width: Space.s200),
+            Expanded(child: Divider(color: p.ink, thickness: Borders.thick)),
+          ],
+        ),
       ),
     );
   }

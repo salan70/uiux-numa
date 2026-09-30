@@ -201,19 +201,20 @@ class _TitleYear extends StatelessWidget {
   }
 }
 
-/// 球団の変遷。連続する同じ球団をまとめ、「2013〜2020 年」と球団名の組にする。
+/// 球団の変遷。連続する同じ球団をまとめ、「2013〜2020 年」と球団名の組にする。季の途中の移籍も区切りに数える（D-23）。
 List<(String, String)> teamStints(Player player) {
-  final out = <(String, String)>[];
-  var start = player.seasons.first;
-  for (var i = 1; i <= player.seasons.length; i++) {
-    final end = i == player.seasons.length || player.seasons[i].team.name != start.team.name;
-    if (!end) continue;
-    final last = player.seasons[i - 1];
-    final span = start.year == last.year ? '${start.year} 年' : '${start.year}〜${last.year} 年';
-    out.add((span, start.team.name));
-    if (i < player.seasons.length) start = player.seasons[i];
+  final spans = <(int, int, String)>[];
+  for (final s in player.seasons) {
+    for (final st in s.stints) {
+      final last = spans.lastOrNull;
+      if (last != null && last.$3 == st.team.name) {
+        spans[spans.length - 1] = (last.$1, s.year, last.$3);
+      } else {
+        spans.add((s.year, s.year, st.team.name));
+      }
+    }
   }
-  return out;
+  return [for (final (a, b, name) in spans) (a == b ? '$a 年' : '$a〜$b 年', name)];
 }
 
 /// 年度別の成績。年の列を固定し、項目を横に送る（player_detail.md の横スクロールの表）。
@@ -240,7 +241,15 @@ class YearlyTable extends StatelessWidget {
       rate(l.ops),
     ];
     final rows = [
-      for (final s in player.seasons.reversed) (year(s.year), cells(s.team.abbreviation, s.line), false),
+      // 季の途中で移籍した年は、所属期間ごとの行の下に年の合計の行を置く（D-23）。
+      for (final s in player.seasons.reversed)
+        if (!s.hasTransfer)
+          (year(s.year), cells(s.team.abbreviation, s.line), false)
+        else ...[
+          for (final st in s.stints)
+            (year(s.year), cells(st.team.abbreviation, BattingLine.of(s.games.where((g) => g.stint == st.id))), false),
+          ('${s.year} 計', cells('', s.line), true),
+        ],
       ('通算', cells('', player.career), true),
     ];
     final textStyle = Txt.ui.merge(Txt.tabular);

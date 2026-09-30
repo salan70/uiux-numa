@@ -92,13 +92,15 @@ class AppStore extends ChangeNotifier {
     return true;
   }
 
-  /// 試合を消し、後ろの試合の番号を詰める。
+  /// 試合を消し、後ろの試合の番号を詰める。試合が無くなった前の所属期間は消す（D-23）。
   void deleteGame(int index) {
-    final games = current!.current.games;
+    final season = current!.current;
+    final games = season.games;
     games.removeAt(index);
     for (var i = index; i < games.length; i++) {
       games[i] = games[i].copyWith(number: i + 1);
     }
+    season.stints.removeWhere((s) => s != season.stint && !games.any((g) => g.stint == s.id));
     lastSummary = null;
     notifyListeners();
   }
@@ -202,6 +204,7 @@ class AppStore extends ChangeNotifier {
         myScore: myScore,
         opponentScore: opponentScore,
         teamRank: was.teamRank,
+        stint: was.stint,
       );
       draft = null;
       saveState = SaveState.idle;
@@ -219,6 +222,7 @@ class AppStore extends ChangeNotifier {
         myScore: myScore,
         opponentScore: opponentScore,
         teamRank: season.teamRank,
+        stint: season.stint.id,
       ),
     );
     lastSummary = GameSummary(
@@ -273,11 +277,64 @@ class AppStore extends ChangeNotifier {
           participation: const Participation(ParticipationKind.none),
           teamRank: last ? (rank ?? season.teamRank) : season.teamRank,
           teamOutcome: i < outcomes.length ? outcomes[i] : null,
+          stint: season.stint.id,
         ),
       );
     }
     lastSummary = null;
     notifyListeners();
+  }
+
+  // ---- シーズン途中の移籍（screen_design/mid_season_transfer.md） ----
+
+  /// 季の途中で移籍できるか。今季に試合があり、全試合を終えておらず、新しい試合の入力中でなく、移籍の後に試合があるとき。
+  bool get canTransfer {
+    final player = current;
+    if (player == null || !player.isActive) return false;
+    final season = player.current;
+    return season.games.isNotEmpty && !season.isComplete && draft == null && !canUndoTransfer;
+  }
+
+  /// 移籍した後にまだ試合が無い。移籍先を直すか、移籍を取り消せる。
+  bool get canUndoTransfer {
+    final player = current;
+    if (player == null || !player.isActive || draft != null) return false;
+    final season = player.current;
+    return season.hasTransfer && season.stintGames.isEmpty;
+  }
+
+  /// 次の試合から移籍先の所属にする。移籍先が今の所属期間と同じ移籍を直すときは、その所属期間を書き換える。
+  void transfer({required Team team, required String uniformNumber, required int startRank}) {
+    final season = current!.current;
+    if (canUndoTransfer) {
+      season.stint
+        ..team = team
+        ..uniformNumber = uniformNumber
+        ..startRank = startRank;
+    } else {
+      season.stints.add(
+        Stint(id: season.stint.id + 1, team: team, uniformNumber: uniformNumber, startRank: startRank),
+      );
+    }
+    lastSummary = null;
+    notifyListeners();
+  }
+
+  void undoTransfer() {
+    if (!canUndoTransfer) return;
+    current!.current.stints.removeLast();
+    notifyListeners();
+  }
+
+  /// この選手が所属した球団（候補の札に出す）。
+  List<Team> teamsOf(Player player) {
+    final out = <Team>[];
+    for (final s in player.seasons) {
+      for (final st in s.stints) {
+        if (!out.any((t) => t.name == st.team.name)) out.add(st.team);
+      }
+    }
+    return out;
   }
 
   // ---- シーズン終了と引退（function_design/season_end_process.md） ----

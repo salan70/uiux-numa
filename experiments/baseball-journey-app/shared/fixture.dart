@@ -16,7 +16,10 @@ enum Fixture {
   rookie,
 
   /// 全試合を終え、シーズンの終了だけが残る。
-  seasonEnd;
+  seasonEnd,
+
+  /// 4 年目の途中で、第 31 戦から季の途中の移籍先にいる（D-23）。
+  transferred;
 
   static Fixture parse(String? value) => Fixture.values.where((f) => f.name == value).firstOrNull ?? Fixture.midseason;
 }
@@ -221,6 +224,13 @@ List<Player> makeFixturePlayers(Fixture fixture) {
     Fixture.seasonEnd => 'kinjo',
     _ => 'sora',
   };
+  if (fixture == Fixture.transferred) {
+    final season = players.firstWhere((p) => p.id == currentId).current;
+    season.stints.add(Stint(id: 1, team: _aoba, uniformNumber: '5', startRank: 4));
+    for (var i = 30; i < season.games.length; i++) {
+      season.games[i] = season.games[i].copyWith(stint: 1);
+    }
+  }
   // 「つづきから」の並び。現在の選手を最後に遊んだことにする。
   var order = 1;
   for (final p in players) {

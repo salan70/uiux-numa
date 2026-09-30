@@ -257,9 +257,13 @@ class GameRecord {
     this.opponentScore,
     this.teamRank,
     this.teamOutcome,
+    this.stint = 0,
   });
 
   final int number;
+
+  /// 所属期間（Stint.id）。季の途中で移籍したら、移籍の後の試合は新しい所属期間に入る（D-23）。
+  final int stint;
   final Participation participation;
   final List<AtBat> atBats;
   final RunnerLine? runner;
@@ -274,7 +278,7 @@ class GameRecord {
 
   GameRecord withTeamRank(int value) => copyWith(teamRank: value);
 
-  GameRecord copyWith({int? number, int? teamRank, GameOutcome? Function()? teamOutcome}) => GameRecord(
+  GameRecord copyWith({int? number, int? teamRank, GameOutcome? Function()? teamOutcome, int? stint}) => GameRecord(
     number: number ?? this.number,
     participation: participation,
     atBats: atBats,
@@ -283,6 +287,7 @@ class GameRecord {
     opponentScore: opponentScore,
     teamRank: teamRank ?? this.teamRank,
     teamOutcome: teamOutcome == null ? this.teamOutcome : teamOutcome(),
+    stint: stint ?? this.stint,
   );
 
   bool get played => participation.kind != ParticipationKind.none;
@@ -324,11 +329,23 @@ enum StatItem {
 
 const defaultTitles = ['首位打者', '本塁打王', '打点王', '最多安打', '最高出塁率', '盗塁王', 'MVP', '新人王', 'ベストナイン', 'ゴールデングラブ'];
 
+/// 所属期間。季の途中で移籍すると季を所属期間に分ける（D-23）。
+class Stint {
+  Stint({required this.id, required this.team, required this.uniformNumber, this.startRank = 1});
+
+  final int id;
+  Team team;
+  String uniformNumber;
+
+  /// 所属期間の最初の試合の順位の初期値。開幕は 1 位、移籍では移籍のときに入れた順位（R-7-3）。
+  int startRank;
+}
+
 class Season {
   Season({
     required this.year,
-    required this.team,
-    required this.uniformNumber,
+    required Team team,
+    required String uniformNumber,
     required this.salary,
     required this.abilities,
     this.totalGames = 143,
@@ -338,12 +355,17 @@ class Season {
     this.transferred = false,
   }) : games = games ?? [],
        titles = titles ?? [],
-       ranks = ranks ?? {};
+       ranks = ranks ?? {},
+       stints = [Stint(id: 0, team: team, uniformNumber: uniformNumber)];
 
   final int year;
-  final Team team;
+  final List<Stint> stints;
+  Stint get stint => stints.last;
+  Stint stintOf(int id) => stints.firstWhere((s) => s.id == id);
+  Team get team => stint.team;
+
   /// 文字で持つ。支配下の 0 と 00、育成の 012 のような 0 始まりを区別する。
-  final String uniformNumber;
+  String get uniformNumber => stint.uniformNumber;
 
   /// 万円。
   final int salary;
@@ -357,12 +379,24 @@ class Season {
   final bool transferred;
 
   int get playedCount => games.length;
-  /// 開幕は全球団が 0 勝 0 敗で並ぶので 1 位から始める。
-  int get teamRank => games.isEmpty ? 1 : games.last.teamRank ?? 1;
-  int rankBefore(int index) => index == 0 ? 1 : games[index - 1].teamRank ?? 1;
-  int get wins => games.where((g) => g.outcome == GameOutcome.win).length;
-  int get losses => games.where((g) => g.outcome == GameOutcome.loss).length;
-  int get draws => games.where((g) => g.outcome == GameOutcome.draw).length;
+
+  /// 季の途中で移籍した。
+  bool get hasTransfer => stints.length > 1;
+
+  /// 今の所属期間の試合。チームの勝敗と順位は所属期間ごとに数える（R-7-3）。
+  List<GameRecord> get stintGames => [for (final g in games) if (g.stint == stint.id) g];
+
+  /// 次の試合の前の順位。開幕は全球団が 0 勝 0 敗で並ぶので 1 位から始める。
+  int get teamRank => stintGames.lastOrNull?.teamRank ?? stint.startRank;
+  int rankBefore(int index) {
+    final g = games[index];
+    if (index == 0 || games[index - 1].stint != g.stint) return stintOf(g.stint).startRank;
+    return games[index - 1].teamRank ?? 1;
+  }
+
+  int get wins => stintGames.where((g) => g.outcome == GameOutcome.win).length;
+  int get losses => stintGames.where((g) => g.outcome == GameOutcome.loss).length;
+  int get draws => stintGames.where((g) => g.outcome == GameOutcome.draw).length;
   bool get isComplete => games.length >= totalGames;
   BattingLine get line => BattingLine.of(games);
 }
