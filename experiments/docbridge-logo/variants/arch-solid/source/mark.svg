@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>DocBridge</title>
+  <!-- 橋そのものを面で描く。桁（4..28 × 6..10）と、桁の下端に頂点が接するアーチの帯（外径 12、内径 8、中心 16,22）。脚は 26 まで。 -->
+  <path id="part-mark-deck" fill="currentColor" d="M4 6H28V10H4Z"/>
+  <path id="part-mark-arch" fill="currentColor" d="M4 26V22A12 12 0 0 1 28 22V26H24V22A8 8 0 0 0 8 22V26Z"/>
+</svg>

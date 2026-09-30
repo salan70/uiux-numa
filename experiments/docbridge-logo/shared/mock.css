@@ -1,0 +1,186 @@
+/*
+ * DocBridge のロゴのモックのスタイル。色は GitHub の明暗の面に近い値を写す。
+ * マークは currentColor だけを持ち、大きさは利用画面が与える。
+ */
+
+.db-mock {
+  --db-bg: #e9ecea;
+  --db-light-surface: #ffffff;
+  --db-light-ink: #1f2328;
+  --db-light-muted: #59636e;
+  --db-light-line: #d1d9e0;
+  --db-light-code: #f6f8fa;
+  --db-dark-surface: #0d1117;
+  --db-dark-ink: #f0f6fc;
+  --db-dark-muted: #9198a1;
+  --db-dark-line: #3d444d;
+  --db-dark-code: #151b23;
+
+  min-height: 100vh;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  align-content: start;
+  background: var(--db-bg);
+  color: var(--db-light-ink);
+  font-family: var(--font-family-sans);
+  font-synthesis-weight: none;
+}
+
+:where(.db-mock) :where(*, ::before, ::after) {
+  box-sizing: border-box;
+}
+
+:where(.db-mock) :where(p, pre) {
+  margin: 0;
+}
+
+.db-mock .db-light {
+  background: var(--db-light-surface);
+  color: var(--db-light-ink);
+  --db-muted: var(--db-light-muted);
+  --db-line: var(--db-light-line);
+  --db-code: var(--db-light-code);
+}
+
+.db-mock .db-dark {
+  background: var(--db-dark-surface);
+  color: var(--db-dark-ink);
+  --db-muted: var(--db-dark-muted);
+  --db-line: var(--db-dark-line);
+  --db-code: var(--db-dark-code);
+}
+
+.db-mock .db-mark {
+  display: inline-flex;
+  flex: none;
+  color: currentColor;
+}
+
+.db-mock .db-mark > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.db-mock .db-mark--16 {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.db-mock .db-mark--24 {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.db-mock .db-mark--32 {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+.db-mock .db-mark--40 {
+  inline-size: 40px;
+  block-size: 40px;
+}
+
+.db-mock .db-mark--48 {
+  inline-size: 48px;
+  block-size: 48px;
+}
+
+.db-mock .db-mark--64 {
+  inline-size: 64px;
+  block-size: 64px;
+}
+
+/* 1. タブ */
+.db-tabs {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.db-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: 15rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  border: 1px solid var(--db-line);
+  border-block-end: 0;
+  font-size: 0.75rem;
+}
+
+.db-tab__title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 2. README */
+.db-readmes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
+}
+
+.db-readme {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--db-line);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.db-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.db-wordmark {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.db-readme pre {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  background: var(--db-code);
+  font-size: 0.8125rem;
+}
+
+/* 3. avatar の面 */
+.db-tiles {
+  display: flex;
+  gap: 1rem;
+}
+
+.db-tile {
+  display: grid;
+  place-items: center;
+  inline-size: 6rem;
+  block-size: 6rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--db-line);
+}
+
+/* 4. 縮小列 */
+.db-sizes {
+  display: flex;
+  gap: 1rem;
+}
+
+.db-sizes__row {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--db-line);
+}

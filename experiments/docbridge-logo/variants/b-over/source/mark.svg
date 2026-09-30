@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>DocBridge</title>
+  <!-- B を反時計回りに 90° 倒す。stem（4..28 × 22..26）が桁、2 つの bowl（外径 13、帯 3、中央で 2 重なる）が桁の上に並ぶ 2 連のアーチ。 -->
+  <path id="part-mark-letter" fill="currentColor" d="M4 26V13A6.5 6.5 0 0 1 17 13V26ZM15 26V13A6.5 6.5 0 0 1 28 13V26ZM7 22H14V13A3.5 3.5 0 0 0 7 13ZM18 22H25V13A3.5 3.5 0 0 0 18 13Z"/>
+</svg>

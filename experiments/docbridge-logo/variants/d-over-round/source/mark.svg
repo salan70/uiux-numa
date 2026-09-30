@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>DocBridge</title>
+  <!-- d-over に丸みを付ける。桁の端は半径 2（厚み 4 の半分）で丸め、開口の下の角も半径 2 で丸める。 -->
+  <path id="part-mark-letter" fill="currentColor" fill-rule="evenodd" d="M4 24V18A12 12 0 0 1 28 18V24A2 2 0 0 1 26 26H6A2 2 0 0 1 4 24ZM8 20V18A8 8 0 0 1 24 18V20A2 2 0 0 1 22 22H10A2 2 0 0 1 8 20Z"/>
+</svg>

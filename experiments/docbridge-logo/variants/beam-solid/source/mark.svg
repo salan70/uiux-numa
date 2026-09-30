@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>DocBridge</title>
+  <!-- 桁橋。桁（4..28 × 6..10）と、桁より内側に立つ 2 本の橋脚（幅 4、10..26）。 -->
+  <path id="part-mark-deck" fill="currentColor" d="M4 6H28V10H4Z"/>
+  <path id="part-mark-piers" fill="currentColor" d="M8 10H12V26H8ZM20 10H24V26H20Z"/>
+</svg>

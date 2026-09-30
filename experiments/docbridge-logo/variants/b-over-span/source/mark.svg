@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img">
+  <title>DocBridge</title>
+  <!-- b-over の桁を bowl より 2 ずつ外へ張り出す。桁 4..28、2 つの bowl は外径 11、帯 3、中央で 2 重なる。 -->
+  <path id="part-mark-letter" fill="currentColor" d="M4 22H28V26H4ZM6 26V13A5.5 5.5 0 0 1 17 13V26ZM15 26V13A5.5 5.5 0 0 1 26 13V26ZM9 22H14V13A2.5 2.5 0 0 0 9 13ZM18 22H23V13A2.5 2.5 0 0 0 18 13Z"/>
+</svg>
