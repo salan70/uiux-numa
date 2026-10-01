@@ -9,13 +9,17 @@ import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
+import '../../shared/switcher.dart';
 
 // atbat: 製品の比喩「遊ぶ人は打者、正解率は打率」（docs/design/2026-08-12-play-stats-ia-redesign-design.md）を、1 問の中まで通す。
 // 1 問を 1 打席とし、ランクを打球に読み替える。SS は本塁打、S は三塁打、A は二塁打、B は単打、C は内野安打、不正解は凡退。
 // 結果では走者が塁を回り、打率と長打率がその場で動く。1 問の結果が、自分の成績に積み上がることを見せるため。
 // 今日の1問の 3 回はアウトカウントにする。造形は v2 のまま、ダイヤモンドの図だけを足した。
 
-Widget buildVariant() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens);
+Widget buildVariant() => const VariantHost(initial: 'atbat');
+
+/// この案の殻。VariantHost が案を替えるときに作り直す。
+Widget buildApp() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens, variant: 'atbat');
 
 Widget buildPanel() => const JumpPanel();
 

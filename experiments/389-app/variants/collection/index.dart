@@ -6,13 +6,17 @@ import '../../shared/ds.dart';
 import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/quiz_screen.dart';
+import '../../shared/switcher.dart';
 
 // collection: 製品のマイ成績の「正解コレクション」（球団別に正解した選手を集める）を、ホームと結果の主役に上げる。
 // 1 問の価値を「正解率が上がる」だけでなく「名鑑の空きが 1 つ埋まる」にし、長く遊ぶ動機を球団のコンプリートに置く。
 // 結果では、当てた選手のカードが出て、ホームと同じ球団の列の空きへ飛んで収まる。初めての選手は NEW、ランクが上がれば更新を出す。
 // 造形は v2 のまま、カードの隅のアクセントをランクの色にして、集めた選手の当て方を残す。
 
-Widget buildVariant() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens);
+Widget buildVariant() => const VariantHost(initial: 'collection');
+
+/// この案の殻。VariantHost が案を替えるときに作り直す。
+Widget buildApp() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens, variant: 'collection');
 
 Widget buildPanel() => const JumpPanel();
 

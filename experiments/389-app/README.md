@@ -173,6 +173,8 @@ round 2 は利用者が 3 案を操作して方向を選ぶ。
 
 `just flutter-dev` を起動し、`http://localhost:5185/?compare=389-app` で 3 案を並べて操作する。
 1 案だけなら `?variant=389-app/<id>` で開き、端末の枠の外の操作盤から各画面へ移れる。
+スマホでは [Artifact](https://claude.ai/artifact/QrkzLp35j2DAAPA5GSpqTP) で開く（非公開、既定は `scoreboard`）。右端の丸いボタンから、案を替え、各画面へ移れる。
+Artifact はビルドで既定の案を渡す（`--dart-define=RUNNER_QUERY=variant=389-app/scoreboard`）。
 
 起動の query:
 
