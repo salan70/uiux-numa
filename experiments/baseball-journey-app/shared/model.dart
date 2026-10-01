@@ -421,6 +421,10 @@ class Season {
   int get losses => stintGames.where((g) => g.outcome == GameOutcome.loss).length;
   int get draws => stintGames.where((g) => g.outcome == GameOutcome.draw).length;
   bool get isComplete => games.length >= totalGames;
+
+  /// 規定打席。チームの試合数 × 3.1 の端数を切り捨てる（R-3-a、D-34）。季の途中は消化した試合数で数える。
+  int get qualifyingPlateAppearances => (games.length * 31) ~/ 10;
+  bool get qualified => games.isNotEmpty && line.plateAppearances >= qualifyingPlateAppearances;
   BattingLine get line => BattingLine.of(games);
 }
 
