@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" role="img" shape-rendering="crispEdges">
+  <title>1 字消す</title>
+  <path id="part-backspace-pixels" d="M3 2h9v1h-9zM2 3h10v1h-10zM1 4h4v1h-4zM6 4h2v1h-2zM9 4h3v1h-3zM0 5h6v1h-6zM8 5h4v1h-4zM0 6h6v1h-6zM8 6h4v1h-4zM1 7h4v1h-4zM6 7h2v1h-2zM9 7h3v1h-3zM2 8h10v1h-10zM3 9h9v1h-9z" fill="currentColor"/>
+</svg>
