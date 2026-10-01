@@ -8,7 +8,7 @@ import 'widgets.dart';
 
 // その年の 1 ページ（D-19、U-8、season_end_wizard.md）。1 年を 1 枚にまとめる。
 // シーズンの終わりの今季の段の最初に置き、選手の詳細の年度別から見返す。
-// 自己最高は数える項目（本塁打、打点、安打、盗塁）だけに付ける。率は打席の少ない年に跳ねるので付けない（規定打席は未定。G-14）。
+// 自己最高は、数える項目はそれまでのどの季より多いとき、率は規定打席に達した季どうしで比べて高いときに付ける（R-3-a、D-34）。
 
 class YearPage extends StatelessWidget {
   const YearPage({super.key, required this.player, required this.season, this.showTitles = true});
@@ -33,6 +33,15 @@ class YearPage extends StatelessWidget {
 
     bool best(int Function(BattingLine) f) =>
         earlier.isNotEmpty && f(line) > 0 && earlier.every((s) => f(line) > f(s.line));
+    // 率は打席の少ない季に大きく振れるので、規定打席に達した季どうしだけで比べる。比べる季が無ければ付けない。
+    final qualifiedEarlier = [for (final s in earlier) if (s.qualified) s.line];
+    bool bestRate(double? Function(BattingLine) f) {
+      final now = f(line);
+      return season.qualified &&
+          now != null &&
+          qualifiedEarlier.isNotEmpty &&
+          qualifiedEarlier.every((l) => f(l) == null || now > f(l)!);
+    }
     String? intDelta(int now, int? was) => was == null || now == was ? null : now > was ? '+${now - was}' : '−${was - now}';
     String? rateDelta(double? now, double? was) {
       if (now == null || was == null) return null;
@@ -41,12 +50,12 @@ class YearPage extends StatelessWidget {
     }
 
     final tiles = [
-      (StatTile(label: '打率', value: rate(line.average), delta: rateDelta(line.average, before?.average), large: false), false),
+      (StatTile(label: '打率', value: rate(line.average), delta: rateDelta(line.average, before?.average), large: false), bestRate((l) => l.average)),
       (StatTile(label: '本塁打', value: '${line.homeRuns}', delta: intDelta(line.homeRuns, before?.homeRuns), large: false), best((l) => l.homeRuns)),
       (StatTile(label: '打点', value: '${line.rbi}', delta: intDelta(line.rbi, before?.rbi), large: false), best((l) => l.rbi)),
       (StatTile(label: '安打', value: '${line.hits}', delta: intDelta(line.hits, before?.hits), large: false), best((l) => l.hits)),
       (StatTile(label: '盗塁', value: '${line.steals}', delta: intDelta(line.steals, before?.steals), large: false), best((l) => l.steals)),
-      (StatTile(label: 'OPS', value: rate(line.ops), delta: rateDelta(line.ops, before?.ops), large: false), false),
+      (StatTile(label: 'OPS', value: rate(line.ops), delta: rateDelta(line.ops, before?.ops), large: false), bestRate((l) => l.ops)),
     ];
 
     return Column(
@@ -95,7 +104,8 @@ class YearPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: Space.s200),
           child: Text(
-            '${line.games} 試合 ${line.plateAppearances} 打席 ${line.atBats} 打数・${line.walks} 四球 ${line.strikeouts} 三振',
+            '${line.games} 試合 ${line.plateAppearances} 打席 ${line.atBats} 打数・${line.walks} 四球 ${line.strikeouts} 三振・'
+            '規定打席 ${season.qualifyingPlateAppearances} に${season.qualified ? '到達' : '未到達'}',
             style: Txt.caption.merge(Txt.tabular).copyWith(color: p.onSurfaceVariant),
           ),
         ),
