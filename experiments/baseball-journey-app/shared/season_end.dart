@@ -7,6 +7,7 @@ import 'number_inputs.dart';
 import 'parts.dart';
 import 'pixel.dart';
 import 'store.dart';
+import 'team_candidates.dart';
 import 'theme.dart';
 import 'widgets.dart';
 import 'year_page.dart';
@@ -45,6 +46,9 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   late String _uniform = _season.uniformNumber;
   late int _salary = _season.salary;
   late int _teamCount = _season.team.teamCount;
+
+  /// 来季の年間試合数。残留は今季の値、移籍は移籍先のリーグの値（初期値は今季の値。D-15）。
+  late int _totalGames = _season.totalGames;
   final _team = TextEditingController();
   final _league = TextEditingController();
   final _country = TextEditingController();
@@ -108,6 +112,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
           )
         : null,
     careerRanks: _careerRanks,
+    totalGames: _totalGames,
   );
 
   Future<void> _next() async {
@@ -283,6 +288,24 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
       ] else ...[
         if (_choice == _Choice.transfer) ...[
           const FieldLabel('移籍先'),
+          TeamCandidates(
+            selectedTeam: _team.text.trim(),
+            selectedLeague: _league.text.trim(),
+            exclude: _season.team.name,
+            onTeam: (t) => setState(() {
+              _team.text = t.team.name;
+              _league.text = t.team.league;
+              _country.text = t.team.country;
+              _teamCount = t.team.teamCount;
+              _totalGames = t.games;
+            }),
+            onLeague: (l) => setState(() {
+              _league.text = l.league;
+              _country.text = l.country;
+              _teamCount = l.teamCount;
+              _totalGames = l.games;
+            }),
+          ),
           TextField(
             controller: _team,
             decoration: InputDecoration(
@@ -317,6 +340,14 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
             max: 30,
             unit: ' 球団',
             onChanged: (v) => setState(() => _teamCount = v),
+          ),
+          NumberStepper(
+            label: '年間試合数',
+            value: _totalGames,
+            min: 1,
+            max: 200,
+            unit: ' 試合',
+            onChanged: (v) => setState(() => _totalGames = v),
           ),
         ],
         FieldLabel('来季の契約', note: '今季: 背番号 ${_season.uniformNumber}・${salary(_season.salary)}'),

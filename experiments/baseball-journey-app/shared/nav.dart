@@ -11,6 +11,9 @@ import 'year_page.dart';
 
 // 3 案が同じ行き先へ移る処理。どこから開いても、閉じると元の画面へ戻る。
 
+/// 記録済みの試合を直す入力画面を開く。入力画面は案ごとに違うので、案が起動時に渡す。
+void Function(BuildContext context)? openGameEditor;
+
 Future<void> openDetail(BuildContext context, Player player, {VoidCallback? onPlay}) {
   return Navigator.of(context).push(
     MaterialPageRoute<void>(
@@ -52,9 +55,9 @@ Future<void> openSettings(BuildContext context) =>
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SettingsScreen()));
 
 /// 試合の一覧。openEditor を渡すと、行を押して試合を直せる。
-Future<void> openHistory(BuildContext context, Player player, {VoidCallback? openEditor}) => Navigator.of(
+Future<void> openHistory(BuildContext context, Player player, {Season? season, VoidCallback? openEditor}) => Navigator.of(
   context,
-).push(MaterialPageRoute<void>(builder: (_) => GameHistoryScreen(player: player, openEditor: openEditor)));
+).push(MaterialPageRoute<void>(builder: (_) => GameHistoryScreen(player: player, season: season, openEditor: openEditor)));
 
 /// 起動引数の route のうち、3 案で同じ行き先のもの。行き先を開いたら true。
 bool openSharedRoute(BuildContext context, AppStore store) {

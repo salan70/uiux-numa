@@ -2,13 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'fixture.dart';
 import 'format.dart';
 import 'model.dart';
 import 'number_inputs.dart';
 import 'parts.dart';
 import 'player_detail.dart';
 import 'store.dart';
+import 'team_candidates.dart';
 import 'theme.dart';
 import 'widgets.dart';
 
@@ -278,19 +278,24 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         InputDecoration(hintText: hint, errorText: err && c.text.trim().isEmpty ? message : null);
     return [
       const FieldLabel('入団した球団'),
-      ChoiceWrap<Team>(
-        semanticsLabel: '球団の候補',
-        values: fixtureTeams,
-        label: (t) => t.name,
-        isSelected: (t) => t.name == _team.text.trim(),
-        onSelected: (t) => setState(() {
-          _team.text = t.name;
-          _league.text = t.league;
-          _country.text = t.country;
-          _draft.teamCount = t.teamCount;
+      TeamCandidates(
+        selectedTeam: _team.text.trim(),
+        selectedLeague: _league.text.trim(),
+        onTeam: (t) => setState(() {
+          _team.text = t.team.name;
+          _league.text = t.team.league;
+          _country.text = t.team.country;
+          _draft.teamCount = t.team.teamCount;
+          _draft.totalGames = t.games;
+        }),
+        onLeague: (l) => setState(() {
+          _league.text = l.league;
+          _country.text = l.country;
+          _draft.teamCount = l.teamCount;
+          _draft.totalGames = l.games;
         }),
       ),
-      const SizedBox(height: Space.s300),
+      const SizedBox(height: Space.s100),
       TextField(controller: _team, decoration: deco('球団名', _team, '球団名を入力してください。'), onChanged: (_) => setState(() {})),
       const SizedBox(height: Space.s200),
       TextField(
@@ -312,6 +317,15 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         max: 30,
         unit: ' 球団',
         onChanged: (v) => setState(() => _draft.teamCount = v),
+      ),
+      // 年間試合数はリーグが持ち、季の始まりに季へ写す（D-14、R-6-5）。
+      NumberStepper(
+        label: '年間試合数',
+        value: _draft.totalGames,
+        min: 1,
+        max: 200,
+        unit: ' 試合',
+        onChanged: (v) => setState(() => _draft.totalGames = v),
       ),
       const FieldLabel('入団の経路'),
       ChoiceWrap<JoiningRoute>(
@@ -378,7 +392,7 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
       ]),
       section('能力', 1, [for (final a in d.abilities) AbilityBar(ability: a)]),
       section('入団', 2, [
-        FactRow('球団', '${_team.text.trim()}（${_league.text.trim()}・${_country.text.trim()}・${_draft.teamCount} 球団）'),
+        FactRow('球団', '${_team.text.trim()}（${_league.text.trim()}・${_country.text.trim()}・${_draft.teamCount} 球団・${_draft.totalGames} 試合）'),
         FactRow('経路', d.route == JoiningRoute.draft ? 'ドラフト ${d.draftRound} 位' : d.route.label),
         FactRow('入団年', year(d.joiningYear)),
         FactRow('背番号', d.uniformNumber),
@@ -405,7 +419,7 @@ class PositionPicker extends StatelessWidget {
       children: [
         ChoiceWrap<Position>(
           semanticsLabel: '守備位置',
-          values: Position.values,
+          values: Position.fielders,
           label: (pos) {
             final i = selected.indexOf(pos);
             return i < 0 ? pos.label : '${pos.label} ${i + 1}';

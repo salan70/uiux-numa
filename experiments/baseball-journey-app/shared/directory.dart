@@ -200,37 +200,74 @@ class _Tag extends StatelessWidget {
   }
 }
 
-/// 今季の試合の一覧（season_game_history.md）。新しい試合を上から並べる。
+/// 1 つの季の試合の一覧（season_game_history.md）。新しい試合を上から並べる。
+/// 今季のほか、終えた季や引退した選手の季も開ける（D-17、D-19）。
 /// 行を押すと直せる。出場した試合は入力画面で開き直し（openEditor）、欠場の試合はチームの勝敗をシートで直す。
-class GameHistoryScreen extends StatelessWidget {
-  const GameHistoryScreen({super.key, required this.player, this.openEditor});
+class GameHistoryScreen extends StatefulWidget {
+  const GameHistoryScreen({super.key, required this.player, this.season, this.openEditor});
 
   final Player player;
+
+  /// 開く季。無ければ今季。
+  final Season? season;
 
   /// 開き直した試合の入力画面を開く。案ごとに入力画面が違うので、開く処理を受け取る。無ければ行を押せない。
   final VoidCallback? openEditor;
 
+  @override
+  State<GameHistoryScreen> createState() => _GameHistoryScreenState();
+}
+
+/// 絞り込み（D-19、U-9）。
+enum _GameFilter {
+  all('すべて'),
+  homeRun('本塁打'),
+  multiHit('複数安打'),
+  memo('メモあり'),
+  skipped('欠場');
+
+  const _GameFilter(this.label);
+  final String label;
+
+  bool test(GameRecord g) => switch (this) {
+    all => true,
+    homeRun => g.atBats.any((a) => a.result == AtBatResult.homeRun),
+    multiHit => g.atBats.where((a) => a.result.isHit).length >= 2,
+    memo => g.memo != null,
+    skipped => !g.played,
+  };
+}
+
+class _GameHistoryScreenState extends State<GameHistoryScreen> {
+  _GameFilter _filter = _GameFilter.all;
+
+  /// 直せなかった理由。スナックバーは使わず、一覧の上に出す（Q-12）。
+  String? _notice;
+
+  Season get _season => widget.season ?? widget.player.current;
+
   void _open(BuildContext context, AppStore store, GameRecord g) {
     final index = g.number - 1;
     if (!g.played) {
-      showSkippedGameSheet(context, store, index);
+      showSkippedGameSheet(context, store, index, season: _season);
       return;
     }
-    if (!store.editGame(index)) {
-      final next = player.current.playedCount + 1;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('入力中の第 $next 戦を保存するか消すと、前の試合を直せます。')),
-      );
+    if (!store.editGame(index, season: _season)) {
+      final next = widget.player.current.playedCount + 1;
+      setState(() => _notice = '入力中の第 $next 戦を保存するか消すと、前の試合を直せます。');
       return;
     }
-    openEditor!();
+    setState(() => _notice = null);
+    widget.openEditor!();
   }
 
   @override
   Widget build(BuildContext context) {
     final store = StoreScope.of(context);
     final p = Palette.of(context);
-    final s = player.current;
+    final s = _season;
+    final finished = s != widget.player.current || s.isComplete || !widget.player.isActive;
+    final shown = [for (final g in s.games.reversed) if (_filter.test(g)) g];
     return Scaffold(
       appBar: AppBar(title: Text('${year(s.year)}の試合')),
       body: ListView(
@@ -239,19 +276,50 @@ class GameHistoryScreen extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(year(s.year), style: Txt.heading)),
+              if (finished && s.games.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: Space.s300),
+                  child: Text('最終 ${s.teamRank} 位', style: Txt.control.merge(Txt.tabular)),
+                ),
               Text('${s.playedCount} / ${s.totalGames} 試合', style: Txt.control.merge(Txt.tabular)),
             ],
           ),
-          if (openEditor != null)
-            Text('試合を押すと、直したり消したりできます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
-          const SizedBox(height: Space.s400),
-          if (s.games.isEmpty) const Text('まだ試合がありません。'),
+          if (widget.openEditor != null)
+            Text(
+              finished ? '試合を押すと直せます。直したら、この年のタイトルと順位も見直してください。' : '試合を押すと、直したり消したりできます。',
+              style: Txt.caption.copyWith(color: p.onSurfaceVariant),
+            ),
+          if (_notice != null)
+            Container(
+              margin: const EdgeInsets.only(top: Space.s200),
+              padding: const EdgeInsets.all(Space.s300),
+              decoration: BoxDecoration(
+                color: p.surfaceContainer,
+                borderRadius: BorderRadius.circular(Radii.control),
+                border: Border.all(color: p.ink, width: Borders.thick),
+              ),
+              child: Semantics(liveRegion: true, child: Text(_notice!, style: Txt.body)),
+            ),
+          const SizedBox(height: Space.s300),
+          if (s.games.isNotEmpty)
+            ChoiceWrap<_GameFilter>(
+              semanticsLabel: '絞り込み',
+              values: _GameFilter.values,
+              label: (f) => f.label,
+              isSelected: (f) => f == _filter,
+              onSelected: (f) => setState(() => _filter = f),
+            ),
+          const SizedBox(height: Space.s300),
+          if (s.games.isEmpty)
+            const Text('まだ試合がありません。')
+          else if (shown.isEmpty)
+            const Text('当てはまる試合がありません。'),
           // 季の途中で移籍したら、所属期間ごとに「第 N 戦から {球団名}」の区切りを置く（D-23）。
           // 新しい試合を上に並べるので、区切りは所属期間の塊の上に置く。
-          if (s.hasTransfer && s.stintGames.isEmpty)
+          if (_filter == _GameFilter.all && s.hasTransfer && s.stintGames.isEmpty)
             _StintDivider(from: s.playedCount + 1, team: s.team.name, empty: true),
-          for (final (i, g) in s.games.reversed.indexed) ...[
-            if (s.hasTransfer && (i == 0 || s.games.reversed.elementAt(i - 1).stint != g.stint))
+          for (final (i, g) in shown.indexed) ...[
+            if (s.hasTransfer && (i == 0 || shown[i - 1].stint != g.stint))
               _StintDivider(
                 from: s.games.firstWhere((x) => x.stint == g.stint).number,
                 team: s.stintOf(g.stint).team.name,
@@ -262,7 +330,7 @@ class GameHistoryScreen extends StatelessWidget {
               child: GameLine(
                 game: g,
                 rankFrom: s.rankBefore(g.number - 1),
-                onTap: openEditor == null ? null : () => _open(context, store, g),
+                onTap: widget.openEditor == null ? null : () => _open(context, store, g),
               ),
             ),
           ],
@@ -401,25 +469,26 @@ class GameLine extends StatelessWidget {
 }
 
 /// 欠場の試合を直すシート。チームの勝敗を選び直し、試合を消せる。選ぶとすぐ記録に入る。
-Future<void> showSkippedGameSheet(BuildContext context, AppStore store, int index) {
+Future<void> showSkippedGameSheet(BuildContext context, AppStore store, int index, {Season? season}) {
   return showModalBottomSheet<void>(
     context: context,
     sheetAnimationStyle: sheetAnimation(context),
     isScrollControlled: true,
-    builder: (_) => StoreScope(store: store, child: _SkippedGameSheet(index: index)),
+    builder: (_) => StoreScope(store: store, child: _SkippedGameSheet(index: index, season: season)),
   );
 }
 
 class _SkippedGameSheet extends StatelessWidget {
-  const _SkippedGameSheet({required this.index});
+  const _SkippedGameSheet({required this.index, this.season});
 
   final int index;
+  final Season? season;
 
   @override
   Widget build(BuildContext context) {
     final store = StoreScope.of(context);
     final p = Palette.of(context);
-    final games = store.current!.current.games;
+    final games = (season ?? store.current!.current).games;
     if (index >= games.length) return const SizedBox.shrink();
     final g = games[index];
     return SafeArea(
@@ -438,7 +507,7 @@ class _SkippedGameSheet extends StatelessWidget {
               values: const [null, GameOutcome.win, GameOutcome.loss, GameOutcome.draw],
               label: (o) => o?.label ?? '未記録',
               isSelected: (o) => o == g.teamOutcome,
-              onSelected: (o) => store.setSkippedOutcome(index, o),
+              onSelected: (o) => store.setSkippedOutcome(index, o, season: season),
             ),
             const SizedBox(height: Space.s600),
             Row(
@@ -457,7 +526,7 @@ class _SkippedGameSheet extends StatelessWidget {
                         destructive: true,
                       );
                       if (!ok) return;
-                      store.deleteGame(index);
+                      store.deleteGame(index, season: season);
                       navigator.pop();
                     },
                   ),

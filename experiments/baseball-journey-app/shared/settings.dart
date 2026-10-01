@@ -61,7 +61,59 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SectionTitle('遊び方'),
           const HowToPlay(),
+          const SectionTitle('起動'),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('起動したら選手トップを開く'),
+            subtitle: const Text('タイトルを飛ばし、最後に遊んだ現役の選手から始めます。'),
+            value: store.openTopOnLaunch,
+            onChanged: (v) {
+              store.openTopOnLaunch = v;
+              store.changed();
+            },
+          ),
           const SectionTitle('データ'),
+          PressButton(
+            label: '書き出す',
+            icon: Icons.ios_share,
+            onPressed: store.players.isEmpty
+                ? null
+                : () async {
+                    store.exportAll();
+                    await confirmDialog(
+                      context,
+                      title: '書き出しました',
+                      message: '${store.players.length} 人の選手と足したタイトルを 1 つのファイルにしました。製品ではここで端末の共有が開き、保存先を選びます。',
+                      confirm: '閉じる',
+                      cancel: null,
+                    );
+                  },
+          ),
+          const SizedBox(height: Space.s100),
+          Text(
+            store.lastExportedAt == null ? 'まだ書き出していません。' : '最後に書き出した日時: ${_stamp(store.lastExportedAt!)}',
+            style: Txt.caption.copyWith(color: p.onSurfaceVariant),
+          ),
+          const SizedBox(height: Space.s300),
+          PressButton(
+            label: '読み込む',
+            icon: Icons.file_open_outlined,
+            onPressed: () async {
+              final ok = await confirmDialog(
+                context,
+                title: '今のデータと置き換えますか？',
+                message: '今の ${store.players.length} 人の選手と足したタイトルが、読み込んだファイルの内容に置き換わります。読み込めなかったときは、今のデータを残します。',
+                confirm: '置き換える',
+                destructive: true,
+              );
+              if (!ok || !context.mounted) return;
+              store.importAll();
+              Navigator.of(context).popUntil((r) => r.isFirst);
+            },
+          ),
+          const SizedBox(height: Space.s100),
+          Text('試作では、見本のデータを読み込みます。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          const SizedBox(height: Space.s400),
           PressButton(
             label: 'すべてのデータを消す',
             kind: PressKind.destructive,
@@ -95,6 +147,9 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
+
+String _stamp(DateTime t) =>
+    '${t.year} 年 ${t.month} 月 ${t.day} 日 ${t.hour}:${t.minute.toString().padLeft(2, '0')}';
 
 /// 遊び方。function_requirements.md のチュートリアルとヘルプを、初回の空の状態と設定の両方に置く。
 class HowToPlay extends StatelessWidget {

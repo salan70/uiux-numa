@@ -394,14 +394,17 @@ AtBat _atBat(Random r, int contact, int power, int eye, int speed) {
         ? AtBatResult.flyOut
         : AtBatResult.lineOut;
   }
+  // アウトの打点は、走者を返す内野ゴロや外野フライのような珍しい場面だけにする。
   final rbi = result.maxRbi == 0
       ? 0
+      : !result.isOnBase && result.minRbi == 0
+      ? (r.nextDouble() < 0.06 ? 1 : 0)
       : (result.minRbi + (r.nextDouble() < 0.35 ? r.nextInt(result.maxRbi - result.minRbi + 1) : 0)).clamp(
           result.minRbi,
           result.maxRbi,
         );
   final steals = result.maxSteals > 0 && r.nextDouble() < speed * 0.0025 ? 1 : 0;
-  final caught = steals == 0 && result.allowsCaughtStealing && r.nextDouble() < 0.03;
+  final caught = steals == 0 && result.maxSteals > 0 && r.nextDouble() < 0.03;
   final scored = result.minRuns > 0 || (result.maxRuns > 0 && r.nextDouble() < 0.33 + speed * 0.002);
   return AtBat(result, rbi: rbi, steals: steals, caughtStealing: caught, scored: scored);
 }

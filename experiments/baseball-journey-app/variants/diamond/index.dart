@@ -23,7 +23,10 @@ import '../../shared/screen_jump.dart';
 // 上限をばねで返す増減、桁が転がる試合後にした。動きは頻度で予算を分け、1 季 143 回の入力は短く、稀な場面だけ長くする。
 // 選手の作成、シーズンの終了と引退、選手の詳細、設定、試合の履歴、スコアは shared の画面を使う。
 
-Widget buildVariant() => JourneyApp(home: (_) => const _Title());
+Widget buildVariant() {
+  openGameEditor = (context) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const _Matchday()));
+  return JourneyApp(home: (_) => const _Title());
+}
 
 /// 実行基盤が端末の枠の外に置く操作盤。
 Widget buildPanel() => const ScreenJumpPanel();
@@ -54,6 +57,11 @@ class _TitleState extends State<_Title> with SingleTickerProviderStateMixin {
       }
       final store = StoreScope.read(context);
       final route = store.options.route;
+      // 起動したら選手トップを開く設定なら、タイトルを飛ばす（D-19、U-11）。
+      if (route == null && store.openTopOnLaunch && (store.current?.isActive ?? false)) {
+        _openTop(context);
+        return;
+      }
       if (route == null || route == 'title') return;
       if (route == 'directory') {
         _openDirectory(context);
@@ -250,10 +258,21 @@ Future<void> _openTransfer(BuildContext context, Player player) => Navigator.of(
   context,
 ).push(MaterialPageRoute<void>(fullscreenDialog: true, builder: (_) => TransferScreen(player: player)));
 
-Future<void> _openMenu(BuildContext context) {
+/// 入力の途中で出場を選び直す。新しい試合でも、記録済みの試合の修正でも使う（D-17、D-5）。
+Future<void> _rechoose(BuildContext context) async {
+  final store = StoreScope.read(context);
+  final draft = store.draft;
+  if (draft == null) return;
+  final choice = await showParticipationSheet(context, store.current!, initial: draft.participation);
+  if (choice?.participation case final p?) store.changeParticipation(p);
+}
+
+/// メニュー。試合の入力中に開いたら（inInput）、出場の選び直しと入力を消す操作を先に置く（D-17）。
+Future<void> _openMenu(BuildContext context, {bool inInput = false}) {
   final store = StoreScope.read(context);
   final player = store.current!;
   final navigator = Navigator.of(context);
+  final inputting = inInput && store.draft != null && store.draft!.editIndex == null;
   Widget item(IconData icon, String label, VoidCallback onTap) => ListTile(
     minTileHeight: Sizes.target + Space.s200,
     leading: Icon(icon),
@@ -270,6 +289,22 @@ Future<void> _openMenu(BuildContext context) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (inputting) ...[
+            item(Icons.swap_horiz, '出場を選び直す', () => _rechoose(context)),
+            item(Icons.delete_outline, 'この試合の入力を消す', () async {
+              final ok = await confirmDialog(
+                context,
+                title: '第 ${player.current.playedCount + 1} 戦の入力を消しますか？',
+                message: '入力した打席と走塁が消えます。',
+                confirm: '消す',
+                destructive: true,
+              );
+              if (!ok) return;
+              store.discardGame();
+              navigator.pop();
+            }),
+            const Divider(height: 1),
+          ],
           item(Icons.bar_chart, '記録', () => openDetail(context, player)),
           item(Icons.list_alt, '${year(player.current.year)}の試合', () => _openHistory(context, player)),
           if (store.canTransfer)
@@ -658,6 +693,12 @@ class _MatchdayState extends State<_Matchday> {
           actions: [
             if (editIndex != null)
               IconButton(
+                tooltip: '出場を選び直す',
+                icon: const Icon(Icons.swap_horiz),
+                onPressed: () => _rechoose(context),
+              ),
+            if (editIndex != null)
+              IconButton(
                 tooltip: '第 ${editIndex + 1} 戦を消す',
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () async {
@@ -676,7 +717,11 @@ class _MatchdayState extends State<_Matchday> {
                 },
               )
             else
-              IconButton(tooltip: 'メニュー', icon: const Icon(Icons.menu), onPressed: () => _openMenu(context)),
+              IconButton(
+                tooltip: 'メニュー',
+                icon: const Icon(Icons.menu),
+                onPressed: () => _openMenu(context, inInput: true),
+              ),
           ],
         ),
         body: ListView(
@@ -726,7 +771,7 @@ class _MatchdayState extends State<_Matchday> {
                     // 文字 2 倍では 3 つを 1 行に収められないので、ほかの結果を 1 段上に戻す。
                     if (large) ...[const SizedBox(height: Space.s100), _OtherResults(onPick: _pick)],
                     const SizedBox(height: Space.s200),
-                    // 取り消すは形の知られた矢印だけにし、ほかの結果と同じ行に入れて入力面を 1 段低くする。
+                    // 取り消すとやり直すは形の知られた矢印だけにし、ほかの結果と同じ行に入れて入力面を 1 段低くする。
                     Row(
                       children: [
                         SizedBox(
@@ -735,8 +780,19 @@ class _MatchdayState extends State<_Matchday> {
                             label: '',
                             icon: Icons.undo,
                             semanticsLabel: '取り消す',
-                            semanticsHint: '最後の入力を消します',
-                            onPressed: draft.isEmpty ? null : store.undo,
+                            semanticsHint: '直前の操作を戻します',
+                            onPressed: draft.canUndo ? store.undo : null,
+                          ),
+                        ),
+                        const SizedBox(width: Space.s150),
+                        SizedBox(
+                          width: Sizes.target + Bold.shadow,
+                          child: KeyButton(
+                            label: '',
+                            icon: Icons.redo,
+                            semanticsLabel: 'やり直す',
+                            semanticsHint: '取り消した操作をもう一度します',
+                            onPressed: draft.canRedo ? store.redo : null,
                           ),
                         ),
                         if (!large) ...[
@@ -1191,15 +1247,15 @@ class _AtBatEditor extends StatelessWidget {
           floorNote: r.minRbi > 0 ? '${r.minRbi} 打点以上です' : null,
           stacked: true,
         ),
-      if (r.maxSteals > 0)
+      if (a.maxSteals > 0)
         RubberStepper(
           key: ValueKey('steal-$i'),
           label: '盗塁',
           value: a.steals,
           min: 0,
-          max: r.maxSteals,
+          max: a.maxSteals,
           onChanged: store.setSteals,
-          limitNote: '${r.maxSteals} 盗塁までです',
+          limitNote: '${a.maxSteals} 盗塁までです',
           stacked: true,
         ),
     ];
@@ -1235,21 +1291,29 @@ class _AtBatEditor extends StatelessWidget {
               Expanded(child: steppers.length > 1 ? steppers.last : const SizedBox.shrink()),
             ],
           ),
-        if (r.maxRuns > 0 || r.allowsCaughtStealing)
+        // ゴロ、犠飛、犠打は「打者が残った」を選んだときだけ走塁を出す（R-1-a、D-24）。外すと走塁を 0 に戻す。
+        if (a.maxRuns > 0 || a.allowsCaughtStealing || r.canStay)
           Wrap(
             spacing: Space.s200,
             children: [
-              if (r.maxRuns > 0)
+              if (r.canStay)
+                FilterChip(
+                  label: const Text('打者が残った'),
+                  tooltip: '前の走者が封殺されたり、失策で打者が塁に残ったとき',
+                  selected: a.stayed,
+                  onSelected: store.setStayed,
+                ),
+              if (a.maxRuns > 0)
                 FilterChip(
                   label: const Text('得点'),
                   selected: a.scored,
                   onSelected: r.minRuns > 0 ? null : store.setScored,
                 ),
-              if (r.allowsCaughtStealing)
+              if (a.allowsCaughtStealing)
                 FilterChip(label: const Text('盗塁死'), selected: a.caughtStealing, onSelected: store.setCaughtStealing),
             ],
           ),
-        if (r.maxRbi == 0 && r.maxSteals == 0 && r.maxRuns == 0)
+        if (r.maxRbi == 0 && a.maxSteals == 0 && a.maxRuns == 0 && !r.canStay)
           Text('${r.label}では打点も走塁も付きません。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
       ],
     );

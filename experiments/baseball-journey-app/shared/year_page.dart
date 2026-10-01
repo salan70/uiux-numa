@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'directory.dart';
 import 'format.dart';
 import 'model.dart';
+import 'nav.dart';
 import 'theme.dart';
 import 'widgets.dart';
 
@@ -290,7 +291,20 @@ class YearPageScreen extends StatelessWidget {
       appBar: AppBar(title: Text('${year(season.year)}の 1 ページ')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(Space.page, Space.s200, Space.page, Space.s1000),
-        children: [YearPage(player: player, season: season)],
+        children: [
+          YearPage(player: player, season: season),
+          const SizedBox(height: Space.s400),
+          PressButton(
+            label: '${year(season.year)}の試合を見る',
+            icon: Icons.list_alt,
+            onPressed: () => openHistory(
+              context,
+              player,
+              season: season,
+              openEditor: openGameEditor == null ? null : () => openGameEditor!(context),
+            ),
+          ),
+        ],
       ),
     );
   }
