@@ -20,6 +20,15 @@ adopted:
   - diamond
 ---
 
+## 現在地
+
+2026-10-01 時点。
+作業の段取りと完了条件は製品側の [salan70/baseball_player_journey#234](https://github.com/salan70/baseball_player_journey/issues/234) にあり、試作で確かめる項目をここで round として進める。
+
+- 判断待ち: round 14（その年の 1 ページ、試合後のメモ）を利用者が確かめる。round 12 の改善への所見も待つ。
+- 次の一手: #234 の「試作で確かめる」の残り（取り消しとやり直しから）。
+- 読むもの: この README の「反復の記録」と「試し方」、製品の `docs/specification/decisions_2026-10_uiux.md`。
+
 ## Problem
 
 Baseball Player Journey の現在の UI は、Flutter 版から SwiftUI 版への移植を重ねたもので、要件から情報設計を導いたものではない。
