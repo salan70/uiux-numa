@@ -28,3 +28,10 @@ flutter:
           weight: 400
         - asset: fonts/LINESeedJP-Bold.woff2
           weight: 700
+    # 製品の書体を写す Experiment の書体。正本は各 Experiment の fonts/ にあり、理由は docs/decisions/2026-10-01-flutter-product-fonts.md にある。
+    - family: Oxanium
+      fonts:
+        - asset: lib/experiments/389-app/fonts/Oxanium-Variable.ttf
+    - family: RocknRoll One
+      fonts:
+        - asset: lib/experiments/389-app/fonts/RocknRollOne-Regular.ttf
