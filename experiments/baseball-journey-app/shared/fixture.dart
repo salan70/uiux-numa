@@ -239,6 +239,15 @@ List<Player> makeFixturePlayers(Fixture fixture) {
   return players;
 }
 
+/// 見本の選手の顔。id から決めた顔を基にし、年を重ねると口ひげを、6 年目からは髪を白くする（季ごとに直せる見本）。
+Face _face(_Spec spec, int season) {
+  final random = Random(spec.id.codeUnits.fold<int>(11, (a, c) => a * 37 + c));
+  final base = Face.random(random.nextInt).copyWith(beard: Beard.none, glasses: Glasses.none);
+  if (season >= 8) return base.copyWith(beard: Beard.full, hairColor: 4);
+  if (season >= 3) return base.copyWith(beard: Beard.mustache);
+  return base;
+}
+
 Player _build(_Spec spec) {
   final random = Random(spec.id.codeUnits.fold<int>(7, (a, c) => a * 31 + c));
   final seasons = <Season>[];
@@ -286,6 +295,7 @@ Player _build(_Spec spec) {
       games: games,
       titles: [...?spec.titles[i]],
       transferred: i > 0 && spec.teams(i - 1) != team,
+      face: _face(spec, i),
     );
     if (season.isComplete) {
       for (final title in season.titles) {
