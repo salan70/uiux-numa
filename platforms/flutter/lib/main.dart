@@ -19,8 +19,12 @@ import 'variant_entry.dart';
 const _deviceSize = Size(402, 874);
 const _deviceInsets = EdgeInsets.only(top: 62, bottom: 34);
 
+/// URL に query を付けられない配布先（claude.ai の Artifact など）のために、ビルドで既定の query を渡す。
+/// 例: flutter build web --dart-define=RUNNER_QUERY=variant=baseball-journey-app/diamond。URL の query が優先する。
+const _defaultQuery = String.fromEnvironment('RUNNER_QUERY');
+
 void main() {
-  final query = Uri.base.queryParameters;
+  final query = {...Uri.splitQueryString(_defaultQuery), ...Uri.base.queryParameters};
   if (query['semantics'] == '1') {
     WidgetsFlutterBinding.ensureInitialized();
     SemanticsBinding.instance.ensureSemantics();
