@@ -403,8 +403,11 @@ AtBat _atBat(Random r, int contact, int power, int eye, int speed) {
           result.minRbi,
           result.maxRbi,
         );
-  final steals = result.maxSteals > 0 && r.nextDouble() < speed * 0.0025 ? 1 : 0;
-  final caught = steals == 0 && result.maxSteals > 0 && r.nextDouble() < 0.03;
-  final scored = result.minRuns > 0 || (result.maxRuns > 0 && r.nextDouble() < 0.33 + speed * 0.002);
+  // ゴロ、犠飛、犠打で打者が塁に残るのは珍しいので、走塁はほとんど付けない。
+  final reached = result.isOnBase || result == AtBatResult.error || result == AtBatResult.fielderChoice || result == AtBatResult.uncaughtThirdStrike;
+  final chance = reached ? 1.0 : 0.05;
+  final steals = result.maxSteals > 0 && r.nextDouble() < speed * 0.0025 * chance ? 1 : 0;
+  final caught = steals == 0 && result.maxSteals > 0 && r.nextDouble() < 0.03 * chance;
+  final scored = result.minRuns > 0 || (result.maxRuns > 0 && r.nextDouble() < (0.33 + speed * 0.002) * chance);
   return AtBat(result, rbi: rbi, steals: steals, caughtStealing: caught, scored: scored);
 }
