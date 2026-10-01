@@ -25,6 +25,9 @@ class _JourneyAppState extends State<JourneyApp> {
   /// 起動し直した回数。MaterialApp の key にし、画面の積み重ねを捨てて最初から開く。
   int _generation = 0;
 
+  /// 画面へ移るシートを、MaterialApp の Navigator の上で開く。
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -67,6 +70,15 @@ class _JourneyAppState extends State<JourneyApp> {
         listenable: _store,
         builder: (context, _) => MaterialApp(
           key: ValueKey(_generation),
+          navigatorKey: _navigatorKey,
+          // 窓が端末の枠と操作盤を並べられないほど狭い（スマホで開いた）ときは、画面へ移るボタンを重ねる。
+          // 撮影（bare=1）では出さない。
+          builder: (context, child) {
+            final window = MediaQueryData.fromView(View.of(context)).size.width;
+            final compact = window < 402 + 32 + 320 + 80 && Uri.base.queryParameters['bare'] != '1';
+            if (!compact || child == null) return child ?? const SizedBox.shrink();
+            return Stack(children: [child, ScreenJumpButton(navigatorKey: _navigatorKey)]);
+          },
           debugShowCheckedModeBanner: false,
           title: 'Baseball Player Journey',
           theme: buildTheme(Brightness.light),

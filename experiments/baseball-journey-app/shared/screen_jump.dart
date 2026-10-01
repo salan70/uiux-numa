@@ -60,35 +60,50 @@ class ScreenJumpPanel extends StatelessWidget {
   }
 }
 
-class _Panel extends StatefulWidget {
+class _Panel extends StatelessWidget {
   const _Panel();
 
   @override
-  State<_Panel> createState() => _PanelState();
+  Widget build(BuildContext context) => const Scaffold(body: ScreenJumpList());
 }
 
-class _PanelState extends State<_Panel> {
+/// 行き先の一覧。端末の枠の外の操作盤と、狭い画面で開くシート（ScreenJumpButton）の両方で使う。
+class ScreenJumpList extends StatefulWidget {
+  const ScreenJumpList({super.key, this.controller});
+
+  /// シートで開いたときのスクロール。
+  final ScrollController? controller;
+
+  @override
+  State<ScreenJumpList> createState() => _ScreenJumpListState();
+}
+
+class _ScreenJumpListState extends State<ScreenJumpList> {
   Fixture? _fixture;
   bool? _saveFailure;
+  bool? _launchTop;
 
   void _go(LaunchOptions? current, String? route) {
     ScreenJump.restart.value = {
       'fixture': (_fixture ?? current?.fixture ?? Fixture.midseason).name,
       'route': ?route,
       if (_saveFailure ?? current?.saveFailure ?? false) 'saveFailure': '1',
+      if (_launchTop ?? current?.launchTop ?? false) 'launchTop': '1',
     };
   }
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    return Scaffold(
-      body: ListenableBuilder(
+    return Material(
+      color: Colors.transparent,
+      child: ListenableBuilder(
         listenable: Listenable.merge([ScreenJump.current, ScreenJump.themeMode]),
         builder: (context, _) {
           final current = ScreenJump.current.value;
           final fixture = _fixture ?? current?.fixture ?? Fixture.midseason;
           return ListView(
+            controller: widget.controller,
             padding: const EdgeInsets.fromLTRB(Space.s400, Space.s400, Space.s400, Space.s600),
             children: [
               Semantics(header: true, child: const Text('画面へ移る', style: Txt.heading)),
@@ -121,6 +136,13 @@ class _PanelState extends State<_Panel> {
                 value: _saveFailure ?? current?.saveFailure ?? false,
                 onChanged: (v) => setState(() => _saveFailure = v),
               ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('起動したら選手トップを開く'),
+                subtitle: const Text('「タイトル」を選ぶと、起動したときの動きを確かめられます。'),
+                value: _launchTop ?? current?.launchTop ?? false,
+                onChanged: (v) => setState(() => _launchTop = v),
+              ),
               for (final (title, items) in _groups) ...[
                 SectionTitle(title),
                 LayoutBuilder(
@@ -149,6 +171,70 @@ class _PanelState extends State<_Panel> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+/// 狭い画面（スマホで開いたとき）の「画面へ移る」ボタン。端末の枠の外に操作盤を置けないので、画面の端に小さく重ね、
+/// 押すと行き先の一覧をシートで開く。ドラッグで動かせる。製品の UI ではない。
+class ScreenJumpButton extends StatefulWidget {
+  const ScreenJumpButton({super.key, required this.navigatorKey});
+
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  @override
+  State<ScreenJumpButton> createState() => _ScreenJumpButtonState();
+}
+
+class _ScreenJumpButtonState extends State<ScreenJumpButton> {
+  /// 画面の右端、下から 3 割の高さに置く。下端の主な操作と、右上のメニューに重ねない。
+  Offset? _offset;
+
+  void _open() {
+    final context = widget.navigatorKey.currentContext;
+    if (context == null) return;
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.85,
+        maxChildSize: 0.95,
+        builder: (_, controller) => ScreenJumpList(controller: controller),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    const extent = 44.0;
+    final offset = _offset ?? Offset(size.width - extent - 8, size.height * 0.62);
+    return Positioned(
+      left: offset.dx,
+      top: offset.dy,
+      child: GestureDetector(
+        onPanUpdate: (d) => setState(() {
+          final next = offset + d.delta;
+          _offset = Offset(next.dx.clamp(0, size.width - extent), next.dy.clamp(0, size.height - extent));
+        }),
+        onTap: _open,
+        child: Semantics(
+          button: true,
+          label: '画面へ移る（試作の操作）',
+          child: Container(
+            width: extent,
+            height: extent,
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.55),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white70, width: 1.5),
+            ),
+            child: const Icon(Icons.alt_route, color: Colors.white, size: 22),
+          ),
+        ),
       ),
     );
   }
