@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'fixture.dart';
@@ -11,7 +13,8 @@ class LaunchOptions {
   LaunchOptions(Map<String, String> query)
     : fixture = Fixture.parse(query['fixture']),
       route = query['route'],
-      saveFailure = query['saveFailure'] == '1';
+      saveFailure = query['saveFailure'] == '1',
+      launchTop = query['launchTop'] == '1';
 
   final Fixture fixture;
 
@@ -20,6 +23,9 @@ class LaunchOptions {
 
   /// 次の試合の保存を 1 回だけ失敗させる。
   final bool saveFailure;
+
+  /// 「起動したら選手トップを開く」をオンにして起動する。試作は設定を保存しないので、起動の動きはこれで確かめる。
+  final bool launchTop;
 }
 
 enum SaveState { idle, saving, failed }
@@ -52,6 +58,30 @@ class AppStore extends ChangeNotifier {
   bool haptics = true;
   bool sound = true;
 
+  /// 起動したら最後に遊んだ現役の選手の選手トップを開く（D-19、U-11）。初期値はオフ。
+  late bool openTopOnLaunch = options.launchTop;
+
+  /// 最後に書き出した日時（D-19、U-10）。
+  DateTime? lastExportedAt;
+
+  /// 名鑑全体（全選手と足したタイトル）を書き出す。試作はファイルを作らず、日時だけを残す。
+  void exportAll() {
+    lastExportedAt = DateTime.now();
+    notifyListeners();
+  }
+
+  /// 書き出したファイルで今のデータを置き換える。試作は見本のデータで置き換える。
+  void importAll() {
+    players
+      ..clear()
+      ..addAll(makeFixturePlayers(Fixture.midseason));
+    customTitles.clear();
+    currentId = activePlayers.firstOrNull?.id;
+    draft = null;
+    lastSummary = null;
+    notifyListeners();
+  }
+
   Player? get current => players.where((p) => p.id == currentId).firstOrNull;
   List<Player> get activePlayers =>
       players.where((p) => p.isActive).toList()..sort((a, b) => b.lastPlayedOrder.compareTo(a.lastPlayedOrder));
@@ -78,11 +108,13 @@ class AppStore extends ChangeNotifier {
   GameSummary? lastSummary;
 
   /// 記録済みの試合を入力画面で開き直す。新しい試合を入力している間は開かず、false を返す。
-  bool editGame(int index) {
+  /// season を渡すと、終えた季の試合を直す（D-17）。
+  bool editGame(int index, {Season? season}) {
     final d = draft;
     if (d != null && d.editIndex == null) return false;
-    final g = current!.current.games[index];
-    draft = GameDraft(g.participation, editIndex: index, initialScores: (g.myScore ?? 0, g.opponentScore ?? 0))
+    final s = season ?? current!.current;
+    final g = s.games[index];
+    draft = GameDraft(g.participation, editIndex: index, editSeason: s, initialScores: (g.myScore ?? 0, g.opponentScore ?? 0))
       ..atBats.addAll(g.atBats)
       ..runner = g.runner
       ..selected = g.atBats.isEmpty ? null : g.atBats.length - 1;
@@ -93,21 +125,21 @@ class AppStore extends ChangeNotifier {
   }
 
   /// 試合を消し、後ろの試合の番号を詰める。試合が無くなった前の所属期間は消す（D-23）。
-  void deleteGame(int index) {
-    final season = current!.current;
-    final games = season.games;
+  void deleteGame(int index, {Season? season}) {
+    final target = season ?? current!.current;
+    final games = target.games;
     games.removeAt(index);
     for (var i = index; i < games.length; i++) {
       games[i] = games[i].copyWith(number: i + 1);
     }
-    season.stints.removeWhere((s) => s != season.stint && !games.any((g) => g.stint == s.id));
+    target.stints.removeWhere((s) => s != target.stint && !games.any((g) => g.stint == s.id));
     lastSummary = null;
     notifyListeners();
   }
 
   /// 欠場の試合のチームの勝敗を直す。
-  void setSkippedOutcome(int index, GameOutcome? outcome) {
-    final games = current!.current.games;
+  void setSkippedOutcome(int index, GameOutcome? outcome, {Season? season}) {
+    final games = (season ?? current!.current).games;
     games[index] = games[index].copyWith(teamOutcome: () => outcome);
     notifyListeners();
   }
@@ -119,6 +151,20 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 入力の途中で出場を選び直す（D-17、D-5）。打席は残し、代走から他の出場に変えたら代走の走塁を捨てる。
+  void changeParticipation(Participation p) {
+    final d = draft!;
+    d.participation = p;
+    if (p.kind == ParticipationKind.pinchRunner) {
+      d.runner ??= const RunnerLine();
+    } else {
+      d.runner = null;
+    }
+    d.undoStack.clear();
+    d.redoStack.clear();
+    notifyListeners();
+  }
+
   void discardGame() {
     draft = null;
     saveState = SaveState.idle;
@@ -127,6 +173,8 @@ class AppStore extends ChangeNotifier {
 
   void addResult(AtBatResult result) {
     final d = draft!;
+    _record();
+    // 結果で必ず決まる値だけを初期値にする（R-1-b、D-32）。
     d.atBats.add(AtBat(result, rbi: result.minRbi, scored: result.minRuns > 0));
     d.selected = d.atBats.length - 1;
     notifyListeners();
@@ -134,6 +182,7 @@ class AppStore extends ChangeNotifier {
 
   void replaceResult(int index, AtBatResult result) {
     final d = draft!;
+    _record();
     d.atBats[index] = d.atBats[index].withResult(result);
     notifyListeners();
   }
@@ -145,29 +194,44 @@ class AppStore extends ChangeNotifier {
 
   void removeAtBat(int index) {
     final d = draft!;
+    _record();
     d.atBats.removeAt(index);
     d.selected = d.atBats.isEmpty ? null : d.atBats.length - 1;
     notifyListeners();
   }
 
-  /// 最後の入力を取り消す（AC-007）。代走の走塁は打席より先に入るので、打席が無ければ走塁を戻す。
+  /// 直前の操作（打席を足す、結果を変える、打点・走塁を変える、打席を消す）を 1 つ戻す（D-19、U-5）。
   void undo() {
     final d = draft!;
-    if (d.atBats.isNotEmpty) {
-      d.atBats.removeLast();
-      d.selected = d.atBats.isEmpty ? null : d.atBats.length - 1;
-    } else if (d.runner != null) {
-      d.runner = const RunnerLine();
-    }
+    if (d.undoStack.isEmpty) return;
+    d.redoStack.add(d.snapshot());
+    d.restore(d.undoStack.removeLast());
     notifyListeners();
   }
 
+  /// 取り消した操作を 1 つ戻す。新しい操作をしたら、やり直せる操作は消える。
+  void redo() {
+    final d = draft!;
+    if (d.redoStack.isEmpty) return;
+    d.undoStack.add(d.snapshot());
+    d.restore(d.redoStack.removeLast());
+    notifyListeners();
+  }
+
+  void _record() {
+    final d = draft!;
+    d.undoStack.add(d.snapshot());
+    d.redoStack.clear();
+  }
+
   void setRbi(int value) => _editSelected((a) => a.copyWith(rbi: value.clamp(a.result.minRbi, a.result.maxRbi)));
-  void setSteals(int value) => _editSelected((a) => a.copyWith(steals: value.clamp(0, a.result.maxSteals)));
+  void setSteals(int value) => _editSelected((a) => a.copyWith(steals: value.clamp(0, a.maxSteals)));
   void setCaughtStealing(bool value) => _editSelected((a) => a.copyWith(caughtStealing: value));
-  void setScored(bool value) => _editSelected((a) => a.copyWith(scored: a.result.minRuns > 0 || value));
+  void setScored(bool value) => _editSelected((a) => a.copyWith(scored: a.result.minRuns > 0 || (value && a.maxRuns > 0)));
+  void setStayed(bool value) => _editSelected((a) => a.result.canStay ? a.withStayed(value) : a);
 
   void setRunner(RunnerLine line) {
+    _record();
     draft!.runner = line;
     notifyListeners();
   }
@@ -176,7 +240,9 @@ class AppStore extends ChangeNotifier {
     final d = draft!;
     final i = d.selected;
     if (i == null) return;
-    d.atBats[i] = edit(d.atBats[i]);
+    final next = edit(d.atBats[i]);
+    _record();
+    d.atBats[i] = next;
     notifyListeners();
   }
 
@@ -193,7 +259,7 @@ class AppStore extends ChangeNotifier {
       notifyListeners();
       return false;
     }
-    final season = player.current;
+    final season = d.editSeason ?? player.current;
     if (d.editIndex case final i?) {
       final was = season.games[i];
       season.games[i] = GameRecord(
@@ -345,15 +411,28 @@ class AppStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// この選手が所属した球団（候補の札に出す）。
-  List<Team> teamsOf(Player player) {
-    final out = <Team>[];
-    for (final s in player.seasons) {
-      for (final st in s.stints) {
-        if (!out.any((t) => t.name == st.team.name)) out.add(st.team);
+  /// どの選手かが一度でも使った球団。作成、移籍、季の終わりで候補の札に出す（D-35）。
+  /// 選ぶと値を写すだけで、写した後は選手ごとに持つ。新しく使った季の値を優先する。
+  List<TeamOption> get teamOptions {
+    final out = <String, TeamOption>{};
+    for (final pl in players) {
+      for (final s in pl.seasons) {
+        for (final st in s.stints) {
+          final was = out[st.team.name];
+          if (was == null || was.year <= s.year) out[st.team.name] = (team: st.team, games: s.totalGames, year: s.year);
+        }
       }
     }
-    return out;
+    return out.values.toList()..sort((a, b) => b.year.compareTo(a.year));
+  }
+
+  /// どの選手かが一度でも使ったリーグ。リーグだけを選ぶと、リーグ名、国名、球団数、年間試合数を写す（D-35）。
+  List<LeagueOption> get leagueOptions {
+    final out = <String, LeagueOption>{};
+    for (final t in teamOptions.reversed) {
+      out[t.team.league] = (league: t.team.league, country: t.team.country, teamCount: t.team.teamCount, games: t.games);
+    }
+    return out.values.toList().reversed.toList();
   }
 
   // ---- シーズン終了と引退（function_design/season_end_process.md） ----
@@ -382,6 +461,7 @@ class AppStore extends ChangeNotifier {
         salary: input.salary,
         abilities: input.abilities,
         transferred: input.team != null,
+        totalGames: input.totalGames,
       ),
     );
     notifyListeners();
@@ -436,12 +516,24 @@ class AppStore extends ChangeNotifier {
           uniformNumber: input.uniformNumber,
           salary: input.salary,
           abilities: List.of(input.abilities),
+          totalGames: input.totalGames,
         ),
       ],
     );
     players.add(player);
     select(player);
     return player;
+  }
+
+  /// 選手を消す（D-22）。足したタイトルの定義は残す。遊んでいた選手なら、次に遊んだ現役の選手へ移す。
+  void deletePlayer(Player player) {
+    players.remove(player);
+    if (currentId == player.id) {
+      currentId = activePlayers.firstOrNull?.id;
+      draft = null;
+      lastSummary = null;
+    }
+    notifyListeners();
   }
 
   /// データの初期化（settings.md の二段階の確認の後）。
@@ -455,14 +547,22 @@ class AppStore extends ChangeNotifier {
   }
 }
 
+typedef TeamOption = ({Team team, int games, int year});
+typedef LeagueOption = ({String league, String country, int teamCount, int games});
+
+typedef DraftSnapshot = ({List<AtBat> atBats, RunnerLine? runner, int? selected});
+
 class GameDraft {
-  GameDraft(this.participation, {this.editIndex, this.initialScores})
+  GameDraft(this.participation, {this.editIndex, this.editSeason, this.initialScores})
     : runner = participation.kind == ParticipationKind.pinchRunner ? const RunnerLine() : null;
 
-  final Participation participation;
+  Participation participation;
 
   /// 記録済みの試合を直しているときの位置。新しい試合なら null。
   final int? editIndex;
+
+  /// 直している試合の季。今季なら null でもよい。
+  final Season? editSeason;
 
   /// 直す試合のスコア（自チーム、相手）。スコアの入力の初期値にする。
   final (int, int)? initialScores;
@@ -476,8 +576,30 @@ class GameDraft {
 
   bool get isEmpty =>
       atBats.isEmpty && (runner == null || (runner!.steals == 0 && !runner!.caughtStealing && !runner!.scored));
-  bool get canSave => atBats.isNotEmpty || runner != null;
+  /// 打席が無くても、代打・代走・守備固めなら保存できる（D-31）。スタメンは打席が要る。
+  bool get canSave => atBats.isNotEmpty || participation.kind != ParticipationKind.starter;
+
+  /// 取り消しとやり直しの履歴。入力の途中だけ持ち、保存しない。
+  final undoStack = <DraftSnapshot>[];
+  final redoStack = <DraftSnapshot>[];
+  bool get canUndo => undoStack.isNotEmpty;
+  bool get canRedo => redoStack.isNotEmpty;
+
+  DraftSnapshot snapshot() => (atBats: List.of(atBats), runner: runner, selected: selected);
+  void restore(DraftSnapshot s) {
+    atBats
+      ..clear()
+      ..addAll(s.atBats);
+    runner = s.runner;
+    selected = s.selected;
+  }
   int get rbi => atBats.fold(0, (s, a) => s + a.rbi);
+
+  /// 本人の得点。打席と代走の走塁から数える。
+  int get runs => atBats.where((a) => a.scored).length + ((runner?.scored ?? false) ? 1 : 0);
+
+  /// 自チームの得点の下限。打点の合計と本人の得点の多い方（R-2-2、R-2-3）。
+  int get minScore => max(rbi, runs);
   int get hits => atBats.where((a) => a.result.isHit).length;
   int get atBatCount => atBats.where((a) => a.result.atBat).length;
 
@@ -523,6 +645,7 @@ class SeasonEndInput {
     required this.bats,
     this.team,
     this.careerRanks = const {},
+    this.totalGames = 143,
   });
 
   final Map<StatItem, int> ranks;
@@ -536,6 +659,9 @@ class SeasonEndInput {
   /// 移籍先。残留なら null。
   final Team? team;
   final Map<StatItem, int> careerRanks;
+
+  /// 来季の年間試合数。
+  final int totalGames;
 }
 
 class PlayerDraft {
@@ -551,6 +677,9 @@ class PlayerDraft {
   String country = '日本';
   /// 日本のプロ野球は 1 リーグ 6 球団なので、それを初期値にする。
   int teamCount = 6;
+
+  /// 年間試合数（D-14）。リーグの値で、季の始まりに季へ写す。
+  int totalGames = 143;
   String league = '';
   String teamName = '';
   JoiningRoute route = JoiningRoute.draft;

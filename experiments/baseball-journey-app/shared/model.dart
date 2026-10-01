@@ -13,8 +13,9 @@ enum ResultGroup {
   final String label;
 }
 
-/// 打席結果。上限と下限は AtBatResultType.swift の maxRbi、minRbi、maxStolenBases、maxRuns、minRuns を写した。
-/// 敬遠は本体で打数に数えている（isAtBat）が、公認野球規則 9.02(a)(1) に従い数えない。README の製品への指摘に記録した。
+/// 打席結果。上限と下限は製品の domain_rules.md R-1 に合わせた（確定）。
+/// 敬遠は公認野球規則 9.02(a)(1) に従い打数に数えない。
+/// canStay の結果（ゴロ、犠飛、犠打）は「打者が残った」ときだけ盗塁と得点を付けられる（R-1-a、D-24）。
 enum AtBatResult {
   single('ヒット', '安', ResultGroup.onBase, bases: 1, maxRbi: 3, maxSteals: 3, maxRuns: 1),
   double_('二塁打', '二', ResultGroup.onBase, bases: 2, maxRbi: 3, maxSteals: 2, maxRuns: 1),
@@ -25,15 +26,15 @@ enum AtBatResult {
   intentionalWalk('敬遠', '敬', ResultGroup.onBase, atBat: false, maxRbi: 1, maxSteals: 3, maxRuns: 1),
   swingOut('空振り三振', '振', ResultGroup.out, strikeout: true),
   missedStrikeout('見逃し三振', '見', ResultGroup.out, strikeout: true),
-  groundOut('ゴロ', 'ゴ', ResultGroup.out, maxRbi: 1, maxSteals: 1, maxRuns: 1),
-  flyOut('フライ', '飛', ResultGroup.out),
-  lineOut('ライナー', '直', ResultGroup.out),
+  groundOut('ゴロ', 'ゴ', ResultGroup.out, maxRbi: 3, canStay: true),
+  flyOut('フライ', '飛', ResultGroup.out, maxRbi: 3),
+  lineOut('ライナー', '直', ResultGroup.out, maxRbi: 3),
   doublePlay('併殺打', '併', ResultGroup.out),
-  sacrificeFly('犠牲フライ', '犠飛', ResultGroup.other, atBat: false, maxRbi: 1),
-  sacrificeBunt('犠打', '犠打', ResultGroup.other, atBat: false, maxRbi: 1),
-  error('エラー', '失', ResultGroup.other, maxSteals: 3, maxRuns: 1),
-  fielderChoice('野選', '野', ResultGroup.other, maxRbi: 1, maxSteals: 3, maxRuns: 1),
-  buntOut('バントアウト', 'バ', ResultGroup.other),
+  sacrificeFly('犠牲フライ', '犠飛', ResultGroup.other, atBat: false, maxRbi: 3, minRbi: 1, canStay: true),
+  sacrificeBunt('犠打', '犠打', ResultGroup.other, atBat: false, maxRbi: 3, canStay: true),
+  error('エラー', '失', ResultGroup.other, maxRbi: 1, maxSteals: 3, maxRuns: 1),
+  fielderChoice('野選', '野', ResultGroup.other, maxRbi: 3, maxSteals: 3, maxRuns: 1),
+  buntOut('バントアウト', 'バ', ResultGroup.other, maxRbi: 3),
   uncaughtThirdStrike('振り逃げ', '逃', ResultGroup.other, strikeout: true, maxSteals: 3, maxRuns: 1);
 
   const AtBatResult(
@@ -48,6 +49,7 @@ enum AtBatResult {
     this.maxSteals = 0,
     this.maxRuns = 0,
     this.minRuns = 0,
+    this.canStay = false,
   });
 
   final String label;
@@ -64,11 +66,11 @@ enum AtBatResult {
   final int maxRuns;
   final int minRuns;
 
+  /// 打者が塁に残ることがあるアウト系の結果（R-1-a）。
+  final bool canStay;
+
   bool get isHit => bases > 0;
   bool get isOnBase => group == ResultGroup.onBase;
-
-  /// 盗塁死は、打者走者が塁に残る結果にだけ付く（allowsSubsequentCaughtStealing）。
-  bool get allowsCaughtStealing => maxSteals > 0 && this != triple;
 }
 
 /// 出場区分。function_design/game_result_input.md の GameParticipation を写した。
@@ -112,18 +114,25 @@ enum Position {
   shortstop('遊撃手', '遊', PositionGroup.infield),
   left('左翼手', '左', PositionGroup.outfield),
   center('中堅手', '中', PositionGroup.outfield),
-  right('右翼手', '右', PositionGroup.outfield);
+  right('右翼手', '右', PositionGroup.outfield),
+
+  /// 指名打者。試合の出場（スタメン）でだけ選び、選手の守備位置には持たない（D-18）。
+  designatedHitter('指名打者', '指', PositionGroup.designatedHitter);
 
   const Position(this.label, this.short, this.group);
   final String label;
   final String short;
   final PositionGroup group;
+
+  /// 選手の守備位置として選べるもの。
+  static List<Position> get fielders => [for (final p in values) if (p != designatedHitter) p];
 }
 
 enum PositionGroup {
   catcher('捕手'),
   infield('内野手'),
-  outfield('外野手');
+  outfield('外野手'),
+  designatedHitter('指名打者');
 
   const PositionGroup(this.label);
   final String label;
@@ -210,22 +219,48 @@ class PlayerOrigin {
 
 /// 1 打席。走塁は打席に結び付けて持つ（BaseRunningAction.relatedAtBatActionId）。
 class AtBat {
-  const AtBat(this.result, {this.rbi = 0, this.steals = 0, this.caughtStealing = false, this.scored = false});
+  const AtBat(
+    this.result, {
+    this.rbi = 0,
+    this.steals = 0,
+    this.caughtStealing = false,
+    this.scored = false,
+    this.stayed = false,
+  });
 
   final AtBatResult result;
+
+  /// 打者が残った（R-1-a）。ゴロ、犠飛、犠打だけが持つ。
+  final bool stayed;
+
+  /// 打者が残ったときは、塁から本塁までの 3 盗塁と得点を付けられる。
+  int get maxSteals => result.canStay && stayed ? 3 : result.maxSteals;
+  int get maxRuns => result.canStay && stayed ? 1 : result.maxRuns;
+
+  /// 盗塁死は、打者が塁に残るときに付く。三塁打の本盗の失敗も含める（R-1）。
+  bool get allowsCaughtStealing => maxSteals > 0;
   final int rbi;
   final int steals;
   final bool caughtStealing;
   final bool scored;
 
   /// 結果を替えたとき、上限を超える値を上限へ丸める。ホームランは盗塁を 0 に戻す（AC-017）。
-  AtBat withResult(AtBatResult next) => AtBat(
-    next,
-    rbi: rbi.clamp(next.minRbi, next.maxRbi),
-    steals: steals.clamp(0, next.maxSteals),
-    caughtStealing: caughtStealing && next.allowsCaughtStealing,
-    scored: next.minRuns > 0 || (scored && next.maxRuns > 0),
-  );
+  AtBat withResult(AtBatResult next) {
+    final keep = AtBat(next, stayed: stayed && next.canStay);
+    return AtBat(
+      next,
+      rbi: rbi.clamp(next.minRbi, next.maxRbi),
+      steals: steals.clamp(0, keep.maxSteals),
+      caughtStealing: caughtStealing && keep.allowsCaughtStealing,
+      scored: next.minRuns > 0 || (scored && keep.maxRuns > 0),
+      stayed: keep.stayed,
+    );
+  }
+
+  /// 打者が残ったを外したら、その打席の盗塁、得点、盗塁死を 0 に戻す（R-1-a）。
+  AtBat withStayed(bool value) => value
+      ? AtBat(result, rbi: rbi, stayed: true)
+      : AtBat(result, rbi: rbi);
 
   AtBat copyWith({int? rbi, int? steals, bool? caughtStealing, bool? scored}) => AtBat(
     result,
@@ -233,6 +268,7 @@ class AtBat {
     steals: steals ?? this.steals,
     caughtStealing: caughtStealing ?? this.caughtStealing,
     scored: scored ?? this.scored,
+    stayed: stayed,
   );
 }
 
@@ -243,8 +279,8 @@ class RunnerLine {
   final bool caughtStealing;
   final bool scored;
 
-  /// 代走は一塁から出る前提で、二盗と三盗の 2 回を上限にする。
-  static const maxSteals = 2;
+  /// 代走は一塁から出る前提で、二盗、三盗、本盗の 3 回を上限にする（D-24）。
+  static const maxSteals = 3;
 }
 
 class GameRecord {

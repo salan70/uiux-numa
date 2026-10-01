@@ -4,6 +4,7 @@ import 'creation.dart';
 import 'model.dart';
 import 'number_inputs.dart';
 import 'store.dart';
+import 'team_candidates.dart';
 import 'theme.dart';
 import 'widgets.dart';
 
@@ -83,9 +84,8 @@ class _TransferScreenState extends State<TransferScreen> {
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
-    final store = StoreScope.of(context);
+    StoreScope.of(context);
     final errors = _tried ? _errors() : const <String>[];
-    final candidates = [for (final t in store.teamsOf(widget.player)) if (t.name != _from.team.name) t];
     // 移籍の前の試合が最後。直すときも、移籍の後の最初の試合は次の試合になる。
     final from = _season.playedCount + 1;
     return Scaffold(
@@ -104,16 +104,18 @@ class _TransferScreenState extends State<TransferScreen> {
             ),
           ),
           FieldLabel('移籍先', note: '今: ${_from.team.name}'),
-          if (candidates.isNotEmpty) ...[
-            ChoiceWrap<Team>(
-              semanticsLabel: 'これまでの球団',
-              values: candidates,
-              label: (t) => t.name,
-              isSelected: (t) => t.name == _team.text.trim(),
-              onSelected: _pick,
-            ),
-            const SizedBox(height: Space.s200),
-          ],
+          TeamCandidates(
+            selectedTeam: _team.text.trim(),
+            selectedLeague: _league.text.trim(),
+            exclude: _from.team.name,
+            onTeam: (t) => _pick(t.team),
+            onLeague: (l) => setState(() {
+              _league.text = l.league;
+              _country.text = l.country;
+              _teamCount = l.teamCount;
+              _rank = _rank.clamp(1, _teamCount);
+            }),
+          ),
           TextField(
             controller: _team,
             decoration: InputDecoration(

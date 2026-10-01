@@ -24,7 +24,14 @@ class PlayerDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('選手'),
-        actions: [ShareAction(player: player)],
+        actions: [
+          ShareAction(player: player),
+          PopupMenuButton<String>(
+            tooltip: 'メニュー',
+            onSelected: (_) => _delete(context),
+            itemBuilder: (_) => [const PopupMenuItem(value: 'delete', child: Text('この選手を消す'))],
+          ),
+        ],
       ),
       body: PlayerDetailBody(player: player),
       bottomNavigationBar: onPlay == null
@@ -36,6 +43,24 @@ class PlayerDetailScreen extends StatelessWidget {
               ),
             ),
     );
+  }
+
+  /// 選手を消す（D-22）。確認の後に、その選手の季、試合、球団、下書きを消し、名鑑へ戻る。足したタイトルは残す。
+  Future<void> _delete(BuildContext context) async {
+    final store = StoreScope.read(context);
+    final navigator = Navigator.of(context);
+    final ok = await confirmDialog(
+      context,
+      title: '${player.name}を消しますか？',
+      message: '${player.proYears} 年分の季と試合の記録が消えます。消した選手は戻せません。足したタイトルは残ります。',
+      confirm: '消す',
+      destructive: true,
+    );
+    if (!ok) return;
+    final wasCurrent = store.currentId == player.id;
+    store.deletePlayer(player);
+    // 遊んでいた選手なら選手トップも開けないので、タイトルまで戻る。ほかの選手なら名鑑へ戻る。
+    wasCurrent ? navigator.popUntil((r) => r.isFirst) : navigator.pop();
   }
 }
 
@@ -62,9 +87,10 @@ class ShareAction extends StatelessWidget {
               children: [
                 Semantics(header: true, child: const Text('選手カードを共有', style: Txt.heading)),
                 const SizedBox(height: Space.s300),
-                PlayerCard(player: player),
+                // この 1 枚を画像にして、端末の共有で送る（D-19、G-17）。
+                ShareCard(player: player),
                 const SizedBox(height: Space.s300),
-                Text('このモックでは画像を書き出しません。', style: Txt.caption.copyWith(color: Palette.of(context).onSurfaceVariant)),
+                _ShareButton(),
               ],
             ),
           ),
@@ -452,4 +478,76 @@ class AbilityBar extends StatelessWidget {
       : v >= 60
       ? p.primary
       : p.surface;
+}
+
+/// 共有する画像。選手の札（ドット絵、名前、球団、背番号）、通算の成績、タイトルの数、小さなアプリ名。
+class ShareCard extends StatelessWidget {
+  const ShareCard({super.key, required this.player});
+
+  final Player player;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.of(context);
+    final c = player.career;
+    final titles = player.allTitles.length;
+    return Semantics(
+      label: '${player.name}の選手カード、通算 ${player.proYears} 年、${c.hits} 安打 ${c.homeRuns} 本塁打、タイトル $titles 個',
+      excludeSemantics: true,
+      child: BoldBox(
+        padding: const EdgeInsets.all(Space.s300),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            PlayerHeader(player: player),
+            const SizedBox(height: Space.s300),
+            Row(
+              children: [
+                Text('通算 ${player.proYears} 年', style: Txt.control.copyWith(fontWeight: FontWeight.w700)),
+                const Spacer(),
+                Text('タイトル $titles 個', style: Txt.control.copyWith(fontWeight: FontWeight.w700)),
+              ],
+            ),
+            const SizedBox(height: Space.s200),
+            SeasonStatGrid(line: c, large: false),
+            const SizedBox(height: Space.s300),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text('Baseball Player Journey', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 端末の共有を開く。試作の Web では開けないので、押したら開いたつもりの文を出す。
+class _ShareButton extends StatefulWidget {
+  @override
+  State<_ShareButton> createState() => _ShareButtonState();
+}
+
+class _ShareButtonState extends State<_ShareButton> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        PressButton(
+          label: '画像を共有する',
+          icon: Icons.ios_share,
+          kind: PressKind.primary,
+          onPressed: () => setState(() => _pressed = true),
+        ),
+        const SizedBox(height: Space.s200),
+        Text(
+          _pressed ? '製品ではここで端末の共有が開きます（試作では開きません）。' : '上の 1 枚を画像にして送ります。',
+          style: Txt.caption.copyWith(color: Palette.of(context).onSurfaceVariant),
+        ),
+      ],
+    );
+  }
 }

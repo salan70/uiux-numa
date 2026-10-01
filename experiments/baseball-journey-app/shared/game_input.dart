@@ -305,26 +305,26 @@ class AtBatEditor extends StatelessWidget {
             limitNote: '${r.label}の打点は ${r.maxRbi} までです。',
             floorNote: r.minRbi > 0 ? '${r.label}は ${r.minRbi} 打点以上です。' : null,
           ),
-        if (r.maxSteals > 0)
+        if (a.maxSteals > 0)
           NumberStepper(
             label: '盗塁',
             value: a.steals,
             min: 0,
-            max: r.maxSteals,
+            max: a.maxSteals,
             onChanged: store.setSteals,
-            limitNote: '${r.label}の後の盗塁は ${r.maxSteals} までです。',
+            limitNote: '${r.label}の後の盗塁は ${a.maxSteals} までです。',
           ),
-        if (r.maxRuns > 0 || r.allowsCaughtStealing)
+        if (a.maxRuns > 0 || a.allowsCaughtStealing)
           Wrap(
             spacing: Space.s200,
             children: [
-              if (r.maxRuns > 0)
+              if (a.maxRuns > 0)
                 FilterChip(
                   label: const Text('得点'),
                   selected: a.scored,
                   onSelected: r.minRuns > 0 ? null : store.setScored,
                 ),
-              if (r.allowsCaughtStealing)
+              if (a.allowsCaughtStealing)
                 FilterChip(label: const Text('盗塁死'), selected: a.caughtStealing, onSelected: store.setCaughtStealing),
             ],
           ),
@@ -396,7 +396,7 @@ class GameActionBar extends StatelessWidget {
             label: '取り消す',
             icon: Icons.undo,
             semanticsHint: '最後の入力を消します',
-            onPressed: d.isEmpty ? null : store.undo,
+            onPressed: d.canUndo ? store.undo : null,
           ),
         ),
         const SizedBox(width: Space.s300),
@@ -433,15 +433,18 @@ class _ScoreSheet extends StatefulWidget {
 }
 
 class _ScoreSheetState extends State<_ScoreSheet> {
-  late int _my;
-  int _opponent = 0;
+  /// 新しい試合はどちらも未選択から始め、両方を選ぶまで保存できない（D-19、U-4）。
+  int? _my;
+  int? _opponent;
 
   @override
   void initState() {
     super.initState();
     final d = StoreScope.read(context).draft!;
-    _my = d.initialScores == null ? d.rbi : max(d.rbi, d.initialScores!.$1);
-    _opponent = d.initialScores?.$2 ?? 0;
+    if (d.initialScores case (final my, final opponent)) {
+      _my = max(d.minScore, my);
+      _opponent = opponent;
+    }
   }
 
   @override
@@ -450,9 +453,12 @@ class _ScoreSheetState extends State<_ScoreSheet> {
     final p = Palette.of(context);
     final d = store.draft;
     if (d == null) return const SizedBox.shrink();
-    final outcome = _my > _opponent
+    final my = _my, opponent = _opponent;
+    final outcome = my == null || opponent == null
+        ? null
+        : my > opponent
         ? GameOutcome.win
-        : _my < _opponent
+        : my < opponent
         ? GameOutcome.loss
         : GameOutcome.draw;
     final saving = store.saveState == SaveState.saving;
@@ -466,17 +472,17 @@ class _ScoreSheetState extends State<_ScoreSheet> {
             Semantics(header: true, child: const Text('スコア', style: Txt.heading)),
             Text(d.line, style: Txt.ui.copyWith(color: p.onSurfaceVariant)),
             const SizedBox(height: Space.s300),
-            _ScoreBoard(my: _my, opponent: _opponent, outcome: outcome),
+            _ScoreBoard(my: my, opponent: opponent, outcome: outcome),
             const SizedBox(height: Space.s300),
             _ScorePicker(
               label: '自チーム',
-              value: _my,
-              min: d.rbi,
+              value: my,
+              min: d.minScore,
               onChanged: (v) => setState(() => _my = v),
-              note: d.rbi > 0 ? '自チームの得点は、打点の合計の ${d.rbi} 点以上です。' : null,
+              note: d.minScore > 0 ? '自チームの得点は、打点の合計と本人の得点の多い方の ${d.minScore} 点以上です。' : null,
             ),
             const SizedBox(height: Space.s300),
-            _ScorePicker(label: '相手', value: _opponent, min: 0, onChanged: (v) => setState(() => _opponent = v)),
+            _ScorePicker(label: '相手', value: opponent, min: 0, onChanged: (v) => setState(() => _opponent = v)),
 
             // 失敗の文言の行は常に確保し、出ても保存ボタンを動かさない。
             SizedBox(
@@ -499,8 +505,11 @@ class _ScoreSheetState extends State<_ScoreSheet> {
                     label: '保存',
                     kind: PressKind.primary,
                     busy: saving,
-                    onPressed: () async {
-                      final ok = await store.saveGame(_my, _opponent);
+                    semanticsHint: outcome == null ? '自チームと相手の得点を選ぶと保存できます' : null,
+                    onPressed: outcome == null
+                        ? null
+                        : () async {
+                      final ok = await store.saveGame(my!, opponent!);
                       if (ok && context.mounted) Navigator.pop(context, true);
                     },
                   ),
@@ -521,7 +530,9 @@ class _ScorePicker extends StatelessWidget {
   const _ScorePicker({required this.label, required this.value, required this.min, required this.onChanged, this.note});
 
   final String label;
-  final int value;
+
+  /// 未選択なら null。
+  final int? value;
   final int min;
   final ValueChanged<int> onChanged;
   final String? note;
@@ -547,12 +558,13 @@ class _ScorePicker extends StatelessWidget {
         for (var i = 0; i < keys.length; i++) ...[if (i > 0) const SizedBox(width: Space.s150), keys[i]],
       ],
     );
+    final value = this.value;
     Widget n(int v) => key('$v', selected: v == value, onPressed: v < min ? null : () => onChanged(v));
-    final many = value >= _many;
+    final many = value != null && value >= _many;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(label, style: Txt.control),
+        Text(value == null ? '$label（未選択）' : label, style: Txt.control),
         const SizedBox(height: Space.s100),
         row([for (var v = 0; v <= 5; v++) n(v)]),
         const SizedBox(height: Space.s150),
@@ -573,7 +585,7 @@ class _ScorePicker extends StatelessWidget {
                 validate: (t) => (int.tryParse(t) ?? 0) < _many ? '$_many 点以上を打ちます。10 点以下は札から選びます。' : null,
                 preview: (t) => Text('${t.isEmpty ? '−' : t} 点', style: Txt.figure.copyWith(color: p.onSurface)),
               );
-              if (t != null) onChanged(int.parse(t));
+              if (t != null) onChanged(max(min, int.parse(t)));
             },
           ),
         ]),
@@ -587,25 +599,26 @@ class _ScorePicker extends StatelessWidget {
 class _ScoreBoard extends StatelessWidget {
   const _ScoreBoard({required this.my, required this.opponent, required this.outcome});
 
-  final int my;
-  final int opponent;
-  final GameOutcome outcome;
+  /// 未選択の側は null で、「−」を灯す。
+  final int? my;
+  final int? opponent;
+  final GameOutcome? outcome;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.of(context);
     final label = Txt.caption.copyWith(color: Night.ink);
-    Widget side(String name, int score) => Column(
+    Widget side(String name, int? score) => Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(name, style: label),
         const SizedBox(height: Space.s100),
-        DotText(['$score'], pitch: 4, offColor: Night.ledOff),
+        DotText([score == null ? '-' : '$score'], pitch: 4, offColor: Night.ledOff),
       ],
     );
     return Semantics(
       liveRegion: true,
-      label: '$my 対 $opponent で${outcome.label}',
+      label: outcome == null ? 'スコアは未選択' : '$my 対 $opponent で${outcome!.label}',
       excludeSemantics: true,
       child: BoldBox(
         color: Night.board,
@@ -621,7 +634,7 @@ class _ScoreBoard extends StatelessWidget {
                 border: Border.all(color: outcome == GameOutcome.win ? p.ink : Night.ink, width: Borders.thick),
               ),
               child: Text(
-                outcome.label,
+                outcome?.label ?? '−',
                 style: Txt.control.copyWith(color: outcome == GameOutcome.win ? p.onPrimary : Night.ink),
               ),
             ),
@@ -657,11 +670,15 @@ class ParticipationForm extends StatefulWidget {
     required this.onDecided,
     this.dense = false,
     this.initialKind = ParticipationKind.starter,
+    this.initial,
   });
 
   final Player player;
   final ValueChanged<NextGameChoice> onDecided;
   final bool dense;
+
+  /// 入力の途中で出場を選び直すときの今の出場。あれば欠場と「前と同じ」を出さない（D-17）。
+  final Participation? initial;
 
   /// 最初に選んでおく出場のしかた。「欠場で進める」から開くときは欠場にする。
   final ParticipationKind initialKind;
@@ -671,10 +688,23 @@ class ParticipationForm extends StatefulWidget {
 }
 
 class _ParticipationFormState extends State<ParticipationForm> {
-  late ParticipationKind _kind = widget.initialKind;
+  late ParticipationKind _kind = widget.initial?.kind ?? widget.initialKind;
   late int _order =
-      widget.player.current.games.reversed.map((g) => g.participation.battingOrder).whereType<int>().firstOrNull ?? 1;
-  late Position _position = widget.player.mainPosition;
+      widget.initial?.battingOrder ??
+      widget.player.current.games.reversed.map((g) => g.participation.battingOrder).whereType<int>().firstOrNull ??
+      1;
+
+  /// 守備位置の初期値は前の試合の守備位置、無ければメイン。
+  late Position _position =
+      widget.initial?.position ??
+      widget.player.current.games.reversed.map((g) => g.participation.position).whereType<Position>().firstOrNull ??
+      widget.player.mainPosition;
+
+  /// 前の試合の出場。欠場だったり今季の最初の試合だったりすれば無い（D-19、U-2）。
+  Participation? get _previous {
+    final last = widget.player.current.games.lastOrNull;
+    return last == null || !last.played ? null : last.participation;
+  }
   int _skip = 1;
   int _wins = 0;
   int _losses = 0;
@@ -699,13 +729,35 @@ class _ParticipationFormState extends State<ParticipationForm> {
     final p = Palette.of(context);
     final season = widget.player.current;
     final remaining = season.totalGames - season.playedCount;
+    final previous = widget.initial == null ? _previous : null;
+    // スタメンは選手の守備位置と指名打者、守備固めは選手の守備位置だけから選ぶ（D-18）。
+    final positions = [
+      ...widget.player.positions,
+      if (_kind == ParticipationKind.starter) Position.designatedHitter,
+    ];
+    if (!positions.contains(_position)) _position = widget.player.mainPosition;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (previous != null) ...[
+          // 1 季に 143 回選ぶので、前と同じ出場は 1 回押して始める。
+          PressButton(
+            label: '前と同じ（${_describe(previous)}）',
+            icon: Icons.replay,
+            semanticsHint: 'この出場で試合を始めます',
+            onPressed: () => widget.onDecided(NextGameChoice.play(previous)),
+          ),
+          const SizedBox(height: Space.s200),
+          Text('ほかの出場', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
+          const SizedBox(height: Space.s100),
+        ],
         ChoiceWrap<ParticipationKind>(
           semanticsLabel: '出場',
-          values: ParticipationKind.values,
+          values: [
+            for (final k in ParticipationKind.values)
+              if (widget.initial == null || k != ParticipationKind.none) k,
+          ],
           label: (k) => k.label,
           isSelected: (k) => k == _kind,
           onSelected: (k) => setState(() => _kind = k),
@@ -728,7 +780,7 @@ class _ParticipationFormState extends State<ParticipationForm> {
           const SizedBox(height: Space.s100),
           ChoiceWrap<Position>(
             semanticsLabel: '守備位置',
-            values: Position.values,
+            values: positions,
             label: (pos) => pos.short,
             isSelected: (pos) => pos == _position,
             onSelected: (pos) => setState(() => _position = pos),
@@ -796,7 +848,11 @@ class _ParticipationFormState extends State<ParticipationForm> {
           const SizedBox(height: Space.s300),
         ],
         PressButton(
-          label: _kind == ParticipationKind.none ? '$_skip 試合を進める' : '試合を始める',
+          label: _kind == ParticipationKind.none
+              ? '$_skip 試合を進める'
+              : widget.initial != null
+              ? 'この出場にする'
+              : '試合を始める',
           kind: PressKind.primary,
           onPressed: () => widget.onDecided(
             _kind == ParticipationKind.none
@@ -815,10 +871,19 @@ class _ParticipationFormState extends State<ParticipationForm> {
   }
 }
 
+/// 「1 番・遊」「代打・5 番」の短い形。札に 1 行で収める。
+String _describe(Participation p) => switch (p.kind) {
+  ParticipationKind.starter => '${p.battingOrder} 番・${p.position?.short ?? ''}',
+  ParticipationKind.pinchHitter => '代打・${p.battingOrder} 番',
+  ParticipationKind.defensive => '守備固め・${p.position?.short ?? ''}',
+  _ => p.kind.label,
+};
+
 Future<NextGameChoice?> showParticipationSheet(
   BuildContext context,
   Player player, {
   ParticipationKind initialKind = ParticipationKind.starter,
+  Participation? initial,
 }) {
   return showModalBottomSheet<NextGameChoice>(
     context: context,
@@ -830,9 +895,19 @@ Future<NextGameChoice?> showParticipationSheet(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Semantics(header: true, child: Text('第 ${player.current.playedCount + 1} 戦', style: Txt.heading)),
+            Semantics(
+              header: true,
+              child: Text(initial != null ? '出場を選び直す' : '第 ${player.current.playedCount + 1} 戦', style: Txt.heading),
+            ),
+            if (initial != null)
+              Text('入力した打席は残ります。', style: Txt.caption.copyWith(color: Palette.of(context).onSurfaceVariant)),
             const SizedBox(height: Space.s300),
-            ParticipationForm(player: player, initialKind: initialKind, onDecided: (c) => Navigator.pop(context, c)),
+            ParticipationForm(
+              player: player,
+              initialKind: initialKind,
+              initial: initial,
+              onDecided: (c) => Navigator.pop(context, c),
+            ),
           ],
         ),
       ),

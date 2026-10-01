@@ -590,7 +590,8 @@ Future<bool> confirmDialog(
   required String title,
   required String message,
   required String confirm,
-  String cancel = 'キャンセル',
+  /// null なら閉じる操作だけの知らせにする。
+  String? cancel = 'キャンセル',
   bool destructive = false,
 }) async {
   final result = await showDialog<bool>(
@@ -600,7 +601,8 @@ Future<bool> confirmDialog(
       title: Text(title),
       content: Text(message),
       actions: [
-        PressButton(label: cancel, expand: false, dense: true, onPressed: () => Navigator.pop(context, false)),
+        if (cancel != null)
+          PressButton(label: cancel, expand: false, dense: true, onPressed: () => Navigator.pop(context, false)),
         PressButton(
           label: confirm,
           expand: false,
