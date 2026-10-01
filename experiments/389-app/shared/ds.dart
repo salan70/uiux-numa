@@ -3,9 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'icons.dart';
+
 // .389 の Design System v2 を写す。出典は salan70/389-app 10adac47 の DESIGN.md と packages/common/design_system。
 // 値と造形は製品に合わせ、試作で足したものはコメントで示す。
-// アイコンは製品の SVG の代わりに Material の Rounded を使う（DsSvgIcon の Rounded Line Icon に近い形を選ぶ）。
+// アイコンは icons.dart の DsIcon（製品の DsSvgIcon の線画を写したもの）を使う。
 
 abstract final class DsPalette {
   static const navy950 = Color(0xFF0E1624);
@@ -442,13 +444,16 @@ enum DsButtonType {
 
 /// 押すと 100ms で 0.95 倍に縮み、離すと戻ってから動く。リップルは無い。
 class DsButton extends StatefulWidget {
-  const DsButton({required this.label, required this.onPressed, super.key, this.type = DsButtonType.primary, this.icon, this.small = false, this.color, this.foreground});
+  const DsButton({required this.label, required this.onPressed, super.key, this.type = DsButtonType.primary, this.icon, this.small = false, this.tight = false, this.color, this.foreground});
 
   final String label;
   final VoidCallback? onPressed;
   final DsButtonType type;
-  final IconData? icon;
+  final DsGlyph? icon;
   final bool small;
+
+  /// 試作で足した、高さ 48 のまま左右の余白と文字を詰める形。下端の帯の補助のボタンに使い、回答のボタンと高さを揃える。
+  final bool tight;
 
   /// 試作で足した上書き。主の色を状況の色（ランクなど）に替えるときに使う。
   final Color? color;
@@ -474,8 +479,8 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
     final bg = enabled ? (widget.color ?? t.background) : DsColor.disabledSurface;
     final fg = enabled ? (widget.foreground ?? t.foreground) : DsColor.disabledContent;
     final isText = t == DsButtonType.text;
-    final label = Text(widget.label, maxLines: 1, style: DsTypography.button.copyWith(color: fg, fontSize: widget.small ? 14 : 16));
-    final icon = widget.icon == null ? null : Icon(widget.icon, size: 20, color: fg);
+    final label = Text(widget.label, maxLines: 1, style: DsTypography.button.copyWith(color: fg, fontSize: widget.small || widget.tight ? 14 : 16));
+    final icon = widget.icon == null ? null : DsIcon(widget.icon!, size: 20, color: fg, background: bg);
     return Semantics(
       button: true,
       enabled: enabled,
@@ -501,7 +506,7 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
                       boxShadow: enabled ? DsShadow.small : null,
                     ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: isText ? 0 : (widget.small ? 8 : 24)),
+                padding: EdgeInsets.symmetric(horizontal: isText ? 0 : (widget.tight ? 8 : (widget.small ? 16 : 24))),
                 child: Row(
                   mainAxisSize: isText ? MainAxisSize.min : MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -523,7 +528,7 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
 class DsHeaderIconButton extends StatelessWidget {
   const DsHeaderIconButton({required this.icon, required this.tooltip, required this.onPressed, super.key});
 
-  final IconData icon;
+  final DsGlyph icon;
   final String tooltip;
   final VoidCallback? onPressed;
 
@@ -532,7 +537,7 @@ class DsHeaderIconButton extends StatelessWidget {
     onPressed: onPressed,
     tooltip: tooltip,
     constraints: const BoxConstraints.tightFor(width: 44, height: 44),
-    icon: Icon(icon, size: 24, color: DsColor.contentPrimary),
+    icon: DsIcon(icon, background: DsColor.background),
   );
 }
 

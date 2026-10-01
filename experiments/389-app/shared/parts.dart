@@ -145,8 +145,9 @@ class RankBar extends StatelessWidget {
           ),
         ),
         const SizedBox(height: DsSpacing.space8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          spacing: DsSpacing.space16,
+          runSpacing: DsSpacing.space4,
           children: [
             for (final r in Rank.values)
               Row(

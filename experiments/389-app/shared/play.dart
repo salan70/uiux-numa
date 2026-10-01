@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'ds.dart';
+import 'icons.dart';
 
 // 3 案が共有するクイズの部品。v2 の Pattern C（成績表のカード、下端の帯）に従い、開示と外れの動きを足した。
 
 /// 成績表。製品の StatsView と同じく、cyan の隅のアクセント、影、ドットグリッドを持つカードに、年度 × 項目を 1px の区切りで並べる。
+/// 開いた値だけを cyan にし、年度は灰に下げて、開いた値が表の中で最も目立つようにする。
 /// 開いた瞬間のマスは pink で大きく出て、600ms で cyan の定位置へ戻る。どこが開いたかを目で追えるようにするため。
+/// 終わった後は全部を見せ、開かずに済んだマスを白にして、開いたマス（cyan）と分ける。
 class StatsTable extends StatelessWidget {
   const StatsTable({required this.session, super.key, this.compact = false});
 
@@ -42,9 +45,12 @@ class StatsTable extends StatelessWidget {
                 Text(
                   s.year(r),
                   textAlign: TextAlign.center,
-                  style: DsTypography.displayNumeric.copyWith(fontSize: s.year(r) == '通算' ? 12 : 15, color: DsColor.actionPrimary, fontFamily: s.year(r) == '通算' ? DsTypography.bodyFamily : null),
+                  style: s.year(r) == '通算'
+                      ? DsTypography.caption.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)
+                      : DsTypography.displayNumeric.copyWith(fontSize: 15, color: DsColor.contentSecondary),
                 ),
-                for (var c = 0; c < s.stats.length; c++) StatCell(text: s.value(r, c), revealed: s.isRevealed(r, c), fresh: s.lastRevealed == (r, c) && !s.isOver),
+                for (var c = 0; c < s.stats.length; c++)
+                  StatCell(text: s.value(r, c), revealed: s.isRevealed(r, c), fresh: s.lastRevealed == (r, c) && !s.isOver, rest: s.isOver && !s.opened(r, c)),
               ]),
             ),
         ],
@@ -56,11 +62,14 @@ class StatsTable extends StatelessWidget {
 }
 
 class StatCell extends StatefulWidget {
-  const StatCell({required this.text, required this.revealed, required this.fresh, super.key});
+  const StatCell({required this.text, required this.revealed, required this.fresh, super.key, this.rest = false});
 
   final String text;
   final bool revealed;
   final bool fresh;
+
+  /// 終わった後に見せる、開かずに済んだマス。
+  final bool rest;
 
   @override
   State<StatCell> createState() => _StatCellState();
@@ -91,7 +100,7 @@ class _StatCellState extends State<StatCell> with SingleTickerProviderStateMixin
         final v = _t.value;
         final pop = Curves.easeOutBack.transform((v / 0.45).clamp(0, 1));
         final settle = Curves.easeOut.transform(((v - 0.45) / 0.55).clamp(0, 1));
-        final color = Color.lerp(DsColor.actionEmphasis, DsColor.actionPrimary, widget.fresh ? settle : 1)!;
+        final color = widget.rest ? DsColor.contentPrimary.withValues(alpha: 0.72) : Color.lerp(DsColor.actionEmphasis, DsColor.actionPrimary, widget.fresh ? settle : 1)!;
         return Stack(
           alignment: Alignment.center,
           children: [
@@ -273,7 +282,7 @@ class _MissBannerState extends State<MissBanner> with SingleTickerProviderStateM
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.close_rounded, color: DsColor.onAction, size: 22),
+                    const DsIcon(DsGlyph.close, color: DsColor.onAction, size: 22),
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
@@ -349,7 +358,7 @@ class _AnswerSheetState extends State<_AnswerSheet> {
                   decoration: InputDecoration(
                     hintText: '選手名の一部（例: 柳田）',
                     hintStyle: DsTypography.body1.copyWith(color: DsColor.disabledContent),
-                    prefixIcon: const Icon(Icons.search_rounded, color: DsColor.contentSecondary),
+                    prefixIcon: const Padding(padding: EdgeInsets.all(12), child: DsIcon(DsGlyph.search, size: 22, color: DsColor.contentSecondary)),
                     filled: true,
                     fillColor: DsColor.surface,
                     enabledBorder: const OutlineInputBorder(borderRadius: DsRadius.borderSm, borderSide: BorderSide(color: DsColor.surfaceBorder)),
@@ -360,10 +369,14 @@ class _AnswerSheetState extends State<_AnswerSheet> {
                 SizedBox(
                   height: 280,
                   child: hits.isEmpty
-                      ? Center(
-                          child: Text(
-                            _text.text.isEmpty ? '名前を入れると候補が出ます' : '該当する選手がいません',
-                            style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 4),
+                            child: Text(
+                              _text.text.isEmpty ? '姓だけでも探せます。外れても、何度でも回答できます。' : '「${_text.text}」に当たる選手がいません。漢字の表記を確かめてください。',
+                              style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
+                            ),
                           ),
                         )
                       : ListView.separated(
@@ -392,7 +405,7 @@ class _AnswerSheetState extends State<_AnswerSheet> {
                                     if (miss)
                                       const DsBadge(label: '外れ', color: DsColor.incorrect)
                                     else
-                                      const Icon(Icons.chevron_right_rounded, color: DsColor.actionPrimary),
+                                      const DsIcon(DsGlyph.chevronRight, size: 20, color: DsColor.actionPrimary),
                                   ],
                                 ),
                               ),
@@ -426,12 +439,16 @@ Future<String?> showQuizMenu(BuildContext context, {required bool canRevealAll, 
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (canRevealAll) ...[
-                DsButton(label: 'すべて表示する', type: DsButtonType.outline, icon: Icons.visibility_rounded, onPressed: () => Navigator.pop(context, 'all')),
+                DsButton(label: 'すべて表示する', type: DsButtonType.outline, icon: DsGlyph.eye, onPressed: () => Navigator.pop(context, 'all')),
                 const SizedBox(height: 6),
                 Text('当てても C になります', textAlign: TextAlign.center, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
                 const SizedBox(height: DsSpacing.space12),
               ],
-              if (canGiveUp) DsButton(label: 'あきらめて答えを見る', type: DsButtonType.danger, icon: Icons.flag_rounded, onPressed: () => Navigator.pop(context, 'give')),
+              if (canGiveUp) ...[
+                Text('あきらめると不正解として記録され、答えと全部の成績を見られます。', style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)),
+                const SizedBox(height: DsSpacing.space12),
+                DsButton(label: 'あきらめて答えを見る', type: DsButtonType.danger, icon: DsGlyph.flag, onPressed: () => Navigator.pop(context, 'give')),
+              ],
             ],
           ),
         ),
