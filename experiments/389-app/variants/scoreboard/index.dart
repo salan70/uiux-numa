@@ -5,20 +5,17 @@ import 'package:flutter/material.dart';
 import '../../shared/app.dart';
 import '../../shared/data.dart';
 import '../../shared/ds.dart';
+import '../../shared/icons.dart';
 import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
-import '../../shared/switcher.dart';
 
 // scoreboard: 現行の情報構造（ホーム → クイズ → 結果 → プレイ記録）と v2 の造形をそのまま保ち、体験の芯だけを磨く。
 // 磨いた点は 3 つ。クイズの最中にいま当てたときのランクを出す。外れをダイアログでなく表の上の帯で知らせる。結果でランクを主役にする。
 // 結果のランクは、紙吹雪とともに大きな文字が縮みながら着地し、ランクの色の隅のアクセントで結果のカードを塗り分ける。
 
-Widget buildVariant() => const VariantHost(initial: 'scoreboard');
-
-/// この案の殻。VariantHost が案を替えるときに作り直す。
-Widget buildApp() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens, variant: 'scoreboard');
+Widget buildVariant() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens);
 
 Widget buildPanel() => const JumpPanel();
 
@@ -77,65 +74,79 @@ class _HomeState extends State<_Home> {
         children: [
           const Positioned.fill(child: StatsStreamBackground()),
           SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 360),
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-                  children: [
-                    const SizedBox(height: DsSpacing.space24),
-                    Center(child: Text('プロ野球クイズ', style: DsTypography.caption.copyWith(color: DsColor.contentPrimary, letterSpacing: 2))),
-                    const SizedBox(height: DsSpacing.space4),
-                    const Center(child: Logo389(width: 230)),
-                    const SizedBox(height: DsSpacing.space32),
-                    TodayCard(onPlay: () => _open(_quiz(_daily()))),
-                    const SizedBox(height: DsSpacing.space16),
-                    GestureDetector(
-                      onTap: () => _open(const _Record()),
-                      child: DsCard(
-                        accentColor: DsColor.actionPrimary,
-                        hasShadow: true,
-                        padding: EdgeInsets.zero,
-                        child: IntrinsicHeight(
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 128,
-                                color: DsColor.contentPrimary,
-                                padding: const EdgeInsets.all(DsSpacing.space16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+            // 製品の Pattern A と同じく、中身を幅 360 に収めて縦の中央に置く。背が足りなければスクロールする。
+            child: LayoutBuilder(
+              builder: (context, box) => SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: box.maxHeight - 40),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 360),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: Text('プロ野球クイズ', style: DsTypography.caption.copyWith(color: DsColor.contentPrimary, letterSpacing: 2)),
+                          ),
+                          const SizedBox(height: DsSpacing.space4),
+                          const Center(child: Logo389(width: 230)),
+                          const SizedBox(height: DsSpacing.space32),
+                          TodayCard(onPlay: () => _open(_quiz(_daily()))),
+                          const SizedBox(height: DsSpacing.space16),
+                          GestureDetector(
+                            onTap: () => _open(const _Record()),
+                            child: DsCard(
+                              accentColor: DsColor.actionPrimary,
+                              hasShadow: true,
+                              padding: EdgeInsets.zero,
+                              child: IntrinsicHeight(
+                                child: Row(
                                   children: [
-                                    Text('通算正解率', style: DsTypography.overline.copyWith(color: DsColor.onAction, letterSpacing: 0, fontWeight: FontWeight.w700)),
-                                    const SizedBox(height: DsSpacing.space4),
-                                    DsDisplayNumber(p.average, fontSize: 36, color: DsColor.actionPrimary),
+                                    Container(
+                                      width: 128,
+                                      color: DsColor.contentPrimary,
+                                      padding: const EdgeInsets.all(DsSpacing.space16),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '通算正解率',
+                                            style: DsTypography.overline.copyWith(color: DsColor.onAction, letterSpacing: 0, fontWeight: FontWeight.w700),
+                                          ),
+                                          const SizedBox(height: DsSpacing.space4),
+                                          DsDisplayNumber(p.average, fontSize: 36, color: DsColor.actionPrimary),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: DsSpacing.space16),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            DsStat(label: 'プレイ', value: '${p.plays}'),
+                                            DsStat(label: '正解', value: '${p.correct}', color: DsColor.rankHighlight),
+                                            DsStat(label: '最高ランク', value: best == Rank.miss ? '—' : best.label, color: dsRankColor(best.label)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: DsSpacing.space16),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      DsStat(label: 'プレイ', value: '${p.plays}'),
-                                      DsStat(label: '正解', value: '${p.correct}', color: DsColor.rankHighlight),
-                                      DsStat(label: '最高ランク', value: best == Rank.miss ? '—' : best.label, color: dsRankColor(best.label)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: DsSpacing.space24),
+                          DsButton(label: 'クイズ設定', type: DsButtonType.secondary, icon: DsGlyph.sliders, onPressed: () => showConditionSheet(context)),
+                          const SizedBox(height: DsSpacing.space16),
+                          DsButton(label: 'クイズをプレイ！', icon: DsGlyph.baseball, onPressed: () => _open(_quiz(randomSession()))),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: DsSpacing.space24),
-                    DsButton(label: 'クイズ設定', type: DsButtonType.secondary, icon: Icons.tune_rounded, onPressed: () => showConditionSheet(context)),
-                    const SizedBox(height: DsSpacing.space16),
-                    DsButton(label: 'クイズをプレイ！', icon: Icons.sports_baseball_rounded, onPressed: () => _open(_quiz(randomSession()))),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -192,8 +203,8 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
               DsPageHeader(
                 title: s.mode == QuizMode.daily ? '今日の1問の結果' : '結果',
                 accentColor: color,
-                leading: DsHeaderIconButton(icon: Icons.home_rounded, tooltip: 'TOP へ戻る', onPressed: () => Navigator.of(context).maybePop()),
-                trailing: DsHeaderIconButton(icon: Icons.ios_share_rounded, tooltip: '結果をシェア', onPressed: () => showShareNote(context, '結果のカード')),
+                leading: DsHeaderIconButton(icon: DsGlyph.home, tooltip: 'TOP へ戻る', onPressed: () => Navigator.of(context).maybePop()),
+                trailing: DsHeaderIconButton(icon: DsGlyph.share, tooltip: '結果をシェア', onPressed: () => showShareNote(context, '結果のカード')),
               ),
               Expanded(
                 child: ListView(
@@ -215,7 +226,10 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
                               animation: _land,
                               builder: (context, child) {
                                 final v = Curves.easeOutBack.transform(_land.value);
-                                return Opacity(opacity: _land.value.clamp(0, 1), child: Transform.scale(scale: 2.4 - 1.4 * v, child: child));
+                                return Opacity(
+                                  opacity: _land.value.clamp(0, 1),
+                                  child: Transform.scale(scale: 2.4 - 1.4 * v, child: child),
+                                );
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +249,10 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
                                 const SizedBox(height: DsSpacing.space8),
                                 _Line(label: '外れ', value: '${s.incorrect}', unit: '回'),
                                 const SizedBox(height: DsSpacing.space12),
-                                Text(won ? _next(s) : '同じ選手はまた出題されます', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary, height: 1.4)),
+                                Text(
+                                  won ? _next(s) : (s.mode == QuizMode.daily ? '次の 1 問は 19:00 に届きます' : 'この選手は、またいつか出題されます'),
+                                  style: DsTypography.caption.copyWith(color: DsColor.contentSecondary, height: 1.4),
+                                ),
                               ],
                             ),
                           ),
@@ -250,9 +267,13 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
               DsBottomActionBar(
                 child: Row(
                   children: [
-                    Expanded(child: DsButton(label: 'TOPへ戻る', type: DsButtonType.outline, onPressed: () => Navigator.of(context).maybePop())),
+                    Expanded(
+                      child: DsButton(label: 'TOPへ戻る', type: DsButtonType.outline, onPressed: () => Navigator.of(context).maybePop()),
+                    ),
                     const SizedBox(width: DsSpacing.space8),
-                    Expanded(child: DsButton(label: 'もう一度！', icon: Icons.replay_rounded, onPressed: () => Navigator.of(context).pushReplacement(dsRoute(_quiz(randomSession()))))),
+                    Expanded(
+                      child: DsButton(label: 'もう一度！', icon: DsGlyph.replay, onPressed: () => Navigator.of(context).pushReplacement(dsRoute(_quiz(randomSession())))),
+                    ),
                   ],
                 ),
               ),
@@ -286,7 +307,10 @@ class _Line extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
-      SizedBox(width: 36, child: Text(label, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary))),
+      SizedBox(
+        width: 36,
+        child: Text(label, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+      ),
       DsDisplayNumber(value, fontSize: 24),
       const SizedBox(width: 6),
       Text(unit, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
@@ -313,7 +337,10 @@ class _RecordState extends State<_Record> {
     return Scaffold(
       body: Column(
         children: [
-          DsPageHeader(title: 'プレイ記録', leading: DsHeaderIconButton(icon: Icons.chevron_left_rounded, tooltip: '戻る', onPressed: () => Navigator.of(context).maybePop())),
+          DsPageHeader(
+            title: 'プレイ記録',
+            leading: DsHeaderIconButton(icon: DsGlyph.chevronLeft, tooltip: '戻る', onPressed: () => Navigator.of(context).maybePop()),
+          ),
           DsTabs(labels: const ['統計', '履歴'], index: _tab, onChanged: (i) => setState(() => _tab = i)),
           Expanded(
             child: ListView(
@@ -328,7 +355,10 @@ class _RecordState extends State<_Record> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text('サマリー', style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)),
+                            Text(
+                              'サマリー',
+                              style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                            ),
                             const SizedBox(height: DsSpacing.space12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -355,7 +385,10 @@ class _RecordState extends State<_Record> {
                           children: [
                             Row(
                               children: [
-                                Text('コレクション', style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)),
+                                Text(
+                                  'コレクション',
+                                  style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                                ),
                                 const Spacer(),
                                 Text('正解 ${col.values.fold(0, (a, s) => a + s.length)} 人', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
                               ],
@@ -369,27 +402,61 @@ class _RecordState extends State<_Record> {
                               mainAxisSpacing: 8,
                               crossAxisSpacing: 8,
                               childAspectRatio: 1.15,
-                              children: [
-                                for (final t in teamOrder)
-                                  DsSurface(
-                                    borderColor: col[t]!.length == Profile.teamSize[t] && col[t]!.isNotEmpty ? DsColor.rankHighlight : DsColor.surfaceBorder,
-                                    borderWidth: col[t]!.length == Profile.teamSize[t] && col[t]!.isNotEmpty ? DsBorder.standard : DsBorder.thin,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(t, maxLines: 1, overflow: TextOverflow.ellipsis, style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
-                                        const SizedBox(height: 2),
-                                        DsDisplayNumber('${col[t]!.length}', fontSize: 22, color: DsColor.actionPrimary),
-                                      ],
-                                    ),
-                                  ),
-                              ],
+                              children: [for (final t in teamOrder) _TeamTile(team: t, count: col[t]!.length, size: Profile.teamSize[t]!)],
                             ),
                           ],
                         ),
                       ),
                     ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// コレクションの 1 球団。正解した人数を主に、出題できる人数を添える。全員を当てた球団は黄の枠と王冠にする。
+class _TeamTile extends StatelessWidget {
+  const _TeamTile({required this.team, required this.count, required this.size});
+
+  final String team;
+  final int count;
+  final int size;
+
+  @override
+  Widget build(BuildContext context) {
+    final complete = size > 0 && count == size;
+    return DsSurface(
+      backgroundColor: DsColor.background,
+      borderColor: complete ? DsColor.rankHighlight : DsColor.disabledSurface,
+      borderWidth: complete ? DsBorder.standard : DsBorder.thin,
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(team, maxLines: 1, style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
+                ),
+              ),
+              if (complete) const DsIcon(DsGlyph.crown, size: 12, color: DsColor.rankHighlight),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              DsDisplayNumber('$count', fontSize: 22, color: count == 0 ? DsColor.disabledContent : DsColor.actionPrimary),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: DsDisplayNumber('/$size', fontSize: 12, color: DsColor.contentSecondary),
+              ),
+            ],
           ),
         ],
       ),

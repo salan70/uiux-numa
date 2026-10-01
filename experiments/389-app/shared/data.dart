@@ -106,7 +106,10 @@ class QuizSession extends ChangeNotifier {
   /// マスの開く順。0 から始まる。
   int orderOf(int row, int col) => _order.indexOf((row, col));
 
-  bool isRevealed(int row, int col) => isOver || orderOf(row, col) < _unveil;
+  bool isRevealed(int row, int col) => isOver || opened(row, col);
+
+  /// 遊んでいる間に開いたマスか。終わった後に全部を見せるときも、開いたマスと分けて描くために使う。
+  bool opened(int row, int col) => orderOf(row, col) < _unveil;
 
   /// 直前に開いたマス。
   (int, int)? get lastRevealed => _unveil == 0 ? null : _order[_unveil - 1];

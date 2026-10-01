@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data.dart';
 import 'ds.dart';
+import 'icons.dart';
 import 'play.dart';
 
 // 3 案が共有するクイズの画面。v2 の Pattern C に従い、上にヘッダー、中に成績表、下に「補助｜回答｜補助」の帯を置く。
@@ -92,7 +93,7 @@ class _QuizScreenState extends State<QuizScreen> {
           DsPageHeader(
             title: daily ? '今日の1問 No.${profile.dailyNumber}' : 'マニュアルモード',
             accentColor: daily ? DsColor.actionEmphasis : DsColor.rankHighlight,
-            leading: DsHeaderIconButton(icon: Icons.logout_rounded, tooltip: 'あきらめる、すべて表示', onPressed: _menu),
+            leading: DsHeaderIconButton(icon: DsGlyph.close, tooltip: 'あきらめる', onPressed: _menu),
             trailing: widget.trailing?.call(s),
           ),
           Expanded(
@@ -127,16 +128,14 @@ class _QuizScreenState extends State<QuizScreen> {
           DsBottomActionBar(
             child: Row(
               children: [
-                Expanded(
-                  flex: 3,
-                  child: daily
-                      ? DsButton(label: 'あきらめる', type: DsButtonType.outline, small: true, onPressed: _menu)
-                      : DsButton(label: 'すべて表示', type: DsButtonType.outline, small: true, onPressed: full ? null : () => _menu(revealOnly: true)),
-                ),
+                // 今日の1問は全部を開けられないので、補助は「次を表示」だけにする。
+                if (!daily) ...[
+                  Expanded(flex: 3, child: DsButton(label: 'すべて表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : () => _menu(revealOnly: true))),
+                  const SizedBox(width: DsSpacing.space8),
+                ],
+                Expanded(flex: 5, child: DsButton(label: '回答する', icon: DsGlyph.baseball, onPressed: _answer)),
                 const SizedBox(width: DsSpacing.space8),
-                Expanded(flex: 5, child: DsButton(label: '回答する', icon: Icons.sports_baseball_rounded, onPressed: _answer)),
-                const SizedBox(width: DsSpacing.space8),
-                Expanded(flex: 3, child: DsButton(label: '次を表示', type: DsButtonType.outline, small: true, onPressed: full ? null : s.revealNext)),
+                Expanded(flex: 3, child: DsButton(label: '次を表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : s.revealNext)),
               ],
             ),
           ),
@@ -161,7 +160,7 @@ class LivesMark extends StatelessWidget {
         for (var i = 0; i < QuizSession.dailyLives; i++)
           Padding(
             padding: const EdgeInsets.only(left: 2),
-            child: Icon(Icons.sports_baseball_rounded, size: 20, color: i < left ? DsColor.contentPrimary : DsColor.disabledSurface),
+            child: DsIcon(DsGlyph.baseball, size: 22, color: i < left ? DsColor.contentPrimary : DsColor.disabledSurface),
           ),
       ],
     ),
