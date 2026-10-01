@@ -461,6 +461,7 @@ class AppStore extends ChangeNotifier {
         abilities: input.abilities,
         transferred: input.team != null,
         totalGames: input.totalGames,
+        face: input.face,
       ),
     );
     notifyListeners();
@@ -516,12 +517,19 @@ class AppStore extends ChangeNotifier {
           salary: input.salary,
           abilities: List.of(input.abilities),
           totalGames: input.totalGames,
+          face: input.face,
         ),
       ],
     );
     players.add(player);
     select(player);
     return player;
+  }
+
+  /// 今の季（引退した選手は最後の季）の顔を直す（D-37）。前の季の顔は変えない。
+  void setFace(Player player, Face face) {
+    player.current.face = face;
+    notifyListeners();
   }
 
   /// 選手を消す（D-22）。足したタイトルの定義は残す。遊んでいた選手なら、次に遊んだ現役の選手へ移す。
@@ -645,6 +653,7 @@ class SeasonEndInput {
     this.team,
     this.careerRanks = const {},
     this.totalGames = 143,
+    this.face = const Face(),
   });
 
   final Map<StatItem, int> ranks;
@@ -661,10 +670,16 @@ class SeasonEndInput {
 
   /// 来季の年間試合数。
   final int totalGames;
+
+  /// 来季の顔（D-37）。
+  final Face face;
 }
 
 class PlayerDraft {
   String name = '';
+
+  /// 顔は開いたときに無作為に組む（D-37）。
+  Face face = Face.random(Random().nextInt);
   CareerBackground background = CareerBackground.highSchool;
   int age = CareerBackground.highSchool.defaultAge;
   Hand throws = Hand.right;

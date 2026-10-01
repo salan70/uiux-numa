@@ -37,7 +37,103 @@ const _sprite = [
   '.kuuuuunnuuuuuk.',
 ];
 
-const _skins = [Color(0xFFF5CFA8), Color(0xFFE8B48A), Color(0xFFC98D62), Color(0xFFA86D45)];
+const _skins = [
+  Color(0xFFF8DCC0),
+  Color(0xFFF5CFA8),
+  Color(0xFFE8B48A),
+  Color(0xFFC98D62),
+  Color(0xFFA86D45),
+  Color(0xFF7A4B2E),
+];
+
+/// 髪の色。黒、茶、金、赤、白。
+const hairColors = [Color(0xFF231A14), Color(0xFF6B4226), Color(0xFFE2B640), Color(0xFFB4442A), Color(0xFFE9E6DF)];
+const skinColors = _skins;
+
+/// 顔の部品を、基の胸像に重ねる（D-37）。h: 髪とひげ、g: 眼鏡の枠、q: レンズの光、l: 色の付いたレンズ、x: 無精ひげ。
+/// 顔は 4〜11 列、目は 7 行目の 5 列と 9 列、口は 9 行目。帽子のつばの下の 6 行目に眉と前髪を置く。
+List<String> faceSprite(Face face) {
+  final rows = [for (final r in _sprite) r.split('')];
+  void set(int y, int x, String c) => rows[y][x] = c;
+  switch (face.hair) {
+    case HairStyle.shaved:
+      break;
+    case HairStyle.sideburns:
+      for (final (y, x) in const [(6, 4), (7, 4), (6, 11), (7, 11)]) {
+        set(y, x, 'h');
+      }
+    case HairStyle.bangs:
+      for (final (y, x) in const [(6, 4), (6, 6), (6, 7), (6, 8), (6, 11)]) {
+        set(y, x, 'h');
+      }
+    case HairStyle.long:
+      for (var y = 6; y <= 9; y++) {
+        set(y, 3, 'h');
+        set(y, 12, 'h');
+        set(y, 2, 'k');
+        set(y, 13, 'k');
+      }
+      set(10, 4, 'h');
+      set(10, 11, 'h');
+      set(10, 3, 'k');
+      set(10, 12, 'k');
+  }
+  switch (face.brow) {
+    case Brow.none:
+      break;
+    case Brow.thin:
+      set(6, 5, 'h');
+      set(6, 9, 'h');
+    case Brow.thick:
+      for (final x in const [4, 5, 9, 10]) {
+        set(6, x, 'h');
+      }
+  }
+  switch (face.eyes) {
+    case Eyes.dot:
+      break;
+    case Eyes.narrow:
+      set(7, 6, 'e');
+      set(7, 10, 'e');
+    case Eyes.round:
+      set(8, 5, 'e');
+      set(8, 9, 'e');
+  }
+  if (face.beard == Beard.mustache || face.beard == Beard.full) {
+    for (var x = 6; x <= 9; x++) {
+      set(8, x, 'h');
+    }
+  }
+  if (face.beard == Beard.chin || face.beard == Beard.full) {
+    for (var x = 5; x <= 10; x++) {
+      set(10, x, 'h');
+    }
+    set(11, 7, 'h');
+    set(11, 8, 'h');
+  }
+  if (face.beard == Beard.stubble) {
+    for (final (y, x) in const [(9, 5), (9, 10), (10, 6), (10, 9)]) {
+      set(y, x, 'x');
+    }
+  }
+  switch (face.glasses) {
+    case Glasses.none:
+      break;
+    case Glasses.glasses:
+      // 1 画素の目は枠と見分けられないので、目の位置にレンズの光を置く。
+      for (final x in const [4, 6, 7, 8, 10]) {
+        set(7, x, 'g');
+      }
+      set(7, 5, 'q');
+      set(7, 9, 'q');
+    case Glasses.sunglasses:
+      for (final x in const [4, 5, 6, 8, 9, 10]) {
+        set(7, x, 'l');
+      }
+      set(7, 7, 'g');
+  }
+  return [for (final r in rows) r.join()];
+}
 const _ink = Color(0xFF120D09);
 const _paper = Color(0xFFFFFDF9);
 const _grey = Color(0xFF9EA19F);
@@ -56,15 +152,25 @@ Color teamColor(Team team) {
 
 int _stableHash(String s) => s.codeUnits.fold(7, (h, c) => (h * 31 + c) & 0x7fffffff);
 
-/// 選手ごとの配色。肌の色は id から固定で決める。引退した選手は帽子を灰にする。
-Map<String, Color> playerPalette(Player player) {
-  final team = player.isActive ? teamColor(player.current.team) : _grey;
+/// 選手ごとの配色。肌と髪は顔の部品から決める。引退した選手は帽子を灰にする。
+Map<String, Color> playerPalette(Player player, {Face? face, Team? team}) => facePalette(
+  face ?? player.face,
+  player.isActive ? teamColor(team ?? player.current.team) : _grey,
+);
+
+Map<String, Color> facePalette(Face face, Color team) {
+  final skin = _skins[face.skin % _skins.length];
   return {
     'k': _ink,
     'c': team,
     'b': Color.lerp(team, _ink, 0.45)!,
     'w': team == const Color(0xFFFAC400) ? _ink : _paper,
-    's': _skins[_stableHash(player.id) % _skins.length],
+    's': skin,
+    'h': hairColors[face.hairColor % hairColors.length],
+    'g': _ink,
+    'l': const Color(0xFF1E2A3A),
+    'q': const Color(0xFFCFE6F2),
+    'x': Color.lerp(skin, _ink, 0.25)!,
     'e': _ink,
     'p': const Color(0xFFF39A82),
     'm': const Color(0xFFB5452E),
@@ -75,24 +181,46 @@ Map<String, Color> playerPalette(Player player) {
 
 /// ドット絵の選手。reveal が 1 未満の間は、画素が下の行から降りてくる（選手を初めて見せるとき）。
 class PixelAvatar extends StatelessWidget {
-  const PixelAvatar({super.key, required this.player, this.size = 64, this.reveal = 1});
+  const PixelAvatar({super.key, required this.player, this.size = 64, this.reveal = 1, this.season});
 
   final Player player;
   final double size;
   final double reveal;
 
+  /// その季の顔と球団で描く。無ければ今の季。
+  final Season? season;
+
   @override
   Widget build(BuildContext context) {
+    final face = (season ?? player.current).face;
     return ExcludeSemantics(
-      child: CustomPaint(size: Size.square(size), painter: _AvatarPainter(playerPalette(player), reveal)),
+      child: CustomPaint(
+        size: Size.square(size),
+        painter: _AvatarPainter(playerPalette(player, face: face, team: season?.team), faceSprite(face), reveal),
+      ),
     );
   }
 }
 
+/// 選手が決まる前（作成の途中）の顔。球団の色を直接渡す。
+class FaceAvatar extends StatelessWidget {
+  const FaceAvatar({super.key, required this.face, required this.team, this.size = 96});
+
+  final Face face;
+  final Color team;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: CustomPaint(size: Size.square(size), painter: _AvatarPainter(facePalette(face, team), faceSprite(face), 1)),
+  );
+}
+
 class _AvatarPainter extends CustomPainter {
-  _AvatarPainter(this.colors, this.reveal);
+  _AvatarPainter(this.colors, this.sprite, this.reveal);
 
   final Map<String, Color> colors;
+  final List<String> sprite;
   final double reveal;
 
   @override
@@ -101,7 +229,7 @@ class _AvatarPainter extends CustomPainter {
     final paint = Paint()..isAntiAlias = false;
     for (var y = 0; y < 16; y++) {
       for (var x = 0; x < 16; x++) {
-        final color = colors[_sprite[y][x]];
+        final color = colors[sprite[y][x]];
         if (color == null) continue;
         var dy = 0.0;
         if (reveal < 1) {
@@ -123,7 +251,7 @@ class _AvatarPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_AvatarPainter old) => old.reveal != reveal || old.colors != colors;
+  bool shouldRepaint(_AvatarPainter old) => old.reveal != reveal || old.colors != colors || old.sprite != sprite;
 }
 
 // 5×7 のドット文字。`#` が点灯する。電光掲示板の英数字だけに使い、日本語は LINE Seed JP で組む。

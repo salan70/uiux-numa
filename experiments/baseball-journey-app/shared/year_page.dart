@@ -4,6 +4,7 @@ import 'directory.dart';
 import 'format.dart';
 import 'model.dart';
 import 'nav.dart';
+import 'pixel.dart';
 import 'theme.dart';
 import 'widgets.dart';
 
@@ -152,6 +153,9 @@ class _Masthead extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          // その年の顔（D-37）。季ごとに直せるので、年を追うと顔の移り変わりが見える。
+          PixelAvatar(player: player, season: season, size: 48),
+          const SizedBox(width: Space.s200),
           Text('${season.year}', style: Txt.figure.copyWith(color: p.onSurface)),
           const SizedBox(width: Space.s300),
           Expanded(

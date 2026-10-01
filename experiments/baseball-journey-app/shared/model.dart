@@ -196,6 +196,77 @@ const minAbilities = 3;
 const maxAbilities = 10;
 const defaultAbilityNames = ['ミート', 'パワー', '選球眼', 'メンタル', 'スピード', '肩', '守備'];
 
+/// 選手の顔の部品（D-37）。季ごとに持ち、シーズンの終わりと選手の詳細で直せる。
+/// 帽子と胸の色は球団の色で、顔の部品には含めない。
+enum HairStyle { shaved, sideburns, bangs, long }
+
+enum Brow { none, thin, thick }
+
+enum Eyes { dot, narrow, round }
+
+enum Beard { none, mustache, chin, full, stubble }
+
+enum Glasses { none, glasses, sunglasses }
+
+class Face {
+  const Face({
+    this.skin = 0,
+    this.hair = HairStyle.sideburns,
+    this.hairColor = 0,
+    this.brow = Brow.thin,
+    this.eyes = Eyes.dot,
+    this.beard = Beard.none,
+    this.glasses = Glasses.none,
+  });
+
+  /// 肌の色と髪の色は、pixel.dart の色の一覧の位置。
+  final int skin;
+  final HairStyle hair;
+  final int hairColor;
+  final Brow brow;
+  final Eyes eyes;
+  final Beard beard;
+  final Glasses glasses;
+
+  static const skinCount = 6;
+  static const hairColorCount = 5;
+
+  /// おまかせ。ひげと眼鏡は少なめに出す。
+  factory Face.random(int Function(int max) next) => Face(
+    skin: next(skinCount),
+    hair: HairStyle.values[next(HairStyle.values.length)],
+    hairColor: next(10) < 6 ? 0 : next(hairColorCount),
+    brow: Brow.values[next(Brow.values.length)],
+    eyes: Eyes.values[next(Eyes.values.length)],
+    beard: next(10) < 6 ? Beard.none : Beard.values[1 + next(Beard.values.length - 1)],
+    glasses: next(10) < 8 ? Glasses.none : Glasses.values[1 + next(Glasses.values.length - 1)],
+  );
+
+  Face copyWith({int? skin, HairStyle? hair, int? hairColor, Brow? brow, Eyes? eyes, Beard? beard, Glasses? glasses}) => Face(
+    skin: skin ?? this.skin,
+    hair: hair ?? this.hair,
+    hairColor: hairColor ?? this.hairColor,
+    brow: brow ?? this.brow,
+    eyes: eyes ?? this.eyes,
+    beard: beard ?? this.beard,
+    glasses: glasses ?? this.glasses,
+  );
+
+  @override
+  bool operator ==(Object other) =>
+      other is Face &&
+      other.skin == skin &&
+      other.hair == hair &&
+      other.hairColor == hairColor &&
+      other.brow == brow &&
+      other.eyes == eyes &&
+      other.beard == beard &&
+      other.glasses == glasses;
+
+  @override
+  int get hashCode => Object.hash(skin, hair, hairColor, brow, eyes, beard, glasses);
+}
+
 class Team {
   const Team({required this.name, required this.abbreviation, required this.league, required this.country, required this.teamCount});
   final String name;
@@ -392,12 +463,16 @@ class Season {
     List<String>? titles,
     Map<StatItem, int>? ranks,
     this.transferred = false,
+    this.face = const Face(),
   }) : games = games ?? [],
        titles = titles ?? [],
        ranks = ranks ?? {},
        stints = [Stint(id: 0, team: team, uniformNumber: uniformNumber)];
 
   final int year;
+
+  /// その季の顔（D-37）。季ごとに直せるので、年度別にその年の顔が残る。
+  Face face;
   final List<Stint> stints;
   Stint get stint => stints.last;
   Stint stintOf(int id) => stints.firstWhere((s) => s.id == id);
@@ -483,6 +558,7 @@ class Player {
   final Map<StatItem, int> careerRanks = {};
 
   Season get current => seasons.last;
+  Face get face => current.face;
   bool get isActive => status == PlayerStatus.active;
   Position get mainPosition => positions.first;
   int get age => current.year - birthYear;

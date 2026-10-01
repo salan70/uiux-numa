@@ -6,6 +6,7 @@ import 'model.dart';
 import 'number_inputs.dart';
 import 'parts.dart';
 import 'pixel.dart';
+import 'face_editor.dart';
 import 'store.dart';
 import 'team_candidates.dart';
 import 'theme.dart';
@@ -55,6 +56,9 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
   late List<Ability> _abilities = List.of(_season.abilities);
   late List<Position> _positions = List.of(widget.player.positions);
   late Hand _bats = widget.player.bats;
+
+  /// 来季の顔。今季の顔から直す（D-37）。
+  late Face _face = _season.face;
   final _careerRanks = <StatItem, int>{};
   int _step = 0;
 
@@ -113,6 +117,7 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
         : null,
     careerRanks: _careerRanks,
     totalGames: _totalGames,
+    face: _face,
   );
 
   Future<void> _next() async {
@@ -376,6 +381,16 @@ class _SeasonEndScreenState extends State<SeasonEndScreen> {
         label: (h) => '${h.label}打ち',
         isSelected: (h) => h == _bats,
         onSelected: (h) => setState(() => _bats = h),
+      ),
+      // 季ごとに顔を直せる（D-37）。年度別にその年の顔が残る。
+      const FieldLabel('来季の顔', note: '変えなければ今季の顔のまま'),
+      FaceEditor(
+        face: _face,
+        before: _season.face,
+        team: teamColor(_choice == _Choice.transfer && _team.text.trim().isNotEmpty
+            ? Team(name: _team.text.trim(), abbreviation: '', league: '', country: '', teamCount: 6)
+            : _season.team),
+        onChanged: (f) => setState(() => _face = f),
       ),
     ];
   }

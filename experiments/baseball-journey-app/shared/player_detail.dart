@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'face_editor.dart';
 import 'format.dart';
 import 'model.dart';
 import 'parts.dart';
@@ -28,8 +29,11 @@ class PlayerDetailScreen extends StatelessWidget {
           ShareAction(player: player),
           PopupMenuButton<String>(
             tooltip: 'メニュー',
-            onSelected: (_) => _delete(context),
-            itemBuilder: (_) => [const PopupMenuItem(value: 'delete', child: Text('この選手を消す'))],
+            onSelected: (v) => v == 'face' ? showFaceSheet(context, player) : _delete(context),
+            itemBuilder: (_) => [
+              const PopupMenuItem(value: 'face', child: Text('顔を直す')),
+              const PopupMenuItem(value: 'delete', child: Text('この選手を消す')),
+            ],
           ),
         ],
       ),

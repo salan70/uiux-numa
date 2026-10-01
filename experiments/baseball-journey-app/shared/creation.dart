@@ -7,6 +7,8 @@ import 'model.dart';
 import 'number_inputs.dart';
 import 'parts.dart';
 import 'player_detail.dart';
+import 'face_editor.dart';
+import 'pixel.dart';
 import 'store.dart';
 import 'team_candidates.dart';
 import 'theme.dart';
@@ -260,6 +262,13 @@ class _PlayerCreationScreenState extends State<PlayerCreationScreen> {
         max: 150,
         unit: 'kg',
         onChanged: (v) => setState(() => _draft.weight = v),
+      ),
+      // 顔の部品（D-37）。帽子と胸は入団する球団の色になる。球団を決める前は、球団名から決まる色で見せる。
+      const FieldLabel('顔', note: '後から選手の詳細とシーズンの終わりで直せます'),
+      FaceEditor(
+        face: _draft.face,
+        team: teamColor(Team(name: _team.text.trim(), abbreviation: '', league: '', country: '', teamCount: 6)),
+        onChanged: (f) => setState(() => _draft.face = f),
       ),
     ];
   }
