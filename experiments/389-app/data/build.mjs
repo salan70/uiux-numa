@@ -11,7 +11,9 @@ const parse = (file) => {
   const [head, ...lines] = readFileSync(join(src, file), "utf8").trim().split("\n");
   const keys = head.split(",");
   return lines.map((line) => {
-    const cells = line.match(/("[^"]*"|[^,]*)(,|$)/g).map((c) => c.replace(/,$/, "").replace(/^"|"$/g, ""));
+    const cells = line
+      .match(/("[^"]*"|[^,]*)(,|$)/g)
+      .map((c) => c.replace(/,$/, "").replace(/^"|"$/g, ""));
     return Object.fromEntries(keys.map((k, i) => [k, cells[i]]));
   });
 };
@@ -27,7 +29,8 @@ for (const h of hitters) {
   const rows = stats.filter((s) => s.playerId === h.id);
   const total = rows.find((r) => r.年度 === "通算");
   if (!total || +total.試合 < 300 || +total.安打 < 300 || +total.本塁打 < 50) continue;
-  const years = rows.filter((r) => r.年度 !== "通算").sort((a, b) => +a.表示順 - +b.表示順);
+  // 製品の出題と同じく、通算の行を最後の 1 行として含める。
+  const years = rows.sort((a, b) => +a.表示順 - +b.表示順);
   players.push({ id: h.id.slice(0, 8), name: h.name, team: h.team, years });
 }
 players.sort((a, b) => a.name.localeCompare(b.name, "ja"));
