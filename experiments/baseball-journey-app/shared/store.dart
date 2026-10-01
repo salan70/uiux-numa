@@ -228,7 +228,6 @@ class AppStore extends ChangeNotifier {
   void setSteals(int value) => _editSelected((a) => a.copyWith(steals: value.clamp(0, a.maxSteals)));
   void setCaughtStealing(bool value) => _editSelected((a) => a.copyWith(caughtStealing: value));
   void setScored(bool value) => _editSelected((a) => a.copyWith(scored: a.result.minRuns > 0 || (value && a.maxRuns > 0)));
-  void setStayed(bool value) => _editSelected((a) => a.result.canStay ? a.withStayed(value) : a);
 
   void setRunner(RunnerLine line) {
     _record();

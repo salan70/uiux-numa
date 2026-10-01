@@ -15,7 +15,7 @@ enum ResultGroup {
 
 /// 打席結果。上限と下限は製品の domain_rules.md R-1 に合わせた（確定）。
 /// 敬遠は公認野球規則 9.02(a)(1) に従い打数に数えない。
-/// canStay の結果（ゴロ、犠飛、犠打）は「打者が残った」ときだけ盗塁と得点を付けられる（R-1-a、D-24）。
+/// ゴロ、犠飛、犠打は打者が塁に残ることがあるので、盗塁と得点を常に付けられる（R-1-a、D-36）。
 enum AtBatResult {
   single('ヒット', '安', ResultGroup.onBase, bases: 1, maxRbi: 3, maxSteals: 3, maxRuns: 1),
   double_('二塁打', '二', ResultGroup.onBase, bases: 2, maxRbi: 3, maxSteals: 2, maxRuns: 1),
@@ -26,12 +26,12 @@ enum AtBatResult {
   intentionalWalk('敬遠', '敬', ResultGroup.onBase, atBat: false, maxRbi: 1, maxSteals: 3, maxRuns: 1),
   swingOut('空振り三振', '振', ResultGroup.out, strikeout: true),
   missedStrikeout('見逃し三振', '見', ResultGroup.out, strikeout: true),
-  groundOut('ゴロ', 'ゴ', ResultGroup.out, maxRbi: 3, canStay: true),
+  groundOut('ゴロ', 'ゴ', ResultGroup.out, maxRbi: 3, maxSteals: 3, maxRuns: 1),
   flyOut('フライ', '飛', ResultGroup.out, maxRbi: 3),
   lineOut('ライナー', '直', ResultGroup.out, maxRbi: 3),
   doublePlay('併殺打', '併', ResultGroup.out),
-  sacrificeFly('犠牲フライ', '犠飛', ResultGroup.other, atBat: false, maxRbi: 3, minRbi: 1, canStay: true),
-  sacrificeBunt('犠打', '犠打', ResultGroup.other, atBat: false, maxRbi: 3, canStay: true),
+  sacrificeFly('犠牲フライ', '犠飛', ResultGroup.other, atBat: false, maxRbi: 3, minRbi: 1, maxSteals: 3, maxRuns: 1),
+  sacrificeBunt('犠打', '犠打', ResultGroup.other, atBat: false, maxRbi: 3, maxSteals: 3, maxRuns: 1),
   error('エラー', '失', ResultGroup.other, maxRbi: 1, maxSteals: 3, maxRuns: 1),
   fielderChoice('野選', '野', ResultGroup.other, maxRbi: 3, maxSteals: 3, maxRuns: 1),
   buntOut('バントアウト', 'バ', ResultGroup.other, maxRbi: 3),
@@ -49,7 +49,6 @@ enum AtBatResult {
     this.maxSteals = 0,
     this.maxRuns = 0,
     this.minRuns = 0,
-    this.canStay = false,
   });
 
   final String label;
@@ -65,9 +64,6 @@ enum AtBatResult {
   final int maxSteals;
   final int maxRuns;
   final int minRuns;
-
-  /// 打者が塁に残ることがあるアウト系の結果（R-1-a）。
-  final bool canStay;
 
   bool get isHit => bases > 0;
   bool get isOnBase => group == ResultGroup.onBase;
@@ -225,17 +221,11 @@ class AtBat {
     this.steals = 0,
     this.caughtStealing = false,
     this.scored = false,
-    this.stayed = false,
   });
 
   final AtBatResult result;
-
-  /// 打者が残った（R-1-a）。ゴロ、犠飛、犠打だけが持つ。
-  final bool stayed;
-
-  /// 打者が残ったときは、塁から本塁までの 3 盗塁と得点を付けられる。
-  int get maxSteals => result.canStay && stayed ? 3 : result.maxSteals;
-  int get maxRuns => result.canStay && stayed ? 1 : result.maxRuns;
+  int get maxSteals => result.maxSteals;
+  int get maxRuns => result.maxRuns;
 
   /// 盗塁死は、打者が塁に残るときに付く。三塁打の本盗の失敗も含める（R-1）。
   bool get allowsCaughtStealing => maxSteals > 0;
@@ -245,22 +235,13 @@ class AtBat {
   final bool scored;
 
   /// 結果を替えたとき、上限を超える値を上限へ丸める。ホームランは盗塁を 0 に戻す（AC-017）。
-  AtBat withResult(AtBatResult next) {
-    final keep = AtBat(next, stayed: stayed && next.canStay);
-    return AtBat(
-      next,
-      rbi: rbi.clamp(next.minRbi, next.maxRbi),
-      steals: steals.clamp(0, keep.maxSteals),
-      caughtStealing: caughtStealing && keep.allowsCaughtStealing,
-      scored: next.minRuns > 0 || (scored && keep.maxRuns > 0),
-      stayed: keep.stayed,
-    );
-  }
-
-  /// 打者が残ったを外したら、その打席の盗塁、得点、盗塁死を 0 に戻す（R-1-a）。
-  AtBat withStayed(bool value) => value
-      ? AtBat(result, rbi: rbi, stayed: true)
-      : AtBat(result, rbi: rbi);
+  AtBat withResult(AtBatResult next) => AtBat(
+    next,
+    rbi: rbi.clamp(next.minRbi, next.maxRbi),
+    steals: steals.clamp(0, next.maxSteals),
+    caughtStealing: caughtStealing && next.maxSteals > 0,
+    scored: next.minRuns > 0 || (scored && next.maxRuns > 0),
+  );
 
   AtBat copyWith({int? rbi, int? steals, bool? caughtStealing, bool? scored}) => AtBat(
     result,
@@ -268,7 +249,6 @@ class AtBat {
     steals: steals ?? this.steals,
     caughtStealing: caughtStealing ?? this.caughtStealing,
     scored: scored ?? this.scored,
-    stayed: stayed,
   );
 }
 

@@ -1291,18 +1291,10 @@ class _AtBatEditor extends StatelessWidget {
               Expanded(child: steppers.length > 1 ? steppers.last : const SizedBox.shrink()),
             ],
           ),
-        // ゴロ、犠飛、犠打は「打者が残った」を選んだときだけ走塁を出す（R-1-a、D-24）。外すと走塁を 0 に戻す。
-        if (a.maxRuns > 0 || a.allowsCaughtStealing || r.canStay)
+        if (a.maxRuns > 0 || a.allowsCaughtStealing)
           Wrap(
             spacing: Space.s200,
             children: [
-              if (r.canStay)
-                FilterChip(
-                  label: const Text('打者が残った'),
-                  tooltip: '前の走者が封殺されたり、失策で打者が塁に残ったとき',
-                  selected: a.stayed,
-                  onSelected: store.setStayed,
-                ),
               if (a.maxRuns > 0)
                 FilterChip(
                   label: const Text('得点'),
@@ -1313,7 +1305,7 @@ class _AtBatEditor extends StatelessWidget {
                 FilterChip(label: const Text('盗塁死'), selected: a.caughtStealing, onSelected: store.setCaughtStealing),
             ],
           ),
-        if (r.maxRbi == 0 && a.maxSteals == 0 && a.maxRuns == 0 && !r.canStay)
+        if (r.maxRbi == 0 && a.maxSteals == 0 && a.maxRuns == 0)
           Text('${r.label}では打点も走塁も付きません。', style: Txt.caption.copyWith(color: p.onSurfaceVariant)),
       ],
     );
