@@ -18,7 +18,7 @@ const tableOrder = (slug) => {
     readFileSync(readme, "utf8")
       .split(/^## Variants$/m)[1]
       ?.split(/^## /m)[0] ?? "";
-  return [...section.matchAll(/^\| `([a-z0-9-]+)` \|/gm)].map((m) => m[1]);
+  return [...section.matchAll(/^\| `([a-z0-9-]+)` +\|/gm)].map((m) => m[1]);
 };
 
 const entries = [];
