@@ -9,12 +9,16 @@ import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
+import '../../shared/switcher.dart';
 
 // scoreboard: 現行の情報構造（ホーム → クイズ → 結果 → プレイ記録）と v2 の造形をそのまま保ち、体験の芯だけを磨く。
 // 磨いた点は 3 つ。クイズの最中にいま当てたときのランクを出す。外れをダイアログでなく表の上の帯で知らせる。結果でランクを主役にする。
 // 結果のランクは、紙吹雪とともに大きな文字が縮みながら着地し、ランクの色の隅のアクセントで結果のカードを塗り分ける。
 
-Widget buildVariant() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens);
+Widget buildVariant() => const VariantHost(initial: 'scoreboard');
+
+/// この案の殻。VariantHost が案を替えるときに作り直す。
+Widget buildApp() => QuizApp(title: '.389', theme: buildDsTheme(), screens: _screens, variant: 'scoreboard');
 
 Widget buildPanel() => const JumpPanel();
 
