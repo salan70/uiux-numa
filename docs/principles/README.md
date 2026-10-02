@@ -37,14 +37,16 @@ Skill は `candidate` を未検証の仮説、`adopted` を採用済みとして
 
 ## 一覧
 
-| 原則                                                                                       | status      | 由来                                                                                                    |
-| ------------------------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------- |
-| [組の一貫性は少数のパラメータで縛る](icon-set-consistency-by-few-parameters.md)            | `candidate` | `experiments/class-tech-icons/`                                                                         |
-| [比喩は描き方より先に効く](metaphor-decides-before-style.md)                               | `candidate` | `experiments/class-tech-icons/`、`class-doc-logo`（削除済み）、`class-chapter-illustration`（削除済み） |
-| [状態は色で示し、寸法で示さない](state-changes-must-not-move-layout.md)                    | `candidate` | `catalog-editorial`（削除済み）                                                                         |
-| [段の数は任意項目の有無で変えない](block-shape-must-not-vary-by-optional-parts.md)         | `candidate` | `guideline-rule-structure`（削除済み）                                                                  |
-| [良し悪しの色に画面の強調色を借りない](semantic-color-must-not-borrow-the-accent.md)       | `candidate` | `guideline-rule-structure`（削除済み）                                                                  |
-| [テーマ色の塗りに意味を担わせない](theme-color-fill-carries-no-meaning.md)                 | `candidate` | `experiments/catalog-theme-icons/`                                                                      |
-| [高頻度の入力は選択肢と取り消しを入力面に置く](frequent-input-keeps-choices-on-surface.md) | `candidate` | `experiments/baseball-journey-app/`                                                                     |
+| 原則                                                                                         | status      | 由来                                                                                                    |
+| -------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------- |
+| [組の一貫性は少数のパラメータで縛る](icon-set-consistency-by-few-parameters.md)              | `candidate` | `experiments/class-tech-icons/`                                                                         |
+| [比喩は描き方より先に効く](metaphor-decides-before-style.md)                                 | `candidate` | `experiments/class-tech-icons/`、`class-doc-logo`（削除済み）、`class-chapter-illustration`（削除済み） |
+| [状態は色で示し、寸法で示さない](state-changes-must-not-move-layout.md)                      | `candidate` | `catalog-editorial`（削除済み）、`experiments/389-app/`                                                 |
+| [段の数は任意項目の有無で変えない](block-shape-must-not-vary-by-optional-parts.md)           | `candidate` | `guideline-rule-structure`（削除済み）                                                                  |
+| [良し悪しの色に画面の強調色を借りない](semantic-color-must-not-borrow-the-accent.md)         | `candidate` | `guideline-rule-structure`（削除済み）                                                                  |
+| [テーマ色の塗りに意味を担わせない](theme-color-fill-carries-no-meaning.md)                   | `candidate` | `experiments/catalog-theme-icons/`                                                                      |
+| [高頻度の入力は選択肢と取り消しを入力面に置く](frequent-input-keeps-choices-on-surface.md)   | `candidate` | `experiments/baseball-journey-app/`                                                                     |
+| [稀な達成は画面全体で祝い、押せば飛ばせる](rare-completion-earns-full-screen-celebration.md) | `candidate` | `experiments/389-app/`                                                                                  |
+| [順序のある選択は、入れる枠を先に選ばせる](ordered-picks-choose-slot-first.md)               | `candidate` | `experiments/389-app/`                                                                                  |
 
 削除済みの Experiment は、各原則候補の本文にある commit permalink で辿る。
