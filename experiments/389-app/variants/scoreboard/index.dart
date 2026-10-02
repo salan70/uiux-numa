@@ -864,14 +864,22 @@ class _MonthGrid extends StatelessWidget {
 }
 
 /// 過去の 1 回の結果。結果の画面と同じ並びで、動きと操作の帯を持たない。
-class _RecordDetail extends StatelessWidget {
+class _RecordDetail extends StatefulWidget {
   const _RecordDetail({required this.record});
 
   final PlayRecord record;
 
   @override
+  State<_RecordDetail> createState() => _RecordDetailState();
+}
+
+class _RecordDetailState extends State<_RecordDetail> {
+  /// 選手名を見せたか。製品の履歴と同じく初めは伏せ、「正解を確認」を押したときだけ見せる。
+  bool _shown = false;
+
+  @override
   Widget build(BuildContext context) {
-    final r = record;
+    final r = widget.record;
     final s = QuizSession(player: r.player, seed: r.dailyNumber ?? r.player.id.hashCode);
     for (var i = 0; i < (s.total * r.unveilPercent / 100).round(); i++) {
       s.revealNext();
@@ -900,7 +908,7 @@ class _RecordDetail extends StatelessWidget {
                   style: DsTypography.caption.copyWith(color: DsColor.contentSecondary),
                 ),
                 const SizedBox(height: DsSpacing.space8),
-                ResultHeading(session: s, verdict: r.correct ? '正解' : '不正解'),
+                _HiddenAnswer(session: s, correct: r.correct, shown: _shown, onShow: () => setState(() => _shown = true)),
                 const SizedBox(height: DsSpacing.space20),
                 DsCard(
                   accentColor: color,
@@ -969,4 +977,65 @@ class _UtilityButton extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// 履歴の詳細の見出し。正誤の札の下に、選手名を伏せた枠と「正解を確認」を置く。押すと枠が名前に入れ替わる。
+/// 伏せた枠は名前と同じ高さにし、入れ替わっても下の並びを動かさない。
+class _HiddenAnswer extends StatelessWidget {
+  const _HiddenAnswer({required this.session, required this.correct, required this.shown, required this.onShow});
+
+  final QuizSession session;
+  final bool correct;
+  final bool shown;
+  final VoidCallback onShow;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = session.player;
+    return Column(
+      children: [
+        DsBadge(label: correct ? '正解' : '不正解', color: correct ? DsColor.statusSuccess : DsColor.incorrect, shape: DsBadgeShape.chamfered, large: true),
+        const SizedBox(height: DsSpacing.space12),
+        SizedBox(
+          height: 76,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            transitionBuilder: (child, a) => FadeTransition(
+              opacity: a,
+              child: ScaleTransition(scale: Tween(begin: 0.96, end: 1.0).animate(a), child: child),
+            ),
+            child: shown
+                ? Column(
+                    key: const ValueKey('name'),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(p.name, style: DsTypography.headline3.copyWith(color: DsColor.contentPrimary)),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DsBadge(label: p.teamName, color: DsColor.contentPrimary),
+                          const SizedBox(width: DsSpacing.space8),
+                          Text('2025年シーズン終了時', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+                        ],
+                      ),
+                    ],
+                  )
+                : Column(
+                    key: const ValueKey('hidden'),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('？？？', style: DsTypography.headline3.copyWith(color: DsColor.disabledContent, letterSpacing: 4)),
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        width: 168,
+                        child: DsButton(label: '正解を確認', type: DsButtonType.secondary, small: true, onPressed: onShow),
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
 }
