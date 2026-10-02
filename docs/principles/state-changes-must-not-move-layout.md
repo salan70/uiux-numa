@@ -2,7 +2,7 @@
 title: 状態は色で示し、寸法で示さない
 status: candidate
 created: 2026-09-20
-updated: 2026-09-20
+updated: 2026-10-02
 ---
 
 ## 仮説
@@ -49,7 +49,8 @@ updated: 2026-09-20
 ## 検証結果
 
 - `catalog-editorial`（2026-09-20）: `topic-first` で上の 3 箇所を直し、4 つの操作で矩形が一致することを実測した。送りを 10 回押す、7 トピックを移る、variant を 8 個すべて押す、明暗を切り替える。直す前は送りで 3px、ナビで項目ごとに幅が変わっていた。
-- 未検証: 別の Experiment や別プロダクトで試していない。由来は 1 件である。
+- `389-app`（2026-10-02、Flutter）: 2 か所で寸法が状態で変わり、周りが動いた。外れた名前の札を目盛りの下に足すと表が 1 行ぶん下がった。常にある見出しの行の右へ移して直した。出題する成績の札に列の番号を中に足すと札の幅が変わり、ほかの札の並びが折り返し直した。番号を札の角に重ねて直した。どちらも撮影の比較で確かめ、矩形の実測はしていない。[389-app](https://github.com/salan70/uiux-numa/blob/1313c9e5c9c6b6d81a87221ae7577bd5ac0b85dd/experiments/389-app/README.md)
+- 未検証: 別プロダクトの実装で試していない。由来は 2 件の Experiment である。
 - 未検証: 多観点評価を経ていない。`docs/evaluation.md` に、状態変更で位置が動かないことを直接扱う軸はない。近いのは `interaction clarity`（状態の変化が分かるか）と `localization robustness`（文言の長さで崩れないか）で、どちらも原因が違う。評価で使うときは `interaction clarity` の根拠として挙げる。`skills/reviewing-motion` が「layout 属性の変化がクリック取りこぼしや段飛びを起こしていないか。起きたら interaction clarity の根拠にする」と定めている扱いに揃える。
 - 未検証: 機械検査の仕組みがない。今回は Chrome DevTools Protocol で矩形を読んで比べたが、リポジトリに検査スクリプトは置いていない。道具を増やすかどうかは別の判断である。
 - 関連: `docs/catalog-publishing.md` の公開後の確認に「遷移と状態変更で layout-shift が起きない」がある。この原則は、その確認を公開前の設計判断へ前倒しするものである。
