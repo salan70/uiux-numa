@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'celebration.dart';
 import 'data.dart';
 import 'ds.dart';
 import 'icons.dart';
@@ -67,6 +68,12 @@ class _QuizScreenState extends State<QuizScreen> {
   Future<void> _answer() async {
     final name = await showAnswerSheet(context, wrong: s.wrongNames);
     if (name == null || !mounted) return;
+    // 正解なら、シートが閉じきってから演出を始め、その後で判定する。判定が先だと、表の残りのマスが波を待たずに一度に開くため。
+    if (name == s.player.name && !s.isOver) {
+      await Future<void>.delayed(const Duration(milliseconds: 220));
+      if (!mounted) return;
+      setState(() => _won = true);
+    }
     final outcome = s.guess(name);
     if (outcome == GuessOutcome.wrong) {
       setState(() => _misses++);
@@ -79,13 +86,10 @@ class _QuizScreenState extends State<QuizScreen> {
     _finish();
   }
 
-  /// 答え合わせ。開いていないマスが左上から斜めの波で開き（約 0.6 秒）、正解の札と選手名が出る。
-  /// 波が届いてから 0.5 秒置いて結果へ移る。画面のどこを押しても、すぐに結果へ移る。
-  /// 動きを止める設定では、波を出さずに札だけを見せ、同じ間を置いて移る。
+  /// 正解の演出（celebration.dart）を出し、終わったら結果へ移る。画面のどこを押しても、すぐに結果へ移る。
+  /// 動きを止める設定では、札だけを見せて 0.7 秒置く。
   Future<void> _celebrate() async {
-    setState(() => _won = true);
-    final still = dsStill(context);
-    await Future<void>.delayed((still ? Duration.zero : StatsTable.waveLength(s)) + const Duration(milliseconds: 700));
+    await Future<void>.delayed(dsStill(context) ? const Duration(milliseconds: 700) : celebrationLength);
     _finish();
   }
 
@@ -109,152 +113,73 @@ class _QuizScreenState extends State<QuizScreen> {
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: _won ? _finish : null,
-        child: AbsorbPointer(
-          absorbing: _won,
-          child: Column(
-            children: [
-              DsPageHeader(
-                title: widget.title ?? (daily ? '今日の1問 No.${profile.dailyNumber}' : 'マニュアルモード'),
-                accentColor: daily ? DsColor.actionEmphasis : DsColor.rankHighlight,
-                leading: DsHeaderIconButton(icon: DsGlyph.close, tooltip: 'あきらめる', onPressed: _giveUp),
-                trailing: widget.trailing?.call(s),
-              ),
-              Expanded(
-                child: Stack(
-                  children: [
-                    ListView(
-                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-                      children: [
-                        ?widget.above?.call(s),
-                        RankMeter(session: s, labels: widget.meterLabels),
-                        if (s.wrongNames.isNotEmpty) ...[
-                          const SizedBox(height: DsSpacing.space8),
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: [for (final n in s.wrongNames) DsBadge(label: '× $n', color: DsColor.surface, foreground: DsColor.incorrect)],
-                          ),
-                        ],
-                        const SizedBox(height: DsSpacing.space12),
-                        StatsTable(session: s, cascade: _won),
-                      ],
-                    ),
-                    if (_won)
+        child: Celebration(
+          active: _won,
+          rank: s.finalRank,
+          name: s.player.name,
+          child: AbsorbPointer(
+            absorbing: _won,
+            child: Column(
+              children: [
+                DsPageHeader(
+                  title: widget.title ?? (daily ? '今日の1問 No.${profile.dailyNumber}' : 'マニュアルモード'),
+                  accentColor: daily ? DsColor.actionEmphasis : DsColor.rankHighlight,
+                  leading: DsHeaderIconButton(icon: DsGlyph.close, tooltip: 'あきらめる', onPressed: _giveUp),
+                  trailing: widget.trailing?.call(s),
+                ),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      // 行の高さを、使える高さと年数から決める（24〜34）。長い選手でも表が 1 画面に収まり、遊んでいる間にスクロールしなくて済む。
+                      // 150 は、余白、目盛り、表の見出しと枠の高さの合計に、下端の余裕を足したもの。
+                      LayoutBuilder(
+                        builder: (context, box) => ListView(
+                          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                          children: [
+                            ?widget.above?.call(s),
+                            RankMeter(session: s, labels: widget.meterLabels, wrongNames: s.wrongNames),
+                            const SizedBox(height: DsSpacing.space12),
+                            StatsTable(session: s, cascade: _won, rowHeight: ((box.maxHeight - 150) / s.yearCount).clamp(24.0, 34.0)),
+                          ],
+                        ),
+                      ),
                       Positioned(
-                        top: 120,
+                        top: 12,
                         left: 20,
                         right: 20,
-                        child: Center(child: _CorrectStamp(name: s.player.name)),
+                        child: Center(
+                          child: MissBanner(name: s.wrongNames.lastOrNull, trigger: _misses, extra: widget.missExtra?.call(s)),
+                        ),
                       ),
-                    Positioned(
-                      top: 12,
-                      left: 20,
-                      right: 20,
-                      child: Center(
-                        child: MissBanner(name: s.wrongNames.lastOrNull, trigger: _misses, extra: widget.missExtra?.call(s)),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              DsBottomActionBar(
-                child: Row(
-                  children: [
-                    // 今日の1問は全部を開けられないので、補助は「次を表示」だけにする。
-                    if (!daily) ...[
+                DsBottomActionBar(
+                  child: Row(
+                    children: [
+                      // 今日の1問は全部を開けられないので、補助は「次を表示」だけにする。
+                      if (!daily) ...[
+                        Expanded(
+                          flex: 3,
+                          child: DsButton(label: 'すべて表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : _revealAll),
+                        ),
+                        const SizedBox(width: DsSpacing.space8),
+                      ],
                       Expanded(
-                        flex: 3,
-                        child: DsButton(label: 'すべて表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : _revealAll),
+                        flex: 5,
+                        child: DsButton(label: '回答する', icon: DsGlyph.baseball, onPressed: _answer),
                       ),
                       const SizedBox(width: DsSpacing.space8),
+                      Expanded(
+                        flex: 3,
+                        child: DsButton(label: '次を表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : s.revealNext),
+                      ),
                     ],
-                    Expanded(
-                      flex: 5,
-                      child: DsButton(label: '回答する', icon: DsGlyph.baseball, onPressed: _answer),
-                    ),
-                    const SizedBox(width: DsSpacing.space8),
-                    Expanded(
-                      flex: 3,
-                      child: DsButton(label: '次を表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : s.revealNext),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 答え合わせの札。正解の文字と選手名を、緑の面に載せて表の上に置く。
-/// 0.92 倍から少し行き過ぎて 1 倍に収まり（280ms）、影が 0 から 6px へ伸びて机に置かれたように見せる。
-class _CorrectStamp extends StatefulWidget {
-  const _CorrectStamp({required this.name});
-
-  final String name;
-
-  @override
-  State<_CorrectStamp> createState() => _CorrectStampState();
-}
-
-class _CorrectStampState extends State<_CorrectStamp> with SingleTickerProviderStateMixin {
-  late final _t = AnimationController(vsync: this, duration: const Duration(milliseconds: 280));
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (dsStill(context)) {
-      _t.value = 1;
-    } else if (_t.value == 0 && !_t.isAnimating) {
-      _t.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-    _t.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      liveRegion: true,
-      label: '正解。${widget.name}',
-      excludeSemantics: true,
-      child: AnimatedBuilder(
-        animation: _t,
-        builder: (context, child) {
-          final v = Curves.easeOutBack.transform(_t.value);
-          return Opacity(
-            opacity: _t.value.clamp(0, 1),
-            child: Transform.scale(
-              scale: 0.92 + 0.08 * v,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(28, 14, 28, 16),
-                decoration: BoxDecoration(
-                  color: DsColor.statusSuccess,
-                  borderRadius: DsRadius.borderMd,
-                  border: Border.all(color: DsColor.onAction, width: DsBorder.standard),
-                  boxShadow: [BoxShadow(color: DsColor.shadow, offset: Offset(0, 6 * _t.value))],
-                ),
-                child: child,
-              ),
-            ),
-          );
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('正解！', style: DsTypography.headline1.copyWith(color: DsColor.onAction, height: 1.1)),
-            const SizedBox(height: 2),
-            Text(
-              widget.name,
-              style: DsTypography.body1.copyWith(color: DsColor.onAction, fontWeight: FontWeight.w700),
-            ),
-          ],
         ),
       ),
     );

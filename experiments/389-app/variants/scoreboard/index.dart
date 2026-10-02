@@ -308,8 +308,19 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
               ),
             ],
           ),
-          // 紙吹雪は、少ない手がかりで当てた SS と S だけにする。毎回降らせると、正解の重みが薄れるため。
-          if (rank == Rank.ss || rank == Rank.s) const Positioned.fill(child: Confetti()),
+          // 紙吹雪は正解のたびに降らせ、量を少ない手がかりで当てたほど多くする（round 5、利用者の所見）。
+          if (won)
+            Positioned.fill(
+              child: Confetti(
+                burst: switch (rank) {
+                  Rank.ss => 120,
+                  Rank.s => 90,
+                  Rank.a => 60,
+                  Rank.b => 45,
+                  _ => 30,
+                },
+              ),
+            ),
         ],
       ),
     );
