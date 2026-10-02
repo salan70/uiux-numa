@@ -3,7 +3,7 @@ title: Japanese Notation
 summary: 画面に出る日本語の文字の形を、どの画面でも同じ形に揃える。
 status: adopted
 created: 2026-09-22
-updated: 2026-09-25
+updated: 2026-10-02
 ---
 
 ## 目的
@@ -89,17 +89,18 @@ updated: 2026-09-25
 - 実験: [UX Writing の確認の例](ux-writing.md)
 - 出典: [JTF 日本語標準スタイルガイド 3.2](https://www.jtf.jp/pdf/jtf_style_guide.pdf)
 
-### 文の記号は全角、英数字に付く記号は半角で書く
+### 文の記号は全角、英数字に付く記号は半角で書き、語を「・」で並べない
 
-意図と根拠: 半角の括弧は英数字の内部と `(1)` のような番号だけに使い、ラベルと値は半角コロンと空白で区切る。
+意図と根拠: 半角の括弧は英数字の内部と `(1)` のような番号だけに使い、ラベルと値は半角コロンと空白で区切る。並べる語は「と」、読点、改行、札で分ける。389-app で、利用者が「・」の区切りをやめるよう求めた。
 
 - 適用: foundation
 - コア: 環境に依存しない文字で書く
 - コア: プロダクト全体で 1 つの形に揃える
-- 良い例:「主色・副色」「UI/UX NUMA」「最終更新: 2026.09.22」「4.5:1」
-- 悪い例:「UI／UX NUMA」「面 / 線」「12：05」「100％」、`·`（U+00B7）の中点
-- 例外: 英語の文字列の内部（Google Drive (beta)）
+- 良い例:「主色と副色」「UI/UX NUMA」「最終更新: 2026.09.22」「4.5:1」
+- 悪い例:「主色・副色」「UI／UX NUMA」「面 / 線」「12：05」「100％」、`·`（U+00B7）の中点
+- 例外: 英語の文字列の内部（Google Drive (beta)）。「・」を含む正式名（セ・リーグ、オリックス・バファローズ）と、外国の人名の区切り。
 - 実験: [サイドバー](../../apps/catalog/src/components/Sidebar.tsx)
+- 実験: [389-app](https://github.com/salan70/uiux-numa/blob/1313c9e5c9c6b6d81a87221ae7577bd5ac0b85dd/experiments/389-app/README.md)
 - 出典: [公用文作成の考え方 Ⅰ-5](https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf)
 
 ### 外来語は語尾に長音を付け、定着した形で書く
