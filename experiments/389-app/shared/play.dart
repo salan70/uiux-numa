@@ -12,7 +12,7 @@ import 'icons.dart';
 /// 遊んでいる間は、開いた値だけを cyan にし、年度は灰に下げて、開いた値が表の中で最も目立つようにする。
 /// 開いた瞬間のマスは pink で大きく出て、600ms で cyan の定位置へ戻る。どこが開いたかを目で追えるようにするため。
 class StatsTable extends StatelessWidget {
-  const StatsTable({required this.session, super.key, this.compact = false, this.mono = false, this.cascade = false});
+  const StatsTable({required this.session, super.key, this.compact = false, this.mono = false, this.cascade = false, this.rowHeight});
 
   final QuizSession session;
 
@@ -25,6 +25,9 @@ class StatsTable extends StatelessWidget {
   /// 正解した瞬間に、開いていないマスを左上から斜めの波で開く。
   final bool cascade;
 
+  /// 行の高さの上書き。クイズでは画面に収まる高さを渡す。
+  final double? rowHeight;
+
   /// 波の 1 段の間隔。17 行 × 5 列で約 0.6 秒になる。
   static const waveStep = Duration(milliseconds: 28);
 
@@ -34,7 +37,7 @@ class StatsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = session;
-    final rowH = compact ? 26.0 : 34.0;
+    final rowH = rowHeight ?? (compact ? 26.0 : 34.0);
     final yearColor = mono ? DsColor.contentPrimary : DsColor.contentSecondary;
     return DsCard(
       accentColor: DsColor.actionPrimary,
@@ -73,7 +76,7 @@ class StatsTable extends StatelessWidget {
                     revealed: s.isRevealed(r, c),
                     fresh: s.lastRevealed == (r, c) && !s.isOver,
                     color: mono || (s.isOver && !s.opened(r, c)) ? DsColor.contentPrimary : DsColor.actionPrimary,
-                    wave: cascade && !s.opened(r, c) ? waveStep * (r + c) : null,
+                    wave: cascade && !s.opened(r, c) ? const Duration(milliseconds: 240) + waveStep * (r + c) : null,
                   ),
               ]),
             ),
@@ -187,12 +190,15 @@ class _StatCellState extends State<StatCell> with TickerProviderStateMixin {
 /// 現在のランクを、SS〜C の 5 枠の札で示す。いまの枠だけをランクの色で塗り、届かなくなった枠は打ち消す。
 /// 誤答でもランクは落ちるので、session.rankNow から出す。
 class RankMeter extends StatefulWidget {
-  const RankMeter({required this.session, super.key, this.labels});
+  const RankMeter({required this.session, super.key, this.labels, this.wrongNames = const []});
 
   final QuizSession session;
 
   /// 枠のラベルの読み替え。null ならランクの記号。
   final String Function(Rank)? labels;
+
+  /// 外れた名前。見出しの行の右に 1 行で出す。行は常にあるので、外しても表は動かない。
+  final List<String> wrongNames;
 
   @override
   State<RankMeter> createState() => _RankMeterState();
@@ -223,12 +229,26 @@ class _RankMeterState extends State<RankMeter> with SingleTickerProviderStateMix
     final now = widget.session.rankNow;
     final label = widget.labels ?? (r) => r.label;
     return Semantics(
-      label: '現在のランク ${now.label}',
+      label: '現在のランク ${now.label}${widget.wrongNames.isEmpty ? '' : '。外れ ${widget.wrongNames.join('、')}'}',
       excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('現在のランク', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+          Row(
+            children: [
+              Text('現在のランク', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+              const SizedBox(width: DsSpacing.space12),
+              Expanded(
+                child: Text(
+                  widget.wrongNames.isEmpty ? '' : '外れ　${widget.wrongNames.reversed.join('・')}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                  style: DsTypography.caption.copyWith(color: DsColor.incorrect),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: DsSpacing.space4),
           Row(
             children: [

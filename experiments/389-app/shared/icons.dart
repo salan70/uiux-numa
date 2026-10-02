@@ -4,6 +4,7 @@ import 'ds.dart';
 
 // .389 の線画アイコン。製品の packages/common/design_system/assets/icons（24 の格子、線 1.5〜2.5、端と角は丸）を写す。
 // 製品に無いもの（share、eye、skipNext、search、replay、flag）は、同じ格子と線の太さ（2.1）で描き足した。
+// baseball の縫い目は、製品の形だと 20px で下に合流して「Y」に見えるので、左右の縁に沿う 2 本の弧に描き直した（round 5）。
 // SVG を読む依存を足さないため、パスは CustomPainter で描く。読める命令は M L H V C S Q A Z（大文字と小文字）。
 
 /// 1 本の線。d がパス、circle と rect は SVG の要素。fillBackground は製品の sliders の丸のように、線の内側を地の色で塗る。
@@ -22,7 +23,7 @@ class _Stroke {
 }
 
 enum DsGlyph {
-  baseball([_Stroke.circle(Offset(12, 12), 8.5, 1.8), _Stroke('M7.2 7.2c2.1 1.4 3.5 3.1 4.1 5.2.5 1.8.3 3.3-.7 4.5M16.8 7.2c-2.1 1.4-3.5 3.1-4.1 5.2-.5 1.8-.3 3.3.7 4.5', 1.5)]),
+  baseball([_Stroke.circle(Offset(12, 12), 8.5, 1.8), _Stroke('M8 4.4c2.1 2.1 2.1 13.1 0 15.2M16 4.4c-2.1 2.1-2.1 13.1 0 15.2', 1.6)]),
   calendar([_Stroke.rect(Rect.fromLTWH(3.5, 5.5, 17, 15), 2.2, 2.1), _Stroke('M7.5 3.5v4M16.5 3.5v4M3.7 9.5h16.6', 2.1), _Stroke('M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01', 2.8)]),
   check([_Stroke('m5.2 12.5 4.2 4.2 9.4-9.4', 2.5)]),
   chevronLeft([_Stroke('m15 5.8-6.2 6.2 6.2 6.2', 2.3)]),
