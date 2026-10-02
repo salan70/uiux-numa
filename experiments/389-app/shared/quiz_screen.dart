@@ -11,7 +11,7 @@ import 'play.dart';
 // 案ごとに変えるのは、目盛りの読み替え、ヘッダーの右、表の上の札、終わった後の行き先である。
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({required this.session, required this.onFinish, super.key, this.openAnswer = false, this.meterLabels, this.trailing, this.above, this.missExtra, this.title});
+  const QuizScreen({required this.session, required this.onFinish, super.key, this.openAnswer = false, this.meterLabels, this.trailing, this.above, this.missExtra, this.title, this.timer});
 
   final QuizSession session;
 
@@ -32,11 +32,14 @@ class QuizScreen extends StatefulWidget {
   /// ヘッダーの題の上書き（過去の今日の1問など）。
   final String? title;
 
+  /// タイマーモードの間隔（秒）。null ならマニュアル。製品の TimerController と同じく、間隔ごとに次の成績を自動で出す。
+  final double? timer;
+
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateMixin {
   QuizSession get s => widget.session;
   int _misses = 0;
 
@@ -44,16 +47,35 @@ class _QuizScreenState extends State<QuizScreen> {
   bool _won = false;
   bool _leaving = false;
 
+  /// タイマーの 1 周。終わるたびに次の成績を出す。
+  late final AnimationController _tick =
+      AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: ((widget.timer ?? 1) * 1000).round()),
+      )..addStatusListener((st) {
+        if (st != AnimationStatus.completed || !mounted) return;
+        s.revealNext();
+        if (s.unveil < s.total && !s.isOver && !_won) _tick.forward(from: 0);
+      });
+  bool _paused = false;
+
+  void _resume() {
+    if (widget.timer == null || _paused || s.isOver || s.unveil >= s.total) return;
+    _tick.forward();
+  }
+
   @override
   void initState() {
     super.initState();
     s.addListener(_changed);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _resume());
     if (widget.openAnswer) WidgetsBinding.instance.addPostFrameCallback((_) => _answer());
   }
 
   @override
   void dispose() {
     s.removeListener(_changed);
+    _tick.dispose();
     super.dispose();
   }
 
@@ -66,8 +88,14 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Future<void> _answer() async {
+    // 回答している間は、タイマーを止める。
+    _tick.stop();
     final name = await showAnswerSheet(context, wrong: s.wrongNames);
-    if (name == null || !mounted) return;
+    if (!mounted) return;
+    if (name == null) {
+      _resume();
+      return;
+    }
     // 正解なら、シートが閉じきってから演出を始め、その後で判定する。判定が先だと、表の残りのマスが波を待たずに一度に開くため。
     if (name == s.player.name && !s.isOver) {
       await Future<void>.delayed(const Duration(milliseconds: 220));
@@ -77,6 +105,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final outcome = s.guess(name);
     if (outcome == GuessOutcome.wrong) {
       setState(() => _misses++);
+      _resume();
       return;
     }
     if (outcome == GuessOutcome.correct) {
@@ -122,7 +151,27 @@ class _QuizScreenState extends State<QuizScreen> {
             child: Column(
               children: [
                 DsPageHeader(
-                  title: widget.title ?? (daily ? '今日の1問 No.${profile.dailyNumber}' : 'マニュアルモード'),
+                  title: widget.title ?? (daily ? '今日の1問 No.${profile.dailyNumber}' : (widget.timer != null ? 'タイマー ${widget.timer!.toStringAsFixed(1)} 秒' : 'マニュアルモード')),
+                  bottom: widget.timer == null
+                      ? null
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: AnimatedBuilder(
+                            animation: _tick,
+                            builder: (context, _) => Container(
+                              width: 160,
+                              height: 4,
+                              alignment: Alignment.centerLeft,
+                              decoration: BoxDecoration(color: DsColor.disabledSurface, borderRadius: BorderRadius.circular(2)),
+                              child: FractionallySizedBox(
+                                widthFactor: s.unveil >= s.total ? 1 : _tick.value,
+                                child: Container(
+                                  decoration: BoxDecoration(color: s.unveil >= s.total ? DsColor.actionEmphasis : DsColor.actionPrimary, borderRadius: BorderRadius.circular(2)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                   accentColor: daily ? DsColor.actionEmphasis : DsColor.rankHighlight,
                   leading: DsHeaderIconButton(icon: DsGlyph.close, tooltip: 'あきらめる', onPressed: _giveUp),
                   trailing: widget.trailing?.call(s),
@@ -172,7 +221,20 @@ class _QuizScreenState extends State<QuizScreen> {
                       const SizedBox(width: DsSpacing.space8),
                       Expanded(
                         flex: 3,
-                        child: DsButton(label: '次を表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : s.revealNext),
+                        // タイマーでは、次を表示の代わりに一時停止と再開を置く。
+                        child: widget.timer != null
+                            ? DsButton(
+                                label: _paused ? '再開' : '一時停止',
+                                type: DsButtonType.outline,
+                                tight: true,
+                                onPressed: full
+                                    ? null
+                                    : () => setState(() {
+                                        _paused = !_paused;
+                                        _paused ? _tick.stop() : _resume();
+                                      }),
+                              )
+                            : DsButton(label: '次を表示', type: DsButtonType.outline, tight: true, onPressed: full ? null : s.revealNext),
                       ),
                     ],
                   ),

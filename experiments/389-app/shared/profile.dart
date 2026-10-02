@@ -32,7 +32,7 @@ class DailyDay {
   DateTime get date => Profile.todayDate.subtract(Duration(days: day));
 
   /// その日の出題。番号から選手と開示の順を決める。
-  QuizPlayer get player => record?.player ?? quizPlayers[number % quizPlayers.length];
+  QuizPlayer get player => record?.player ?? _standardPlayers[number % _standardPlayers.length];
 }
 
 class Profile {
@@ -88,7 +88,7 @@ class Profile {
   /// 球団ごとの出題できる選手の数。
   static Map<String, int> get teamSize {
     final map = {for (final t in teamOrder) t: 0};
-    for (final p in quizPlayers) {
+    for (final p in _standardPlayers) {
       final t = teamShort[p.team];
       if (t != null) map[t] = map[t]! + 1;
     }
@@ -101,7 +101,7 @@ class Profile {
   static List<PlayRecord> _sample() {
     final random = math.Random(389);
     const ranks = [Rank.ss, Rank.s, Rank.s, Rank.a, Rank.a, Rank.a, Rank.b, Rank.b, Rank.c, Rank.miss, Rank.miss];
-    final players = [...quizPlayers]..shuffle(random);
+    final players = [..._standardPlayers]..shuffle(random);
     // 1 日に遊ぶノーマルの数。遊ばない日と、まとめて遊ぶ日が混ざるようにする。
     const normalPerDay = [3, 1, 0, 4, 2, 0, 5, 1, 2, 0, 3, 1, 0, 2, 4, 1, 0, 2, 3];
     final out = <PlayRecord>[];
@@ -137,3 +137,6 @@ String _rate(double v) => v >= 1 ? '1.000' : '.${(v * 1000).round().toString().p
 
 /// 0〜1 を打率の形で書く。
 String rateText(double v) => _rate(v);
+
+/// 既定の条件（全球団、通算 300 試合、300 安打、50 本塁打）に合う選手。コレクションの母数と見本の記録に使う。
+final _standardPlayers = QuizCondition.standard().players;

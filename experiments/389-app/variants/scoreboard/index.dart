@@ -10,6 +10,7 @@ import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
+import 'quiz_setting.dart';
 import 'settings.dart';
 
 // scoreboard: 現行の情報構造（ホーム → クイズ → 結果 → プレイ記録）と v2 の造形をそのまま保ち、体験の芯だけを磨く。
@@ -31,6 +32,7 @@ final _screens = <String, WidgetBuilder>{
   'dailyFail': (_) => _Result(session: _failed(sampleSession(reveal: 12, mode: QuizMode.daily))),
   'stats': (_) => const _Record(),
   'settings': (_) => const SettingsScreen(),
+  'quizSetting': (c) => QuizSettingScreen(onPlay: () => _playFrom(c)),
 };
 
 QuizSession _wrong(QuizSession s) => s..guess(s.player.name == '山田 哲人' ? '坂本 勇人' : '山田 哲人');
@@ -42,7 +44,16 @@ QuizSession _failed(QuizSession s) {
   return s;
 }
 
+/// クイズ設定の条件で 1 問を始める。条件に合う選手がいなければ、クイズ設定を開く。
+void _playFrom(BuildContext context, {bool replace = false}) {
+  final s = randomSession();
+  final nav = Navigator.of(context);
+  final route = dsRoute(s == null ? QuizSettingScreen(onPlay: () => _playFrom(context)) : _quiz(s));
+  replace ? nav.pushReplacement(route) : nav.push(route);
+}
+
 Widget _quiz(QuizSession s, {bool openAnswer = false}) => QuizScreen(
+  timer: s.mode == QuizMode.normal && QuizCondition.current.timer ? QuizCondition.current.interval : null,
   session: s,
   openAnswer: openAnswer,
   onFinish: (s) => _Result(session: s),
@@ -50,7 +61,11 @@ Widget _quiz(QuizSession s, {bool openAnswer = false}) => QuizScreen(
   missExtra: (s) => s.mode == QuizMode.daily ? 'のこり ${s.livesLeft} 回' : null,
 );
 
-QuizSession _daily() => QuizSession(player: quizPlayers[profile.dailyNumber % quizPlayers.length], mode: QuizMode.daily, seed: profile.dailyNumber);
+/// 今日の1問は、運営が選ぶ問題で、クイズ設定の条件に関わらず既定の条件の選手と成績から出す。
+QuizSession _daily() {
+  final pool = QuizCondition.standard().players;
+  return QuizSession(player: pool[profile.dailyNumber % pool.length], mode: QuizMode.daily, seed: profile.dailyNumber);
+}
 
 // ───────────────────────── ホーム ─────────────────────────
 
@@ -159,9 +174,20 @@ class _HomeState extends State<_Home> {
                             ),
                           ),
                           const SizedBox(height: DsSpacing.space24),
-                          DsButton(label: 'クイズ設定', type: DsButtonType.secondary, icon: DsGlyph.sliders, onPressed: () => showConditionSheet(context)),
+                          DsButton(
+                            label: 'クイズ設定',
+                            type: DsButtonType.secondary,
+                            icon: DsGlyph.sliders,
+                            onPressed: () => _open(Builder(builder: (c) => QuizSettingScreen(onPlay: () => _playFrom(c, replace: true)))),
+                          ),
                           const SizedBox(height: DsSpacing.space16),
-                          DsButton(label: 'クイズをプレイ！', icon: DsGlyph.baseball, onPressed: () => _open(_quiz(randomSession()))),
+                          DsButton(
+                            label: 'クイズをプレイ！',
+                            icon: DsGlyph.baseball,
+                            onPressed: () async {
+                              _playFrom(context);
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -307,7 +333,7 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
                     ),
                     const SizedBox(width: DsSpacing.space8),
                     Expanded(
-                      child: DsButton(label: 'もう一度！', icon: DsGlyph.replay, onPressed: () => Navigator.of(context).pushReplacement(dsRoute(_quiz(randomSession())))),
+                      child: DsButton(label: 'もう一度！', icon: DsGlyph.replay, onPressed: () => _playFrom(context, replace: true)),
                     ),
                   ],
                 ),
@@ -407,7 +433,10 @@ class _RecordState extends State<_Record> {
             title: 'プレイ記録',
             leading: DsHeaderIconButton(icon: DsGlyph.chevronLeft, tooltip: '戻る', onPressed: () => Navigator.of(context).maybePop()),
           ),
-          DsTabs(labels: const ['統計', 'ノーマル', '今日の1問'], index: _tab, onChanged: (i) => setState(() => _tab = i)),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            child: DsSegmented(labels: const ['統計', 'ノーマル', '今日の1問'], index: _tab, onChanged: (i) => setState(() => _tab = i)),
+          ),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),

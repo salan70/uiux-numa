@@ -21,6 +21,7 @@ const jumpTargets = <(String, String)>[
   ('daily', '今日の1問'),
   ('dailyFail', '今日の1問（3 回外れ）'),
   ('stats', 'プレイ記録'),
+  ('quizSetting', 'クイズ設定'),
   ('settings', '設定'),
 ];
 
