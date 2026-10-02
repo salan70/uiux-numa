@@ -102,12 +102,24 @@ class Profile {
     final random = math.Random(389);
     const ranks = [Rank.ss, Rank.s, Rank.s, Rank.a, Rank.a, Rank.a, Rank.b, Rank.b, Rank.c, Rank.miss, Rank.miss];
     final players = [...quizPlayers]..shuffle(random);
-    return [
+    // 1 日に遊ぶノーマルの数。遊ばない日と、まとめて遊ぶ日が混ざるようにする。
+    const normalPerDay = [3, 1, 0, 4, 2, 0, 5, 1, 2, 0, 3, 1, 0, 2, 4, 1, 0, 2, 3];
+    final out = <PlayRecord>[];
+    var k = 0;
+    PlayRecord make(int day, bool daily) {
+      final r = ranks[k % ranks.length];
+      return PlayRecord(day: day, player: players[k++ % players.length], rank: r, unveilPercent: _percentFor(r, random), daily: daily);
+    }
+
+    for (var day = 0; day < normalPerDay.length; day++) {
+      for (var n = 0; n < normalPerDay[day]; n++) {
+        out.add(make(day, false));
+      }
       // 今日の1問は 1 日 1 回。今日（済ませた設定のときだけ）と、遊ばなかった日（4 日前、9 日前）を除く。
-      for (var i = 0; i < 38; i++)
-        if (!(i.isEven && const [4, 9].contains(i ~/ 2)) && !(i == 0 && !Uri.base.queryParameters.containsKey('daily')))
-          PlayRecord(day: i ~/ 2, player: players[i % players.length], rank: ranks[i % ranks.length], unveilPercent: _percentFor(ranks[i % ranks.length], random), daily: i.isEven),
-    ];
+      final skip = const [4, 9].contains(day) || (day == 0 && !Uri.base.queryParameters.containsKey('daily'));
+      if (!skip) out.add(make(day, true));
+    }
+    return out;
   }
 }
 

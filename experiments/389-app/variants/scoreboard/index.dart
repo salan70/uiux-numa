@@ -10,7 +10,7 @@ import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
-import '../../shared/remarks.dart';
+import 'settings.dart';
 
 // scoreboard: 現行の情報構造（ホーム → クイズ → 結果 → プレイ記録）と v2 の造形をそのまま保ち、体験の芯だけを磨く。
 // 磨いた点は 3 つ。クイズの最中にいま当てたときのランクを出す。外れをダイアログでなく表の上の帯で知らせる。結果でランクを主役にする。
@@ -30,6 +30,7 @@ final _screens = <String, WidgetBuilder>{
   'daily': (_) => _quiz(_wrong(sampleSession(reveal: 4, mode: QuizMode.daily))),
   'dailyFail': (_) => _Result(session: _failed(sampleSession(reveal: 12, mode: QuizMode.daily))),
   'stats': (_) => const _Record(),
+  'settings': (_) => const SettingsScreen(),
 };
 
 QuizSession _wrong(QuizSession s) => s..guess(s.player.name == '山田 哲人' ? '坂本 勇人' : '山田 哲人');
@@ -74,6 +75,18 @@ class _HomeState extends State<_Home> {
       body: Stack(
         children: [
           const Positioned.fill(child: StatsStreamBackground()),
+          // 製品のホームと同じく、右上に広告非表示と設定の 2 つを置く。
+          Positioned(
+            top: MediaQuery.paddingOf(context).top + 8,
+            right: 20,
+            child: Row(
+              children: [
+                _UtilityButton(icon: DsGlyph.prohibit, label: '広告非表示', onTap: () => _open(const SettingsScreen(focusAds: true))),
+                const SizedBox(width: DsSpacing.space8),
+                _UtilityButton(icon: DsGlyph.settings, label: '設定', onTap: () => _open(const SettingsScreen())),
+              ],
+            ),
+          ),
           SafeArea(
             // 製品の Pattern A と同じく、中身を幅 360 に収めて縦の中央に置く。背が足りなければスクロールする。
             child: LayoutBuilder(
@@ -94,7 +107,12 @@ class _HomeState extends State<_Home> {
                           const SizedBox(height: DsSpacing.space4),
                           const Center(child: Logo389(width: 230)),
                           const SizedBox(height: DsSpacing.space32),
-                          TodayCard(onPlay: () => _open(_quiz(_daily()))),
+                          TodayCard(
+                            onPlay: () async {
+                              await _startDaily(context);
+                              setState(() {});
+                            },
+                          ),
                           const SizedBox(height: DsSpacing.space16),
                           GestureDetector(
                             onTap: () => _open(const _Record()),
@@ -171,11 +189,8 @@ class _Result extends StatefulWidget {
 
 class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
   /// 結果の入場。1 本の時間（900ms）を区切って使う。
-  /// 120〜480ms でランクが 1.25 倍から着地し、着地の瞬間（360〜680ms）にランクの色の線が放射状に弾け、500〜720ms で一言が出る。
+  /// 120〜480ms でランクが 1.25 倍から着地し、着地の瞬間（360〜680ms）にランクの色の線が放射状に弾ける。
   late final _t = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
-
-  /// 撮影（bare=1）では一言を固定する。
-  late final String _remark = pickRemark(widget.session, random: Uri.base.queryParameters['bare'] == '1' ? math.Random(1) : null);
 
   @override
   void didChangeDependencies() {
@@ -206,7 +221,6 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
     final color = dsRankColor(rank.label);
     final land = _seg(0.13, 0.53, Curves.easeOutBack);
     final burst = _seg(0.4, 0.75);
-    final remark = _seg(0.55, 0.8);
     return Scaffold(
       body: Stack(
         children: [
@@ -276,14 +290,6 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
                                 ),
                               ),
                             ],
-                          ),
-                          const Divider(color: DsColor.disabledSurface, height: 24),
-                          FadeTransition(
-                            opacity: remark,
-                            child: SlideTransition(
-                              position: Tween(begin: const Offset(0, 0.3), end: Offset.zero).animate(remark),
-                              child: Text(_remark, style: DsTypography.body1.copyWith(color: DsColor.contentPrimary)),
-                            ),
                           ),
                         ],
                       ),
@@ -406,9 +412,9 @@ class _RecordState extends State<_Record> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
               children: _tab == 1
-                  ? [HistoryList(onOpen: (r) => Navigator.of(context).push(dsRoute(_RecordDetail(record: r))))]
+                  ? [const _NormalLog()]
                   : _tab == 2
-                  ? [_DailyLog(onChanged: () => setState(() {}))]
+                  ? [_DailyCalendar(onChanged: () => setState(() {}))]
                   : [
                       DsCard(
                         accentColor: DsColor.actionPrimary,
@@ -526,50 +532,304 @@ class _TeamTile extends StatelessWidget {
   }
 }
 
-/// 今日の1問の記録。日付の新しい順に並べ、遊んだ日はランク、遊ばなかった日は「未プレイ」を出す。
+/// 今日の1問を始める。注意事項を確認のシートで出し、「はじめる」を押したときだけクイズを開く。
+/// 文言は製品の確認ダイアログ（confirm_dialog_page.dart の「今日の 1 問」を開始しますか？）の 3 点に揃えた。
+Future<void> _startDaily(BuildContext context) async {
+  final ok = await showConfirmSheet(context, title: '今日の1問をはじめますか？', body: '', action: 'はじめる', notes: const ['1 日 1 回だけ遊べます。', '回答は 3 回までです。', 'プレイ中にアプリを閉じると、不正解になります。', '毎日 19:00 に新しい問題に替わります。']);
+  if (ok && context.mounted) await Navigator.of(context).push(dsRoute(_quiz(_daily())));
+}
+
+/// ランクの小さなマス。正解はランクの色で塗ってランクを、不正解は pink で × を載せる。
+class _RankTile extends StatelessWidget {
+  const _RankTile({required this.rank, required this.onTap, this.size = 40});
+
+  final Rank rank;
+  final VoidCallback onTap;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: rank == Rank.miss ? '不正解' : 'ランク ${rank.label}',
+    excludeSemantics: true,
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: dsRankColor(rank.label),
+          borderRadius: DsRadius.borderXs,
+          border: Border.all(color: DsColor.onAction, width: DsBorder.standard),
+          boxShadow: DsShadow.xs,
+        ),
+        child: Text(
+          rank.label,
+          style: DsTypography.displayNumeric.copyWith(fontSize: size * 0.42, color: DsColor.onAction),
+        ),
+      ),
+    ),
+  );
+}
+
+/// ノーマルの記録。縦の一覧でなく、日ごとに 1 段のスコアボードにし、1 問を 1 マスで並べる。
+/// 1 日に何問、どのランクで解いたかが段の長さと色で一目で読める。選手名は出さない。マスを押すとその回の結果を開く。
+class _NormalLog extends StatelessWidget {
+  const _NormalLog();
+
+  @override
+  Widget build(BuildContext context) {
+    final records = profile.records.where((r) => !r.daily).toList();
+    if (records.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: Text(
+          '記録はまだありません',
+          textAlign: TextAlign.center,
+          style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
+        ),
+      );
+    }
+    final days = <int, List<PlayRecord>>{};
+    for (final r in records) {
+      days.putIfAbsent(r.day, () => []).add(r);
+    }
+    return DsCard(
+      accentColor: DsColor.actionPrimary,
+      showDotGrid: true,
+      hasShadow: true,
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, e) in days.entries.indexed) ...[
+            if (i > 0) const Divider(color: DsColor.disabledSurface, height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 72,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dayLabel(e.key),
+                        style: DsTypography.caption.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                      ),
+                      Text('${e.value.length} 問', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      // 1 日の中は、解いた順に左から並べる。
+                      for (final r in e.value.reversed)
+                        _RankTile(
+                          rank: r.rank,
+                          size: 36,
+                          onTap: () => Navigator.of(context).push(dsRoute(_RecordDetail(record: r))),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// 今日の1問の記録。縦の一覧でなく、月のカレンダーにする。遊んだ日はランクの色で塗り、遊ばなかった日は枠だけにする。
+/// 続けて遊んだか、どこで途切れたかが、色の並びで読める。
 /// 遊んだ日を押すとその日の結果を、遊ばなかった日を押すとその日の問題を開く（製品と同じく記録はしない）。
-class _DailyLog extends StatelessWidget {
-  const _DailyLog({required this.onChanged});
+class _DailyCalendar extends StatelessWidget {
+  const _DailyCalendar({required this.onChanged});
 
   final VoidCallback onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final days = profile.dailyLog();
+    final log = {for (final d in profile.dailyLog(days: 40)) d.day: d};
+    final today = Profile.todayDate;
+    final months = [DateTime(today.year, today.month), DateTime(today.year, today.month - 1)];
+    Future<void> open(DailyDay d) async {
+      if (d.record != null) {
+        await Navigator.of(context).push(dsRoute(_RecordDetail(record: d.record!)));
+      } else if (d.day == 0) {
+        await _startDaily(context);
+      } else {
+        final s = QuizSession(player: d.player, seed: d.number);
+        await Navigator.of(context).push(
+          dsRoute(
+            QuizScreen(
+              session: s,
+              title: '今日の1問 No.${d.number}',
+              onFinish: (s) => _Result(session: s),
+            ),
+          ),
+        );
+      }
+      onChanged();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final d in days)
-          Padding(
-            padding: const EdgeInsets.only(bottom: DsSpacing.space8),
-            child: RecordRow(
-              title: '今日の1問 No.${d.number}',
-              date: dayLabel(d.day),
-              detail: d.record == null ? (d.day == 0 ? '19:00 まで' : '記録なし') : (d.record!.correct ? '開示 ${d.record!.unveilPercent}%' : '不正解'),
-              rank: d.record?.rank,
-              onTap: () async {
-                if (d.record != null) {
-                  await Navigator.of(context).push(dsRoute(_RecordDetail(record: d.record!)));
-                } else if (d.day == 0) {
-                  await Navigator.of(context).push(dsRoute(_quiz(_daily())));
-                } else {
-                  final s = QuizSession(player: d.player, seed: d.number);
-                  await Navigator.of(context).push(
-                    dsRoute(
-                      QuizScreen(
-                        session: s,
-                        title: '今日の1問 No.${d.number}',
-                        onFinish: (s) => _Result(session: s),
-                      ),
-                    ),
-                  );
-                }
-                onChanged();
-              },
+        for (final m in months) ...[_MonthGrid(month: m, log: log, onOpen: open), const SizedBox(height: DsSpacing.space16)],
+        Wrap(
+          spacing: DsSpacing.space12,
+          runSpacing: DsSpacing.space4,
+          children: [
+            for (final r in Rank.values)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(color: dsRankColor(r.label), borderRadius: BorderRadius.circular(2)),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(r == Rank.miss ? '不正解' : r.label, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+                ],
+              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: DsColor.disabledContent),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text('未プレイ', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+              ],
             ),
-          ),
+          ],
+        ),
+        const SizedBox(height: DsSpacing.space12),
         Text('過去の問題は、解いても記録に残りません。', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
       ],
+    );
+  }
+}
+
+/// 1 か月のカレンダー。月曜始まり。
+class _MonthGrid extends StatelessWidget {
+  const _MonthGrid({required this.month, required this.log, required this.onOpen});
+
+  final DateTime month;
+  final Map<int, DailyDay> log;
+  final ValueChanged<DailyDay> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final first = DateTime(month.year, month.month);
+    final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+    final lead = first.weekday - 1;
+    final played = [for (var d = 1; d <= daysInMonth; d++) log[Profile.todayDate.difference(DateTime(month.year, month.month, d)).inDays]?.record].whereType<PlayRecord>().length;
+    return DsCard(
+      accentColor: DsColor.actionEmphasis,
+      hasShadow: true,
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Text(
+                '${month.year}年${month.month}月',
+                style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+              ),
+              const Spacer(),
+              Text('遊んだ日 ', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+              DsDisplayNumber('$played', fontSize: 18, color: DsColor.actionPrimary),
+            ],
+          ),
+          const SizedBox(height: DsSpacing.space8),
+          Row(
+            children: [
+              for (var i = 0; i < 7; i++)
+                Expanded(
+                  child: Text(
+                    '月火水木金土日'[i],
+                    textAlign: TextAlign.center,
+                    style: DsTypography.overline.copyWith(color: i >= 5 ? DsColor.actionEmphasis : DsColor.contentSecondary, letterSpacing: 0),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: DsSpacing.space4),
+          GridView.count(
+            crossAxisCount: 7,
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            children: [for (var i = 0; i < lead; i++) const SizedBox.shrink(), for (var d = 1; d <= daysInMonth; d++) _dayCell(DateTime(month.year, month.month, d))],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dayCell(DateTime date) {
+    final ago = Profile.todayDate.difference(date).inDays;
+    final day = log[ago];
+    final number = Text('${date.day}', style: DsTypography.displayNumeric.copyWith(fontSize: 10, color: DsColor.contentSecondary));
+    // 未来の日と、記録の範囲より前の日は、数字だけを置く。
+    if (ago < 0 || day == null) {
+      return Padding(
+        padding: const EdgeInsets.all(4),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Opacity(opacity: 0.4, child: number),
+        ),
+      );
+    }
+    final r = day.record?.rank;
+    final isToday = ago == 0;
+    return Semantics(
+      button: true,
+      label: '${date.month}月${date.day}日、${r == null ? '未プレイ' : (r == Rank.miss ? '不正解' : 'ランク ${r.label}')}',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: () => onOpen(day),
+        child: Container(
+          decoration: BoxDecoration(
+            color: r == null ? DsColor.background : dsRankColor(r.label),
+            borderRadius: DsRadius.borderXs,
+            border: Border.all(color: r != null ? DsColor.onAction : (isToday ? DsColor.actionPrimary : DsColor.disabledSurface), width: isToday && r == null ? DsBorder.standard : DsBorder.thin),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 4,
+                top: 2,
+                child: Text('${date.day}', style: DsTypography.displayNumeric.copyWith(fontSize: 10, color: r == null ? DsColor.contentSecondary : DsColor.onAction)),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: r != null
+                      ? Text(r.label, style: DsTypography.displayNumeric.copyWith(fontSize: 15, color: DsColor.onAction))
+                      : (isToday ? Text('今日', style: DsTypography.overline.copyWith(color: DsColor.actionPrimary, letterSpacing: 0)) : const SizedBox.shrink()),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -646,4 +906,38 @@ class _RecordDetail extends StatelessWidget {
       ),
     );
   }
+}
+
+/// ホームの右上の 40 × 40 の outline のボタン。製品の NavigationButton.openSettingDialog に倣う。
+class _UtilityButton extends StatelessWidget {
+  const _UtilityButton({required this.icon, required this.label, required this.onTap});
+
+  final DsGlyph icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: label,
+    excludeSemantics: true,
+    child: Tooltip(
+      message: label,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 40,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: DsColor.surface,
+            borderRadius: DsRadius.borderSm,
+            border: Border.all(color: DsColor.surfaceBorder, width: DsBorder.standard),
+            boxShadow: DsShadow.small,
+          ),
+          child: DsIcon(icon, size: 20),
+        ),
+      ),
+    ),
+  );
 }

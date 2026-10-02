@@ -238,13 +238,32 @@ class _RankMeterState extends State<RankMeter> with SingleTickerProviderStateMix
             children: [
               Text('現在のランク', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
               const SizedBox(width: DsSpacing.space12),
+              // 外れた名前は区切り文字でつながず、小さな札に分けて新しい順に並べる。収まらない札は左で切る。
               Expanded(
-                child: Text(
-                  widget.wrongNames.isEmpty ? '' : '外れ　${widget.wrongNames.reversed.join('・')}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  style: DsTypography.caption.copyWith(color: DsColor.incorrect),
+                child: SizedBox(
+                  height: 20,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.centerRight,
+                      maxWidth: double.infinity,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (final n in widget.wrongNames) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: DsColor.incorrect),
+                                borderRadius: DsRadius.borderXs,
+                              ),
+                              child: Text(n, style: DsTypography.overline.copyWith(color: DsColor.incorrect, letterSpacing: 0, height: 1.6)),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -542,14 +561,31 @@ class _SheetSurface extends StatelessWidget {
 }
 
 /// 取り消せる操作の確認。題、何が起きるかの 1 文、「キャンセル」と実行のボタンを並べる。実行したら true を返す。
-Future<bool> showConfirmSheet(BuildContext context, {required String title, required String body, required String action, bool danger = false}) async {
+Future<bool> showConfirmSheet(BuildContext context, {required String title, required String body, required String action, bool danger = false, List<String> notes = const []}) async {
   final ok = await showModalBottomSheet<bool>(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (context) => _SheetSurface(
       title: title,
       children: [
-        Text(body, style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)),
+        if (body.isNotEmpty) Text(body, style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)),
+        // 注意書きは、区切り文字でなく行頭の印で 1 行ずつ分ける。
+        for (final n in notes)
+          Padding(
+            padding: const EdgeInsets.only(top: DsSpacing.space8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 7, right: 10),
+                  child: DsStatusDot(color: DsColor.actionEmphasis, size: 6),
+                ),
+                Expanded(
+                  child: Text(n, style: DsTypography.body2.copyWith(color: DsColor.contentPrimary)),
+                ),
+              ],
+            ),
+          ),
         const SizedBox(height: DsSpacing.space20),
         Row(
           children: [
@@ -633,7 +669,10 @@ class _ConfettiPainter extends CustomPainter {
 }
 
 /// 製品では OS の共有シートを開く操作。試作では説明だけを出す。
-void showShareNote(BuildContext context, String what) {
+void showShareNote(BuildContext context, String what) => showProductNote(context, '製品では、$whatを画像にして OS の共有シートを開く。試作では開かない。');
+
+/// 製品では外の画面を開く操作。試作では説明だけを出す。
+void showProductNote(BuildContext context, String text) {
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -644,7 +683,7 @@ void showShareNote(BuildContext context, String what) {
         top: false,
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text('製品では、$whatを画像にして OS の共有シートを開く。試作では開かない。', style: DsTypography.body2.copyWith(color: DsColor.contentPrimary)),
+          child: Text(text, style: DsTypography.body2.copyWith(color: DsColor.contentPrimary)),
         ),
       ),
     ),

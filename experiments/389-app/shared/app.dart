@@ -21,6 +21,7 @@ const jumpTargets = <(String, String)>[
   ('daily', '今日の1問'),
   ('dailyFail', '今日の1問（3 回外れ）'),
   ('stats', 'プレイ記録'),
+  ('settings', '設定'),
 ];
 
 /// 操作盤から殻への依頼。操作盤は実行基盤の側で別の木に描かれるので、同じ isolate の通知で結ぶ。
