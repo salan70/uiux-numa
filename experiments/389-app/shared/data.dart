@@ -22,6 +22,51 @@ class QuizPlayer {
 
   /// 姓だけ。札や見出しで短く呼ぶときに使う。
   String get family => name.split(' ').first;
+
+  /// 通算の値。条件の下限と比べるときに使う。
+  int career(String stat) {
+    final total = rows.where((r) => r[0] == '通算').firstOrNull;
+    return total == null ? 0 : int.tryParse(total[statColumns.indexOf(stat) + 1]) ?? 0;
+  }
+
+  /// 2025 年シーズン終了時の所属の短い名。
+  String get teamName => teamShort[team] ?? team;
+}
+
+/// クイズ設定の条件。製品の SearchCondition を写す（domain/.../search_condition.dart）。
+/// 球団は 1 つ以上、出題する成績はちょうど 4 つ。下限の候補とタイマーの間隔の範囲も製品に合わせた。
+class QuizCondition {
+  QuizCondition({required this.teams, required this.minGames, required this.minHits, required this.minHr, required this.stats, this.timer = false, this.interval = 1.0});
+
+  factory QuizCondition.standard() => QuizCondition(teams: {...teamOrder}, minGames: 300, minHits: 300, minHr: 50, stats: [...defaultStats]);
+
+  Set<String> teams;
+  int minGames;
+  int minHits;
+  int minHr;
+  List<String> stats;
+  bool timer;
+
+  /// タイマーで次の成績を出すまでの秒数。
+  double interval;
+
+  static const statCount = 4;
+  static const gamesOptions = [0, 100, 300, 500, 1000];
+  static const hitsOptions = [0, 100, 300, 500, 1000];
+  static const hrOptions = [0, 10, 50, 100, 200];
+  static const minInterval = 0.3;
+  static const maxInterval = 5.0;
+
+  /// いまの条件。試作の中だけで持つ。
+  static final current = QuizCondition.standard();
+
+  bool get valid => teams.isNotEmpty && stats.length == statCount;
+
+  /// 条件に合う選手。
+  List<QuizPlayer> get players => [
+    for (final p in quizPlayers)
+      if (teams.contains(p.teamName) && p.career('試合') >= minGames && p.career('安打') >= minHits && p.career('本塁打') >= minHr) p,
+  ];
 }
 
 /// 製品の既定の出題項目（domain/.../search_condition.dart の defaultSearchCondition）。

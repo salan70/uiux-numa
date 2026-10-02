@@ -1,5 +1,5 @@
 // .389 の成績データ（salan70/389-app 42d79695 の tools/npb_data_scraper/seasons/end2025）から、試作の出題と候補を shared/data.g.dart に書く。
-// 出題は製品の既定の条件（通算 300 試合、300 安打、50 本塁打）を満たす選手に絞り、候補には全選手の名前を入れる。
+// 出題は全選手を入れ、クイズ設定の条件（球団、通算の試合、安打、本塁打の下限）で試作の中で絞る。候補には全選手の名前を入れる。
 // 使い方: node experiments/389-app/data/build.mjs <389-app のパス>
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,15 +20,44 @@ const parse = (file) => {
 
 const hitters = parse("hitters.csv");
 const stats = parse("hitting_stats.csv");
-const columns = ["球団", "試合", "安打", "本塁打", "打点", "盗塁", "打率", "OPS"];
-const rate = (v) => Number(v).toFixed(3).replace(/^0/, "");
-const cell = (k, v) => (k === "打率" || k === "OPS" ? rate(v) : v);
+// 製品のクイズ設定で選べる成績の全部（StatsType のうち、データにある 23 列）。
+const columns = [
+  "球団",
+  "試合",
+  "打席",
+  "打数",
+  "得点",
+  "安打",
+  "二塁打",
+  "三塁打",
+  "本塁打",
+  "塁打",
+  "打点",
+  "盗塁",
+  "盗塁死",
+  "犠打",
+  "犠飛",
+  "四球",
+  "死球",
+  "三振",
+  "併殺打",
+  "打率",
+  "出塁率",
+  "長打率",
+  "OPS",
+];
+const rates = new Set(["打率", "出塁率", "長打率", "OPS"]);
+const rate = (v) => {
+  const t = Number(v).toFixed(3);
+  return t.startsWith("0") ? t.slice(1) : t;
+};
+const cell = (k, v) => (rates.has(k) ? rate(v) : v);
 
 const players = [];
 for (const h of hitters) {
   const rows = stats.filter((s) => s.playerId === h.id);
   const total = rows.find((r) => r.年度 === "通算");
-  if (!total || +total.試合 < 300 || +total.安打 < 300 || +total.本塁打 < 50) continue;
+  if (!total) continue;
   // 製品の出題と同じく、通算の行を最後の 1 行として含める。
   const years = rows.sort((a, b) => +a.表示順 - +b.表示順);
   players.push({ id: h.id.slice(0, 8), name: h.name, team: h.team, years });

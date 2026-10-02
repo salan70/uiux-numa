@@ -730,4 +730,10 @@ PageRoute<void> dsRoute(Widget screen) => PageRouteBuilder<void>(
   },
 );
 
-QuizSession randomSession() => QuizSession(player: quizPlayers[DateTime.now().microsecond % quizPlayers.length]);
+/// クイズ設定の条件で 1 問を作る。条件に合う選手がいなければ null。
+QuizSession? randomSession() {
+  final c = QuizCondition.current;
+  final pool = c.players;
+  if (pool.isEmpty || !c.valid) return null;
+  return QuizSession(player: pool[DateTime.now().microsecond % pool.length], stats: [...c.stats]);
+}

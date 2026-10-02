@@ -90,50 +90,6 @@ class TodayCard extends StatelessWidget {
   }
 }
 
-/// いまの出題の条件を読むだけのシート。条件を変える画面は round 2 で作る。
-void showConditionSheet(BuildContext context) {
-  Widget chips(List<String> items) => Wrap(
-    spacing: 6,
-    runSpacing: 6,
-    children: [for (final t in items) DsBadge(label: t, color: DsColor.actionPrimary)],
-  );
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (_) => DsSurface(
-      backgroundColor: DsColor.background,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(DsRadius.lg)),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('いまの条件', style: DsTypography.headline4.copyWith(color: DsColor.contentPrimary)),
-              const SizedBox(height: DsSpacing.space12),
-              Text('球団', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-              const SizedBox(height: 4),
-              chips(teamOrder),
-              const SizedBox(height: DsSpacing.space12),
-              Text('出題する選手', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-              const SizedBox(height: 4),
-              chips(const ['通算 300 試合以上', '300 安打以上', '50 本塁打以上']),
-              const SizedBox(height: DsSpacing.space12),
-              Text('出題する成績', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-              const SizedBox(height: 4),
-              chips(defaultStats),
-              const SizedBox(height: DsSpacing.space16),
-              Text('試作では条件を変えられません。', style: DsTypography.caption.copyWith(color: DsColor.disabledContent)),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
 /// ランクの内訳を 1 本の帯で示す。製品のドーナツの代わりに、横に積んで割合を読みやすくした。
 class RankBar extends StatelessWidget {
   const RankBar({super.key});
@@ -194,37 +150,54 @@ String dayLabel(int day) {
   return '${d.month}/${d.day}（${'月火水木金土日'[d.weekday - 1]}）';
 }
 
-/// 2 つの見出しを切り替えるタブ。製品のプレイ記録の「統計 / 履歴」に倣い、選んだ方に cyan の下線を引く。
-class DsTabs extends StatelessWidget {
-  const DsTabs({required this.labels, required this.index, required this.onChanged, super.key});
+/// 切り替えのセグメントコントロール。ヘッダーの下線と二重の線にならないよう、下線のタブでなく、1 つの枠の中の札で選ぶ。
+/// 選んだ札は cyan の面に濃紺の文字と小さな影、選ばない札は地のまま。v2 の DsChip の選択の造形に合わせた。
+class DsSegmented extends StatelessWidget {
+  const DsSegmented({required this.labels, required this.index, required this.onChanged, super.key});
 
   final List<String> labels;
   final int index;
   final ValueChanged<int> onChanged;
 
   @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      for (var i = 0; i < labels.length; i++)
-        Expanded(
-          child: InkWell(
-            onTap: () => onChanged(i),
-            child: Container(
-              height: 44,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: i == index ? DsColor.actionPrimary : DsColor.disabledSurface, width: i == index ? DsBorder.standard : DsBorder.thin),
+  Widget build(BuildContext context) => Container(
+    height: 44,
+    padding: const EdgeInsets.all(3),
+    decoration: BoxDecoration(
+      color: DsColor.background,
+      borderRadius: DsRadius.borderSm,
+      border: Border.all(color: DsColor.disabledSurface),
+    ),
+    child: Row(
+      children: [
+        for (var i = 0; i < labels.length; i++)
+          Expanded(
+            child: Semantics(
+              button: true,
+              selected: i == index,
+              label: labels[i],
+              excludeSemantics: true,
+              child: GestureDetector(
+                onTap: () => onChanged(i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 120),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: i == index ? DsColor.actionPrimary : Colors.transparent,
+                    borderRadius: BorderRadius.circular(DsRadius.sm - 2),
+                    border: i == index ? Border.all(color: DsColor.onAction, width: DsBorder.standard) : null,
+                    boxShadow: i == index ? DsShadow.xs : null,
+                  ),
+                  child: Text(
+                    labels[i],
+                    style: DsTypography.body2.copyWith(color: i == index ? DsColor.onAction : DsColor.contentSecondary, fontWeight: FontWeight.w700),
+                  ),
                 ),
-              ),
-              child: Text(
-                labels[i],
-                style: DsTypography.body1.copyWith(color: i == index ? DsColor.actionPrimary : DsColor.contentSecondary, fontWeight: FontWeight.w700),
               ),
             ),
           ),
-        ),
-    ],
+      ],
+    ),
   );
 }
 
