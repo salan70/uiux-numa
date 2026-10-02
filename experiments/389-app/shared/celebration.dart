@@ -80,7 +80,9 @@ class _CelebrationState extends State<Celebration> with SingleTickerProviderStat
       child: widget.child,
       builder: (context, child) {
         if (!widget.active) {
-          return Stack(children: [Transform.translate(offset: Offset.zero, child: child)]);
+          return Stack(
+            children: [Transform.translate(offset: Offset.zero, child: child)],
+          );
         }
         final shake = _still ? 0.0 : _seg(240, 520);
         final dx = shake == 0 || shake == 1 ? 0.0 : math.sin(shake * math.pi * 7) * 10 * (1 - shake);

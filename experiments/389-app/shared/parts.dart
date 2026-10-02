@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data.dart';
 import 'ds.dart';
-import 'icons.dart';
 import 'play.dart';
 import 'profile.dart';
 
@@ -187,98 +186,6 @@ class RankBar extends StatelessWidget {
   }
 }
 
-/// ノーマルの履歴の一覧。日付、開示の割合、ランクを 1 行に並べる。
-/// 選手名は出さない。一覧を眺めただけで答えが目に入らないようにするため。押すとその回の結果を開く。
-class HistoryList extends StatelessWidget {
-  const HistoryList({required this.onOpen, super.key, this.limit = 30});
-
-  final int limit;
-  final ValueChanged<PlayRecord> onOpen;
-
-  @override
-  Widget build(BuildContext context) {
-    final records = profile.records.where((r) => !r.daily).take(limit).toList();
-    if (records.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 40),
-        child: Text(
-          '記録はまだありません',
-          textAlign: TextAlign.center,
-          style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
-        ),
-      );
-    }
-    return Column(
-      children: [
-        for (final (i, r) in records.indexed)
-          Padding(
-            padding: const EdgeInsets.only(bottom: DsSpacing.space8),
-            child: RecordRow(title: 'ノーマル　${records.length - i} 問目', date: dayLabel(r.day), detail: r.correct ? '開示 ${r.unveilPercent}%' : '不正解', rank: r.rank, onTap: () => onOpen(r)),
-          ),
-      ],
-    );
-  }
-}
-
-/// 記録の 1 行。題、日付、補足、ランクの札を並べ、右端に開く印を置く。
-class RecordRow extends StatelessWidget {
-  const RecordRow({required this.title, required this.date, required this.detail, required this.onTap, super.key, this.rank});
-
-  final String title;
-  final String date;
-  final String detail;
-
-  /// null なら未プレイ。
-  final Rank? rank;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final r = rank;
-    return Semantics(
-      button: true,
-      label: '$title、$date、${r == null ? '未プレイ' : (r == Rank.miss ? '不正解' : 'ランク ${r.label}')}',
-      excludeSemantics: true,
-      child: GestureDetector(
-        onTap: onTap,
-        child: DsSurface(
-          backgroundColor: r == null ? DsColor.background : DsColor.surface,
-          borderColor: r == null ? DsColor.disabledSurface : DsColor.surfaceBorder,
-          padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: DsTypography.body2.copyWith(color: r == null ? DsColor.contentSecondary : DsColor.contentPrimary, fontWeight: FontWeight.w700),
-                    ),
-                    Text('$date・$detail', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
-                  ],
-                ),
-              ),
-              if (r == null)
-                Text('未プレイ', style: DsTypography.caption.copyWith(color: DsColor.disabledContent))
-              else
-                SizedBox(
-                  width: 52,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: DsBadge(label: r == Rank.miss ? '×' : r.label, color: dsRankColor(r.label)),
-                  ),
-                ),
-              const SizedBox(width: 4),
-              const DsIcon(DsGlyph.chevronRight, size: 20, color: DsColor.contentSecondary),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// 何日前かを、今日、昨日、日付（10/1（木））で書く。
 String dayLabel(int day) {
   if (day == 0) return '今日';
@@ -344,7 +251,15 @@ class ResultHeading extends StatelessWidget {
           textAlign: TextAlign.center,
           style: DsTypography.headline3.copyWith(color: DsColor.contentPrimary),
         ),
-        Text('${teamShort[s.player.team] ?? s.player.team}・2025年シーズン終了時', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+        const SizedBox(height: 2),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DsBadge(label: teamShort[s.player.team] ?? s.player.team, color: DsColor.contentPrimary),
+            const SizedBox(width: DsSpacing.space8),
+            Text('2025年シーズン終了時', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+          ],
+        ),
       ],
     );
   }
