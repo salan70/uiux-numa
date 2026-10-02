@@ -20,7 +20,7 @@ const jumpTargets = <(String, String)>[
   ('result', '正解の結果'),
   ('daily', '今日の1問'),
   ('dailyFail', '今日の1問（3 回外れ）'),
-  ('stats', 'マイ成績'),
+  ('stats', 'プレイ記録'),
 ];
 
 /// 操作盤から殻への依頼。操作盤は実行基盤の側で別の木に描かれるので、同じ isolate の通知で結ぶ。
@@ -89,7 +89,12 @@ class _QuizAppState extends State<QuizApp> {
         final window = MediaQueryData.fromView(View.of(context)).size.width;
         final compact = window < 402 + 32 + 320 + 80 && Uri.base.queryParameters['bare'] != '1';
         if (!compact || child == null) return child ?? const SizedBox.shrink();
-        return Stack(children: [child, _JumpButton(navigatorKey: _navigatorKey)]);
+        return Stack(
+          children: [
+            child,
+            _JumpButton(navigatorKey: _navigatorKey),
+          ],
+        );
       },
       debugShowCheckedModeBanner: false,
       title: widget.title,
@@ -121,8 +126,7 @@ class JumpPanel extends StatelessWidget {
           children: [
             const Text('画面へ移る', style: TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
-            for (final (key, label) in jumpTargets)
-              ListTile(dense: true, title: Text(label), onTap: () => jumpRequest.value = key),
+            for (final (key, label) in jumpTargets) ListTile(dense: true, title: Text(label), onTap: () => jumpRequest.value = key),
           ],
         ),
       ),
@@ -158,7 +162,10 @@ class _JumpButtonState extends State<_JumpButton> {
           controller: controller,
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
           children: [
-            const Text('画面へ移る', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
+            const Text(
+              '画面へ移る',
+              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+            ),
             const SizedBox(height: 4),
             const Text('選んだ画面を、見本のデータから開き直します。', style: TextStyle(color: Color(0xFFB8C2D1), fontSize: 12)),
             const SizedBox(height: 8),

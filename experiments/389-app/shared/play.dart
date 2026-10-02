@@ -9,21 +9,33 @@ import 'icons.dart';
 // 3 案が共有するクイズの部品。v2 の Pattern C（成績表のカード、下端の帯）に従い、開示と外れの動きを足した。
 
 /// 成績表。製品の StatsView と同じく、cyan の隅のアクセント、影、ドットグリッドを持つカードに、年度 × 項目を 1px の区切りで並べる。
-/// 開いた値だけを cyan にし、年度は灰に下げて、開いた値が表の中で最も目立つようにする。
+/// 遊んでいる間は、開いた値だけを cyan にし、年度は灰に下げて、開いた値が表の中で最も目立つようにする。
 /// 開いた瞬間のマスは pink で大きく出て、600ms で cyan の定位置へ戻る。どこが開いたかを目で追えるようにするため。
-/// 終わった後は全部を見せ、開かずに済んだマスを白にして、開いたマス（cyan）と分ける。
 class StatsTable extends StatelessWidget {
-  const StatsTable({required this.session, super.key, this.compact = false});
+  const StatsTable({required this.session, super.key, this.compact = false, this.mono = false, this.cascade = false});
 
   final QuizSession session;
 
   /// 行を詰める。結果の画面で表を小さく見せるときに使う。
   final bool compact;
 
+  /// 文字を 1 色（白）にする。結果の画面で、答えの成績として読ませるときに使う。
+  final bool mono;
+
+  /// 正解した瞬間に、開いていないマスを左上から斜めの波で開く。
+  final bool cascade;
+
+  /// 波の 1 段の間隔。17 行 × 5 列で約 0.6 秒になる。
+  static const waveStep = Duration(milliseconds: 28);
+
+  /// 波が最後のマスまで届くまでの時間。
+  static Duration waveLength(QuizSession s) => waveStep * (s.yearCount + s.stats.length) + const Duration(milliseconds: 220);
+
   @override
   Widget build(BuildContext context) {
     final s = session;
     final rowH = compact ? 26.0 : 34.0;
+    final yearColor = mono ? DsColor.contentPrimary : DsColor.contentSecondary;
     return DsCard(
       accentColor: DsColor.actionPrimary,
       hasShadow: true,
@@ -34,23 +46,35 @@ class StatsTable extends StatelessWidget {
         children: [
           _row([
             for (final h in ['年度', ...s.stats])
-              Text(h, textAlign: TextAlign.center, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary, fontSize: 11)),
+              Text(
+                h,
+                textAlign: TextAlign.center,
+                style: DsTypography.caption.copyWith(color: DsColor.contentSecondary, fontSize: 11),
+              ),
           ]),
           const Divider(color: DsColor.surfaceBorder, thickness: DsBorder.thin, height: 12),
           for (var r = 0; r < s.yearCount; r++)
             Container(
               height: rowH,
-              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: DsColor.surfaceBorder.withValues(alpha: 0.35), width: 0.5))),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: DsColor.surfaceBorder.withValues(alpha: 0.35), width: 0.5)),
+              ),
               child: _row([
                 Text(
                   s.year(r),
                   textAlign: TextAlign.center,
                   style: s.year(r) == '通算'
                       ? DsTypography.caption.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)
-                      : DsTypography.displayNumeric.copyWith(fontSize: 15, color: DsColor.contentSecondary),
+                      : DsTypography.displayNumeric.copyWith(fontSize: 15, color: yearColor),
                 ),
                 for (var c = 0; c < s.stats.length; c++)
-                  StatCell(text: s.value(r, c), revealed: s.isRevealed(r, c), fresh: s.lastRevealed == (r, c) && !s.isOver, rest: s.isOver && !s.opened(r, c)),
+                  StatCell(
+                    text: s.value(r, c),
+                    revealed: s.isRevealed(r, c),
+                    fresh: s.lastRevealed == (r, c) && !s.isOver,
+                    color: mono || (s.isOver && !s.opened(r, c)) ? DsColor.contentPrimary : DsColor.actionPrimary,
+                    wave: cascade && !s.opened(r, c) ? waveStep * (r + c) : null,
+                  ),
               ]),
             ),
         ],
@@ -62,31 +86,46 @@ class StatsTable extends StatelessWidget {
 }
 
 class StatCell extends StatefulWidget {
-  const StatCell({required this.text, required this.revealed, required this.fresh, super.key, this.rest = false});
+  const StatCell({required this.text, required this.revealed, required this.fresh, required this.color, super.key, this.wave});
 
   final String text;
   final bool revealed;
-  final bool fresh;
 
-  /// 終わった後に見せる、開かずに済んだマス。
-  final bool rest;
+  /// 遊んでいる間に、いま開いたマス。pink で大きく出てから color へ落ち着く。
+  final bool fresh;
+  final Color color;
+
+  /// 正解の波で開くまでの待ち。null なら波に乗らない。
+  final Duration? wave;
 
   @override
   State<StatCell> createState() => _StatCellState();
 }
 
-class _StatCellState extends State<StatCell> with SingleTickerProviderStateMixin {
+class _StatCellState extends State<StatCell> with TickerProviderStateMixin {
   late final _t = AnimationController(vsync: this, duration: const Duration(milliseconds: 600), value: 1);
+
+  /// 波で開く動き。下から 6px 持ち上がりながら現れる（220ms）。
+  late final _w = AnimationController(vsync: this, duration: const Duration(milliseconds: 220), value: 1);
 
   @override
   void didUpdateWidget(StatCell old) {
     super.didUpdateWidget(old);
-    if (!old.revealed && widget.revealed && widget.fresh && !dsStill(context)) _t.forward(from: 0);
+    if (old.revealed || !widget.revealed || dsStill(context)) return;
+    if (widget.wave != null) {
+      _w.value = 0;
+      Future<void>.delayed(widget.wave!, () {
+        if (mounted) _w.forward();
+      });
+    } else if (widget.fresh) {
+      _t.forward(from: 0);
+    }
   }
 
   @override
   void dispose() {
     _t.dispose();
+    _w.dispose();
     super.dispose();
   }
 
@@ -95,54 +134,64 @@ class _StatCellState extends State<StatCell> with SingleTickerProviderStateMixin
     if (!widget.revealed) return const SizedBox.shrink();
     final team = !RegExp(r'^[\d.]+$').hasMatch(widget.text);
     return AnimatedBuilder(
-      animation: _t,
+      animation: Listenable.merge([_t, _w]),
       builder: (context, _) {
         final v = _t.value;
+        final w = Curves.easeOut.transform(_w.value);
         final pop = Curves.easeOutBack.transform((v / 0.45).clamp(0, 1));
         final settle = Curves.easeOut.transform(((v - 0.45) / 0.55).clamp(0, 1));
-        final color = widget.rest ? DsColor.contentPrimary.withValues(alpha: 0.72) : Color.lerp(DsColor.actionEmphasis, DsColor.actionPrimary, widget.fresh ? settle : 1)!;
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            if (v < 0.6)
-              Opacity(
-                opacity: (1 - v / 0.6) * 0.5,
-                child: Transform.scale(
-                  scale: 0.6 + v,
-                  child: Container(decoration: BoxDecoration(border: Border.all(color: DsColor.actionEmphasis, width: 2), borderRadius: DsRadius.borderXs)),
-                ),
-              ),
-            Transform.scale(
-              scale: 1.6 - 0.6 * pop,
-              child: Opacity(
-                opacity: (v / 0.2).clamp(0, 1),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    widget.text,
-                    maxLines: 1,
-                    style: team
-                        ? DsTypography.body2.copyWith(color: color, fontWeight: FontWeight.w700)
-                        : DsTypography.displayNumeric.copyWith(fontSize: 17, color: color),
+        final color = widget.fresh ? Color.lerp(DsColor.actionEmphasis, widget.color, settle)! : widget.color;
+        return Opacity(
+          opacity: w,
+          child: Transform.translate(
+            offset: Offset(0, (1 - w) * 6),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (v < 0.6)
+                  Opacity(
+                    opacity: (1 - v / 0.6) * 0.5,
+                    child: Transform.scale(
+                      scale: 0.6 + v,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: DsColor.actionEmphasis, width: 2),
+                          borderRadius: DsRadius.borderXs,
+                        ),
+                      ),
+                    ),
+                  ),
+                Transform.scale(
+                  scale: 1.6 - 0.6 * pop,
+                  child: Opacity(
+                    opacity: (v / 0.2).clamp(0, 1),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        widget.text,
+                        maxLines: 1,
+                        style: team ? DsTypography.body2.copyWith(color: color, fontWeight: FontWeight.w700) : DsTypography.displayNumeric.copyWith(fontSize: 17, color: color),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );
   }
 }
 
-/// いま当てたときのランクを、SS〜C の 5 枠の札で示す。いまの枠だけをランクの色で塗り、下がるまでのマス数を添える。
+/// 現在のランクを、SS〜C の 5 枠の札で示す。いまの枠だけをランクの色で塗り、届かなくなった枠は打ち消す。
 /// 誤答でもランクは落ちるので、session.rankNow から出す。
 class RankMeter extends StatefulWidget {
   const RankMeter({required this.session, super.key, this.labels});
 
   final QuizSession session;
 
-  /// 枠のラベルの読み替え（打球の名など）。null ならランクの記号。
+  /// 枠のラベルの読み替え。null ならランクの記号。
   final String Function(Rank)? labels;
 
   @override
@@ -171,61 +220,54 @@ class _RankMeterState extends State<RankMeter> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final s = widget.session;
-    final now = s.rankNow;
-    final left = s.cellsBeforeDrop;
-    final next = Rank.values[math.min(now.index + 1, Rank.c.index)];
+    final now = widget.session.rankNow;
     final label = widget.labels ?? (r) => r.label;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            Text('いま当てれば', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-            const Spacer(),
-            Text(
-              left == null ? 'これより下はない' : (left <= 0 ? '次の 1 マスで ${label(next)}' : 'あと $left マスで ${label(next)}'),
-              style: DsTypography.caption.copyWith(color: left != null && left <= 0 ? DsColor.actionEmphasis : DsColor.contentSecondary),
-            ),
-          ],
-        ),
-        const SizedBox(height: DsSpacing.space4),
-        Row(
-          children: [
-            for (final r in const [Rank.ss, Rank.s, Rank.a, Rank.b, Rank.c]) ...[
-              Expanded(
-                child: AnimatedBuilder(
-                  animation: _drop,
-                  builder: (context, child) => Transform.translate(offset: Offset(0, r == now ? -math.sin(_drop.value * math.pi) * 4 : 0), child: child),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: 28,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: r == now ? dsRankColor(r.label) : (r.index < now.index ? DsColor.background : DsColor.surface),
-                      borderRadius: DsRadius.borderXs,
-                      border: Border.all(color: r == now ? DsColor.onAction : DsColor.disabledSurface, width: r == now ? DsBorder.standard : DsBorder.thin),
-                      boxShadow: r == now ? DsShadow.xs : null,
-                    ),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        label(r),
-                        style: (widget.labels == null ? DsTypography.displayNumeric.copyWith(fontSize: 15) : DsTypography.caption.copyWith(fontWeight: FontWeight.w700)).copyWith(
-                          color: r == now ? DsColor.onAction : (r.index < now.index ? DsColor.disabledContent : dsRankColor(r.label)),
-                          decoration: r.index < now.index ? TextDecoration.lineThrough : null,
-                          decorationColor: DsColor.disabledContent,
+    return Semantics(
+      label: '現在のランク ${now.label}',
+      excludeSemantics: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('現在のランク', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+          const SizedBox(height: DsSpacing.space4),
+          Row(
+            children: [
+              for (final r in const [Rank.ss, Rank.s, Rank.a, Rank.b, Rank.c]) ...[
+                Expanded(
+                  child: AnimatedBuilder(
+                    animation: _drop,
+                    builder: (context, child) => Transform.translate(offset: Offset(0, r == now ? -math.sin(_drop.value * math.pi) * 4 : 0), child: child),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 28,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: r == now ? dsRankColor(r.label) : (r.index < now.index ? DsColor.background : DsColor.surface),
+                        borderRadius: DsRadius.borderXs,
+                        border: Border.all(color: r == now ? DsColor.onAction : DsColor.disabledSurface, width: r == now ? DsBorder.standard : DsBorder.thin),
+                        boxShadow: r == now ? DsShadow.xs : null,
+                      ),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          label(r),
+                          style: DsTypography.displayNumeric.copyWith(
+                            fontSize: 15,
+                            color: r == now ? DsColor.onAction : (r.index < now.index ? DsColor.disabledContent : dsRankColor(r.label)),
+                            decoration: r.index < now.index ? TextDecoration.lineThrough : null,
+                            decorationColor: DsColor.disabledContent,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              if (r != Rank.c) const SizedBox(width: DsSpacing.space4),
+                if (r != Rank.c) const SizedBox(width: DsSpacing.space4),
+              ],
             ],
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -301,21 +343,21 @@ class _MissBannerState extends State<MissBanner> with SingleTickerProviderStateM
   }
 }
 
-/// 回答のシート。名前の一部で候補を出し、外れた名前は消して選べなくする。
-Future<String?> showAnswerSheet(BuildContext context, {required List<String> wrong, String title = '選手を回答する'}) {
+/// 回答のシート。名前の一部で候補を出し、選んだ候補を「回答する」で送る。外れた名前は消して選べなくする。
+/// 候補を押しただけでは送らない。押し間違えで 1 回ぶんの回答を失わないようにするため。
+Future<String?> showAnswerSheet(BuildContext context, {required List<String> wrong}) {
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => _AnswerSheet(wrong: wrong, title: title),
+    builder: (_) => _AnswerSheet(wrong: wrong),
   );
 }
 
 class _AnswerSheet extends StatefulWidget {
-  const _AnswerSheet({required this.wrong, required this.title});
+  const _AnswerSheet({required this.wrong});
 
   final List<String> wrong;
-  final String title;
 
   @override
   State<_AnswerSheet> createState() => _AnswerSheetState();
@@ -323,6 +365,7 @@ class _AnswerSheet extends StatefulWidget {
 
 class _AnswerSheetState extends State<_AnswerSheet> {
   final _text = TextEditingController();
+  String? _selected;
 
   @override
   void dispose() {
@@ -335,126 +378,174 @@ class _AnswerSheetState extends State<_AnswerSheet> {
     final hits = searchNames(_text.text);
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-      child: DsSurface(
-        backgroundColor: DsColor.background,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(DsRadius.lg)),
-        accentColor: DsColor.actionPrimary,
-        accentPosition: DsCorner.topRight,
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.title, style: DsTypography.headline4.copyWith(color: DsColor.contentPrimary)),
-                const SizedBox(height: DsSpacing.space12),
-                TextField(
-                  controller: _text,
-                  autofocus: true,
-                  onChanged: (_) => setState(() {}),
-                  style: DsTypography.body1.copyWith(color: DsColor.contentPrimary),
-                  decoration: InputDecoration(
-                    hintText: '選手名の一部（例: 柳田）',
-                    hintStyle: DsTypography.body1.copyWith(color: DsColor.disabledContent),
-                    prefixIcon: const Padding(padding: EdgeInsets.all(12), child: DsIcon(DsGlyph.search, size: 22, color: DsColor.contentSecondary)),
-                    filled: true,
-                    fillColor: DsColor.surface,
-                    enabledBorder: const OutlineInputBorder(borderRadius: DsRadius.borderSm, borderSide: BorderSide(color: DsColor.surfaceBorder)),
-                    focusedBorder: const OutlineInputBorder(borderRadius: DsRadius.borderSm, borderSide: BorderSide(color: DsColor.actionPrimary, width: DsBorder.standard)),
-                  ),
-                ),
-                const SizedBox(height: DsSpacing.space8),
-                SizedBox(
-                  height: 280,
-                  child: hits.isEmpty
-                      ? Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8, left: 4),
-                            child: Text(
-                              _text.text.isEmpty ? '姓だけでも探せます。外れても、何度でも回答できます。' : '「${_text.text}」に当たる選手がいません。漢字の表記を確かめてください。',
-                              style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
-                            ),
-                          ),
-                        )
-                      : ListView.separated(
-                          itemCount: hits.length,
-                          separatorBuilder: (_, _) => const SizedBox(height: DsSpacing.space8),
-                          itemBuilder: (context, i) {
-                            final n = hits[i];
-                            final miss = widget.wrong.contains(n);
-                            return GestureDetector(
-                              onTap: miss ? null : () => Navigator.pop(context, n),
-                              child: DsSurface(
-                                backgroundColor: miss ? DsColor.background : DsColor.surface,
-                                borderColor: miss ? DsColor.disabledSurface : DsColor.surfaceBorder,
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      n,
-                                      style: DsTypography.body1.copyWith(
-                                        color: miss ? DsColor.disabledContent : DsColor.contentPrimary,
-                                        decoration: miss ? TextDecoration.lineThrough : null,
-                                        decorationColor: DsColor.disabledContent,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    if (miss)
-                                      const DsBadge(label: '外れ', color: DsColor.incorrect)
-                                    else
-                                      const DsIcon(DsGlyph.chevronRight, size: 20, color: DsColor.actionPrimary),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ],
+      child: _SheetSurface(
+        title: '選手を回答',
+        children: [
+          Text('一部でも検索できます', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+          const SizedBox(height: DsSpacing.space8),
+          TextField(
+            controller: _text,
+            autofocus: true,
+            onChanged: (_) => setState(() => _selected = null),
+            style: DsTypography.body1.copyWith(color: DsColor.contentPrimary),
+            decoration: InputDecoration(
+              hintText: '例: 佐藤',
+              hintStyle: DsTypography.body1.copyWith(color: DsColor.disabledContent),
+              prefixIcon: const Padding(
+                padding: EdgeInsets.all(12),
+                child: DsIcon(DsGlyph.search, size: 22, color: DsColor.contentSecondary),
+              ),
+              filled: true,
+              fillColor: DsColor.surface,
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: DsRadius.borderSm,
+                borderSide: BorderSide(color: DsColor.surfaceBorder),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: DsRadius.borderSm,
+                borderSide: BorderSide(color: DsColor.actionPrimary, width: DsBorder.standard),
+              ),
             ),
           ),
-        ),
+          const SizedBox(height: DsSpacing.space8),
+          SizedBox(
+            height: 248,
+            child: hits.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      _text.text.isEmpty ? '' : '該当する選手がいません',
+                      textAlign: TextAlign.center,
+                      style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
+                    ),
+                  )
+                : ListView.separated(
+                    itemCount: hits.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: DsSpacing.space8),
+                    itemBuilder: (context, i) {
+                      final n = hits[i];
+                      final miss = widget.wrong.contains(n);
+                      final on = n == _selected;
+                      return Semantics(
+                        selected: on,
+                        enabled: !miss,
+                        button: true,
+                        child: GestureDetector(
+                          onTap: miss ? null : () => setState(() => _selected = on ? null : n),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 120),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: on ? DsColor.actionPrimary : (miss ? DsColor.background : DsColor.surface),
+                              borderRadius: DsRadius.borderSm,
+                              border: Border.all(color: on ? DsColor.onAction : (miss ? DsColor.disabledSurface : DsColor.surfaceBorder), width: on ? DsBorder.standard : DsBorder.thin),
+                              boxShadow: on ? DsShadow.xs : null,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  n,
+                                  style: DsTypography.body1.copyWith(
+                                    color: on ? DsColor.onAction : (miss ? DsColor.disabledContent : DsColor.contentPrimary),
+                                    fontWeight: on ? FontWeight.w700 : null,
+                                    decoration: miss ? TextDecoration.lineThrough : null,
+                                    decorationColor: DsColor.disabledContent,
+                                  ),
+                                ),
+                                const Spacer(),
+                                if (miss) const DsBadge(label: '外れ', color: DsColor.incorrect),
+                                if (on) const DsIcon(DsGlyph.check, size: 20, color: DsColor.onAction),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+          const SizedBox(height: DsSpacing.space12),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: DsButton(label: 'キャンセル', type: DsButtonType.outline, onPressed: () => Navigator.pop(context)),
+              ),
+              const SizedBox(width: DsSpacing.space8),
+              Expanded(
+                flex: 3,
+                child: DsButton(label: '回答する', icon: DsGlyph.baseball, onPressed: _selected == null ? null : () => Navigator.pop(context, _selected)),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
-/// クイズの補助の操作（すべて表示、あきらめる）。返り値は 'all' か 'give'。
-Future<String?> showQuizMenu(BuildContext context, {required bool canRevealAll, bool canGiveUp = true}) {
-  return showModalBottomSheet<String>(
-    context: context,
-    backgroundColor: Colors.transparent,
-    builder: (context) => DsSurface(
-      backgroundColor: DsColor.background,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(DsRadius.lg)),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (canRevealAll) ...[
-                DsButton(label: 'すべて表示する', type: DsButtonType.outline, icon: DsGlyph.eye, onPressed: () => Navigator.pop(context, 'all')),
-                const SizedBox(height: 6),
-                Text('当てても C になります', textAlign: TextAlign.center, style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-                const SizedBox(height: DsSpacing.space12),
+/// シートの面。題と、右上の閉じるボタンを持つ。
+class _SheetSurface extends StatelessWidget {
+  const _SheetSurface({required this.title, required this.children});
+
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => DsSurface(
+    backgroundColor: DsColor.background,
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(DsRadius.lg)),
+    child: SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 8, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(title, style: DsTypography.headline4.copyWith(color: DsColor.contentPrimary)),
+                ),
+                DsHeaderIconButton(icon: DsGlyph.close, tooltip: '閉じる', onPressed: () => Navigator.pop(context)),
               ],
-              if (canGiveUp) ...[
-                Text('あきらめると不正解として記録され、答えと全部の成績を見られます。', style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)),
-                const SizedBox(height: DsSpacing.space12),
-                DsButton(label: 'あきらめて答えを見る', type: DsButtonType.danger, icon: DsGlyph.flag, onPressed: () => Navigator.pop(context, 'give')),
-              ],
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+            ),
+          ],
         ),
       ),
     ),
   );
+}
+
+/// 取り消せる操作の確認。題、何が起きるかの 1 文、「キャンセル」と実行のボタンを並べる。実行したら true を返す。
+Future<bool> showConfirmSheet(BuildContext context, {required String title, required String body, required String action, bool danger = false}) async {
+  final ok = await showModalBottomSheet<bool>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (context) => _SheetSurface(
+      title: title,
+      children: [
+        Text(body, style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)),
+        const SizedBox(height: DsSpacing.space20),
+        Row(
+          children: [
+            Expanded(
+              child: DsButton(label: 'キャンセル', type: DsButtonType.outline, onPressed: () => Navigator.pop(context, false)),
+            ),
+            const SizedBox(width: DsSpacing.space8),
+            Expanded(
+              child: DsButton(label: action, type: danger ? DsButtonType.danger : DsButtonType.primary, onPressed: () => Navigator.pop(context, true)),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+  return ok ?? false;
 }
 
 /// 正解の紙吹雪。製品の CustomConfettiWidget の 4 色で、上から 1 回だけ降らせる。
@@ -484,7 +575,9 @@ class _ConfettiState extends State<Confetti> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) => IgnorePointer(
-    child: ExcludeSemantics(child: CustomPaint(painter: _ConfettiPainter(_t, widget.burst), child: const SizedBox.expand())),
+    child: ExcludeSemantics(
+      child: CustomPaint(painter: _ConfettiPainter(_t, widget.burst), child: const SizedBox.expand()),
+    ),
   );
 }
 
@@ -570,7 +663,10 @@ PageRoute<void> dsRoute(Widget screen) => PageRouteBuilder<void>(
     final c = CurvedAnimation(parent: a, curve: Curves.easeOutCubic);
     return FadeTransition(
       opacity: c,
-      child: SlideTransition(position: Tween(begin: const Offset(0, 0.03), end: Offset.zero).animate(c), child: child),
+      child: SlideTransition(
+        position: Tween(begin: const Offset(0, 0.03), end: Offset.zero).animate(c),
+        child: child,
+      ),
     );
   },
 );

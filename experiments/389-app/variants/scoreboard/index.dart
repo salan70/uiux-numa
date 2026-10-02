@@ -10,6 +10,7 @@ import '../../shared/parts.dart';
 import '../../shared/play.dart';
 import '../../shared/profile.dart';
 import '../../shared/quiz_screen.dart';
+import '../../shared/remarks.dart';
 
 // scoreboard: 現行の情報構造（ホーム → クイズ → 結果 → プレイ記録）と v2 の造形をそのまま保ち、体験の芯だけを磨く。
 // 磨いた点は 3 つ。クイズの最中にいま当てたときのランクを出す。外れをダイアログでなく表の上の帯で知らせる。結果でランクを主役にする。
@@ -169,25 +170,33 @@ class _Result extends StatefulWidget {
 }
 
 class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
-  late final _land = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+  /// 結果の入場。1 本の時間（900ms）を区切って使う。
+  /// 120〜480ms でランクが 1.25 倍から着地し、着地の瞬間（360〜680ms）にランクの色の線が放射状に弾け、500〜720ms で一言が出る。
+  late final _t = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
+
+  /// 撮影（bare=1）では一言を固定する。
+  late final String _remark = pickRemark(widget.session, random: Uri.base.queryParameters['bare'] == '1' ? math.Random(1) : null);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (dsStill(context)) {
-      _land.value = 1;
-    } else if (_land.value == 0 && !_land.isAnimating) {
-      Future<void>.delayed(const Duration(milliseconds: 180), () {
-        if (mounted) _land.forward();
-      });
+      _t.value = 1;
+    } else if (_t.value == 0 && !_t.isAnimating) {
+      _t.forward();
     }
   }
 
   @override
   void dispose() {
-    _land.dispose();
+    _t.dispose();
     super.dispose();
   }
+
+  Animation<double> _seg(double a, double b, [Curve curve = Curves.easeOut]) => CurvedAnimation(
+    parent: _t,
+    curve: Interval(a, b, curve: curve),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +204,9 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
     final won = s.status == QuizStatus.correct;
     final rank = s.finalRank;
     final color = dsRankColor(rank.label);
+    final land = _seg(0.13, 0.53, Curves.easeOutBack);
+    final burst = _seg(0.4, 0.75);
+    final remark = _seg(0.55, 0.8);
     return Scaffold(
       body: Stack(
         children: [
@@ -216,51 +228,68 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
                       accentColor: color,
                       showDotGrid: true,
                       hasShadow: true,
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                      child: Row(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 20, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(
-                            width: 120,
-                            height: 104,
-                            child: AnimatedBuilder(
-                              animation: _land,
-                              builder: (context, child) {
-                                final v = Curves.easeOutBack.transform(_land.value);
-                                return Opacity(
-                                  opacity: _land.value.clamp(0, 1),
-                                  child: Transform.scale(scale: 2.4 - 1.4 * v, child: child),
-                                );
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('ランク', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
-                                  DsDisplayNumber(won ? rank.label : '×', fontSize: 72, color: color),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: DsSpacing.space12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _Line(label: '開示', value: '${s.unveil}/${s.total}', unit: '${(s.rate * 100).round()}%'),
-                                const SizedBox(height: DsSpacing.space8),
-                                _Line(label: '外れ', value: '${s.incorrect}', unit: '回'),
-                                const SizedBox(height: DsSpacing.space12),
-                                Text(
-                                  won ? _next(s) : (s.mode == QuizMode.daily ? '次の 1 問は 19:00 に届きます' : 'この選手は、またいつか出題されます'),
-                                  style: DsTypography.caption.copyWith(color: DsColor.contentSecondary, height: 1.4),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 128,
+                                height: 104,
+                                child: AnimatedBuilder(
+                                  animation: _t,
+                                  builder: (context, _) => CustomPaint(
+                                    painter: won ? _BurstPainter(progress: burst.value, color: color) : null,
+                                    child: Opacity(
+                                      opacity: (_t.value / 0.2).clamp(0, 1),
+                                      child: Transform.scale(
+                                        scale: 1.25 - 0.25 * land.value,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('ランク', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
+                                            Text(
+                                              won ? rank.label : '×',
+                                              style: DsTypography.displayNumeric.copyWith(
+                                                fontSize: 72,
+                                                color: color,
+                                                shadows: [Shadow(color: DsColor.shadow, offset: Offset(0, 4 * land.value.clamp(0, 1)))],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ],
+                              ),
+                              const SizedBox(width: DsSpacing.space8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _Line(label: '開示', value: '${s.unveil}/${s.total}', unit: '${(s.rate * 100).round()}%'),
+                                    const SizedBox(height: DsSpacing.space8),
+                                    _Line(label: '外れ', value: '${s.incorrect}', unit: '回'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(color: DsColor.disabledSurface, height: 24),
+                          FadeTransition(
+                            opacity: remark,
+                            child: SlideTransition(
+                              position: Tween(begin: const Offset(0, 0.3), end: Offset.zero).animate(remark),
+                              child: Text(_remark, style: DsTypography.body1.copyWith(color: DsColor.contentPrimary)),
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: DsSpacing.space16),
-                    StatsTable(session: s, compact: true),
+                    StatsTable(session: s, compact: true, mono: true),
                   ],
                 ),
               ),
@@ -279,21 +308,41 @@ class _ResultState extends State<_Result> with SingleTickerProviderStateMixin {
               ),
             ],
           ),
-          if (won) const Positioned.fill(child: Confetti()),
+          // 紙吹雪は、少ない手がかりで当てた SS と S だけにする。毎回降らせると、正解の重みが薄れるため。
+          if (rank == Rank.ss || rank == Rank.s) const Positioned.fill(child: Confetti()),
         ],
       ),
     );
   }
 }
 
-/// 次のランクへの手がかり。もう少しで上のランクだったなら、何マス少なければ届いたかを伝える。
-String _next(QuizSession s) {
-  final r = s.finalRank;
-  if (r == Rank.ss) return 'これ以上ない当て方です';
-  final up = Rank.values[math.max(0, r.index - 1)];
-  final need = s.unveil - up.maxUnveil(s.total);
-  if (s.incorrect > up.maxIncorrect) return '外れを ${up.maxIncorrect} 回以内にすると ${up.label}';
-  return 'あと $need マス少なければ ${up.label}';
+/// ランクが着地した瞬間の、放射状の短い線。v2 の装飾（幾何の小さな形、単色）に合わせ、ぼかしを使わない。
+class _BurstPainter extends CustomPainter {
+  const _BurstPainter({required this.progress, required this.color});
+
+  final double progress;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (progress <= 0 || progress >= 1) return;
+    final c = size.center(const Offset(0, 8));
+    final paint = Paint()
+      ..color = color.withValues(alpha: 1 - progress)
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    const n = 12;
+    for (var i = 0; i < n; i++) {
+      final a = i * 2 * math.pi / n + math.pi / n;
+      final d = Offset(math.cos(a), math.sin(a));
+      final r0 = 40 + 22 * progress;
+      final r1 = r0 + 10 * (1 - progress) + 4;
+      canvas.drawLine(c + d * r0, c + d * r1, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_BurstPainter old) => old.progress != progress || old.color != color;
 }
 
 class _Line extends StatelessWidget {
@@ -341,12 +390,14 @@ class _RecordState extends State<_Record> {
             title: 'プレイ記録',
             leading: DsHeaderIconButton(icon: DsGlyph.chevronLeft, tooltip: '戻る', onPressed: () => Navigator.of(context).maybePop()),
           ),
-          DsTabs(labels: const ['統計', '履歴'], index: _tab, onChanged: (i) => setState(() => _tab = i)),
+          DsTabs(labels: const ['統計', 'ノーマル', '今日の1問'], index: _tab, onChanged: (i) => setState(() => _tab = i)),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
               children: _tab == 1
-                  ? [const HistoryList(limit: 30)]
+                  ? [HistoryList(onOpen: (r) => Navigator.of(context).push(dsRoute(_RecordDetail(record: r))))]
+                  : _tab == 2
+                  ? [_DailyLog(onChanged: () => setState(() {}))]
                   : [
                       DsCard(
                         accentColor: DsColor.actionPrimary,
@@ -457,6 +508,128 @@ class _TeamTile extends StatelessWidget {
                 child: DsDisplayNumber('/$size', fontSize: 12, color: DsColor.contentSecondary),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 今日の1問の記録。日付の新しい順に並べ、遊んだ日はランク、遊ばなかった日は「未プレイ」を出す。
+/// 遊んだ日を押すとその日の結果を、遊ばなかった日を押すとその日の問題を開く（製品と同じく記録はしない）。
+class _DailyLog extends StatelessWidget {
+  const _DailyLog({required this.onChanged});
+
+  final VoidCallback onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final days = profile.dailyLog();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final d in days)
+          Padding(
+            padding: const EdgeInsets.only(bottom: DsSpacing.space8),
+            child: RecordRow(
+              title: '今日の1問 No.${d.number}',
+              date: dayLabel(d.day),
+              detail: d.record == null ? (d.day == 0 ? '19:00 まで' : '記録なし') : (d.record!.correct ? '開示 ${d.record!.unveilPercent}%' : '不正解'),
+              rank: d.record?.rank,
+              onTap: () async {
+                if (d.record != null) {
+                  await Navigator.of(context).push(dsRoute(_RecordDetail(record: d.record!)));
+                } else if (d.day == 0) {
+                  await Navigator.of(context).push(dsRoute(_quiz(_daily())));
+                } else {
+                  final s = QuizSession(player: d.player, seed: d.number);
+                  await Navigator.of(context).push(
+                    dsRoute(
+                      QuizScreen(
+                        session: s,
+                        title: '今日の1問 No.${d.number}',
+                        onFinish: (s) => _Result(session: s),
+                      ),
+                    ),
+                  );
+                }
+                onChanged();
+              },
+            ),
+          ),
+        Text('過去の問題は、解いても記録に残りません。', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
+      ],
+    );
+  }
+}
+
+/// 過去の 1 回の結果。結果の画面と同じ並びで、動きと操作の帯を持たない。
+class _RecordDetail extends StatelessWidget {
+  const _RecordDetail({required this.record});
+
+  final PlayRecord record;
+
+  @override
+  Widget build(BuildContext context) {
+    final r = record;
+    final s = QuizSession(player: r.player, seed: r.dailyNumber ?? r.player.id.hashCode);
+    for (var i = 0; i < (s.total * r.unveilPercent / 100).round(); i++) {
+      s.revealNext();
+    }
+    if (r.correct) {
+      s.guess(r.player.name);
+    } else {
+      s.giveUp();
+    }
+    final color = dsRankColor(r.rank.label);
+    return Scaffold(
+      body: Column(
+        children: [
+          DsPageHeader(
+            title: r.daily ? '今日の1問 No.${r.dailyNumber}' : 'ノーマルの記録',
+            accentColor: color,
+            leading: DsHeaderIconButton(icon: DsGlyph.chevronLeft, tooltip: '戻る', onPressed: () => Navigator.of(context).maybePop()),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              children: [
+                Text(
+                  dayLabel(r.day),
+                  textAlign: TextAlign.center,
+                  style: DsTypography.caption.copyWith(color: DsColor.contentSecondary),
+                ),
+                const SizedBox(height: DsSpacing.space8),
+                ResultHeading(session: s, verdict: r.correct ? '正解' : '不正解'),
+                const SizedBox(height: DsSpacing.space20),
+                DsCard(
+                  accentColor: color,
+                  showDotGrid: true,
+                  hasShadow: true,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 112,
+                        child: Column(
+                          children: [
+                            Text('ランク', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
+                            DsDisplayNumber(r.correct ? r.rank.label : '×', fontSize: 56, color: color),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [_Line(label: '開示', value: '${s.unveil}/${s.total}', unit: '${r.unveilPercent}%')],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: DsSpacing.space16),
+                StatsTable(session: s, compact: true, mono: true),
+              ],
+            ),
           ),
         ],
       ),
