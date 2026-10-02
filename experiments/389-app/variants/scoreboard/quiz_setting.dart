@@ -26,18 +26,39 @@ class _QuizSettingScreenState extends State<QuizSettingScreen> {
 
   void _toggleTeam(String t) => setState(() => c.teams.contains(t) ? c.teams.remove(t) : c.teams.add(t));
 
-  void _toggleStat(String st) => setState(() {
-    if (c.stats.contains(st)) {
-      c.stats.remove(st);
-    } else if (c.stats.length < QuizCondition.statCount) {
-      c.stats.add(st);
+  /// 選んでいる枠。null なら、押した成績は左の空きから入る。
+  int? _active;
+
+  void _tapSlot(int i) => setState(() => _active = _active == i ? null : i);
+
+  void _clearSlot(int i) => setState(() {
+    c.slots[i] = null;
+    _active = i;
+  });
+
+  /// 成績の札を押したとき。枠を選んでいればその枠へ入れ（ほかの枠にあれば入れ替える）、次の空きの枠へ進む。
+  /// 枠を選んでいなければ、選んでいない成績は左の空きへ入れ、選んでいる成績は枠から外す。
+  void _tapStat(String st) => setState(() {
+    final slots = c.slots;
+    final at = slots.indexOf(st);
+    final target = _active;
+    if (target != null) {
+      if (at >= 0 && at != target) slots[at] = slots[target];
+      slots[target] = st;
+      final next = slots.indexOf(null);
+      _active = next >= 0 ? next : null;
+    } else if (at >= 0) {
+      slots[at] = null;
+    } else {
+      final empty = slots.indexOf(null);
+      if (empty >= 0) slots[empty] = st;
     }
   });
 
   @override
   Widget build(BuildContext context) {
     final count = c.players.length;
-    final full = c.stats.length == QuizCondition.statCount;
+    final full = c.slots.every((s) => s != null);
     final problem = c.teams.isEmpty ? '球団を 1 つ以上選んでください' : (!full ? '出題する成績を 4 つ選んでください' : (count == 0 ? '条件に合う選手がいません' : null));
     return Scaffold(
       body: Column(
@@ -104,22 +125,36 @@ class _QuizSettingScreenState extends State<QuizSettingScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 選んだ順に、表の列の並びになる。選んだ成績を先に、列の順で見せる。
+                      // 枠の並びが表の列の並びになる。枠を選んでから成績を押すと、その枠に入る。枠を選ばずに押すと、左の空きから入る。
                       Row(
                         children: [
                           for (var i = 0; i < QuizCondition.statCount; i++) ...[
                             Expanded(
-                              child: _Slot(label: i < c.stats.length ? c.stats[i] : null, index: i + 1, onTap: i < c.stats.length ? () => _toggleStat(c.stats[i]) : null),
+                              child: _Slot(label: c.slots[i], index: i + 1, active: _active == i, onTap: () => _tapSlot(i), onClear: c.slots[i] == null ? null : () => _clearSlot(i)),
                             ),
                             if (i < QuizCondition.statCount - 1) const SizedBox(width: 6),
                           ],
                         ],
                       ),
-                      const SizedBox(height: DsSpacing.space12),
+                      const SizedBox(height: DsSpacing.space8),
+                      SizedBox(
+                        height: 18,
+                        child: Text(_active == null ? '' : '${_active! + 1} 列目に入れる成績を選ぶ', style: DsTypography.caption.copyWith(color: DsColor.actionPrimary)),
+                      ),
+                      const SizedBox(height: DsSpacing.space4),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: [for (final st in statColumns) _Chip(label: st, selected: c.stats.contains(st), enabled: c.stats.contains(st) || !full, onTap: () => _toggleStat(st))],
+                        children: [
+                          for (final st in statColumns)
+                            _Chip(
+                              label: st,
+                              selected: c.slots.contains(st),
+                              column: c.slots.contains(st) ? c.slots.indexOf(st) + 1 : null,
+                              enabled: _active != null || c.slots.contains(st) || !full,
+                              onTap: () => _tapStat(st),
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -236,12 +271,15 @@ class _Section extends StatelessWidget {
 
 /// 選ぶ札。製品の DsChip と同じく、選ぶと cyan の面に 2px の濃紺の輪郭と小さな影、選ばないと 1px の輪郭。
 class _Chip extends StatelessWidget {
-  const _Chip({required this.label, required this.selected, required this.onTap, this.enabled = true});
+  const _Chip({required this.label, required this.selected, required this.onTap, this.enabled = true, this.column});
 
   final String label;
   final bool selected;
   final bool enabled;
   final VoidCallback onTap;
+
+  /// 入っている枠の番号。出題する成績の札で、どの列に入っているかを示す。
+  final int? column;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -254,20 +292,42 @@ class _Chip extends StatelessWidget {
       onTap: enabled ? onTap : null,
       child: Opacity(
         opacity: enabled ? 1 : 0.35,
-        // 札は中身の幅にする。alignment を付けると Wrap の中で横いっぱいに伸びるので、上下の余白で高さを作る。
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 120),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-            color: selected ? DsColor.actionPrimary : DsColor.surface,
-            borderRadius: DsRadius.borderSm,
-            border: Border.all(color: selected ? DsColor.onAction : DsColor.surfaceBorder, width: selected ? DsBorder.standard : DsBorder.thin),
-            boxShadow: selected ? DsShadow.xs : null,
-          ),
-          child: Text(
-            label,
-            style: DsTypography.body2.copyWith(color: selected ? DsColor.onAction : DsColor.contentPrimary, fontWeight: FontWeight.w700),
-          ),
+        // 列の番号は札の左上の角に重ね、札の幅を変えない。幅が変わると、ほかの札の並びが動くため。
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // 札は中身の幅にする。alignment を付けると Wrap の中で横いっぱいに伸びるので、上下の余白で高さを作る。
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 120),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: selected ? DsColor.actionPrimary : DsColor.surface,
+                borderRadius: DsRadius.borderSm,
+                border: Border.all(color: selected ? DsColor.onAction : DsColor.surfaceBorder, width: selected ? DsBorder.standard : DsBorder.thin),
+                boxShadow: selected ? DsShadow.xs : null,
+              ),
+              child: Text(
+                label,
+                style: DsTypography.body2.copyWith(color: selected ? DsColor.onAction : DsColor.contentPrimary, fontWeight: FontWeight.w700),
+              ),
+            ),
+            if (column != null)
+              Positioned(
+                left: -6,
+                top: -6,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: DsColor.actionEmphasis,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: DsColor.onAction, width: 1.5),
+                  ),
+                  child: Text('$column', style: DsTypography.displayNumeric.copyWith(fontSize: 11, color: DsColor.onAction)),
+                ),
+              ),
+          ],
         ),
       ),
     ),
@@ -339,37 +399,75 @@ class _Steps extends StatelessWidget {
   );
 }
 
-/// 出題する成績の枠。選んだ順に表の列になるので、列の番号を添える。押すと外す。
+/// 出題する成績の枠。押すと選び、選んだ枠に次に押した成績が入る。入っている枠は右上の × で空ける。
+/// 選んでいる枠は cyan の面にし、どこへ入るかを示す。
 class _Slot extends StatelessWidget {
-  const _Slot({required this.label, required this.index, required this.onTap});
+  const _Slot({required this.label, required this.index, required this.active, required this.onTap, this.onClear});
 
   final String? label;
   final int index;
-  final VoidCallback? onTap;
+  final bool active;
+  final VoidCallback onTap;
+  final VoidCallback? onClear;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: BoxDecoration(
-        color: label == null ? DsColor.background : DsColor.surface,
-        borderRadius: DsRadius.borderSm,
-        border: Border.all(color: label == null ? DsColor.disabledSurface : DsColor.actionEmphasis, width: label == null ? DsBorder.thin : DsBorder.standard),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('$index 列目', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0, height: 1.2)),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              label ?? '未選択',
-              style: DsTypography.body2.copyWith(color: label == null ? DsColor.disabledContent : DsColor.contentPrimary, fontWeight: FontWeight.w700, height: 1.3),
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    selected: active,
+    label: '$index 列目、${label ?? '未選択'}',
+    child: GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
+        height: 52,
+        decoration: BoxDecoration(
+          color: active ? DsColor.actionPrimary : (label == null ? DsColor.background : DsColor.surface),
+          borderRadius: DsRadius.borderSm,
+          border: Border.all(color: active ? DsColor.onAction : (label == null ? DsColor.disabledSurface : DsColor.actionEmphasis), width: active || label != null ? DsBorder.standard : DsBorder.thin),
+          boxShadow: active ? DsShadow.xs : null,
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('$index 列目', style: DsTypography.overline.copyWith(color: active ? DsColor.onAction : DsColor.contentSecondary, letterSpacing: 0, height: 1.2)),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        label ?? '未選択',
+                        style: DsTypography.body2.copyWith(
+                          color: active ? DsColor.onAction : (label == null ? DsColor.disabledContent : DsColor.contentPrimary),
+                          fontWeight: FontWeight.w700,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            if (onClear != null)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Semantics(
+                  button: true,
+                  label: '$index 列目を空ける',
+                  child: GestureDetector(
+                    onTap: onClear,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: DsIcon(DsGlyph.close, size: 12, color: active ? DsColor.onAction : DsColor.contentSecondary),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     ),
   );

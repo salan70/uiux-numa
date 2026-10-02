@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'confetti.dart';
 import 'data.dart';
 import 'ds.dart';
 
@@ -14,7 +15,7 @@ import 'ds.dart';
 //   0–240    「正解！」の札が 2.4 倍から叩きつけられる（easeIn）。着地で影が 0 から 8px へ伸びる
 //   240–520  着地の衝撃で画面が揺れる（振幅 10px、減衰）
 //   240–1700 札の背後で、ランクの色の放射の光が広がりながらゆっくり回る
-//   240–1500 札の中心から紙吹雪が弾ける。量はランクで変える（SS 140、S 110、A 80、B 60、C 40）
+//   240–1700 札の中心から紙吹雪が上向きに打ち上がり、ゆっくり舞い落ちる（confetti.dart）。量はランクで変える（SS 140、S 110、A 80、B 60、C 40）
 //   240–     表の開いていないマスが斜めの波で開く（StatsTable の cascade）
 // 動きを止める設定では、光、揺れ、放射、紙吹雪を出さず、札だけを置く。
 
@@ -107,7 +108,7 @@ class _CelebrationState extends State<Celebration> with SingleTickerProviderStat
               Positioned.fill(
                 child: IgnorePointer(
                   child: CustomPaint(
-                    painter: _BurstPainter(progress: _seg(240, 1500), count: _burstCount(widget.rank)),
+                    painter: ConfettiPainter(progress: _seg(240, 1700), duration: const Duration(milliseconds: 1460), count: _burstCount(widget.rank), mode: ConfettiMode.burst),
                   ),
                 ),
               ),
@@ -217,51 +218,4 @@ class _RaysPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RaysPainter old) => old.progress != progress || old.color != color;
-}
-
-/// 札の中心から弾ける紙吹雪。四角、丸、細長い紙の 3 形を、v2 の 4 色で撒き、重さで落とす。
-class _BurstPainter extends CustomPainter {
-  const _BurstPainter({required this.progress, required this.count});
-
-  final double progress;
-  final int count;
-
-  static const _colors = [DsColor.actionPrimary, DsColor.actionEmphasis, DsColor.rankHighlight, DsColor.statusSuccess, DsColor.contentPrimary];
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (progress <= 0 || progress >= 1) return;
-    final random = math.Random(389);
-    final origin = Offset(size.width / 2, size.height * 0.36);
-    final t = progress;
-    for (var i = 0; i < count; i++) {
-      final angle = random.nextDouble() * 2 * math.pi;
-      final speed = 260 + random.nextDouble() * 520;
-      final spin = (random.nextDouble() - 0.5) * 18;
-      final shape = i % 3;
-      final color = _colors[i % _colors.length];
-      // 初速で外へ飛び、空気で減速し、重さで落ちる。
-      final drag = (1 - math.exp(-3.2 * t)) / 3.2;
-      final pos = origin + Offset(math.cos(angle), math.sin(angle) * 0.85) * speed * drag + Offset(0, 900 * t * t * 0.55);
-      final alpha = t < 0.7 ? 1.0 : 1 - (t - 0.7) / 0.3;
-      final paint = Paint()..color = color.withValues(alpha: alpha);
-      canvas.save();
-      canvas.translate(pos.dx, pos.dy);
-      canvas.rotate(spin * t + i);
-      switch (shape) {
-        case 0:
-          canvas.drawRect(Rect.fromCenter(center: Offset.zero, width: 10, height: 6), paint);
-        case 1:
-          canvas.drawCircle(Offset.zero, 3.5, paint);
-        default:
-          // 細長い紙は、回転で幅が変わって見えるよう、横の倍率を揺らす。
-          canvas.scale(math.cos(spin * t * 2).abs() * 0.8 + 0.2, 1);
-          canvas.drawRect(Rect.fromCenter(center: Offset.zero, width: 4, height: 14), paint);
-      }
-      canvas.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(_BurstPainter old) => old.progress != progress || old.count != count;
 }
