@@ -27,7 +27,7 @@ adopted:
 - 採用: `scoreboard`（現行の構成を磨く）。round 3〜9 で、配色、配置、大きさと形、アイコン、文言、演出、プレイ記録、クイズ設定、設定を磨いた。
 - 引き継ぎ: .389 への移植は [salan70/389-app#911](https://github.com/salan70/389-app/issues/911) で進める。試作は移植の見本として残す。
 - 還元: States & Feedback に Tip を 3 件足し、原則候補を 2 件立て、1 件に検証結果を足した（下の「還元」）。
-- 判断待ち: 採用済みの Guideline（UX Writing、Japanese Notation）へ足すかどうか（下の「還元」）。
+- 移植は 1 つの PR でまとめて対応しきる方針にした（2026-10-02、利用者の判断）。
 
 ## Problem
 
@@ -229,10 +229,10 @@ Artifact はビルドで既定の案を渡す（`--dart-define=RUNNER_QUERY=vari
 | [順序のある選択は、入れる枠を先に選ばせる](../../docs/principles/ordered-picks-choose-slot-first.md)               | 原則候補を立てた。クイズ設定の出題する成績の枠                                                                                        |
 | [状態は色で示し、寸法で示さない](../../docs/principles/state-changes-must-not-move-layout.md)                      | 検証結果を足した。外れた名前の札と、成績の札の番号で、周りが動いた 2 件                                                               |
 
-採用済みの Guideline は人間の確認を経て変えるので、次の 2 件は足さずに判断を待つ。
+採用済みの Guideline には、利用者の判断（2026-10-02、推奨案のとおり）を受けて次の 2 件を足した。
 
-- UX Writing: 「頼まれていない安心、次の行動の促し、開発の都合を画面に書かない」を Tip にするか（round 4 の「文言の方針」）。
-- Japanese Notation: 「並べる語を『・』で区切らない」を Tip にするか。今の Tip の良い例に「主色・副色」があり、足すならこの例も直す。
+- [UX Writing](../../docs/guidelines/ux-writing.md): Tip「頼まれていない安心、促し、開発の都合を書かない」。
+- [Japanese Notation](../../docs/guidelines/japanese-notation.md): 記号の Tip に「語を『・』で並べない」を含め、良い例の「主色・副色」を「主色と副色」に直した。Catalog の画面には「・」で並べる所が 2 か所残る（`Meta.tsx` のプラットフォーム、`contrast.ts` の「面・線」）。
 
 ## Decision
 
