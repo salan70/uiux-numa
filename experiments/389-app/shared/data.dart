@@ -36,16 +36,20 @@ class QuizPlayer {
 /// クイズ設定の条件。製品の SearchCondition を写す（domain/.../search_condition.dart）。
 /// 球団は 1 つ以上、出題する成績はちょうど 4 つ。下限の候補とタイマーの間隔の範囲も製品に合わせた。
 class QuizCondition {
-  QuizCondition({required this.teams, required this.minGames, required this.minHits, required this.minHr, required this.stats, this.timer = false, this.interval = 1.0});
+  QuizCondition({required this.teams, required this.minGames, required this.minHits, required this.minHr, required this.slots, this.timer = false, this.interval = 1.0});
 
-  factory QuizCondition.standard() => QuizCondition(teams: {...teamOrder}, minGames: 300, minHits: 300, minHr: 50, stats: [...defaultStats]);
+  factory QuizCondition.standard() => QuizCondition(teams: {...teamOrder}, minGames: 300, minHits: 300, minHr: 50, slots: [...defaultStats]);
 
   Set<String> teams;
   int minGames;
   int minHits;
   int minHr;
-  List<String> stats;
+
+  /// 出題する成績の 4 つの枠。左から表の列になる。空きは null。
+  List<String?> slots;
   bool timer;
+
+  List<String> get stats => slots.whereType<String>().toList();
 
   /// タイマーで次の成績を出すまでの秒数。
   double interval;
@@ -60,7 +64,7 @@ class QuizCondition {
   /// いまの条件。試作の中だけで持つ。
   static final current = QuizCondition.standard();
 
-  bool get valid => teams.isNotEmpty && stats.length == statCount;
+  bool get valid => teams.isNotEmpty && slots.every((s) => s != null);
 
   /// 条件に合う選手。
   List<QuizPlayer> get players => [

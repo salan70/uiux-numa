@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'confetti.dart';
 import 'data.dart';
 import 'ds.dart';
 import 'icons.dart';
@@ -604,7 +605,7 @@ Future<bool> showConfirmSheet(BuildContext context, {required String title, requ
   return ok ?? false;
 }
 
-/// 正解の紙吹雪。製品の CustomConfettiWidget の 4 色で、上から 1 回だけ降らせる。
+/// 結果の画面の紙吹雪。画面の上から降らせ、紙の落ち方で舞わせる（confetti.dart）。
 class Confetti extends StatefulWidget {
   const Confetti({super.key, this.burst = 60});
 
@@ -615,7 +616,8 @@ class Confetti extends StatefulWidget {
 }
 
 class _ConfettiState extends State<Confetti> with SingleTickerProviderStateMixin {
-  late final _t = AnimationController(vsync: this, duration: const Duration(milliseconds: 2600));
+  static const _length = Duration(milliseconds: 3600);
+  late final _t = AnimationController(vsync: this, duration: _length);
 
   @override
   void didChangeDependencies() {
@@ -632,40 +634,15 @@ class _ConfettiState extends State<Confetti> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) => IgnorePointer(
     child: ExcludeSemantics(
-      child: CustomPaint(painter: _ConfettiPainter(_t, widget.burst), child: const SizedBox.expand()),
+      child: AnimatedBuilder(
+        animation: _t,
+        builder: (context, _) => CustomPaint(
+          painter: ConfettiPainter(progress: _t.value, duration: _length, count: widget.burst, mode: ConfettiMode.rain),
+          child: const SizedBox.expand(),
+        ),
+      ),
     ),
   );
-}
-
-class _ConfettiPainter extends CustomPainter {
-  _ConfettiPainter(this.t, this.n) : super(repaint: t);
-
-  final Animation<double> t;
-  final int n;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (t.value == 0 || t.value == 1) return;
-    final r = math.Random(21);
-    const colors = [DsColor.actionPrimary, DsColor.actionEmphasis, DsColor.rankHighlight, DsColor.statusSuccess];
-    for (var i = 0; i < n; i++) {
-      final x0 = r.nextDouble() * size.width;
-      final vx = (r.nextDouble() - 0.5) * 120;
-      final delay = r.nextDouble() * 0.25;
-      final p = ((t.value - delay) / (1 - delay)).clamp(0.0, 1.0);
-      if (p == 0) continue;
-      final y = -20 + p * p * (size.height * 0.9) + math.sin(p * 10 + i) * 8;
-      final x = x0 + vx * p;
-      canvas.save();
-      canvas.translate(x, y);
-      canvas.rotate(p * 8 + i);
-      canvas.drawRect(Rect.fromCenter(center: Offset.zero, width: 8, height: 4), Paint()..color = colors[i % 4].withValues(alpha: 1 - p * 0.6));
-      canvas.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(_ConfettiPainter old) => false;
 }
 
 /// 製品では OS の共有シートを開く操作。試作では説明だけを出す。
