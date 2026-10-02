@@ -16,6 +16,23 @@ class PlayRecord {
   final bool daily;
 
   bool get correct => rank != Rank.miss;
+
+  /// 今日の1問なら、その日の番号。
+  int? get dailyNumber => daily ? Profile.todayNumber - day : null;
+}
+
+/// 今日の1問の 1 日ぶん。遊んでいなければ record は null。
+class DailyDay {
+  const DailyDay({required this.number, required this.day, required this.record});
+
+  final int number;
+  final int day;
+  final PlayRecord? record;
+
+  DateTime get date => Profile.todayDate.subtract(Duration(days: day));
+
+  /// その日の出題。番号から選手と開示の順を決める。
+  QuizPlayer get player => record?.player ?? quizPlayers[number % quizPlayers.length];
 }
 
 class Profile {
@@ -31,7 +48,14 @@ class Profile {
   bool dailyDone;
 
   /// 今日の1問の番号。製品の初回配信からの日数に見立てる。
-  final int dailyNumber = 812;
+  int get dailyNumber => todayNumber;
+  static const todayNumber = 812;
+
+  /// 試作の今日。木曜にする（today と揃える）。
+  static final todayDate = DateTime(2026, 10, 1);
+
+  /// 過去の今日の1問。新しい順に、今日を含めて days 日ぶん。
+  List<DailyDay> dailyLog({int days = 21}) => [for (var d = 0; d < days; d++) DailyDay(number: todayNumber - d, day: d, record: records.where((r) => r.daily && r.day == d).firstOrNull)];
 
   int get plays => records.length;
   int get correct => records.where((r) => r.correct).length;
@@ -79,17 +103,23 @@ class Profile {
     const ranks = [Rank.ss, Rank.s, Rank.s, Rank.a, Rank.a, Rank.a, Rank.b, Rank.b, Rank.c, Rank.miss, Rank.miss];
     final players = [...quizPlayers]..shuffle(random);
     return [
+      // 今日の1問は 1 日 1 回。今日（済ませた設定のときだけ）と、遊ばなかった日（4 日前、9 日前）を除く。
       for (var i = 0; i < 38; i++)
-        PlayRecord(
-          day: i ~/ 2,
-          player: players[i % players.length],
-          rank: ranks[random.nextInt(ranks.length)],
-          unveilPercent: 4 + random.nextInt(60),
-          daily: i.isEven,
-        ),
+        if (!(i.isEven && const [4, 9].contains(i ~/ 2)) && !(i == 0 && !Uri.base.queryParameters.containsKey('daily')))
+          PlayRecord(day: i ~/ 2, player: players[i % players.length], rank: ranks[i % ranks.length], unveilPercent: _percentFor(ranks[i % ranks.length], random), daily: i.isEven),
     ];
   }
 }
+
+/// ランクに合う開示の割合（%）。ランクの上限（SS 10、S 20、A 50、B 70）の内側から選ぶ。
+int _percentFor(Rank r, math.Random random) => switch (r) {
+  Rank.ss => 3 + random.nextInt(8),
+  Rank.s => 11 + random.nextInt(10),
+  Rank.a => 21 + random.nextInt(30),
+  Rank.b => 51 + random.nextInt(20),
+  Rank.c => 71 + random.nextInt(25),
+  Rank.miss => 10 + random.nextInt(70),
+};
 
 String _rate(double v) => v >= 1 ? '1.000' : '.${(v * 1000).round().toString().padLeft(3, '0')}';
 

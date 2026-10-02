@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data.dart';
 import 'ds.dart';
+import 'icons.dart';
 import 'play.dart';
 import 'profile.dart';
 
@@ -35,11 +36,17 @@ class TodayCard extends StatelessWidget {
               children: [
                 const DsBadge(label: 'TODAY', color: DsColor.actionPrimary, shape: DsBadgeShape.chamfered),
                 const SizedBox(width: DsSpacing.space8),
-                Text(title, style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                ),
                 const Spacer(),
                 DsStatusDot(color: done ? DsColor.statusSuccess : DsColor.statusPending),
                 const SizedBox(width: 6),
-                Text(done ? 'プレイ済み' : '未プレイ', style: DsTypography.caption.copyWith(color: done ? DsColor.statusSuccess : DsColor.statusPending, fontWeight: FontWeight.w700)),
+                Text(
+                  done ? 'プレイ済み' : '未プレイ',
+                  style: DsTypography.caption.copyWith(color: done ? DsColor.statusSuccess : DsColor.statusPending, fontWeight: FontWeight.w700),
+                ),
               ],
             ),
             const SizedBox(height: DsSpacing.space12),
@@ -55,9 +62,15 @@ class TodayCard extends StatelessWidget {
                             style: DsTypography.caption.copyWith(color: DsColor.contentSecondary),
                             children: [
                               const TextSpan(text: '連続回答 '),
-                              TextSpan(text: '${p.streak}日', style: const TextStyle(color: DsColor.actionPrimary, fontWeight: FontWeight.w700)),
+                              TextSpan(
+                                text: '${p.streak}日',
+                                style: const TextStyle(color: DsColor.actionPrimary, fontWeight: FontWeight.w700),
+                              ),
                               const TextSpan(text: ' / 自己ベスト '),
-                              TextSpan(text: '${p.bestStreak}日', style: const TextStyle(color: DsColor.actionEmphasis, fontWeight: FontWeight.w700)),
+                              TextSpan(
+                                text: '${p.bestStreak}日',
+                                style: const TextStyle(color: DsColor.actionEmphasis, fontWeight: FontWeight.w700),
+                              ),
                             ],
                           ),
                         ),
@@ -65,7 +78,10 @@ class TodayCard extends StatelessWidget {
                 if (done)
                   Text('次は ${p.untilNext.inHours}:${(p.untilNext.inMinutes % 60).toString().padLeft(2, '0')} 後', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary))
                 else
-                  Text('挑戦する →', style: DsTypography.caption.copyWith(color: DsColor.actionEmphasis, fontWeight: FontWeight.w700)),
+                  Text(
+                    '挑戦する →',
+                    style: DsTypography.caption.copyWith(color: DsColor.actionEmphasis, fontWeight: FontWeight.w700),
+                  ),
               ],
             ),
           ],
@@ -110,7 +126,7 @@ void showConditionSheet(BuildContext context) {
               const SizedBox(height: 4),
               chips(defaultStats),
               const SizedBox(height: DsSpacing.space16),
-              Text('条件を変える画面は、方向が決まってから作ります。', style: DsTypography.caption.copyWith(color: DsColor.disabledContent)),
+              Text('試作では条件を変えられません。', style: DsTypography.caption.copyWith(color: DsColor.disabledContent)),
             ],
           ),
         ),
@@ -139,7 +155,11 @@ class RankBar extends StatelessWidget {
                 : Row(
                     children: [
                       for (final r in Rank.values)
-                        if (p.count(r) > 0) Expanded(flex: p.count(r), child: ColoredBox(color: dsRankColor(r.label))),
+                        if (p.count(r) > 0)
+                          Expanded(
+                            flex: p.count(r),
+                            child: ColoredBox(color: dsRankColor(r.label)),
+                          ),
                     ],
                   ),
           ),
@@ -167,53 +187,104 @@ class RankBar extends StatelessWidget {
   }
 }
 
-/// 履歴の一覧。日付、今日の1問の札、選手、開示の割合、ランクを 1 行に並べる。
+/// ノーマルの履歴の一覧。日付、開示の割合、ランクを 1 行に並べる。
+/// 選手名は出さない。一覧を眺めただけで答えが目に入らないようにするため。押すとその回の結果を開く。
 class HistoryList extends StatelessWidget {
-  const HistoryList({super.key, this.limit = 12, this.rankLabel});
+  const HistoryList({required this.onOpen, super.key, this.limit = 30});
 
   final int limit;
-
-  /// ランクの札の読み替え（打球の名など）。
-  final String Function(Rank)? rankLabel;
+  final ValueChanged<PlayRecord> onOpen;
 
   @override
   Widget build(BuildContext context) {
-    final records = profile.records.take(limit).toList();
+    final records = profile.records.where((r) => !r.daily).take(limit).toList();
     if (records.isEmpty) {
-      return DsCard(child: Text('まだ記録がありません。1 問解くとここに残ります。', style: DsTypography.body2.copyWith(color: DsColor.contentSecondary)));
+      return Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: Text(
+          '記録はまだありません',
+          textAlign: TextAlign.center,
+          style: DsTypography.body2.copyWith(color: DsColor.contentSecondary),
+        ),
+      );
     }
     return Column(
       children: [
-        for (final r in records)
+        for (final (i, r) in records.indexed)
           Padding(
             padding: const EdgeInsets.only(bottom: DsSpacing.space8),
-            child: DsSurface(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              accentColor: r.daily ? DsColor.actionEmphasis : null,
-              accentSize: 12,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 44,
-                    child: Text(r.day == 0 ? '今日' : (r.day == 1 ? '昨日' : '${r.day}日前'), style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(r.player.name, style: DsTypography.body2.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)),
-                        Text('${r.daily ? '今日の1問' : 'ノーマル'}・開示 ${r.unveilPercent}%', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
-                      ],
-                    ),
-                  ),
-                  DsBadge(label: rankLabel?.call(r.rank) ?? (r.rank == Rank.miss ? '不正解' : r.rank.label), color: dsRankColor(r.rank.label)),
-                ],
-              ),
-            ),
+            child: RecordRow(title: 'ノーマル　${records.length - i} 問目', date: dayLabel(r.day), detail: r.correct ? '開示 ${r.unveilPercent}%' : '不正解', rank: r.rank, onTap: () => onOpen(r)),
           ),
       ],
     );
   }
+}
+
+/// 記録の 1 行。題、日付、補足、ランクの札を並べ、右端に開く印を置く。
+class RecordRow extends StatelessWidget {
+  const RecordRow({required this.title, required this.date, required this.detail, required this.onTap, super.key, this.rank});
+
+  final String title;
+  final String date;
+  final String detail;
+
+  /// null なら未プレイ。
+  final Rank? rank;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final r = rank;
+    return Semantics(
+      button: true,
+      label: '$title、$date、${r == null ? '未プレイ' : (r == Rank.miss ? '不正解' : 'ランク ${r.label}')}',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: DsSurface(
+          backgroundColor: r == null ? DsColor.background : DsColor.surface,
+          borderColor: r == null ? DsColor.disabledSurface : DsColor.surfaceBorder,
+          padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: DsTypography.body2.copyWith(color: r == null ? DsColor.contentSecondary : DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                    ),
+                    Text('$date・$detail', style: DsTypography.overline.copyWith(color: DsColor.contentSecondary, letterSpacing: 0)),
+                  ],
+                ),
+              ),
+              if (r == null)
+                Text('未プレイ', style: DsTypography.caption.copyWith(color: DsColor.disabledContent))
+              else
+                SizedBox(
+                  width: 52,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: DsBadge(label: r == Rank.miss ? '×' : r.label, color: dsRankColor(r.label)),
+                  ),
+                ),
+              const SizedBox(width: 4),
+              const DsIcon(DsGlyph.chevronRight, size: 20, color: DsColor.contentSecondary),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 何日前かを、今日、昨日、日付（10/1（木））で書く。
+String dayLabel(int day) {
+  if (day == 0) return '今日';
+  if (day == 1) return '昨日';
+  final d = Profile.todayDate.subtract(Duration(days: day));
+  return '${d.month}/${d.day}（${'月火水木金土日'[d.weekday - 1]}）';
 }
 
 /// 2 つの見出しを切り替えるタブ。製品のプレイ記録の「統計 / 履歴」に倣い、選んだ方に cyan の下線を引く。
@@ -235,9 +306,14 @@ class DsTabs extends StatelessWidget {
               height: 44,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: i == index ? DsColor.actionPrimary : DsColor.disabledSurface, width: i == index ? DsBorder.standard : DsBorder.thin)),
+                border: Border(
+                  bottom: BorderSide(color: i == index ? DsColor.actionPrimary : DsColor.disabledSurface, width: i == index ? DsBorder.standard : DsBorder.thin),
+                ),
               ),
-              child: Text(labels[i], style: DsTypography.body1.copyWith(color: i == index ? DsColor.actionPrimary : DsColor.contentSecondary, fontWeight: FontWeight.w700)),
+              child: Text(
+                labels[i],
+                style: DsTypography.body1.copyWith(color: i == index ? DsColor.actionPrimary : DsColor.contentSecondary, fontWeight: FontWeight.w700),
+              ),
             ),
           ),
         ),
@@ -263,7 +339,11 @@ class ResultHeading extends StatelessWidget {
       children: [
         DsBadge(label: label, color: won ? DsColor.statusSuccess : DsColor.incorrect, shape: DsBadgeShape.chamfered, large: true),
         const SizedBox(height: DsSpacing.space12),
-        Text(won ? s.player.name : '正解は ${s.player.name} 選手', textAlign: TextAlign.center, style: DsTypography.headline3.copyWith(color: DsColor.contentPrimary)),
+        Text(
+          won ? s.player.name : '正解は ${s.player.name} 選手',
+          textAlign: TextAlign.center,
+          style: DsTypography.headline3.copyWith(color: DsColor.contentPrimary),
+        ),
         Text('${teamShort[s.player.team] ?? s.player.team}・2025年シーズン終了時', style: DsTypography.caption.copyWith(color: DsColor.contentSecondary)),
       ],
     );

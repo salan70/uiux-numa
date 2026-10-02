@@ -68,8 +68,10 @@ enum GuessOutcome { correct, wrong, failed }
 class QuizSession extends ChangeNotifier {
   QuizSession({required this.player, this.stats = defaultStats, this.mode = QuizMode.normal, int? seed}) {
     final random = math.Random(seed ?? player.id.hashCode);
-    final cells = [for (var r = 0; r < player.rows.length; r++) for (var c = 0; c < stats.length; c++) (r, c)]
-      ..shuffle(random);
+    final cells = [
+      for (var r = 0; r < player.rows.length; r++)
+        for (var c = 0; c < stats.length; c++) (r, c),
+    ]..shuffle(random);
     _order = cells;
   }
 

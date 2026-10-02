@@ -22,23 +22,13 @@ class _Stroke {
 }
 
 enum DsGlyph {
-  baseball([
-    _Stroke.circle(Offset(12, 12), 8.5, 1.8),
-    _Stroke('M7.2 7.2c2.1 1.4 3.5 3.1 4.1 5.2.5 1.8.3 3.3-.7 4.5M16.8 7.2c-2.1 1.4-3.5 3.1-4.1 5.2-.5 1.8-.3 3.3.7 4.5', 1.5),
-  ]),
-  calendar([
-    _Stroke.rect(Rect.fromLTWH(3.5, 5.5, 17, 15), 2.2, 2.1),
-    _Stroke('M7.5 3.5v4M16.5 3.5v4M3.7 9.5h16.6', 2.1),
-    _Stroke('M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01', 2.8),
-  ]),
+  baseball([_Stroke.circle(Offset(12, 12), 8.5, 1.8), _Stroke('M7.2 7.2c2.1 1.4 3.5 3.1 4.1 5.2.5 1.8.3 3.3-.7 4.5M16.8 7.2c-2.1 1.4-3.5 3.1-4.1 5.2-.5 1.8-.3 3.3.7 4.5', 1.5)]),
+  calendar([_Stroke.rect(Rect.fromLTWH(3.5, 5.5, 17, 15), 2.2, 2.1), _Stroke('M7.5 3.5v4M16.5 3.5v4M3.7 9.5h16.6', 2.1), _Stroke('M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01', 2.8)]),
   check([_Stroke('m5.2 12.5 4.2 4.2 9.4-9.4', 2.5)]),
   chevronLeft([_Stroke('m15 5.8-6.2 6.2 6.2 6.2', 2.3)]),
   chevronRight([_Stroke('m9 5.8 6.2 6.2L9 18.2', 2.3)]),
   close([_Stroke('M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5', 2.3)]),
-  crown([
-    _Stroke('m4 8 4.2 3.2L12 5l3.8 6.2L20 8l-1.5 9.5h-13L4 8Z', 1.8),
-    _Stroke('M5.5 20h13', 1.8),
-  ]),
+  crown([_Stroke('m4 8 4.2 3.2L12 5l3.8 6.2L20 8l-1.5 9.5h-13L4 8Z', 1.8), _Stroke('M5.5 20h13', 1.8)]),
   home([_Stroke('M4 10.6 12 4l8 6.6v8.1c0 .7-.6 1.3-1.3 1.3h-4.4v-5.5H9.7V20H5.3c-.7 0-1.3-.6-1.3-1.3v-8.1Z', 2.1)]),
   settings([
     _Stroke(
@@ -56,10 +46,7 @@ enum DsGlyph {
   stats([_Stroke('M5 19V12.8M10 19V8.5M15 19v-5.1M20 19V5.2', 2.4), _Stroke('M3.5 20.5h17', 2.1)]),
   // ここから下は描き足したもの。
   share([_Stroke('M8.5 9.5H7.2c-1 0-1.7.8-1.7 1.7v7.1c0 1 .8 1.7 1.7 1.7h9.6c1 0 1.7-.8 1.7-1.7v-7.1c0-1-.8-1.7-1.7-1.7h-1.3M12 3.5v10.5M8.6 6.9 12 3.5l3.4 3.4', 2.1)]),
-  eye([
-    _Stroke('M2.9 12c2.2-4 5.3-6 9.1-6s6.9 2 9.1 6c-2.2 4-5.3 6-9.1 6s-6.9-2-9.1-6Z', 2.1),
-    _Stroke.circle(Offset(12, 12), 2.7, 2.1),
-  ]),
+  eye([_Stroke('M2.9 12c2.2-4 5.3-6 9.1-6s6.9 2 9.1 6c-2.2 4-5.3 6-9.1 6s-6.9-2-9.1-6Z', 2.1), _Stroke.circle(Offset(12, 12), 2.7, 2.1)]),
   skipNext([_Stroke('M6.5 6.8v10.4L13.6 12 6.5 6.8ZM17.5 6.5v11', 2.1)]),
   search([_Stroke.circle(Offset(10.5, 10.5), 6, 2.1), _Stroke('m15.2 15.2 4.8 4.8', 2.3)]),
   replay([_Stroke('M5.6 13.5A6.6 6.6 0 1 0 7.8 7M4.8 4.6v3.9h3.9', 2.1)]),
@@ -82,7 +69,10 @@ class DsIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
-    child: SizedBox.square(dimension: size, child: CustomPaint(painter: _GlyphPainter(glyph, color, background))),
+    child: SizedBox.square(
+      dimension: size,
+      child: CustomPaint(painter: _GlyphPainter(glyph, color, background)),
+    ),
   );
 }
 

@@ -158,7 +158,12 @@ class DsSurface extends StatelessWidget {
     final left = p == DsCorner.topLeft || p == DsCorner.bottomLeft;
     final top = p == DsCorner.topLeft || p == DsCorner.topRight;
     return DecoratedBox(
-      decoration: BoxDecoration(color: backgroundColor, border: Border.all(color: borderColor, width: borderWidth), borderRadius: borderRadius, boxShadow: shadow),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(color: borderColor, width: borderWidth),
+        borderRadius: borderRadius,
+        boxShadow: shadow,
+      ),
       child: ClipRRect(
         borderRadius: borderRadius,
         child: Stack(
@@ -171,7 +176,9 @@ class DsSurface extends StatelessWidget {
                 right: left ? null : 0,
                 top: top ? 0 : null,
                 bottom: top ? null : 0,
-                child: IgnorePointer(child: DsCornerAccent(color: accentColor!, position: p, size: accentSize)),
+                child: IgnorePointer(
+                  child: DsCornerAccent(color: accentColor!, position: p, size: accentSize),
+                ),
               ),
           ],
         ),
@@ -232,22 +239,26 @@ class _CornerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size s) {
     final path = switch (position) {
-      DsCorner.topLeft => Path()
-        ..moveTo(0, 0)
-        ..lineTo(s.width, 0)
-        ..lineTo(0, s.height),
-      DsCorner.topRight => Path()
-        ..moveTo(0, 0)
-        ..lineTo(s.width, 0)
-        ..lineTo(s.width, s.height),
-      DsCorner.bottomLeft => Path()
-        ..moveTo(0, 0)
-        ..lineTo(0, s.height)
-        ..lineTo(s.width, s.height),
-      DsCorner.bottomRight => Path()
-        ..moveTo(s.width, 0)
-        ..lineTo(s.width, s.height)
-        ..lineTo(0, s.height),
+      DsCorner.topLeft =>
+        Path()
+          ..moveTo(0, 0)
+          ..lineTo(s.width, 0)
+          ..lineTo(0, s.height),
+      DsCorner.topRight =>
+        Path()
+          ..moveTo(0, 0)
+          ..lineTo(s.width, 0)
+          ..lineTo(s.width, s.height),
+      DsCorner.bottomLeft =>
+        Path()
+          ..moveTo(0, 0)
+          ..lineTo(0, s.height)
+          ..lineTo(s.width, s.height),
+      DsCorner.bottomRight =>
+        Path()
+          ..moveTo(s.width, 0)
+          ..lineTo(s.width, s.height)
+          ..lineTo(0, s.height),
     };
     canvas.drawPath(path, Paint()..color = color);
   }
@@ -265,7 +276,10 @@ class DsDotGrid extends StatelessWidget {
   final double spacing;
 
   @override
-  Widget build(BuildContext context) => CustomPaint(painter: _DotPainter(color.withValues(alpha: opacity), spacing), child: const SizedBox.expand());
+  Widget build(BuildContext context) => CustomPaint(
+    painter: _DotPainter(color.withValues(alpha: opacity), spacing),
+    child: const SizedBox.expand(),
+  );
 }
 
 class _DotPainter extends CustomPainter {
@@ -311,7 +325,13 @@ class DsDisplayNumber extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: style,
-        children: [for (var i = 0; i < value.length; i++) TextSpan(text: value[i], style: TextStyle(color: colors[i % colors.length]))],
+        children: [
+          for (var i = 0; i < value.length; i++)
+            TextSpan(
+              text: value[i],
+              style: TextStyle(color: colors[i % colors.length]),
+            ),
+        ],
       ),
       textAlign: textAlign,
     );
@@ -369,7 +389,10 @@ class DsBadge extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: large ? DsSpacing.space12 : DsSpacing.space8, vertical: DsSpacing.space4),
-        child: Text(label, style: (large ? DsTypography.body2 : DsTypography.overline).copyWith(color: foreground, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
+        child: Text(
+          label,
+          style: (large ? DsTypography.body2 : DsTypography.overline).copyWith(color: foreground, fontWeight: FontWeight.w700, letterSpacing: 0.4),
+        ),
       ),
     );
     if (!chamfered) return box;
@@ -377,7 +400,13 @@ class DsBadge extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
-          child: Transform.translate(offset: const Offset(0, 2), child: const ClipPath(clipper: _Chamfer(), child: ColoredBox(color: DsColor.shadow))),
+          child: Transform.translate(
+            offset: const Offset(0, 2),
+            child: const ClipPath(
+              clipper: _Chamfer(),
+              child: ColoredBox(color: DsColor.shadow),
+            ),
+          ),
         ),
         ClipPath(clipper: const _Chamfer(), child: box),
       ],
@@ -479,7 +508,11 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
     final bg = enabled ? (widget.color ?? t.background) : DsColor.disabledSurface;
     final fg = enabled ? (widget.foreground ?? t.foreground) : DsColor.disabledContent;
     final isText = t == DsButtonType.text;
-    final label = Text(widget.label, maxLines: 1, style: DsTypography.button.copyWith(color: fg, fontSize: widget.small || widget.tight ? 14 : 16));
+    final label = Text(
+      widget.label,
+      maxLines: 1,
+      style: DsTypography.button.copyWith(color: fg, fontSize: widget.small || widget.tight ? 14 : 16),
+    );
     final icon = widget.icon == null ? null : DsIcon(widget.icon!, size: 20, color: fg, background: bg);
     return Semantics(
       button: true,
@@ -498,7 +531,11 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
             height: isText ? 32 : (widget.small ? 36 : 48),
             child: DecoratedBox(
               decoration: isText
-                  ? const BoxDecoration(border: Border(bottom: BorderSide(color: DsColor.actionEmphasis, width: DsBorder.standard)))
+                  ? const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: DsColor.actionEmphasis, width: DsBorder.standard),
+                      ),
+                    )
                   : BoxDecoration(
                       color: bg,
                       borderRadius: DsRadius.borderSm,
@@ -512,7 +549,9 @@ class _DsButtonState extends State<DsButton> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (icon != null) ...[icon, const SizedBox(width: DsSpacing.space8)],
-                    Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: label)),
+                    Flexible(
+                      child: FittedBox(fit: BoxFit.scaleDown, child: label),
+                    ),
                   ],
                 ),
               ),
@@ -570,17 +609,34 @@ class DsPageHeader extends StatelessWidget {
               height: 48,
               child: Row(
                 children: [
-                  SizedBox(width: 100, child: Align(alignment: Alignment.centerLeft, child: Padding(padding: const EdgeInsets.only(left: 4), child: leading))),
+                  SizedBox(
+                    width: 100,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(padding: const EdgeInsets.only(left: 4), child: leading),
+                    ),
+                  ),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700)),
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: DsTypography.body1.copyWith(color: DsColor.contentPrimary, fontWeight: FontWeight.w700),
+                        ),
                         ?bottom,
                       ],
                     ),
                   ),
-                  SizedBox(width: 100, child: Align(alignment: Alignment.centerRight, child: Padding(padding: const EdgeInsets.only(right: 4), child: trailing))),
+                  SizedBox(
+                    width: 100,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(padding: const EdgeInsets.only(right: 4), child: trailing),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -622,7 +678,11 @@ class Logo389 extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     label: '.389',
-    child: SizedBox(width: width, height: width * 146 / 372, child: const CustomPaint(painter: _LogoPainter())),
+    child: SizedBox(
+      width: width,
+      height: width * 146 / 372,
+      child: const CustomPaint(painter: _LogoPainter()),
+    ),
   );
 }
 
@@ -756,7 +816,10 @@ class _StreamPainter extends CustomPainter {
           final value = _streamValues[(vi + k) % _streamValues.length];
           final a = lerpDouble(0.22, 0.05, k / count)!;
           final tp = TextPainter(
-            text: TextSpan(text: value, style: DsTypography.displayNumeric.copyWith(fontSize: 13, letterSpacing: 1, color: (k == 0 ? head : DsColor.contentSecondary).withValues(alpha: a))),
+            text: TextSpan(
+              text: value,
+              style: DsTypography.displayNumeric.copyWith(fontSize: 13, letterSpacing: 1, color: (k == 0 ? head : DsColor.contentSecondary).withValues(alpha: a)),
+            ),
             textDirection: TextDirection.ltr,
           )..layout();
           tp.paint(canvas, Offset(x - tp.width / 2, y0 + (count - k) * row));
