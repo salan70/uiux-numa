@@ -286,7 +286,7 @@ function parseVariantRows(source: string): { id: string; hypothesis: string; axi
 
 /**
  * README の Problem 節の先頭文。
- * 1 文 1 行で書く規範（CLAUDE.md）があるため、最初の非空行をそのまま使う。
+ * 1 文 1 行で書く規範（AGENTS.md）があるため、最初の非空行をそのまま使う。
  */
 function leadSentence(source: string): string {
   const start = source.indexOf("## Problem");

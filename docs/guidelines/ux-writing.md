@@ -10,7 +10,7 @@ updated: 2026-10-02
 
 ボタン、ラベル、補助文、エラー、状態の文言で、利用者が次の行動を迷わず取れるようにする。
 漢字とかなの開きや英数字の空白などの表記は [Japanese Notation](japanese-notation.md) が扱う。
-設計文書の文体は concise-writing が扱う。
+設計文書の表記は `AGENTS.md` の文章規範が扱う。
 
 ## コア
 

@@ -25,4 +25,4 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 Nix flake と direnv で固定する。
 初回に `direnv allow` と `just setup` を実行し、コマンド一覧は `just` で見る。
-AI エージェント向けの指示は [CLAUDE.md](CLAUDE.md) にある。
+AI エージェント向けの指示は [AGENTS.md](AGENTS.md) にある。
