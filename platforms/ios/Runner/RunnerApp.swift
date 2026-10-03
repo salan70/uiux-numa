@@ -52,24 +52,28 @@ private struct VariantList: View {
         }
         .fullScreenCover(item: $selected) { entry in
             entry.make()
-                .overlay(alignment: .top) { RunnerCloseButton { selected = nil } }
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    RunnerCloseButton { selected = nil }
+                }
         }
     }
 }
 
-/// 一覧へ戻る操作。variant の操作と重ならないよう、ステータスバーの中央を長押ししたときだけ閉じる。
+/// 実機でも押せるよう、戻る操作をアプリの safe area 内に置く。
 private struct RunnerCloseButton: View {
     let close: () -> Void
 
     var body: some View {
-        Color.clear
-            .frame(width: 120, height: 24)
-            .contentShape(Rectangle())
-            .ignoresSafeArea()
-            .onLongPressGesture(minimumDuration: 0.8, perform: close)
-            .accessibilityLabel("variant の一覧へ戻る")
-            .accessibilityAddTraits(.isButton)
-            .accessibilityAction { close() }
+        HStack {
+            Button(action: close) {
+                Label("一覧へ戻る", systemImage: "chevron.left")
+                    .font(.subheadline.weight(.semibold))
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 16)
+            }
+            Spacer()
+        }
+        .background(.bar)
     }
 }
 
