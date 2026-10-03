@@ -108,6 +108,27 @@ ios-build: ios-gen
       -destination "platform=iOS Simulator,name={{ios_device}}" \
       -derivedDataPath platforms/ios/build build
 
+# 実機向けに既存の開発チームで署名する。端末 ID とチーム ID は引数で渡す。
+ios-device-build device team: ios-gen
+    env -i HOME="$HOME" PATH=/usr/bin:/bin:/usr/sbin:/sbin /usr/bin/xcrun xcodebuild -quiet \
+      -project platforms/ios/NumaRunner.xcodeproj -scheme NumaRunner \
+      -destination "platform=iOS,id={{device}}" \
+      -derivedDataPath platforms/ios/build-device \
+      CODE_SIGNING_ALLOWED=YES CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM={{team}} \
+      -allowProvisioningUpdates build
+
+# ペアリング済みの実機へインストールし、引数なしなら variant 一覧を開く。
+# 例: just ios-device-run <device-id> <team-id> -variant myrecipee-app/recipe-index
+[positional-arguments]
+ios-device-run device team *args: (ios-device-build device team)
+    #!/usr/bin/env bash
+    set -euo pipefail
+    device="$1"
+    shift 2
+    devicectl() { env -i HOME="$HOME" PATH=/usr/bin:/bin:/usr/sbin:/sbin /usr/bin/xcrun devicectl "$@"; }
+    devicectl device install app --device "$device" platforms/ios/build-device/Build/Products/Debug-iphoneos/NumaRunner.app
+    devicectl device process launch --terminate-existing --device "$device" dev.salan70.uiuxnuma.runner "$@"
+
 # シミュレータで variant を開く。例: just ios-run yodoku-app/tabs -fixture idle
 [positional-arguments]
 ios-run target *args: ios-build

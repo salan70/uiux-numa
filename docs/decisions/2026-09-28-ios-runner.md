@@ -2,6 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-28
+- 置き換え先: 実機の起動と署名だけを [実機での比較](2026-10-03-ios-physical-device-runner.md)で置き換える。
 - 参照: [Issue #19](https://github.com/salan70/uiux-numa/issues/19)、[Web 実行基盤の ADR](2026-09-13-web-runner.md)、[初期ディレクトリ構成](2026-09-13-initial-directory-layout.md)
 
 ## 背景

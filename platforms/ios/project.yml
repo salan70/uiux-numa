@@ -13,7 +13,7 @@ settings:
     SWIFT_STRICT_CONCURRENCY: complete
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: 1
-    # シミュレータでだけ動かす。署名は要らない。
+    # 既定は署名不要。実機の署名とチームは ios-device-build の引数で指定する。
     CODE_SIGNING_ALLOWED: "NO"
 
 targets:
