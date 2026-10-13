@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>記録の山</title>
+  <path id="part-books-ink" d="M3 2h10v1h-10zM2 3h1v1h-1zM13 3h1v1h-1zM2 4h1v1h-1zM13 4h1v1h-1zM2 5h1v1h-1zM13 5h1v1h-1zM2 6h12v1h-12zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h14v1h-14zM0 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM15 12h1v1h-1zM0 13h1v1h-1zM15 13h1v1h-1zM1 14h14v1h-14z" fill="#1F1F1F"/>
+  <path id="part-books-white" d="M11 4h1v1h-1zM12 8h1v1h-1zM13 12h1v1h-1z" fill="#FEFEFE"/>
+  <path id="part-books-yellow" d="M5 4h1v1h-1zM4 8h1v1h-1zM3 12h1v1h-1z" fill="#FAC400"/>
+  <path id="part-books-coral" d="M2 7h12v1h-12zM2 8h2v1h-2zM5 8h7v1h-7zM13 8h1v1h-1zM2 9h12v1h-12z" fill="#F37252"/>
+  <path id="part-books-blue" d="M1 11h14v1h-14zM1 12h2v1h-2zM4 12h9v1h-9zM14 12h1v1h-1zM1 13h14v1h-14z" fill="#4078E0"/>
+  <path id="part-books-green" d="M3 3h10v1h-10zM3 4h2v1h-2zM6 4h5v1h-5zM12 4h1v1h-1zM3 5h10v1h-10z" fill="#2E9E5B"/>
+</svg>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>やきう選手物語 バッジとショップ絵</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* layout: 1 列の読み物。見本はすべてアプリのライト配色の「画面パネル」に置き、ページの外枠だけ配色に追従する */
+:root{
+  --bg:#F3F4F3; --panel:#FEFEFE; --fg:#1F1F1F; --muted:#4D4D4D; --edge:#1F1F1F; --soft:#E4E7E5;
+  --font:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  /* アプリのテーマ（baseball-journey-app/shared/theme.dart のライト）。見本パネル内は常にこの値 */
+  --a-bg:#F8F9F9; --a-surface:#FEFEFE; --a-ink:#1F1F1F; --a-sub:#4D4D4D; --a-cont:#EFF0F0;
+  --a-yellow-c:#FAF1D1; --a-blue-c:#D4E0F7; --a-coral-c:#FAD9D1; --a-blue:#4078E0; --a-coral:#F37252; --a-yellow:#FAC400;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.75;padding-inline:16px;padding-block:24px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:48px}
+h1{font-size:28px;line-height:1.3;margin:0;text-wrap:balance;font-weight:800}
+h2{font-size:21px;line-height:1.3;margin:0 0 12px;font-weight:800;text-wrap:balance}
+h3{font-size:17px;line-height:1.4;margin:0;font-weight:800}
+p{margin:0;max-width:68ch}
+.lead{color:var(--muted);margin-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+ul{margin:0;padding-left:1.2em}
+li{margin:2px 0}
+.card{background:var(--panel);border:3px solid var(--edge);border-radius:12px;padding:20px;display:grid;gap:14px;min-width:0}
+.dirs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:900px){.dirs{grid-template-columns:1fr}}
+.pick{box-shadow:5px 5px 0 var(--edge)}
+.tag{display:inline-block;font-size:12px;font-weight:800;border:2px solid var(--edge);border-radius:6px;padding:0 8px;margin-left:8px;vertical-align:2px;background:var(--a-yellow);color:#1F1F1F}
+dl{margin:0;display:grid;gap:8px}
+dt{font-weight:800;font-size:13px}
+dd{margin:0;color:var(--muted);font-size:14px}
+
+/* 見本パネル：アプリの画面と同じ背景 */
+.app{background:var(--a-bg);color:var(--a-ink);border-radius:10px;padding:16px;border:1px solid var(--soft)}
+.row{display:flex;flex-wrap:wrap;gap:16px 14px;align-items:flex-start}
+.cap{font-size:11px;line-height:1.35;text-align:center;color:var(--a-sub);margin-top:8px;max-width:72px}
+.cell{display:flex;flex-direction:column;align-items:center}
+.sep{width:100%;height:0;border-top:1px dashed #C9CECB;margin:2px 0}
+
+/* バッジとショップ絵の台 */
+.tile{--s:64px;width:var(--s);height:var(--s);position:relative;display:grid;place-items:center;flex:none;
+  border:2px solid var(--a-ink);border-radius:calc(var(--s)*.16);box-shadow:3px 3px 0 var(--a-ink)}
+.tile.flat{box-shadow:none}
+.tile.bare{border:none;box-shadow:none;background:none!important}
+.tile svg{display:block}
+.tile.locked{border-color:#A3AAA6;box-shadow:none;background:var(--a-cont)!important}
+.medal{border-radius:50%}
+.chip{position:absolute;right:calc(var(--s)*-.12);bottom:calc(var(--s)*-.12);font-weight:800;font-size:calc(var(--s)*.19);line-height:1.35;
+  padding:0 .32em;border:2px solid var(--a-ink);border-radius:6px;background:var(--a-surface);color:var(--a-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.first{background:var(--a-coral)}
+.locked .chip{border-color:#A3AAA6;color:#8A918D;background:var(--a-cont)}
+.sil-k *{fill:#1F1F1F;stroke:#1F1F1F;stroke-width:11px;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:none}
+.sil-w *{fill:#FEFEFE;stroke:#FEFEFE;stroke-width:6px;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:none}
+.sil-k .nosil,.sil-w .nosil{display:none}
+
+/* 画面のモック */
+.mocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;justify-items:center}
+.phone{width:min(100%,375px);background:var(--a-bg);color:var(--a-ink);border:1px solid var(--soft);border-radius:24px;padding:20px 16px 28px;display:grid;gap:14px;align-content:start}
+.bar{display:flex;align-items:center;gap:28px;font-size:24px;font-weight:700;padding:4px 4px 8px}
+.bar svg{width:24px;height:24px}
+.flabel{font-size:13px;color:var(--a-sub);margin-bottom:-6px}
+.chips{display:flex;gap:8px;overflow:hidden}
+.fchip{position:relative;flex:none;border:2px solid var(--a-ink);border-radius:6px;padding:6px 12px;font-weight:700;font-size:14px;background:var(--a-surface)}
+.fchip.on{background:var(--a-blue-c)}
+.fchip.on::after{content:"";position:absolute;top:-8px;right:-8px;width:16px;height:16px;border-radius:50%;background:var(--a-blue);border:2px solid var(--a-ink);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.2 2.2 4.8-5' fill='none' stroke='%231F1F1F' stroke-width='2'/%3E%3C/svg%3E");background-size:100%}
+.sum{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.sum b{font-size:22px;font-variant-numeric:tabular-nums}
+.agrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;justify-items:center}
+.agrid .cap{color:var(--a-ink);font-weight:700;font-size:11px}
+.agrid .locked + .cap{color:#8A918D;font-weight:400}
+.wallet{display:flex;justify-content:flex-end}
+.wallet span{border:2px solid var(--a-ink);border-radius:999px;padding:2px 12px;font-weight:800;background:var(--a-yellow-c);font-variant-numeric:tabular-nums}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.item{background:var(--a-surface);border:3px solid var(--a-ink);border-radius:12px;box-shadow:5px 5px 0 var(--a-ink);padding:10px;display:grid;gap:6px;justify-items:center}
+.item .nm{font-weight:700;font-size:14px;line-height:1.35;text-align:center}
+.item .pr{font-weight:800;font-size:16px;font-variant-numeric:tabular-nums}
+.item .pr small{font-size:11px;font-weight:700;color:var(--a-sub);margin-left:2px}
+.sizes .cell .cap{max-width:none}
+.rules{counter-reset:r;list-style:none;padding:0;display:grid;gap:10px}
+.rules li{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start}
+.rules li::before{counter-increment:r;content:counter(r);display:grid;place-items:center;width:28px;height:28px;border:2px solid var(--edge);border-radius:6px;font-weight:800;background:var(--a-yellow);color:#1F1F1F}
+.note{font-size:13px;color:var(--muted)}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">方向性の確認用 ・ round 1 ・ <a href="avatars.html" style="color:inherit">選手の顔の比較へ</a> ・ <a href="./" style="color:inherit">最新の代表セットへ</a></div>
+    <h1>やきう選手物語 実績バッジとショップ絵</h1>
+    <p class="lead">殿堂画面のカード（太い墨の枠、ずらした影、角丸）と選手のドット顔に合わせた 3 案です。どれも同じ 4 つの実績と 3 つの商品で比べています。</p>
+  </header>
+
+  <section>
+    <h2>1. 方向の違う 3 案</h2>
+    <div class="dirs" id="dirs"></div>
+  </section>
+
+  <section>
+    <h2>2. B 案で具体化した見本</h2>
+    <p class="note" style="margin-bottom:12px">升目は 16 × 16。台の大きさは 64px（数の札は 48px 以上で表示）。</p>
+    <div class="card">
+      <h3>実績バッジ 8 点</h3>
+      <div class="app"><div class="row" id="badgesB"></div></div>
+      <h3>ショップ絵 6 点</h3>
+      <div class="app"><div class="row" id="shopB"></div></div>
+      <h3>大きさごとの見え方</h3>
+      <div class="app"><div class="row sizes" id="sizesB"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. 一覧に並べたとき</h2>
+    <div class="mocks">
+      <div class="phone" id="mockAch"></div>
+      <div class="phone" id="mockShop"></div>
+    </div>
+    <p class="note" style="margin-top:12px">商品名と価格は見え方を確かめるための仮の値です。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin:0">4. 実績とショップを同じトーンで揃える決まり</h2>
+    <ol class="rules">
+      <li><div><b>台は角丸四角 1 種。</b>枠 2px の墨、角丸は一辺の 16%、影は右下へ 3px。アプリの選択チップと同じ寸法です。</div></li>
+      <li><div><b>絵柄は 16 × 16 の升目で描く。</b>部品ごとに 1 升の墨の輪郭を付け、塗りは 1 部品 1 色。陰影、グラデーション、光沢は使わない。</div></li>
+      <li><div><b>色はアプリのテーマ色だけ。</b>墨、白、黄、青、珊瑚、緑に、素材の茶（革、木）と灰（金属）を足した 8 色。</div></li>
+      <li><div><b>台の色で種類を分ける。</b>実績は 記録 = 黄、表彰 = 青、殿堂 = 珊瑚の淡い色。商品は薄い灰の「棚」。</div></li>
+      <li><div><b>数は絵柄に描かず、右下の札で示す。</b>同じ絵柄に数だけ変えて量産する。「初」は珊瑚の札。48px 未満では札を出さない。</div></li>
+      <li><div><b>拡大は整数倍だけ。</b>台の大きさから 1、2、3 倍を選び、ドットの境界を画素に揃える。</div></li>
+      <li><div><b>未獲得は灰の 2 階調にし、影を外す。</b>形は見せて、次の目標として読めるようにする。</div></li>
+      <li><div><b>影は一番外側の枠だけ。</b>商品カードの中に置くときは台の影を外す。</div></li>
+    </ol>
+  </section>
+</main>
+
+<script src="badge-grids.js"></script>
+<script src="pixel-badges.js"></script>
+<script>
+/* ---------- ベクターの絵柄（A 案、C 案） ---------- */
+const k=P.k;
+const star=(cx,cy,R1,r1)=>{let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r1:R1;p.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1))}return p.join(' ')};
+const ball=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${P.w}" stroke="${k}" stroke-width="3"/><path d="M${cx-r*.55} ${cy-r*.62}q${r*.32} ${r*.62} 0 ${r*1.24}M${cx+r*.55} ${cy-r*.62}q${-r*.32} ${r*.62} 0 ${r*1.24}" fill="none" stroke="${P.r}" stroke-width="2" stroke-linecap="round"/>`;
+const VEC={
+  hit:`<line x1="10" y1="11" x2="26" y2="29" stroke="${k}" stroke-width="11" stroke-linecap="round"/><line x1="26" y1="29" x2="37" y2="40" stroke="${k}" stroke-width="7" stroke-linecap="round"/><line x1="10" y1="11" x2="26" y2="29" stroke="${P.t}" stroke-width="5" stroke-linecap="round"/><line x1="26" y1="29" x2="37" y2="40" stroke="${P.t}" stroke-width="1.5" stroke-linecap="round"/>${ball(34,13,8)}`,
+  hr:`<path class="nosil" d="M7 30Q10 16 22 12" fill="none" stroke="${k}" stroke-width="2.5" stroke-dasharray="1 5" stroke-linecap="round"/><rect x="5" y="33" width="38" height="9" rx="2" fill="${P.g}" stroke="${k}" stroke-width="3"/><path d="M17 33v9M31 33v9" stroke="${k}" stroke-width="2"/>${ball(32,15,8)}`,
+  crown:`<path d="M9 37 6 13l10 9 8-13 8 13 10-9-3 24z" fill="${P.y}" stroke="${k}" stroke-width="3" stroke-linejoin="round"/><path d="M10 31h28" stroke="${k}" stroke-width="2.5"/><circle cx="24" cy="24" r="3" fill="${P.r}" stroke="${k}" stroke-width="2"/>`,
+  hall:`<path d="M5 18 24 7l19 11z" fill="${P.r}" stroke="${k}" stroke-width="3" stroke-linejoin="round"/><rect x="8" y="18" width="32" height="5" fill="${P.w}" stroke="${k}" stroke-width="3"/><rect x="11" y="23" width="5" height="11" fill="${P.w}" stroke="${k}" stroke-width="3"/><rect x="21.5" y="23" width="5" height="11" fill="${P.w}" stroke="${k}" stroke-width="3"/><rect x="32" y="23" width="5" height="11" fill="${P.w}" stroke="${k}" stroke-width="3"/><rect x="5" y="34" width="38" height="6" fill="${P.w}" stroke="${k}" stroke-width="3"/>`,
+  ticket:`<path d="M6 14h36v7a3 3 0 0 0 0 6v7H6v-7a3 3 0 0 0 0-6z" fill="${P.r}" stroke="${k}" stroke-width="3" stroke-linejoin="round"/><path d="M33 17v14" stroke="${k}" stroke-width="2.5" stroke-dasharray="2 3"/><polygon points="${star(19,24.5,7,3)}" fill="${P.w}" stroke="${k}" stroke-width="2" stroke-linejoin="round"/>`,
+  coin:`<circle cx="24" cy="24" r="17" fill="${P.y}" stroke="${k}" stroke-width="3"/><circle cx="24" cy="24" r="11" fill="none" stroke="${k}" stroke-width="2"/><path d="M28 19.5a6 6 0 1 0 0 9" fill="none" stroke="${k}" stroke-width="3" stroke-linecap="round"/>`,
+  pack:`<path d="M12 9l3-3 3 3 3-3 3 3 3-3 3 3 3-3 3 3v30l-3 3-3-3-3 3-3-3-3 3-3-3-3 3-3-3z" fill="${P.b}" stroke="${k}" stroke-width="3" stroke-linejoin="round"/><polygon points="${star(24,22,8,3.6)}" fill="${P.y}" stroke="${k}" stroke-width="2.5" stroke-linejoin="round"/><path d="M15 34h18" stroke="${P.w}" stroke-width="2.5"/>`,
+};
+const vecSvg=(key,px,sticker)=>sticker
+  ?`<svg width="${px}" height="${px}" viewBox="-3 -3 54 54" aria-hidden="true"><g class="sil-k">${VEC[key]}</g><g class="sil-w">${VEC[key]}</g>${VEC[key]}</svg>`
+  :`<svg width="${px}" height="${px}" viewBox="0 0 48 48" aria-hidden="true">${VEC[key]}</svg>`;
+
+/* ---------- 項目 ---------- */
+const CAT={rec:'var(--a-yellow-c)',award:'var(--a-blue-c)',hof:'var(--a-coral-c)',shop:'var(--a-cont)'};
+const BADGES=[
+  {name:'初安打',m:'hit',cat:'rec',chip:'初'},
+  {name:'初本塁打',m:'hr',cat:'rec',chip:'初'},
+  {name:'100 安打',m:'hit',cat:'rec',chip:'100'},
+  {name:'30 本塁打',m:'hr',cat:'rec',chip:'30'},
+  {name:'10 盗塁',m:'steal',cat:'rec',chip:'10'},
+  {name:'MVP',m:'crown',cat:'award'},
+  {name:'ゴールデングラブ',m:'glove',cat:'award'},
+  {name:'殿堂入り',m:'hall',cat:'hof'},
+];
+const SHOP=[
+  {name:'ガチャチケット',m:'ticket',price:'300'},
+  {name:'CP 1,000',m:'coin',price:'160',unit:'円'},
+  {name:'特訓ダンベル',m:'up',price:'500',kind:'能力アップ'},
+  {name:'救急箱',m:'care',price:'200',kind:'回復'},
+  {name:'練習メニュー',m:'aid',price:'300',kind:'育成補助'},
+  {name:'スペシャルパック',m:'pack',price:'1,200'},
+];
+
+function tile(it,{v='B',s=64,locked=false,flat=false,shop=false}={}){
+  const bg=shop?CAT.shop:CAT[it.cat];
+  let art,cls='tile';
+  if(v==='B'){const n=Math.max(1,Math.floor(s*.75/16));art=pixSvg(it.m,n*16,locked)}
+  else if(v==='A'){art=vecSvg(it.m,Math.round(s*.78))}
+  else{ // C：実績は丸い台、商品は台なしのステッカー
+    if(shop){cls+=' bare';art=vecSvg(it.m,Math.round(s*1.02),true)}
+    else{cls+=' medal';art=vecSvg(it.m,Math.round(s*.86),true)}
+  }
+  if(locked)cls+=' locked';if(flat)cls+=' flat';
+  const chip=it.chip&&s>=48?`<span class="chip${it.chip==='初'?' first':''}">${it.chip}</span>`:'';
+  return `<div class="${cls}" style="--s:${s}px;background:${bg}" role="img" aria-label="${it.name}">${art}${chip}</div>`;
+}
+const cellHtml=(t,label)=>`<div class="cell">${t}<div class="cap">${label}</div></div>`;
+
+/* 1. 3 案 */
+const pickB=[BADGES[2],BADGES[3],BADGES[5],BADGES[7]],pickS=[SHOP[0],SHOP[1],SHOP[5]];
+const DIRS=[
+  {v:'A',title:'A. カード札 × フラット線画',
+   aim:'殿堂のカードと同じ枠、角丸、影の札に、太い墨の線で描いた平らな絵柄を入れる。',
+   fit:'枠、影、角丸がカードとチップの寸法と同じで、画面のどこに置いても同じ部品に見える。ベクターなので大きさを選ばない。',
+   weak:'選手のドット顔と並ぶと、絵柄だけ質感が違って見える。斜めの線や曲線を 1 点ずつ描き起こすので量産の手間が大きい。'},
+  {v:'B',title:'B. カード札 × ドット絵',pick:true,
+   aim:'A と同じ札に、選手の顔と同じ 16 × 16 のドット絵を入れる。輪郭は部品ごとに 1 升の墨で自動で付ける。',
+   fit:'選手アバターと同じ升目と輪郭なので、殿堂の一覧に並べても素材が揃う。既存のドットアイコン（pixel-12）と同じ「升目の文字列が正本」の作り方で、Flutter の PixelArt でそのまま描ける。',
+   weak:'バットのような斜めの線はギザギザが出る。32px 未満では細部が潰れるので、最小は 32px（1 倍）にする。'},
+  {v:'C',title:'C. 丸メダル × ステッカー',
+   aim:'実績は丸いメダルの台、絵柄は白フチと墨フチのシールにして、おもちゃ感をいちばん強く出す。',
+   fit:'太い墨の縁と平らな塗りはアプリと同じで、楽しさは 3 案で最も強い。',
+   weak:'角丸四角が中心の画面で丸だけが浮く。白フチが白い背景で消える。シールの縁で絵柄が太り、グリッドで実績と商品の大きさが揃いにくい。'},
+];
+document.getElementById('dirs').innerHTML=DIRS.map(d=>`
+  <article class="card${d.pick?' pick':''}">
+    <h3>${d.title}${d.pick?'<span class="tag">推し</span>':''}</h3>
+    <div class="app"><div class="row">${pickB.map(b=>cellHtml(tile(b,{v:d.v,s:48}),b.name)).join('')}
+      <div class="sep"></div>${pickS.map(x=>cellHtml(tile(x,{v:d.v,s:48,shop:true}),x.name)).join('')}</div></div>
+    <dl><div><dt>狙い</dt><dd>${d.aim}</dd></div><div><dt>なぜ現 UI に合うか</dt><dd>${d.fit}</dd></div><div><dt>弱いところ</dt><dd>${d.weak}</dd></div></dl>
+  </article>`).join('');
+
+/* 2. B 案の具体化 */
+document.getElementById('badgesB').innerHTML=BADGES.map(b=>cellHtml(tile(b),b.name)).join('');
+document.getElementById('shopB').innerHTML=SHOP.map(x=>cellHtml(tile(x,{shop:true}),x.kind||x.name)).join('');
+const sz=[32,48,64,96];
+document.getElementById('sizesB').innerHTML=
+  sz.map(s=>cellHtml(tile(BADGES[3],{s}),`${s}px`)).join('')+'<div class="sep"></div>'+
+  sz.map(s=>cellHtml(tile(SHOP[0],{s,shop:true}),`${s}px`)).join('');
+
+/* 3. 一覧のモック */
+const back=`<svg viewBox="0 0 24 24"><path d="M20 12H5m6-6-6 6 6 6" fill="none" stroke="#1F1F1F" stroke-width="2.4"/></svg>`;
+const ACH=[
+  [BADGES[0],0,'初安打'],[BADGES[1],0,'初本塁打'],[BADGES[2],0,'100 安打'],[{...BADGES[2],chip:'200'},1,'200 安打<br>163/200'],
+  [BADGES[3],0,'30 本塁打'],[{...BADGES[3],chip:'50'},1,'50 本塁打<br>38/50'],[BADGES[4],0,'10 盗塁'],[{...BADGES[4],chip:'30'},1,'30 盗塁<br>12/30'],
+  [BADGES[5],0,'MVP'],[BADGES[6],0,'ゴールデン<br>グラブ'],[BADGES[7],1,'殿堂入り'],[{...BADGES[5],chip:'3'},1,'MVP 3 回<br>1/3'],
+];
+document.getElementById('mockAch').innerHTML=`
+  <div class="bar">${back}実績</div>
+  <div class="flabel">種類</div>
+  <div class="chips"><span class="fchip on">すべて</span><span class="fchip">記録</span><span class="fchip">表彰</span><span class="fchip">殿堂</span></div>
+  <div class="sum"><span>獲得</span><span><b>8</b> / 12</span></div>
+  <div class="agrid">${ACH.map(([b,l,c])=>`<div class="cell">${tile(b,{locked:!!l})}<div class="cap">${c}</div></div>`).join('')}</div>`;
+document.getElementById('mockShop').innerHTML=`
+  <div class="bar">${back}ショップ</div>
+  <div class="wallet"><span>4,250 CP</span></div>
+  <div class="sgrid">${SHOP.map(x=>`<div class="item">${tile(x,{shop:true,flat:true,s:72})}<div class="nm">${x.name}</div><div class="pr">${x.price}<small>${x.unit||'CP'}</small></div></div>`).join('')}</div>`;
+</script>

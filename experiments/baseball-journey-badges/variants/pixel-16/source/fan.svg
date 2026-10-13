@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>大型扇風機</title>
+  <path id="part-fan-ink" d="M4 0h2v1h-2zM10 0h2v1h-2zM3 1h1v1h-1zM12 1h1v1h-1zM2 2h1v1h-1zM13 2h1v1h-1zM2 3h1v1h-1zM13 3h1v1h-1zM1 4h1v1h-1zM14 4h1v1h-1zM1 5h1v1h-1zM14 5h1v1h-1zM1 6h1v1h-1zM7 6h2v1h-2zM14 6h1v1h-1zM1 7h1v1h-1zM7 7h2v1h-2zM14 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM2 9h1v1h-1zM13 9h1v1h-1zM2 10h1v1h-1zM13 10h1v1h-1zM3 11h1v1h-1zM12 11h1v1h-1zM4 12h2v1h-2zM10 12h2v1h-2zM3 13h10v1h-10zM2 14h1v1h-1zM13 14h1v1h-1zM3 15h10v1h-10z" fill="#1F1F1F"/>
+  <path id="part-fan-white" d="M6 0h4v1h-4zM4 1h3v1h-3zM9 1h3v1h-3zM3 2h4v1h-4zM9 2h4v1h-4zM3 3h4v1h-4zM9 3h4v1h-4zM2 4h5v1h-5zM9 4h5v1h-5zM2 5h5v1h-5zM9 5h5v1h-5zM2 6h3v1h-3zM11 6h3v1h-3zM2 7h2v1h-2zM12 7h2v1h-2zM2 8h1v1h-1zM7 8h2v1h-2zM13 8h1v1h-1zM5 9h6v1h-6zM3 10h10v1h-10zM4 11h8v1h-8zM6 12h4v1h-4z" fill="#FEFEFE"/>
+  <path id="part-fan-blue" d="M7 1h2v1h-2zM7 2h2v1h-2zM7 3h2v1h-2zM7 4h2v1h-2zM7 5h2v1h-2zM5 6h2v1h-2zM9 6h2v1h-2zM4 7h3v1h-3zM9 7h3v1h-3zM3 8h4v1h-4zM9 8h4v1h-4zM3 9h2v1h-2zM11 9h2v1h-2z" fill="#4078E0"/>
+  <path id="part-fan-gray" d="M3 14h10v1h-10z" fill="#9AA19D"/>
+</svg>

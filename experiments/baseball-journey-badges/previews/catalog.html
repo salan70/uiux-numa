@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>やきう選手物語 実績の体系</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* layout: 1 列の読み物。比較の見本はアプリのライト配色のパネルに置く */
+:root{
+  --bg:#F3F4F3; --panel:#FEFEFE; --fg:#1F1F1F; --muted:#4D4D4D; --edge:#1F1F1F; --soft:#E4E7E5; --row:#F3F4F3;
+  --font:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --a-bg:#F8F9F9; --a-surface:#FEFEFE; --a-ink:#1F1F1F; --a-sub:#4D4D4D; --a-cont:#EFF0F0;
+  --a-yellow-c:#FAF1D1; --a-blue-c:#D4E0F7; --a-coral-c:#FAD9D1; --a-green-c:#D9EEDC; --a-yellow:#FAC400; --a-coral:#F37252;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;--row:#2C2E2D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;--row:#2C2E2D;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.75;padding-inline:16px;padding-block:24px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:44px}
+h1{font-size:28px;line-height:1.3;margin:0;font-weight:800;text-wrap:balance}
+h2{font-size:21px;line-height:1.3;margin:0 0 12px;font-weight:800}
+h3{font-size:16px;margin:0;font-weight:800}
+p{margin:0;max-width:68ch}
+.lead{color:var(--muted);margin-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.eyebrow a{color:inherit}
+.note{font-size:13px;color:var(--muted)}
+.card{background:var(--panel);border:3px solid var(--edge);border-radius:12px;padding:20px;display:grid;gap:14px;min-width:0}
+.opts{display:grid;gap:20px}
+.app{background:var(--a-bg);color:var(--a-ink);border-radius:10px;padding:16px;border:1px solid var(--soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:18px 8px;justify-items:center}
+.cell{display:flex;flex-direction:column;align-items:center}
+.cap{font-size:11px;line-height:1.35;text-align:center;color:var(--a-ink);margin-top:8px;max-width:76px;font-weight:700}
+.tile{--s:64px;width:var(--s);height:var(--s);position:relative;display:grid;place-items:center;flex:none;border:2px solid var(--a-ink);border-radius:calc(var(--s)*.16);box-shadow:3px 3px 0 var(--a-ink)}
+.tile svg{display:block}
+.chip{position:absolute;right:-8px;bottom:-8px;font-weight:800;font-size:12px;line-height:1.35;padding:0 4px;border:2px solid var(--a-ink);border-radius:6px;background:var(--a-surface);color:var(--a-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.first{background:var(--a-coral)}
+.chip.career{background:var(--a-yellow)}
+.chip small{font-size:9px;margin-right:1px}
+.stars{position:absolute;right:-8px;bottom:-8px;display:flex;gap:1px;padding:1px 3px;border:2px solid var(--a-ink);border-radius:6px;background:var(--a-surface)}
+dl{margin:0;display:grid;gap:6px}
+dt{font-weight:800;font-size:13px}
+dd{margin:0;color:var(--muted);font-size:14px}
+.pick{box-shadow:5px 5px 0 var(--edge)}
+.tag{display:inline-block;font-size:12px;font-weight:800;border:2px solid var(--edge);border-radius:6px;padding:0 8px;margin-left:8px;vertical-align:2px;background:var(--a-yellow);color:#1F1F1F}
+.stats{display:flex;flex-wrap:wrap;gap:12px}
+.stat{border:2px solid var(--edge);border-radius:10px;padding:8px 14px;min-width:140px}
+.stat b{display:block;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-size:12px;color:var(--muted)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px;line-height:1.5}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+thead th{font-size:12px;color:var(--muted);font-weight:700}
+tbody tr.grp th{background:var(--row);font-weight:800;font-size:13px}
+td code{font-size:11px;color:var(--muted)}
+.new{display:inline-block;font-size:10px;font-weight:800;border:1.5px solid currentColor;border-radius:4px;padding:0 4px;margin-left:4px}
+.motifs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 16px;font-size:13px}
+.motifs div{border-bottom:1px solid var(--soft);padding:4px 0}
+.motifs b{font-weight:800}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">ですてにい版 113 種 ・ round 5 ・ <a href="./">バッジとショップ絵</a> ・ <a href="avatars.html">選手の顔</a></div>
+    <h1>やきう選手物語 実績の体系</h1>
+    <p class="lead">実績 95 種とショップ 18 種を「絵柄 × 段階 × 数」に分けました。描く前に決めたいのは、数（10、300、755 など）を画像に入れるかどうかです。本塁打の系統 13 種で 3 案を比べます。</p>
+  </header>
+
+  <section>
+    <h2>1. 数の扱い（本塁打の系統で比較）</h2>
+    <div class="opts" id="opts"></div>
+  </section>
+
+  <section class="card">
+    <h2 style="margin:0">2. 113 種を絵柄に分けると</h2>
+    <div class="stats" id="stats"></div>
+    <p class="note">A 案（数は札）の場合の数え方です。B 案では実績ごとに 1 枚で 95 枚になります。</p>
+  </section>
+
+  <section>
+    <h2>3. 絵柄の一覧と比喩</h2>
+    <div class="card"><div class="motifs" id="motifs"></div></div>
+  </section>
+
+  <section>
+    <h2>4. 実績とショップの対応表</h2>
+    <div class="card tbl"><table><thead><tr><th>名前</th><th>ID</th><th>絵柄</th><th>重ねるもの</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </section>
+</main>
+
+<script src="badge-grids.js"></script>
+<script src="pixel-badges.js"></script>
+<script>
+/* ---------- 絵柄（比喩）。have は原本があるもの ---------- */
+const M={
+  'hit':['安打','バットと球',1],'home-run':['本塁打','黄色のポール際を弧を描いて越える球',1],'steal':['盗塁','青い帯のスパイク（スピードの赤い靴と色で分ける）',1],'mvp':['MVP','王冠',1],'golden-glove':['ゴールデングラブ','台座に載った金のグラブ',1],'hall-of-fame':['殿堂','柱の殿堂',1],
+  'rbi':['打点','ほうき（走者一掃）',1],'avg':['打率','3 の目のさいころ（打率は確率）',1],'ops':['OPS','針が赤い目盛りへ振り切れたメーター',1],
+  'triple-crown':['三冠王','3 つの宝石の王冠',1],'best-nine':['ベストナイン','9 つの点の盾',1],'all-star':['オールスター','星',1],
+  'rookie':['新人王','若葉マーク',1],'pennant':['優勝','優勝旗',1],'calendar':['現役年数','日めくり',1],'horseshoe':['無事是名馬','蹄鉄',1],
+  'tower':['出場試合','球場の照明塔',1],'bird':['渡り鳥','飛ぶ鳥',1],'stairs':['二軍から頂点','階段の上の王冠',1],'scoreboard':['通算スコア','時計の付いたスコアボード',1],
+  'tape':['記録破り','切れたゴールテープと星',1],'books':['記録の山','積んだ記録帳',1],'bars':['能力','1 本だけ突き抜ける棒グラフ',1],'bars3':['複数の能力','3 本が突き抜ける棒グラフ',1],
+  'sprout':['伸び盛り','芽',1],'tree':['大器晩成','大きな木',1],'radar':['総合力','六角のレーダー',1],'radar-full':['全能力','満ちた六角のレーダー',1],
+  'diamond':['守備位置','守備位置の点が灯るダイヤモンド',1],'resume':['三つの経歴','履歴書',1],'fan':['大型扇風機','扇風機',1],'wind':['疾風','巻く風',1],
+  'fang':['怪物新人','目と牙のある若葉マーク',1],'no-k':['三振しない','K の禁止の標識',1],'chest':['宝の持ち腐れ','クモの巣の宝箱',1],'cake':['45 歳','ろうそくのケーキ',1],
+  'contact':['コンタクト','芯で捉えた球と火花',1],'eye':['選球眼','目',1],'swing':['打撃技術','振りの弧とバット',1],'power':['パワー','バーベル',1],
+  'winged-spike':['スピード','翼の付いたスパイク',1],'slide':['盗塁技術','土煙の立つベース',1],'route':['走塁技術','ダイヤモンドを回る矢印',1],
+  'pin':['ポジショニング','守備位置のピン',1],'range':['守備範囲','扇形の守備範囲と左右の矢印',1],'catch':['捕球','球の入ったグラブ',1],'arm':['肩力','速い球の跡',1],
+  'target':['送球','的',1],'protector':['ブロッキング','プロテクター',1],'frame':['フレーミング','ストライクゾーンとミット',1],'mask':['リード','捕手のマスク',1],
+  'shield':['ケガ耐性','包帯を巻いた盾',1],'first-aid':['回復','救急箱',1],'flame-heart':['メンタル','炎をまとったハート',1],
+};
+/* ---------- 実績とショップ。[名前, ID, 絵柄, 重ねるもの]。重ねるもの：数、通算、王冠、回数、2 つ目の絵柄 ---------- */
+const G=[
+ ['1. シーズン記録',[['10本塁打の第一歩','season10Hr','home-run','10'],['20発スラッガー','season20Hr','home-run','20'],['30発の証明','season30Hr','home-run','30'],['40発の大砲','season40Hr','home-run','40'],['シーズン50本塁打','season50Hr','home-run','50'],['シーズン60本塁打','season60Hr','home-run','60'],
+  ['シーズン100安打','season100Hits','hit','100'],['シーズン150安打','season150Hits','hit','150'],['シーズン200安打','season200Hits','hit','200'],['シーズン10盗塁','season10Sb','steal','10'],['シーズン30盗塁','season30Sb','steal','30'],['シーズン50盗塁','season50Sb','steal','50'],
+  ['シーズン100打点','season100Rbi','rbi','100'],['シーズン120打点','season120Rbi','rbi','120'],['3割打者','season300Avg','avg',''],['OPS1.000','season1000Ops','ops','']]],
+ ['2. 複合記録',[['20-20クラブ','season2020','home-run','+ steal、20'],['30-30クラブ','season3030','home-run','+ steal、30'],['40本塁打40盗塁','season4040','home-run','+ steal、40'],['主砲の責務','season30Hr100Rbi','home-run','+ rbi'],['三割三十発','season300Avg30Hr','avg','+ home-run'],['走る安打製造機','season200Hits20Sb','hit','+ steal'],['選球眼と勝負強さ','season100Bb100Rbi','eye','+ rbi'],['三冠王','tripleCrown','triple-crown','']]],
+ ['3. 通算記録',[['初安打','careerHits1','hit','初'],['通算100安打','careerHits100','hit','通算 100'],['通算500安打','careerHits500','hit','通算 500'],['通算1,000安打','career1000Hits','hit','通算 1,000'],['通算2,000安打','careerHits2000','hit','通算 2,000'],['通算3,000安打','career3000Hits','hit','通算 3,000'],
+  ['初本塁打','careerHr1','home-run','初'],['通算10本塁打','careerHr10','home-run','通算 10'],['通算100本塁打','careerHr100','home-run','通算 100'],['通算300本塁打','careerHr300','home-run','通算 300'],['通算500本塁打','career500Hr','home-run','通算 500'],['通算755本塁打','career755Hr','home-run','通算 755'],['通算100盗塁','careerSb100','steal','通算 100'],['通算300盗塁','careerSb300','steal','通算 300']]],
+ ['4. タイトル・表彰',[['初MVP','firstMvp','mvp','初'],['MVP3回','mvp3','mvp','× 3'],['MVP5回','fiveMvp','mvp','× 5'],['初ゴールデングラブ','firstGoldGlove','golden-glove','初'],['ゴールデングラブ3回','goldGlove3','golden-glove','× 3'],['守備の名手','goldGlove5','golden-glove','× 5'],['初ベストナイン','firstBestNine','best-nine','初'],
+  ['初オールスター','firstAllStar','all-star','初'],['オールスター10回','allStar10','all-star','× 10'],['初本塁打王','firstHomeRunLeader','home-run','王冠'],['初盗塁王','firstStolenBaseLeader','steal','王冠'],['首位打者','seasonBattingChampion','hit','王冠'],['新人王','rookieAward','rookie',''],['常勝','championship5','pennant','× 5']]],
+ ['5. キャリア・人生・記録更新',[['5シーズン現役','seasons5','calendar','5'],['10シーズン現役','seasons10','calendar','10'],['15シーズン現役','seasons15','calendar','15'],['20年選手','career20Seasons','calendar','20'],['無事是名馬','ironCareer','horseshoe',''],['一軍100試合','season100Games','tower','100'],['一軍1000試合','careerGames1000','tower','通算 1,000'],
+  ['渡り鳥','journeyman','bird',''],['ベテランMVP','veteranMvp','mvp','+ cake（年齢）'],['不惑のアーチ','lateBloomer40','home-run','+ cake（年齢）'],['二軍から頂点へ','farmToTitle','stairs',''],['通算スコア10,000','careerScore10000','scoreboard','10,000'],['通算スコアの壁','challengeCareerScore','scoreboard','5,000'],['記録破り','breakRecord','tape',''],['記録の山','record10','books','× 10']]],
+ ['6. 育成・能力',[['一芸80','ability80','bars','80'],['一芸90','ability90','bars','90'],['一芸99','ability99','bars','99'],['オールラウンダーの入口','threeAbilities80','bars3','80'],['伸び盛り','growth10','sprout','+10'],['大器晩成','growth20','tree','+20'],['総合95','ovr95','radar','95'],['総合99','ovr99','radar','99'],['オール90','hiddenPerfectGame','radar-full','90'],['パーフェクトプレーヤー','all99','radar-full','99']]],
+ ['7. 殿堂入り・コレクション',[['最初の殿堂入り','hof1','hall-of-fame','初'],['殿堂入り5人','hof5','hall-of-fame','5 人'],['殿堂入り10人','hallOfFame10','hall-of-fame','10 人'],['殿堂入り25人','hof25','hall-of-fame','25 人'],['4守備位置の殿堂','hofPositions4','diamond','4'],['6守備位置の殿堂','hofPositions6','diamond','6'],['全守備位置で殿堂入り','allPositionsHof','diamond','全'],
+  ['三つの経歴','hofBackgrounds','resume',''],['五人の大砲','hofSluggers5','hall-of-fame','+ home-run'],['スターの系譜','hofMvp10','hall-of-fame','+ mvp']]],
+ ['8. 珍記録・隠し実績',[['大型扇風機','bigFan','fan',''],['疾風のノーパワー','speedNoPower','wind',''],['怪物新人','monsterRookie','fang',''],['長打を捨てた安打職人','pureHitter','hit','打ち消しの home-run'],['三振しない大砲','contactSlugger','no-k',''],['復活のオールスター','comebackAllStar','all-star','戻る矢印'],['宝の持ち腐れ','hiddenPower95LowHr','chest',''],['45歳まで現役','hiddenCareer45','cake','45']]],
+ ['9. ショップ：打撃',[['コンタクト','contact','contact','+1〜+5'],['選球眼','plateDiscipline','eye','+1〜+5'],['打撃技術','battingTechnique','swing','+1〜+5'],['パワー','power','power','+1〜+5']]],
+ ['10. ショップ：走塁',[['スピード','speed','winged-spike','+1〜+5'],['盗塁技術','stealingTechnique','slide','+1〜+5'],['走塁技術','baserunningTechnique','route','+1〜+5']]],
+ ['11. ショップ：守備',[['ポジショニング','positioning','pin','+1〜+5'],['守備範囲','fieldingRange','range','+1〜+5'],['捕球','catching','catch','+1〜+5'],['肩力','armStrength','arm','+1〜+5'],['送球','throwingAccuracy','target','+1〜+5'],['ブロッキング','blocking','protector','+1〜+5'],['フレーミング','framing','frame','+1〜+5'],['リード','gameCalling','mask','+1〜+5']]],
+ ['12. ショップ：その他',[['ケガ耐性','injuryResistance','shield','+1〜+5'],['回復','recovery','first-aid','+1〜+5'],['メンタル','mental','flame-heart','+1〜+5']]],
+];
+
+/* ---------- 1. 数の扱い 3 案 ---------- */
+const DIG={0:['111','101','101','101','111'],1:['010','110','010','010','111'],2:['111','001','111','100','111'],3:['111','001','111','001','111'],4:['101','101','111','001','001'],5:['111','100','111','001','111'],6:['111','100','111','101','111'],7:['111','001','001','010','010'],8:['111','101','111','101','111'],9:['111','101','111','001','111']};
+function withDigits(name,num,fill){ // 16 × 16 の升目の右下に、3 × 5 の数字の札を描き込む
+  const g=BADGE_GRIDS[name].map(r=>r.split(''));const ds=[...num];const w=ds.length*4+1,h=7;
+  if(w>16)return null;const x0=16-w,y0=16-h;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const edge=y===0||y===h-1||x===0||x===w-1;g[y0+y][x0+x]=edge?'k':fill}
+  ds.forEach((d,i)=>DIG[d].forEach((row,yy)=>[...row].forEach((b,xx)=>{if(b==='1')g[y0+1+yy][x0+2+i*4+xx]='k'})));
+  return g.map(r=>r.join(''));
+}
+function svgRows(rows,px){let o='';rows.forEach((row,y)=>{let x=0;while(x<16){const c=row[x];if(c==='.'){x++;continue}let e=x;while(e<16&&row[e]===c)e++;o+=`<rect x="${x}" y="${y}" width="${e-x}" height="1" fill="${BADGE_COLORS[c]}"/>`;x=e}});
+  return `<svg width="${px}" height="${px}" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">${o}</svg>`}
+const starSvg=on=>`<svg width="9" height="9" viewBox="0 0 5 5" shape-rendering="crispEdges"><path d="M2 0h1v1h1v1h1v1h-1v2h-1v-1h-1v1h-1v-2h-1v-1h1v-1h1z" fill="${on?'#FAC400':'#D6DBD8'}" stroke="#1F1F1F" stroke-width=".35"/></svg>`;
+const HR=[['季 10','10','s',1],['季 20','20','s',1],['季 30','30','s',2],['季 40','40','s',2],['季 50','50','s',3],['季 60','60','s',3],
+  ['初本塁打','初','c',1],['通算 10','10','c',1],['通算 100','100','c',2],['通算 300','300','c',2],['通算 500','500','c',3],['通算 755','755','c',3],['初本塁打王','王','t',0]];
+const tileOf=(inner,bg='var(--a-yellow-c)',extra='')=>`<div class="tile" style="background:${bg}">${inner}${extra}</div>`;
+const TITLE=()=>tileOf(pixSvg('hr',48),'var(--a-blue-c)','<span class="chip career">王</span>');
+const OPTS=[
+ {id:'A',title:'A. 数は画像に入れず、画面の札で重ねる',pick:true,
+  render:([lab,n,k])=>k==='t'?TITLE():tileOf(pixSvg('hr',48),undefined,`<span class="chip${n==='初'?' first':k==='c'?' career':''}">${k==='c'&&n!=='初'?'<small>通算</small>':''}${n}</span>`),
+  pros:'絵柄は系統ごとに 1 枚で済み、113 種を 54 の絵柄で賄える。閾値が変わっても描き直さない。数は文字なので読み上げと拡大文字に乗る。通算は札の色と「通算」で季と分ける。',
+  cons:'画像だけ（共有カードなど）では数が出ないので、共有するときは画面側で札ごと書き出す。'},
+ {id:'B',title:'B. 数をドットで画像に描き込む',
+  render:([lab,n,k])=>{if(k==='t')return TITLE();if(n==='初')return tileOf(pixSvg('hr',48));const r=withDigits('home-run',n,k==='c'?'y':'w');return r?tileOf(svgRows(r,48)):tileOf('<span class="note" style="font-size:11px;text-align:center;color:#A23B1B">入らない</span>')},
+  pros:'画像 1 枚で意味が完結し、共有カードにそのまま使える。',
+  cons:'実績ごとに 1 枚で 95 枚。16 × 16 では 3 桁が限界で、1,000 以上（通算安打、スコア 10,000）は入らない。数字の札が絵柄の 3 分の 1 を隠す。閾値が変わると描き直す。'},
+ {id:'C',title:'C. 数の代わりに段階の星を重ねる',
+  render:([lab,n,k,st])=>k==='t'?TITLE():tileOf(pixSvg('hr',48),undefined,`<span class="stars">${[1,2,3].map(i=>starSvg(i<=st)).join('')}</span>`),
+  pros:'桁数に左右されず、段階の上下が一目でわかる。',
+  cons:'本塁打の季 6 段階を星 3 つに丸めるので、星だけでは何本かわからない。名前の文字に頼る。'},
+];
+document.getElementById('opts').innerHTML=OPTS.map(o=>`<article class="card${o.pick?' pick':''}"><h3>${o.title}${o.pick?'<span class="tag">推し</span>':''}</h3>
+  <div class="app"><div class="grid">${HR.map(h=>`<div class="cell">${o.render(h)}<div class="cap">${h[0]}</div></div>`).join('')}</div></div>
+  <dl><div><dt>よいところ</dt><dd>${o.pros}</dd></div><div><dt>弱いところ</dt><dd>${o.cons}</dd></div></dl></article>`).join('');
+
+/* ---------- 2〜4. 体系 ---------- */
+const all=G.flatMap(([g,rs])=>rs.map(r=>[g,...r]));
+const used=new Set(all.map(r=>r[3]));
+const badgeN=all.filter(r=>!r[0].includes('ショップ')).length,shopN=all.length-badgeN;
+const haveN=[...used].filter(k=>M[k]?.[2]).length;
+document.getElementById('stats').innerHTML=[[badgeN,'実績'],[shopN,'ショップ'],[used.size,'描く絵柄（A 案）'],[haveN,'原本があるもの'],[used.size-haveN,'これから描く']].map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join('');
+document.getElementById('motifs').innerHTML=[...used].map(k=>`<div><b>${M[k][0]}</b>：${M[k][1]}${M[k][2]?'':'<span class="new">新規</span>'} <code>${k}</code></div>`).join('');
+document.getElementById('rows').innerHTML=G.map(([g,rs])=>`<tr class="grp"><th colspan="4">${g}（${rs.length}）</th></tr>`+rs.map(([n,id,m,x])=>`<tr><td>${n}</td><td><code>${id}</code></td><td>${M[m][0]}<code> ${m}</code></td><td>${x||'—'}</td></tr>`).join('')).join('');
+</script>

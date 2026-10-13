@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>二軍から頂点</title>
+  <path id="part-stairs-ink" d="M11 0h2v1h-2zM10 1h1v1h-1zM13 1h1v1h-1zM9 2h1v1h-1zM14 2h1v1h-1zM9 3h1v1h-1zM14 3h1v1h-1zM9 4h6v1h-6zM8 5h1v1h-1zM15 5h1v1h-1zM8 6h1v1h-1zM15 6h1v1h-1zM5 7h4v1h-4zM15 7h1v1h-1zM4 8h1v1h-1zM15 8h1v1h-1zM4 9h1v1h-1zM8 9h1v1h-1zM15 9h1v1h-1zM1 10h4v1h-4zM8 10h1v1h-1zM15 10h1v1h-1zM0 11h1v1h-1zM8 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM4 12h1v1h-1zM8 12h1v1h-1zM15 12h1v1h-1zM0 13h1v1h-1zM4 13h1v1h-1zM8 13h1v1h-1zM15 13h1v1h-1zM0 14h1v1h-1zM4 14h1v1h-1zM8 14h1v1h-1zM15 14h1v1h-1zM1 15h14v1h-14z" fill="#1F1F1F"/>
+  <path id="part-stairs-white" d="M10 5h4v1h-4zM6 8h3v1h-3zM2 11h3v1h-3z" fill="#FEFEFE"/>
+  <path id="part-stairs-yellow" d="M11 1h2v1h-2zM10 2h4v1h-4zM10 3h4v1h-4z" fill="#FAC400"/>
+  <path id="part-stairs-blue" d="M9 5h1v1h-1zM14 5h1v1h-1zM9 6h6v1h-6zM9 7h6v1h-6zM5 8h1v1h-1zM9 8h6v1h-6zM5 9h3v1h-3zM9 9h6v1h-6zM5 10h3v1h-3zM9 10h6v1h-6zM1 11h1v1h-1zM5 11h3v1h-3zM9 11h6v1h-6zM1 12h3v1h-3zM5 12h3v1h-3zM9 12h6v1h-6zM1 13h3v1h-3zM5 13h3v1h-3zM9 13h6v1h-6zM1 14h3v1h-3zM5 14h3v1h-3zM9 14h6v1h-6z" fill="#4078E0"/>
+</svg>

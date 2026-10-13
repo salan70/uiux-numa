@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>疾風</title>
+  <path id="part-wind-ink" d="M8 0h3v1h-3zM7 1h1v1h-1zM11 1h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM12 2h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM12 3h1v1h-1zM0 4h10v1h-10zM12 4h1v1h-1zM11 5h1v1h-1zM0 6h11v1h-11zM2 8h11v1h-11zM1 9h1v1h-1zM13 9h1v1h-1zM1 10h1v1h-1zM14 10h1v1h-1zM2 11h11v1h-11zM15 11h1v1h-1zM0 12h9v1h-9zM11 12h2v1h-2zM15 12h1v1h-1zM8 13h2v1h-2zM14 13h1v1h-1zM0 14h8v1h-8zM10 14h1v1h-1zM13 14h1v1h-1zM11 15h2v1h-2z" fill="#1F1F1F"/>
+  <path id="part-wind-white" d="M8 1h3v1h-3zM7 2h2v1h-2zM10 2h2v1h-2zM7 3h1v1h-1zM11 3h1v1h-1zM10 4h2v1h-2zM0 5h11v1h-11zM2 9h11v1h-11zM2 10h12v1h-12zM13 11h2v1h-2zM9 12h2v1h-2zM13 12h2v1h-2zM0 13h8v1h-8zM10 13h4v1h-4zM11 14h2v1h-2z" fill="#FEFEFE"/>
+</svg>

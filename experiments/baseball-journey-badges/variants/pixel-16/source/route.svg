@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>走塁技術</title>
+  <path id="part-route-ink" d="M7 0h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM5 2h1v1h-1zM9 2h1v1h-1zM4 3h1v1h-1zM10 3h1v1h-1zM3 4h1v1h-1zM2 5h1v1h-1zM12 5h1v1h-1zM1 6h1v1h-1zM13 6h1v1h-1zM0 7h1v1h-1zM14 7h1v1h-1zM0 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM13 9h1v1h-1zM2 10h1v1h-1zM12 10h1v1h-1zM3 11h1v1h-1zM11 11h1v1h-1zM4 12h1v1h-1zM10 12h1v1h-1zM5 13h1v1h-1zM9 13h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM7 15h1v1h-1z" fill="#1F1F1F"/>
+  <path id="part-route-white" d="M7 2h2v1h-2zM7 3h2v1h-2zM2 7h2v1h-2zM12 7h2v1h-2zM2 8h2v1h-2zM12 8h2v1h-2zM7 12h2v1h-2zM7 13h2v1h-2z" fill="#FEFEFE"/>
+  <path id="part-route-coral" d="M5 4h1v1h-1zM10 4h2v1h-2zM4 5h2v1h-2zM10 5h1v1h-1zM5 10h1v1h-1zM10 10h2v1h-2zM4 11h2v1h-2zM10 11h1v1h-1z" fill="#F37252"/>
+  <path id="part-route-green" d="M7 1h1v1h-1zM6 2h1v1h-1zM5 3h2v1h-2zM9 3h1v1h-1zM4 4h1v1h-1zM6 4h4v1h-4zM3 5h1v1h-1zM6 5h4v1h-4zM11 5h1v1h-1zM2 6h11v1h-11zM1 7h1v1h-1zM4 7h8v1h-8zM1 8h1v1h-1zM4 8h8v1h-8zM2 9h11v1h-11zM3 10h2v1h-2zM6 10h4v1h-4zM6 11h4v1h-4zM5 12h2v1h-2zM9 12h1v1h-1zM6 13h1v1h-1zM7 14h1v1h-1z" fill="#2E9E5B"/>
+</svg>

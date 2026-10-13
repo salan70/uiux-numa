@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>優勝</title>
+  <path id="part-pennant-ink" d="M1 0h1v1h-1zM3 0h1v1h-1zM0 1h1v1h-1zM4 1h1v1h-1zM1 2h1v1h-1zM3 2h10v1h-10zM1 3h2v1h-2zM13 3h1v1h-1zM1 4h2v1h-2zM14 4h1v1h-1zM1 5h2v1h-2zM14 5h1v1h-1zM1 6h2v1h-2zM13 6h1v1h-1zM1 7h2v1h-2zM13 7h1v1h-1zM1 8h2v1h-2zM14 8h1v1h-1zM1 9h2v1h-2zM15 9h1v1h-1zM1 10h1v1h-1zM3 10h12v1h-12zM1 11h1v1h-1zM3 11h1v1h-1zM1 12h1v1h-1zM3 12h1v1h-1zM1 13h1v1h-1zM3 13h1v1h-1zM1 14h1v1h-1zM3 14h1v1h-1zM1 15h1v1h-1zM3 15h1v1h-1z" fill="#1F1F1F"/>
+  <path id="part-pennant-white" d="M6 5h2v1h-2zM6 6h3v1h-3zM6 7h2v1h-2z" fill="#FEFEFE"/>
+  <path id="part-pennant-yellow" d="M2 0h1v1h-1zM1 1h3v1h-3zM2 2h1v1h-1zM4 11h1v1h-1zM6 11h1v1h-1zM8 11h1v1h-1zM10 11h1v1h-1z" fill="#FAC400"/>
+  <path id="part-pennant-coral" d="M3 3h10v1h-10zM3 4h11v1h-11zM3 5h3v1h-3zM8 5h6v1h-6zM3 6h3v1h-3zM9 6h4v1h-4zM3 7h3v1h-3zM8 7h5v1h-5zM3 8h11v1h-11zM3 9h12v1h-12z" fill="#F37252"/>
+  <path id="part-pennant-brown" d="M2 10h1v1h-1zM2 11h1v1h-1zM2 12h1v1h-1zM2 13h1v1h-1zM2 14h1v1h-1zM2 15h1v1h-1z" fill="#C27A3A"/>
+</svg>

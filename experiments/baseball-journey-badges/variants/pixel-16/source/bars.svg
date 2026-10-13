@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>能力</title>
+  <path id="part-bars-ink" d="M9 0h3v1h-3zM8 1h1v1h-1zM12 1h1v1h-1zM8 2h1v1h-1zM12 2h1v1h-1zM8 3h1v1h-1zM12 3h1v1h-1zM8 4h1v1h-1zM12 4h1v1h-1zM8 5h1v1h-1zM12 5h1v1h-1zM8 6h1v1h-1zM12 6h1v1h-1zM5 7h4v1h-4zM12 7h1v1h-1zM4 8h1v1h-1zM8 8h1v1h-1zM12 8h4v1h-4zM1 9h4v1h-4zM8 9h1v1h-1zM12 9h1v1h-1zM0 10h1v1h-1zM4 10h1v1h-1zM8 10h1v1h-1zM12 10h1v1h-1zM0 11h1v1h-1zM4 11h1v1h-1zM8 11h1v1h-1zM12 11h1v1h-1zM0 12h1v1h-1zM4 12h1v1h-1zM8 12h1v1h-1zM12 12h1v1h-1zM0 13h1v1h-1zM4 13h1v1h-1zM8 13h1v1h-1zM12 13h1v1h-1zM0 14h1v1h-1zM4 14h1v1h-1zM8 14h1v1h-1zM12 14h1v1h-1zM1 15h3v1h-3zM5 15h3v1h-3zM9 15h3v1h-3zM13 15h3v1h-3z" fill="#1F1F1F"/>
+  <path id="part-bars-yellow" d="M9 1h3v1h-3zM9 2h3v1h-3zM9 3h3v1h-3zM9 4h3v1h-3zM9 5h3v1h-3zM9 6h3v1h-3zM9 7h3v1h-3zM9 8h3v1h-3zM9 9h3v1h-3zM9 10h3v1h-3zM9 11h3v1h-3zM9 12h3v1h-3zM9 13h3v1h-3zM9 14h3v1h-3z" fill="#FAC400"/>
+  <path id="part-bars-gray" d="M5 8h3v1h-3zM5 9h3v1h-3zM13 9h3v1h-3zM1 10h3v1h-3zM5 10h3v1h-3zM13 10h3v1h-3zM1 11h3v1h-3zM5 11h3v1h-3zM13 11h3v1h-3zM1 12h3v1h-3zM5 12h3v1h-3zM13 12h3v1h-3zM1 13h3v1h-3zM5 13h3v1h-3zM13 13h3v1h-3zM1 14h3v1h-3zM5 14h3v1h-3zM13 14h3v1h-3z" fill="#9AA19D"/>
+</svg>

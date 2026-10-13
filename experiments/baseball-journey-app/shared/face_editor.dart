@@ -97,12 +97,6 @@ class FaceEditor extends StatelessWidget {
           selected: face.hairColor,
           onSelected: (i) => onChanged(face.copyWith(hairColor: i)),
         ),
-        label('眉'),
-        choices<Brow>('眉', Brow.values, (b) => switch (b) {
-          Brow.none => 'なし',
-          Brow.thin => '細い',
-          Brow.thick => '太い',
-        }, face.brow, (b) => face.copyWith(brow: b)),
         label('目'),
         choices<Eyes>('目', Eyes.values, (e) => switch (e) {
           Eyes.dot => '点',

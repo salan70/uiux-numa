@@ -51,7 +51,8 @@ const hairColors = [Color(0xFF231A14), Color(0xFF6B4226), Color(0xFFE2B640), Col
 const skinColors = _skins;
 
 /// 顔の部品を、基の胸像に重ねる（D-37）。h: 髪とひげ、g: 眼鏡の枠、q: レンズの光、l: 色の付いたレンズ、x: 無精ひげ。
-/// 顔は 4〜11 列、目は 7 行目の 5 列と 9 列、口は 9 行目。帽子のつばの下の 6 行目に眉と前髪を置く。
+/// 顔は 4〜11 列、目は 7 行目の 5 列と 9 列、口は 9 行目。帽子のつばの下の 6 行目に前髪を置く。
+/// 眉は 2 画素しか変わらず見分けの手がかりにならないので、部品から外した（baseball-journey-badges の round 3）。
 List<String> faceSprite(Face face) {
   final rows = [for (final r in _sprite) r.split('')];
   void set(int y, int x, String c) => rows[y][x] = c;
@@ -77,17 +78,6 @@ List<String> faceSprite(Face face) {
       set(10, 11, 'h');
       set(10, 3, 'k');
       set(10, 12, 'k');
-  }
-  switch (face.brow) {
-    case Brow.none:
-      break;
-    case Brow.thin:
-      set(6, 5, 'h');
-      set(6, 9, 'h');
-    case Brow.thick:
-      for (final x in const [4, 5, 9, 10]) {
-        set(6, x, 'h');
-      }
   }
   switch (face.eyes) {
     case Eyes.dot:

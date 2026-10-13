@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>やきう選手物語 選手の顔</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* layout: 1 列の読み物。見本はアプリのライト配色の「画面パネル」に置き、ページの外枠だけ配色に追従する */
+:root{
+  --bg:#F3F4F3; --panel:#FEFEFE; --fg:#1F1F1F; --muted:#4D4D4D; --edge:#1F1F1F; --soft:#E4E7E5;
+  --font:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --a-bg:#F8F9F9; --a-surface:#FEFEFE; --a-ink:#1F1F1F; --a-sub:#4D4D4D; --a-cont:#EFF0F0;
+  --a-yellow-c:#FAF1D1; --a-blue-c:#D4E0F7; --a-coral-c:#FAD9D1; --a-yellow:#FAC400; --a-coral:#F37252;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.75;padding-inline:16px;padding-block:24px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:44px}
+h1{font-size:28px;line-height:1.3;margin:0;font-weight:800;text-wrap:balance}
+h2{font-size:21px;line-height:1.3;margin:0 0 12px;font-weight:800}
+h3{font-size:16px;margin:0;font-weight:800}
+p{margin:0;max-width:68ch}
+.lead{color:var(--muted);margin-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.note{font-size:13px;color:var(--muted)}
+.card{background:var(--panel);border:3px solid var(--edge);border-radius:12px;padding:20px;display:grid;gap:14px;min-width:0}
+.app{background:var(--a-bg);color:var(--a-ink);border-radius:10px;padding:14px;border:1px solid var(--soft)}
+.scroll{overflow-x:auto}
+table{border-collapse:separate;border-spacing:0 6px;color:var(--a-ink);font-size:inherit}
+th{font-size:12px;font-weight:800;text-align:left;padding-right:14px;white-space:nowrap;vertical-align:middle}
+td{padding:0 6px;vertical-align:top}
+.av{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px}
+.av svg{display:block}
+.av span{font-size:11px;line-height:1.3;color:var(--a-sub);white-space:nowrap}
+.av b{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+.lineup{display:flex;flex-wrap:wrap;gap:10px}
+.rowlabel{font-size:12px;font-weight:800;margin:4px 0 6px}
+.mocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px}
+.mock{display:grid;gap:12px;align-content:start}
+.hof{background:var(--a-surface);border:3px solid var(--a-ink);border-radius:12px;box-shadow:5px 5px 0 var(--a-ink);padding:12px 16px;display:flex;align-items:center;gap:12px;color:var(--a-ink)}
+.rank{width:32px;height:32px;display:grid;place-items:center;border:2px solid var(--a-ink);border-radius:6px;font-weight:800;font-size:20px;flex:none}
+.rail{width:6px;height:44px;border:2px solid var(--a-ink);border-radius:4px;flex:none}
+.who{flex:1;min-width:0;line-height:1.4}
+.who .nm{font-weight:800;font-size:17px}
+.who .ps{font-size:13px;color:var(--a-sub)}
+.who .ps b{color:var(--a-ink)}
+.score{text-align:right;line-height:1.3}
+.score b{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
+.score small{display:block;font-size:12px;color:var(--a-sub)}
+.badges{display:flex;gap:12px;flex-wrap:wrap}
+.tile{--s:64px;width:var(--s);height:var(--s);display:grid;place-items:center;border:2px solid var(--a-ink);border-radius:calc(var(--s)*.16);box-shadow:3px 3px 0 var(--a-ink);flex:none}
+.tile svg{display:block}
+.find{display:grid;gap:8px}
+.find li{margin:0}
+ul{margin:0;padding-left:1.2em}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">選手画像とバッジ ・ round 2 ・ <a href="./" style="color:inherit">バッジとショップ絵へ</a></div>
+    <h1>やきう選手物語 選手の顔</h1>
+    <p class="lead">今の 16 × 16、それを整えた 16 改、描き込みを増やした 24 × 24 の 3 通りで、カスタマイズの効き方と並べたときの見分けやすさを比べます。顔の項目と選択肢は今の製品と同じにしています。</p>
+  </header>
+
+  <section class="card" id="findings">
+    <h2 style="margin:0">見てほしいところ</h2>
+    <ul class="find">
+      <li><b>決定（round 3）：</b>顔は今の 16 × 16 のまま。眉の項目は廃止し、下の見本からも外しました。</li>
+      <li><b>升目を細かくするだけでは差は広がらない。</b>各見本の下の数字は、基本の顔から変わった画素の数です。目は今の 16 で 2 画素、24 でも 4〜5 画素。48px での面積に直すと 18px² と 16〜20px² で、ほぼ同じです。眉も同じ傾向です。</li>
+      <li><b>差が出るのは、輪郭か広い面を変える項目。</b>長髪（今の 16 で 20 画素、24 で 57）、ひげ全体（12 と 26）、眼鏡（7 と 32〜36）、肌、髪の色。12 人の並びで見分けの手がかりになっているのも、この項目です。</li>
+      <li><b>次の一手は、項目を「面積で効くもの」に組み替えること。</b>例：目と眉を 1 つの「目元」にまとめて 3〜4 行ぶんを変える。顔の形（丸、面長、角）、帽子のかぶり方、体格を足す。効かない選択肢は減らす。この組み替えは 16 でも 24 でもできます。</li>
+      <li><b>16 改</b>は、耳を出して輪郭を変え、目を縦 2 画素にし、袖を球団の色にした案です。升目が同じなので、製品の PixelArt はそのまま使えます。<b>24</b> は眼鏡と表情を描き込めますが、1 画素が 2px になるので、バッジと粗さを揃えるにはバッジの台を 48px にするか、バッジも 24 で描き直します。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>1. 項目を 1 つずつ変えたとき（48px）</h2>
+    <p class="note" style="margin-bottom:12px">基本の顔：坊主、点の目、ひげなし、眼鏡なし、肌 2、黒髪、北斗ライナーズ（青）。</p>
+    <div class="card" id="items"></div>
+  </section>
+
+  <section>
+    <h2>2. 12 人を並べたとき（48px）</h2>
+    <div class="card" id="lineups"></div>
+  </section>
+
+  <section>
+    <h2>3. 殿堂カードと実績バッジに並べたとき</h2>
+    <p class="note" style="margin-bottom:12px">顔とバッジのドットの粗さを揃えた組み合わせです。16 改は顔 48px とバッジの台 64px（どちらも 1 画素 3px）、24 は顔 48px とバッジの台 48px（どちらも 1 画素 2px）。</p>
+    <div class="mocks" id="mocks"></div>
+  </section>
+</main>
+
+<script src="badge-grids.js"></script>
+<script src="pixel-badges.js"></script>
+<script>
+const INK='#120D09',PAPER='#FFFDF9';
+const SKINS=['#F8DCC0','#F5CFA8','#E8B48A','#C98D62','#A86D45','#7A4B2E'];
+const HAIRS=['#231A14','#6B4226','#E2B640','#B4442A','#E9E6DF'];
+const TEAMS=[['北斗ライナーズ','#4078E0'],['湾岸ドルフィンズ','#F37252'],['青葉スターズ','#2E8B57'],['サンセット・ウェーブス','#FAC400']];
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,t)=>'#'+hex(a).map((v,i)=>Math.round(v+(hex(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+function palette(f,team){const s=SKINS[f.skin];return{k:INK,c:team,b:mix(team,INK,.45),w:team==='#FAC400'?INK:PAPER,s,h:HAIRS[f.hairColor],g:INK,l:'#1E2A3A',q:'#CFE6F2',x:mix(s,INK,.25),o:mix(s,INK,.16),e:INK,p:'#F39A82',m:'#B5452E',u:PAPER,n:team,a:team}}
+const grid=rows=>rows.map(r=>r.split(''));
+const rep=(c,n)=>c.repeat(n);
+
+/* ---- 今の 16（baseball-journey-app/shared/pixel.dart の写し） ---- */
+const CUR16=['................','.....kkkkkk.....','....kcccccck....','...kcccwwccck...','...kcccccccck...','...kbbbbbbbbbbk.','...kssssssssk...','...ksesssessk...','...kpssssspsk...','...ksssmmsssk...','....kssssssk....','......kssk......','...kkuuuuuukk...','..kuuuunnuuuuk..','.kuuuuunnuuuuuk.','.kuuuuunnuuuuuk.'];
+function cur16(f){const r=grid(CUR16),set=(y,x,c)=>r[y][x]=c;
+  if(f.hair==='sideburns')for(const[y,x]of[[6,4],[7,4],[6,11],[7,11]])set(y,x,'h');
+  if(f.hair==='bangs')for(const[y,x]of[[6,4],[6,6],[6,7],[6,8],[6,11]])set(y,x,'h');
+  if(f.hair==='long'){for(let y=6;y<=9;y++){set(y,3,'h');set(y,12,'h');set(y,2,'k');set(y,13,'k')}set(10,4,'h');set(10,11,'h');set(10,3,'k');set(10,12,'k')}
+  if(f.brow==='thin'){set(6,5,'h');set(6,9,'h')}
+  if(f.brow==='thick')for(const x of[4,5,9,10])set(6,x,'h');
+  if(f.eyes==='narrow'){set(7,6,'e');set(7,10,'e')}
+  if(f.eyes==='round'){set(8,5,'e');set(8,9,'e')}
+  if(f.beard==='mustache'||f.beard==='full')for(let x=6;x<=9;x++)set(8,x,'h');
+  if(f.beard==='chin'||f.beard==='full'){for(let x=5;x<=10;x++)set(10,x,'h');set(11,7,'h');set(11,8,'h')}
+  if(f.beard==='stubble')for(const[y,x]of[[9,5],[9,10],[10,6],[10,9]])set(y,x,'x');
+  if(f.glasses==='glasses'){for(const x of[4,6,7,8,10])set(7,x,'g');set(7,5,'q');set(7,9,'q')}
+  if(f.glasses==='sunglasses'){for(const x of[4,5,6,8,9,10])set(7,x,'l');set(7,7,'g')}
+  return r;
+}
+
+/* ---- 16 改：耳、縦 2 画素の目、球団色の袖 ---- */
+const NEW16=['................','.....kkkkkk.....','....kcccccck....','...kcccwwccck...','...kcccccccck...','...kbbbbbbbbbbk.',
+  '..kk'+rep('s',8)+'kk..','.ksk'+rep('s',8)+'ksk.','.ksk'+rep('s',8)+'ksk.','..kk'+rep('s',8)+'kk..','....k'+rep('s',6)+'k....','......kssk......',
+  '...kkuunnuukk...','..ka'+rep('u',8)+'ak..','.kaa'+rep('u',5)+'nnuaak.','.kaa'+rep('u',5)+'nnuaak.'];
+function new16(f){const r=grid(NEW16),set=(y,x,c)=>r[y][x]=c;
+  set(9,4,'p');set(9,11,'p');set(9,7,'m');set(9,8,'m');
+  if(f.hair==='sideburns')for(let y=6;y<=9;y++){set(y,3,'h');set(y,12,'h');if(y===7||y===8){set(y,2,'h');set(y,13,'h')}}
+  if(f.hair==='bangs')for(const x of[4,5,7,8,10,11])set(6,x,'h');
+  if(f.hair==='long'){for(let y=6;y<=10;y++){set(y,1,'k');set(y,2,'h');set(y,3,'h');set(y,12,'h');set(y,13,'h');set(y,14,'k')}for(const x of[2,3,12,13])set(11,x,'k')}
+  if(f.brow==='thin'){set(6,5,'h');set(6,10,'h')}
+  if(f.brow==='thick')for(const x of[4,5,6,9,10,11])set(6,x,'h');
+  if(f.eyes==='dot')for(const[y,x]of[[7,5],[8,5],[7,10],[8,10]])set(y,x,'e');
+  if(f.eyes==='narrow')for(const x of[5,6,9,10])set(8,x,'e');
+  if(f.eyes==='round'){for(const y of[7,8])for(const x of[5,6,9,10])set(y,x,'e');set(7,5,'q');set(7,9,'q')}
+  if(f.beard==='mustache'||f.beard==='full')for(let x=6;x<=9;x++)set(9,x,'h');
+  if(f.beard==='chin'||f.beard==='full'){for(let x=5;x<=10;x++)set(10,x,'h');set(11,7,'h');set(11,8,'h')}
+  if(f.beard==='full')for(const[y,x]of[[8,4],[9,4],[8,11],[9,11]])set(y,x,'h');
+  if(f.beard==='stubble')for(const[y,x]of[[9,5],[9,10],[10,6],[10,9]])set(y,x,'x');
+  if(f.glasses==='glasses'){[...'gqqggqqg'].forEach((c,i)=>set(7,4+i,c))}
+  if(f.glasses==='sunglasses'){for(const y of[7,8])for(const x of[4,5,6,9,10,11])set(y,x,'l');set(7,7,'g');set(7,8,'g')}
+  return r;
+}
+
+/* ---- 24：顔の幅 12、耳、2 × 2 の目の枠、眼鏡の枠 ---- */
+const B24=[rep('.',24),rep('.',9)+rep('k',6)+rep('.',9),rep('.',7)+'kk'+rep('c',6)+'kk'+rep('.',7),
+  rep('.',6)+'kccccwwcccck'+rep('.',6),rep('.',5)+'kcccccwwccccck'+rep('.',5),rep('.',5)+'k'+rep('c',12)+'k'+rep('.',5),
+  rep('.',4)+'k'+rep('c',14)+'k'+rep('.',4),rep('.',4)+'k'+rep('c',14)+'k'+rep('.',4),rep('.',4)+'k'+rep('b',18)+'k',
+  rep('.',5)+'k'+rep('s',12)+'kkkkk.'.slice(0,5)+'.',
+  '....kk'+rep('s',12)+'kk....','...ksk'+rep('s',12)+'ksk...','...ksk'+rep('s',12)+'ksk...','...ksk'+rep('s',12)+'ksk...',
+  '....kk'+rep('s',12)+'kk....','.....k'+rep('s',12)+'k.....','.....k'+rep('s',12)+'k.....','......k'+rep('s',10)+'k......',
+  '.......kkkssssk kk.......'.replace(' ',''),'....kkuuuunssnuuuukk....','...kuuuuuuunnuuuuuuuk...',
+  '..kaa'+rep('u',14)+'aak..','.kaaa'+rep('u',8)+'nn'+rep('u',4)+'aaak.','.kaaa'+rep('u',8)+'nn'+rep('u',4)+'aaak.'];
+B24.forEach((r,i)=>{if(r.length!==24)throw new Error('B24 row '+i+' '+r.length)});
+function face24(f){const r=grid(B24),set=(y,x,c)=>r[y][x]=c;
+  set(15,7,'p');set(15,16,'p');set(16,11,'m');set(16,12,'m');set(14,12,'o');
+  if(f.hair==='sideburns')for(let y=9;y<=14;y++){set(y,6,'h');set(y,17,'h')}
+  if(f.hair==='bangs'){for(let x=6;x<=17;x++)set(9,x,'h');for(const x of[6,7,9,10,13,14,16,17])set(10,x,'h')}
+  if(f.hair==='long'){for(let y=9;y<=17;y++){set(y,2,'k');set(y,3,'h');set(y,4,'h');set(y,19,'h');set(y,20,'h');set(y,21,'k')}for(const x of[3,4,19,20])set(18,x,'k')}
+  if(f.brow==='thin')for(const x of[8,9,14,15])set(10,x,'h');
+  if(f.brow==='thick'){for(const x of[7,8,9,14,15,16])set(10,x,'h');set(11,9,'h');set(11,14,'h')}
+  if(f.eyes==='dot')for(const[y,x]of[[12,9],[13,9],[12,14],[13,14]])set(y,x,'e');
+  if(f.eyes==='narrow')for(const x of[8,9,14,15])set(13,x,'e');
+  if(f.eyes==='round'){for(const y of[12,13])for(const x of[8,9,14,15])set(y,x,'e');set(12,8,'q');set(12,14,'q')}
+  if(f.beard==='mustache'||f.beard==='full')for(let x=10;x<=13;x++)set(15,x,'h');
+  if(f.beard==='chin'||f.beard==='full'){for(let x=8;x<=15;x++)set(17,x,'h');for(let x=10;x<=13;x++)set(18,x,'h')}
+  if(f.beard==='full'){for(let y=13;y<=16;y++){set(y,6,'h');set(y,17,'h')}set(17,7,'h');set(17,16,'h')}
+  if(f.beard==='stubble')for(const[y,x]of[[15,9],[15,14],[16,8],[16,15],[17,10],[17,13]])set(y,x,'x');
+  if(f.glasses!=='none'){const sun=f.glasses==='sunglasses';
+    for(const x0 of[7,13]){for(let y=11;y<=14;y++)for(let x=x0;x<=x0+3;x++){const edge=y===11||y===14||x===x0||x===x0+3;
+      if(edge)set(y,x,'g');else if(sun||r[y][x]!=='e')set(y,x,sun?'l':'q')}}
+    set(12,11,'g');set(12,12,'g');set(12,6,'g');set(12,17,'g')}
+  return r;
+}
+
+const REND={cur:{name:'今の 16',fn:cur16,n:16},n16:{name:'16 改',fn:new16,n:16},r24:{name:'24',fn:face24,n:24}};
+function svg(g,pal,px){let o='';const n=g.length;
+  g.forEach((row,y)=>{let x=0;while(x<n){const c=row[x];if(c==='.'){x++;continue}let e=x;while(e<n&&row[e]===c)e++;o+=`<rect x="${x}" y="${y}" width="${e-x}" height="1" fill="${pal[c]}"/>`;x=e}});
+  return `<svg width="${px}" height="${px}" viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges" aria-hidden="true">${o}</svg>`}
+const diff=(a,b,pa,pb)=>a.reduce((s,row,y)=>s+row.filter((c,x)=>(c==='.'?'':pa[c])!==(b[y][x]==='.'?'':pb[b[y][x]])).length,0);
+
+const BASE={hair:'shaved',brow:'none',eyes:'dot',beard:'none',glasses:'none',skin:1,hairColor:0};
+const ITEMS=[
+  ['髪型','hair',[['shaved','坊主'],['sideburns','もみあげ'],['bangs','前髪'],['long','長髪']]],
+  ['目','eyes',[['dot','点'],['narrow','細目'],['round','丸']]],
+  ['ひげ','beard',[['none','なし'],['mustache','口ひげ'],['chin','あご'],['full','全体'],['stubble','無精']]],
+  ['眼鏡','glasses',[['none','なし'],['glasses','眼鏡'],['sunglasses','サングラス']]],
+  ['肌','skin',[0,1,2,3,4,5].map(i=>[i,String(i+1)])],
+  ['髪の色','hairColor',[[0,'黒'],[1,'茶'],[2,'金'],[3,'赤'],[4,'白']],{hair:'long'}],
+];
+const team=TEAMS[0][1];
+document.getElementById('items').innerHTML=ITEMS.map(([label,key,opts,extra])=>{
+  const base={...BASE,...(extra||{})};
+  const rows=Object.values(REND).map(rd=>{
+    const pb=palette(base,team),gb=rd.fn(base);
+    const cells=opts.map(([v,t])=>{const f={...base,[key]:v},p=palette(f,team),g=rd.fn(f);const d=diff(gb,g,pb,p);
+      return `<td><div class="av">${svg(g,p,48)}<span>${t}</span><b>${d?d+' 画素':'基本'}</b></div></td>`}).join('');
+    return `<tr><th>${rd.name}</th>${cells}</tr>`}).join('');
+  return `<div><h3>${label}${extra?'<span class="note">（長髪で比較）</span>':''}</h3><div class="app scroll"><table>${rows}</table></div></div>`}).join('');
+
+/* 12 人 */
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=rng(389),pick=a=>a[Math.floor(rnd()*a.length)];
+const PEOPLE=[...Array(12)].map(()=>({face:{hair:pick(['shaved','sideburns','bangs','long']),eyes:pick(['dot','narrow','round']),
+  beard:pick(['none','none','mustache','chin','full','stubble']),glasses:pick(['none','none','glasses','sunglasses']),skin:Math.floor(rnd()*6),hairColor:Math.floor(rnd()*5)},team:pick(TEAMS)[1]}));
+document.getElementById('lineups').innerHTML=Object.values(REND).map(rd=>
+  `<div><div class="rowlabel">${rd.name}</div><div class="app lineup">${PEOPLE.map(p=>svg(rd.fn(p.face),palette(p.face,p.team),48)).join('')}</div></div>`).join('');
+
+/* 殿堂カードとバッジ */
+const MOCKP=[{nm:'柳原 湊斗',ps:'三塁手',rk:'名選手',sc:'6,821',rank:1,rc:'#F37252',p:PEOPLE[0]},{nm:'甲斐 郁也',ps:'捕手',rk:'スター',sc:'4,180',rank:2,rc:'#FAC400',p:PEOPLE[5]}];
+const BADGE4=[['hit','#FAF1D1'],['hr','#FAF1D1'],['crown','#D4E0F7'],['hall','#FAD9D1']];
+const card=(m,rd)=>`<div class="hof"><div class="rank" style="background:${m.rc}">${m.rank}</div><div class="rail" style="background:${m.p.team}"></div>
+  ${svg(rd.fn(m.p.face),palette(m.p.face,m.p.team),48)}<div class="who"><div class="nm">${m.nm}</div><div class="ps">${m.ps}　<b>${m.rk}</b></div></div>
+  <div class="score"><b>${m.sc}</b><small>通算スコア</small></div></div>`;
+document.getElementById('mocks').innerHTML=[['n16',64,48],['r24',48,32]].map(([id,ts,ms])=>{const rd=REND[id];
+  return `<div class="mock"><h3>${rd.name}：顔 48px ／ バッジの台 ${ts}px</h3><div class="app" style="display:grid;gap:16px">${MOCKP.map(m=>card(m,rd)).join('')}
+  <div class="badges">${BADGE4.map(([k,bg])=>`<div class="tile" style="--s:${ts}px;background:${bg}">${pixSvg(k,ms)}</div>`).join('')}</div></div></div>`}).join('');
+</script>

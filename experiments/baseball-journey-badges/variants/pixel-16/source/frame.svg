@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>フレーミング</title>
+  <path id="part-frame-ink" d="M1 0h10v1h-10zM0 1h1v1h-1zM11 1h1v1h-1zM0 2h1v1h-1zM11 2h1v1h-1zM0 3h1v1h-1zM11 3h1v1h-1zM0 4h1v1h-1zM11 4h1v1h-1zM0 5h1v1h-1zM11 5h1v1h-1zM0 6h1v1h-1zM11 6h1v1h-1zM0 7h1v1h-1zM9 7h5v1h-5zM0 8h1v1h-1zM8 8h1v1h-1zM14 8h1v1h-1zM0 9h1v1h-1zM7 9h1v1h-1zM15 9h1v1h-1zM0 10h1v1h-1zM7 10h1v1h-1zM15 10h1v1h-1zM0 11h1v1h-1zM7 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM7 12h1v1h-1zM15 12h1v1h-1zM1 13h7v1h-7zM15 13h1v1h-1zM8 14h1v1h-1zM14 14h1v1h-1zM9 15h5v1h-5z" fill="#1F1F1F"/>
+  <path id="part-frame-white" d="M1 1h3v1h-3zM5 1h2v1h-2zM8 1h3v1h-3zM1 2h3v1h-3zM5 2h2v1h-2zM8 2h3v1h-3zM1 3h3v1h-3zM5 3h2v1h-2zM8 3h3v1h-3zM1 5h3v1h-3zM5 5h2v1h-2zM8 5h3v1h-3zM1 6h3v1h-3zM5 6h2v1h-2zM8 6h3v1h-3zM1 7h3v1h-3zM5 7h2v1h-2zM8 7h1v1h-1zM1 9h3v1h-3zM5 9h2v1h-2zM1 10h3v1h-3zM5 10h2v1h-2zM1 11h3v1h-3zM5 11h2v1h-2zM11 11h2v1h-2zM1 12h3v1h-3zM5 12h2v1h-2zM11 12h2v1h-2z" fill="#FEFEFE"/>
+  <path id="part-frame-brown" d="M9 8h5v1h-5zM8 9h7v1h-7zM8 10h7v1h-7zM8 11h3v1h-3zM13 11h2v1h-2zM8 12h3v1h-3zM13 12h2v1h-2zM8 13h7v1h-7zM9 14h5v1h-5z" fill="#C27A3A"/>
+  <path id="part-frame-gray" d="M4 1h1v1h-1zM7 1h1v1h-1zM4 2h1v1h-1zM7 2h1v1h-1zM4 3h1v1h-1zM7 3h1v1h-1zM1 4h10v1h-10zM4 5h1v1h-1zM7 5h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM4 7h1v1h-1zM7 7h1v1h-1zM1 8h7v1h-7zM4 9h1v1h-1zM4 10h1v1h-1zM4 11h1v1h-1zM4 12h1v1h-1z" fill="#9AA19D"/>
+</svg>

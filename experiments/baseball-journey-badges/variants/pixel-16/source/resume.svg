@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" shape-rendering="crispEdges">
+  <title>三つの経歴</title>
+  <path id="part-resume-ink" d="M2 1h11v1h-11zM2 2h1v1h-1zM12 2h2v1h-2zM2 3h1v1h-1zM13 3h1v1h-1zM2 4h1v1h-1zM8 4h4v1h-4zM13 4h1v1h-1zM2 5h1v1h-1zM13 5h1v1h-1zM2 6h1v1h-1zM8 6h4v1h-4zM13 6h1v1h-1zM2 7h1v1h-1zM13 7h1v1h-1zM2 8h1v1h-1zM4 8h8v1h-8zM13 8h1v1h-1zM2 9h1v1h-1zM13 9h1v1h-1zM2 10h1v1h-1zM4 10h8v1h-8zM13 10h1v1h-1zM2 11h1v1h-1zM13 11h1v1h-1zM2 12h1v1h-1zM4 12h8v1h-8zM13 12h1v1h-1zM2 13h1v1h-1zM13 13h1v1h-1zM2 14h12v1h-12z" fill="#1F1F1F"/>
+  <path id="part-resume-white" d="M3 2h9v1h-9zM3 3h1v1h-1zM7 3h6v1h-6zM3 4h1v1h-1zM7 4h1v1h-1zM12 4h1v1h-1zM3 5h1v1h-1zM7 5h6v1h-6zM3 6h1v1h-1zM7 6h1v1h-1zM12 6h1v1h-1zM3 7h10v1h-10zM3 8h1v1h-1zM12 8h1v1h-1zM3 9h10v1h-10zM3 10h1v1h-1zM12 10h1v1h-1zM3 11h10v1h-10zM3 12h1v1h-1zM12 12h1v1h-1zM3 13h10v1h-10z" fill="#FEFEFE"/>
+  <path id="part-resume-blue" d="M4 3h3v1h-3zM4 4h1v1h-1zM6 4h1v1h-1zM4 5h3v1h-3zM4 6h3v1h-3z" fill="#4078E0"/>
+  <path id="part-resume-skin" d="M5 4h1v1h-1z" fill="#F5CFA8"/>
+</svg>
