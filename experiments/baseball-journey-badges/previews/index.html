@@ -1,0 +1,139 @@
+<title>やきう選手物語 実績バッジとショップ絵</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* layout: 1 列の読み物。見本はアプリのライト配色の画面パネルに置き、ページの外枠だけ配色に追従する */
+:root{
+  --bg:#F3F4F3; --panel:#FEFEFE; --fg:#1F1F1F; --muted:#4D4D4D; --edge:#1F1F1F; --soft:#E4E7E5;
+  --font:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --a-bg:#F8F9F9; --a-surface:#FEFEFE; --a-ink:#1F1F1F; --a-sub:#4D4D4D; --a-cont:#EFF0F0;
+  --a-yellow-c:#FAF1D1; --a-blue-c:#D4E0F7; --a-coral-c:#FAD9D1; --a-green-c:#D9EEDC; --a-yellow:#FAC400; --a-coral:#F37252; --a-blue:#4078E0;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.75;padding-inline:16px;padding-block:24px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:44px}
+h1{font-size:28px;line-height:1.3;margin:0;font-weight:800;text-wrap:balance}
+h2{font-size:21px;line-height:1.3;margin:0 0 12px;font-weight:800}
+h3{font-size:16px;margin:0;font-weight:800}
+p{margin:0;max-width:68ch}
+.lead{color:var(--muted);margin-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.eyebrow a{color:inherit}
+.note{font-size:13px;color:var(--muted)}
+.card{background:var(--panel);border:3px solid var(--edge);border-radius:12px;padding:20px;display:grid;gap:14px;min-width:0}
+.app{background:var(--a-bg);color:var(--a-ink);border-radius:10px;padding:16px;border:1px solid var(--soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:20px 8px;justify-items:center}
+.cell{display:flex;flex-direction:column;align-items:center}
+.cap{font-size:11px;line-height:1.35;text-align:center;color:var(--a-ink);margin-top:9px;max-width:80px;font-weight:700}
+.cap span{display:block;font-weight:400;color:var(--a-sub)}
+.tile{--s:64px;width:var(--s);height:var(--s);position:relative;display:grid;place-items:center;flex:none;border:2px solid var(--a-ink);border-radius:calc(var(--s)*.16);box-shadow:3px 3px 0 var(--a-ink)}
+.tile svg{display:block}
+.tile.locked{border-color:#A3AAA6;box-shadow:none;background:var(--a-cont)!important}
+.tile.hidden{border-color:#A3AAA6;border-style:dashed;box-shadow:none;background:var(--a-cont)!important;font-size:28px;font-weight:800;color:#A3AAA6}
+.tile.flat{box-shadow:none}
+.tile.todo{border-style:dashed;border-color:#A3AAA6;box-shadow:none;background:var(--a-cont)!important;font-size:10px;color:#8A918D}
+.chip{position:absolute;right:-9px;bottom:-9px;font-weight:800;font-size:12px;line-height:1.35;padding:0 4px;border:2px solid var(--a-ink);border-radius:6px;background:var(--a-surface);color:var(--a-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.first{background:var(--a-coral)}
+.chip.gold{background:var(--a-yellow)}
+.chip small{font-size:9px;margin-right:1px}
+.locked .chip{border-color:#A3AAA6;color:#8A918D;background:var(--a-cont)}
+.phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;justify-items:center}
+.phone{width:min(100%,375px);background:var(--a-bg);color:var(--a-ink);border:1px solid var(--soft);border-radius:24px;padding:20px 16px 28px;display:grid;gap:14px;align-content:start}
+.bar{display:flex;align-items:center;gap:28px;font-size:24px;font-weight:700;padding:4px 4px 8px}
+.bar svg{width:24px;height:24px}
+.chips{display:flex;gap:8px;overflow:hidden}
+.fchip{position:relative;flex:none;border:2px solid var(--a-ink);border-radius:6px;padding:6px 10px;font-weight:700;font-size:13px;background:var(--a-surface)}
+.fchip.on{background:var(--a-blue-c)}
+.sum{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.sum b{font-size:22px;font-variant-numeric:tabular-nums}
+.agrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 6px;justify-items:center}
+.sec{font-size:13px;font-weight:800;color:var(--a-sub);margin-bottom:-4px}
+.wallet{display:flex;justify-content:flex-end}
+.wallet span{border:2px solid var(--a-ink);border-radius:999px;padding:2px 12px;font-weight:800;background:var(--a-yellow-c);font-variant-numeric:tabular-nums}
+.item{background:var(--a-surface);border:3px solid var(--a-ink);border-radius:12px;box-shadow:5px 5px 0 var(--a-ink);padding:10px 12px;display:flex;align-items:center;gap:12px}
+.item .who{flex:1;min-width:0}
+.item .nm{font-weight:800;font-size:16px;line-height:1.35}
+.pips{display:flex;gap:3px;margin-top:4px}
+.pips i{width:12px;height:8px;border:2px solid var(--a-ink);border-radius:2px;background:var(--a-surface)}
+.pips i.on{background:var(--a-yellow)}
+.item .pr{font-weight:800;font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.item .pr small{font-size:11px;color:var(--a-sub);margin-left:2px}
+.rules{list-style:none;padding:0;margin:0;display:grid;gap:10px;counter-reset:r}
+.rules li{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start}
+.rules li::before{counter-increment:r;content:counter(r);display:grid;place-items:center;width:28px;height:28px;border:2px solid var(--edge);border-radius:6px;font-weight:800;background:var(--a-yellow);color:#1F1F1F}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">ですてにい版 113 種 ・ round 6 ・ <a href="redo.html">作り直した 10 絵柄</a> ・ <a href="catalog.html">113 種の体系</a> ・ <a href="avatars.html">選手の顔</a> ・ <a href="round1.html">round 1 の方向比較</a></div>
+    <h1>やきう選手物語 実績バッジとショップ絵</h1>
+    <p class="lead">数は画像に入れず画面の札で重ねる A 案で、実績 95 種とショップ 18 種に要る 54 の絵柄をすべて描きました。</p>
+  </header>
+
+  <section>
+    <h2>1. 描いた 54 の絵柄</h2>
+    <div class="card"><div class="app"><div class="grid" id="motifs"></div></div>
+    <p class="note">台の色はカテゴリ：記録・成績 = 黄、タイトル・栄誉 = 青、キャリア・人生 = 緑、育成・挑戦 = 珊瑚。ショップは薄い灰。</p></div>
+  </section>
+
+  <section>
+    <h2>2. 画面に並べたとき</h2>
+    <div class="phones">
+      <div class="phone" id="ach"></div>
+      <div class="phone" id="shop"></div>
+    </div>
+    <p class="note" style="margin-top:12px">進捗、価格、所持 CP は見え方を確かめるための仮の値です。ショップの破線は未作成の絵柄です。</p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin:0">3. 量産の決まり（A 案）</h2>
+    <ol class="rules">
+      <li><div><b>絵柄は種目で 1 つ。</b>季と通算、10 本と 60 本は同じ絵柄を使い、数は右下の札に書く。通算は黄色の札に「通算」、初回は珊瑚の「初」、回数は「× 3」、タイトルは黄色の「王」。</div></li>
+      <li><div><b>複合記録は主な種目の絵柄に、名前の数を札で重ねる。</b>20-20 クラブは本塁打の絵柄に「20-20」。2 つ目の絵柄は描き足さない。</div></li>
+      <li><div><b>台の色はカテゴリの 4 色。</b>判定範囲（選手、プレイヤー全体）と隠し実績の印は台の色に使わない。</div></li>
+      <li><div><b>状態は台で表す。</b>未獲得は灰の 2 階調で影なし、形は見せる。隠し実績は未獲得の間「？」の破線の台にし、獲得後に絵柄を出す。</div></li>
+      <li><div><b>ショップは 1 能力 1 絵柄。</b>+1〜+5 は絵柄を変えず、名前の下の 5 つの升で示す。</div></li>
+      <li><div><b>升目は 16 × 16、輪郭は 1 升の墨、色は 9 色。</b>顔（選手画像）と同じ升目なので、48px の顔と 64px の台でドットの粗さが揃う。</div></li>
+    </ol>
+  </section>
+</main>
+
+<script src="badge-grids.js"></script>
+<script src="pixel-badges.js"></script>
+<script>
+const CAT={rec:'var(--a-yellow-c)',title:'var(--a-blue-c)',life:'var(--a-green-c)',grow:'var(--a-coral-c)',shop:'var(--a-cont)'};
+const MOT=[['hit','安打','rec',11],['home-run','本塁打','rec',22],['steal','盗塁','rec',7],['rbi','打点','rec',2],['avg','打率','rec',1],['triple-crown','三冠王','rec',1],
+  ['mvp','MVP','title',5],['golden-glove','ゴールデングラブ','title',3],['all-star','オールスター','title',3],['rookie','新人王','title',1],['hall-of-fame','殿堂','title',6],['diamond','守備位置','title',3],
+  ['calendar','現役年数','life',4],['bird','渡り鳥','life',1],['bars','能力','grow',4],['sprout','伸び盛り','grow',1],['fan','大型扇風機','rec',1],['chest','宝の持ち腐れ','grow',1],
+  ['power','パワー','shop',1],['winged-spike','スピード','shop',1],['catch','捕球','shop',1],['flame-heart','メンタル','shop',1],
+  ['ops','OPS','rec',1],['eye','選球眼','rec',2],['best-nine','ベストナイン','title',1],['pennant','優勝','title',1],['horseshoe','無事是名馬','life',1],['tower','出場試合','life',2],['stairs','二軍から頂点','life',1],['scoreboard','通算スコア','life',2],['tape','記録破り','life',1],['books','記録の山','life',1],['bars3','複数の能力','grow',1],['tree','大器晩成','grow',1],['radar','総合力','grow',2],['radar-full','全能力','grow',2],['resume','三つの経歴','title',1],['wind','疾風','rec',1],['fang','怪物新人','rec',1],['no-k','三振しない','rec',1],['cake','45 歳','rec',1],['contact','コンタクト','shop',1],['swing','打撃技術','shop',1],['slide','盗塁技術','shop',1],['route','走塁技術','shop',1],['pin','ポジショニング','shop',1],['range','守備範囲','shop',1],['arm','肩力','shop',1],['target','送球','shop',1],['protector','ブロッキング','shop',1],['frame','フレーミング','shop',1],['mask','リード','shop',1],['shield','ケガ耐性','shop',1],['first-aid','回復','shop',1]];
+function tile(m,cat,{chip='',cls='',locked=false,s=64}={}){
+  const n=Math.max(1,Math.floor(s*.75/16));
+  const c=chip?`<span class="chip${chip.startsWith('初')?' first':/通算|王/.test(chip)?' gold':''}">${chip.replace('通算 ','<small>通算</small>')}</span>`:'';
+  return `<div class="tile${locked?' locked':''}${cls?' '+cls:''}" style="--s:${s}px;background:${CAT[cat]}">${pixSvg(m,n*16,locked)}${c}</div>`}
+document.getElementById('motifs').innerHTML=MOT.map(([m,nm,cat,n])=>`<div class="cell">${tile(m,cat)}<div class="cap">${nm}<span>${{rec:'記録・成績',title:'タイトル',life:'キャリア',grow:'育成・挑戦',shop:'ショップ'}[cat]}</span></div></div>`).join('');
+
+const back=`<svg viewBox="0 0 24 24"><path d="M20 12H5m6-6-6 6 6 6" fill="none" stroke="#1F1F1F" stroke-width="2.4"/></svg>`;
+const A=[
+ ['記録・成績',[['home-run','rec','30','30発の証明'],['hit','rec','通算 100','通算100安打'],['avg','rec','','3割打者'],['rbi','rec','100','シーズン100打点'],['home-run','rec','20-20','20-20クラブ'],['triple-crown','rec','','三冠王',1,'0/3'],['steal','rec','通算 300','通算300盗塁',1,'184/300'],['fan','rec','','大型扇風機']]],
+ ['タイトル・栄誉',[['mvp','title','初','初MVP'],['golden-glove','title','× 3','ゴールデン<br>グラブ3回'],['all-star','title','初','初オールスター'],['rookie','title','','新人王'],['hit','title','王','首位打者'],['hall-of-fame','title','5 人','殿堂入り5人',1,'3/5'],['diamond','title','4','4守備位置の殿堂',1,'2/4'],['?','title','','隠し実績',2]]],
+ ['キャリア・人生',[['calendar','life','10','10シーズン現役'],['bird','life','','渡り鳥',1,'2/3']]],
+ ['育成・挑戦',[['bars','grow','90','一芸90'],['sprout','grow','+10','伸び盛り'],['bars','grow','99','一芸99',1,'93/99'],['?','grow','','隠し実績',2]]],
+];
+document.getElementById('ach').innerHTML=`<div class="bar">${back}実績</div>
+  <div class="chips"><span class="fchip on">すべて</span><span class="fchip">記録・成績</span><span class="fchip">タイトル</span><span class="fchip">キャリア</span></div>
+  <div class="sum"><span>獲得</span><span><b>14</b> / 95</span></div>
+  ${A.map(([sec,xs])=>`<div class="sec">${sec}</div><div class="agrid">${xs.map(([m,cat,chip,nm,st,pg])=>st===2
+    ?`<div class="cell"><div class="tile hidden" style="--s:64px">？</div><div class="cap" style="color:#8A918D;font-weight:400">${nm}</div></div>`
+    :`<div class="cell">${tile(m,cat,{chip,locked:st===1})}<div class="cap"${st?' style="color:#8A918D;font-weight:400"':''}>${nm}${pg?`<span>${pg}</span>`:''}</div></div>`).join('')}</div>`).join('')}`;
+
+const S=[['打撃',[['コンタクト',''],['選球眼',''],['打撃技術',''],['パワー','power',3]]],['走塁',[['スピード','winged-spike',1],['盗塁技術',''],['走塁技術','']]],
+  ['守備',[['捕球','catch',5],['肩力',''],['送球','']]],['その他',[['ケガ耐性',''],['回復',''],['メンタル','flame-heart',0]]]];
+const price=l=>l>=5?'最大':[100,200,400,700,1000][l].toLocaleString();
+document.getElementById('shop').innerHTML=`<div class="bar">${back}ショップ</div><div class="wallet"><span>2,450 CP</span></div>
+  ${S.map(([sec,xs])=>`<div class="sec">${sec}</div>${xs.map(([nm,m,lv=0])=>`<div class="item">${m?tile(m,'shop',{cls:'flat',s:56}):`<div class="tile todo" style="--s:56px">未作成</div>`}
+    <div class="who"><div class="nm">${nm}</div><div class="pips">${[0,1,2,3,4].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('')}</div></div>
+    <div class="pr">${price(lv)}${lv>=5?'':'<small>CP</small>'}</div></div>`).join('')}`).join('')}`;
+</script>

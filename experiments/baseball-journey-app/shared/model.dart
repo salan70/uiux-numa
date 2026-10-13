@@ -200,8 +200,6 @@ const defaultAbilityNames = ['ミート', 'パワー', '選球眼', 'メンタ�
 /// 帽子と胸の色は球団の色で、顔の部品には含めない。
 enum HairStyle { shaved, sideburns, bangs, long }
 
-enum Brow { none, thin, thick }
-
 enum Eyes { dot, narrow, round }
 
 enum Beard { none, mustache, chin, full, stubble }
@@ -213,7 +211,6 @@ class Face {
     this.skin = 0,
     this.hair = HairStyle.sideburns,
     this.hairColor = 0,
-    this.brow = Brow.thin,
     this.eyes = Eyes.dot,
     this.beard = Beard.none,
     this.glasses = Glasses.none,
@@ -223,7 +220,6 @@ class Face {
   final int skin;
   final HairStyle hair;
   final int hairColor;
-  final Brow brow;
   final Eyes eyes;
   final Beard beard;
   final Glasses glasses;
@@ -236,17 +232,15 @@ class Face {
     skin: next(skinCount),
     hair: HairStyle.values[next(HairStyle.values.length)],
     hairColor: next(10) < 6 ? 0 : next(hairColorCount),
-    brow: Brow.values[next(Brow.values.length)],
     eyes: Eyes.values[next(Eyes.values.length)],
     beard: next(10) < 6 ? Beard.none : Beard.values[1 + next(Beard.values.length - 1)],
     glasses: next(10) < 8 ? Glasses.none : Glasses.values[1 + next(Glasses.values.length - 1)],
   );
 
-  Face copyWith({int? skin, HairStyle? hair, int? hairColor, Brow? brow, Eyes? eyes, Beard? beard, Glasses? glasses}) => Face(
+  Face copyWith({int? skin, HairStyle? hair, int? hairColor, Eyes? eyes, Beard? beard, Glasses? glasses}) => Face(
     skin: skin ?? this.skin,
     hair: hair ?? this.hair,
     hairColor: hairColor ?? this.hairColor,
-    brow: brow ?? this.brow,
     eyes: eyes ?? this.eyes,
     beard: beard ?? this.beard,
     glasses: glasses ?? this.glasses,
@@ -258,13 +252,12 @@ class Face {
       other.skin == skin &&
       other.hair == hair &&
       other.hairColor == hairColor &&
-      other.brow == brow &&
       other.eyes == eyes &&
       other.beard == beard &&
       other.glasses == glasses;
 
   @override
-  int get hashCode => Object.hash(skin, hair, hairColor, brow, eyes, beard, glasses);
+  int get hashCode => Object.hash(skin, hair, hairColor, eyes, beard, glasses);
 }
 
 class Team {

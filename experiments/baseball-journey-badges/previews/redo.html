@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>やきう選手物語 絵柄の作り直し</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* layout: 絵柄ごとに 1 行。今の絵柄、A、B を横に並べ、狭い画面では折り返す */
+:root{
+  --bg:#F3F4F3; --panel:#FEFEFE; --fg:#1F1F1F; --muted:#4D4D4D; --edge:#1F1F1F; --soft:#E4E7E5;
+  --font:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --a-bg:#F8F9F9; --a-ink:#1F1F1F; --a-sub:#4D4D4D; --a-cont:#EFF0F0; --a-surface:#FEFEFE;
+  --a-yellow-c:#FAF1D1; --a-blue-c:#D4E0F7; --a-yellow:#FAC400; --a-coral:#F37252;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1A1B1B;--panel:#252726;--fg:#F0F0F0;--muted:#C9C9C9;--edge:#8B9C91;--soft:#323433;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.75;padding-inline:16px;padding-block:24px 64px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:20px}
+h1{font-size:28px;line-height:1.3;margin:0;font-weight:800}
+p{margin:0;max-width:68ch}
+.lead{color:var(--muted);margin-top:8px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.eyebrow a{color:inherit}
+.row{background:var(--panel);border:3px solid var(--edge);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
+@media (max-width:640px){.row{grid-template-columns:1fr}}
+.row h2{font-size:18px;margin:0;font-weight:800}
+.row h2 span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.app{background:var(--a-bg);color:var(--a-ink);border-radius:10px;padding:14px;border:1px solid var(--soft);display:flex;flex-wrap:wrap;gap:20px}
+.opt{display:grid;grid-template-columns:auto auto;gap:6px 10px;align-items:end;max-width:300px}
+.opt .lbl{grid-column:1/-1;font-size:12px;line-height:1.45;color:var(--a-ink)}
+.opt .lbl b{font-weight:800;margin-right:4px}
+.opt.cur{opacity:.55}
+.sec{font-size:13px;font-weight:800;color:var(--muted);margin:8px 0 -6px}
+.tile{--s:64px;width:var(--s);height:var(--s);position:relative;display:grid;place-items:center;border:2px solid var(--a-ink);border-radius:calc(var(--s)*.16);box-shadow:3px 3px 0 var(--a-ink)}
+.tile svg{display:block}
+.tile.sm{--s:40px;box-shadow:2px 2px 0 var(--a-ink)}
+.chip{position:absolute;right:-9px;bottom:-9px;font-weight:800;font-size:12px;line-height:1.35;padding:0 4px;border:2px solid var(--a-ink);border-radius:6px;background:var(--a-surface);font-variant-numeric:tabular-nums}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">round 10 ・ <a href="./">代表セット</a> ・ <a href="catalog.html">113 種の体系</a></div>
+    <h1>やきう選手物語 絵柄の作り直し</h1>
+    <p class="lead">round 7〜10 で作り直した 10 の絵柄の確定版です。代表セットにも反映しています。64px と 32px で並べています。</p>
+  </header>
+  <div id="rows" style="display:grid;gap:16px"></div>
+</main>
+
+<script src="badge-grids.js"></script>
+<script src="redo-grids.js"></script>
+<script>
+const C=BADGE_COLORS;
+function svg(rows,px){let o='';rows.forEach((row,y)=>{let x=0;while(x<16){const c=row[x];if(c==='.'){x++;continue}let e=x;while(e<16&&row[e]===c)e++;o+=`<rect x="${x}" y="${y}" width="${e-x}" height="1" fill="${C[c]}"/>`;x=e}});
+  return `<svg width="${px}" height="${px}" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">${o}</svg>`}
+const get=k=>REDO_GRIDS[k]||BADGE_GRIDS[k];
+const tile=(rows,bg,chip,sm)=>`<div class="tile${sm?' sm':''}" style="background:${bg}">${svg(rows,sm?32:48)}${chip&&!sm?`<span class="chip">${chip}</span>`:''}</div>`;
+const Y='var(--a-yellow-c)',B='var(--a-blue-c)',G='var(--a-cont)';
+const ROWS=[
+ ['記録・成績'],
+ ['安打','記録・成績',Y,null,[['hit','','照りで丸い棒に見せたバットと、元の球']]],
+ ['本塁打','記録・成績',Y,null,[['home-run','','黄色のポール際を、弧を描いて越える球']]],
+ ['盗塁','記録・成績',Y,null,[['steal','','青い帯のスパイク。右は赤いスピードの靴'],['winged-spike','','']]],
+ ['打点','記録・成績',Y,null,[['rbi','','ほうき。「走者一掃」']]],
+ ['打率','記録・成績',Y,null,[['avg','','3 の目のさいころ。打率は確率']]],
+ ['タイトル・ショップ'],
+ ['ゴールデングラブ','タイトル',B,null,[['golden-glove','','台座に載った金のグラブ。網を格子で見せ、全体を黄で塗る']]],
+ ['オールスター','タイトル',B,null,[['all-star','','左右対称の星と白い照り']]],
+ ['パワー','ショップ',G,null,[['power','','バーベル']]],
+ ['スピード','ショップ',G,null,[['winged-spike','','翼の付いたスパイク']]],
+ ['メンタル','ショップ',G,null,[['flame-heart','','炎をまとったハート']]],
+];
+document.getElementById('rows').innerHTML=ROWS.map(([nm,cat,bg,cur,opts])=>!cat?`<h2 class="sec">${nm}</h2>`:`<section class="row"><h2>${nm}<span>${cat}</span></h2><div class="app">
+  ${cur?`<div class="opt cur">${tile(BADGE_GRIDS[cur],bg)}${tile(BADGE_GRIDS[cur],bg,'',1)}<div class="lbl"><b>今</b></div></div>`:''}
+  ${opts.map(([k,l,d,chip])=>`<div class="opt">${tile(get(k),bg,chip)}${tile(get(k),bg,chip,1)}<div class="lbl">${l?`<b>${l}</b>`:''}${d}</div></div>`).join('')}</div></section>`).join('');
+</script>
