@@ -1,0 +1,141 @@
+<title>やきう選手物語 題字</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&family=Mochiy+Pop+One&family=Dela+Gothic+One&display=swap">
+<style>
+/* 夜の球場の地に、題字の案を実寸のタイトル画面で並べる。1 案 1 端末。 */
+:root{
+  --field:#0F2A1C; --stripe:#133523; --board:#06150D; --led:#FAC400; --ledoff:#15321F;
+  --ink:#F4F1E6; --shadow:#1A1A17; --red:#D9442B; --muted:#A9B8AC; --page:#0A1F14;
+  --ui:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--page);color:var(--ink);font-family:var(--ui);}
+.wrap{max-width:1500px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+header{max-width:62ch;display:grid;gap:10px;margin-bottom:28px}
+h1{font-size:26px;font-weight:800;margin:0;text-wrap:balance}
+header p{margin:0;line-height:1.75;color:var(--muted);font-size:14px}
+header b{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:36px 28px;align-items:start}
+figure{margin:0;display:grid;gap:14px;min-width:0}
+figcaption{display:grid;gap:4px}
+figcaption .id{font-size:12px;letter-spacing:.12em;color:var(--led);font-weight:700}
+figcaption h2{margin:0;font-size:18px;font-weight:800}
+figcaption p{margin:0;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.phone{width:100%;max-width:340px;aspect-ratio:340/660;border-radius:34px;border:6px solid #000;overflow:hidden;position:relative;
+  background:var(--field) repeating-linear-gradient(66deg,var(--stripe) 0 30px,var(--field) 30px 60px);}
+.screen{position:absolute;inset:0;padding:54px 20px 20px;display:flex;flex-direction:column;align-items:stretch}
+.logo{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.sub{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--ink);text-align:center}
+.board{background:var(--board);border:3px solid var(--shadow);border-radius:22px;box-shadow:5px 5px 0 var(--shadow);padding:18px 16px;display:grid;justify-items:center;gap:10px;width:100%;box-sizing:border-box}
+canvas{display:block}
+.summary{display:flex;align-items:center;gap:10px;justify-content:center;font-size:12.5px;font-weight:700;margin:14px 0 12px}
+.summary .face{width:30px;height:30px;border-radius:6px;background:#3b6fc4;box-shadow:inset 0 -12px 0 #e9c39b}
+.summary small{display:block;font-size:11.5px;opacity:.9}
+.btn{height:46px;border-radius:999px;border:3px solid var(--shadow);box-shadow:4px 4px 0 var(--shadow);display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:.06em;color:#1A1A17;margin-bottom:12px}
+.btn.p{background:var(--led)} .btn.s{background:#fff}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:center;font-weight:700;font-size:14px;margin-top:8px}
+.links span:first-child{grid-column:1/-1}
+/* B ポップ */
+.pop{font-family:"Mochiy Pop One",var(--ui);color:var(--led);-webkit-text-stroke:9px var(--shadow);paint-order:stroke fill;text-shadow:5px 5px 0 var(--shadow);line-height:1.02;text-align:center;transform:rotate(-4deg);display:grid;justify-items:center}
+.pop .l1{font-size:68px;letter-spacing:.02em}
+.pop .l2{font-size:50px;color:var(--ink);margin-top:-2px}
+.ribbon{background:var(--shadow);color:var(--ink);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.12em}
+.emblem{width:100%;max-width:300px;height:auto}
+.note{margin-top:36px;max-width:70ch;font-size:13.5px;line-height:1.8;color:var(--muted)}
+.note h3{color:var(--ink);font-size:15px;margin:0 0 6px}
+.note ul{margin:0;padding-left:1.2em}
+</style>
+<div class="wrap">
+<header>
+  <h1>やきう選手物語 タイトルロゴ 第 1 案</h1>
+  <p>方向の違う下書きを 4 つ、実際のタイトル画面の大きさで並べました。<b>どの方向で詰めるか</b>を選んでください（組み合わせや「この案のここ」という指定も歓迎です）。字形や細部は選んだ方向で作り込みます。</p>
+  <p>共通: 下の「ですてにい」は外し、副題「プロ野球選手シミュレーション」を添えています。</p>
+</header>
+<div class="grid">
+  <figure>
+    <div class="phone"><div class="screen">
+      <div class="logo"><div class="board"><canvas id="a"></canvas></div><div class="sub">プロ野球選手シミュレーション</div></div>
+      <div class="rest"></div>
+    </div></div>
+    <figcaption><span class="id">A</span><h2>電光掲示板（いまの延長）</h2><p>いまの掲示板をそのまま使い、題字を 16 点の和文ドットに置き換えます。1 点ずつ点く演出も残せます。</p></figcaption>
+  </figure>
+  <figure>
+    <div class="phone"><div class="screen">
+      <div class="logo"><div class="pop"><span class="l1">やきう</span><span class="l2">選手物語</span></div><div class="ribbon">プロ野球選手シミュレーション</div></div>
+      <div class="rest"></div>
+    </div></div>
+    <figcaption><span class="id">B</span><h2>ポップな題字</h2><p>掲示板を外し、太い縁と影の付いた丸い字を少し傾けます。ボタンと同じ「黒い縁と影」でまとめる案です。</p></figcaption>
+  </figure>
+  <figure>
+    <div class="phone"><div class="screen">
+      <div class="logo">
+        <svg class="emblem" viewBox="0 0 300 210" role="img" aria-label="やきう選手物語">
+          <circle cx="150" cy="100" r="92" fill="#F4F1E6" stroke="#1A1A17" stroke-width="4"/>
+          <path d="M92 30 C120 70 120 130 92 170" fill="none" stroke="#D9442B" stroke-width="3.5"/>
+          <path d="M208 30 C180 70 180 130 208 170" fill="none" stroke="#D9442B" stroke-width="3.5"/>
+          <g stroke="#D9442B" stroke-width="3" stroke-linecap="round">
+            <path d="M98 44 l12 -5 M104 58 l12 -3 M108 74 l12 -2 M108 126 l12 2 M104 142 l12 3 M98 156 l12 5"/>
+            <path d="M202 44 l-12 -5 M196 58 l-12 -3 M192 74 l-12 -2 M192 126 l-12 2 M196 142 l-12 3 M202 156 l-12 5"/>
+          </g>
+          <path d="M6 82 H294 L282 104 L294 126 H6 L18 104 Z" fill="#FAC400" stroke="#1A1A17" stroke-width="4" stroke-linejoin="round"/>
+          <text x="150" y="117" text-anchor="middle" font-family="Dela Gothic One, sans-serif" font-size="33" fill="#1A1A17">やきう選手物語</text>
+        </svg>
+        <div class="sub">プロ野球選手シミュレーション</div>
+      </div>
+      <div class="rest"></div>
+    </div></div>
+    <figcaption><span class="id">C</span><h2>球団のエンブレム風</h2><p>白球に帯を掛け、帯に題字を載せます。アプリのアイコンにも流用しやすい形です。</p></figcaption>
+  </figure>
+  <figure>
+    <div class="phone"><div class="screen">
+      <div class="logo"><canvas id="d"></canvas><div class="sub">プロ野球選手シミュレーション</div></div>
+      <div class="rest"></div>
+    </div></div>
+    <figcaption><span class="id">D</span><h2>ドット絵の題字</h2><p>掲示板を外し、選手の顔と同じドット絵の字に厚みを付けます。昔のゲームのタイトル画面の方向です。</p></figcaption>
+  </figure>
+</div>
+<div class="note">
+  <h3>このあと</h3>
+  <ul>
+    <li>選んだ方向で字形を作り込み、第 2 案として 2〜3 通りに絞って見せます。</li>
+    <li>決まったら uiux-numa に記録し、アプリに組み込んで Web に出します。</li>
+  </ul>
+</div>
+</div>
+<script>
+const G={"や":["0000000000000000","0000000100000000","0010000010000000","0010000010000000","0001001111110000","0001010000001000","0001100000000100","0111000000000100","1001000000000100","0000100000001000","0000100000110000","0000100111000000","0000010000000000","0000010000000000","0000010000000000","0000000000000000"],"き":["0000000000000000","0000010000000000","0000010000000000","0000001001110000","0111111110000000","0000000100000000","0000000011111000","0111111111000000","0000000001000000","0000000000100000","0001111111110000","0010000000001000","0010000000000000","0010000000000000","0001111111110000","0000000000000000"],"う":["0000000000000000","0000000000000000","0001111110000000","0000000001110000","0000000000000000","0000000000000000","0000111111100000","0111000000010000","0000000000001000","0000000000001000","0000000000001000","0000000000010000","0000000000100000","0000000011000000","0011111100000000","0000000000000000"],"選":["0000000000000000","0000011110111100","0100000010000100","0010011110111100","0001010000100000","0000010010100100","0000001110011100","0000000010010000","1111001111111100","0001000010010000","0001011111111110","0001000010010000","0001001100001100","0001100000000000","0010011111111110","1100000000000000"],"手":["0000000000000000","0000000011110000","0011111100000000","0000000100000000","0000000100000000","0011111111111000","0000000100000000","0000000100000000","0000000100000000","1111111111111110","0000000100000000","0000000100000000","0000000100000000","0000000100000000","0000000100000000","0000111000000000"],"物":["0000000000000000","0001000100000000","0101000100000000","0101001111111111","0111101001001001","1001010010010001","1001000010010001","0001110100100001","0111001001000001","1001000010000001","0001000100000001","0001001000000001","0001010000001001","0001000000000111","0001000000000000","0000000000000000"],"語":["0000000000000000","0000000000000000","0111100111111110","0000000000100000","0000000000100000","1111111011111100","0000000001000100","0111110001000100","0000000111111110","0111110000000000","0000000011111100","0111110010000100","0100010010000100","0100010010000100","0111110011111100","0100000010000100"]};
+const SHADOW='#1A1A17',LED='#FAC400',OFF='#15321F',INK='#F4F1E6';
+function cols(t){return t.length*17-1}
+function bitmap(lines,gap){ // returns {w,h,cells:[[x,y,lineIndex]]}
+  const w=Math.max(...lines.map(cols)),h=lines.length*16+(lines.length-1)*gap,cells=[];
+  lines.forEach((t,li)=>{const x0=Math.round((w-cols(t))/2),y0=li*(16+gap);
+    [...t].forEach((ch,ci)=>G[ch].forEach((row,y)=>[...row].forEach((v,x)=>{if(v==='1')cells.push([x0+ci*17+x,y0+y,li])})))});
+  return {w,h,cells};
+}
+function setup(c,w,h){const r=devicePixelRatio||1;c.width=Math.round(w*r);c.height=Math.round(h*r);c.style.width=w+'px';c.style.height=h+'px';const x=c.getContext('2d');x.scale(r,r);return x}
+function led(id,lines,maxW){
+  const b=bitmap(lines,3),p=Math.min(5,maxW/b.w),x=setup(document.getElementById(id),b.w*p,b.h*p),d=p*.74;
+  x.fillStyle=OFF;for(let i=0;i<b.w;i++)for(let j=0;j<b.h;j++)x.fillRect(i*p,j*p,d,d);
+  x.fillStyle='rgba(250,196,0,.2)';b.cells.forEach(([i,j])=>x.fillRect(i*p-p*.18,j*p-p*.18,d+p*.36,d+p*.36));
+  x.fillStyle=LED;b.cells.forEach(([i,j])=>x.fillRect(i*p,j*p,d,d));
+}
+function block(id,maxW){
+  // 1 行目を大きく、2 行目を小さく。縁 1 点と、右下へ 2 点の厚み。
+  const rows=[{t:'やきう',col:LED},{t:'選手物語',col:INK}];
+  const p2=Math.min(4.2,(maxW-12)/(cols('選手物語')+3)),p1=Math.min(6.2,(maxW-12)/(cols('やきう')+3));
+  const h=(16+3)*p1+(16+3)*p2+10,c=document.getElementById(id),x=setup(c,maxW,h);
+  let y=0;rows.forEach((r,li)=>{const p=li?p2:p1,b=bitmap([r.t],0),ox=(maxW-(b.w+3)*p)/2;
+    const set=new Set(b.cells.map(([i,j])=>i+','+j));
+    x.fillStyle=SHADOW;
+    b.cells.forEach(([i,j])=>{for(let dx=-1;dx<=3;dx++)for(let dy=-1;dy<=3;dy++){if(dx-dy>2||dy-dx>2)continue;x.fillRect(ox+(i+dx+1)*p,y+(j+dy+1)*p,p+.5,p+.5)}});
+    x.fillStyle=r.col;b.cells.forEach(([i,j])=>x.fillRect(ox+(i+1)*p,y+(j+1)*p,p+.4,p+.4));
+    y+=(16+3)*p+10;});
+}
+const tpl=`<div class="summary"><span class="face"></span><span>安藤 真希<small>9年目 30歳 捕手 総合 80</small></span></div>
+<div class="btn p">つづきから</div><div class="btn s">新しいキャリア</div>
+<div class="links"><span>キャリアの一覧</span><span>殿堂</span><span>ショップ</span><span>実績</span><span>設定</span></div>`;
+document.querySelectorAll('.rest').forEach(e=>e.innerHTML=tpl);
+function draw(){const w=document.querySelector('.screen').clientWidth-40;led('a',['やきう','選手物語'],w-32);block('d',w);}
+document.fonts.ready.then(draw);addEventListener('resize',draw);draw();
+</script>
