@@ -1,0 +1,330 @@
+<title>やきう選手物語 題字</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<style>
+/* 夜の球場の地に、掲示板の作り込み 3 案と背景 3 案を実寸のタイトル画面で並べる。 */
+:root{
+  --field:#0F2A1C; --stripe:#133523; --board:#06150D; --led:#FAC400; --ledoff:#15321F;
+  --ink:#F4F1E6; --shadow:#1F1F1F; --muted:#A9B8AC; --page:#0A1F14;
+  --ui:"LINE Seed JP","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--page);color:var(--ink);font-family:var(--ui);}
+.wrap{max-width:1180px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+header{max-width:62ch;display:grid;gap:10px;margin-bottom:12px}
+h1{font-size:26px;font-weight:800;margin:0;text-wrap:balance}
+header p,.lead{margin:0;line-height:1.75;color:var(--muted);font-size:14px}
+b{color:var(--ink)}
+section{margin-top:36px;display:grid;gap:16px}
+h2{margin:0;font-size:20px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:32px 28px;align-items:start}
+figure{margin:0;display:grid;gap:12px;min-width:0}
+figcaption{display:grid;gap:4px}
+.id{font-size:12px;letter-spacing:.12em;color:var(--led);font-weight:700}
+figcaption h3{margin:0;font-size:17px;font-weight:800}
+figcaption p{margin:0;font-size:13.5px;line-height:1.7;color:var(--muted)}
+.phone{width:100%;max-width:340px;aspect-ratio:340/660;border-radius:34px;border:6px solid #000;overflow:hidden;position:relative;background:var(--field)}
+.phone>canvas.bg{position:absolute;inset:0;width:100%;height:100%}
+.screen{position:absolute;inset:0;padding:64px 20px 20px;display:flex;flex-direction:column}
+.logo{min-height:200px;display:flex;align-items:center;justify-content:center}
+.summary{display:flex;align-items:center;gap:10px;justify-content:center;font-size:12.5px;font-weight:700;margin:22px 0 12px}
+.summary .face{width:30px;height:30px;border-radius:6px;background:#3b6fc4;box-shadow:inset 0 -12px 0 #e9c39b}
+.summary small{display:block;font-size:11.5px;opacity:.9}
+.btn{height:46px;border-radius:999px;border:3px solid var(--shadow);box-shadow:4px 4px 0 var(--shadow);display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:.06em;color:#1A1A17;margin-bottom:12px}
+.btn.p{background:var(--led)} .btn.s{background:#fff}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:center;font-weight:700;font-size:14px;margin-top:8px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.links span:first-child{grid-column:1/-1}
+.board{position:relative;background:var(--board);border:3px solid var(--shadow);border-radius:22px;box-shadow:5px 5px 0 var(--shadow);padding:20px 16px;display:grid;justify-items:center;gap:12px;width:100%;box-sizing:border-box}
+.board.housing{border-radius:10px;padding:26px 20px 18px;border-width:4px;background:var(--board);box-shadow:5px 5px 0 var(--shadow),inset 0 0 0 5px #0d0f0e}
+.board.housing i{position:absolute;width:6px;height:6px;border-radius:50%;background:#3a3f3b}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px}
+.controls span{font-size:12px;color:var(--muted);margin-left:6px}
+.controls button{font:inherit;font-size:13px;font-weight:700;color:var(--ink);background:#12301F;border:2px solid #2a4a37;border-radius:999px;padding:6px 12px;cursor:pointer}
+.controls button[aria-pressed="true"]{background:var(--led);color:#1A1A17;border-color:var(--led)}
+.controls button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#replay{margin-left:auto}
+canvas{display:block}
+.note{margin-top:36px;max-width:70ch;font-size:13.5px;line-height:1.8;color:var(--muted)}
+</style>
+<div class="wrap">
+<header>
+  <h1>やきう選手物語 タイトルロゴ 第 5 案</h1>
+  <p>いちばん上に<b>選手の顔が並ぶ背景</b>を 3 案（G1〜G3）足しました。その下が第 4 案までの背景 8 案です。下の<b>動き</b>（M1 / M2 / M0）とあわせて、背景と枠を 1 つずつ選んでください。</p><p>ボタンで、動きの欄の背景と、すべての枠を切り替えられます。</p>
+</header>
+<div class="controls" role="group" aria-label="表示の切り替え">
+  <span>背景</span><button data-k="bg" data-v="stripe" aria-pressed="true">B1 芝の帯</button><button data-k="bg" data-v="night">B2 夜空と照明</button><button data-k="bg" data-v="check">B3 市松</button><button data-k="bg" data-v="diamond">B4</button><button data-k="bg" data-v="stands">B5</button><button data-k="bg" data-v="pixel">B6</button><button data-k="bg" data-v="dusk">B7</button><button data-k="bg" data-v="seam">B8</button><button data-k="bg" data-v="wall">G1</button><button data-k="bg" data-v="rows">G2</button><button data-k="bg" data-v="fade">G3</button>
+  <span>枠</span><button data-k="frame" data-v="l1" aria-pressed="true">L1</button><button data-k="frame" data-v="l3">L3 筐体と BSO</button>
+  <button id="replay">最初から</button>
+</div>
+<section>
+  <h2>選手の顔のギャラリー</h2>
+  <p class="lead">アプリの選手の顔（16 点のドット絵）を、髪、目、ひげ、眼鏡、球団の色をばらばらにして並べています。G1 と G2 はゆっくり動きます。</p>
+  <div class="grid">
+    <figure><div class="phone" data-mode="still" data-fixbg="wall"></div><figcaption><span class="id">G1</span><h3>名鑑の壁</h3><p>球団の色の帯が付いた札に顔を入れ、格子に並べてゆっくり上へ送ります。これまでの選手が積み重なっていく感じです。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="rows"></div><figcaption><span class="id">G2</span><h3>斜めに流れる列</h3><p>顔だけを斜めの列に並べ、列ごとに逆向きに流します。流れる掲示板と動きがそろいます。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="fade"></div><figcaption><span class="id">G3</span><h3>まわりに並ぶ</h3><p>顔を隙間なく敷き、掲示板とボタンのまわりを暗く抜いて、画面の縁にだけ顔が見えるようにします。動きません。</p></figcaption></figure>
+  </div>
+</section>
+<section>
+  <h2>背景</h2>
+  <p class="lead">第 2 案の 3 つに 5 つを足しました。掲示板は 2 段で止めて揃えています（枠は上のボタンで切り替わります）。</p>
+  <div class="grid">
+    <figure><div class="phone" data-mode="still" data-fixbg="stripe"></div><figcaption><span class="id">B1</span><h3>いまの芝の帯</h3><p>比べるための基準です。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="night"></div><figcaption><span class="id">B2</span><h3>夜空と照明</h3><p>上が夜空と照明塔、下が外野の芝。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="check"></div><figcaption><span class="id">B3</span><h3>刈り込みの市松</h3><p>奥へ向かう市松と、手前の本塁まわり。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="diamond"></div><figcaption><span class="id">B4</span><h3>ダイヤモンドの俯瞰</h3><p>真上から見た内野。掲示板が二塁の奥、ボタンが内野の上に乗ります。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="stands"></div><figcaption><span class="id">B5</span><h3>客席</h3><p>上半分を埋まった客席、下を芝にします。人の気配が出る案です。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="pixel"></div><figcaption><span class="id">B6</span><h3>ドット絵の夜の球場</h3><p>選手の顔と同じ粗さのドット絵で、月、星、スタンド、照明塔を描きます。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="dusk"></div><figcaption><span class="id">B7</span><h3>夕暮れ</h3><p>試合の始まる前の夕焼け。夜の配色から離れ、暖かい色が入ります。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="still" data-fixbg="seam"></div><figcaption><span class="id">B8</span><h3>ボールの縫い目</h3><p>景色ではなく模様。大きなボールの縫い目を左右の弧で通します。</p></figcaption></figure>
+  </div>
+</section>
+<section>
+  <h2>動き</h2>
+  <p class="lead">背景は上のボタンで選んだものになります。「最初から」で動きをもう一度見られます。</p>
+  <div class="grid">
+    <figure><div class="phone" data-mode="loop"></div>
+      <figcaption><span class="id">M1</span><h3>流れ続ける</h3><p>右から入って左へ抜け、少し間をおいて繰り返します。字を大きくできる代わりに、題字の全体は一度に見えません。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="once"></div>
+      <figcaption><span class="id">M2</span><h3>流れてから 2 段で止まる</h3><p>開いたときに 1 度だけ流れ、そのあと掲示板が切り替わって 2 段の題字で止まります。最初の動きと、読みやすさの両方を取る案です。</p></figcaption></figure>
+    <figure><div class="phone" data-mode="static"></div>
+      <figcaption><span class="id">M0</span><h3>2 段で止まったまま（第 2 案）</h3><p>比べるための基準です。いまと同じく 1 点ずつ左から点けます。</p></figcaption></figure>
+  </div>
+</section>
+<p class="note">「動きを減らす」設定のときは、どの案も流さずに 2 段の題字を最初から出します。流れる速さは 1 秒に 30 点（約 2 字）で、実際の球場の掲示板に近い、1 点ずつ送る動きにしています。</p>
+</div>
+<script>
+const G={"や":["0000000000000000","0000000100000000","0010000010000000","0010000010000000","0001001111110000","0001010000001000","0001100000000100","0111000000000100","1001000000000100","0000100000001000","0000100000110000","0000100111000000","0000010000000000","0000010000000000","0000010000000000","0000000000000000"],"き":["0000000000000000","0000010000000000","0000010000000000","0000001001110000","0111111110000000","0000000100000000","0000000011111000","0111111111000000","0000000001000000","0000000000100000","0001111111110000","0010000000001000","0010000000000000","0010000000000000","0001111111110000","0000000000000000"],"う":["0000000000000000","0000000000000000","0001111110000000","0000000001110000","0000000000000000","0000000000000000","0000111111100000","0111000000010000","0000000000001000","0000000000001000","0000000000001000","0000000000010000","0000000000100000","0000000011000000","0011111100000000","0000000000000000"],"選":["0000000000000000","0000011110111100","0100000010000100","0010011110111100","0001010000100000","0000010010100100","0000001110011100","0000000010010000","1111001111111100","0001000010010000","0001011111111110","0001000010010000","0001001100001100","0001100000000000","0010011111111110","1100000000000000"],"手":["0000000000000000","0000000011110000","0011111100000000","0000000100000000","0000000100000000","0011111111111000","0000000100000000","0000000100000000","0000000100000000","1111111111111110","0000000100000000","0000000100000000","0000000100000000","0000000100000000","0000000100000000","0000111000000000"],"物":["0000000000000000","0001000100000000","0101000100000000","0101001111111111","0111101001001001","1001010010010001","1001000010010001","0001110100100001","0111001001000001","1001000010000001","0001000100000001","0001001000000001","0001010000001001","0001000000000111","0001000000000000","0000000000000000"],"語":["0000000000000000","0000000000000000","0111100111111110","0000000000100000","0000000000100000","1111111011111100","0000000001000100","0111110001000100","0000000111111110","0111110000000000","0000000011111100","0111110010000100","0100010010000100","0100010010000100","0111110011111100","0100000010000100"]};
+const SH='#1F1F1F',LED='#FAC400',OFF='#15321F',WHITE='#F4F1E6';
+const D5={B:['####.','#...#','#...#','####.','#...#','#...#','####.'],S:['.####','#....','#....','.###.','....#','....#','####.'],O:['.###.','#...#','#...#','#...#','#...#','#...#','.###.']};
+function cols(t){return t.length*17-1}
+function setup(c,w,h){const r=devicePixelRatio||1;c.width=Math.round(w*r);c.height=Math.round(h*r);c.style.width=w+'px';c.style.height=h+'px';const x=c.getContext('2d');x.setTransform(r,0,0,r,0,0);return x}
+function title(lines,gap){const w=Math.max(...lines.map(cols)),h=lines.length*16+(lines.length-1)*gap,cells=[];
+  lines.forEach((t,li)=>{const x0=Math.round((w-cols(t))/2),y0=li*(16+gap);[...t].forEach((ch,ci)=>G[ch].forEach((row,y)=>[...row].forEach((v,x)=>{if(v==='1')cells.push([x0+ci*17+x,y0+y,li])})))});
+  return {w,h,cells};}
+function dots(x,b,p,colorOf){const d=p*.74;
+  x.fillStyle=OFF;for(let i=0;i<b.w;i++)for(let j=0;j<b.h;j++)x.fillRect(i*p,j*p,d,d);
+  b.cells.forEach(([i,j,li])=>{const c=colorOf(li);x.fillStyle=c+'33';x.fillRect(i*p-p*.18,j*p-p*.18,d+p*.36,d+p*.36)});
+  b.cells.forEach(([i,j,li])=>{x.fillStyle=colorOf(li);x.fillRect(i*p,j*p,d,d)});}
+function board(kind,maxW){
+  const el=document.createElement('div');el.className='board'+(kind==='l3'?' housing':'');
+  const c=document.createElement('canvas');el.appendChild(c);
+  const b=title(['やきう','選手物語'],4),p=Math.min(5,(maxW-(kind==='l3'?48:38))/b.w);
+  const x=setup(c,b.w*p,b.h*p);dots(x,b,p,li=>kind==='l2'&&li===1?WHITE:LED);
+  if(kind==='l3'){
+    ['8px 8px','8px auto auto 8px'].forEach(()=>{});
+    for(const [t,l] of [['8px','8px'],['8px',null],[null,'8px'],[null,null]]){const i=document.createElement('i');if(t)i.style.top=t;else i.style.bottom='8px';if(l)i.style.left=l;else i.style.right='8px';el.appendChild(i)}
+    const bc=document.createElement('canvas');el.appendChild(bc);
+    const lamps=[['B',3,'#3BD16F',1],['S',2,LED,2],['O',2,'#FF4A3D',0]];
+    const q=p*0.9,lw=lamps.reduce((s,[,n])=>s+6+n*3+3,0)-3,y=setup(bc,lw*q,7*q);let cx=0;
+    for(const [ch,n,col,on] of lamps){D5[ch].forEach((r,j)=>[...r].forEach((v,i)=>{y.fillStyle=v==='#'?WHITE:OFF;y.fillRect((cx+i)*q,j*q,q*.74,q*.74)}));cx+=6;
+      for(let k=0;k<n;k++){y.fillStyle=k<on?col:'#163020';y.beginPath();y.arc((cx+1.2)*q,3.5*q,q*1.25,0,7);y.fill();cx+=3}cx+=3}
+  }
+  return el;}
+function rng(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+function bgMore(x,kind,W,H){
+  if(kind==='diamond'){
+    x.fillStyle='#0F2A1C';x.fillRect(0,0,W,H);
+    x.fillStyle='#133523';for(let a=0;a<W;a+=44)x.fillRect(a,0,22,H);
+    const hx=W/2,hy=H*.93,s=W*.66,d=s/Math.SQRT2;
+    // 内野の土（本塁を中心にした扇）
+    x.fillStyle='#4A2F1E';x.beginPath();x.moveTo(hx,hy);x.arc(hx,hy,d*2*1.08,-Math.PI*.75,-Math.PI*.25);x.closePath();x.fill();
+    // 内野の芝
+    const k=14;x.fillStyle='#163F29';x.beginPath();x.moveTo(hx,hy-k*1.6);x.lineTo(hx+d-k*1.4,hy-d);x.lineTo(hx,hy-2*d+k*1.6);x.lineTo(hx-d+k*1.4,hy-d);x.closePath();x.fill();
+    // 本塁まわりとマウンド
+    x.fillStyle='#4A2F1E';x.beginPath();x.arc(hx,hy,26,0,7);x.fill();x.beginPath();x.arc(hx,hy-d,15,0,7);x.fill();
+    x.fillStyle='#E9E4D4';x.fillRect(hx-3,hy-d-1.5,6,3);
+    // ライン
+    x.strokeStyle='rgba(244,241,230,.8)';x.lineWidth=2.5;x.beginPath();x.moveTo(hx,hy);x.lineTo(hx-H,hy-H);x.moveTo(hx,hy);x.lineTo(hx+H,hy-H);x.stroke();
+    // 塁
+    x.fillStyle='#F4F1E6';for(const [bx,by] of [[hx+d,hy-d],[hx,hy-2*d],[hx-d,hy-d]]){x.save();x.translate(bx,by);x.rotate(Math.PI/4);x.fillRect(-5,-5,10,10);x.restore()}
+    x.beginPath();x.moveTo(hx-6,hy-6);x.lineTo(hx+6,hy-6);x.lineTo(hx+6,hy);x.lineTo(hx,hy+5);x.lineTo(hx-6,hy);x.fill();
+    // 外野の端に照明の明るみ
+    const r=x.createRadialGradient(W/2,-H*.1,0,W/2,-H*.1,H*.7);r.addColorStop(0,'rgba(255,244,200,.14)');r.addColorStop(1,'rgba(255,244,200,0)');x.fillStyle=r;x.fillRect(0,0,W,H);
+  }
+  if(kind==='stands'){
+    const top=H*.5;x.fillStyle='#0A1418';x.fillRect(0,0,W,top);
+    const R=rng(11),rows=16;
+    for(let i=0;i<rows;i++){const t0=Math.pow(i/rows,1.25)*top,t1=Math.pow((i+1)/rows,1.25)*top,h=t1-t0;
+      x.fillStyle=i%2?'#0E1C22':'#122630';x.fillRect(0,t0,W,h);
+      const r=Math.max(1.4,h*.28),step=r*2.6;
+      for(let cx=(i%2)*step/2;cx<W;cx+=step){if((cx/ (W/4)|0)%4===2&&Math.abs(cx%(W/4))<step)continue;const v=R();if(v<.15)continue;
+        x.fillStyle=['#3a5a7a','#7a4a3a','#8a7a4a','#4a6a4a','#6a4a6a','#9a9a8a'][Math.floor(v*6)];x.globalAlpha=.55;x.beginPath();x.arc(cx,t0+h*.45,r,0,7);x.fill();x.globalAlpha=1}}
+    // 通路
+    x.fillStyle='rgba(8,14,16,.85)';for(const ax of [W*.25,W*.75]){x.beginPath();x.moveTo(ax-4,0);x.lineTo(ax+4,0);x.lineTo(ax+9,top);x.lineTo(ax-9,top);x.fill()}
+    // 照明が客席を上から照らす
+    let g=x.createLinearGradient(0,0,0,top);g.addColorStop(0,'rgba(255,244,200,.0)');g.addColorStop(1,'rgba(255,244,200,.08)');x.fillStyle=g;x.fillRect(0,0,W,top);
+    // フェンスと芝
+    x.fillStyle='#0B3A2A';x.fillRect(0,top,W,22);x.fillStyle=LED;x.fillRect(0,top,W,2);
+    for(let i=0;i<12;i++){const a=top+22+Math.pow(i/12,1.5)*(H-top-22),b=top+22+Math.pow((i+1)/12,1.5)*(H-top-22);x.fillStyle=i%2?'#133523':'#0F2A1C';x.fillRect(0,a,W,b-a+1)}
+  }
+  if(kind==='pixel'){
+    const P=4,w=Math.ceil(W/P),h=Math.ceil(H/P),o=document.createElement('canvas');o.width=w;o.height=h;const y=o.getContext('2d');
+    const bands=['#06101E','#0A1828','#0E2232','#122C3A'],hz=Math.round(h*.45);
+    bands.forEach((c,i)=>{y.fillStyle=c;y.fillRect(0,Math.round(hz*i/4),w,Math.ceil(hz/4)+1)});
+    const R=rng(5);y.fillStyle='#F4F1E6';for(let i=0;i<34;i++)y.fillRect(R()*w|0,(R()*hz*.6)|0,1,1);
+    y.fillStyle='#FFF2B0';y.fillRect(w-18,6,4,4);y.fillRect(w-19,7,6,2);y.fillRect(w-17,5,2,6);
+    // スタンドの段
+    y.fillStyle='#08121A';for(let i=0;i<w;i++){const e=Math.abs(i-w/2)/(w/2);const hh=Math.round(16-e*8);y.fillRect(i,hz-hh,1,hh)}
+    y.fillStyle='#0D1C26';for(let i=0;i<w;i+=2)for(let j=hz-12;j<hz;j+=3)if(R()<.5)y.fillRect(i,j,1,1);
+    // 照明塔
+    for(const tx of [5,w-10]){y.fillStyle='#0a1418';y.fillRect(tx+2,14,1,hz-14);y.fillStyle='#FFF6D6';y.fillRect(tx,9,6,4);y.fillStyle='#0a1418';y.fillRect(tx+1,10,1,1);y.fillRect(tx+3,10,1,1);y.fillRect(tx+1,12,1,1);y.fillRect(tx+3,12,1,1)}
+    y.fillStyle='#0B3A2A';y.fillRect(0,hz,w,3);y.fillStyle=LED;y.fillRect(0,hz,w,1);
+    for(let j=hz+3;j<h;j++){const k=Math.floor(Math.pow((j-hz)/(h-hz),0.6)*9);y.fillStyle=k%2?'#133523':'#0F2A1C';y.fillRect(0,j,w,1)}
+    x.imageSmoothingEnabled=false;x.drawImage(o,0,0,w*P,h*P);
+  }
+  if(kind==='dusk'){
+    const hz=H*.45;let g=x.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#1A1530');g.addColorStop(.55,'#4E2A48');g.addColorStop(.85,'#B4553A');g.addColorStop(1,'#E08A3C');x.fillStyle=g;x.fillRect(0,0,W,hz);
+    x.fillStyle='rgba(255,210,140,.9)';x.beginPath();x.arc(W*.68,hz-8,26,Math.PI,0);x.fill();
+    x.fillStyle='#140F1C';x.beginPath();x.moveTo(0,hz-46);x.lineTo(W*.18,hz-58);x.lineTo(W*.5,hz-40);x.lineTo(W*.82,hz-58);x.lineTo(W,hz-46);x.lineTo(W,hz);x.lineTo(0,hz);x.fill();
+    for(const sx of [W*.12,W*.88]){x.fillStyle='#140F1C';x.fillRect(sx-1.5,30,3,hz-60);x.fillStyle='#FFE9B0';for(let i=0;i<4;i++)for(let j=0;j<2;j++)x.fillRect(sx-11+i*6,26+j*6,4,4);
+      const r=x.createRadialGradient(sx,32,0,sx,32,70);r.addColorStop(0,'rgba(255,233,176,.35)');r.addColorStop(1,'rgba(255,233,176,0)');x.fillStyle=r;x.fillRect(sx-70,0,140,110)}
+    for(let i=0;i<12;i++){const a=hz+Math.pow(i/12,1.5)*(H-hz),b=hz+Math.pow((i+1)/12,1.5)*(H-hz);x.fillStyle=i%2?'#163521':'#12301E';x.fillRect(0,a,W,b-a+1)}
+    g=x.createLinearGradient(0,hz,0,hz+60);g.addColorStop(0,'rgba(224,138,60,.22)');g.addColorStop(1,'rgba(224,138,60,0)');x.fillStyle=g;x.fillRect(0,hz,W,60);
+  }
+  if(kind==='seam'){
+    x.fillStyle='#0F2A1C';x.fillRect(0,0,W,H);
+    // 画面より大きいボールの縫い目を 2 本、左右から弧で通す
+    const R=W*1.25;
+    for(const side of [-1,1]){const cx=W/2+side*(R+W*.08),cy=H*.55;
+      x.strokeStyle='#17402A';x.lineWidth=40;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+      x.strokeStyle='rgba(196,66,48,.8)';x.lineWidth=3;
+      for(let a=-0.55;a<=0.55;a+=0.045){const ang=(side<0?0:Math.PI)+a;const px=cx+Math.cos(ang)*R,py=cy+Math.sin(ang)*R;const tx=-Math.sin(ang),ty=Math.cos(ang),nx=Math.cos(ang),ny=Math.sin(ang);
+        x.beginPath();x.moveTo(px+nx*9-tx*3,py+ny*9-ty*3);x.lineTo(px+tx*2,py+ty*2);x.moveTo(px-nx*9-tx*3,py-ny*9-ty*3);x.lineTo(px+tx*2,py+ty*2);x.stroke()}}
+  }
+}
+
+const SPR=['................','.....kkkkkk.....','....kcccccck....','...kcccwwccck...','...kcccccccck...','...kbbbbbbbbbbk.','...kssssssssk...','...ksesssessk...','...kpssssspsk...','...ksssmmsssk...','....kssssssk....','......kssk......','...kkuuuuuukk...','..kuuuunnuuuuk..','.kuuuuunnuuuuuk.','.kuuuuunnuuuuuk.'];
+const SKIN=['#F8DCC0','#F5CFA8','#E8B48A','#C98D62','#A86D45','#7A4B2E'],HAIR=['#231A14','#6B4226','#E2B640','#B4442A','#E9E6DF'];
+const TEAM=['#4078E0','#F37252','#FAC400','#2E8B57','#120D09','#7A55C7','#DB3A62','#00A6A6'];
+function mix(a,b,t){const p=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const A=p(a),B=p(b);return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')}
+function faceCanvas(R){const rows=SPR.map(r=>r.split(''));const set=(y,x,c)=>rows[y][x]=c;
+  const hair=R()*4|0,eyes=R()*3|0,beard=R()<.6?0:1+(R()*4|0),gl=R()<.75?0:1+(R()*2|0);
+  if(hair===1)[[6,4],[7,4],[6,11],[7,11]].forEach(([y,x])=>set(y,x,'h'));
+  if(hair===2)[[6,4],[6,6],[6,7],[6,8],[6,11]].forEach(([y,x])=>set(y,x,'h'));
+  if(hair===3){for(let y=6;y<=9;y++){set(y,3,'h');set(y,12,'h');set(y,2,'k');set(y,13,'k')}set(10,4,'h');set(10,11,'h');set(10,3,'k');set(10,12,'k')}
+  if(eyes===1){set(7,6,'e');set(7,10,'e')}if(eyes===2){set(8,5,'e');set(8,9,'e')}
+  if(beard===1||beard===3)for(let x=6;x<=9;x++)set(8,x,'h');
+  if(beard===2||beard===3){for(let x=5;x<=10;x++)set(10,x,'h');set(11,7,'h');set(11,8,'h')}
+  if(beard===4)[[9,5],[9,10],[10,6],[10,9]].forEach(([y,x])=>set(y,x,'x'));
+  if(gl===1){[4,6,7,8,10].forEach(x=>set(7,x,'g'));set(7,5,'q');set(7,9,'q')}
+  if(gl===2){[4,5,6,8,9,10].forEach(x=>set(7,x,'l'));set(7,7,'g')}
+  const team=TEAM[R()*TEAM.length|0],sec=TEAM[R()*TEAM.length|0],skin=SKIN[R()*6|0];
+  const pal={k:'#120D09',c:team,b:mix(team,'#120D09',.45),w:team==='#FAC400'?'#120D09':'#FFFDF9',s:skin,h:HAIR[R()*5|0],g:'#120D09',l:'#1E2A3A',q:'#CFE6F2',x:mix(skin,'#120D09',.25),e:'#120D09',p:'#F39A82',m:'#B5452E',u:'#FFFDF9',n:sec};
+  const o=document.createElement('canvas');o.width=16;o.height=16;const y=o.getContext('2d');
+  rows.forEach((r,j)=>r.forEach((c,i)=>{if(c!=='.'){y.fillStyle=pal[c];y.fillRect(i,j,1,1)}}));return {img:o,team};}
+const FACES=(()=>{const R=rng(42),a=[];for(let i=0;i<60;i++)a.push(faceCanvas(R));return a})();
+function galleryBg(c,kind,W,H){
+  const x=c.getContext('2d');x.imageSmoothingEnabled=false;
+  const dim=(a)=>{x.fillStyle=`rgba(6,21,13,${a})`;x.fillRect(0,0,W,H)};
+  let raf,t0=null;
+  function frame(t){if(t0===null)t0=t;const e=reduce?0:(t-t0)/1000;
+    x.fillStyle='#0F2A1C';x.fillRect(0,0,W,H);
+    if(kind==='wall'){ // 名鑑の壁: 札に入った顔を格子に並べ、ゆっくり上へ送る
+      const cw=W/5,chh=cw*1.22,off=(e*8)%chh;let k=0;
+      for(let r=-1;r*chh-off<H+chh;r++)for(let col=0;col<5;col++){const f=FACES[((r+1000)*5+col)%FACES.length];
+        const px=col*cw+4,py=r*chh-off+4,w=cw-8,h=chh-8;
+        x.fillStyle='#F4F1E6';x.fillRect(px,py,w,h);x.fillStyle=f.team;x.fillRect(px,py+h-6,w,6);
+        x.fillStyle='#DCD6C4';x.fillRect(px+3,py+3,w-6,w-6);x.drawImage(f.img,px+3,py+3,w-6,w-6)}
+      dim(.78);
+    }
+    if(kind==='rows'){ // 斜めの帯: 列ごとに逆向きに流す
+      x.save();x.translate(W/2,H/2);x.rotate(-0.21);const s=46,rows=Math.ceil(H*1.4/s)+2;
+      for(let r=0;r<rows;r++){const y=-H*0.75+r*s,dir=r%2?1:-1,off=((e*14*dir)%s+s)%s;
+        for(let i=-1;i*s<W*1.6+s;i++){const f=FACES[(r*7+i+600)%FACES.length];x.drawImage(f.img,-W*0.8+i*s+off-s,y,s-6,s-6)}}
+      x.restore();dim(.72);
+    }
+    if(kind==='fade'){ // 端に寄せる: 顔を密に並べ、掲示板とボタンのまわりを暗く抜く
+      const s=W/7;for(let r=0;r*s<H;r++)for(let col=0;col<7;col++){const f=FACES[(r*7+col)%FACES.length];x.drawImage(f.img,col*s+2,r*s+2,s-4,s-4)}
+      x.fillStyle='rgba(6,21,13,.45)';x.fillRect(0,0,W,H);
+      const g=x.createRadialGradient(W/2,H*.46,W*.2,W/2,H*.46,H*.62);g.addColorStop(0,'rgba(15,42,28,.97)');g.addColorStop(.55,'rgba(15,42,28,.9)');g.addColorStop(1,'rgba(15,42,28,.25)');x.fillStyle=g;x.fillRect(0,0,W,H);
+    }
+    if(!reduce&&kind!=='fade')raf=requestAnimationFrame(frame);}
+  raf=requestAnimationFrame(frame);anims.push(()=>cancelAnimationFrame(raf));
+}
+
+function bg(c,kind,W,H){if(['wall','rows','fade'].includes(kind)){setup(c,W,H);galleryBg(c,kind,W,H);return}const x=setup(c,W,H);bgMore(x,kind,W,H);
+  if(kind==='stripe'){x.fillStyle='#0F2A1C';x.fillRect(0,0,W,H);x.fillStyle='#133523';const s=H*.45;for(let a=-s;a<W;a+=120){x.beginPath();x.moveTo(a,0);x.lineTo(a+60,0);x.lineTo(a+60+s,H);x.lineTo(a+s,H);x.fill()}}
+  if(kind==='night'){
+    const hz=H*.43,ly=36;let g=x.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#050D1A');g.addColorStop(1,'#0E2733');x.fillStyle=g;x.fillRect(0,0,W,hz);
+    // 星
+    x.fillStyle='rgba(244,241,230,.55)';let sd=7;const rnd=()=>{sd=(sd*9301+49297)%233280;return sd/233280};for(let i=0;i<40;i++){x.fillRect(rnd()*W,rnd()*hz*.7,1.2,1.2)}
+    // 照明の光
+    for(const sx of [W*.08,W*.92]){const r=x.createRadialGradient(sx,ly,0,sx,ly,W*.6);r.addColorStop(0,'rgba(255,244,200,.38)');r.addColorStop(.35,'rgba(255,244,200,.10)');r.addColorStop(1,'rgba(255,244,200,0)');x.fillStyle=r;x.fillRect(0,0,W,H);
+      x.fillStyle='#FFF6D6';for(let i=0;i<4;i++)for(let j=0;j<2;j++)x.fillRect(sx-11+i*6,ly-5+j*6,4,4);x.fillStyle='#0a1418';x.fillRect(sx-1.5,ly+8,3,hz-ly)}
+    // スタンドの影とフェンス
+    x.fillStyle='#08161A';x.beginPath();x.moveTo(0,hz-30);x.quadraticCurveTo(W/2,hz-62,W,hz-30);x.lineTo(W,hz);x.lineTo(0,hz);x.fill();
+    x.fillStyle='#0B3A2A';x.fillRect(0,hz-10,W,10);x.fillStyle=LED;x.fillRect(0,hz-10,W,2);
+    // 芝。奥へ詰まる横縞
+    for(let i=0;i<14;i++){const t0=Math.pow(i/14,1.7),t1=Math.pow((i+1)/14,1.7);x.fillStyle=i%2?'#133523':'#0F2A1C';x.fillRect(0,hz+t0*(H-hz),W,(t1-t0)*(H-hz)+1)}
+    g=x.createLinearGradient(0,hz,0,hz+40);g.addColorStop(0,'rgba(255,244,200,.12)');g.addColorStop(1,'rgba(255,244,200,0)');x.fillStyle=g;x.fillRect(0,hz,W,40);
+  }
+  if(kind==='check'){
+    x.fillStyle='#0F2A1C';x.fillRect(0,0,W,H);
+    const vx=W/2,vy=-H*.9,n=10;
+    const rows=[];for(let i=0;i<=16;i++)rows.push(Math.pow(i/16,1.35)*H);
+    for(let r=0;r<16;r++)for(let k=-n;k<n;k++){if((r+k)%2===0)continue;
+      const y0=rows[r],y1=rows[r+1],sp=w=>W*.16*(1+w/H*1.0);
+      const xa=(y)=>vx+(k)*sp(y),xb=(y)=>vx+(k+1)*sp(y);
+      x.fillStyle='#133523';x.beginPath();x.moveTo(xa(y0),y0);x.lineTo(xb(y0),y0);x.lineTo(xb(y1),y1);x.lineTo(xa(y1),y1);x.fill()}
+    // 本塁まわりの土とライン
+    x.fillStyle='#5A3A22';x.beginPath();x.ellipse(W/2,H+30,W*.62,H*.16,0,Math.PI,0);x.fill();
+    x.fillStyle='#0F2A1C';x.beginPath();x.ellipse(W/2,H+30,W*.62-26,H*.16-20,0,Math.PI,0);x.fill();
+    x.strokeStyle='rgba(244,241,230,.75)';x.lineWidth=3;x.beginPath();x.moveTo(W/2,H-24);x.lineTo(-20,H-24-(W/2+20)*0.42);x.moveTo(W/2,H-24);x.lineTo(W+20,H-24-(W/2+20)*0.42);x.stroke();
+    x.fillStyle='#F4F1E6';x.beginPath();x.moveTo(W/2-8,H-34);x.lineTo(W/2+8,H-34);x.lineTo(W/2+8,H-26);x.lineTo(W/2,H-20);x.lineTo(W/2-8,H-26);x.fill();
+  }}
+const tpl=`<div class="summary"><span class="face"></span><span>安藤 真希<small>9年目 30歳 捕手 総合 80</small></span></div>
+<div class="btn p">つづきから</div><div class="btn s">新しいキャリア</div>
+<div class="links"><span>キャリアの一覧</span><span>殿堂</span><span>ショップ</span><span>実績</span><span>設定</span></div>`;
+const state={bg:'stripe',frame:'l1'};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let anims=[];
+function lampsCanvas(el,p){const bc=document.createElement('canvas');el.appendChild(bc);
+  const lamps=[['B',3,'#3BD16F',1],['S',2,LED,2],['O',2,'#FF4A3D',0]];
+  const q=p*0.9,lw=lamps.reduce((s,[,n])=>s+6+n*3+3,0)-3,y=setup(bc,lw*q,7*q);let cx=0;
+  for(const [ch,n,col,on] of lamps){D5[ch].forEach((r,j)=>[...r].forEach((v,i)=>{y.fillStyle=v==='#'?WHITE:OFF;y.fillRect((cx+i)*q,j*q,q*.74,q*.74)}));cx+=6;
+    for(let k=0;k<n;k++){y.fillStyle=k<on?col:'#163020';y.beginPath();y.arc((cx+1.2)*q,3.5*q,q*1.25,0,7);y.fill();cx+=3}cx+=3}}
+function shell(){const el=document.createElement('div');el.className='board'+(state.frame==='l3'?' housing':'');
+  if(state.frame==='l3')for(const [t,l] of [[1,1],[1,0],[0,1],[0,0]]){const i=document.createElement('i');i.style[t?'top':'bottom']='8px';i.style[l?'left':'right']='8px';el.appendChild(i)}
+  return el}
+// 2 段の題字の大きさを基準に、1 列でも同じ箱の高さに収める
+function makeBoard(mode,maxW){
+  const el=shell(),c=document.createElement('canvas');el.appendChild(c);
+  const inner=maxW-(state.frame==='l3'?48:38);
+  const two=title(['やきう','選手物語'],4),p2=Math.min(5,inner/two.w);
+  const one=title(['やきう選手物語'],0);
+  const p1=p2*1.45, loopOnly=mode==='loop'&&!reduce, H2=loopOnly?Math.ceil(16*p1):two.h*p2;
+  const x=setup(c,two.w*p2,H2);
+  if(state.frame==='l3')lampsCanvas(el,p2);
+  const d1=p1*.74, oy=Math.round((H2-16*p1)/2);
+  const set1=new Set(one.cells.map(([i,j])=>i+','+j));
+  function drawOne(offset){x.clearRect(0,0,two.w*p2,H2);
+    const w1=Math.floor(two.w*p2/p1), ox=(two.w*p2-w1*p1)/2;
+    for(let i=0;i<w1;i++)for(let j=0;j<16;j++){const src=i-offset;const on=set1.has(src+','+j);
+      if(on){x.fillStyle=LED+'33';x.fillRect(ox+i*p1-p1*.18,oy+j*p1-p1*.18,d1+p1*.36,d1+p1*.36)}
+      x.fillStyle=on?LED:OFF;x.fillRect(ox+i*p1,oy+j*p1,d1,d1)}
+    return w1}
+  function drawTwo(lit){x.clearRect(0,0,two.w*p2,H2);const d=p2*.74,lim=lit*two.w;
+    x.fillStyle=OFF;for(let i=0;i<two.w;i++)for(let j=0;j<two.h;j++)x.fillRect(i*p2,j*p2,d,d);
+    two.cells.forEach(([i,j])=>{if(i>lim)return;x.fillStyle=LED+'33';x.fillRect(i*p2-p2*.18,j*p2-p2*.18,d+p2*.36,d+p2*.36);x.fillStyle=LED;x.fillRect(i*p2,j*p2,d,d)})}
+  if(reduce||mode==='still'){drawTwo(1);return el}
+  const w1=drawOne(9999);const speed=30, gapCols=Math.round(w1*0.6);
+  let t0=null,raf;
+  function frame(t){if(t0===null)t0=t;const e=(t-t0)/1000;
+    if(mode==='static'){const lit=Math.min(1,e/0.9);drawTwo(1-Math.pow(1-lit,3));if(lit<1)raf=requestAnimationFrame(frame);return}
+    const cycle=w1+one.w+gapCols, step=Math.floor(e*speed);
+    if(mode==='once'){ if(step<w1+one.w){drawOne(w1-step)}else{
+        const e2=e-(w1+one.w)/speed; if(e2<0.25){x.clearRect(0,0,two.w*p2,H2);drawTwo(0)}else{const lit=Math.min(1,(e2-.25)/0.9);drawTwo(1-Math.pow(1-lit,3));if(lit>=1)return}}
+      raf=requestAnimationFrame(frame);return}
+    drawOne(w1-(step%cycle));raf=requestAnimationFrame(frame)}
+  raf=requestAnimationFrame(frame);anims.push(()=>cancelAnimationFrame(raf));
+  return el}
+function draw(){anims.forEach(f=>f());anims=[];
+  document.querySelectorAll('.phone').forEach(ph=>{ph.innerHTML='';const W=ph.clientWidth,H=ph.clientHeight;
+  const c=document.createElement('canvas');c.className='bg';ph.appendChild(c);bg(c,ph.dataset.fixbg||state.bg,W,H);
+  const s=document.createElement('div');s.className='screen';const l=document.createElement('div');l.className='logo';l.appendChild(makeBoard(ph.dataset.mode,W-40));s.appendChild(l);s.insertAdjacentHTML('beforeend',tpl);ph.appendChild(s);})}
+document.querySelectorAll('.controls button[data-k]').forEach(b=>b.addEventListener('click',()=>{state[b.dataset.k]=b.dataset.v;
+  document.querySelectorAll(`.controls button[data-k="${b.dataset.k}"]`).forEach(o=>o.setAttribute('aria-pressed',String(o===b)));draw()}));
+document.getElementById('replay').addEventListener('click',draw);
+let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,100)});document.fonts.ready.then(draw);draw();
+</script>
