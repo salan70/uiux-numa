@@ -27,16 +27,30 @@ const base = [
   ".kuuuuunnuuuuuk.",
 ];
 
-// 顔は HairStyle.sideburns、髪は黒、肌は 2 番目。もみあげで帽子と顔の境を締める。
-function sprite() {
+// 髪型は製品の HairStyle と同じ升に置く。既定は sideburns で、もみあげで帽子と顔の境を締める。
+function sprite(hairStyle = "sideburns") {
   const rows = base.map((r) => r.split(""));
-  for (const [y, x] of [
-    [6, 4],
-    [7, 4],
-    [6, 11],
-    [7, 11],
-  ])
-    rows[y][x] = "h";
+  const set = (y, x, c) => (rows[y][x] = c);
+  if (hairStyle === "sideburns") {
+    for (const [y, x] of [
+      [6, 4],
+      [7, 4],
+      [6, 11],
+      [7, 11],
+    ])
+      set(y, x, "h");
+  } else if (hairStyle === "long") {
+    for (let y = 6; y <= 9; y++) {
+      set(y, 3, "h");
+      set(y, 12, "h");
+      set(y, 2, "k");
+      set(y, 13, "k");
+    }
+    set(10, 4, "h");
+    set(10, 11, "h");
+    set(10, 3, "k");
+    set(10, 12, "k");
+  }
   return rows.map((r) => r.join(""));
 }
 
@@ -48,14 +62,14 @@ const lerp = (a, b, t) => {
   return "#" + x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, "0")).join("").toUpperCase();
 };
 
-function palette(team) {
+function palette({ team, skin = "#F5CFA8", hair = "#231A14" }) {
   return {
     k: ink,
     c: team,
     b: lerp(team, ink, 0.45),
     w: team === "#FAC400" ? ink : paper,
-    s: "#F5CFA8",
-    h: "#231A14",
+    s: skin,
+    h: hair,
     e: ink,
     p: "#F39A82",
     m: "#B5452E",
@@ -69,6 +83,8 @@ const grounds = {
   day: { team: "#4078E0", field: "#FAC400", stripe: null },
   // §15.1 の夜の球場。芝の刈り目を 2 升ごとの帯で敷く。
   night: { team: "#FAC400", field: "#0F2A1C", stripe: "#133523" },
+  // 開発版（Debug の構成）。緑の地（球団色の緑）に、金髪で肌の暗い選手を置き、本番と見分ける。
+  dev: { team: "#4078E0", field: "#2E8B57", stripe: null, skin: "#7A4B2E", hair: "#E2B640", hairStyle: "long" },
 };
 
 // bust は胸像の外縁（列 1..14、行 1..15）を 14 × 52 = 728 にして左右に 148 ずつ空け、下端を辺に付ける。
@@ -81,11 +97,11 @@ const sizes = {
 function svg(groundId, sizeId) {
   const g = grounds[groundId];
   const { cell, x0, y0 } = sizes[sizeId];
-  const colors = palette(g.team);
+  const colors = palette(g);
   const parts = new Map();
   const add = (key, d) => parts.set(key, (parts.get(key) ?? "") + d);
   // 同じ色の横の続きを 1 本の矩形にまとめる。
-  sprite().forEach((row, y) => {
+  sprite(g.hairStyle).forEach((row, y) => {
     let x = 0;
     while (x < 16) {
       const ch = row[x];
