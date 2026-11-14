@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-25
-- 参照: [規約と記録の組み直し](2026-09-24-minimal-docs.md)、[CLAUDE.md](../../CLAUDE.md)、[skills/README.md](../../skills/README.md)
+- 参照: [規約と記録の組み直し](2026-09-24-minimal-docs.md)、[AGENTS.md](../../AGENTS.md)（決定時点では `CLAUDE.md`）、[skills/README.md](../../skills/README.md)
 
 ## 背景
 
@@ -12,11 +12,15 @@ CLAUDE.md、`docs/`、`skills/` の文書は、読者となるモデルを限定
 
 ## 決定
 
-- 文書と Skill の読者は Opus 5.5 相当のモデルとする。言わなくても同じ結果になる説明は書かない。
-- 残す記述は次に限る。リポジトリ固有の事実（パス、コマンド、値、形式）、機械検査される形式、利用者が複数の妥当な選択から決めた事項、実測で分かった落とし穴、既定の振る舞いを禁じる指示、判断の主体。
+- 文書と Skill の読者は Opus 5.5 相当のモデルとする。
+  言わなくても同じ結果になる説明は書かない。
+- 残す記述は次に限る。
+  リポジトリ固有の事実（パス、コマンド、値、形式）、機械検査される形式、利用者が複数の妥当な選択から決めた事項、実測で分かった落とし穴、既定の振る舞いを禁じる指示、判断の主体。
 - 一般知識の解説、言われなくても行う手順、規則だけで一意に解釈できる理由、重複、明らかな規則の例示は削る。
-- 対象は CLAUDE.md、`docs/`（`decisions/` と `principles/<slug>.md` を除く）、`skills/`、`tokens/*/README.md` とする。ADR、Experiment の README、原則候補は記録なので書き換えない。
-- Guideline と Experiment の機械検査される形式は変えない。形式の中で記述を削る。
+- 対象は CLAUDE.md、`docs/`（`decisions/` と `principles/<slug>.md` を除く）、`skills/`、`tokens/*/README.md` とする。
+  ADR、Experiment の README、原則候補は記録なので書き換えない。
+- Guideline と Experiment の機械検査される形式は変えない。
+  形式の中で記述を削る。
 - Skill の参照 ID は、Experiment の README が引用しているものの番号を変えず、消した番号は欠番にする。
 
 ## 却下した案

@@ -9,7 +9,8 @@
 - `prefers-reduced-motion: reduce` では移動を弱めるか止め、理解を助ける色と透明度の変化は残す。
 - `:hover` の動きは `@media (hover: hover) and (pointer: fine)` で囲む。
 - キーボードで操作でき、状態が支援技術に伝わる。
-- `tokens/motion/` にある値を使い、並行する easing と duration の定義を増やさない。無い値は variant 内の局所値にし、共通 token にしない。
+- `tokens/motion/` にある値を使い、並行する easing と duration の定義を増やさない。
+  無い値は variant 内の局所値にし、共通 token にしない。
 
 ## 仮説
 
@@ -22,13 +23,21 @@
 | たまに                 | 標準の動き             |
 | 初めて、稀（登録完了） | 喜びを足してよい       |
 
-- キーボード起点でも頻度で決める。稀な完了は動かしてよい。
-- 目的は次のどれか 1 語にする。置けなければ動かさない。フィードバック、空間の連続、状態の明示、急な変化の緩和、説明、喜び。
-- 動かす属性は `transform` と `opacity`。`height` の accordion のような layout の変化は例外として短くする。
-- 入場は `scale(0.9–0.97)` と透明度から。`scale(0)` から始めない。原点はトリガー側。
+- キーボード起点でも頻度で決める。
+  稀な完了は動かしてよい。
+- 目的は次のどれか 1 語にする。
+  置けなければ動かさない。
+  フィードバック、空間の連続、状態の明示、急な変化の緩和、説明、喜び。
+- 動かす属性は `transform` と `opacity`。
+  `height` の accordion のような layout の変化は例外として短くする。
+- 入場は `scale(0.9–0.97)` と透明度から。
+  `scale(0)` から始めない。
+  原点はトリガー側。
 - 曲線は入退場 `easing.out`、状態変化 `easing.standard`、無限の進行 `linear`。
-- 時間は `duration.press`（押下、小さな面）、`duration.state`（色、面、線）、`duration.entrance` と `duration.stagger`（画面の見出し）。300ms を超えるなら理由を書く。
-- 連続で発火するものは keyframes より transition。退場は入場と同じ経路。
+- 時間は `duration.press`（押下、小さな面）、`duration.state`（色、面、線）、`duration.entrance` と `duration.stagger`（画面の見出し）。
+  300ms を超えるなら理由を書く。
+- 連続で発火するものは keyframes より transition。
+  退場は入場と同じ経路。
 - 利用者が決める相は遅く、システムの応答は速く。
 
 ## 判定の扱い

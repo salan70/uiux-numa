@@ -10,8 +10,11 @@
 作成から 11 日で、`docs/` と `skills/` の散文が約 10,900 行になり、`experiments/` のコードと同じ規模になっていた。
 過剰設計の調査で次が分かった。
 
-- ADR が 51 本あり、commit の 3 割が ADR を触っていた。後で参照する構造の判断は 20 本ほどで、残りは Catalog の画面、Guideline の改稿、1 行の設定変更の記録だった。同日に 3〜5 本が順に前の本を置き換える連鎖が 5 系統あった。
-- Pattern lifecycle（257 行、参照 30 箇所）の対象となる `patterns/` と `design-systems/` は存在せず、Experiment の status `extracted` の使用は 0 件だった。実際に Experiment をまたぐ知見の置き場になっていたのは `docs/principles/` だった。
+- ADR が 51 本あり、commit の 3 割が ADR を触っていた。
+  後で参照する構造の判断は 20 本ほどで、残りは Catalog の画面、Guideline の改稿、1 行の設定変更の記録だった。
+  同日に 3〜5 本が順に前の本を置き換える連鎖が 5 系統あった。
+- Pattern lifecycle（257 行、参照 30 箇所）の対象となる `patterns/` と `design-systems/` は存在せず、Experiment の status `extracted` の使用は 0 件だった。
+  実際に Experiment をまたぐ知見の置き場になっていたのは `docs/principles/` だった。
 - 17 軸 7 観点の多観点評価を使った Experiment は 18 件中 2 件で、9 月 19 日以降は 0 件だった。
 - `docs/records/`（2,378 行）は削除した Experiment の README の丸写しで、Guideline の `- 実験:` のリンク先になる以外に用途が無かった。
 - `asset-model.md` の `stable`、`deprecated`、他プロジェクトでの利用手順は使用実績が無く、同じ説明が README、`layers.md`、ADR に分散していた。
@@ -35,25 +38,40 @@
 | Catalog の画面   | 画面に閉じた判断                             | `apps/catalog/README.md`           |
 | リポジトリの構造 | ディレクトリ、ツールチェーン、記録形式、公開 | `docs/decisions/`                  |
 
-- ADR は上の「リポジトリの構造」に当たる判断だけに書く。基準は [文書の地図](../README.md#adr) に置く。
-- `docs/experiment-lifecycle.md` と `docs/experiment-format.md` を `docs/experiment.md` に統合し、`docs/guideline-format.md` を `docs/guideline.md` に、`docs/evaluation/` の 3 文書を `docs/evaluation.md` に畳む。`docs/asset-model.md` は `docs/layers.md` の 2 表にする。
-- Pattern lifecycle、`patterns/`、`design-systems/`、Experiment の status `extracted`、README の節 `Related patterns / assets` を廃止する。節は `Related` にする。Experiment をまたぐ知見は `docs/principles/` で持つ。
-- 評価は任意にする。README の Evaluation には、評価したか、しなかったなら何を見て判断したかを書く。
-- `docs/records/` を廃止する。削除した Experiment を出どころにするリンクは、削除前の commit への permalink にする。
-- Guideline の frontmatter から `axes` を外し、解析器の検査も外す。`adopted` の判断は commit message に書く。
+- ADR は上の「リポジトリの構造」に当たる判断だけに書く。
+  基準は [文書の地図](../README.md#adr) に置く。
+- `docs/experiment-lifecycle.md` と `docs/experiment-format.md` を `docs/experiment.md` に統合し、`docs/guideline-format.md` を `docs/guideline.md` に、`docs/evaluation/` の 3 文書を `docs/evaluation.md` に畳む。
+  `docs/asset-model.md` は `docs/layers.md` の 2 表にする。
+- Pattern lifecycle、`patterns/`、`design-systems/`、Experiment の status `extracted`、README の節 `Related patterns / assets` を廃止する。
+  節は `Related` にする。
+  Experiment をまたぐ知見は `docs/principles/` で持つ。
+- 評価は任意にする。
+  README の Evaluation には、評価したか、しなかったなら何を見て判断したかを書く。
+- `docs/records/` を廃止する。
+  削除した Experiment を出どころにするリンクは、削除前の commit への permalink にする。
+- Guideline の frontmatter から `axes` を外し、解析器の検査も外す。
+  `adopted` の判断は commit message に書く。
 - 原則候補の `判断` 節は `candidate` のうちは省いてよい。
 - `skills/README.md` は一覧、読み込み経路、追加手順だけにする。
-- Catalog の画面に閉じた ADR 16 本は `apps/catalog/README.md` の表へ移す。Guideline の改稿記録 7 本と、記録形式の補足 3 本は下の表に要点を残して削除する。原文は commit `5215a3c` の `docs/decisions/` にある。
+- Catalog の画面に閉じた ADR 16 本は `apps/catalog/README.md` の表へ移す。
+  Guideline の改稿記録 7 本と、記録形式の補足 3 本は下の表に要点を残して削除する。
+  原文は commit `5215a3c` の `docs/decisions/` にある。
 
 ## 却下した案
 
 - ADR の見出し表記の統一と Superseded の付け直しだけ行う: 本数が減らず、切り出しの基準が無いままでは同じ形で増える。
-- 既存 ADR を残し、基準だけ決めて新規分を止める: 51 本の中から効く 20 本を探す負担が残る。移す先（Catalog の README と本 ADR の表）が用意できるので、今回まとめて移す。
-- `docs/records/` を Decision と Rejected reasons だけの短縮版にする: 短縮版の保守が残る。permalink は保守が要らず、README の全文が読める。
-- 原則候補を Guideline の Tips へ吸収する: 原則候補は Skill 3 本と Experiment 5 件から参照され、Guideline より粒度が細かい。境界は「検証中か、採用済みか」で足りる。
-- Pattern lifecycle を最初の Pattern が出るまで残す: 11 日間で 18 Experiment を経て 1 件も出ず、代わりに原則候補が 6 件出た。要るときに原則候補から導けばよい。
-- 評価の軸を使われた 11 軸に減らす: Skill が motion appropriateness などを名指ししており、軸の一覧は 1 行ずつなら 17 行で済む。減らすのは目安の 3 段階の記述にした。
-- `maturity` を `experimental` と `candidate` の 2 値にする: Catalog の検証コードが 4 値を持ち、docs と食い違う。4 値のまま表を 4 行にした。
+- 既存 ADR を残し、基準だけ決めて新規分を止める: 51 本の中から効く 20 本を探す負担が残る。
+  移す先（Catalog の README と本 ADR の表）が用意できるので、今回まとめて移す。
+- `docs/records/` を Decision と Rejected reasons だけの短縮版にする: 短縮版の保守が残る。
+  permalink は保守が要らず、README の全文が読める。
+- 原則候補を Guideline の Tips へ吸収する: 原則候補は Skill 3 本と Experiment 5 件から参照され、Guideline より粒度が細かい。
+  境界は「検証中か、採用済みか」で足りる。
+- Pattern lifecycle を最初の Pattern が出るまで残す: 11 日間で 18 Experiment を経て 1 件も出ず、代わりに原則候補が 6 件出た。
+  要るときに原則候補から導けばよい。
+- 評価の軸を使われた 11 軸に減らす: Skill が motion appropriateness などを名指ししており、軸の一覧は 1 行ずつなら 17 行で済む。
+  減らすのは目安の 3 段階の記述にした。
+- `maturity` を `experimental` と `candidate` の 2 値にする: Catalog の検証コードが 4 値を持ち、docs と食い違う。
+  4 値のまま表を 4 行にした。
 
 ## 影響
 
@@ -77,4 +95,5 @@ Catalog の画面の 16 本は [apps/catalog/README.md](../../apps/catalog/READM
 - 13 Experiment の README の節 `Related patterns / assets` を `Related` にする。
 - Guideline と原則候補の `docs/records/` へのリンクは commit `5215a3c` の permalink にする。
 - `docs/templates/` は `experiment.md` と `guideline.md` の 2 ファイルにする。
-- 残す ADR のリンク切れは直す。本文の判断は変えない。
+- 残す ADR のリンク切れは直す。
+  本文の判断は変えない。

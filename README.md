@@ -11,8 +11,10 @@ AI エージェントで UI/UX とプロダクト体験を反復的に探索す�
 
 ## 他リポジトリとの責務
 
-- `uiux-numa`: UI/UX とプロダクト体験ドメインの正本。experiments、knowledge、UI/UX 固有の skills、tokens を扱う。
-- `dotfiles`: AI-driven development 全般の基盤と汎用 asset を扱う。同じ asset を二重管理しない。
+- `uiux-numa`: UI/UX とプロダクト体験ドメインの正本。
+  experiments、knowledge、UI/UX 固有の skills、tokens を扱う。
+- `dotfiles`: AI-driven development 全般の基盤と汎用 asset を扱う。
+  同じ asset を二重管理しない。
 - product repositories: 成果を利用し、実環境で検証する場所。
 
 ## Catalog

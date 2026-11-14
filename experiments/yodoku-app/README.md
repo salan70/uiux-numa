@@ -98,10 +98,14 @@ variant で変える軸は、情報構造（どこから何へ行くか）と読
 
 - 常設のタブを置かない、四隅の操作の意味を固定する（home R-7、画面節）
 - 読書中の下部に 3 つの円形操作を置く（reading R-10）
-- 読書中は本詳細へ移れない（book-detail の状態節）。3 案とも移れるようにし、別の本を読書中なら「読む」を押せない理由を文字で出す。C-02 は守る。
+- 読書中は本詳細へ移れない（book-detail の状態節）。
+  3 案とも移れるようにし、別の本を読書中なら「読む」を押せない理由を文字で出す。
+  C-02 は守る。
 - 面囲みを使わない、Liquid Glass の範囲、配色、書影が無いときの絵文字（Yodoku DS）
-- 日付の年を今年なら省く（book-detail R-15）。Japanese Notation の `2026.09.22` に揃えた。
-- ボタンの語形「終了する」「メモする」。UX Writing の語幹と終止形（「終える」「メモ」「読む」）に揃えた。
+- 日付の年を今年なら省く（book-detail R-15）。
+  Japanese Notation の `2026.09.22` に揃えた。
+- ボタンの語形「終了する」「メモする」。
+  UX Writing の語幹と終止形（「終える」「メモ」「読む」）に揃えた。
 
 ### Yodoku の点検の反映
 
@@ -119,9 +123,12 @@ variant で変える軸は、情報構造（どこから何へ行くか）と読
 
 ## Constraints
 
-- SwiftUI（iOS 26）で `platforms/ios` の実行基盤に載せる（[ADR](../../docs/decisions/2026-09-28-ios-runner.md)）。Yodoku のコードには依存しない。
-- 固定データは `shared/YodokuAppFixture.swift` に置く。本の書名と著者は実在の本、メモと余韻はこの Experiment のために書いた文で、本文の引用は置かない。
-- ドメインの型と導出は Yodoku の `domain.md` と機能仕様の規則を `shared/YodokuAppModel.swift`、`shared/YodokuAppStore.swift` に写し、規則の番号をコメントに残す。本体に無い状態や値を置かない。
+- SwiftUI（iOS 26）で `platforms/ios` の実行基盤に載せる（[ADR](../../docs/decisions/2026-09-28-ios-runner.md)）。
+  Yodoku のコードには依存しない。
+- 固定データは `shared/YodokuAppFixture.swift` に置く。
+  本の書名と著者は実在の本、メモと余韻はこの Experiment のために書いた文で、本文の引用は置かない。
+- ドメインの型と導出は Yodoku の `domain.md` と機能仕様の規則を `shared/YodokuAppModel.swift`、`shared/YodokuAppStore.swift` に写し、規則の番号をコメントに残す。
+  本体に無い状態や値を置かない。
 - 採用済みの Guideline（UX Writing、Japanese Notation、Information Architecture）に従い、draft の Guideline（Accessibility、States & Feedback、Color、Design Principles）は iOS に読み替えて当てる。
 - 最大の文字サイズ、ダーク、動きの抑制で崩れないこと。
 
@@ -211,8 +218,10 @@ just ios-run yodoku-app/tabs -fixture idle
 
 ### モックの限界
 
-- 永続化しない。起動のたびに固定データから作り直す。
-- 書影は取得せず、書名を刷った無地の表紙で代える。本の検索は固定の候補から探し、楽天と NDL を呼ばない。
+- 永続化しない。
+  起動のたびに固定データから作り直す。
+- 書影は取得せず、書名を刷った無地の表紙で代える。
+  本の検索は固定の候補から探し、楽天と NDL を呼ばない。
 - 起動時と復帰時の自動終了の判定は、画面の表示時にだけ行う。
 - 触覚、Liquid Glass の見え方、動きの滑らかさは、シミュレータの Debug ビルドで見ただけで、実機では確かめていない。
 - カテゴリーの管理、アプリの起動時のエラー（Y6）は置いていない。
@@ -224,7 +233,8 @@ just ios-run yodoku-app/tabs -fixture idle
 
 - 3 案のホーム（`idle`、`active` の最小化、`empty`）、読書空間（`active`）、終了シート、自動終了の知らせを撮った。
 - `journal` で本詳細、セッション詳細、ふりかえり、本棚を開き、ダークの本詳細を撮った。
-- `tabs` の読書空間を最大の文字サイズ（accessibility-extra-extra-extra-large）で撮り、事実の値が 1 字ずつ折り返さないことを見た。下部の操作が本文に重なる点は残っている。
+- `tabs` の読書空間を最大の文字サイズ（accessibility-extra-extra-extra-large）で撮り、事実の値が 1 字ずつ折り返さないことを見た。
+  下部の操作が本文に重なる点は残っている。
 
 VoiceOver の読み上げ、動きの抑制、メモの保存失敗と本の検索失敗の実操作、`journal` と `bookstand` の最大の文字サイズは確かめていない。
 

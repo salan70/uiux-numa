@@ -22,7 +22,8 @@ semantic token は `title`、`heading`、`body`、`ui`、`control`、`caption` �
 - `control` はボタン、項目名、選択状態に使う。
 - `caption` は日時や補足などの二次情報に限る。
 - 複数行の本文は `40rem` を fallback とし、対応環境では `40ic` を上限にする。
-  節の見出しや罫が桁いっぱいに引かれている面では、本文も桁の幅に従わせ、上限を重ねない。1 行の字数を実測して記録する（[ADR](../../docs/decisions/2026-09-21-measure-cap-follows-the-column.md)）。
+  節の見出しや罫が桁いっぱいに引かれている面では、本文も桁の幅に従わせ、上限を重ねない。
+  1 行の字数を実測して記録する（[ADR](../../docs/decisions/2026-09-21-measure-cap-follows-the-column.md)）。
 - 文字を固定高の箱へ閉じ込めない。
 - 省略する場合は完全な内容へ到達できる手段を用意する。
 

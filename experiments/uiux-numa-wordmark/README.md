@@ -34,21 +34,27 @@ Catalog を見る利用者を対象にする。
 
 対象は wordmark 1 個と、マークとの lockup（横組み）である。
 domain は `logo-brand-identity`、`visual-design`、`accessibility`。
-`animation-motion` は入れない。`logo-brand-identity` に topic が無いため、2 番目以降の domain が topic を決め、Motion 画面に載ってしまう。
+`animation-motion` は入れない。
+`logo-brand-identity` に topic が無いため、2 番目以降の domain が topic を決め、Motion 画面に載ってしまう。
 Catalog には載せない（[掲載しない Experiment の ADR](../../docs/decisions/2026-09-22-unlisted-experiments.md)）。
 
 variant で変える軸は、字の大小（小文字 / 大文字）と、赤い点の置き場所（i の点 / 句点）の組である。
 字画、端点、格子、baseline、字間、動きの曲線と時間は 2 案で共通にする。
 
-比喩と印象は利用者が決めた。マークとテイストを合わせることである（crafting-svg の手順 1）。
+比喩と印象は利用者が決めた。
+マークとテイストを合わせることである（crafting-svg の手順 1）。
 
 ## Constraints
 
-- `<text>` を使わず path で作図する。フォントの outline 化は [SVG ツールチェーンの ADR](../../docs/decisions/2026-09-18-svg-toolchain.md) で却下済みである。
+- `<text>` を使わず path で作図する。
+  フォントの outline 化は [SVG ツールチェーンの ADR](../../docs/decisions/2026-09-18-svg-toolchain.md) で却下済みである。
 - 色は `currentColor` と、利用画面の CSS が与える `part-wordmark-dot` だけにする。
-- 字ごとに `part-wordmark-<字>` の id を付ける。preset-default の mergePaths が同じ属性の path を 1 本にまとめ、字ごとに線を引く動きができなくなるためである。
-- マークと同じ高さ 32 の座標で描き、baseline を y 28 に揃える。lockup は高さを 1 つ与えれば並ぶ。
-- 点はどの版でも描く。動きの無い版は点が据わった姿で、動きの有る版は点が最後に落ちて据わる。
+- 字ごとに `part-wordmark-<字>` の id を付ける。
+  preset-default の mergePaths が同じ属性の path を 1 本にまとめ、字ごとに線を引く動きができなくなるためである。
+- マークと同じ高さ 32 の座標で描き、baseline を y 28 に揃える。
+  lockup は高さを 1 つ与えれば並ぶ。
+- 点はどの版でも描く。
+  動きの無い版は点が据わった姿で、動きの有る版は点が最後に落ちて据わる。
 - 動きはマークの Catalog 実装（`apps/catalog/src/catalog.css` の `logo-mark--enter`）と同じ曲線、時間、落とし方にする。
 - `prefers-reduced-motion: reduce` では線を引かず、点を落とさず、透明度の変化だけを残す。
 
@@ -66,9 +72,11 @@ variant で変える軸は、字の大小（小文字 / 大文字）と、赤い
 
 ### 削除した variant
 
-2026-09-25 に利用者が `caps-period` を採用した。`lower-tittle` はコードを削除し、仮説と軸だけを残す。
+2026-09-25 に利用者が `caps-period` を採用した。
+`lower-tittle` はコードを削除し、仮説と軸だけを残す。
 
-- `lower-tittle`: マークの n と同じ x-height の小文字で組み、i の点を赤くすると、マークの nu が字の続きとして読める。変えた軸は小文字、点は i の点。
+- `lower-tittle`: マークの n と同じ x-height の小文字で組み、i の点を赤くすると、マークの nu が字の続きとして読める。
+  変えた軸は小文字、点は i の点。
 
 ### 造形のパラメータ
 
@@ -141,7 +149,8 @@ round 3 の N と M のうねりが気になると指摘した（round 4 で直�
 | wordmark の点       | 点を持つ字を引き終える 230ms 前       | 380ms | 同上                                     |
 | wordmark の点の波紋 | 着地（落下の 68%）の 1160ms と 1260ms | 800ms | entrance の token。マークと同じ輪を 2 つ |
 
-wordmark の字は 500ms で、マークの 800ms より短くする。字が 9 つあり、800ms では最後の字が 1.4 秒まで残る。
+wordmark の字は 500ms で、マークの 800ms より短くする。
+字が 9 つあり、800ms では最後の字が 1.4 秒まで残る。
 
 ### 反復の記録
 
@@ -170,10 +179,14 @@ previews:
 - `compare-round2.png`: `caps-period` の round 1 と round 2 を、120px、24px、16px（3 倍に拡大）で交互に並べたもの。
 - `compare-round3.png`: マーク、`caps-period` の round 2 と round 3 を、120px と 16px（3 倍に拡大）で並べたもの。
 - `compare-round4.png`: マーク、`caps-period` の round 3 と round 4 を、120px と 16px（3 倍に拡大）で並べたもの。
-- `caps-period-construction.html`: round 4 の作図。基準線、字の幅、角の円と丸める前の直線、字の間の白と、式の表。
-- `caps-period-final-in-context.png`: モックの完成状態。サイドバー、ホーム大見出し（動きあり、動きなし）、縮小、暗い面。
-- `caps-period-enter.png`: round 4 の動きの途中。上から 200、450、650、900、1300ms。
-- `compare.html`: 採用した配布用 SVG をそのまま並べたページ。点は字と同じ色で出る（赤はモックで確かめる）。
+- `caps-period-construction.html`: round 4 の作図。
+  基準線、字の幅、角の円と丸める前の直線、字の間の白と、式の表。
+- `caps-period-final-in-context.png`: モックの完成状態。
+  サイドバー、ホーム大見出し（動きあり、動きなし）、縮小、暗い面。
+- `caps-period-enter.png`: round 4 の動きの途中。
+  上から 200、450、650、900、1300ms。
+- `compare.html`: 採用した配布用 SVG をそのまま並べたページ。
+  点は字と同じ色で出る（赤はモックで確かめる）。
 
 ## Evaluation
 
@@ -186,7 +199,8 @@ previews:
 - 採用: `caps-period`（round 4）
 - 判断者: 利用者
 - 判断日: 2026-09-25
-- 理由: 利用者は、点を句点にする考えを好み、round 2〜4 で縦長、M の幅、カクカク、うねりを指摘した。round 4 を見て「それで行きます」と判断した。
+- 理由: 利用者は、点を句点にする考えを好み、round 2〜4 で縦長、M の幅、カクカク、うねりを指摘した。
+  round 4 を見て「それで行きます」と判断した。
 
 2026-09-25 に Catalog へ適用した。
 
@@ -196,14 +210,21 @@ previews:
 | ホーム大見出し | `LogoMark animated` + `Wordmark animated`                          | マークと字を引き、句点を落とす                   |
 
 名前は見えない文字列（`logo-label`）が担い、SVG は `aria-hidden` にする。
-ホーム大見出しの lockup の高さは、display の大きさと、版面の幅の 1/8.3 の小さいほうにする。lockup の幅は高さの約 8.2 倍で、390px の画面でも溢れない。
+ホーム大見出しの lockup の高さは、display の大きさと、版面の幅の 1/8.3 の小さいほうにする。
+lockup の幅は高さの約 8.2 倍で、390px の画面でも溢れない。
 Catalog は `pathLength="1"` で破線を 0..1 に揃え、モックのように長さを測る JS を持たない。
-2026-09-25 に利用者が、句点の着地にもマークと同じ波紋を広げることを求めた。Catalog の `Wordmark` に輪を 2 つ足した。モック（`shared/WordmarkMock.tsx`）には足していない。
-続けて利用者が波紋のタイミングを揃えることを求めた。マークの点を 570ms から句点と同じ 900ms に遅らせ、2 つの点が同時に着地して波紋が同時に広がるようにした。句点は文字を引き終えてから落とす必要があるので、マークの側を合わせた。
+2026-09-25 に利用者が、句点の着地にもマークと同じ波紋を広げることを求めた。
+Catalog の `Wordmark` に輪を 2 つ足した。
+モック（`shared/WordmarkMock.tsx`）には足していない。
+続けて利用者が波紋のタイミングを揃えることを求めた。
+マークの点を 570ms から句点と同じ 900ms に遅らせ、2 つの点が同時に着地して波紋が同時に広がるようにした。
+句点は文字を引き終えてから落とす必要があるので、マークの側を合わせた。
 
 ## Rejected reasons
 
-- `lower-tittle`: 利用者は、点を句点にする考えのほうが好きだと判断した（2026-09-25、判断者は利用者）。制作中の観察では、マークの点と i の点が同じ高さで並んで競っていた。コードは Decision まで残す。
+- `lower-tittle`: 利用者は、点を句点にする考えのほうが好きだと判断した（2026-09-25、判断者は利用者）。
+  制作中の観察では、マークの点と i の点が同じ高さで並んで競っていた。
+  コードは Decision まで残す。
 
 ## Learnings
 
@@ -213,4 +234,5 @@ Catalog は `pathLength="1"` で破線を 0..1 に揃え、モックのように
 
 - `experiments/uiux-numa-logo/`: マーク `nu-dot` の正本と座標の導出。
 - `experiments/catalog-showreel/`: マークの点と動きの由来。
-- `apps/catalog/src/catalog.css`: マークの入場（`logo-mark--enter`）。wordmark の動きはこの値に揃えた。
+- `apps/catalog/src/catalog.css`: マークの入場（`logo-mark--enter`）。
+  wordmark の動きはこの値に揃えた。

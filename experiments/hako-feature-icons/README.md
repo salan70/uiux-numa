@@ -28,8 +28,10 @@ AI エージェントが要求文から SVG アイコンを作る手順と知識
 
 ## Target
 
-- 開発者: 個人開発で LP とアプリのアイコンを AI エージェントに依頼する。デザインの専門知識はない。
-- 利用者: LP を初めて訪れ、機能の見出しとアイコンを 1 秒程度で流し読みする。アプリ内では 16px のアイコンをラベルと一緒に見る。
+- 開発者: 個人開発で LP とアプリのアイコンを AI エージェントに依頼する。
+  デザインの専門知識はない。
+- 利用者: LP を初めて訪れ、機能の見出しとアイコンを 1 秒程度で流し読みする。
+  アプリ内では 16px のアイコンをラベルと一緒に見る。
 
 ## Scope / Domains
 
@@ -44,11 +46,16 @@ variant で変える軸は次の 2 つ。
 
 ## Constraints
 
-- viewBox は `0 0 24 24`。単色で、fill と stroke は `currentColor` か `none` だけを使う。
-- 自己完結した静的 SVG にする。`script`、外部参照、`text`、アニメーションを使わない。`just svg-check --mono --viewbox "0 0 24 24"` を通す。
+- viewBox は `0 0 24 24`。
+  単色で、fill と stroke は `currentColor` か `none` だけを使う。
+- 自己完結した静的 SVG にする。
+  `script`、外部参照、`text`、アニメーションを使わない。
+  `just svg-check --mono --viewbox "0 0 24 24"` を通す。
 - 3 個で見かけの大きさと線の太さを揃える。
-- 利用画面は LP の機能セクション（40px の角丸の面の上に 24px）と、アプリ内のタスク詳細（16px、ラベル併記）。配色は color-schemes の `wasabi` のライト。
-- 編集用の原本を `variants/<id>/source/`、配布用を `variants/<id>/dist/` に置く。配布用は `just svg-optimize` で作る。
+- 利用画面は LP の機能セクション（40px の角丸の面の上に 24px）と、アプリ内のタスク詳細（16px、ラベル併記）。
+  配色は color-schemes の `wasabi` のライト。
+- 編集用の原本を `variants/<id>/source/`、配布用を `variants/<id>/dist/` に置く。
+  配布用は `just svg-optimize` で作る。
 - `index.tsx` は配布用を `?raw` で inline に展開する。
 - モックは React + TypeScript で、追加の npm 依存を入れない。
 - モックの文字は `tokens/typography/` の 6 role を使い、アイコン以外の比較条件を揃える。
@@ -91,22 +98,32 @@ Hako は小さなチーム向けのタスク共有アプリです。その LP �
 - 実行日: 2026-09-18
 - モデル: `claude-fable-5-1`
 - 権限: `--permission-mode acceptEdits`、`Bash` は `just`、`ls`、`cat`、`mkdir`、`resvg`、`svgo`、`xmllint`、`file` だけを許可
-- 環境: リポジトリのルートで `nix develop -c` 経由。`CLAUDE.md`、この README、`current-feather`、`scripts/`、SVG 制作の ADR を読める状態
-- 結果: 79 ターン、約 19 分、費用 7.35 USD。ツール呼び出し 77 回（Bash 41、Read 23、Write 12、Edit 1）
+- 環境: リポジトリのルートで `nix develop -c` 経由。
+  `CLAUDE.md`、この README、`current-feather`、`scripts/`、SVG 制作の ADR を読める状態
+- 結果: 79 ターン、約 19 分、費用 7.35 USD。
+  ツール呼び出し 77 回（Bash 41、Read 23、Write 12、Edit 1）
 - session_id: `08f5138b-b6b2-4a03-b068-7ece1ae05fa9`
 
 実行の記録から分かった行動は次のとおり。
 
 - 既存の README、`current-feather`、`scripts/` の 3 本、SVG 制作の ADR を読み、`part-<asset>-<role>` の id と `role="img"` の規約を自力で採用した。
-- `just svg-sheet` で 16、24、48px を描画し、3 回反復した。resvg で利用画面の色を再現した比較画像も作った（規則外の名前だったため保存していない）。
-- Chrome での利用画面の撮影と `index.tsx` は作らなかった。`index.tsx` と in-context の preview は、担当者が同じモックで後から加えた。
-- `just svg-check --viewbox` の引数が分割される不具合を報告した。recipe を修正した。
+- `just svg-sheet` で 16、24、48px を描画し、3 回反復した。
+  resvg で利用画面の色を再現した比較画像も作った（規則外の名前だったため保存していない）。
+- Chrome での利用画面の撮影と `index.tsx` は作らなかった。
+  `index.tsx` と in-context の preview は、担当者が同じモックで後から加えた。
+- `just svg-check --viewbox` の引数が分割される不具合を報告した。
+  recipe を修正した。
 
 `no-skill` の造形の理由（実行の報告から要約）は次のとおり。
 
-- stroke 1.5、round の端点。24px で線が軽く、16px で 1px になる。基準の Feather 風（2px）より細くして落ち着きに寄せた。
+- stroke 1.5、round の端点。
+  24px で線が軽く、16px で 1px になる。
+  基準の Feather 風（2px）より細くして落ち着きに寄せた。
 - 各アイコンに塗りの要素を 1 つだけ置き、「線画 + 1 点の塗り」で組として見せる。
-- assign: 塗りの頭と左右対称の肩の弧に、右上のチェックで「決まった」を示す。deadline: 縁の線で閉じた鐘と塗りの舌。progress: 台の線に立つ 3 本のバーで、今週だけ塗り。高さは等間隔を避けて電波表示と区別した。
+- assign: 塗りの頭と左右対称の肩の弧に、右上のチェックで「決まった」を示す。
+  deadline: 縁の線で閉じた鐘と塗りの舌。
+  progress: 台の線に立つ 3 本のバーで、今週だけ塗り。
+  高さは等間隔を避けて電波表示と区別した。
 - 却下した案: 肩の弧をチェックへ続ける形（48px で波に見えた）、呼び鈴（縦長だとランプに見え、平たいと組の大きさが揃わない）、カレンダー + 日付の点（「知らせる」が消える）、折れ線と円グラフ（推移か完了率のどちらかが落ちる）。
 
 ### Skill あり実行の条件
@@ -117,18 +134,23 @@ Hako は小さなチーム向けのタスク共有アプリです。その LP �
 - 実行日: 2026-09-18
 - モデル: `claude-fable-5-1`
 - 権限: `no-skill` と同じに加えて `nix develop`、`diff` を許可
-- 結果: 93 ターン、約 16 分、費用 8.37 USD。ツール呼び出し 90 回（Bash 42、Write 24、Read 22、Agent 1、Edit 1）
+- 結果: 93 ターン、約 16 分、費用 8.37 USD。
+  ツール呼び出し 90 回（Bash 42、Write 24、Read 22、Agent 1、Edit 1）
 - session_id: `52fad342-092b-4b99-83ca-a58930957e60`
-- Skill の読み込み: `/crafting-svg` の展開で SKILL.md が読み込まれ、参照資料 5 本（icon、svg-authoring、foundations、self-review、ui-fit）と `docs/principles/README.md` を読んだ。造形の理由に知識 ID を引用し、Brief を知らない別 agent にラベルなしのシートを読ませる確認を自発的に行った。
+- Skill の読み込み: `/crafting-svg` の展開で SKILL.md が読み込まれ、参照資料 5 本（icon、svg-authoring、foundations、self-review、ui-fit）と `docs/principles/README.md` を読んだ。
+  造形の理由に知識 ID を引用し、Brief を知らない別 agent にラベルなしのシートを読ませる確認を自発的に行った。
 
 ### 方向の variant の制作条件
 
 `crisp-square`、`soft-solid`、`hako-frame` は、方向のパラメータ（線幅、端点と角、塗りか線か、比喩の範囲、グリッド）を担当者が指定し、Skill を読み込んだ subagent に 1 variant ずつ任せた。
-要求文は共通。反復は最大 3 回。利用画面の撮影まで subagent が行い、README への記録は担当者が写した。
+要求文は共通。
+反復は最大 3 回。
+利用画面の撮影まで subagent が行い、README への記録は担当者が写した。
 
 ### 反復の記録
 
-`current-feather` は既存のため反復なし。`no-skill` の反復は実行の報告にだけ残り、round ごとの記録はない。
+`current-feather` は既存のため反復なし。
+`no-skill` の反復は実行の報告にだけ残り、round ごとの記録はない。
 
 | variant        | round | 観察                                                                                                                                                                                   | 変更                                                                                                      | 参照                               | 終了理由                         |
 | -------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------- | -------------------------------- |
@@ -148,31 +170,43 @@ Hako は小さなチーム向けのタスク共有アプリです。その LP �
 
 `with-skill`（線幅 1.5、round、線で器を描き塗りで決まったものを 1 つ置く）
 
-- 線の中心を 0.75 + 1.5n に置き、16px（2/3 倍）で整数ピクセルに乗せた（SVG-01、ICON-09）。線幅 2 は 16px で 1.33px になりにじむため採らなかった。
-- assign はカードの線に担当者の塗り、deadline は鐘の線に舌の塗り、progress は 100% の到達線に完了分の塗り。既製の「人 + チェック」の配置を避けた。
-- 却下: 挙手する人（腕が斜線に見える）、台座の上の人（判子に見える）、カレンダー + 鐘（16px で assign と取り違える）、棒 + 幹（スライダーに見える）。下書きは `previews/with-skill-sketch-metaphor-sheet.png`。
-- 未解決: deadline は目隠しの読み取りで「Feather や Lucide の鐘に似る」と指摘され、比喩の限界として許容した。progress の到達線は「上限」や「見出し線」と読まれる可能性が残る。
+- 線の中心を 0.75 + 1.5n に置き、16px（2/3 倍）で整数ピクセルに乗せた（SVG-01、ICON-09）。
+  線幅 2 は 16px で 1.33px になりにじむため採らなかった。
+- assign はカードの線に担当者の塗り、deadline は鐘の線に舌の塗り、progress は 100% の到達線に完了分の塗り。
+  既製の「人 + チェック」の配置を避けた。
+- 却下: 挙手する人（腕が斜線に見える）、台座の上の人（判子に見える）、カレンダー + 鐘（16px で assign と取り違える）、棒 + 幹（スライダーに見える）。
+  下書きは `previews/with-skill-sketch-metaphor-sheet.png`。
+- 未解決: deadline は目隠しの読み取りで「Feather や Lucide の鐘に似る」と指摘され、比喩の限界として許容した。
+  progress の到達線は「上限」や「見出し線」と読まれる可能性が残る。
 
 `crisp-square`（線幅 2、butt と miter、角丸なし、整数座標）
 
 - 塗りは各 1 か所、4 単位の要素（頭、印の日、今週の棒）だけに置き、「決まった 1 つ」を示す（ICON-10、FORM-08）。
-- assign は名札に頭と肩、deadline は卓上の暦に印の日、progress は L 字の軸に立つ週ごとの棒。「知らせる」は比喩に含めずラベルに委ねた（ICON-01）。
-- 許容: 暦は水平線 3 本を持つため 3 個の中でわずかに重い（FORM-06）。名札の肩の内側は 16px で灰色の面になる。
-- 未解決: SVGO が既定値の `stroke-linecap="butt"` と `stroke-linejoin="miter"` を配布用から落とす。利用先の CSS が round を指定すると角が変わる。
+- assign は名札に頭と肩、deadline は卓上の暦に印の日、progress は L 字の軸に立つ週ごとの棒。
+  「知らせる」は比喩に含めずラベルに委ねた（ICON-01）。
+- 許容: 暦は水平線 3 本を持つため 3 個の中でわずかに重い（FORM-06）。
+  名札の肩の内側は 16px で灰色の面になる。
+- 未解決: SVGO が既定値の `stroke-linecap="butt"` と `stroke-linejoin="miter"` を配布用から落とす。
+  利用先の CSS が round を指定すると角が変わる。
 
 `soft-solid`（線なし、塗りと負の空間、角丸 外 2 / 内 1）
 
-- 塗りの面積を 96px 描画の alpha 合計で測り、157 / 166 / 166 に揃えた（FORM-03）。円グラフは keyline 20 より小さい直径 16.5 で、面積の一致を優先した。
+- 塗りの面積を 96px 描画の alpha 合計で測り、157 / 166 / 166 に揃えた（FORM-03）。
+  円グラフは keyline 20 より小さい直径 16.5 で、面積の一致を優先した。
 - assign は頭と肩のシルエットに塗りのチェック、deadline はドームと広がる裾の鐘に半円の舌、progress は右上が欠けた円グラフ（欠け = 残り、閉合で円として読む。FORM-10）。
 - 却下: 3 個すべてを角丸四角の切り抜きにする案（40px の面の上で重すぎ、切り抜きが 16px で 1.3px を割る）。
-- 未解決: 塗りは既定の線画より強調として働くため（ICON-10）、本文の横で文字より重く見える可能性がある。複数行の一覧では未検証。
+- 未解決: 塗りは既定の線画より強調として働くため（ICON-10）、本文の横で文字より重く見える可能性がある。
+  複数行の一覧では未検証。
 
 `hako-frame`（線幅 2、round、共通の上が開いた箱）
 
-- 箱は外形 18×10（x 3〜21、y 11〜21）で幅を担い、意味の要素が口から上へ出て高さを担う。16px で箱が容器として読める最小の高さを確保しつつ、要素の輪郭が識別を担う（ICON-06、ICON-11、FORM-09）。
+- 箱は外形 18×10（x 3〜21、y 11〜21）で幅を担い、意味の要素が口から上へ出て高さを担う。
+  16px で箱が容器として読める最小の高さを確保しつつ、要素の輪郭が識別を担う（ICON-06、ICON-11、FORM-09）。
 - assign は箱の中の人、deadline は箱に入る「!」、progress は箱の中のチェック。
 - 却下: 進捗を「箱が満たされる度合い」（底の塗り帯）で表す案は、縦の見かけが他 2 個の半分になり ICON-06 に反する。
-- 未解決: 「!」がエラーや警告に、チェックが「完了する操作」に読まれる可能性がある。3 個中 2 個だけに塗りがあり、progress は線のみ。チェックは task アプリで頻出の形で、箱との組み合わせで固有性が出るかは評価に委ねる。
+- 未解決: 「!」がエラーや警告に、チェックが「完了する操作」に読まれる可能性がある。
+  3 個中 2 個だけに塗りがあり、progress は線のみ。
+  チェックは task アプリで頻出の形で、箱との組み合わせで固有性が出るかは評価に委ねる。
 
 ### 原則候補の別プロダクトでの試行
 
@@ -196,13 +230,22 @@ variant `principle-applied` は、原則の初版の手順に厳密に従って�
 
 判定は**部分的に反証**である。
 
-- 支持された点: 24px の外形が 3 個とも一致し、座標は整数だけになった。外形の一致は別プロダクトでも再現した。
-- 反証 1: 初版が固定するとした 3 パラメータのうち、root の属性の一致と要素側の上書き 0 は、4 案すべてが既に満たしていた。Skill も原則も使わない `no-skill` でも満たしている。差を生んだのは座標の刻みと外形だけだった。
-- 反証 2: 外形の一致は 3 パラメータの必要条件ではない。`with-skill` も一致を達成しており、語彙を混ぜ、座標も整数ではない。
-- 反証 3: 初版は最小の表示サイズを決めていなかった。24 の viewBox の整数座標は 16px で境界から外れ、線幅 2 も 1.33px になる。結果、16px のにじみが 4 案で最悪になった。由来の Experiment が 20〜96px だったため、この穴は露出しなかった。
+- 支持された点: 24px の外形が 3 個とも一致し、座標は整数だけになった。
+  外形の一致は別プロダクトでも再現した。
+- 反証 1: 初版が固定するとした 3 パラメータのうち、root の属性の一致と要素側の上書き 0 は、4 案すべてが既に満たしていた。
+  Skill も原則も使わない `no-skill` でも満たしている。
+  差を生んだのは座標の刻みと外形だけだった。
+- 反証 2: 外形の一致は 3 パラメータの必要条件ではない。
+  `with-skill` も一致を達成しており、語彙を混ぜ、座標も整数ではない。
+- 反証 3: 初版は最小の表示サイズを決めていなかった。
+  24 の viewBox の整数座標は 16px で境界から外れ、線幅 2 も 1.33px になる。
+  結果、16px のにじみが 4 案で最悪になった。
+  由来の Experiment が 20〜96px だったため、この穴は露出しなかった。
 
 この反証を受けて、原則候補に「最小の表示サイズを先に決め、線幅と刻みをそこから逆算する」手順と、内側の最小隙間を足した。
-`principle-applied` の 16px のにじみは、原則の初版の値を守る限り直せない。値を変えると `with-skill` と同じになり、手順に厳密に従った検証でなくなる。この矛盾は残した。
+`principle-applied` の 16px のにじみは、原則の初版の値を守る限り直せない。
+値を変えると `with-skill` と同じになり、手順に厳密に従った検証でなくなる。
+この矛盾は残した。
 
 preview は `previews/principle-applied-final-sheet.png`、`previews/compare-principle-24.png`、`previews/principle-applied-final-in-context.png`。
 
@@ -210,9 +253,13 @@ preview は `previews/principle-applied-final-sheet.png`、`previews/compare-pri
 
 - `previews/<id>-first-sheet.png`: 最初の完成形の比較シート（`with-skill`、方向の 3 variant）
 - `previews/<id>-final-sheet.png`: 配布用で描画した最終の比較シート（全 variant）
-- `previews/<id>-final-in-context.png`: 利用画面のモック（全 variant）。1280×900、倍率 2
-- `previews/compare-first-sheet.png`: 改善前の比較。各 variant の first-sheet を縦に並べた。基準 2 件は final を載せた
-- `previews/compare-final-sheet.png`: 改善後の比較。アイコンごとに 6 variant を並べた
+- `previews/<id>-final-in-context.png`: 利用画面のモック（全 variant）。
+  1280×900、倍率 2
+- `previews/compare-first-sheet.png`: 改善前の比較。
+  各 variant の first-sheet を縦に並べた。
+  基準 2 件は final を載せた
+- `previews/compare-final-sheet.png`: 改善後の比較。
+  アイコンごとに 6 variant を並べた
 
 ## Evaluation
 

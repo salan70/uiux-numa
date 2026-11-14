@@ -49,12 +49,19 @@ variant で変える軸は情報構造と操作である。
 
 ## Constraints
 
-- 要件文書の作業（W-01〜22）、常時表示（S-01〜07）、状態（T-01〜12）を、すべての variant が画面に置く。置かない場合は理由を README に書く。
-- 要件文書の制約（C-01〜15）を守る。特に Apply は途中で他の作業へ移れない線形の流れにし、「実機に反映した」以外の完了文言を使わない。
-- 固定データは Cornix Bonsai の型（`EditTarget`、`WorkTask`、`Selection`、keycode の分類、保存状態、診断、`ApplyState`）と fixture（`fixtures/cornix-lp/baseline.vil`、V1.12 definition、`fixtures/mac-keyboard/desired.yaml`）から作る。本体に無い状態や数値を置かない。
-- 盤面の座標と keycode の表示は、Cornix Bonsai の `src/render/geometry.ts` と label 関数の出力を写す。出典 commit を残す。
-- 配色は `color-schemes-material` の `pop-toy`、寸法と文字は `tokens/` の 6 系統、ボタンは `button` の `pill-action` を使う。追加の npm 依存を入れない。
-- 色を積極的に使い、カラフルで楽しい雰囲気を出す。ただし色だけで状態を区別せず、良し悪しの色（success / warning / error）と強調色を分ける。黄の塗りは白の面に 1.61:1 しかないため、塗りだけで選択を示さない。
+- 要件文書の作業（W-01〜22）、常時表示（S-01〜07）、状態（T-01〜12）を、すべての variant が画面に置く。
+  置かない場合は理由を README に書く。
+- 要件文書の制約（C-01〜15）を守る。
+  特に Apply は途中で他の作業へ移れない線形の流れにし、「実機に反映した」以外の完了文言を使わない。
+- 固定データは Cornix Bonsai の型（`EditTarget`、`WorkTask`、`Selection`、keycode の分類、保存状態、診断、`ApplyState`）と fixture（`fixtures/cornix-lp/baseline.vil`、V1.12 definition、`fixtures/mac-keyboard/desired.yaml`）から作る。
+  本体に無い状態や数値を置かない。
+- 盤面の座標と keycode の表示は、Cornix Bonsai の `src/render/geometry.ts` と label 関数の出力を写す。
+  出典 commit を残す。
+- 配色は `color-schemes-material` の `pop-toy`、寸法と文字は `tokens/` の 6 系統、ボタンは `button` の `pill-action` を使う。
+  追加の npm 依存を入れない。
+- 色を積極的に使い、カラフルで楽しい雰囲気を出す。
+  ただし色だけで状態を区別せず、良し悪しの色（success / warning / error）と強調色を分ける。
+  黄の塗りは白の面に 1.61:1 しかないため、塗りだけで選択を示さない。
 - キーボード操作（方向キー、Enter、Esc）、focus、文字拡大、reduced motion、ライトとダークを確認する。
 - 1280 × 800 と 1024 × 768 で横スクロールを出さない。
 - 各 variant は README に、部品の境界と状態の持ち方の図を書く。
@@ -140,7 +147,8 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 
 - keycode の組み立て（Tap / Hold）と、fixture に無い keycode の表示は、本体の `applyPick` と `keycodeDisplay` を写した近似である。
 - 保存、接続、読込、Apply は時間を置いて状態を進めるだけで、ファイルと実機には触れない。
-- Mac の動作の種類（basic / modTap / layerSwitch / none）を選ぶ select は置いていない。picker と適用先で basic と modTap を作れる。
+- Mac の動作の種類（basic / modTap / layerSwitch / none）を選ぶ select は置いていない。
+  picker と適用先で basic と modTap を作れる。
 - Behaviors の Tap Dance は先頭 6 件だけを並べる。
 - encoder と盤面上の押し込みキーの対応（P-01）は、definition にも Core にも対応が無いため表せない。
 - 診断の出どころを `invalid-cases.vil` に切り替えても、検証パネルの「参照」は目標状態の fixture のままである。
@@ -155,7 +163,8 @@ error と warning の例は `invalid-cases.vil` の診断を使う（モック�
 - picker での割り当て、保存中から保存済みへの遷移、同じ位置の変更で差分件数が増えないこと。
 - Hold では modifier だけを選べ、選ぶと mod-tap になること。
 - パネルが画面中央の modal で開き、見出しへ focus し、Esc で閉じると入口へ戻ること。
-- パネルを全画面へ広げ、元に戻せること。全画面にしたパネルが次も全画面で開くこと。
+- パネルを全画面へ広げ、元に戻せること。
+  全画面にしたパネルが次も全画面で開くこと。
 - 検証の診断から該当キーへ移り、盤面へ focus が戻ること。
 - Apply の backup、差分確認、書き込み中は中断だけ、完了の「実機に反映した」、反映後に差分 0 件で Apply を止めること。
 - 保存の競合で再試行を出さず再読込を出すこと。
@@ -183,9 +192,12 @@ Core、ファイル形式、CLI、Apply の安全手順は変えない。
 判断者は利用者で、理由は「直感」である。
 言葉にした理由は無く、下の代償は提案時に書いたものである。
 
-- `layer-shelf`: 全 layer の縮小盤面を棚に並べて主のナビゲーションにし、棚が Overview を兼ねる。代償は、棚が面積を使い、layer の少ない Mac では棚の意味が薄いこと。
-- `key-palette`: 検索できる keycode パレットで、キーボードだけで割り当てる。代償は、keycode 名を知らない利用者には物理配列の picker より探しにくいこと。
-- `sync-lanes`: 目標と実機を 2 つのレーンに分け、差分と Apply をレーンの間に置く。代償は、頻度の低い実機の情報が常に面積を使い、編集面が狭くなること。
+- `layer-shelf`: 全 layer の縮小盤面を棚に並べて主のナビゲーションにし、棚が Overview を兼ねる。
+  代償は、棚が面積を使い、layer の少ない Mac では棚の意味が薄いこと。
+- `key-palette`: 検索できる keycode パレットで、キーボードだけで割り当てる。
+  代償は、keycode 名を知らない利用者には物理配列の picker より探しにくいこと。
+- `sync-lanes`: 目標と実機を 2 つのレーンに分け、差分と Apply をレーンの間に置く。
+  代償は、頻度の低い実機の情報が常に面積を使い、編集面が狭くなること。
 
 ## Learnings
 

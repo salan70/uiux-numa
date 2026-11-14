@@ -61,8 +61,10 @@ adopted:
 `night-header` に、地 `#E2E8E3`（第 2 段の中）と、灰を緑に寄せる配色（第 3 段の T1）を採る（2026-10-16、利用者）。
 製品の決定は DS-241 に記録した。
 
-- 見出しの帯: タイトルと同じ顔の列を止めて敷き、掲示板の色の 72% で覆う。題と戻るの印は夜の字、下端に点いた LED の黄の 3 点の線。
-- 配色: background `#E2E8E3`、surfaceContainer `#EEF2EE`、surfaceVariant `#D0DAD3`、onSurfaceVariant `#435048`、outline `#6A786F`、字と輪郭と影 `#17221B`。面は白のまま。
+- 見出しの帯: タイトルと同じ顔の列を止めて敷き、掲示板の色の 72% で覆う。
+  題と戻るの印は夜の字、下端に点いた LED の黄の 3 点の線。
+- 配色: background `#E2E8E3`、surfaceContainer `#EEF2EE`、surfaceVariant `#D0DAD3`、onSurfaceVariant `#435048`、outline `#6A786F`、字と輪郭と影 `#17221B`。
+  面は白のまま。
 
 ![アプリの各画面（T1）](previews/t1-in-app.png)
 
@@ -70,7 +72,8 @@ adopted:
 
 - `board-header`: 顔の地とのつながりが弱い。
 - `face-ground`: 字だけの欄（設定の説明など）の後ろがうるさくなる。
-- 地 `#EEF1EE`: 寄せ方が弱い。`#D3DCD5`: 字だけの欄が重く見える。
+- 地 `#EEF1EE`: 寄せ方が弱い。
+  `#D3DCD5`: 字だけの欄が重く見える。
 - 面をクリームにする段と、選択を芝の緑にする段: 利用者が灰を緑に寄せる段で止めた。
 
 ## Learnings

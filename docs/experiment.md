@@ -7,10 +7,14 @@
 ## 流れ
 
 1. Problem を書く。
-2. variant を実装する。copy、情報構造、操作、motion、feedback も独立した variant にしてよい。
-3. 必要なら [evaluation.md](evaluation.md) の手順で評価する。評価せずに判断してもよい。
-4. 人間が判断し、Decision と Rejected reasons を書く。エージェントは先に書かない。
-5. 判断後は却下 variant のコードと専用の preview を削除する。理由は README に残り、コードは Git 履歴で辿る。
+2. variant を実装する。
+   copy、情報構造、操作、motion、feedback も独立した variant にしてよい。
+3. 必要なら [evaluation.md](evaluation.md) の手順で評価する。
+   評価せずに判断してもよい。
+4. 人間が判断し、Decision と Rejected reasons を書く。
+   エージェントは先に書かない。
+5. 判断後は却下 variant のコードと専用の preview を削除する。
+   理由は README に残り、コードは Git 履歴で辿る。
 6. 一般化できる知見は Learnings に書き、仮説として育てるなら [原則候補](principles/README.md) に立てる。
 
 判断済みで後続の無い Experiment はディレクトリごと削除してよい。
@@ -35,19 +39,32 @@ experiments/<slug>/
     └── compare-<state>.png      # variant を横断する比較画像（任意）
 ```
 
-- `variants/<variant-id>/` に Markdown を置かない。説明と判断は README に集める。
-- `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。`platforms` に `web` を含む Experiment では、README の Variants 表にある id に `index.tsx` が要る。
-- iOS の variant は `index.tsx` の代わりに `<Pascal(slug)><Pascal(id)>.swift` を置き、同じ名前の SwiftUI の `View` を引数なしで作れるようにする（例: `yodoku-app` の `tabs` は `YodokuAppTabs`）。全 Experiment の Swift は 1 つの module に入るので、ほかのファイル名と型名もこの名前で始める。`shared/*.swift` も読まれる。
-- Flutter の variant は `index.tsx` の代わりに `index.dart` を置き、引数なしの top-level 関数 `Widget buildVariant()` を持たせる。Dart はファイルごとに名前空間が分かれるので、iOS と違い名前に slug を含めなくてよい。`shared/*.dart` は相対 import で読む。
-- 確かめるための操作（画面の移動など）を端末の中に重ねたくないときは、`index.dart` に `Widget buildPanel()` も置く。実行基盤は窓に余裕があるとき、端末の枠の右に操作盤として描く。
-- Catalog は `platforms` に `web` を含まない Experiment を載せない。frontmatter の検査だけは通す。
-- SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。`index.tsx` は `dist/` を利用画面のモックに埋め込む。多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。
-- preview は README が根拠にするものだけを commit する。`state` は variant 間で揃える。
+- `variants/<variant-id>/` に Markdown を置かない。
+  説明と判断は README に集める。
+- `platforms/web` と Catalog は `experiments/*/variants/*/index.tsx` を glob で読む。
+  `platforms` に `web` を含む Experiment では、README の Variants 表にある id に `index.tsx` が要る。
+- iOS の variant は `index.tsx` の代わりに `<Pascal(slug)><Pascal(id)>.swift` を置き、同じ名前の SwiftUI の `View` を引数なしで作れるようにする（例: `yodoku-app` の `tabs` は `YodokuAppTabs`）。
+  全 Experiment の Swift は 1 つの module に入るので、ほかのファイル名と型名もこの名前で始める。
+  `shared/*.swift` も読まれる。
+- Flutter の variant は `index.tsx` の代わりに `index.dart` を置き、引数なしの top-level 関数 `Widget buildVariant()` を持たせる。
+  Dart はファイルごとに名前空間が分かれるので、iOS と違い名前に slug を含めなくてよい。
+  `shared/*.dart` は相対 import で読む。
+- 確かめるための操作（画面の移動など）を端末の中に重ねたくないときは、`index.dart` に `Widget buildPanel()` も置く。
+  実行基盤は窓に余裕があるとき、端末の枠の右に操作盤として描く。
+- Catalog は `platforms` に `web` を含まない Experiment を載せない。
+  frontmatter の検査だけは通す。
+- SVG は `source/` に原本、`dist/` に `just svg-optimize` の出力を置く。
+  `index.tsx` は `dist/` を利用画面のモックに埋め込む。
+  多色にする面は `part-<asset>-<name>` の id を持ち、色は利用画面の CSS が与える。
+- preview は README が根拠にするものだけを commit する。
+  `state` は variant 間で揃える。
 
 ## slug と variant-id
 
-- 小文字の英数字とハイフンだけの kebab-case にする。日付 prefix と連番（`a`、`b`）は使わない。
-- variant-id は変えた軸が分かる名前にする（例: `on-blur`、`realtime`）。名前で選ぶ選択肢なら、その名前でよい（例: 配色の `wasabi`）。
+- 小文字の英数字とハイフンだけの kebab-case にする。
+  日付 prefix と連番（`a`、`b`）は使わない。
+- variant-id は変えた軸が分かる名前にする（例: `on-blur`、`realtime`）。
+  名前で選ぶ選択肢なら、その名前でよい（例: 配色の `wasabi`）。
 
 ## frontmatter
 
@@ -119,7 +136,8 @@ adopted: []
 | --------- | -------------------------------------------- | -------------------- | ------------------- |
 | `on-blur` | フィールド離脱時の検証は入力の流れを妨げない | 検証タイミング、文言 | `variants/on-blur/` |
 
-- Catalog はこの表の `id`、`仮説`、`変えた軸` を読む。列の順を変えない。
+- Catalog はこの表の `id`、`仮説`、`変えた軸` を読む。
+  列の順を変えない。
 - 基準となる variant は仮説の先頭に `基準:` と書く。
 - 評価の前に却下した variant は、判断までは表に残し、仮説の先頭に `却下:` と書く。
 - 判断後に削除した variant は表から外し、仮説と変えた軸を「削除した variant」の箇条書きへ移す。

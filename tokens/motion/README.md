@@ -16,7 +16,8 @@
 | `easing.out`      | cubic-bezier(0, 0, 0.58, 1)      |                     | 動き出しの曲線。`ease-out` |
 | `easing.entrance` | cubic-bezier(0.22, 1, 0.36, 1)   |                     | 画面の見出しが現れる曲線   |
 
-CSS では時間に semantic を使う。曲線に semantic は置かない。
+CSS では時間に semantic を使う。
+曲線に semantic は置かない。
 `entrance`、`stagger`、`easing.entrance` の根拠は `experiments/catalog-screen-entrance/README.md` にある。
 
 ## 使用規則

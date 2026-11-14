@@ -33,7 +33,8 @@ Catalog が読み、値が表に無ければ build が落ちる。
 | `stable`       | 十分に検証され、再利用できる |
 | `deprecated`   | 新規利用を推奨しない         |
 
-`stable` は人間が判断して付ける。Experiment の `status` や `adopted` から自動では進めない。
+`stable` は人間が判断して付ける。
+Experiment の `status` や `adopted` から自動では進めない。
 
 ## Catalog
 

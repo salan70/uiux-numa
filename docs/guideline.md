@@ -16,8 +16,10 @@ updated: YYYY-MM-DD
 ---
 ```
 
-- `title` は Catalog の表示名で英語にする。本文は日本語で書く。
-- `status` は `draft` か `adopted`。人間が内容を確認したら `adopted` にし、判断者、判断日、理由を commit message に書く。
+- `title` は Catalog の表示名で英語にする。
+  本文は日本語で書く。
+- `status` は `draft` か `adopted`。
+  人間が内容を確認したら `adopted` にし、判断者、判断日、理由を commit message に書く。
 - `created` と `updated` は機械検査の対象外なので、更新時に手で直す。
 
 ## 本文
@@ -32,7 +34,8 @@ updated: YYYY-MM-DD
 
 ### コア
 
-`###` の見出しと本文 1〜3 文で書く。見出しは短い名詞句か短文にし、Tips がこの見出しで引く。
+`###` の見出しと本文 1〜3 文で書く。
+見出しは短い名詞句か短文にし、Tips がこの見出しで引く。
 本文は目指す状態を 1 文で書き、実際に衝突する判断があるときだけ「A より B を優先する」を 1 文足す。
 主題のすべての場面に当てはまる数値は本文に書いてよい。
 箇条書き、具体例、出典は Tips へ送る。
@@ -79,6 +82,7 @@ updated: YYYY-MM-DD
 ## 文書を足す手順
 
 1. 雛形を `docs/guidelines/<slug>.md` へ複製し、コアを先に決めてから Tips を書く。
-2. `apps/catalog/src/content/guidelines.ts` の `GUIDELINE_ORDER` へ slug を足す。落としても build は通り、一覧の末尾へ並ぶ。
+2. `apps/catalog/src/content/guidelines.ts` の `GUIDELINE_ORDER` へ slug を足す。
+   落としても build は通り、一覧の末尾へ並ぶ。
 3. [docs/guidelines/README.md](guidelines/README.md) の一覧へ行を足す。
 4. `just catalog-test` と `just lint` を通す。

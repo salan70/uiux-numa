@@ -2,10 +2,12 @@
 
 - 状態: Accepted
 - 日付: 2026-09-13
-- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。`patterns/` と `design-systems/` の予定を廃止した。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。
+  `patterns/` と `design-systems/` の予定を廃止した。
 - 参照: [Issue #1](https://github.com/salan70/uiux-numa/issues/1)
 - 補足: `platforms/` の作成時期は [Web 実行基盤の ADR](2026-09-13-web-runner.md) で「最初の Web Experiment」に改めた。
-- 補足: テンプレートは `docs/templates/<kind>/` に置く。[Experiment format の ADR](2026-09-13-experiment-format.md) で決めた。
+- 補足: テンプレートは `docs/templates/<kind>/` に置く。
+  [Experiment format の ADR](2026-09-13-experiment-format.md) で決めた。
 
 ## 背景
 
@@ -49,17 +51,22 @@ uiux-numa/
 | `platforms/`      | 基盤      | Experiment を動かすアプリ殻や共通設定                                               | Web 以外の最初の Experiment |
 | `apps/catalog/`   | 基盤      | Catalog サイト                                                                      | Catalog MVP                 |
 
-- ディレクトリは最初の中身ができた時点で作る。空ディレクトリや `.gitkeep` を先に置かない。
+- ディレクトリは最初の中身ができた時点で作る。
+  空ディレクトリや `.gitkeep` を先に置かない。
 - `docs/principles/` も最初の原則ができた時点で作る。
 - `platforms/` と `apps/` は 3 層の外に置く実行基盤とする。
-- 各 Experiment の実装は `experiments/<name>/` 内に閉じる。`platforms/` には Experiment 固有の実装を置かない。
+- 各 Experiment の実装は `experiments/<name>/` 内に閉じる。
+  `platforms/` には Experiment 固有の実装を置かない。
 - dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、`skills/` と混ぜない。
 
 ## 却下した案
 
-- 対象領域ごとのディレクトリ: 領域は Experiment の metadata で表す。分類を固定するとディレクトリ移動が頻発する。
-- 空ディレクトリを先に全部作る: Issue #1 の non-goal。中身のない構成は判断の材料にならない。
-- `platforms/` の削除: 実行基盤の置き場が `apps/` と混ざる。役割を実行基盤に限定して残す。
+- 対象領域ごとのディレクトリ: 領域は Experiment の metadata で表す。
+  分類を固定するとディレクトリ移動が頻発する。
+- 空ディレクトリを先に全部作る: Issue #1 の non-goal。
+  中身のない構成は判断の材料にならない。
+- `platforms/` の削除: 実行基盤の置き場が `apps/` と混ざる。
+  役割を実行基盤に限定して残す。
 - `docs/adr/` の命名: dotfiles の `docs/decisions/` と揃える。
 
 ## 影響

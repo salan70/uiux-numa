@@ -2,7 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。`extracted` と `promoted` を廃止し、モデルの説明は docs/layers.md に置いた。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。
+  `extracted` と `promoted` を廃止し、モデルの説明は docs/layers.md に置いた。
 - 参照: [Issue #8](https://github.com/salan70/uiux-numa/issues/8)、[Asset composition model](../layers.md)、[Lab / Knowledge / Assets](../layers.md)、[Experiment の記録形式](../experiment.md)、[Pattern lifecycle](../experiment.md)
 
 ## 背景
@@ -17,12 +18,16 @@ Experiment の `extracted`、Pattern の `promoted`、variant の `adopted` を 
 ## 決定
 
 - Asset の性質は `role`（`foundation` / `module` / `reference`）と `maturity`（`experimental` / `candidate` / `stable` / `deprecated`）で表す。
-- 2 軸は独立させる。ディレクトリ名や 3 層の置き場へ固定しない。
+- 2 軸は独立させる。
+  ディレクトリ名や 3 層の置き場へ固定しない。
 - 運用の正本は [Asset composition model](../layers.md) にする。
 - Catalog と再利用判断に使う必須 metadata は `role`、`maturity`、`platforms`、`sources` だけにする。
-- Skill の `SKILL.md` frontmatter は `name` と `description` のままにする。分類は `skills/README.md` に書く。
-- Experiment の `status` と `adopted`、Pattern の `status` は各 lifecycle の語として残す。Asset の `maturity` へ転記しない。
-- 物理ディレクトリは現状維持とする。3 件の分類で再編の必要は確認できなかった。
+- Skill の `SKILL.md` frontmatter は `name` と `description` のままにする。
+  分類は `skills/README.md` に書く。
+- Experiment の `status` と `adopted`、Pattern の `status` は各 lifecycle の語として残す。
+  Asset の `maturity` へ転記しない。
+- 物理ディレクトリは現状維持とする。
+  3 件の分類で再編の必要は確認できなかった。
 
 ### 実例
 
@@ -45,7 +50,8 @@ Skill の frontmatter を変えないと、エージェントの起動契約を�
 
 ## 却下した案
 
-- 3 層の置き場を role と同一視する: Lab の Experiment にも `reference` がある。Knowledge の Pattern は再利用の形ではない。
+- 3 層の置き場を role と同一視する: Lab の Experiment にも `reference` がある。
+  Knowledge の Pattern は再利用の形ではない。
 - Experiment の `status` に `stable` を足す: lifecycle の手順位置と再利用判断が混ざる。
 - Pattern の `promoted` を Asset の `stable` と同一にする: 昇格は形を変えた印であり、実利用の十分さではない。
 - 全成果物を `design-systems/` へ集約する: 完成 Design System 前提に戻る。

@@ -162,7 +162,8 @@ round 0 で比喩と曲線が決まったため、named variant は 1 本だけ�
 - `previews/compare-divider.png`: round 2 の A / D / E / F と 6 配色の輪郭比較。
 - `previews/tomoe-classic-first-sheet.png`: source の 20 / 24 / 48px シート。
 - `previews/tomoe-classic-final-sheet.png`: dist の 20 / 24 / 48px シート。
-- `previews/tomoe-classic-in-context.png`: 利用画面のモックを実行基盤で撮影したもの。10 配色 × light / dark の 20 セルと、明暗 3 状態の 1 組を 1 枚に収める。
+- `previews/tomoe-classic-in-context.png`: 利用画面のモックを実行基盤で撮影したもの。
+  10 配色 × light / dark の 20 セルと、明暗 3 状態の 1 組を 1 枚に収める。
 
 ## Evaluation
 
@@ -197,7 +198,8 @@ SVG の正本と配布用は `stroke="currentColor"` のままにし、Icons ペ
 
 - A（現行の `currentColor` の輪郭）は却下した。
   ライトで黒い輪が色を締め付け、20px で中心が潰れて見えたためである。
-- B（領域の隙間 0.75）と C（隙間 1.5）は、20px でほぼ差が出なかったため却下した。作図は `compare-divider.png` の初版で成立を確認したが、効果がなかった。
+- B（領域の隙間 0.75）と C（隙間 1.5）は、20px でほぼ差が出なかったため却下した。
+  作図は `compare-divider.png` の初版で成立を確認したが、効果がなかった。
 - B と C は隙間を空けると各領域が自分の輪郭を引き、平行 2 本になって線の量が減らない。
 - D（輪郭なし）は却下した。
   `tsukiyo` dark の primary が面に対して 1.01:1 となり、役割色が面に溶けて円が欠けたためである。

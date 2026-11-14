@@ -21,12 +21,15 @@ primitive は 4px グリッドの階梯で、`space.100` が 4px を表す。
 | `space.1000` | 2.5rem   | 40  |
 | `space.2000` | 5rem     | 80  |
 
-- `space.page-inline`: ページ左右の余白。`space.600` を参照する。
-- `space.section`: 主要セクションの開始までの縦の間隔。`space.1000` を参照する。
+- `space.page-inline`: ページ左右の余白。
+  `space.600` を参照する。
+- `space.section`: 主要セクションの開始までの縦の間隔。
+  `space.1000` を参照する。
 
 ## 追加の規則
 
-- primitive は公開 Catalog に実利用がある値だけを 4px グリッド上に追加する。2px と 6px は細部の補正用である。
+- primitive は公開 Catalog に実利用がある値だけを 4px グリッド上に追加する。
+  2px と 6px は細部の補正用である。
 - semantic は役割名があるときだけ追加する。
 - padding は独立の token にせず、この階梯を参照する。
 

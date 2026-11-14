@@ -67,10 +67,14 @@ variant で変える軸は造形（見た目）だけにする。
 ## Constraints
 
 - viewBox は `0 0 24 24`、最小サイズは 16px（`docs/principles/icon-set-consistency-by-few-parameters.md`）。
-- 線は `currentColor`。語の色を継ぎ、Pop Toy の明暗へ追従する（UIFIT-07）。
-- 2 色にする場合は、色の面を `part-<asset>-accent` にし、色は利用画面の CSS が与える。意味は輪郭が担い、色の面には意味を担わせない（`docs/principles/theme-color-fill-carries-no-meaning.md`）。
-- 色だけで意味を伝えない。error、warning、info は形でも見分ける。
-- アイコンは読み上げから外す（`aria-hidden`）。名前は隣の語か `aria-label` が持つ。
+- 線は `currentColor`。
+  語の色を継ぎ、Pop Toy の明暗へ追従する（UIFIT-07）。
+- 2 色にする場合は、色の面を `part-<asset>-accent` にし、色は利用画面の CSS が与える。
+  意味は輪郭が担い、色の面には意味を担わせない（`docs/principles/theme-color-fill-carries-no-meaning.md`）。
+- 色だけで意味を伝えない。
+  error、warning、info は形でも見分ける。
+- アイコンは読み上げから外す（`aria-hidden`）。
+  名前は隣の語か `aria-label` が持つ。
 - Cornix Bonsai の `design-system.test.ts`（CSS に生の hex と px を書かない）に載せられること。
 - 追加の npm 依存を入れない。
 
@@ -91,18 +95,28 @@ Pop Toy の色の面や、キーキャップの枠を足すと、道具として
 
 ### 削除した variant
 
-- `round-line`: `round-soft` の値の線画だけで、17 個が 1 組に見え、16px で読める。軸は造形の基準。
-- `pop-duo`: 骨格の下に置き場所の色の面を 1 つ敷くと、線画の読みやすさを保ったまま Pop Toy の色が出る。軸は塗り（色の面の有無）。
-- `keycap-skirt`: 天面の下に手前の側面（スカート）を見せると、立体のキーに見える。軸は枠（側面）。
-- `keycap-dish`: 天面の中央に皿の凹みを描くと、押す面のあるキーに見える。軸は枠（皿）。
-- `keycap-shadow`: 右下へ影の縁を落とすと、浮き上がったキーに見える。軸は枠（影）。
+- `round-line`: `round-soft` の値の線画だけで、17 個が 1 組に見え、16px で読める。
+  軸は造形の基準。
+- `pop-duo`: 骨格の下に置き場所の色の面を 1 つ敷くと、線画の読みやすさを保ったまま Pop Toy の色が出る。
+  軸は塗り（色の面の有無）。
+- `keycap-skirt`: 天面の下に手前の側面（スカート）を見せると、立体のキーに見える。
+  軸は枠（側面）。
+- `keycap-dish`: 天面の中央に皿の凹みを描くと、押す面のあるキーに見える。
+  軸は枠（皿）。
+- `keycap-shadow`: 右下へ影の縁を落とすと、浮き上がったキーに見える。
+  軸は枠（影）。
 
-- `keycap-tile`: 角丸の正方形の枠だけで、キーキャップらしさと 16px の読みやすさを両立できる。round 4 までの基準。
-- `keycap-taper`: 超楕円の天面を上へ向かって φ^(−1/4) 倍に細くすると、線を足さずにキーを正面から見た形になる。軸は枠の輪郭（台形）。
-- `keycap-lip`: 超楕円の下に、天面の幅 ÷ φ の縁を 1 本添えると、キーの手前の縁が見える。軸は枠の要素（縁 1 本）。
+- `keycap-tile`: 角丸の正方形の枠だけで、キーキャップらしさと 16px の読みやすさを両立できる。
+  round 4 までの基準。
+- `keycap-taper`: 超楕円の天面を上へ向かって φ^(−1/4) 倍に細くすると、線を足さずにキーを正面から見た形になる。
+  軸は枠の輪郭（台形）。
+- `keycap-lip`: 超楕円の下に、天面の幅 ÷ φ の縁を 1 本添えると、キーの手前の縁が見える。
+  軸は枠の要素（縁 1 本）。
 
-- `keycap-dish-rim`: 皿の縁を不透明度 0.35 の線で描くと、写真のキーキャップのやわらかい縁に近づく。軸は凹み（淡い線の縁）。
-- `keycap-dish-top`: 皿の上側の縁だけを淡い線で描くと、凹みの上にできる陰になり、記号をほぼ保てる。軸は凹み（上の縁の陰）。
+- `keycap-dish-rim`: 皿の縁を不透明度 0.35 の線で描くと、写真のキーキャップのやわらかい縁に近づく。
+  軸は凹み（淡い線の縁）。
+- `keycap-dish-top`: 皿の上側の縁だけを淡い線で描くと、凹みの上にできる陰になり、記号をほぼ保てる。
+  軸は凹み（上の縁の陰）。
 
 `round-line` と `pop-duo` の削除前の状態は commit `20e9f04`、`keycap-skirt`・`keycap-dish`・`keycap-shadow` は commit `87c802b`、`keycap-tile`・`keycap-taper`・`keycap-lip` は commit `c4dd51c`、`keycap-dish-rim`・`keycap-dish-top` は commit `bd17d87` にある。
 
@@ -211,7 +225,8 @@ round 5 では、凹みを淡い面（fill-opacity）か淡い線（stroke-opaci
 未解決の点:
 
 - `keycap-tile` は、Cornix の入口がすでに色のタイルの中にあるので、枠が二重になる。
-- error の err は、24px 以上では読めるが、16px では字の形がつぶれる。16px で使う箇所（status bar、保存状態）では、err を読めることより、形の違いで見分ける手がかりとして働く。
+- error の err は、24px 以上では読めるが、16px では字の形がつぶれる。
+  16px で使う箇所（status bar、保存状態）では、err を読めることより、形の違いで見分ける手がかりとして働く。
 - 淡い面と淡い線は、ダークでは明るい色を薄く重ねるので、凹みより盛り上がりに見えるおそれがある。
 - `rotate-cw` と `rotate-ccw` は、弧が頭の先で終わるため、16px では頭が鉤に見えることがある。
 
@@ -228,19 +243,25 @@ round 5 では、凹みを淡い面（fill-opacity）か淡い線（stroke-opaci
 未評価の軸は visual hierarchy、consistency、accessibility の第三者確認である。
 
 採用案は Cornix Bonsai の Web UI の機能アイコンとして取り込む。
-error の err は 16px では字の形まで読めない。語と一緒に置き、形の違いで見分ける手がかりとして使う。
+error の err は 16px では字の形まで読めない。
+語と一緒に置き、形の違いで見分ける手がかりとして使う。
 
 ## Rejected reasons
 
 - `round-line`、`pop-duo`: 2026-09-24 に利用者が、キーキャップ型の枠（`keycap-tile`）がブランドの観点でもよいと述べ、すべての asset をキーキャップ型にすると決めた。
-- `keycap-skirt`、`keycap-dish`、`keycap-shadow`: 2026-09-24 に利用者が、どれも崩れに近いと述べた。枠に線を足すたびに中の記号が 1/2〜5/12 に縮み、線が二重になって重くなっていた。
+- `keycap-skirt`、`keycap-dish`、`keycap-shadow`: 2026-09-24 に利用者が、どれも崩れに近いと述べた。
+  枠に線を足すたびに中の記号が 1/2〜5/12 に縮み、線が二重になって重くなっていた。
 - `keycap-tile`、`keycap-taper`、`keycap-lip`: 2026-09-24 に利用者が、形は超楕円（`keycap-squircle`）がよいと述べた。
-- `keycap-dish-rim`、`keycap-dish-top`: 2026-09-24 に利用者が、`keycap-dish-fill` と `keycap-squircle` を採用した。rim は 16px で縁と記号が混ざり、記号も小さくなる。top は凹みの陰より光沢やふたに見えるおそれがあった。
+- `keycap-dish-rim`、`keycap-dish-top`: 2026-09-24 に利用者が、`keycap-dish-fill` と `keycap-squircle` を採用した。
+  rim は 16px で縁と記号が混ざり、記号も小さくなる。
+  top は凹みの陰より光沢やふたに見えるおそれがあった。
 
 ## Learnings
 
-- 枠に要素を足すと、記号を縮めることになり崩れて見えた（round 3）。枠の輪郭を数式で導き（超楕円）、要素は濃さを落として重ねると、記号の大きさを保ったまま印象を変えられた（round 4〜5）。
-- 記号を縮めても線幅は縮めないので、字や細い形は字間や隙間が線に食われる。文字は縮めずに、置き場所の座標で直接描く（err）。
+- 枠に要素を足すと、記号を縮めることになり崩れて見えた（round 3）。
+  枠の輪郭を数式で導き（超楕円）、要素は濃さを落として重ねると、記号の大きさを保ったまま印象を変えられた（round 4〜5）。
+- 記号を縮めても線幅は縮めないので、字や細い形は字間や隙間が線に食われる。
+  文字は縮めずに、置き場所の座標で直接描く（err）。
 - 依頼者への提示を PNG から SVG のまま描いた HTML に替えると、拡大した判断ができ、往復が速くなった（`docs/decisions/2026-09-24-present-svg-as-html.md`）。
 
 ## Related
