@@ -60,8 +60,10 @@ accessibility も対象に含める。
 判断後にコードと専用の preview を削除した。
 理由は Rejected reasons、削除の判断と復元手順は [ADR](../../docs/decisions/2026-09-21-prune-decided-experiments.md) にある。
 
-- `current-system`: 基準: 現状の暗黙の体系を再現できる。変えた軸: system-ui、既存値。
-- `line-seed-direct`: 書体だけの置換では 600 の意図が曖昧なまま残る。変えた軸: LINE Seed JP、既存値。
+- `current-system`: 基準: 現状の暗黙の体系を再現できる。
+  変えた軸: system-ui、既存値。
+- `line-seed-direct`: 書体だけの置換では 600 の意図が曖昧なまま残る。
+  変えた軸: LINE Seed JP、既存値。
 
 | 判断                        | 解決する問題               | 根拠                                                        | 却下案                                              | 検証結果                                       |
 | --------------------------- | -------------------------- | ----------------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------- |
@@ -89,7 +91,8 @@ primitive 10 個と semantic 6 個を初回の上限とする。
 ## Rejected reasons
 
 - `current-system`: OS ごとに字面が変わり、複数プロジェクトで同じ結果を再現できない。
-- `line-seed-direct`: 600 が残る。LINE Seed JP の実ファイルと役割が一致しない。
+- `line-seed-direct`: 600 が残る。
+  LINE Seed JP の実ファイルと役割が一致しない。
 - 800: title だけのために token と font file を増やす必要がない。
 - Thin: 小さい日本語 UI で使う共通用途がない。
 - display: 一般的な設定 UI に必須ではない。

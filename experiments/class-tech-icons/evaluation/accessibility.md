@@ -118,10 +118,18 @@ README は「利用画面の CSS から `#part-*-accent` で上書きできる�
 
 ## 論点
 
-- duotone を採る場合、accent を暗テーマと forced-colors でどう扱うかを決める必要がある。選択肢は、利用画面の CSS に `@media (forced-colors: active)` と暗テーマ向けの `#part-*-accent` 上書きを置く、accent を `currentColor` に戻す、明テーマ専用と割り切る、の 3 つである。どれも実機（Windows のハイコントラストと VitePress の暗テーマ）での確認が要る。
-- 配布用 SVG が `role="img"` と `<title>` を持ったままでよいかを決める必要がある。可視ラベルと並べる用途では hover tooltip がラベルと重複し、単独配置では名前として役立つ。ラベルありを既定にするなら `aria-hidden="true"` と `focusable="false"` を配布用に焼き込み、単独配置用を別に用意する案がある。
-- `mock.css` がアイコンを px 固定にしている点を、実際の VitePress と Marp に移すときに `em` へ変えるかを決める必要がある。文字だけを拡大する利用者への影響が変わる。
-- 20px での 1.67px 幅の細部（line 系の節点の穴、solid の抜き、duotone の accent）は、拡大図では潰れていないが、実際の学生のスマートフォンと教室のプロジェクタでの見え方は未検証である。README も 96px 専用版を作っていないと記録している。
-- コントラスト比は `mock.css` の色を WCAG 2 の式で計算した値であり、レンダリング後の実測値ではない。最小寸法では antialiasing で実効値が下がるので、境界に近い duotone の暗背景については実測が要る。
-- 第三者による識別テストが 4 案とも無い。accessibility の判定は計算と拡大図に基づくもので、低視力や色覚多様性の当事者による確認は含まない。
+- duotone を採る場合、accent を暗テーマと forced-colors でどう扱うかを決める必要がある。
+  選択肢は、利用画面の CSS に `@media (forced-colors: active)` と暗テーマ向けの `#part-*-accent` 上書きを置く、accent を `currentColor` に戻す、明テーマ専用と割り切る、の 3 つである。
+  どれも実機（Windows のハイコントラストと VitePress の暗テーマ）での確認が要る。
+- 配布用 SVG が `role="img"` と `<title>` を持ったままでよいかを決める必要がある。
+  可視ラベルと並べる用途では hover tooltip がラベルと重複し、単独配置では名前として役立つ。
+  ラベルありを既定にするなら `aria-hidden="true"` と `focusable="false"` を配布用に焼き込み、単独配置用を別に用意する案がある。
+- `mock.css` がアイコンを px 固定にしている点を、実際の VitePress と Marp に移すときに `em` へ変えるかを決める必要がある。
+  文字だけを拡大する利用者への影響が変わる。
+- 20px での 1.67px 幅の細部（line 系の節点の穴、solid の抜き、duotone の accent）は、拡大図では潰れていないが、実際の学生のスマートフォンと教室のプロジェクタでの見え方は未検証である。
+  README も 96px 専用版を作っていないと記録している。
+- コントラスト比は `mock.css` の色を WCAG 2 の式で計算した値であり、レンダリング後の実測値ではない。
+  最小寸法では antialiasing で実効値が下がるので、境界に近い duotone の暗背景については実測が要る。
+- 第三者による識別テストが 4 案とも無い。
+  accessibility の判定は計算と拡大図に基づくもので、低視力や色覚多様性の当事者による確認は含まない。
 - 担当外の気づき: line-square の `terminal` と `web` が同寸の枠を共有する点、solid の `branch` が小文字の h に見える点、duotone のサイドバーで赤が 8 行の縦列になる点は、いずれも discoverability と visual hierarchy の論点として別観点に渡したい。

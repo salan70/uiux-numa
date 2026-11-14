@@ -14,8 +14,10 @@ Baseball Player Journey の UI を確かめる利用者が、各画面へすぐ�
 
 - variant の `index.dart` は、`buildVariant` に加えて任意の top-level 関数 `Widget buildPanel()` を持てる。
 - `scripts/build-flutter-registry.mjs` は `buildPanel` を見つけたら `VariantEntry` の `panel` に渡す。
-- 実行基盤は、端末の枠を描き、窓に端末と操作盤（幅 320）を並べる余裕があるときだけ、枠の右に操作盤を描く。`bare=1` と `compare` では描かない。
-- 操作盤と variant の状態の受け渡しは variant の責務にする。実行基盤は操作盤を置く場所だけを持つ。
+- 実行基盤は、端末の枠を描き、窓に端末と操作盤（幅 320）を並べる余裕があるときだけ、枠の右に操作盤を描く。
+  `bare=1` と `compare` では描かない。
+- 操作盤と variant の状態の受け渡しは variant の責務にする。
+  実行基盤は操作盤を置く場所だけを持つ。
 
 ## 却下した案
 

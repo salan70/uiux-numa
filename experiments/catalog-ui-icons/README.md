@@ -60,12 +60,18 @@ variant は 1 案だけにする。
 
 ## Constraints
 
-- `viewBox` は `0 0 24 24` にする。Catalog の既存のアイコンと外部 SVG の組に揃える。
-- 単色にする。`currentColor` だけを使い、`var()` は使わない（resvg が描画できない）。
-- 最小表示サイズは 16px にする。Button の icon 枠は `1em` で、Button の `font-size` は `--typography-control-font-size: 1rem` である。
-- 最大表示サイズは 20px にする。`.app-shell .icon` は `1.25rem` である。
-- 寸法と線の属性は利用画面の CSS が持つ。SVG は形だけを持つ。
-- 開閉や選択で形を変えない。状態で押し先の寸法を動かさない。
+- `viewBox` は `0 0 24 24` にする。
+  Catalog の既存のアイコンと外部 SVG の組に揃える。
+- 単色にする。
+  `currentColor` だけを使い、`var()` は使わない（resvg が描画できない）。
+- 最小表示サイズは 16px にする。
+  Button の icon 枠は `1em` で、Button の `font-size` は `--typography-control-font-size: 1rem` である。
+- 最大表示サイズは 20px にする。
+  `.app-shell .icon` は `1.25rem` である。
+- 寸法と線の属性は利用画面の CSS が持つ。
+  SVG は形だけを持つ。
+- 開閉や選択で形を変えない。
+  状態で押し先の寸法を動かさない。
 
 ## Hypothesis
 
@@ -168,7 +174,8 @@ keyline（ICON-06）の理論値をこの中へ丸めることになる。
 | 2           | 枠は 18×12 が円と釣り合った。幹は `y=11.25` が 16px で実線になり、`y=12` は灰色に潰れた。`detail` の棒も同じ問題を持つが、字面ごと 0.75 寄せると輪が箱の中で左に寄って見えた | `sidebar` を 18×12、`arrow` の幹を `y=11.25` にした。`detail` は `x=12` のまま残した | ICON-06、ICON-09                                  | 囲み形の有無で扱いを分ける規則に落ちた |
 
 round 2 で決めた規則を残す。
-**囲み形を持つ asset は箱の中心（12）に置く。囲み形を持たない asset は格子を優先して 0.75 ずらしてよい。**
+**囲み形を持つ asset は箱の中心（12）に置く。
+囲み形を持たない asset は格子を優先して 0.75 ずらしてよい。**
 `detail` と `sidebar` は囲み形を持ち、`arrow` は持たない。
 
 `sidebar` は枠と桁の外縁がすべて 1.5 の倍数に載るため、ずらす必要がなかった。
@@ -177,7 +184,8 @@ round 2 で決めた規則を残す。
 
 - `compare-detail-metaphor.png`: `detail` の比喩 3 案を 16 / 20 / 24px で並べた下書きのシート。
 - `round-soft-first-sheet.png`: 原本 4 件のシート。
-- `round-soft-final-sheet.png`: 配布用 4 件のシート。原本と見た目が同じことの確認に使う。
+- `round-soft-final-sheet.png`: 配布用 4 件のシート。
+  原本と見た目が同じことの確認に使う。
 - `round-soft-final-in-context.png`: 利用画面のモックを実行基盤で撮影したもの。
 
 preview は x86_64-darwin で作った。
@@ -190,7 +198,8 @@ preview は x86_64-darwin で作った。
 いずれも見た目は変わらないため、commit 済みの preview は差し替えていない。
 
 配布用 4 件のうち 3 件は svgo 4.0.1 でもバイト単位で一致した。
-`detail` だけは点が消えた。svgo の版差の扱いは[零長 subpath の ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)に残す。
+`detail` だけは点が消えた。
+svgo の版差の扱いは[零長 subpath の ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)に残す。
 
 ## Evaluation
 
@@ -206,7 +215,10 @@ preview は x86_64-darwin で作った。
 
 - 判断者: リポジトリの所有者
 - 判断日: 2026-09-22
-- 根拠: 利用者が現行と `round-soft` を 16px で見比べて選んだ。現行の `arrow` は幹が `y=12` にあるため 16px で 1px の線が半ピクセルにまたがり、灰色ににじんで頭より薄く出る。`round-soft` の `y=11.25` は実線になり、頭と同じ濃さで揃う。`detail` も点と棒の隙間が 1.5 から 2.25 に広がり、16px で i の字が読める。
+- 根拠: 利用者が現行と `round-soft` を 16px で見比べて選んだ。
+  現行の `arrow` は幹が `y=12` にあるため 16px で 1px の線が半ピクセルにまたがり、灰色ににじんで頭より薄く出る。
+  `round-soft` の `y=11.25` は実線になり、頭と同じ濃さで揃う。
+  `detail` も点と棒の隙間が 1.5 から 2.25 に広がり、16px で i の字が読める。
 
 採用に伴い `apps/catalog/src/components/icons.tsx` の `DetailIcon`、`SidebarIcon`、`ArrowIcon` を差し替える。
 `MagatamaIcon` と `AppearanceIcon` はこの Experiment の対象外のため、現行の形のまま残る。
@@ -223,11 +235,26 @@ round 0 で却下した `detail` の比喩 2 案の理由を残す。
 
 ## Learnings
 
-- 16px を最小に置くと、24 の viewBox で使える座標は大きく減る。軸に平行な線の外縁は 1.5 の倍数、対称な外形の幅は 3 の倍数しか取れない。ICON-04 の padding 2 も、ICON-06 の keyline 20 も、そのままでは載らない。値はシステムごとに決め直す、という ICON-04 と ICON-05 の但し書きが実際に効いた。
-- 箱の対称軸（12）は線の中心の格子（`0.75 + 1.5n`）に載らない。中心を通る 1 本の線は、対称性か 16px の鮮明さのどちらかを捨てることになる。囲み形の有無で分けると、どちらを捨てるかを規則にできる。
-- 黄金比は 0.75 格子の上では、18 を 2 つに割る場合だけ 5% 以内に載った。3 つ以上の要素を持つ形（detail）では、最寄りの格子でも 10% を超える。比例を根拠にできる場所は、格子の粗さが決める。
-- 零長の線に丸い端点を打つと、塗り要素を足さずに点を描ける。SVGO は `h0` を `z` に書き換える。閉じた零長の subpath の扱いは描画系で揺れうるが、resvg と Chrome の両方で同じ点として描かれることを確かめた。
-- 揺れるのは描画系だけではない。最適化系も揺れる。svgo 4.0.1 の `convertPathData` は零長の subpath を「無用」と見なして `path` ごと消し、4.1.0 は `z` に畳んで残す。`h0`、`z`、`v0`、`h0z` のどの書き方でも 4.0.1 は消す。造形の手段が最適化の既定に依存していたということで、`convertPathData: { removeUseless: false }` で明示的に守る形に直した（[ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)）。`svg-optimize` の `part-*` ID の一致検査がこれを検知した。検査が造形の前提を守った例である。
+- 16px を最小に置くと、24 の viewBox で使える座標は大きく減る。
+  軸に平行な線の外縁は 1.5 の倍数、対称な外形の幅は 3 の倍数しか取れない。
+  ICON-04 の padding 2 も、ICON-06 の keyline 20 も、そのままでは載らない。
+  値はシステムごとに決め直す、という ICON-04 と ICON-05 の但し書きが実際に効いた。
+- 箱の対称軸（12）は線の中心の格子（`0.75 + 1.5n`）に載らない。
+  中心を通る 1 本の線は、対称性か 16px の鮮明さのどちらかを捨てることになる。
+  囲み形の有無で分けると、どちらを捨てるかを規則にできる。
+- 黄金比は 0.75 格子の上では、18 を 2 つに割る場合だけ 5% 以内に載った。
+  3 つ以上の要素を持つ形（detail）では、最寄りの格子でも 10% を超える。
+  比例を根拠にできる場所は、格子の粗さが決める。
+- 零長の線に丸い端点を打つと、塗り要素を足さずに点を描ける。
+  SVGO は `h0` を `z` に書き換える。
+  閉じた零長の subpath の扱いは描画系で揺れうるが、resvg と Chrome の両方で同じ点として描かれることを確かめた。
+- 揺れるのは描画系だけではない。
+  最適化系も揺れる。
+  svgo 4.0.1 の `convertPathData` は零長の subpath を「無用」と見なして `path` ごと消し、4.1.0 は `z` に畳んで残す。
+  `h0`、`z`、`v0`、`h0z` のどの書き方でも 4.0.1 は消す。
+  造形の手段が最適化の既定に依存していたということで、`convertPathData: { removeUseless: false }` で明示的に守る形に直した（[ADR](../../docs/decisions/2026-09-22-svgo-keeps-zero-length-subpaths.md)）。
+  `svg-optimize` の `part-*` ID の一致検査がこれを検知した。
+  検査が造形の前提を守った例である。
 
 ## Related
 

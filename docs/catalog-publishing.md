@@ -7,7 +7,8 @@ Git 連携と custom domain の設定は利用者が Cloudflare dashboard で 1 
 
 ## 前提
 
-- `oda79.me` は Catalog と同じ Cloudflare account の zone にある。apex domain は使わない。
+- `oda79.me` は Catalog と同じ Cloudflare account の zone にある。
+  apex domain は使わない。
 - Cloudflare Pages Free plan の範囲で運用する。
 - GitHub App の Repository access は **Only select repositories** にし、`salan70/uiux-numa` だけを許可する。
 
@@ -40,7 +41,8 @@ zone が同じ account にあるので CNAME は自動で付く。
 
 ## 公開後の確認
 
-- `https://uiux.oda79.me/` が HTTPS で開き、`noindex` がない。preview deployment には `noindex` がある。
+- `https://uiux.oda79.me/` が HTTPS で開き、`noindex` がない。
+  preview deployment には `noindex` がある。
 - 次の URL を直リンクで開ける。
   - `/`、`/foundations/colors`、`/foundations/colors/<採用した配色>`（ダイアログが開いた状態で出る）
   - `/foundations/typography`、`/foundations/typography/product-ui-typography`
@@ -55,7 +57,8 @@ zone が同じ account にあるので CNAME は自動で付く。
 - `/colors`、`/typography`、`/icons` の旧 URL が新 URL へ 301 される。
 - サイドバーが Works 5 件と Guidelines 7 件の 2 群で、最下段の配色と明暗の選択がサイト全体へ反映され、再読み込み後も保たれる。
 - 選べる配色が採用したものだけで、ライト / ダークの切り替えで値が変わる。
-- 配色の詳細を開くと URL が変わり、Esc、背景、閉じるボタンのどれでも一覧へ戻る。開閉でスクロール位置が動かない。
+- 配色の詳細を開くと URL が変わり、Esc、背景、閉じるボタンのどれでも一覧へ戻る。
+  開閉でスクロール位置が動かない。
 - `/components/<slug>` では採用実装がページ本文へ直接表示され、Home の live は `/preview/<exp>/<variant>` の iframe で表示される。
 - Icons の SVG が表示され、方針の本文中の相対リンクがリポジトリの該当ファイルへ解決される。
 - preview PNG が Catalog の画面へ収集されていない。

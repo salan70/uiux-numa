@@ -2,9 +2,11 @@
 
 - 状態: Accepted
 - 日付: 2026-09-20
-- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。frontmatter の `axes` を廃止し、書式は docs/guideline.md に置いた。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。
+  frontmatter の `axes` を廃止し、書式は docs/guideline.md に置いた。
 - 参照: [Catalog に方針を載せる ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-guidelines.md)、[asset-model](../layers.md)
-- 更新: コアに主題全体へ効く数値を書けるようにした。[コアの数値 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-guideline-core-values.md) を参照する。
+- 更新: コアに主題全体へ効く数値を書けるようにした。
+  [コアの数値 ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-21-guideline-core-values.md) を参照する。
 
 ## 背景
 
@@ -15,13 +17,18 @@ Tips は 1 文書あたり 6〜15 件、合計 59 件あり、読む量が多い
 
 ## 決定
 
-- 節は目的、コア、Tips の 3 つにする。適用範囲、確認項目、出典、判断の節は置かない。
-- コアは思想を書く。見出しと本文 1〜3 文だけにし、例、図、出典を持たせない。3〜5 件にする。
+- 節は目的、コア、Tips の 3 つにする。
+  適用範囲、確認項目、出典、判断の節は置かない。
+- コアは思想を書く。
+  見出しと本文 1〜3 文だけにし、例、図、出典を持たせない。
+  3〜5 件にする。
 - コアの並び順を、衝突したときの優先順位にする。
-- Tips は具体的な場面の規則を書く。8 件までを目安にする。
+- Tips は具体的な場面の規則を書く。
+  8 件までを目安にする。
 - Tips に適用（`foundation` か `module`）と、関連するコアの見出しを必ず付ける。
 - `adopted` にしたときの判断者、判断日、理由は ADR に残す。
-- まず States & Feedback だけを新書式へ移す。残り 5 文書は内容を確かめてから移す。
+- まず States & Feedback だけを新書式へ移す。
+  残り 5 文書は内容を確かめてから移す。
 - 移行が終わるまで、解析器は未移行の文書だけ旧書式で読む。
 
 [Catalog に方針を載せる ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-guidelines.md) のうち、「2 層を同じ書式で書く」ことと「規則の必須項目」はこの決定で置き換える。

@@ -46,9 +46,11 @@ gap の直書きは 43 件、`1px solid` は 27 件あった。
 
 ### spacing
 
-4px グリッドの数値 index で名付ける。`space.100` が 4px である。
+4px グリッドの数値 index で名付ける。
+`space.100` が 4px である。
 階梯は `catalog.css` の実測値をそのまま採る。
-`space.page-inline` と `space.section` は primitive への参照に変える。生成される値は変わらない。
+`space.page-inline` と `space.section` は primitive への参照に変える。
+生成される値は変わらない。
 
 4px グリッドの根拠は技術的なものである。
 1 倍、1.5 倍、2 倍、3 倍の表示密度で端数が出ない。
@@ -100,15 +102,20 @@ CSS 仕様も border の内側半径を同じ減算で求め、負の値を 0 �
 
 確認できた事実は次である。
 
-- 曲線の輪郭は鋭角より好まれやすい（Bar & Neta 2006）。効果の実体は鋭角への忌避に近い（Bertamini ら 2015）。個人差も大きい（Cotter ら 2017）。
-- Apple は固定の半径の一覧を公開していない。iOS 26 は capsule と concentric corner を推す。
-- Atlassian、Polaris、Primer、Tailwind の階梯は小さい側が 2 / 4 / 6px に集まる。Primer の既定は 6px である。
+- 曲線の輪郭は鋭角より好まれやすい（Bar & Neta 2006）。
+  効果の実体は鋭角への忌避に近い（Bertamini ら 2015）。
+  個人差も大きい（Cotter ら 2017）。
+- Apple は固定の半径の一覧を公開していない。
+  iOS 26 は capsule と concentric corner を推す。
+- Atlassian、Polaris、Primer、Tailwind の階梯は小さい側が 2 / 4 / 6px に集まる。
+  Primer の既定は 6px である。
 
 俗説として退けた主張は次である。
 
 - 「角丸は目に優しい」「認知負荷を下げる」: 査読研究の裏付けを確認できない。
 - 「角丸のボタンはクリック率が上がる」: 対照実験が見つからない。
-- 「黄金比は美しい」: Fechner の実験の追試（Höge 1997、McManus & Weatherby 1997、Russell 2000）は選好を支持しない。Markowsky 1992 は美術と美学への適用の多くを誤りと整理した。
+- 「黄金比は美しい」: Fechner の実験の追試（Höge 1997、McManus & Weatherby 1997、Russell 2000）は選好を支持しない。
+  Markowsky 1992 は美術と美学への適用の多くを誤りと整理した。
 - 「Apple のロゴは黄金比で作られた」: 事後のこじつけであり、Apple の設計根拠は確認されていない。
 
 特定の半径の値が優れるという根拠はない。
@@ -116,25 +123,38 @@ CSS 仕様も border の内側半径を同じ減算で求め、負の値を 0 �
 
 ## 却下した案
 
-- グラデーション: 公開 Catalog で使用 0 件である。利用者が見送りを判断した。
-- shadow: 公開 Catalog で使用 0 件である。popup と drawer の影は局所変数のままにする。
-- `radius.full` と 14px 以上の段: Catalog に利用箇所がない。`radius.full` の却下は [radius.full の ADR](2026-09-21-radius-full.md) が置き換えた。
-- `corner-shape: squircle`: 6〜12px では円弧との差がほぼ見えない。対応は Chromium 系だけである。
-- 半径を高さの比率で決める: 親子を同じ比率にすると角の隙間が不均一になり、減算式と両立しない。相似に見えるという主張に実証はない。
-- 黄金比の階梯: 選好の実証がない。φ は 4px グリッドに乗らず、丸め誤差を常に生む。
+- グラデーション: 公開 Catalog で使用 0 件である。
+  利用者が見送りを判断した。
+- shadow: 公開 Catalog で使用 0 件である。
+  popup と drawer の影は局所変数のままにする。
+- `radius.full` と 14px 以上の段: Catalog に利用箇所がない。
+  `radius.full` の却下は [radius.full の ADR](2026-09-21-radius-full.md) が置き換えた。
+- `corner-shape: squircle`: 6〜12px では円弧との差がほぼ見えない。
+  対応は Chromium 系だけである。
+- 半径を高さの比率で決める: 親子を同じ比率にすると角の隙間が不均一になり、減算式と両立しない。
+  相似に見えるという主張に実証はない。
+- 黄金比の階梯: 選好の実証がない。
+  φ は 4px グリッドに乗らず、丸め誤差を常に生む。
 - フィボナッチ数列の階梯: 3、13、21 が 4px グリッドに乗らない。
-- 基準の半径 1 個から `calc` で階梯を導出する（shadcn/ui の方式）: 基準を変えると小さい側が 0 に潰れる。レビューの対象が値ではなく式になる。Catalog は半径の種類が少なく、見合わない。
-- spacing の t-shirt 命名: 10 段を `xs`〜`4xl` で表すと順序が読めない。Polaris と Atlassian も数値 index を使う。
-- padding と size の独立した家族: padding は space を参照すれば足りる。最小ターゲット `2.5rem` は Catalog だけの値である。
+- 基準の半径 1 個から `calc` で階梯を導出する（shadcn/ui の方式）: 基準を変えると小さい側が 0 に潰れる。
+  レビューの対象が値ではなく式になる。
+  Catalog は半径の種類が少なく、見合わない。
+- spacing の t-shirt 命名: 10 段を `xs`〜`4xl` で表すと順序が読めない。
+  Polaris と Atlassian も数値 index を使う。
+- padding と size の独立した家族: padding は space を参照すれば足りる。
+  最小ターゲット `2.5rem` は Catalog だけの値である。
 - `experiments/` への適用: 過去の Experiment の見た目が変わり、比較の記録が壊れる。
 - 家族ごとに生成スクリプトを複製する: 3 家族とも dimension だけを持ち、処理が同じである。
 
 ## 影響
 
 - [Catalog ホストの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-host.md) の「token の取り込み規則」と「Catalog に残す値」の角丸を置き換える。
-- [デザインシステムサイトの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-design-system-site.md) の「Spacing、Radius、Elevation の token は新設しない」のうち、Spacing と Radius を置き換える。Elevation は据え置く。
-- [topic-first の ADR](2026-09-20-catalog-topic-first.md) の「token にしない」値のうち、角丸 `0.375rem` を置き換える。ほかの値は据え置く。
-- [soft-component-kit の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-soft-component-kit.md) は変えない。variant の角丸は variant の局所変数のままである。
+- [デザインシステムサイトの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-catalog-design-system-site.md) の「Spacing、Radius、Elevation の token は新設しない」のうち、Spacing と Radius を置き換える。
+  Elevation は据え置く。
+- [topic-first の ADR](2026-09-20-catalog-topic-first.md) の「token にしない」値のうち、角丸 `0.375rem` を置き換える。
+  ほかの値は据え置く。
+- [soft-component-kit の ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-19-soft-component-kit.md) は変えない。
+  variant の角丸は variant の局所変数のままである。
 - `scripts/build-space-tokens.mjs` を `scripts/build-dimension-tokens.mjs` へ改め、3 家族を 1 本で生成する。
 - Catalog の Tokens 画面は、参照を持つ token を semantic と表示する。
 

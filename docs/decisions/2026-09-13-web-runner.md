@@ -12,13 +12,18 @@
 
 ## 決定
 
-- Web の variant は Vite + React + TypeScript で実装する。パッケージマネージャは dotfiles と揃えて pnpm を使う。
-- `platforms/web/` を Web の実行基盤として今作る。初期ディレクトリ構成の ADR の作成時期は「最初の Web Experiment」に改める。
-- 実行基盤の責務は `experiments/*/variants/*/index.tsx` を glob で列挙し、選択した variant を描画することだけにする。Catalog の機能は持たない。
+- Web の variant は Vite + React + TypeScript で実装する。
+  パッケージマネージャは dotfiles と揃えて pnpm を使う。
+- `platforms/web/` を Web の実行基盤として今作る。
+  初期ディレクトリ構成の ADR の作成時期は「最初の Web Experiment」に改める。
+- 実行基盤の責務は `experiments/*/variants/*/index.tsx` を glob で列挙し、選択した variant を描画することだけにする。
+  Catalog の機能は持たない。
 - variant の実装は `experiments/<slug>/variants/<id>/` に置き、`platforms/web/` には Experiment 固有の実装を置かない。
-- toolchain は `flake.nix` で `nodejs_22` と `pnpm` を固定する。npm パッケージの版は `pnpm-lock.yaml` で固定する。
+- toolchain は `flake.nix` で `nodejs_22` と `pnpm` を固定する。
+  npm パッケージの版は `pnpm-lock.yaml` で固定する。
 - コマンドは `justfile` の `web-install`、`web-dev`、`web-check` を正本とする。
-- 整形は既存の oxfmt を TypeScript にも適用する。lint（oxlint）と a11y の自動検査は今は入れない。
+- 整形は既存の oxfmt を TypeScript にも適用する。
+  lint（oxlint）と a11y の自動検査は今は入れない。
 
 ## 却下した案
 

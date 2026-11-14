@@ -44,7 +44,10 @@ accessibility は既定で必須にし、外すなら理由を書く。
 
 ## 記録
 
-- 判定は課題あり、許容、良いの 3 段階にし、根拠の観察（ファイル、行、preview 名）を書く。根拠が足りなければ保留にし、何があれば判定できるかを書く。
-- 観点別の記録は `experiments/<slug>/evaluation/<slug>.md` に置く。判定の表、観察、人間の判断が要る論点の 3 節で書く。
-- 入口は `experiments/<slug>/evaluation.md` にする。軸と重みと選定理由、軸 × variant の比較表、観点別の要点とリンク、判断待ちの論点を書く。
+- 判定は課題あり、許容、良いの 3 段階にし、根拠の観察（ファイル、行、preview 名）を書く。
+  根拠が足りなければ保留にし、何があれば判定できるかを書く。
+- 観点別の記録は `experiments/<slug>/evaluation/<slug>.md` に置く。
+  判定の表、観察、人間の判断が要る論点の 3 節で書く。
+- 入口は `experiments/<slug>/evaluation.md` にする。
+  軸と重みと選定理由、軸 × variant の比較表、観点別の要点とリンク、判断待ちの論点を書く。
 - 判断は README の Decision と Rejected reasons に書く。

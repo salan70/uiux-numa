@@ -24,7 +24,8 @@ CSS では semantic を使う。
 - 減算式は、子が親の padding box に辺ごと接する場合だけ使う。
 - 親の中で浮いている部品には使わず、semantic の値をそのまま当てる。
 - 結果が負になる場合は `max(0px, calc(...))` で 0 に丸める。
-- 入れ子の補正は CSS の `calc` で書く。専用の token は作らない。
+- 入れ子の補正は CSS の `calc` で書く。
+  専用の token は作らない。
 
 ```css
 border-radius: max(0px, calc(var(--radius-surface) - var(--border-width-thin) - var(--space-100)));
@@ -35,7 +36,8 @@ border-radius: max(0px, calc(var(--radius-surface) - var(--border-width-thin) - 
 `radius.full` は「端を半円にする」形の指定であり、階梯の外にある。
 
 - `50%` は使わない。
-- 減算式の対象にしない。内側の子にも `radius.pill` をそのまま当てる。
+- 減算式の対象にしない。
+  内側の子にも `radius.pill` をそのまま当てる。
 - ボタンの既定は `radius.control` で、`radius.pill` は部品が明示して選ぶ。
 
 ## 追加の規則

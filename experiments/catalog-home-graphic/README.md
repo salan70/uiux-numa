@@ -37,30 +37,44 @@ Catalog を初めて開く人と、作品を見に戻ってくる人を対象に
 ## Scope / Domains
 
 対象は visual design、interaction design、accessibility で、動きの設計も含む。
-domains に `animation-motion` を入れない。入れると Catalog の Motion に載るが、Motion は画面入場の型を 1 セルずつ並べる画面で、トップ全体の案を載せる場所ではない。
+domains に `animation-motion` を入れない。
+入れると Catalog の Motion に載るが、Motion は画面入場の型を 1 セルずつ並べる画面で、トップ全体の案を載せる場所ではない。
 変える軸は、hero と WORKS の入口の図を何で作るか（字 / 網点 / 成果物の実物）と、それに合った動きの種類である。
 サイドバー、題字の形、配色、topic の文言は案で変えない。
-Catalog への組み込みは、採用後の 2026-09-28 に行った。判断は `apps/catalog/README.md` の画面の設計判断にも残す。
+Catalog への組み込みは、採用後の 2026-09-28 に行った。
+判断は `apps/catalog/README.md` の画面の設計判断にも残す。
 
 crafting-motion の手順に沿った判断は次のとおり。
 
-- 動かすか: 頻度は「訪問ごとに数回」に当たる。入場は開くたびに 1 回だけで、繰り返しは画面に入っている間だけにする。
-- 目的: 喜びと方向づけ。入場で名前を立て、hero から WORKS へ目を送る。WORKS の選択時の動きは、どの topic を選んだかの feedback にする。
-- 手段: 入場と繰り返しは CSS animation、WORKS の登場は IntersectionObserver で立てる印と CSS transition にした。`dot-field` の網点だけは canvas 2D と `requestAnimationFrame` にした。数千の点の大きさを時刻と指の位置から毎コマ決めるので、DOM では描けない。
-- 曲線と時間: 字画を引く `cubic-bezier(0.65, 0, 0.35, 1)` と、入場の `easing.entrance` を使う。点の落下は等加速度、着地で潰れ、1 回跳ねて止まる（`uiux-numa-logo` と同じ順）。
+- 動かすか: 頻度は「訪問ごとに数回」に当たる。
+  入場は開くたびに 1 回だけで、繰り返しは画面に入っている間だけにする。
+- 目的: 喜びと方向づけ。
+  入場で名前を立て、hero から WORKS へ目を送る。
+  WORKS の選択時の動きは、どの topic を選んだかの feedback にする。
+- 手段: 入場と繰り返しは CSS animation、WORKS の登場は IntersectionObserver で立てる印と CSS transition にした。
+  `dot-field` の網点だけは canvas 2D と `requestAnimationFrame` にした。
+  数千の点の大きさを時刻と指の位置から毎コマ決めるので、DOM では描けない。
+- 曲線と時間: 字画を引く `cubic-bezier(0.65, 0, 0.35, 1)` と、入場の `easing.entrance` を使う。
+  点の落下は等加速度、着地で潰れ、1 回跳ねて止まる（`uiux-numa-logo` と同じ順）。
 
 ## Constraints
 
 - React + TypeScript と CSS、canvas 2D だけで実装し、追加の依存を入れない。
-- 色、余白、字は既存の token と Catalog の `--color-*` だけを使う。配色と明暗は `useCatalogColors` で Catalog の選択を読み、配色を切り替えると点の色が追従する。
+- 色、余白、字は既存の token と Catalog の `--color-*` だけを使う。
+  配色と明暗は `useCatalogColors` で Catalog の選択を読み、配色を切り替えると点の色が追従する。
 - マークと wordmark の字画は `uiux-numa-logo` の `nu-dot` と `uiux-numa-wordmark` の `caps-period` の値をそのまま使う（`shared/Lockup.tsx`）。
-- runner の topic は `apps/catalog/src/content/topics.ts` から写した（`shared/home.ts`）。Catalog のトップは `TOPICS` を直接渡す。
+- runner の topic は `apps/catalog/src/content/topics.ts` から写した（`shared/home.ts`）。
+  Catalog のトップは `TOPICS` を直接渡す。
 - 部品は `shared/DotFieldHome.tsx` にあり、runner の variant と Catalog の HomePage が同じものを描く。
-- tagline「UI/UX とプロダクト体験を、AI エージェントと探索する。」は CLAUDE.md のプロジェクトの説明から作った仮の文言である。`dot-field` からは利用者の 2026-09-28 の指示で外した。
-- `dot-field` の tile は topic の名前と番号と、topic を点で想起させる図柄だけにする。説明文と件数は利用者が 2026-09-28 に要らないと判断した。
-- 5 秒を超えて自動で動くものには止める操作を常に置く（WCAG 2.2.2）。画面外とタブの裏では繰り返しを止める。
+- tagline「UI/UX とプロダクト体験を、AI エージェントと探索する。」は CLAUDE.md のプロジェクトの説明から作った仮の文言である。
+  `dot-field` からは利用者の 2026-09-28 の指示で外した。
+- `dot-field` の tile は topic の名前と番号と、topic を点で想起させる図柄だけにする。
+  説明文と件数は利用者が 2026-09-28 に要らないと判断した。
+- 5 秒を超えて自動で動くものには止める操作を常に置く（WCAG 2.2.2）。
+  画面外とタブの裏では繰り返しを止める。
 - `prefers-reduced-motion: reduce` では入場と繰り返しを止め、完成した 1 枚を置く。
-- hover でしか出ない情報を作らない。指で点が膨らむ動きは飾りで、topic の名前は常に見えている。
+- hover でしか出ない情報を作らない。
+  指で点が膨らむ動きは飾りで、topic の名前は常に見えている。
 - 選んだときの動きで周りの要素を動かさない（`docs/principles/state-changes-must-not-move-layout.md`）。
 
 ## Hypothesis
@@ -77,8 +91,10 @@ crafting-motion の手順に沿った判断は次のとおり。
 
 削除した variant:
 
-- `kinetic-type`: topic の名前そのものを巨大な字の帯にして斜めに流すと、字だけでポスターのような強い図になる。変えた軸は、図は字、色は墨と点の赤、帯の流れとスクロールの傾き、WORKS は大きな字の索引と反転。
-- `live-bento`: 飾りの絵を描かず、各 topic の成果物の実物を格子の面で動かし続けると、見せ場と中身の説明が一致する。変えた軸は、図は成果物の実物、配色の帯と書体と token と部品と曲線の短い周期、題字の面の波紋。
+- `kinetic-type`: topic の名前そのものを巨大な字の帯にして斜めに流すと、字だけでポスターのような強い図になる。
+  変えた軸は、図は字、色は墨と点の赤、帯の流れとスクロールの傾き、WORKS は大きな字の索引と反転。
+- `live-bento`: 飾りの絵を描かず、各 topic の成果物の実物を格子の面で動かし続けると、見せ場と中身の説明が一致する。
+  変えた軸は、図は成果物の実物、配色の帯と書体と token と部品と曲線の短い周期、題字の面の波紋。
 
 `dot-field` の値と根拠:
 
@@ -117,7 +133,8 @@ DevTools Protocol で headless Chrome を操作し、1440 × 900 と 390 × 844�
 根拠の preview:
 
 - `previews/dot-field-hero.png`、`previews/dot-field-works.png`: 網点のマークと、topic ごとの網点の図柄（round 4 の後）
-- `previews/dot-field-tokens-motifs.png`: Tokens の図柄の候補 5 つ（round 5）。利用者は `ladder` を選んだ
+- `previews/dot-field-tokens-motifs.png`: Tokens の図柄の候補 5 つ（round 5）。
+  利用者は `ladder` を選んだ
 
 ## Decision
 
@@ -132,13 +149,17 @@ DevTools Protocol で headless Chrome を操作し、1440 × 900 と 390 × 844�
 
 ## Learnings
 
-- 網点の点の大きさは、図柄を 1 区画 1 画素の小さな canvas へ描き、アンチエイリアスの濃さから読むと求まる。字、アイコンの path、曲線、グラデーションを同じ手順で網点にできる。
-- 網点の 1 区画より細い線は点の列に崩れる。アイコンは字画が 1 区画を超える太さになる大きさで描く。
-- 1px の輪を scale で広げると線が太り、縮めた状態では点線に崩れる。SVG の円の半径を動かす。
+- 網点の点の大きさは、図柄を 1 区画 1 画素の小さな canvas へ描き、アンチエイリアスの濃さから読むと求まる。
+  字、アイコンの path、曲線、グラデーションを同じ手順で網点にできる。
+- 網点の 1 区画より細い線は点の列に崩れる。
+  アイコンは字画が 1 区画を超える太さになる大きさで描く。
+- 1px の輪を scale で広げると線が太り、縮めた状態では点線に崩れる。
+  SVG の円の半径を動かす。
 
 ## Related
 
 - [uiux-numa-logo](../uiux-numa-logo/README.md): マークの形と、点を落とす動きの出どころ
 - [uiux-numa-wordmark](../uiux-numa-wordmark/README.md): wordmark の形と入場の値
-- [catalog-showreel](../catalog-showreel/README.md): トップで流す 15 秒の映像。同じトップの見せ場を映像で作る別の Experiment
+- [catalog-showreel](../catalog-showreel/README.md): トップで流す 15 秒の映像。
+  同じトップの見せ場を映像で作る別の Experiment
 - [catalog-screen-entrance](../catalog-screen-entrance/README.md): `blur-focus` の値

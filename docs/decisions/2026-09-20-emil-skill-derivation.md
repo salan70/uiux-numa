@@ -22,11 +22,16 @@ Issue 8 は Asset の `role` / `maturity` と Catalog を扱う。
 
 ## 決定
 
-- 全面導入と原文ラッパーは採用しない。必要な手順だけを、既存の Experiment 運用へ合わせて書き直す。
-- 派生名は上流と衝突しない次の 3 つにする。`exploring-ui-variants`（上流 `prototype`）、`crafting-motion`（上流 `animate`）、`reviewing-motion`（上流 `review-animations`）。
-- 正本は `skills/<name>/` に置く。読み込みは既存どおり `.claude/skills/<name> -> ../../skills/<name>` の相対 symlink にする。
-- 呼び出しは `/exploring-ui-variants`、`/crafting-motion`、`/reviewing-motion` と、要求文での用途一致とする。frontmatter は `name` と `description` だけにする。
-- `emil-design-eng`、`apple-design`、`mobile-native`、`pick-ui-library`、`improve-animations`、`find-animation-opportunities`、`animate-expo` は導入しない。参照は既存の Experiment 手順、`platforms/web`、`docs/evaluation/`、トークンへ置き換える。
+- 全面導入と原文ラッパーは採用しない。
+  必要な手順だけを、既存の Experiment 運用へ合わせて書き直す。
+- 派生名は上流と衝突しない次の 3 つにする。
+  `exploring-ui-variants`（上流 `prototype`）、`crafting-motion`（上流 `animate`）、`reviewing-motion`（上流 `review-animations`）。
+- 正本は `skills/<name>/` に置く。
+  読み込みは既存どおり `.claude/skills/<name> -> ../../skills/<name>` の相対 symlink にする。
+- 呼び出しは `/exploring-ui-variants`、`/crafting-motion`、`/reviewing-motion` と、要求文での用途一致とする。
+  frontmatter は `name` と `description` だけにする。
+- `emil-design-eng`、`apple-design`、`mobile-native`、`pick-ui-library`、`improve-animations`、`find-animation-opportunities`、`animate-expo` は導入しない。
+  参照は既存の Experiment 手順、`platforms/web`、`docs/evaluation/`、トークンへ置き換える。
 - 出典 URL、元コミット、変更理由、MIT の著作権表示とライセンス文を各 Skill に残す。
 - 衝突の扱いを次の表で固定する。
 
@@ -51,13 +56,19 @@ Issue 8 は Asset の `role` / `maturity` と Catalog を扱う。
 
 - 上流 3 Skill を名前ごと全面コピーする: picker 削除、試作削除、未導入 Skill 参照が残り、Experiment の記録義務と衝突する。
 - 原文を読み、衝突箇所だけ「本リポジトリでは無視する」と書くラッパーにする: 無視指示は抜けやすく、専用 picker や Block 判定が再発する。
-- `emil-design-eng` を第 4 Skill として導入する: Issue #9 は必要な部分の参照に留め、一括導入を対象外にしている。判断材料は派生 3 Skill の参照へ写す。
+- `emil-design-eng` を第 4 Skill として導入する: Issue #9 は必要な部分の参照に留め、一括導入を対象外にしている。
+  判断材料は派生 3 Skill の参照へ写す。
 - 上流名のまま `prototype` / `animate` / `review-animations` を置く: 上流更新や他エージェントの同名 Skill と衝突し、派生であることが分からない。
-- #8 の `role` / `maturity` を SKILL.md frontmatter に足す: #8 は Phase 0 であり、metadata の新形式を先行して増やさない。`crafting-svg` と同じく `name` と `description` だけにする。
+- #8 の `role` / `maturity` を SKILL.md frontmatter に足す: #8 は Phase 0 であり、metadata の新形式を先行して増やさない。
+  `crafting-svg` と同じく `name` と `description` だけにする。
 - Catalog 全体の再設計を最初の検証課題にする: #8 の作業を重複させ、Skill の効果が見えなくなる。
 
 ## 影響
 
-- Issue #9 の比較実験は、登録完了の遷移とフィードバックを扱う。Catalog 改修は #8 に残す。
-- 2026-09-20 の判断で、派生 3 Skill は `experimental` のまま継続利用する。1 件の比較では `stable` にしない。
-- 派生 Skill の更新は、上流差分を読んで取り込む。全 Skill の自動更新はしない。手順は `skills/README.md` に書く。
+- Issue #9 の比較実験は、登録完了の遷移とフィードバックを扱う。
+  Catalog 改修は #8 に残す。
+- 2026-09-20 の判断で、派生 3 Skill は `experimental` のまま継続利用する。
+  1 件の比較では `stable` にしない。
+- 派生 Skill の更新は、上流差分を読んで取り込む。
+  全 Skill の自動更新はしない。
+  手順は `skills/README.md` に書く。

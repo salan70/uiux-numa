@@ -11,7 +11,8 @@
 
 semantic は置かない。
 
-線の色と種類は token にしない。色は配色の役割から引く。
+線の色と種類は token にしない。
+色は配色の役割から引く。
 
 判断は [階梯の ADR](../../docs/decisions/2026-09-21-token-scale-foundation.md) に残す。
 

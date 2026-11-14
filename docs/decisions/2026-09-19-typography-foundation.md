@@ -3,7 +3,8 @@
 - 状態: Accepted
 - 日付: 2026-09-19
 - 参照: [日本語プロダクト UI の Typography](../../experiments/product-ui-typography/README.md)
-- 更新: 行長の上限（`40rem` / `40ic`）の使用規則に例外を足した。[行長の上限の ADR](2026-09-21-measure-cap-follows-the-column.md) を参照する。
+- 更新: 行長の上限（`40rem` / `40ic`）の使用規則に例外を足した。
+  [行長の上限の ADR](2026-09-21-measure-cap-follows-the-column.md) を参照する。
 
 ## 背景
 
@@ -28,8 +29,11 @@ Typography token を増やしすぎると、利用側が役割を選べなくな
 - semantic token の合計は 6 個である。
 - CSS custom properties は canonical JSON から生成する。
 - 新しい primitive は、複数の semantic token が参照するときだけ追加する。
-- 新しい semantic token は、既存 token で表せない場合だけ検討する。追加には 2 個以上の利用例を必要とする。
-- 行長と折返しは使用規則にする。DTCG の dimension は `ic` を扱えない。したがって token にはしない。
+- 新しい semantic token は、既存 token で表せない場合だけ検討する。
+  追加には 2 個以上の利用例を必要とする。
+- 行長と折返しは使用規則にする。
+  DTCG の dimension は `ic` を扱えない。
+  したがって token にはしない。
 
 ## 理由
 
@@ -53,7 +57,8 @@ typography composite と alias も表現できる。
 - JSON と CSS の手動併記: 値がずれる経路が増える。
 - Style Dictionary: 初回の出力は CSS だけで、依存追加に見合う変換処理がない。
 - runtime CDN: オフラインで描画できず、取得先の変更にも影響される。
-- component token: 共通 role より細かい。初回の用途には必要ない。
+- component token: 共通 role より細かい。
+  初回の用途には必要ない。
 
 ## 影響
 

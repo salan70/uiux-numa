@@ -19,12 +19,16 @@ dotfiles 由来の共通 Skill は `.claude/skills/` に配備し、ここと混
 Claude Code は `.claude/skills/<name>` だけを読むので、`.claude/skills/<name> -> ../../skills/<name>` の相対 symlink を git で管理する。
 Codex と Cursor は `.agents/skills -> ../.claude/skills` を経由して同じ Skill を読む。
 dotfiles の `sync-ai-assets.sh` は正本にない local Skill を変更しないため、symlink は同期で消えない。
-Skill から他の文書へは、リポジトリのルートからのパスを文字列で書く。symlink 経由では相対リンクの解決先がずれる。
+Skill から他の文書へは、リポジトリのルートからのパスを文字列で書く。
+symlink 経由では相対リンクの解決先がずれる。
 
 ## 追加と改善
 
-1. `skills/<name>/SKILL.md` と `references/` を作る。frontmatter は `name` と `description` だけにする。
+1. `skills/<name>/SKILL.md` と `references/` を作る。
+   frontmatter は `name` と `description` だけにする。
 2. `ln -s ../../skills/<name> .claude/skills/<name>` で symlink を作り、`git add` する。
 3. 上の表に行を足す。
-4. Experiment で使い、README に反復の記録と未解決の点を残す。落とし穴は `SKILL.md` に足す。
-5. 派生 Skill を上流に追従させるときは、記録済み commit との差分だけを読み、衝突表に反する手順は取り込まない。`SOURCE.md` の commit を更新する。
+4. Experiment で使い、README に反復の記録と未解決の点を残す。
+   落とし穴は `SKILL.md` に足す。
+5. 派生 Skill を上流に追従させるときは、記録済み commit との差分だけを読み、衝突表に反する手順は取り込まない。
+   `SOURCE.md` の commit を更新する。

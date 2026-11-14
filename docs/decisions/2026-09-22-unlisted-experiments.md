@@ -2,7 +2,8 @@
 
 - 状態: Accepted
 - 日付: 2026-09-22
-- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。対象は 1 件に限らず、topic に当たらない Experiment 全般とした。
+- 置き換え先: [規約と記録の組み直し](2026-09-24-minimal-docs.md)。
+  対象は 1 件に限らず、topic に当たらない Experiment 全般とした。
 - 置き換え: [削除の ADR](2026-09-21-prune-decided-experiments.md) の「判断済みで Catalog に載せない Experiment は、ディレクトリごと削除する」を、topic に当たらない Experiment について置き換える。
 - 参照: [topic-first ADR](2026-09-20-catalog-topic-first.md)、[visual showcase の ADR](2026-09-20-catalog-visual-showcase.md)、[Experiment lifecycle](../experiment.md)、[対象領域](../scope.md)
 - 対象: `apps/catalog/src/content/inventory.test.ts`、`docs/layers.md`
@@ -47,19 +48,27 @@ Catalog の Works は、再利用する成果物を topic で分ける。
 
 slug を検査に書くと、新しい Experiment が topic を持たないまま黙って消えることを防げる。
 削除の ADR が消した除外リストを復活させるわけではない。
-Catalog の実装は topic だけを見る。掲載しないものを知るのは検査だけである。
+Catalog の実装は topic だけを見る。
+掲載しないものを知るのは検査だけである。
 
 ## 却下した案
 
-- Works に 6 つ目の topic を作る。1 件の Experiment のために IA を広げることになる。2 件目、3 件目の適用事例が出てから形を決めるほうが、topic の定義が決まる。波及先も Sidebar、ホームの件数、詳細 route、live variant の導線に及ぶ。
-- `cornix-product-ui` の domains に `layout` を足して Components へ入れる。コード変更は最小だが、Components の「画面を組む部品」という定義に全面プロトタイプが混ざる。
-- 削除の ADR に従って `cornix-product-ui` を削除する。後続がある成果を消す。
-- 検査から topic の条項を外す。掲載されない Experiment を検出できなくなる。
+- Works に 6 つ目の topic を作る。
+  1 件の Experiment のために IA を広げることになる。
+  2 件目、3 件目の適用事例が出てから形を決めるほうが、topic の定義が決まる。
+  波及先も Sidebar、ホームの件数、詳細 route、live variant の導線に及ぶ。
+- `cornix-product-ui` の domains に `layout` を足して Components へ入れる。
+  コード変更は最小だが、Components の「画面を組む部品」という定義に全面プロトタイプが混ざる。
+- 削除の ADR に従って `cornix-product-ui` を削除する。
+  後続がある成果を消す。
+- 検査から topic の条項を外す。
+  掲載されない Experiment を検出できなくなる。
 
 ## 影響
 
 - `inventory.test.ts` の topic の検査を、`unlisted()` の明示へ変える。
 - 同じ検査の Experiment 件数を 9、live variant 件数を 25 にし、adopted 一覧へ `cornix-product-ui/chromatic-rail` を足す。
 - `docs/layers.md` の Catalog 節に、載せない Experiment がある旨を書く。
-- トップの最終更新日は `catalog.experiments` 全件から採るので、載せない Experiment の更新日も反映される。今回は変えない。
+- トップの最終更新日は `catalog.experiments` 全件から採るので、載せない Experiment の更新日も反映される。
+  今回は変えない。
 - `cornix-product-ui` を Catalog で見せる方法は未決である。

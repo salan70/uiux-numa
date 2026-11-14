@@ -4,9 +4,12 @@
 - 日付: 2026-09-20
 - 参照: [役割を絞って組み直す配色](../../experiments/color-schemes-material/README.md)、[Catalog の面を無彩色にし、公開カテゴリを絞る](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-neutral-navigation.md)、[Catalog を成果物の visual showcase にする](2026-09-20-catalog-visual-showcase.md)
 - 置き換え: [無彩色ナビの ADR](https://github.com/salan70/uiux-numa/blob/5215a3c631edbd49f90202cbee9bde9ef500f030/docs/decisions/2026-09-20-catalog-neutral-navigation.md) の「背景、surface、本文、通常の罫線は白黒を基準にする」条項
-- 置き換え: 2026-09-21。Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
-- 追記: 2026-09-21。色付き面上の暗い文字色を黒にし、on-color の明度差を広げる。
-- 追記: 2026-09-21。金魚の primary を明るく鮮やかな朱色へ調整し、黒系文字を読みやすくする。
+- 置き換え: 2026-09-21。
+  Experiment を残す、写しを凍結するという条項は [削除の ADR](2026-09-21-prune-decided-experiments.md) が置き換える。
+- 追記: 2026-09-21。
+  色付き面上の暗い文字色を黒にし、on-color の明度差を広げる。
+- 追記: 2026-09-21。
+  金魚の primary を明るく鮮やかな朱色へ調整し、黒系文字を読みやすくする。
 
 ## 背景
 
@@ -25,14 +28,20 @@ Material 3 から必要な名前だけを採り、primary / secondary / tertiary
 ## 決定
 
 - Catalog の配色の正本を `experiments/color-schemes-material` の 24 役割にする。
-- 値は `shared/palettes.ts` から `variants/<id>/scheme.css` を生成して渡す。生成は `just schemes-build`、検査は `just schemes-check`。
-- CSS 変数名は `--color-<役割名>` に統一する。Experiment の見本も同じ名前を使う。
-- 面と本文の彩度は抑えるが、無彩色には固定しない。テーマの色相へ寄せる。
+- 値は `shared/palettes.ts` から `variants/<id>/scheme.css` を生成して渡す。
+  生成は `just schemes-build`、検査は `just schemes-check`。
+- CSS 変数名は `--color-<役割名>` に統一する。
+  Experiment の見本も同じ名前を使う。
+- 面と本文の彩度は抑えるが、無彩色には固定しない。
+  テーマの色相へ寄せる。
 - Catalog の `--cat-*` は、色の用途ごとに参照先を分ける。
   - 塗り面は `--color-primary`、その上の文字は `--color-on-primary`。
-  - 面の上に置く色付きの文字と罫線は `--color-primary-text`。4 つの面すべてに 4.5:1 を満たす。
-  - focus ring は `--color-focus`。面に対して 3:1 を満たす。
-- `experiments/color-schemes` は削除せず、公開 Catalog から外す。`SUPERSEDED_SLUGS` で止める。
+  - 面の上に置く色付きの文字と罫線は `--color-primary-text`。
+    4 つの面すべてに 4.5:1 を満たす。
+  - focus ring は `--color-focus`。
+    面に対して 3:1 を満たす。
+- `experiments/color-schemes` は削除せず、公開 Catalog から外す。
+  `SUPERSEDED_SLUGS` で止める。
 
 ## 理由
 
