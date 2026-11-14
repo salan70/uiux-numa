@@ -4,7 +4,7 @@ status: decided
 role: module
 maturity: experimental
 created: 2026-09-25
-updated: 2026-09-25
+updated: 2026-11-14
 platforms:
   - web
 domains:
@@ -162,7 +162,7 @@ domain は `logo-brand-identity`、`visual-design`、`accessibility`。
 - `ks-home`: ホーム段の S と K の位置だけ色を変える。軸は色を置く位置。
 - `k-grid`: 3×3 の 6 個のキーで K を組み、上の腕だけ浮かせる。軸は盤面の並び。キー 6 角、ピッチ 8、浮いたキーの中心 (24, 7.75)。
 - `k-legend`: 浮いたキーを 8 角に大きくして K を刻む。軸は浮いたキーの刻印。K は一辺 4.5 で、16px と 24px では潰れた。
-- `overview`: 候補を 1 ページに並べる一覧面。比べる候補がなくなったので、`shared/Overview.tsx`、`shared/candidates.ts`、専用の CSS とともに削除する。
+- `overview`: 候補を 1 ページに並べる一覧面。比べる候補がなくなったので、`shared/Overview.tsx`、`shared/candidates.ts`、専用の CSS とともに削除した。
 
 ### previews
 

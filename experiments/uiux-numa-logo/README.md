@@ -4,7 +4,7 @@ status: decided
 role: module
 maturity: experimental
 created: 2026-09-22
-updated: 2026-09-25
+updated: 2026-11-14
 platforms:
   - web
 domains:
@@ -186,7 +186,7 @@ viewBox、live area、格子、字画、色数、丸い端点は melt 系の 6 �
 - `melt-flow`: 直線をなくし、曲線だけでつなぐ。軸は溶け方（線が流れる）。
 - `melt-flow-bulb`: 曲線だけでつなぎ、端が溶けて玉になる。軸は溶け方（線が流れる + 端がたまる）。
 - `melt-puddle`: 左の脚が底で水たまりに広がる。軸は溶け方（底で広がる）。
-- `overview`: 候補を 1 ページに並べる一覧面。比較する候補がなくなったので、`shared/Overview.tsx` と専用の CSS とともに削除する。
+- `overview`: 候補を 1 ページに並べる一覧面。比較する候補がなくなったので、`shared/Overview.tsx` と専用の CSS とともに削除した。
 
 2026-09-25 に利用者が `nu-dot` へ置き換えた。`nu-round` はコードを削除し、字の形は `nu-dot` がそのまま引き継ぐ。
 

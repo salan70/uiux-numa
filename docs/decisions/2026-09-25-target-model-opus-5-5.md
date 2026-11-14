@@ -2,7 +2,7 @@
 
 - 状態: Accepted
 - 日付: 2026-09-25
-- 参照: [規約と記録の組み直し](2026-09-24-minimal-docs.md)、[CLAUDE.md](../../CLAUDE.md)、[skills/README.md](../../skills/README.md)
+- 参照: [規約と記録の組み直し](2026-09-24-minimal-docs.md)、[AGENTS.md](../../AGENTS.md)（決定時点では `CLAUDE.md`）、[skills/README.md](../../skills/README.md)
 
 ## 背景
 
