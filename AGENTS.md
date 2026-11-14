@@ -41,6 +41,7 @@ uiux-numa は UI/UX とプロダクト体験を AI エージェントで探索�
   全角括弧の内外には入れない。
 - 静的な Markdown は 1 文 1 行で書く。
   Issue、PR、コメントは段落内で改行しない。
+  `scripts/check-one-sentence-per-line.mjs` が pre-commit で検査する。
 
 ## Git
 

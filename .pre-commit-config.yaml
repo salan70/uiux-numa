@@ -24,3 +24,12 @@ repos:
         entry: markdownlint-cli2
         language: system
         files: \.md$
+
+  # 1 文 1 行 — 静的 Markdown の文末の直後に文が続く行を検出する
+  - repo: local
+    hooks:
+      - id: one-sentence-per-line
+        name: one-sentence-per-line
+        entry: node scripts/check-one-sentence-per-line.mjs
+        language: system
+        files: \.md$
